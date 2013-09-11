@@ -1,0 +1,4 @@
+locale branding en-US jar:geckofx.jar!/locale/branding/
+content branding jar:geckofx.jar!/branding/
+# locale branding en-US locale/branding/
+# content branding branding/
