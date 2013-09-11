@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="SGSclientTCP">
+</Property><Property Name="Solution File" Value="D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\SGSclientTCP.sln">
+</Property><Property Name="Date" Value="Wednesday, September 11, 2013">
+</Property><Property Name="Time" Value="13:22 PM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="SGSclientTCP.sln" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclientTCP.sln">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\SGSclientTCP.csproj" Description="Project file successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\SGSclientTCP.csproj">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\SGSClientForm.cs" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\SGSClientForm.cs">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\SGSClientForm.Designer.cs" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\SGSClientForm.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\LoginForm.cs" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\LoginForm.cs">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\LoginForm.Designer.cs" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\LoginForm.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\Program.cs" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\Program.cs">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\Properties\AssemblyInfo.cs" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\Properties\Resources.Designer.cs" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\Properties\Settings.Designer.cs" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\Properties\Settings.settings" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\SGSClientForm.resx" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\SGSClientForm.resx">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\LoginForm.resx" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\LoginForm.resx">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\Properties\Resources.resx" Description="File successfully backed up as D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSclientTCP\Backup\SGSclient\Properties\Resources.resx">
+</Event><Event ErrorLevel="1" Project="SGSclientTCP" Source="SGSclient\SGSclientTCP.csproj" Description="Your project is targeting .NET Framework 2.0 or 3.0. If your project uses assemblies requiring a newer .NET Framework, your project will fail to build. You can change the .NET Framework version by clicking Properties on the project menu and then selecting a new version in the '.NET Framework' dropdown box. (In Visual Basic, this is located on the Compile tab by clicking the 'Advanced Compiler Options...' button.)">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\SGSclientTCP.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="SGSclientTCP" Source="SGSclient\SGSclientTCP.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="SGSclientTCP.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="SGSclientTCP.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="SGSclientTCP" Source="SGSclient\SGSclientTCP.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

@@ -1,0 +1,7 @@
+D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSserverTCP\Server\bin\Debug\Server.exe
+D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSserverTCP\Server\bin\Debug\Server.pdb
+D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSserverTCP\Server\obj\Debug\Server.SGSserverForm.resources
+D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSserverTCP\Server\obj\Debug\Server.Properties.Resources.resources
+D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSserverTCP\Server\obj\Debug\SGSserverTCP.csproj.GenerateResource.Cache
+D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSserverTCP\Server\obj\Debug\Server.exe
+D:\DropBox\Dropbox\DiceBot\DiceBot\bin\Debug\TCP Chat Sample\TCP Chat\SGSserverTCP\Server\obj\Debug\Server.pdb
