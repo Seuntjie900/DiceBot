@@ -61,13 +61,37 @@
             this.lblTime = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.Settings = new System.Windows.Forms.GroupBox();
+            this.grbInvest = new System.Windows.Forms.GroupBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.nudTotalInvest = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.nudTotalDivestHours = new System.Windows.Forms.NumericUpDown();
+            this.label22 = new System.Windows.Forms.Label();
+            this.nudTotalDivestPer = new System.Windows.Forms.NumericUpDown();
+            this.chkSiteProfit = new System.Windows.Forms.CheckBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.nudProfitPer = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.nudDivestPer = new System.Windows.Forms.NumericUpDown();
+            this.chkDivestProf = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.nudInvestHour = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.nudHours = new System.Windows.Forms.NumericUpDown();
+            this.chkHour = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
             this.btnImport = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.btnStartLow = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.chkOnWin = new System.Windows.Forms.CheckBox();
             this.btnStop = new System.Windows.Forms.Button();
-            this.btnStart = new System.Windows.Forms.Button();
+            this.btnStartHigh = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.rdbReduce = new System.Windows.Forms.RadioButton();
             this.lblDevider = new System.Windows.Forms.Label();
@@ -113,10 +137,21 @@
             this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.ofdImport = new System.Windows.Forms.OpenFileDialog();
             this.ofdExport = new System.Windows.Forms.SaveFileDialog();
+            this.tmrCheckInvest = new System.Windows.Forms.Timer(this.components);
             this.gckBrowser = new DiceBot.Browser();
+            this.label25 = new System.Windows.Forms.Label();
+            this.txtPrince = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.Settings.SuspendLayout();
+            this.grbInvest.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTotalInvest)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTotalDivestHours)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTotalDivestPer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProfitPer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDivestPer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInvestHour)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHours)).BeginInit();
             this.panel4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -420,6 +455,8 @@
             // 
             // Settings
             // 
+            this.Settings.Controls.Add(this.grbInvest);
+            this.Settings.Controls.Add(this.button1);
             this.Settings.Controls.Add(this.btnExport);
             this.Settings.Controls.Add(this.btnImport);
             this.Settings.Controls.Add(this.panel4);
@@ -449,6 +486,262 @@
             this.Settings.TabStop = false;
             this.Settings.Text = "Settings";
             // 
+            // grbInvest
+            // 
+            this.grbInvest.Controls.Add(this.txtPrince);
+            this.grbInvest.Controls.Add(this.label25);
+            this.grbInvest.Controls.Add(this.label24);
+            this.grbInvest.Controls.Add(this.nudTotalInvest);
+            this.grbInvest.Controls.Add(this.label2);
+            this.grbInvest.Controls.Add(this.label23);
+            this.grbInvest.Controls.Add(this.nudTotalDivestHours);
+            this.grbInvest.Controls.Add(this.label22);
+            this.grbInvest.Controls.Add(this.nudTotalDivestPer);
+            this.grbInvest.Controls.Add(this.chkSiteProfit);
+            this.grbInvest.Controls.Add(this.label21);
+            this.grbInvest.Controls.Add(this.label19);
+            this.grbInvest.Controls.Add(this.nudProfitPer);
+            this.grbInvest.Controls.Add(this.label6);
+            this.grbInvest.Controls.Add(this.nudDivestPer);
+            this.grbInvest.Controls.Add(this.chkDivestProf);
+            this.grbInvest.Controls.Add(this.label5);
+            this.grbInvest.Controls.Add(this.nudInvestHour);
+            this.grbInvest.Controls.Add(this.label4);
+            this.grbInvest.Controls.Add(this.nudHours);
+            this.grbInvest.Controls.Add(this.chkHour);
+            this.grbInvest.Controls.Add(this.label3);
+            this.grbInvest.Controls.Add(this.button2);
+            this.grbInvest.Location = new System.Drawing.Point(3, 0);
+            this.grbInvest.Name = "grbInvest";
+            this.grbInvest.Size = new System.Drawing.Size(342, 412);
+            this.grbInvest.TabIndex = 53;
+            this.grbInvest.TabStop = false;
+            this.grbInvest.Text = "Auto Invest/Divest";
+            this.grbInvest.Visible = false;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(282, 193);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(15, 13);
+            this.label24.TabIndex = 26;
+            this.label24.Text = "%";
+            // 
+            // nudTotalInvest
+            // 
+            this.nudTotalInvest.Location = new System.Drawing.Point(234, 191);
+            this.nudTotalInvest.Name = "nudTotalInvest";
+            this.nudTotalInvest.Size = new System.Drawing.Size(42, 20);
+            this.nudTotalInvest.TabIndex = 25;
+            this.nudTotalInvest.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(34, 193);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(198, 13);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "Total Reinvest when site profit increases";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(231, 154);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(41, 13);
+            this.label23.TabIndex = 23;
+            this.label23.Text = "Hour(s)";
+            // 
+            // nudTotalDivestHours
+            // 
+            this.nudTotalDivestHours.Location = new System.Drawing.Point(182, 152);
+            this.nudTotalDivestHours.Name = "nudTotalDivestHours";
+            this.nudTotalDivestHours.Size = new System.Drawing.Size(42, 20);
+            this.nudTotalDivestHours.TabIndex = 22;
+            this.nudTotalDivestHours.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(132, 154);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(48, 13);
+            this.label22.TabIndex = 21;
+            this.label22.Text = "% Within";
+            // 
+            // nudTotalDivestPer
+            // 
+            this.nudTotalDivestPer.Location = new System.Drawing.Point(84, 152);
+            this.nudTotalDivestPer.Name = "nudTotalDivestPer";
+            this.nudTotalDivestPer.Size = new System.Drawing.Size(42, 20);
+            this.nudTotalDivestPer.TabIndex = 20;
+            this.nudTotalDivestPer.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // chkSiteProfit
+            // 
+            this.chkSiteProfit.AutoSize = true;
+            this.chkSiteProfit.Location = new System.Drawing.Point(9, 129);
+            this.chkSiteProfit.Name = "chkSiteProfit";
+            this.chkSiteProfit.Size = new System.Drawing.Size(235, 17);
+            this.chkSiteProfit.TabIndex = 19;
+            this.chkSiteProfit.Text = "Total Divest When Site profit increases with ";
+            this.chkSiteProfit.UseVisualStyleBackColor = true;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(28, 62);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(36, 13);
+            this.label21.TabIndex = 18;
+            this.label21.Text = "Invest";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(230, 94);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(72, 13);
+            this.label19.TabIndex = 17;
+            this.label19.Text = "% is Reached";
+            // 
+            // nudProfitPer
+            // 
+            this.nudProfitPer.Location = new System.Drawing.Point(182, 92);
+            this.nudProfitPer.Name = "nudProfitPer";
+            this.nudProfitPer.Size = new System.Drawing.Size(42, 20);
+            this.nudProfitPer.TabIndex = 16;
+            this.nudProfitPer.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(132, 94);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(47, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "% when ";
+            // 
+            // nudDivestPer
+            // 
+            this.nudDivestPer.Location = new System.Drawing.Point(84, 92);
+            this.nudDivestPer.Name = "nudDivestPer";
+            this.nudDivestPer.Size = new System.Drawing.Size(42, 20);
+            this.nudDivestPer.TabIndex = 14;
+            this.nudDivestPer.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            // 
+            // chkDivestProf
+            // 
+            this.chkDivestProf.AutoSize = true;
+            this.chkDivestProf.Location = new System.Drawing.Point(12, 95);
+            this.chkDivestProf.Name = "chkDivestProf";
+            this.chkDivestProf.Size = new System.Drawing.Size(56, 17);
+            this.chkDivestProf.TabIndex = 13;
+            this.chkDivestProf.Text = "Divest";
+            this.chkDivestProf.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(132, 62);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "% every";
+            // 
+            // nudInvestHour
+            // 
+            this.nudInvestHour.Location = new System.Drawing.Point(84, 60);
+            this.nudInvestHour.Name = "nudInvestHour";
+            this.nudInvestHour.Size = new System.Drawing.Size(42, 20);
+            this.nudInvestHour.TabIndex = 11;
+            this.nudInvestHour.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(232, 62);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Hour(s)";
+            // 
+            // nudHours
+            // 
+            this.nudHours.Location = new System.Drawing.Point(183, 60);
+            this.nudHours.Name = "nudHours";
+            this.nudHours.Size = new System.Drawing.Size(42, 20);
+            this.nudHours.TabIndex = 9;
+            this.nudHours.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkHour
+            // 
+            this.chkHour.AutoSize = true;
+            this.chkHour.Location = new System.Drawing.Point(12, 62);
+            this.chkHour.Name = "chkHour";
+            this.chkHour.Size = new System.Drawing.Size(15, 14);
+            this.chkHour.TabIndex = 8;
+            this.chkHour.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(19, 28);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(104, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Invest/divest When:";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(250, 9);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 45);
+            this.button2.TabIndex = 0;
+            this.button2.Text = "General Settings";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(267, 88);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 71);
+            this.button1.TabIndex = 52;
+            this.button1.Text = "Auto Invest/ divest Settings";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // btnExport
             // 
             this.btnExport.Location = new System.Drawing.Point(267, 49);
@@ -471,15 +764,26 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.btnStartLow);
             this.panel4.Controls.Add(this.btnSettings);
             this.panel4.Controls.Add(this.chkOnWin);
             this.panel4.Controls.Add(this.btnStop);
-            this.panel4.Controls.Add(this.btnStart);
+            this.panel4.Controls.Add(this.btnStartHigh);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(3, 415);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(342, 89);
             this.panel4.TabIndex = 49;
+            // 
+            // btnStartLow
+            // 
+            this.btnStartLow.Location = new System.Drawing.Point(12, 51);
+            this.btnStartLow.Name = "btnStartLow";
+            this.btnStartLow.Size = new System.Drawing.Size(117, 23);
+            this.btnStartLow.TabIndex = 41;
+            this.btnStartLow.Text = "Start Low";
+            this.btnStartLow.UseVisualStyleBackColor = true;
+            this.btnStartLow.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnSettings
             // 
@@ -513,15 +817,15 @@
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
-            // btnStart
+            // btnStartHigh
             // 
-            this.btnStart.Location = new System.Drawing.Point(12, 3);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(117, 71);
-            this.btnStart.TabIndex = 37;
-            this.btnStart.Text = "Start";
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            this.btnStartHigh.Location = new System.Drawing.Point(12, 3);
+            this.btnStartHigh.Name = "btnStartHigh";
+            this.btnStartHigh.Size = new System.Drawing.Size(117, 23);
+            this.btnStartHigh.TabIndex = 37;
+            this.btnStartHigh.Text = "Start High";
+            this.btnStartHigh.UseVisualStyleBackColor = true;
+            this.btnStartHigh.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // groupBox2
             // 
@@ -946,6 +1250,12 @@
             this.TrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseDoubleClick);
             this.TrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_Click);
             // 
+            // tmrCheckInvest
+            // 
+            this.tmrCheckInvest.Enabled = true;
+            this.tmrCheckInvest.Interval = 1000;
+            this.tmrCheckInvest.Tick += new System.EventHandler(this.tmrCheckInvest_Tick);
+            // 
             // gckBrowser
             // 
             this.gckBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -953,6 +1263,24 @@
             this.gckBrowser.Name = "gckBrowser";
             this.gckBrowser.Size = new System.Drawing.Size(854, 777);
             this.gckBrowser.TabIndex = 1;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(12, 262);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(102, 13);
+            this.label25.TabIndex = 27;
+            this.label25.Text = "Principle Investment";
+            // 
+            // txtPrince
+            // 
+            this.txtPrince.Location = new System.Drawing.Point(120, 262);
+            this.txtPrince.Name = "txtPrince";
+            this.txtPrince.Size = new System.Drawing.Size(100, 20);
+            this.txtPrince.TabIndex = 28;
+            this.txtPrince.Text = "10";
+            this.txtPrince.Leave += new System.EventHandler(this.txtPrince_Leave);
             // 
             // cDiceBot
             // 
@@ -974,6 +1302,15 @@
             this.groupBox1.PerformLayout();
             this.Settings.ResumeLayout(false);
             this.Settings.PerformLayout();
+            this.grbInvest.ResumeLayout(false);
+            this.grbInvest.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTotalInvest)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTotalDivestHours)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTotalDivestPer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProfitPer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDivestPer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInvestHour)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHours)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1046,7 +1383,7 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.CheckBox chkOnWin;
         private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.Button btnStartHigh;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label lblDevider;
         private System.Windows.Forms.TextBox txtDevider;
@@ -1072,6 +1409,33 @@
         private System.Windows.Forms.OpenFileDialog ofdImport;
         private System.Windows.Forms.SaveFileDialog ofdExport;
         private System.Windows.Forms.RadioButton rdbReduce;
+        private System.Windows.Forms.Button btnStartLow;
+        private System.Windows.Forms.GroupBox grbInvest;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.NumericUpDown nudInvestHour;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown nudHours;
+        private System.Windows.Forms.CheckBox chkHour;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.NumericUpDown nudTotalInvest;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.NumericUpDown nudTotalDivestHours;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.NumericUpDown nudTotalDivestPer;
+        private System.Windows.Forms.CheckBox chkSiteProfit;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.NumericUpDown nudProfitPer;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown nudDivestPer;
+        private System.Windows.Forms.CheckBox chkDivestProf;
+        private System.Windows.Forms.Timer tmrCheckInvest;
+        private System.Windows.Forms.TextBox txtPrince;
+        private System.Windows.Forms.Label label25;
 
     }
 }

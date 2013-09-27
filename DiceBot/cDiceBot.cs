@@ -63,6 +63,7 @@ namespace DiceBot
         public bool autologin = false;
         public bool autostart = false;
         public bool NCPAutoLogin = false;
+        bool high = true;
         private bool withdrew;
         DateTime dtStarted = new DateTime();
         DateTime dtLastBet = new DateTime();
@@ -73,6 +74,19 @@ namespace DiceBot
         public string NCPpassword = "";
         public string Botname = "";
         public Email Emails { get; set; }
+        #endregion
+
+        #region Auto Invest Divest Vars
+        decimal PrincipleInvest = 0.085m;
+        decimal SitelowestProfits = 9999999999999;
+        DateTime sitelowrecorded = new DateTime();
+        decimal SitelowesProfits2 = 9999999999999;
+        DateTime sitelowrecorded2 = new DateTime();
+        decimal SitelowestProfits3 = 9999999999999;
+        DateTime sitelowrecorded3 = new DateTime();
+        DateTime lastprofit = new DateTime();
+        decimal MyProfit = 0;
+        DateTime lastinvest = DateTime.Now;
         #endregion
 
         private double dPreviousBalance;
@@ -351,7 +365,10 @@ namespace DiceBot
                 gieChance.TextContent = txtChance.Text;
                 GeckoInputElement gieBet = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_bet").DomObject);
                 gieBet.Value = Lastbet.ToString("0.00000000").Replace(',', '.');
+                if (high)
                 gckBrowser.Navigate("javascript:clicked_action_bet_hi()");
+                else
+                    gckBrowser.Navigate("javascript:clicked_action_bet_lo()");
                 dtLastBet = DateTime.Now;
             }
             catch
@@ -488,7 +505,7 @@ namespace DiceBot
 
         void Start()
         {
-            rtbDonate.Text += "Please feel free to donate. \t\tBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 \t\tLtc: LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy";
+            rtbDonate.Text = "Please feel free to donate. \t\tBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 \t\tLtc: LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy";
 
             save();
 
@@ -713,6 +730,10 @@ namespace DiceBot
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            if ((sender as Button).Name.ToUpper().Contains("HIGH"))
+                high=true;
+            else
+                high = false;
             Start();
         }
 
@@ -1434,6 +1455,182 @@ namespace DiceBot
         private void btnSettings_Click(object sender, EventArgs e)
         {
             new cSettings(this).Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            grbInvest.Visible = true;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            grbInvest.Visible = false;
+        }
+        bool divesting = false;
+        bool divesting2 = false;
+        private void tmrCheckInvest_Tick(object sender, EventArgs e)
+        {
+            #region invest hour
+
+            if (chkHour.Checked)
+            {
+                if ((lastinvest - DateTime.Now).Hours > nudHours.Value)
+                {
+                    if (waiter == 0)
+                    {
+                        gckBrowser.Navigate("javascript:socket.emit('invest',csrf,'" + ((decimal)Getbalance() * (decimal)nudInvestHour.Value / (decimal)100.0).ToString() + "',0)");
+                    }
+                    if (waiter == 2)
+                    {
+                        gckBrowser.Navigate("http://Just-dice.com");
+                        lastinvest = DateTime.Now;
+                        waiter = -1;
+                    }
+                    waiter++;
+                }
+            }
+#endregion
+            #region divest profit
+            if (chkDivestProf.Checked)
+            {
+                string sBalance="999999";
+                try
+                {
+                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("investment")[0].DomObject);
+                     sBalance = gieBalance.InnerHtml;
+                }
+                    catch
+                {
+                    
+                }
+                    decimal curinvested = 0;
+                    if (decimal.TryParse(sBalance, out curinvested) || divesting)
+                    {
+                        if ((PrincipleInvest / curinvested) < 1 || divesting)
+                        {
+                            if ((PrincipleInvest / curinvested * 100) > nudProfitPer.Value || divesting)
+                            {
+                                if (waiter == 0)
+                                {
+                                    gckBrowser.Navigate("javascript:socket.emit('divest',csrf,'" + ((curinvested * nudProfitPer.Value) / 100).ToString() + "',0)");
+                                    divesting = true;
+                                }
+                                else if (waiter == 2)
+                                {
+                                    gckBrowser.Navigate("http://Just-dice.com");
+                                    waiter = -1;
+                                    divesting = false;
+                                }
+                                waiter++;
+                            }
+                        }
+                    }
+            }
+            #endregion
+
+            #region site profit
+            if (chkSiteProfit.Checked)
+            {
+                string sBalance = "s";
+                decimal NewProfit = 0;
+                try
+                {
+                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("sprofitraw")[0].DomObject);
+                    sBalance = gieBalance.InnerHtml;
+
+                }
+                catch
+                {
+
+                }
+                if (decimal.TryParse(sBalance, out NewProfit) || divesting2)
+                {
+                    decimal oldprofit = SitelowestProfits;
+
+                        if (oldprofit < 0 && NewProfit < 0)
+                        {
+                            if (oldprofit / NewProfit < 1)
+                            {
+                                if ((oldprofit / NewProfit) * 100m > nudTotalDivestPer.Value)
+                                {
+
+                                    if (waiter == 0)
+                                    {
+                                        gckBrowser.Navigate("javascript:socket.emit(\"divest\",csrf,\"all\",divest_code.val()");
+                                        divesting2 = true;
+                                    }
+
+
+                                }
+                            }
+                            
+                        }
+                        if (oldprofit > 0 && NewProfit > 0)
+                        {
+                            if (NewProfit / oldprofit < 1)
+                            {
+                                if ((NewProfit / oldprofit) * 100m > nudTotalDivestPer.Value)
+                                {
+
+                                    if (waiter == 0)
+                                    {
+                                        gckBrowser.Navigate("javascript:socket.emit(\"divest\",csrf,\"all\",divest_code.val()");
+                                        divesting2 = true;
+                                    }
+
+
+                                }
+                            }
+                        }
+
+                        if (waiter == 2 && divesting2)
+                        {
+                            gckBrowser.Navigate("http://Just-dice.com");
+                            waiter = -1;
+                            divesting = false;
+                        }
+                    if (divesting2)
+                        waiter++;
+                    
+                }
+            }
+            if ((DateTime.Now - lastprofit).Hours >= 1)
+            {
+                string sBalance = "s";
+                decimal NewProfit = 0;
+                try
+                {
+                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("sprofitraw")[0].DomObject);
+                    sBalance = gieBalance.InnerHtml;
+                }
+                catch
+                {
+
+                }
+                if (decimal.TryParse(sBalance, out NewProfit))
+                {
+                    if (NewProfit < SitelowestProfits)
+                    {
+                        SitelowestProfits3 = SitelowesProfits2;
+                        sitelowrecorded3 = sitelowrecorded2;
+                        SitelowesProfits2 = SitelowestProfits;
+                        sitelowrecorded2 = sitelowrecorded;
+                        SitelowestProfits = NewProfit;
+                        sitelowrecorded = DateTime.Now;
+
+                    }
+                }
+            }
+            #endregion
+
+        }
+
+        private void txtPrince_Leave(object sender, EventArgs e)
+        {
+            if (!decimal.TryParse(txtPrince.Text, out PrincipleInvest))
+            {
+                MessageBox.Show("Principle not a valid number");
+            }
         }
 
 

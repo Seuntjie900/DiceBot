@@ -22,7 +22,7 @@ namespace DiceBot
             rtbAbout.Text += "You can also set a maximum amount of time the bet will me multiplied, or decrease the size of the mutliplier every so many bets.\n\n";
             rtbAbout.Text += "To find out what a setting or input does, hover over the label for that setting.\n\n";
             rtbAbout.Text += "A safety key has been built into the program, so you can stop all betting, no matter the settings and no matter what window you are focused on. hitting left ctrl + left shit + s on combination will immediately STOP ALL BETTING until restarted by user\n\n";
-            rtbAbout.Text += "Please feel free to donate. \nBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 Ltc: LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy";
+            rtbAbout.Text += "Please feel free to donate. \nBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 \nLtc:  LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy";
 
         }
 
