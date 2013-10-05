@@ -1,0 +1,12 @@
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\bin\Release\DiceBot.exe
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\bin\Release\DiceBot.pdb
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\bin\Release\Skybound.Gecko.dll
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\obj\x86\Release\DiceBot.About.resources
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\obj\x86\Release\DiceBot.cDiceBot.resources
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\obj\x86\Release\DiceBot.cLogin.resources
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\obj\x86\Release\DiceBot.Properties.Resources.resources
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\obj\x86\Release\DiceBot.cSettings.resources
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\obj\x86\Release\DiceBot.StreakTable.resources
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\obj\x86\Release\DiceBot.csproj.GenerateResource.Cache
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\obj\x86\Release\DiceBot.exe
+C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\obj\x86\Release\DiceBot.pdb

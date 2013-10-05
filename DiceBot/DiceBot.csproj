@@ -104,6 +104,7 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Simulation.cs" />
     <Compile Include="StreakTable.cs">
       <SubType>Form</SubType>
     </Compile>

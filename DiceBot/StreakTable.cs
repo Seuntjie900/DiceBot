@@ -17,7 +17,7 @@ namespace DiceBot
         int nbets;
         int maxmultiplies;
         int mode;
-        public StreakTable(double minbet, double multliplier, double devider, int nbets, int maxmultiplies, int mode )
+        public StreakTable(double minbet, double multliplier, double devider, int nbets, int maxmultiplies, int mode, double chance )
         {
             
             InitializeComponent();
@@ -25,6 +25,7 @@ namespace DiceBot
             txtMultiplier.Text =  (this.multliplier = multliplier).ToString();
             txtDevider.Text = (this.devider = devider).ToString(); ;
             txtNBets.Text = (this.nbets = nbets).ToString();
+            txtReturn.Text = (99 / chance).ToString();
             nudMaxMultiply.Value= this.maxmultiplies = maxmultiplies;
             this.mode = mode;
             switch (mode)

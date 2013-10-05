@@ -17,6 +17,9 @@ using System.IO;
 using System.Resources;
 using System.Net;
 using System.Media;
+using Microsoft.VisualBasic;
+using System.Security.Cryptography;
+
 namespace DiceBot
 {
     
@@ -24,6 +27,7 @@ namespace DiceBot
     {
 
         #region Variables
+        Random rand = new Random();
         double StartBalance = 0;        
         double Lastbet = 0;
         double MinBet = 0;
@@ -32,15 +36,27 @@ namespace DiceBot
         double Amount = 0;
         double loading = 0;
         double loadammount = 2;
-        double BiggestBest = 0;
+        double LargestBet = 0;
+        double LargestWin = 0;
+        double LargestLoss = 0;
         double LowerLimit = 0;
         double Devider = 0;
         double Chance = 0;
+        double avgloss = 0;
+        double avgwin = 0;
+        double avgstreak = 0;
+        int numwinstreasks = 0;
+        int numlosesreaks = 0;
+        int numstreaks = 0;
         int Wins = 0;
         int Losses = 0;
         int Winstreak = 0;
         int BestStreak = 0;
         int WorstStreak = 0;
+        int BestStreak2 = 0;
+        int WorstStreak2 = 0;
+        int BestStreak3 = 0;
+        int WorstStreak3 = 0;
         int Losestreak = 0;
         int timecounter = 0;
         int waiter = 0;
@@ -49,6 +65,9 @@ namespace DiceBot
         int Devidecounter = 0;
         int SoundStreakCount = 15;
         int restartcounter = 0;
+        int reversebets = 0;
+        int laststreaklose = 0;
+        int laststreakwin = 0;
         bool stop = true;
         bool withdraw = false;
         bool invest = false;
@@ -74,6 +93,7 @@ namespace DiceBot
         public string NCPpassword = "";
         public string Botname = "";
         public Email Emails { get; set; }
+        Simulation lastsim;
         #endregion
 
         #region Auto Invest Divest Vars
@@ -110,34 +130,73 @@ namespace DiceBot
             
             
 
-            #region tooltip events
-            lblLowLimit.MouseEnter += Labels_MouseEnter;
-            lblAction.MouseEnter += Labels_MouseEnter;
-            lblAmount.MouseEnter += Labels_MouseEnter;
-            lblAddress.MouseEnter += Labels_MouseEnter;
-            lblMinBet.MouseEnter += Labels_MouseEnter;
-            lblMultiplier.MouseEnter += Labels_MouseEnter;
-            lblMaxMultiplier.MouseEnter += Labels_MouseEnter;
-            lblAfter.MouseEnter += Labels_MouseEnter;
-            lblAfter2.MouseEnter += Labels_MouseEnter;
-            lblBets.MouseEnter += Labels_MouseEnter;
-            lblDevider.MouseEnter += Labels_MouseEnter;
+            #region tooltip Texts
+            ToolTip tt = new ToolTip();
+            tt.SetToolTip(lblZigZag1, "After every n bets/wins/losses \n(as specified to the right), \nthe bot will switch from \nbetting high to low or vica verca");
+            tt.SetToolTip(lblLowLimit,
+                "When your balance goes below this\n" +
+                "value, the bot will stop playing.\n" +
+                "actions specified below");
 
-            lblLowLimit.MouseLeave += Labels_MouseLeave;
-            lblAction.MouseLeave += Labels_MouseLeave;
-            lblAmount.MouseLeave += Labels_MouseLeave;
-            lblAddress.MouseLeave += Labels_MouseLeave;
-            lblMinBet.MouseLeave += Labels_MouseLeave;
-            lblMultiplier.MouseLeave += Labels_MouseLeave;
-            lblMaxMultiplier.MouseLeave += Labels_MouseLeave;
-            lblAfter.MouseLeave += Labels_MouseLeave;
-            lblAfter2.MouseLeave += Labels_MouseLeave;
-            lblBets.MouseLeave += Labels_MouseLeave;
-            lblDevider.MouseLeave += Labels_MouseLeave;
+            tt.SetToolTip(lblLimit,
+                    "When your balance reaches this\n"+
+                    "value, the bot will do one of \n" +
+                    "the actions specified below.");
+                    
+                tt.SetToolTip(lblLowLimit,
+                "When your balance goes below this\n" +
+                "value, the bot will stop playing.\n" +
+                "actions specified below");
+                tt.SetToolTip( lblAction,
+                "The selected action will occur when\n" +
+                "your balance goes above the limit as\n" +
+                "specified above"); 
+                tt.SetToolTip( lblAmount,
+                "The amount that will be invested\n" +
+                "or deposited when the limit is reached"); 
+                tt.SetToolTip( lblAddress,
+                "Btc Address that the funds get" +
+                "withdrawn to\n"); 
+                tt.SetToolTip( lblMinBet,
+                "This is the first bet to be placed,\n" +
+                "upon win, bet will reset to this value\n"); 
+                tt.SetToolTip( lblChance,
+                "Chance of winning, as entered into \n" +
+                "the site\n");
+                tt.SetToolTip( lblMultiplier,
+                "Upon a loss, the bet will be \n" +
+                "multiplied by this value. See\n" +
+                "Max multiplies and After as well"); 
+            tt.SetToolTip( lblMaxMultiplier,
+                "In a losing streak, the bet will\n" +
+                "will be multiplied untill the streak\n" +
+                "reaches "+txtMaxMultiply.Text +" bets. The following bets\n"+
+                "will be with the same amount"); 
+                tt.SetToolTip( lblAfter,
+                "with every " + txtNBets.Text + " losses in a row,\n" +
+                "the muliplier will be multiplied with\n" +
+                txtDevider.Text+". The idea is to decrease the size\n"+
+                "the multiplier, keep the value between\n"+
+                "0.9 and 0.5. Minimum Multiplier is 1"); 
+                tt.SetToolTip( lblAfter2,
+            "with every " + txtNBets.Text + " losses in a row,\n" +
+            "the muliplier will be multiplied with\n" +
+            txtDevider.Text + ". The idea is to decrease the size\n" +
+            "the multiplier, keep the value between\n" +
+            "0.9 and 0.5. Minimum Multiplier is 1"); 
+                tt.SetToolTip( lblDevider,
+            "with every " + txtNBets.Text + " losses in a row,\n" +
+            "the muliplier will be multiplied with\n" +
+            txtDevider.Text + ". The idea is to decrease the size\n" +
+            "the multiplier, keep the value between\n" +
+            "0.9 and 0.5. Minimum Multiplier is 1"); 
+                
+
+
             #endregion
 
 
-            lblTip.Location = new Point(999, 999);
+           
             Xpcom.Initialize(Environment.CurrentDirectory + "\\xulrunner\\");
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
@@ -210,9 +269,13 @@ namespace DiceBot
             TimeSpan curtime = DateTime.Now - dtStarted;
             lblBets.Text = (Wins + Losses).ToString();
 
-            decimal profpB = (decimal)profit / (decimal)(Wins + Losses);
+            decimal profpB = 0;
+            if (Wins+Losses >0)
+                profpB = (decimal)profit / (decimal)(Wins + Losses);
             decimal betsps = (decimal)(Wins + Losses) / (decimal)(((TotalTime.Hours + curtime.Hours) * 60 * 60) + ((TotalTime.Minutes + curtime.Minutes) * 60) + (TotalTime.Minutes + curtime.Seconds));
-            decimal profph = (profpB / betsps) * (decimal)60.0 * (decimal)60.0;
+            decimal profph = 0;
+            if (profpB>0)
+                profph = (profpB / betsps) * (decimal)60.0 * (decimal)60.0;
             lblProfpb.Text = profpB.ToString("0.00000000");
             lblProfitph.Text = (profpB * (decimal)60.0 * (decimal)60.0).ToString("0.00000000");
             lblProfit24.Text = (profpB * (decimal)60.0 * (decimal)60.0 * (decimal)24.0).ToString("0.00000000");
@@ -238,18 +301,129 @@ namespace DiceBot
             {
                 lblMaxBets.ForeColor = Color.Red;
             }
-                
+            lblAvgWinStreak.Text = avgwin.ToString("0.000000");
+            lblAvgLoseStreak.Text = avgloss.ToString("0.000000");
+            lblAvgStreak.Text = avgstreak.ToString("0.000000");
+            if (avgstreak > 0)
+                lblAvgStreak.ForeColor = Color.Green;
+            else lblAvgStreak.ForeColor = Color.Red;
+            lbl3Best.Text = BestStreak.ToString() + "\n" + BestStreak2.ToString() + "\n" + BestStreak3.ToString();
+            lbl3Worst.Text = WorstStreak.ToString() + "\n" + WorstStreak2.ToString() + "\n" + WorstStreak2.ToString();
+            lblLastStreakLose.Text = laststreaklose.ToString();
+            lblLastStreakWin.Text = laststreakwin.ToString();
+            lblLargestBet.Text = LargestBet.ToString("0.00000000");
+            lblLargestLoss.Text = LargestLoss.ToString("0.00000000");
+            lblLargestWin.Text = LargestWin.ToString("0.00000000");
         }
 
         int maxbets()//Start
         {
             if (PreviousBalance != 0)
             {
-                return maxbets(PreviousBalance, 0, MinBet, Multiplier);
+                if (rdbConstant.Checked)
+                    return maxbetsconstant();
+                else if (rdbDevider.Checked)
+                    return maxbetsVariable();
+                else if (rdbMaxMultiplier.Checked)
+                    return maxbetsMaxMultiplies();
+                else if (rdbReduce.Checked) 
+                return maxbetsChangeOnce();
             }
             return 0;
         }
 
+        int maxbetsconstant()
+        {
+            double total = 0;
+            int bets = 0;
+            double curbet = MinBet;
+            double Multiplier = double.Parse(txtMultiplier.Text);
+            while (total < PreviousBalance)
+            {
+                if (bets > 0)
+                    curbet *= Multiplier;
+                bets++;
+                total += curbet;
+                if (bets > 500)
+                    return -500;  
+            }
+            return bets;
+        }
+
+        int maxbetsVariable()
+        {
+            double total = 0;
+            int bets = 0;
+            double curbet = MinBet;
+            int n = Devidecounter;
+            double dmultiplier = double.Parse(txtMultiplier.Text);;
+            while (total < PreviousBalance)
+            {
+                if (bets > 0)
+                {
+                    if (bets % Devidecounter == 0)
+                        dmultiplier *= Devider;
+
+                    curbet *= dmultiplier;
+                }
+                bets++;
+                total += curbet;
+                if (bets > 500)
+                    return -500;
+            }
+            return bets;
+        }
+
+        int maxbetsMaxMultiplies()
+        {
+            double total = 0;
+            int bets = 0;
+            double curbet = MinBet;
+            int n = Devidecounter;
+            double dmultiplier = double.Parse(txtMultiplier.Text); ; ;
+            while (total < PreviousBalance)
+            {
+                if (bets > 0)
+                {
+                    if (bets > MaxMultiplies)
+                        dmultiplier = 1;
+
+                    curbet *= dmultiplier;
+                }
+                bets++;
+                total += curbet;
+                if (bets > 500)
+                    return -500;
+            }
+            return bets;
+        }
+
+        int maxbetsChangeOnce()
+        {
+            double total = 0;
+            int bets = 0;
+            double curbet = MinBet;
+            int n = Devidecounter;
+            double dmultiplier = double.Parse(txtMultiplier.Text); ; ;
+            while (total < PreviousBalance)
+            {
+                if (bets > 0)
+                {
+                    if (bets == Devidecounter)
+                        dmultiplier *= Devider;
+
+                    curbet *= dmultiplier;
+                }
+                bets++;
+                total += curbet;
+                if (bets > 500)
+                    return -500;
+            }
+            return bets;
+        }
+        
+        //depricated this asshole. i hate recursion, don't know why the hell i ever used this
+        //  this is a BAD piece of code taht doesn't work right. i keep it only to remind myself never to program like that again
         int maxbets(double balance, int betnr, double betsize, double multiplier)//Recursive
         {
             
@@ -299,7 +473,7 @@ namespace DiceBot
                 mode = 2;
             else if (rdbReduce.Checked)
                 mode = 3;
-            new StreakTable(MinBet, Multiplier, Devider, Devidecounter, MaxMultiplies, mode).Show();
+            new StreakTable(MinBet, Multiplier, Devider, Devidecounter, MaxMultiplies, mode, Chance).Show();
         }
 
         #endregion
@@ -506,7 +680,8 @@ namespace DiceBot
         void Start()
         {
             rtbDonate.Text = "Please feel free to donate. \t\tBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 \t\tLtc: LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy";
-
+            Winstreak = 0;
+            Losestreak = 0;
             save();
 
             stoponwin = false;
@@ -563,16 +738,59 @@ namespace DiceBot
         {
             if (!stop && !gckBrowser.IsBusy && !(withdraw || invest))
             {
+                double betresult = dBalance - PreviousBalance;
+                if (betresult > 0)
+                {
+                    if (LargestWin < betresult)
+                        LargestWin = betresult;
+                }
+                else if (betresult < 0)
+                {
+                    if (LargestLoss < -betresult)
+                        LargestLoss = -betresult;
+                }
 
+                if (LargestBet < Lastbet)
+                    LargestBet = Lastbet;
                 if (dBalance > PreviousBalance && !(withdraw || invest))
                 {
+                    
+
                     if (PreviousBalance != 0)
                     {
                         Wins++;
                         Winstreak++;
+                        if (Winstreak >= nudLastStreakWin.Value)
+                            laststreakwin = Winstreak;
+                        if (Losestreak != 0)
+                        {
+                            double avglosecalc = avgloss * numlosesreaks;
+                            avglosecalc += Losestreak;
+                            avglosecalc /= ++numlosesreaks;
+                            avgloss = avglosecalc;
+                            double avgbetcalc = avgstreak * numstreaks;
+                            avgbetcalc -= Losestreak;
+                            avgbetcalc /= ++numstreaks;
+                            avgstreak = avgbetcalc;
+                            if (Losestreak > WorstStreak3)
+                            {
+                                WorstStreak3 = Losestreak;
+                                if (Losestreak > WorstStreak2)
+                                {
+                                    WorstStreak3 = WorstStreak2;
+                                    WorstStreak2 = Losestreak;
+                                    if (Losestreak > WorstStreak)
+                                    {
+                                        WorstStreak2 = WorstStreak;
+                                        WorstStreak = Losestreak;
+                                    }
+                                }
+                            }
+                        }
                         Losestreak = 0;
-                        if (Winstreak > BestStreak)
-                            BestStreak = Winstreak;
+                        
+                        
+                        
                     }
                     /*else
                     {
@@ -585,6 +803,13 @@ namespace DiceBot
                     }
                     iMultiplyCounter = 0;
                     Multiplier = double.Parse(txtMultiplier.Text);
+                    if (chkReverse.Checked)
+                    {
+                        if (rdbReverseWins.Checked && Winstreak % reversebets == 0)
+                        {
+                            high = !high;
+                        }
+                    }
                 }
                 else if (dBalance < PreviousBalance && !(withdraw || invest))
                 {
@@ -604,10 +829,43 @@ namespace DiceBot
                         Multiplier *= Devider;
                     }
                     Lastbet *= Multiplier;
-                    if (Lastbet > BiggestBest)
-                        BiggestBest = Lastbet;
+                    
                     Losses++;
                     Losestreak++;
+                    if (Losestreak >= nudLastStreakLose.Value)
+                        laststreaklose = Losestreak;
+                    if (chkReverse.Checked)
+                    {
+                        if (rdbReverseLoss.Checked && Losestreak % reversebets == 0)
+                        {
+                            high = !high;
+                        }
+                    }
+                    if (Winstreak != 0)
+                    {
+                        double avgwincalc = avgwin * numwinstreasks;
+                        avgwincalc += Winstreak;
+                        avgwincalc /= ++numwinstreasks;
+                        avgwin = avgwincalc;
+                        double avgbetcalc = avgstreak * numstreaks;
+                        avgbetcalc += Winstreak;
+                        avgbetcalc /= ++numstreaks;
+                        avgstreak = avgbetcalc;
+                        if (Winstreak > BestStreak3)
+                        {
+                            BestStreak3 = Winstreak;
+                            if (Winstreak > BestStreak2)
+                            {
+                                BestStreak3 = BestStreak2;
+                                BestStreak2 = Winstreak;
+                                if (Winstreak > BestStreak)
+                                {
+                                    BestStreak2 = BestStreak;
+                                    BestStreak = Winstreak;
+                                }
+                            }
+                        }
+                    }
                     Winstreak = 0;
                     if (Sound && SoundStreak && Losestreak > SoundStreakCount)
                         new SoundPlayer("Media\\alarm.wav").Play();
@@ -621,6 +879,14 @@ namespace DiceBot
                         WorstStreak = Losestreak;
 
                    
+
+                }
+                if (chkReverse.Checked)
+                {
+                    if (rdbReverseBets.Checked && (Wins+Losses) % reversebets == 0 )
+                    {
+                        high = !high;
+                    }
                 }
 
                 if (dBalance > Limit && chkLimit.Checked)
@@ -655,6 +921,11 @@ namespace DiceBot
                     if (Emails.Lower)
                         Emails.SendLowLimit(dBalance, LowerLimit, Lastbet);
                 }
+
+                
+
+                
+
 
                 if ((dBalance != PreviousBalance || withdrew) && !stop)
                 {
@@ -869,7 +1140,21 @@ namespace DiceBot
                         msg += "2";
                     else msg += "3";
                     sw.WriteLine(msg);
-
+                    msg = "";
+                    if (chkReverse.Checked)
+                        msg += 1 + ",";
+                    else msg += 0 + ",";
+                    if (rdbReverseBets.Checked)
+                        msg += "0";
+                    else if (rdbReverseLoss.Checked)
+                        msg += "1";
+                    else if (rdbReverseWins.Checked)
+                        msg += "2";
+                    msg += ",";
+                    msg += NudReverse.Value.ToString("00");
+                    msg += ",";
+                    msg += nudLastStreakWin.Value.ToString("00") + "," + nudLastStreakLose.Value.ToString("00");
+                    sw.WriteLine(msg);
 
 
                 }
@@ -946,6 +1231,29 @@ namespace DiceBot
                         else if (s == "3")
                             rdbReduce.Checked = true;
 
+                    }
+                    if (!sw.EndOfStream)
+                    {
+                        msg = sw.ReadLine();
+                        values = msg.Split(',');
+                        i = 0;                        
+                        if (values[i++] == "1")
+                            chkReverse.Checked = true;
+                        else
+                            chkReverse.Checked = false;                        
+                        string cur = values[i++];
+                        if (cur == "0")
+                            rdbReverseBets.Checked = true;
+                        else if (cur == "1")
+                            rdbReverseLoss.Checked = true;
+                        else if (cur == "2")
+                            rdbReverseWins.Checked = true;
+                        NudReverse.Value = decimal.Parse(values[i++]);
+                        if (values.Length > i)
+                        {
+                            nudLastStreakWin.Value = decimal.Parse(values[i++]);
+                            nudLastStreakLose.Value = decimal.Parse(values[i++]);
+                        }
                     }
 
                 }
@@ -1065,6 +1373,24 @@ namespace DiceBot
 
                 }
 
+                chkAlarm.Checked = Sound;
+                chkEmail.Checked = Emails.Enable;
+                chkEmailLowLimit.Checked = Emails.Lower;
+                chkEmailStreak.Checked = Emails.Streak;
+                chkEmailWithdraw.Checked = Emails.Withdraw;
+                chkJDAutoLogin.Checked = autologin;
+                chkJDAutoStart.Checked = autostart;
+                chkNCPAutoLogin.Checked = NCPAutoLogin;
+                chkSoundLowLimit.Checked = SoundLow;
+                chkSoundStreak.Checked = SoundStreak;
+                chkSoundWithdraw.Checked = SoundWithdraw;
+                chkTray.Checked = tray;
+                txtBot.Text = Text;
+                txtEmail.Text = Emails.emailaddress;
+                txtJDPass.Text = password;
+                txtJDUser.Text = username;
+                txtNCPPass.Text = NCPpassword;
+                txtNCPUser.Text = NCPusername;
                 
             }
 
@@ -1073,6 +1399,83 @@ namespace DiceBot
 
             }
         }
+
+        void writesettings()
+        {
+            using (StreamWriter sw = new StreamWriter(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\Psettings"))
+            {
+
+                //NCPuser,ncppass,autologin
+                string temp1 = txtNCPUser.Text + "," + txtNCPPass.Text + ",";
+                if (chkNCPAutoLogin.Checked)
+                    temp1 += "1";
+                else temp1 += "0";
+                string ncpline = "";
+
+                foreach (char c in temp1)
+                {
+                    ncpline += ((int)c).ToString() + " ";
+                }
+                sw.WriteLine(ncpline);
+
+                //JDuser,JDPass,AutoLogin,AutoStart
+                string temp2 = txtJDUser.Text + "," + txtJDPass.Text + ",";
+                if (chkJDAutoLogin.Checked)
+                    temp2 += "1,";
+                else temp2 += "0";
+                if (chkJDAutoStart.Checked)
+                    temp2 += "1,";
+                else temp2 += "0";
+                string jdline = "";
+
+                foreach (char c in temp2)
+                {
+                    jdline += ((int)c).ToString() + " ";
+                }
+                sw.WriteLine(jdline);
+
+                //tray,botname,enableemail,emailaddress,emailwithdraw,emailinvest,emaillow,emailstreak,emailstreakval
+                string temp3 = "";
+                if (chkTray.Checked)
+                    temp3 += "1,";
+                else temp3 += "0,";
+                temp3 += txtBot.Text + ",";
+                if (chkEmail.Checked)
+                    temp3 += "1,";
+                else temp3 += "0,";
+                temp3 += txtEmail.Text + ",";
+                if (chkEmailWithdraw.Checked)
+                    temp3 += "1,";
+                else temp3 += "0,";
+                if (chkEmailLowLimit.Checked)
+                    temp3 += "1,";
+                else temp3 += "0,";
+                if (chkEmailStreak.Checked)
+                    temp3 += "1,";
+                else temp3 += "0,";
+                temp3 += nudEmailStreak.Value.ToString();
+                temp3 += "," + Emails.SMTP;
+                sw.WriteLine(temp3);
+
+                //soundcoin,soundalarm,soundlower,soundstrea,soundstreakvalue
+                temp3 = "";
+                if (chkSoundWithdraw.Checked)
+                    temp3 += "1,";
+                else temp3 += "0,";
+                if (chkAlarm.Checked)
+                    temp3 += "1,";
+                else temp3 += "0,";
+                if (chkSoundLowLimit.Checked)
+                    temp3 += "1,";
+                else temp3 += "0,";
+                if (chkSoundStreak.Checked)
+                    temp3 += "1,";
+                else temp3 += "0,";
+                temp3 += nudSoundStreak.Value.ToString();
+                sw.WriteLine(temp3);
+            }
+        }
+        
 
         private void btnImport_Click(object sender, EventArgs e)
         {
@@ -1252,96 +1655,7 @@ namespace DiceBot
         }
         #endregion
 
-        #region tooltip
-        private void Labels_MouseEnter(object sender, EventArgs e)
-        {
-            Label owner = sender as Label;
-            string message = "";
-            
-            switch (owner.Name)
-            {
-                case "lblLimit": message = 
-                    "When your balance reaches this\n"+
-                    "value, the bot will do one of \n" +
-                    "the actions specified below.";  
-                    break;
-                case "lblLowLimit": message =
-                "When your balance goes below this\n" +
-                "value, the bot will stop playing.\n" +
-                "actions specified below"; break;
-                case "lblAction": message =
-                "The selected action will occur when\n" +
-                "your balance goes above the limit as\n" +
-                "specified above"; break;
-                case "Amount": message =
-                "The amount that will be invested\n" +
-                "or deposited when the limit is reached"; break;
-                case "lblAddress": message =
-                "Btc Address that the funds get" +
-                "withdrawn to\n"; break;
-                case "lblMinBet": message =
-                "This is the first bet to be placed,\n" +
-                "upon win, bet will reset to this value\n"; break;
-                case "lblChance": message =
-                "Chance of winning, as entered into \n" +
-                "the site\n"; break;
-                case "lblMultiplier": message =
-                "Upon a loss, the bet will be \n" +
-                "multiplied by this value. See\n" +
-                "Max multiplies and After as well"; break;
-                case "lblMaxMultiplier": message =
-                "In a losing streak, the bet will\n" +
-                "will be multiplied untill the streak\n" +
-                "reaches "+txtMaxMultiply.Text +" bets. The following bets\n"+
-                "will be with the same amount"; break;
-                case "lblAfter": message =
-                "with every " + txtNBets.Text + " losses in a row,\n" +
-                "the muliplier will be multiplied with\n" +
-                txtDevider.Text+". The idea is to decrease the size\n"+
-                "the multiplier, keep the value between\n"+
-                "0.9 and 0.5. Minimum Multiplier is 1"; break;
-                case "lblAfter2": message =
-            "with every " + txtNBets.Text + " losses in a row,\n" +
-            "the muliplier will be multiplied with\n" +
-            txtDevider.Text + ". The idea is to decrease the size\n" +
-            "the multiplier, keep the value between\n" +
-            "0.9 and 0.5. Minimum Multiplier is 1"; break;
-                case "lblDevider": message =
-            "with every " + txtNBets.Text + " losses in a row,\n" +
-            "the muliplier will be multiplied with\n" +
-            txtDevider.Text + ". The idea is to decrease the size\n" +
-            "the multiplier, keep the value between\n" +
-            "0.9 and 0.5. Minimum Multiplier is 1"; break;
-                
-                default: break;
-            }
-            showtip(message, owner);            
-        }
-
-        private void Labels_MouseLeave(object sender, EventArgs e)
-        {
-            hidetip();
-        }
-
-        void showtip(string Message, Label Owner)
-        {
-            lblTip.Visible = true;
-            Point position = new Point(Owner.Location.X + Owner.Width, Owner.Location.Y + Owner.Height);
-            if (Owner.Parent!=Settings)
-            {
-                position = new Point(Owner.Parent.Location.X + position.X, Owner.Parent.Location.Y + position.Y);
-            }
-            lblTip.Location = position;
-            lblTip.Text = Message;
-            lblTip.BringToFront();
-        }
-
-        void hidetip()
-        {
-            lblTip.Location = new Point(999, 999);
-            lblTip.Text = "";
-        }
-        #endregion
+        
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
@@ -1457,17 +1771,10 @@ namespace DiceBot
             new cSettings(this).Show();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            grbInvest.Visible = true;
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            grbInvest.Visible = false;
-        }
+        #region auto invest divest
         bool divesting = false;
         bool divesting2 = false;
+
         private void tmrCheckInvest_Tick(object sender, EventArgs e)
         {
             #region invest hour
@@ -1632,11 +1939,286 @@ namespace DiceBot
                 MessageBox.Show("Principle not a valid number");
             }
         }
+        #endregion
 
 
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            reversebets = (int)NudReverse.Value;
+            NudReverse.Value = reversebets;
+        }
 
-        
-        
+        private void tabPage5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #region Simulate and bet generator
+
+        Simulation runsim()
+        {
+            
+           
+            double dMultiplier = Multiplier;
+            double startMultiplier = Multiplier;
+            int numbets = (int)nudSimNumBets.Value;
+            int bets = 1;
+            int wins = 0;
+            int losses = 0;
+            int winstreak = 0;
+            int losstreak = 0;
+            int largestwinstreak = 0;
+            int largestlostreak = 0;
+            int MaxMultiplies = this.MaxMultiplies;
+            double devider = this.Devider;
+            double devidercounter = this.Devidecounter;
+            double balance = (double)nudSimBalance.Value;
+            double lastbet = MinBet;
+            double minbet = MinBet;
+            double profit = 0;
+            string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
+            string server = "";
+
+            for (int i = 0; i < 64; i++)
+            {
+                server += (chars[rand.Next(0, chars.Length)]);
+            }
+            string client = "";
+            for (int i = 0; i < 24; i++)
+            {
+                client += rand.Next(0, 10).ToString();
+            }
+            
+            string sserver = "";
+            foreach (byte b in server)
+            {
+                sserver += Convert.ToChar(b);
+            }
+            
+            Simulation sim = new Simulation(balance.ToString("0.00000000"), bets.ToString(), sserver, client);
+            while (bets <= numbets)
+            {
+                //string columns = "Bet Number,LuckyNumber,Chance,Roll,Result,Wagered,Profit,Balance,Total Profit";
+                string betstring = bets+",";
+                double number = getlucky(server, client, bets);
+                betstring += number.ToString() + ","+Chance.ToString()+",";
+                bool win = false;
+                if (high)
+                    betstring += ">" + (100 - Chance) + ",";
+                else
+                    betstring += "<" + Chance+",";
+                if (high && number > 100 - Chance)
+                {
+                    win = true;
+                }
+                else if (!high && number < Chance)
+                {
+                    win = true;
+                }
+
+                if (win)
+                {
+                    betstring += "win,";
+                    wins++;
+                    winstreak++;
+                    if (largestwinstreak < winstreak)
+                        largestwinstreak = winstreak;
+                    losstreak = 0;
+                    dMultiplier = startMultiplier;
+                    profit += (lastbet * 99 / Chance) - lastbet;
+                    betstring += lastbet + ",";
+                    betstring += (lastbet * 99 / Chance) - lastbet+",";
+                    balance += (lastbet * 99 / Chance) - lastbet;
+                    lastbet = minbet;
+                    dMultiplier = startMultiplier;
+                    if (chkReverse.Checked && rdbReverseWins.Checked && winstreak % reversebets == 0)
+                        high = !high;
+
+
+                }
+                else
+                {
+                    betstring += "lose,";
+                    losses++;
+                    losstreak++;
+                    if (largestlostreak < losstreak)
+                        largestlostreak = losstreak;
+                    winstreak = 0;
+                    betstring += lastbet + ",";
+                    betstring += - lastbet + ",";
+                    profit -= lastbet;
+                    balance -= lastbet;
+                    if (rdbMaxMultiplier.Checked && losstreak == MaxMultiplies)
+                    {
+                        dMultiplier = 1;
+                    }
+                    if (rdbDevider.Checked && losstreak % devidercounter == 0)
+                    {
+                        dMultiplier *= devider;
+                    }
+                    if (rdbReduce.Checked && losstreak == devidercounter)
+                    {
+                        dMultiplier *= devider;
+                    }
+                    
+                    lastbet *= dMultiplier;
+                    if (lastbet > balance)
+                        break;
+                    if (chkReverse.Checked && rdbReverseLoss.Checked && losstreak % reversebets == 0)
+                        high = !high;
+                }
+                betstring += balance + ",";
+                betstring += profit;
+                sim.bets.Add(betstring);
+                bets++;
+                if (chkReverse.Checked && rdbReverseBets.Checked && bets % reversebets == 0)
+                    high = !high;
+            }
+
+            lblSimLosses.Text = losses.ToString();
+            lblSimProfit.Text = profit.ToString("0.00000000");
+            lblSimWins.Text = wins.ToString();
+            lblSimEndBalance.Text = balance.ToString("0.00000000");
+            lblSimLoseStreak.Text = largestlostreak.ToString();
+            lblSimWinStreak.Text = largestwinstreak.ToString();
+            
+            return sim;
+
+        }
+
+        private void btnSim_Click(object sender, EventArgs e)
+        {
+            lastsim = runsim();
+        }
+
+        private double getlucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = nonce.ToString() + ":" + client + ":" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+            
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i+=charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+                
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }
+            return 0;
+        }
+
+        private void btnExportSim_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog svdExportSim = new SaveFileDialog();
+            svdExportSim.DefaultExt = "csv";
+            svdExportSim.AddExtension = true;
+            if (svdExportSim.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                
+                try
+                {
+                    if (lastsim == null)
+                    {
+                        lastsim = runsim();
+                    }
+                    using (StreamWriter sw = new StreamWriter(svdExportSim.FileName))
+                    {
+                        foreach (string s in lastsim.bets)
+                        {
+                            sw.WriteLine(s);
+                        }
+                    }
+                    MessageBox.Show("exported to " + svdExportSim.FileName);
+                }
+                catch
+                {
+                    MessageBox.Show("Failed exporting to " + svdExportSim.FileName);
+                }
+            }
+        }
+
+        private void btnGenerateBets_Click(object sender, EventArgs e)
+        {
+            if (txtClientSeed.Text != "" && txtServerSeed.Text != "")
+            {
+                List<string> Betlist = new List<string>();
+                string headers = "betnumber,luckynumber,,Please note, This algorithm is still in testing, some Numbers Might be wrong.\n,,,Check the alternative roll verifier";
+                Betlist.Add(headers);
+                byte[] server = new byte[64];
+                
+                for (decimal i = nudGenBetsStart.Value; i < nudGenBetsStart.Value + nudGenBetsAmount.Value; i++)
+                {
+                    string curstring = i.ToString() + "," + getlucky(i + ":" + txtServerSeed.Text + ":" + i, txtClientSeed.Text, (int)i).ToString();
+                    Betlist.Add(curstring);
+                }
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter("LuckyNum-" + txtClientSeed.Text + ".csv"))
+                    {
+                        foreach (string s in Betlist)
+                        {
+                            sw.WriteLine(s);
+                        }
+                    }
+                    MessageBox.Show("Saved bets to: " + "LuckyNum-" + txtClientSeed.Text + ".csv");
+                }
+                catch
+                {
+                    MessageBox.Show("Failed saving bets to: " + "LuckyNum-" + txtClientSeed.Text + ".csv");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a server seed and a client seed");
+            }
+        }
+
+        #endregion
+
+        private void btnResetStats_Click(object sender, EventArgs e)
+        {
+            Wins = 0;
+            Losses = 0;
+            StartBalance = Getbalance();
+            Winstreak = Losestreak = BestStreak = laststreaklose = laststreakwin = WorstStreak = BestStreak2 = WorstStreak3 = BestStreak3 = WorstStreak3 = numstreaks = numwinstreasks = numlosesreaks = 0;
+            avgloss = avgstreak = LargestBet = LargestLoss = LargestWin = avgwin = 0.0;
+            UpdateStats();
+        }
+
+        private void btnSaveUser_Click(object sender, EventArgs e)
+        {
+            writesettings();
+        }
+
+        private void btnSMTP_Click(object sender, EventArgs e)
+        {
+            string smtp = Interaction.InputBox("Enter new smtp server address", "SMTP", "smtp.secrueserver.net");
+            Emails.SMTP = smtp;
+        }
+
     }
 
     
