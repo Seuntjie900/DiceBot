@@ -2,11 +2,11 @@
 
 [Header,2]
 0,Version,2,0
-1,AppDir,C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\bin\Debug\xulrunner
+1,AppDir,C:\Users\seunt_000\Documents\GitHub\souceforge\dicebot\DiceBot\bin\Debug\xulrunner
 
 [Directories,2]
-0,C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\bin\Debug\xulrunner\components
-1,C:\Users\seunt_000\Documents\GitHub\DiceBot\DiceBot\bin\Debug\xulrunner\plugins
+0,C:\Users\seunt_000\Documents\GitHub\souceforge\dicebot\DiceBot\bin\Debug\xulrunner\components
+1,C:\Users\seunt_000\Documents\GitHub\souceforge\dicebot\DiceBot\bin\Debug\xulrunner\plugins
 
 [Files,131]
 0,dom_svg.xpt,0,23446,1378027244603

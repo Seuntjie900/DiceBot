@@ -190,25 +190,6 @@
             this.nudProfitPer = new System.Windows.Forms.NumericUpDown();
             this.label19 = new System.Windows.Forms.Label();
             this.tabPage9 = new System.Windows.Forms.TabPage();
-            this.txtBot = new System.Windows.Forms.TextBox();
-            this.label50 = new System.Windows.Forms.Label();
-            this.chkTray = new System.Windows.Forms.CheckBox();
-            this.btnSaveUser = new System.Windows.Forms.Button();
-            this.txtNCPUser = new System.Windows.Forms.TextBox();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label43 = new System.Windows.Forms.Label();
-            this.label44 = new System.Windows.Forms.Label();
-            this.label45 = new System.Windows.Forms.Label();
-            this.chkJDAutoStart = new System.Windows.Forms.CheckBox();
-            this.chkJDAutoLogin = new System.Windows.Forms.CheckBox();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label47 = new System.Windows.Forms.Label();
-            this.chkNCPAutoLogin = new System.Windows.Forms.CheckBox();
-            this.txtJDPass = new System.Windows.Forms.TextBox();
-            this.txtJDUser = new System.Windows.Forms.TextBox();
-            this.txtNCPPass = new System.Windows.Forms.TextBox();
-            this.tabPage10 = new System.Windows.Forms.TabPage();
-            this.btnSaveNotification = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.nudSoundStreak = new System.Windows.Forms.NumericUpDown();
             this.chkSoundStreak = new System.Windows.Forms.CheckBox();
@@ -225,6 +206,18 @@
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.label49 = new System.Windows.Forms.Label();
             this.chkEmail = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label43 = new System.Windows.Forms.Label();
+            this.txtJDUser = new System.Windows.Forms.TextBox();
+            this.txtJDPass = new System.Windows.Forms.TextBox();
+            this.chkJDAutoLogin = new System.Windows.Forms.CheckBox();
+            this.chkJDAutoStart = new System.Windows.Forms.CheckBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.txtBot = new System.Windows.Forms.TextBox();
+            this.label50 = new System.Windows.Forms.Label();
+            this.chkTray = new System.Windows.Forms.CheckBox();
+            this.btnSaveUser = new System.Windows.Forms.Button();
+            this.btnSaveNotification = new System.Windows.Forms.Button();
             this.tmBetting = new System.Windows.Forms.Timer(this.components);
             this.tmStop = new System.Windows.Forms.Timer(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
@@ -268,11 +261,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudTotalDivestPer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudProfitPer)).BeginInit();
             this.tabPage9.SuspendLayout();
-            this.tabPage10.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSoundStreak)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -851,7 +844,6 @@
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage9);
-            this.tabControl1.Controls.Add(this.tabPage10);
             this.tabControl1.Location = new System.Drawing.Point(3, 6);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -1989,203 +1981,20 @@
             // 
             // tabPage9
             // 
+            this.tabPage9.Controls.Add(this.groupBox4);
+            this.tabPage9.Controls.Add(this.groupBox2);
+            this.tabPage9.Controls.Add(this.groupBox1);
             this.tabPage9.Controls.Add(this.txtBot);
             this.tabPage9.Controls.Add(this.label50);
             this.tabPage9.Controls.Add(this.chkTray);
             this.tabPage9.Controls.Add(this.btnSaveUser);
-            this.tabPage9.Controls.Add(this.txtNCPUser);
-            this.tabPage9.Controls.Add(this.label40);
-            this.tabPage9.Controls.Add(this.label43);
-            this.tabPage9.Controls.Add(this.label44);
-            this.tabPage9.Controls.Add(this.label45);
-            this.tabPage9.Controls.Add(this.chkJDAutoStart);
-            this.tabPage9.Controls.Add(this.chkJDAutoLogin);
-            this.tabPage9.Controls.Add(this.label46);
-            this.tabPage9.Controls.Add(this.label47);
-            this.tabPage9.Controls.Add(this.chkNCPAutoLogin);
-            this.tabPage9.Controls.Add(this.txtJDPass);
-            this.tabPage9.Controls.Add(this.txtJDUser);
-            this.tabPage9.Controls.Add(this.txtNCPPass);
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage9.Size = new System.Drawing.Size(348, 486);
             this.tabPage9.TabIndex = 2;
-            this.tabPage9.Text = "User";
+            this.tabPage9.Text = "DiceBot Settings";
             this.tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // txtBot
-            // 
-            this.txtBot.Location = new System.Drawing.Point(78, 35);
-            this.txtBot.Name = "txtBot";
-            this.txtBot.Size = new System.Drawing.Size(120, 20);
-            this.txtBot.TabIndex = 50;
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(15, 38);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(57, 13);
-            this.label50.TabIndex = 49;
-            this.label50.Text = "Bot Name:";
-            // 
-            // chkTray
-            // 
-            this.chkTray.AutoSize = true;
-            this.chkTray.Location = new System.Drawing.Point(18, 6);
-            this.chkTray.Name = "chkTray";
-            this.chkTray.Size = new System.Drawing.Size(98, 17);
-            this.chkTray.TabIndex = 48;
-            this.chkTray.Text = "Minimize to tray";
-            this.chkTray.UseVisualStyleBackColor = true;
-            // 
-            // btnSaveUser
-            // 
-            this.btnSaveUser.Location = new System.Drawing.Point(265, 457);
-            this.btnSaveUser.Name = "btnSaveUser";
-            this.btnSaveUser.Size = new System.Drawing.Size(75, 23);
-            this.btnSaveUser.TabIndex = 47;
-            this.btnSaveUser.Text = "Save";
-            this.btnSaveUser.UseVisualStyleBackColor = true;
-            this.btnSaveUser.Click += new System.EventHandler(this.btnSaveUser_Click);
-            // 
-            // txtNCPUser
-            // 
-            this.txtNCPUser.Location = new System.Drawing.Point(91, 101);
-            this.txtNCPUser.Name = "txtNCPUser";
-            this.txtNCPUser.Size = new System.Drawing.Size(100, 20);
-            this.txtNCPUser.TabIndex = 30;
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(19, 237);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(56, 13);
-            this.label40.TabIndex = 29;
-            this.label40.Text = "Password:";
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(19, 214);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(58, 13);
-            this.label43.TabIndex = 28;
-            this.label43.Text = "Username:";
-            // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(21, 130);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(56, 13);
-            this.label44.TabIndex = 27;
-            this.label44.Text = "Password:";
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(19, 104);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(58, 13);
-            this.label45.TabIndex = 26;
-            this.label45.Text = "Username:";
-            // 
-            // chkJDAutoStart
-            // 
-            this.chkJDAutoStart.AutoSize = true;
-            this.chkJDAutoStart.Location = new System.Drawing.Point(53, 288);
-            this.chkJDAutoStart.Name = "chkJDAutoStart";
-            this.chkJDAutoStart.Size = new System.Drawing.Size(73, 17);
-            this.chkJDAutoStart.TabIndex = 25;
-            this.chkJDAutoStart.Text = "Auto Start";
-            this.chkJDAutoStart.UseVisualStyleBackColor = true;
-            // 
-            // chkJDAutoLogin
-            // 
-            this.chkJDAutoLogin.AutoSize = true;
-            this.chkJDAutoLogin.Location = new System.Drawing.Point(54, 265);
-            this.chkJDAutoLogin.Name = "chkJDAutoLogin";
-            this.chkJDAutoLogin.Size = new System.Drawing.Size(77, 17);
-            this.chkJDAutoLogin.TabIndex = 24;
-            this.chkJDAutoLogin.Text = "Auto Login";
-            this.chkJDAutoLogin.UseVisualStyleBackColor = true;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(16, 189);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(92, 13);
-            this.label46.TabIndex = 23;
-            this.label46.Text = "Just-Dice Settings";
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(16, 78);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(114, 13);
-            this.label47.TabIndex = 22;
-            this.label47.Text = "NetCode Pool Settings";
-            // 
-            // chkNCPAutoLogin
-            // 
-            this.chkNCPAutoLogin.AutoSize = true;
-            this.chkNCPAutoLogin.Location = new System.Drawing.Point(54, 153);
-            this.chkNCPAutoLogin.Name = "chkNCPAutoLogin";
-            this.chkNCPAutoLogin.Size = new System.Drawing.Size(77, 17);
-            this.chkNCPAutoLogin.TabIndex = 21;
-            this.chkNCPAutoLogin.Text = "Auto Login";
-            this.chkNCPAutoLogin.UseVisualStyleBackColor = true;
-            // 
-            // txtJDPass
-            // 
-            this.txtJDPass.Location = new System.Drawing.Point(91, 234);
-            this.txtJDPass.Name = "txtJDPass";
-            this.txtJDPass.PasswordChar = '*';
-            this.txtJDPass.Size = new System.Drawing.Size(100, 20);
-            this.txtJDPass.TabIndex = 20;
-            // 
-            // txtJDUser
-            // 
-            this.txtJDUser.Location = new System.Drawing.Point(91, 208);
-            this.txtJDUser.Name = "txtJDUser";
-            this.txtJDUser.Size = new System.Drawing.Size(100, 20);
-            this.txtJDUser.TabIndex = 19;
-            // 
-            // txtNCPPass
-            // 
-            this.txtNCPPass.Location = new System.Drawing.Point(91, 127);
-            this.txtNCPPass.Name = "txtNCPPass";
-            this.txtNCPPass.PasswordChar = '*';
-            this.txtNCPPass.Size = new System.Drawing.Size(100, 20);
-            this.txtNCPPass.TabIndex = 18;
-            // 
-            // tabPage10
-            // 
-            this.tabPage10.Controls.Add(this.btnSaveNotification);
-            this.tabPage10.Controls.Add(this.groupBox4);
-            this.tabPage10.Controls.Add(this.groupBox2);
-            this.tabPage10.Location = new System.Drawing.Point(4, 22);
-            this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(348, 486);
-            this.tabPage10.TabIndex = 3;
-            this.tabPage10.Text = "Notifications";
-            this.tabPage10.UseVisualStyleBackColor = true;
-            // 
-            // btnSaveNotification
-            // 
-            this.btnSaveNotification.Location = new System.Drawing.Point(265, 457);
-            this.btnSaveNotification.Name = "btnSaveNotification";
-            this.btnSaveNotification.Size = new System.Drawing.Size(75, 23);
-            this.btnSaveNotification.TabIndex = 47;
-            this.btnSaveNotification.Text = "Save";
-            this.btnSaveNotification.UseVisualStyleBackColor = true;
-            this.btnSaveNotification.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
             // groupBox4
             // 
@@ -2194,10 +2003,10 @@
             this.groupBox4.Controls.Add(this.chkSoundLowLimit);
             this.groupBox4.Controls.Add(this.chkAlarm);
             this.groupBox4.Controls.Add(this.chkSoundWithdraw);
-            this.groupBox4.Location = new System.Drawing.Point(6, 173);
+            this.groupBox4.Location = new System.Drawing.Point(19, 339);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(200, 124);
-            this.groupBox4.TabIndex = 47;
+            this.groupBox4.Size = new System.Drawing.Size(310, 112);
+            this.groupBox4.TabIndex = 53;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Sounds";
             // 
@@ -2274,26 +2083,25 @@
             this.groupBox2.Controls.Add(this.txtEmail);
             this.groupBox2.Controls.Add(this.label49);
             this.groupBox2.Controls.Add(this.chkEmail);
-            this.groupBox2.Location = new System.Drawing.Point(6, 6);
+            this.groupBox2.Location = new System.Drawing.Point(19, 134);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(200, 181);
-            this.groupBox2.TabIndex = 46;
+            this.groupBox2.Size = new System.Drawing.Size(310, 190);
+            this.groupBox2.TabIndex = 52;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Email Notifications";
             // 
             // btnSMTP
             // 
-            this.btnSMTP.Location = new System.Drawing.Point(117, 16);
+            this.btnSMTP.Location = new System.Drawing.Point(210, 12);
             this.btnSMTP.Name = "btnSMTP";
             this.btnSMTP.Size = new System.Drawing.Size(75, 23);
             this.btnSMTP.TabIndex = 8;
             this.btnSMTP.Text = "Edit SMTP";
             this.btnSMTP.UseVisualStyleBackColor = true;
-            this.btnSMTP.Click += new System.EventHandler(this.btnSMTP_Click);
             // 
             // nudEmailStreak
             // 
-            this.nudEmailStreak.Location = new System.Drawing.Point(141, 134);
+            this.nudEmailStreak.Location = new System.Drawing.Point(141, 109);
             this.nudEmailStreak.Maximum = new decimal(new int[] {
             25,
             0,
@@ -2316,7 +2124,7 @@
             // chkEmailStreak
             // 
             this.chkEmailStreak.AutoSize = true;
-            this.chkEmailStreak.Location = new System.Drawing.Point(6, 134);
+            this.chkEmailStreak.Location = new System.Drawing.Point(6, 110);
             this.chkEmailStreak.Name = "chkEmailStreak";
             this.chkEmailStreak.Size = new System.Drawing.Size(128, 17);
             this.chkEmailStreak.TabIndex = 6;
@@ -2326,7 +2134,7 @@
             // chkEmailLowLimit
             // 
             this.chkEmailLowLimit.AutoSize = true;
-            this.chkEmailLowLimit.Location = new System.Drawing.Point(6, 110);
+            this.chkEmailLowLimit.Location = new System.Drawing.Point(141, 87);
             this.chkEmailLowLimit.Name = "chkEmailLowLimit";
             this.chkEmailLowLimit.Size = new System.Drawing.Size(117, 17);
             this.chkEmailLowLimit.TabIndex = 5;
@@ -2356,13 +2164,13 @@
             // 
             this.txtEmail.Location = new System.Drawing.Point(48, 41);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(146, 20);
+            this.txtEmail.Size = new System.Drawing.Size(237, 20);
             this.txtEmail.TabIndex = 2;
             // 
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(7, 44);
+            this.label49.Location = new System.Drawing.Point(6, 44);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(35, 13);
             this.label49.TabIndex = 1;
@@ -2371,12 +2179,126 @@
             // chkEmail
             // 
             this.chkEmail.AutoSize = true;
-            this.chkEmail.Location = new System.Drawing.Point(7, 20);
+            this.chkEmail.Location = new System.Drawing.Point(6, 20);
             this.chkEmail.Name = "chkEmail";
             this.chkEmail.Size = new System.Drawing.Size(65, 17);
             this.chkEmail.TabIndex = 0;
             this.chkEmail.Text = "Enabled";
             this.chkEmail.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label43);
+            this.groupBox1.Controls.Add(this.txtJDUser);
+            this.groupBox1.Controls.Add(this.txtJDPass);
+            this.groupBox1.Controls.Add(this.chkJDAutoLogin);
+            this.groupBox1.Controls.Add(this.chkJDAutoStart);
+            this.groupBox1.Controls.Add(this.label40);
+            this.groupBox1.Location = new System.Drawing.Point(18, 42);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(311, 86);
+            this.groupBox1.TabIndex = 51;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Just-Dice Settings";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(6, 28);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(58, 13);
+            this.label43.TabIndex = 28;
+            this.label43.Text = "Username:";
+            // 
+            // txtJDUser
+            // 
+            this.txtJDUser.Location = new System.Drawing.Point(78, 22);
+            this.txtJDUser.Name = "txtJDUser";
+            this.txtJDUser.Size = new System.Drawing.Size(107, 20);
+            this.txtJDUser.TabIndex = 19;
+            // 
+            // txtJDPass
+            // 
+            this.txtJDPass.Location = new System.Drawing.Point(78, 48);
+            this.txtJDPass.Name = "txtJDPass";
+            this.txtJDPass.PasswordChar = '*';
+            this.txtJDPass.Size = new System.Drawing.Size(107, 20);
+            this.txtJDPass.TabIndex = 20;
+            // 
+            // chkJDAutoLogin
+            // 
+            this.chkJDAutoLogin.AutoSize = true;
+            this.chkJDAutoLogin.Location = new System.Drawing.Point(213, 24);
+            this.chkJDAutoLogin.Name = "chkJDAutoLogin";
+            this.chkJDAutoLogin.Size = new System.Drawing.Size(77, 17);
+            this.chkJDAutoLogin.TabIndex = 24;
+            this.chkJDAutoLogin.Text = "Auto Login";
+            this.chkJDAutoLogin.UseVisualStyleBackColor = true;
+            // 
+            // chkJDAutoStart
+            // 
+            this.chkJDAutoStart.AutoSize = true;
+            this.chkJDAutoStart.Location = new System.Drawing.Point(213, 50);
+            this.chkJDAutoStart.Name = "chkJDAutoStart";
+            this.chkJDAutoStart.Size = new System.Drawing.Size(73, 17);
+            this.chkJDAutoStart.TabIndex = 25;
+            this.chkJDAutoStart.Text = "Auto Start";
+            this.chkJDAutoStart.UseVisualStyleBackColor = true;
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(6, 51);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(56, 13);
+            this.label40.TabIndex = 29;
+            this.label40.Text = "Password:";
+            // 
+            // txtBot
+            // 
+            this.txtBot.Location = new System.Drawing.Point(209, 7);
+            this.txtBot.Name = "txtBot";
+            this.txtBot.Size = new System.Drawing.Size(120, 20);
+            this.txtBot.TabIndex = 50;
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(146, 10);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(57, 13);
+            this.label50.TabIndex = 49;
+            this.label50.Text = "Bot Name:";
+            // 
+            // chkTray
+            // 
+            this.chkTray.AutoSize = true;
+            this.chkTray.Location = new System.Drawing.Point(18, 10);
+            this.chkTray.Name = "chkTray";
+            this.chkTray.Size = new System.Drawing.Size(98, 17);
+            this.chkTray.TabIndex = 48;
+            this.chkTray.Text = "Minimize to tray";
+            this.chkTray.UseVisualStyleBackColor = true;
+            // 
+            // btnSaveUser
+            // 
+            this.btnSaveUser.Location = new System.Drawing.Point(265, 457);
+            this.btnSaveUser.Name = "btnSaveUser";
+            this.btnSaveUser.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveUser.TabIndex = 47;
+            this.btnSaveUser.Text = "Save";
+            this.btnSaveUser.UseVisualStyleBackColor = true;
+            this.btnSaveUser.Click += new System.EventHandler(this.btnSaveUser_Click);
+            // 
+            // btnSaveNotification
+            // 
+            this.btnSaveNotification.Location = new System.Drawing.Point(265, 457);
+            this.btnSaveNotification.Name = "btnSaveNotification";
+            this.btnSaveNotification.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveNotification.TabIndex = 47;
+            this.btnSaveNotification.Text = "Save";
+            this.btnSaveNotification.UseVisualStyleBackColor = true;
+            this.btnSaveNotification.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
             // tmBetting
             // 
@@ -2523,13 +2445,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudProfitPer)).EndInit();
             this.tabPage9.ResumeLayout(false);
             this.tabPage9.PerformLayout();
-            this.tabPage10.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSoundStreak)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.ResumeLayout(false);
@@ -2641,7 +2564,6 @@
         private System.Windows.Forms.Timer tmrCheckInvest;
         private System.Windows.Forms.TextBox txtPrince;
         private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage4;
@@ -2705,21 +2627,23 @@
         private System.Windows.Forms.NumericUpDown nudLastStreakLose;
         private System.Windows.Forms.Label label38;
         private System.Windows.Forms.TabPage tabPage9;
-        private System.Windows.Forms.TextBox txtNCPUser;
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Label label43;
-        private System.Windows.Forms.Label label44;
-        private System.Windows.Forms.Label label45;
         private System.Windows.Forms.CheckBox chkJDAutoStart;
         private System.Windows.Forms.CheckBox chkJDAutoLogin;
-        private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.Label label47;
-        private System.Windows.Forms.CheckBox chkNCPAutoLogin;
         private System.Windows.Forms.TextBox txtJDPass;
         private System.Windows.Forms.TextBox txtJDUser;
-        private System.Windows.Forms.TextBox txtNCPPass;
         private System.Windows.Forms.Button btnSaveUser;
-        private System.Windows.Forms.TabPage tabPage10;
+        private System.Windows.Forms.Button btnSaveNotification;
+        private System.Windows.Forms.TextBox txtBot;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.CheckBox chkTray;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.Label lblLargestLoss;
+        private System.Windows.Forms.Label lblLargestWin;
+        private System.Windows.Forms.Label lblLargestBet;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label label52;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.NumericUpDown nudSoundStreak;
         private System.Windows.Forms.CheckBox chkSoundStreak;
@@ -2736,16 +2660,8 @@
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.CheckBox chkEmail;
-        private System.Windows.Forms.Button btnSaveNotification;
-        private System.Windows.Forms.TextBox txtBot;
-        private System.Windows.Forms.Label label50;
-        private System.Windows.Forms.CheckBox chkTray;
-        private System.Windows.Forms.Label label51;
-        private System.Windows.Forms.Label lblLargestLoss;
-        private System.Windows.Forms.Label lblLargestWin;
-        private System.Windows.Forms.Label lblLargestBet;
-        private System.Windows.Forms.Label label53;
-        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TabControl tabControl1;
 
     }
 }

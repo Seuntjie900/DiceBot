@@ -81,16 +81,13 @@ namespace DiceBot
         public bool SoundStreak = false;
         public bool autologin = false;
         public bool autostart = false;
-        public bool NCPAutoLogin = false;
         bool high = true;
         private bool withdrew;
         DateTime dtStarted = new DateTime();
         DateTime dtLastBet = new DateTime();
         TimeSpan TotalTime = new TimeSpan(0, 0, 0);
         public string username = "";
-        public string password = "";
-        public string NCPusername = "";
-        public string NCPpassword = "";
+        public string password = "";        
         public string Botname = "";
         public Email Emails { get; set; }
         Simulation lastsim;
@@ -240,7 +237,16 @@ namespace DiceBot
         {
             lblLoseStreak.Text = WorstStreak.ToString();
             lblLosses.Text = Losses.ToString();
-            double profit = (PreviousBalance - StartBalance);
+            double profit = 0;
+            if (StartBalance != -1)
+            {
+                profit = (PreviousBalance - StartBalance);
+
+            }
+            else
+            {
+
+            }
             lblProfit.Text = profit.ToString("0.00000000");
             lblBalance.Text = PreviousBalance.ToString("0.00000000");
             if ((PreviousBalance - StartBalance) < 0)
@@ -509,7 +515,7 @@ namespace DiceBot
                 double test = 0;
                 if (double.TryParse("0,01", out test))
                 {
-                    sBalance.Replace(".", ",");
+                    sBalance = sBalance.Replace(".", ",");
                 }
                 else
                 {
@@ -1276,34 +1282,8 @@ namespace DiceBot
                     string suser = "";
                     string spass = "";
                     bool login = false;
-                    int word = 0;                    
-                    for (int i = 0; i < chars.Length; i++)
-                    {
-                        int num = 0;
-                        if (int.TryParse(chars[i], out num))
-                        {
-                            if ((char)num == ',')
-                                word++;
-                            else
-                                switch (word)
-                                {
-                                    case 0: suser += (char)num; break;
-                                    case 1: spass += (char)num; break;
-                                    case 2: if ((char)num == '1') login = true; else login = false; break;
-                                }
-                        }
-                    }
-                    NCPAutoLogin = login;
-                    NCPpassword = spass;
-                    NCPusername = suser;
-
-                    info = sr.ReadLine();
-                    chars = info.Split(' ');
-                    suser = "";
-                    spass = "";
                     bool start = false;
-                    login = false;
-                    word = 0;
+                    int word = 0;                    
                     for (int i = 0; i < chars.Length; i++)
                     {
                         int num = 0;
@@ -1319,13 +1299,44 @@ namespace DiceBot
                                     case 2: if ((char)num == '1') login = true; else login = false; break;
                                     case 3: if ((char)num == '1') start = true; else start = false; break;
                                 }
-                            }
+                        }
                     }
                     autologin = login;
                     password = spass;
                     username = suser;
                     autostart = start;
+                    if (word == 2)
+                    {
 
+                        info = sr.ReadLine();
+                        chars = info.Split(' ');
+                        suser = "";
+                        spass = "";
+                        
+                        login = false;
+                        word = 0;
+                        for (int i = 0; i < chars.Length; i++)
+                        {
+                            int num = 0;
+                            if (int.TryParse(chars[i], out num))
+                            {
+                                if ((char)num == ',')
+                                    word++;
+                                else
+                                    switch (word)
+                                    {
+                                        case 0: suser += (char)num; break;
+                                        case 1: spass += (char)num; break;
+                                        case 2: if ((char)num == '1') login = true; else login = false; break;
+                                        case 3: if ((char)num == '1') start = true; else start = false; break;
+                                    }
+                            }
+                        }
+                        autologin = login;
+                        password = spass;
+                        username = suser;
+                        autostart = start;
+                    }
 
                     info = sr.ReadLine();
                     string[] values = info.Split(',');
@@ -1380,7 +1391,7 @@ namespace DiceBot
                 chkEmailWithdraw.Checked = Emails.Withdraw;
                 chkJDAutoLogin.Checked = autologin;
                 chkJDAutoStart.Checked = autostart;
-                chkNCPAutoLogin.Checked = NCPAutoLogin;
+                
                 chkSoundLowLimit.Checked = SoundLow;
                 chkSoundStreak.Checked = SoundStreak;
                 chkSoundWithdraw.Checked = SoundWithdraw;
@@ -1389,8 +1400,7 @@ namespace DiceBot
                 txtEmail.Text = Emails.emailaddress;
                 txtJDPass.Text = password;
                 txtJDUser.Text = username;
-                txtNCPPass.Text = NCPpassword;
-                txtNCPUser.Text = NCPusername;
+                
                 
             }
 
@@ -1405,18 +1415,7 @@ namespace DiceBot
             using (StreamWriter sw = new StreamWriter(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\Psettings"))
             {
 
-                //NCPuser,ncppass,autologin
-                string temp1 = txtNCPUser.Text + "," + txtNCPPass.Text + ",";
-                if (chkNCPAutoLogin.Checked)
-                    temp1 += "1";
-                else temp1 += "0";
-                string ncpline = "";
-
-                foreach (char c in temp1)
-                {
-                    ncpline += ((int)c).ToString() + " ";
-                }
-                sw.WriteLine(ncpline);
+                
 
                 //JDuser,JDPass,AutoLogin,AutoStart
                 string temp2 = txtJDUser.Text + "," + txtJDPass.Text + ",";
@@ -1530,7 +1529,7 @@ namespace DiceBot
             try
             {
                 GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                gie.Value = Chance.ToString();
+                gie.Value = Chance.ToString().Replace(',', '.');
             }
             catch
             {

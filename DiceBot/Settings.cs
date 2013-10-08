@@ -26,7 +26,7 @@ namespace DiceBot
             chkEmailWithdraw.Checked = owner.Emails.Withdraw;
             chkJDAutoLogin.Checked = owner.autologin;
             chkJDAutoStart.Checked = owner.autostart;
-            chkNCPAutoLogin.Checked = owner.NCPAutoLogin;
+            
             chkSoundLowLimit.Checked = owner.SoundLow;
             chkSoundStreak.Checked = owner.SoundStreak;
             chkSoundWithdraw.Checked = owner.SoundWithdraw;
@@ -35,8 +35,7 @@ namespace DiceBot
             txtEmail.Text = owner.Emails.emailaddress;
             txtJDPass.Text = owner.password;
             txtJDUser.Text = owner.username;
-            txtNCPPass.Text = owner.NCPpassword;
-            txtNCPUser.Text = owner.NCPusername;
+            
         }
 
         private void groupBox3_Enter(object sender, EventArgs e)
