@@ -32,6 +32,7 @@ namespace DiceBot
         double Lastbet = 0;
         double MinBet = 0;
         double Multiplier = 0;
+        double WinMultiplier = 0;
         double Limit = 0;
         double Amount = 0;
         double loading = 0;
@@ -41,6 +42,7 @@ namespace DiceBot
         double LargestLoss = 0;
         double LowerLimit = 0;
         double Devider = 0;
+        double WinDevider = 0;
         double Chance = 0;
         double avgloss = 0;
         double avgwin = 0;
@@ -62,7 +64,9 @@ namespace DiceBot
         int waiter = 0;
         int iMultiplyCounter = 0;
         int MaxMultiplies = 0;
+        int WinMaxMultiplies = 0;
         int Devidecounter = 0;
+        int WinDevidecounter = 0;
         int SoundStreakCount = 15;
         int restartcounter = 0;
         int reversebets = 0;
@@ -71,6 +75,7 @@ namespace DiceBot
         bool stop = true;
         bool withdraw = false;
         bool invest = false;
+        bool reset = false;
         bool running = false;
         bool stoponwin = false;
         bool loggedin = false;
@@ -343,7 +348,7 @@ namespace DiceBot
             double total = 0;
             int bets = 0;
             double curbet = MinBet;
-            double Multiplier = double.Parse(txtMultiplier.Text);
+            double Multiplier = dparse(txtMultiplier.Text);
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -362,7 +367,7 @@ namespace DiceBot
             int bets = 0;
             double curbet = MinBet;
             int n = Devidecounter;
-            double dmultiplier = double.Parse(txtMultiplier.Text);;
+            double dmultiplier = dparse(txtMultiplier.Text);;
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -386,7 +391,7 @@ namespace DiceBot
             int bets = 0;
             double curbet = MinBet;
             int n = Devidecounter;
-            double dmultiplier = double.Parse(txtMultiplier.Text); ; ;
+            double dmultiplier = dparse(txtMultiplier.Text); ; ;
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -410,7 +415,7 @@ namespace DiceBot
             int bets = 0;
             double curbet = MinBet;
             int n = Devidecounter;
-            double dmultiplier = double.Parse(txtMultiplier.Text); ; ;
+            double dmultiplier = dparse(txtMultiplier.Text); ; ;
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -512,24 +517,9 @@ namespace DiceBot
             {
                 GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_balance").DomObject);
                 string sBalance = gieBalance.Value;
-                double test = 0;
-                if (double.TryParse("0,01", out test))
-                {
-                    sBalance = sBalance.Replace(".", ",");
-                }
-                else
-                {
-                    sBalance.Replace(",", ".");
-                }
-                double dBalance = -1;
-                if (double.TryParse(sBalance, out dBalance))
-                {
-                    return dBalance;
-                }
-                else
-                {
-                    return -1;
-                }
+                
+                double dBalance = dparse(sBalance);
+                return dBalance;
             }
             catch
             {
@@ -675,11 +665,38 @@ namespace DiceBot
 
                 }
                 withdrew = true;
-                Emails.SendInvest(Amount, Getbalance(), double.Parse(invested));
+                Emails.SendInvest(Amount, Getbalance(), dparse(invested));
                 StartBalance -= Amount;
                 Start();
             }
 
+            waiter++;
+        }
+
+        void ResetSeed()
+        {
+            if (waiter == 20)
+            {
+                gckBrowser.Navigate("javascript:clicked_action_random()");
+            }
+            if (waiter == 30)
+            {
+
+                if (txtSecretURL.Text != "")
+                {
+                    gckBrowser.Navigate(txtSecretURL.Text);
+                }
+                else
+                {
+                    gckBrowser.Navigate("http://just-dice.com");
+                }
+            }
+            if (waiter == 100)
+            {
+                waiter = 0; reset = false;
+                withdrew = true;
+                Start();
+            }
             waiter++;
         }
 
@@ -705,44 +722,63 @@ namespace DiceBot
 
         private void tmBetting_Tick(object sender, EventArgs e)
         {
-            double dBalance = Getbalance();
-            if (dBalance != PreviousBalance && dBalance != -1 || withdrew)
+            bool valid = true;
+            if (chkBotSpeed.Checked)
             {
-                if (PreviousBalance == 0)
-                    StartBalance = dBalance;
-                PreviousBalance = dBalance;
-            }
-            else if (dBalance == PreviousBalance && dBalance != -1 || withdrew)
-            {
-                if ((DateTime.Now - dtLastBet).Seconds + ((DateTime.Now - dtLastBet).Minutes * 60) > 120)
+                if ((DateAndTime.Now - dtLastBet).Ticks < new TimeSpan(0, 0, 0, 0, (int)((decimal)1000.0 / nudBotSpeed.Value)).Ticks)
                 {
-                    
-                    gckBrowser.Refresh();
-                    dtLastBet = DateTime.Now;
-                    restartcounter = 0;
-                }
-                if (restartcounter == 30 && !stop)
-                {
-                    Start();
-                }
-                if (restartcounter < 50)
-                {
-                    restartcounter++;
+                    valid = false;
                 }
             }
-            if (withdraw)
-            {
-                Withdraw();
-            }
-            if (invest)
-            {
-                Invest();
-            }
+            double dBalance = PreviousBalance;
+            if (valid)
+             dBalance= Getbalance();
+
+                if (dBalance != PreviousBalance && dBalance != -1 || withdrew)
+                {
+                    if (PreviousBalance == 0)
+                        StartBalance = dBalance;
+                    PreviousBalance = dBalance;
+                }
+                else if (dBalance == PreviousBalance && dBalance != -1 || withdrew)
+                {
+                    if ((DateTime.Now - dtLastBet).Seconds + ((DateTime.Now - dtLastBet).Minutes * 60) > 120)
+                    {
+
+                        gckBrowser.Refresh();
+                        dtLastBet = DateTime.Now;
+                        restartcounter = 0;
+                    }
+                    if (restartcounter == 30 && !stop)
+                    {
+                        Start();
+                    }
+                    if (restartcounter < 50)
+                    {
+                        restartcounter++;
+                    }
+                }
+                if (withdraw)
+                {
+                    Withdraw();
+                }
+                if (invest)
+                {
+                    Invest();
+                }
+                if (reset)
+                {
+                    ResetSeed();
+                }
+
+            
         }
 
         void DoBet(double dBalance)
         {
-            if (!stop && !gckBrowser.IsBusy && !(withdraw || invest))
+            
+
+            if (!stop && !gckBrowser.IsBusy && !(withdraw || invest ||reset))
             {
                 double betresult = dBalance - PreviousBalance;
                 if (betresult > 0)
@@ -758,14 +794,35 @@ namespace DiceBot
 
                 if (LargestBet < Lastbet)
                     LargestBet = Lastbet;
-                if (dBalance > PreviousBalance && !(withdraw || invest))
+                if (dBalance > PreviousBalance && !(withdraw || invest || reset))
                 {
                     
 
                     if (PreviousBalance != 0)
                     {
+
+
+                        if (rdbWinMaxMultiplier.Checked && Winstreak >= WinMaxMultiplies)
+                        {
+                            WinMultiplier = 1;
+                        }
+                        else if (rdbWinDevider.Checked && Winstreak % WinDevidecounter == 0 && Winstreak > 0)
+                        {
+                            WinMultiplier *= WinDevider;
+                        }
+                        else if (rdbWinReduce.Checked && Winstreak == WinDevidecounter && Winstreak > 0)
+                        {
+                            WinMultiplier *= WinDevider;
+                        }
+                        Lastbet *= WinMultiplier;
+                        if (Winstreak == 0)
+                            Lastbet = MinBet;
                         Wins++;
                         Winstreak++;
+                        if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
+                        {
+                            Lastbet = MinBet;
+                        }
                         if (Winstreak >= nudLastStreakWin.Value)
                             laststreakwin = Winstreak;
                         if (Losestreak != 0)
@@ -802,13 +859,15 @@ namespace DiceBot
                     {
                         dPreviousBalance = dBalance;
                     }*/
-                    Lastbet = MinBet;
+                    //Lastbet = MinBet;
                     if (stoponwin)
                     {
                         Stop();
                     }
                     iMultiplyCounter = 0;
-                    Multiplier = double.Parse(txtMultiplier.Text);
+
+                    Multiplier = dparse(txtMultiplier.Text);
+
                     if (chkReverse.Checked)
                     {
                         if (rdbReverseWins.Checked && Winstreak % reversebets == 0)
@@ -817,7 +876,7 @@ namespace DiceBot
                         }
                     }
                 }
-                else if (dBalance < PreviousBalance && !(withdraw || invest))
+                else if (dBalance < PreviousBalance && !(withdraw || invest || reset))
                 {
                     iMultiplyCounter++;
                     if (rdbMaxMultiplier.Checked && Losestreak >= MaxMultiplies)
@@ -838,6 +897,10 @@ namespace DiceBot
                     
                     Losses++;
                     Losestreak++;
+                    if (chkResetBetLoss.Checked && Losestreak % nudResetBetLoss.Value == 0)
+                    {
+                        Lastbet = MinBet;
+                    }
                     if (Losestreak >= nudLastStreakLose.Value)
                         laststreaklose = Losestreak;
                     if (chkReverse.Checked)
@@ -884,7 +947,7 @@ namespace DiceBot
                     if (Losestreak > WorstStreak)
                         WorstStreak = Losestreak;
 
-                   
+                    WinMultiplier = dparse(txtWinMultiplier.Text);
 
                 }
                 if (chkReverse.Checked)
@@ -928,9 +991,20 @@ namespace DiceBot
                         Emails.SendLowLimit(dBalance, LowerLimit, Lastbet);
                 }
 
-                
 
-                
+
+                if ( Wins!=0 && Losses!=0 && chkResetSeed.Checked)
+                {
+                    if ( ((rdbResetSeedBets.Checked && (Wins+Losses) % nudResetSeed.Value == 0) ||
+                       (rdbResetSeedWins.Checked && Wins % nudResetSeed.Value == 0 && Losestreak==0)||
+                       (rdbResetSeedLosses.Checked && Losses % nudResetSeed.Value == 0 && Winstreak == 0)) && !withdrew)
+                    {
+                        waiter = 0;
+                        reset = true;
+                        ResetSeed();
+                    }
+                    
+                }
 
 
                 if ((dBalance != PreviousBalance || withdrew) && !stop)
@@ -952,6 +1026,8 @@ namespace DiceBot
             }
 
         }
+
+       
 
         private void tmStop_Tick(object sender, EventArgs e)
         {
@@ -1099,70 +1175,110 @@ namespace DiceBot
                 try
                 {
                     string msg = "";
-                    msg += txtAmount.Text + ",";
-                    msg += txtLimit.Text + ",";
+                    msg += txtAmount.Text + ";";
+                    msg += txtLimit.Text + ";";
                     if (chkLimit.Checked)
-                        msg += "1,";
+                        msg += "1;";
                     else
-                        msg += "0,";
-                    msg += txtLowerLimit.Text + ",";
+                        msg += "0;";
+                    msg += txtLowerLimit.Text + ";";
                     if (chkLowerLimit.Checked)
-                        msg += "1,";
+                        msg += "1;";
                     else
-                        msg += "0,";
-                    msg += txtMinBet.Text + ",";
-                    msg += txtMultiplier.Text + ",";
-                    msg += txtSecretURL.Text + ",";
-                    msg += txtTo.Text + ",";
+                        msg += "0;";
+                    msg += txtMinBet.Text + ";";
+                    msg += txtMultiplier.Text + ";";
+                    msg += txtSecretURL.Text + ";";
+                    msg += txtTo.Text + ";";
                     if (rdbInvest.Checked)
                     {
-                        msg += "0,";
+                        msg += "0;";
                     }
                     else if (rdbStop.Checked)
                     {
-                        msg += "1,";
+                        msg += "1;";
                     }
                     else
                     {
-                        msg += "2,";
+                        msg += "2;";
                     }
 
 
                     if (chkOnWin.Checked)
-                        msg += "1,";
+                        msg += "1;";
                     else
-                        msg += "0,";
+                        msg += "0;";
                     sw.WriteLine(msg);
                     msg = "";
-                    msg += txtChance.Text + ",";
-                    msg += txtMaxMultiply.Text + ",";
-                    msg += txtNBets.Text + ",";
-                    msg += txtDevider.Text + ",";
+                    msg += txtChance.Text + ";";
+                    msg += txtMaxMultiply.Text + ";";
+                    msg += txtNBets.Text + ";";
+                    msg += txtDevider.Text + ";";
                     if (rdbMaxMultiplier.Checked)
-                        msg += "0,";
+                        msg += "0;";
                     else if (rdbDevider.Checked)
-                        msg += "1,";
+                        msg += "1";
                     else if (rdbConstant.Checked)
                         msg += "2";
                     else msg += "3";
                     sw.WriteLine(msg);
                     msg = "";
                     if (chkReverse.Checked)
-                        msg += 1 + ",";
-                    else msg += 0 + ",";
+                        msg += 1 + ";";
+                    else msg += 0 + ";";
                     if (rdbReverseBets.Checked)
                         msg += "0";
                     else if (rdbReverseLoss.Checked)
                         msg += "1";
                     else if (rdbReverseWins.Checked)
                         msg += "2";
-                    msg += ",";
+                    msg += ";";
                     msg += NudReverse.Value.ToString("00");
-                    msg += ",";
-                    msg += nudLastStreakWin.Value.ToString("00") + "," + nudLastStreakLose.Value.ToString("00");
+                    msg += ";";
+                    msg += nudLastStreakWin.Value.ToString("00") + ";" + nudLastStreakLose.Value.ToString("00");
                     sw.WriteLine(msg);
-
-
+                    msg = "";
+                    if (chkResetBetLoss.Checked)
+                    {
+                        msg += "1;";
+                    }
+                    else
+                    {
+                        msg+="0;";
+                    }
+                    msg += nudResetBetLoss.Value.ToString()+";";
+                    if (chkResetBetWins.Checked)
+                        msg += "1;";
+                    else
+                        msg += "0;";
+                    msg += nudResetWins.Value.ToString() + ";";
+                    msg += txtWinMultiplier.Text + ";"+txtWinMaxMultiplies.Text+";"+txtWinNBets.Text+";"+txtWinDevider.Text+";";
+                    if (rdbWinConstant.Checked)
+                        msg+="0";
+                    else if (rdbWinDevider.Checked)
+                        msg+="1";
+                    else if (rdbWinMaxMultiplier.Checked)
+                        msg+="2";
+                    else if (rdbWinReduce.Checked)
+                        msg+="3";
+                    msg+=";";
+                    if (chkBotSpeed.Checked)
+                        msg += "1";
+                    else msg += "0";
+                    msg += ";";
+                    if (chkResetSeed.Checked)
+                        msg += "1";
+                    else msg += "0";
+                    msg += ";";
+                    if (rdbResetSeedBets.Checked)
+                        msg += "0";
+                    else if (rdbResetSeedWins.Checked)
+                        msg += "1";
+                    else if (rdbResetSeedLosses.Checked)
+                        msg += "2";
+                    msg += ";";
+                        msg+= nudResetSeed.Value.ToString();
+                    sw.WriteLine(msg);
                 }
                 catch
                 {
@@ -1183,6 +1299,8 @@ namespace DiceBot
                 {
                     string msg = sw.ReadLine();
                     string[] values = msg.Split(',');
+                    if (msg.Contains(";"))
+                        values = msg.Split(';');
                     int i = 0;
                     txtAmount.Text = values[i++];
                     txtLimit.Text = values[i++];
@@ -1222,6 +1340,8 @@ namespace DiceBot
                     {
                         msg = sw.ReadLine();
                         values = msg.Split(',');
+                        if (msg.Contains(";"))
+                            values = msg.Split(';');
                         i = 0;
                         txtChance.Text = values[i++];
                         txtMaxMultiply.Text = values[i++];
@@ -1242,6 +1362,8 @@ namespace DiceBot
                     {
                         msg = sw.ReadLine();
                         values = msg.Split(',');
+                        if (msg.Contains(";"))
+                            values = msg.Split(';');
                         i = 0;                        
                         if (values[i++] == "1")
                             chkReverse.Checked = true;
@@ -1254,15 +1376,63 @@ namespace DiceBot
                             rdbReverseLoss.Checked = true;
                         else if (cur == "2")
                             rdbReverseWins.Checked = true;
-                        NudReverse.Value = decimal.Parse(values[i++]);
+                        NudReverse.Value = (decimal)dparse(values[i++]);
                         if (values.Length > i)
                         {
-                            nudLastStreakWin.Value = decimal.Parse(values[i++]);
-                            nudLastStreakLose.Value = decimal.Parse(values[i++]);
+                            nudLastStreakWin.Value = (decimal)dparse(values[i++]);
+                            nudLastStreakLose.Value = (decimal)dparse(values[i++]);
+                        }
+                    }
+                    if (!sw.EndOfStream)
+                    {
+                        msg = sw.ReadLine();
+                        values = msg.Split(',');
+                        if (msg.Contains(";"))
+                            values = msg.Split(';');
+                        i = 0;
+                        
+                        chkResetBetLoss.Checked =(values[i++] == "1");
+                        nudResetBetLoss.Value = (decimal)dparse(values[i++]);
+                        chkResetBetWins.Checked = (values[i++] == "1");
+                        nudResetWins.Value = (decimal)dparse(values[i++]);
+                        
+                        txtWinMultiplier.Text = values[i++];
+                        txtWinMaxMultiplies.Text = values[i++];
+                        txtWinNBets.Text  = values[i++];
+                        txtWinDevider.Text = values[i++];
+                        string cur = values[i++];
+                        rdbWinConstant.Checked = (cur == "0");
+                        rdbWinDevider.Checked = (cur == "1");
+                        rdbWinMaxMultiplier.Checked = (cur == "2");
+                        rdbWinReduce.Checked = (cur == "3");
+                        /*if (chkBotSpeed.Checked)
+                            msg += "1";
+                        else msg += "0";
+                        msg += ";";
+                        if (chkResetSeed.Checked)
+                            msg += "1";
+                        else msg += "0";
+                        msg += ";";
+                        if (rdbResetSeedBets.Checked)
+                            msg += "0";
+                        else if (rdbResetSeedWins.Checked)
+                            msg += "1";
+                        else if (rdbResetSeedLosses.Checked)
+                            msg += "2";*/
+                        chkBotSpeed.Checked = (values[i++] == "1");
+                        chkResetSeed.Checked = (values[i++] == "1");
+                        cur = values[i++];
+                        rdbResetSeedBets.Checked = (cur == "0");
+                        rdbResetSeedWins.Checked = (cur == "1");
+                        rdbResetSeedLosses.Checked = (cur == "2");
+                        if (values.Length >= i + 1)
+                        {
+                            nudResetSeed.Value = iparse(values[i++]);
                         }
                     }
 
                 }
+                variabledisable();
                 return true;
             }
             catch
@@ -1289,7 +1459,7 @@ namespace DiceBot
                         int num = 0;
                         if (int.TryParse(chars[i], out num))
                         {
-                            if ((char)num == ',')
+                            if ((char)num == ',' || (char)num == ';')
                                 word++;
                             else
                                 switch (word)
@@ -1340,6 +1510,8 @@ namespace DiceBot
 
                     info = sr.ReadLine();
                     string[] values = info.Split(',');
+                    if (info.Contains(";"))
+                     values = info.Split(';');
                     int j = 0;
                     tray = (values[j++] == "1");
                     Botname = values[j++];
@@ -1358,7 +1530,7 @@ namespace DiceBot
                         Emails.Lower = ((values[j++] == "1"));
                         Emails.Streak = ((values[j++] == "1"));
                     }
-                    Emails.StreakSize = int.Parse(values[j++]);
+                    Emails.StreakSize = iparse(values[j++]);
                     if (values.Count() == j)
                     {
                         Emails.SMTP = values[j++];
@@ -1380,7 +1552,7 @@ namespace DiceBot
                         SoundLow = ((values[j++] == "1"));
                         SoundStreak = ((values[j++] == "1"));
                     }
-                    SoundStreakCount = int.Parse(values[j++]);
+                    SoundStreakCount = iparse(values[j++]);
 
                 }
 
@@ -1523,6 +1695,50 @@ namespace DiceBot
         #endregion
 
         #region test and parse variables
+
+        private void variabledisable()
+        {
+            //set active controlls for on loss multiplier
+            if (rdbConstant.Checked)
+            {
+                txtMaxMultiply.Enabled = false;
+                txtNBets.Enabled = false;
+                txtDevider.Enabled = false;
+            }
+            if (rdbDevider.Checked || rdbReduce.Checked)
+            {
+                txtMaxMultiply.Enabled = false;
+                txtNBets.Enabled = true;
+                txtDevider.Enabled = true;
+            }
+            if (rdbMaxMultiplier.Checked)
+            {
+                txtMaxMultiply.Enabled = true;
+                txtNBets.Enabled = false;
+                txtDevider.Enabled = false;
+            }
+
+            //set active controlls for on win multiplier
+            if (rdbWinConstant.Checked)
+            {
+                txtWinMaxMultiplies.Enabled = false;
+                txtWinNBets.Enabled = false;
+                txtWinDevider.Enabled = false;
+            }
+            if (rdbWinDevider.Checked || rdbWinReduce.Checked)
+            {
+                txtWinMaxMultiplies.Enabled = false;
+                txtWinNBets.Enabled = true;
+                txtWinDevider.Enabled = true;
+            }
+            if (rdbWinMaxMultiplier.Checked)
+            {
+                txtWinMaxMultiplies.Enabled = true;
+                txtWinNBets.Enabled = false;
+                txtWinDevider.Enabled = false;
+            }
+        }
+
         private void txtChance_Leave(object sender, EventArgs e)
         {
             testInputs();
@@ -1540,7 +1756,16 @@ namespace DiceBot
         double dparse(string text)
         {
             double number = -1;
+
+            text = text.Replace(",", ".");
             if (!double.TryParse(text, out number))
+            {
+                text = text.Replace(".", ",");
+                if (!double.TryParse(text, out number))
+                    return -1;
+            }
+
+            /*if (!double.TryParse(text, out number))
             {
                 if (text.Contains("."))
                     text = text.Replace('.', ',');
@@ -1548,7 +1773,8 @@ namespace DiceBot
                     text = text.Replace(',', '.');
                 if (!double.TryParse(text, out number))
                     number=-1;
-            }
+            }*/
+            
             return number;
         }
         int iparse(string text)
@@ -1639,6 +1865,30 @@ namespace DiceBot
                 valid = false;
                 sMessage += "Please enter a valid number in the Times Multiplier By Field\n";
             }
+            WinMultiplier = dparse(txtWinMultiplier.Text);
+            if (WinMultiplier == -1)
+            {
+                valid = false;
+                sMessage += "Please enter a valid number in the Multiplier Field\n";
+            }
+            WinMaxMultiplies = iparse(txtWinMaxMultiplies.Text);
+            if (WinMaxMultiplies == -1)
+            {
+                valid = false;
+                sMessage += "Please enter a valid number in the Max Multplies Field\n";
+            }
+            WinDevidecounter = iparse(txtWinNBets.Text);
+            if (WinDevidecounter == -1)
+            {
+                valid = false;
+                sMessage += "Please enter a valid number in the After n bets Field\n";
+            }
+            WinDevider = dparse(txtWinDevider.Text);
+            if (WinDevider == -1)
+            {
+                valid = false;
+                sMessage += "Please enter a valid number in the Times Multiplier By Field\n";
+            }
             if (!valid)
                 MessageBox.Show(sMessage);
             return valid;
@@ -1651,6 +1901,9 @@ namespace DiceBot
                 lblMaxBets.Text = "500+";
             else
                 lblMaxBets.Text = max.ToString();
+
+            variabledisable();
+            
         }
         #endregion
 
@@ -1765,10 +2018,10 @@ namespace DiceBot
 
         }
 
-        private void btnSettings_Click(object sender, EventArgs e)
+        /*private void btnSettings_Click(object sender, EventArgs e)
         {
             new cSettings(this).Show();
-        }
+        }*/
 
         #region auto invest divest
         bool divesting = false;
@@ -2216,6 +2469,14 @@ namespace DiceBot
         {
             string smtp = Interaction.InputBox("Enter new smtp server address", "SMTP", "smtp.secrueserver.net");
             Emails.SMTP = smtp;
+        }
+
+        private void nudBotSpeed_ValueChanged(object sender, EventArgs e)
+        {
+            if (nudBotSpeed.Value != (decimal)0.0)
+            {
+                lblTimeBetween.Text = (1 / nudBotSpeed.Value).ToString("##0.0000") + "Seconds";
+            }
         }
 
     }

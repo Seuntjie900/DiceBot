@@ -105,6 +105,20 @@
             this.lblAfter = new System.Windows.Forms.Label();
             this.lblMaxMultiplier = new System.Windows.Forms.Label();
             this.txtMaxMultiply = new System.Windows.Forms.TextBox();
+            this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.rdbWinReduce = new System.Windows.Forms.RadioButton();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.rdbWinMaxMultiplier = new System.Windows.Forms.RadioButton();
+            this.txtWinDevider = new System.Windows.Forms.TextBox();
+            this.rdbWinDevider = new System.Windows.Forms.RadioButton();
+            this.label46 = new System.Windows.Forms.Label();
+            this.rdbWinConstant = new System.Windows.Forms.RadioButton();
+            this.txtWinNBets = new System.Windows.Forms.TextBox();
+            this.txtWinMultiplier = new System.Windows.Forms.TextBox();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
+            this.txtWinMaxMultiplies = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.rdbReverseBets = new System.Windows.Forms.RadioButton();
             this.rdbReverseLoss = new System.Windows.Forms.RadioButton();
@@ -230,6 +244,23 @@
             this.ofdImport = new System.Windows.Forms.OpenFileDialog();
             this.ofdExport = new System.Windows.Forms.SaveFileDialog();
             this.tmrCheckInvest = new System.Windows.Forms.Timer(this.components);
+            this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.chkBotSpeed = new System.Windows.Forms.CheckBox();
+            this.nudBotSpeed = new System.Windows.Forms.NumericUpDown();
+            this.label55 = new System.Windows.Forms.Label();
+            this.chkResetSeed = new System.Windows.Forms.CheckBox();
+            this.nudResetSeed = new System.Windows.Forms.NumericUpDown();
+            this.rdbResetSeedBets = new System.Windows.Forms.RadioButton();
+            this.rdbResetSeedWins = new System.Windows.Forms.RadioButton();
+            this.rdbResetSeedLosses = new System.Windows.Forms.RadioButton();
+            this.label56 = new System.Windows.Forms.Label();
+            this.lblTimeBetween = new System.Windows.Forms.Label();
+            this.chkResetBetLoss = new System.Windows.Forms.CheckBox();
+            this.nudResetBetLoss = new System.Windows.Forms.NumericUpDown();
+            this.label57 = new System.Windows.Forms.Label();
+            this.label58 = new System.Windows.Forms.Label();
+            this.nudResetWins = new System.Windows.Forms.NumericUpDown();
+            this.chkResetBetWins = new System.Windows.Forms.CheckBox();
             this.gckBrowser = new DiceBot.Browser();
             this.panel1.SuspendLayout();
             this.tabControl3.SuspendLayout();
@@ -242,6 +273,7 @@
             this.Settings.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage10.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).BeginInit();
             this.tabPage5.SuspendLayout();
@@ -267,6 +299,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.tabPage11.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBotSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetSeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBetLoss)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -842,6 +879,7 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage11);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage9);
             this.tabControl1.Location = new System.Drawing.Point(3, 6);
@@ -893,18 +931,22 @@
             // tabControl2
             // 
             this.tabControl2.Controls.Add(this.tabPage1);
+            this.tabControl2.Controls.Add(this.tabPage10);
             this.tabControl2.Controls.Add(this.tabPage2);
             this.tabControl2.Controls.Add(this.tabPage5);
             this.tabControl2.Controls.Add(this.tabPage6);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tabControl2.Location = new System.Drawing.Point(3, 266);
+            this.tabControl2.Location = new System.Drawing.Point(3, 246);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(342, 154);
+            this.tabControl2.Size = new System.Drawing.Size(342, 174);
             this.tabControl2.TabIndex = 52;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label57);
+            this.tabPage1.Controls.Add(this.nudResetBetLoss);
+            this.tabPage1.Controls.Add(this.chkResetBetLoss);
             this.tabPage1.Controls.Add(this.rdbReduce);
             this.tabPage1.Controls.Add(this.lblMultiplier);
             this.tabPage1.Controls.Add(this.lblDevider);
@@ -921,9 +963,9 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(334, 128);
+            this.tabPage1.Size = new System.Drawing.Size(334, 148);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Multiplier Settings";
+            this.tabPage1.Text = "Multiplier on loss";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // rdbReduce
@@ -1053,6 +1095,150 @@
             this.txtMaxMultiply.Text = "10";
             this.txtMaxMultiply.Leave += new System.EventHandler(this.txtChance_Leave);
             // 
+            // tabPage10
+            // 
+            this.tabPage10.Controls.Add(this.label58);
+            this.tabPage10.Controls.Add(this.nudResetWins);
+            this.tabPage10.Controls.Add(this.chkResetBetWins);
+            this.tabPage10.Controls.Add(this.rdbWinReduce);
+            this.tabPage10.Controls.Add(this.label44);
+            this.tabPage10.Controls.Add(this.label45);
+            this.tabPage10.Controls.Add(this.rdbWinMaxMultiplier);
+            this.tabPage10.Controls.Add(this.txtWinDevider);
+            this.tabPage10.Controls.Add(this.rdbWinDevider);
+            this.tabPage10.Controls.Add(this.label46);
+            this.tabPage10.Controls.Add(this.rdbWinConstant);
+            this.tabPage10.Controls.Add(this.txtWinNBets);
+            this.tabPage10.Controls.Add(this.txtWinMultiplier);
+            this.tabPage10.Controls.Add(this.label47);
+            this.tabPage10.Controls.Add(this.label54);
+            this.tabPage10.Controls.Add(this.txtWinMaxMultiplies);
+            this.tabPage10.Location = new System.Drawing.Point(4, 22);
+            this.tabPage10.Name = "tabPage10";
+            this.tabPage10.Size = new System.Drawing.Size(334, 148);
+            this.tabPage10.TabIndex = 1;
+            this.tabPage10.Text = "Multiply on win";
+            this.tabPage10.UseVisualStyleBackColor = true;
+            // 
+            // rdbWinReduce
+            // 
+            this.rdbWinReduce.AutoSize = true;
+            this.rdbWinReduce.Location = new System.Drawing.Point(217, 81);
+            this.rdbWinReduce.Name = "rdbWinReduce";
+            this.rdbWinReduce.Size = new System.Drawing.Size(91, 17);
+            this.rdbWinReduce.TabIndex = 66;
+            this.rdbWinReduce.Text = "Change Once";
+            this.rdbWinReduce.UseVisualStyleBackColor = true;
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(61, 13);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(51, 13);
+            this.label44.TabIndex = 57;
+            this.label44.Text = "Multiplier:";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(16, 99);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(96, 13);
+            this.label45.TabIndex = 65;
+            this.label45.Text = "Times Multiplier by:";
+            // 
+            // rdbWinMaxMultiplier
+            // 
+            this.rdbWinMaxMultiplier.AutoSize = true;
+            this.rdbWinMaxMultiplier.Location = new System.Drawing.Point(217, 9);
+            this.rdbWinMaxMultiplier.Name = "rdbWinMaxMultiplier";
+            this.rdbWinMaxMultiplier.Size = new System.Drawing.Size(45, 17);
+            this.rdbWinMaxMultiplier.TabIndex = 54;
+            this.rdbWinMaxMultiplier.Text = "Max";
+            this.rdbWinMaxMultiplier.UseVisualStyleBackColor = true;
+            // 
+            // txtWinDevider
+            // 
+            this.txtWinDevider.Location = new System.Drawing.Point(118, 96);
+            this.txtWinDevider.Name = "txtWinDevider";
+            this.txtWinDevider.Size = new System.Drawing.Size(50, 20);
+            this.txtWinDevider.TabIndex = 64;
+            this.txtWinDevider.Text = "0.95";
+            // 
+            // rdbWinDevider
+            // 
+            this.rdbWinDevider.AutoSize = true;
+            this.rdbWinDevider.Location = new System.Drawing.Point(217, 35);
+            this.rdbWinDevider.Name = "rdbWinDevider";
+            this.rdbWinDevider.Size = new System.Drawing.Size(63, 17);
+            this.rdbWinDevider.TabIndex = 55;
+            this.rdbWinDevider.Text = "Variable";
+            this.rdbWinDevider.UseVisualStyleBackColor = true;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(154, 68);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(28, 13);
+            this.label46.TabIndex = 63;
+            this.label46.Text = "Bets";
+            // 
+            // rdbWinConstant
+            // 
+            this.rdbWinConstant.AutoSize = true;
+            this.rdbWinConstant.Checked = true;
+            this.rdbWinConstant.Location = new System.Drawing.Point(217, 58);
+            this.rdbWinConstant.Name = "rdbWinConstant";
+            this.rdbWinConstant.Size = new System.Drawing.Size(70, 17);
+            this.rdbWinConstant.TabIndex = 56;
+            this.rdbWinConstant.TabStop = true;
+            this.rdbWinConstant.Text = "Contstant";
+            this.rdbWinConstant.UseVisualStyleBackColor = true;
+            // 
+            // txtWinNBets
+            // 
+            this.txtWinNBets.Location = new System.Drawing.Point(118, 65);
+            this.txtWinNBets.Name = "txtWinNBets";
+            this.txtWinNBets.Size = new System.Drawing.Size(30, 20);
+            this.txtWinNBets.TabIndex = 62;
+            this.txtWinNBets.Text = "3";
+            // 
+            // txtWinMultiplier
+            // 
+            this.txtWinMultiplier.Location = new System.Drawing.Point(118, 10);
+            this.txtWinMultiplier.Name = "txtWinMultiplier";
+            this.txtWinMultiplier.Size = new System.Drawing.Size(64, 20);
+            this.txtWinMultiplier.TabIndex = 58;
+            this.txtWinMultiplier.Text = "1";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(80, 68);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(32, 13);
+            this.label47.TabIndex = 61;
+            this.label47.Text = "After ";
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(36, 42);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(76, 13);
+            this.label54.TabIndex = 59;
+            this.label54.Text = "Max Multiplies:";
+            // 
+            // txtWinMaxMultiplies
+            // 
+            this.txtWinMaxMultiplies.Location = new System.Drawing.Point(118, 39);
+            this.txtWinMaxMultiplies.Name = "txtWinMaxMultiplies";
+            this.txtWinMaxMultiplies.Size = new System.Drawing.Size(64, 20);
+            this.txtWinMaxMultiplies.TabIndex = 60;
+            this.txtWinMaxMultiplies.Text = "10";
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.rdbReverseBets);
@@ -1064,7 +1250,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(334, 128);
+            this.tabPage2.Size = new System.Drawing.Size(334, 148);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Zig Zag Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1152,7 +1338,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(334, 128);
+            this.tabPage5.Size = new System.Drawing.Size(334, 148);
             this.tabPage5.TabIndex = 2;
             this.tabPage5.Text = "Simulate";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -1347,7 +1533,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(334, 128);
+            this.tabPage6.Size = new System.Drawing.Size(334, 148);
             this.tabPage6.TabIndex = 3;
             this.tabPage6.Text = "Check  Bets";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -2381,13 +2567,230 @@
             this.tmrCheckInvest.Interval = 1000;
             this.tmrCheckInvest.Tick += new System.EventHandler(this.tmrCheckInvest_Tick);
             // 
+            // tabPage11
+            // 
+            this.tabPage11.Controls.Add(this.lblTimeBetween);
+            this.tabPage11.Controls.Add(this.label56);
+            this.tabPage11.Controls.Add(this.rdbResetSeedLosses);
+            this.tabPage11.Controls.Add(this.rdbResetSeedWins);
+            this.tabPage11.Controls.Add(this.rdbResetSeedBets);
+            this.tabPage11.Controls.Add(this.nudResetSeed);
+            this.tabPage11.Controls.Add(this.chkResetSeed);
+            this.tabPage11.Controls.Add(this.label55);
+            this.tabPage11.Controls.Add(this.nudBotSpeed);
+            this.tabPage11.Controls.Add(this.chkBotSpeed);
+            this.tabPage11.Location = new System.Drawing.Point(4, 22);
+            this.tabPage11.Name = "tabPage11";
+            this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage11.Size = new System.Drawing.Size(348, 486);
+            this.tabPage11.TabIndex = 3;
+            this.tabPage11.Text = "Advanced Bet Settings";
+            this.tabPage11.UseVisualStyleBackColor = true;
+            // 
+            // chkBotSpeed
+            // 
+            this.chkBotSpeed.AutoSize = true;
+            this.chkBotSpeed.Location = new System.Drawing.Point(9, 23);
+            this.chkBotSpeed.Name = "chkBotSpeed";
+            this.chkBotSpeed.Size = new System.Drawing.Size(79, 17);
+            this.chkBotSpeed.TabIndex = 0;
+            this.chkBotSpeed.Text = "Bot Speed:";
+            this.chkBotSpeed.UseVisualStyleBackColor = true;
+            // 
+            // nudBotSpeed
+            // 
+            this.nudBotSpeed.DecimalPlaces = 3;
+            this.nudBotSpeed.Location = new System.Drawing.Point(94, 22);
+            this.nudBotSpeed.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.nudBotSpeed.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.nudBotSpeed.Name = "nudBotSpeed";
+            this.nudBotSpeed.Size = new System.Drawing.Size(48, 20);
+            this.nudBotSpeed.TabIndex = 1;
+            this.nudBotSpeed.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudBotSpeed.ValueChanged += new System.EventHandler(this.nudBotSpeed_ValueChanged);
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(148, 24);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(80, 13);
+            this.label55.TabIndex = 2;
+            this.label55.Text = "Bets per minute";
+            // 
+            // chkResetSeed
+            // 
+            this.chkResetSeed.AutoSize = true;
+            this.chkResetSeed.Location = new System.Drawing.Point(9, 79);
+            this.chkResetSeed.Name = "chkResetSeed";
+            this.chkResetSeed.Size = new System.Drawing.Size(107, 17);
+            this.chkResetSeed.TabIndex = 3;
+            this.chkResetSeed.Text = "Reset Seed After";
+            this.chkResetSeed.UseVisualStyleBackColor = true;
+            // 
+            // nudResetSeed
+            // 
+            this.nudResetSeed.Location = new System.Drawing.Point(122, 78);
+            this.nudResetSeed.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudResetSeed.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudResetSeed.Name = "nudResetSeed";
+            this.nudResetSeed.Size = new System.Drawing.Size(120, 20);
+            this.nudResetSeed.TabIndex = 4;
+            this.nudResetSeed.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // rdbResetSeedBets
+            // 
+            this.rdbResetSeedBets.AutoSize = true;
+            this.rdbResetSeedBets.Location = new System.Drawing.Point(248, 79);
+            this.rdbResetSeedBets.Name = "rdbResetSeedBets";
+            this.rdbResetSeedBets.Size = new System.Drawing.Size(46, 17);
+            this.rdbResetSeedBets.TabIndex = 5;
+            this.rdbResetSeedBets.TabStop = true;
+            this.rdbResetSeedBets.Text = "Bets";
+            this.rdbResetSeedBets.UseVisualStyleBackColor = true;
+            // 
+            // rdbResetSeedWins
+            // 
+            this.rdbResetSeedWins.AutoSize = true;
+            this.rdbResetSeedWins.Location = new System.Drawing.Point(248, 102);
+            this.rdbResetSeedWins.Name = "rdbResetSeedWins";
+            this.rdbResetSeedWins.Size = new System.Drawing.Size(49, 17);
+            this.rdbResetSeedWins.TabIndex = 6;
+            this.rdbResetSeedWins.TabStop = true;
+            this.rdbResetSeedWins.Text = "Wins";
+            this.rdbResetSeedWins.UseVisualStyleBackColor = true;
+            // 
+            // rdbResetSeedLosses
+            // 
+            this.rdbResetSeedLosses.AutoSize = true;
+            this.rdbResetSeedLosses.Location = new System.Drawing.Point(248, 125);
+            this.rdbResetSeedLosses.Name = "rdbResetSeedLosses";
+            this.rdbResetSeedLosses.Size = new System.Drawing.Size(58, 17);
+            this.rdbResetSeedLosses.TabIndex = 7;
+            this.rdbResetSeedLosses.TabStop = true;
+            this.rdbResetSeedLosses.Text = "Losses";
+            this.rdbResetSeedLosses.UseVisualStyleBackColor = true;
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(47, 54);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(101, 13);
+            this.label56.TabIndex = 8;
+            this.label56.Text = "Time Between bets:";
+            // 
+            // lblTimeBetween
+            // 
+            this.lblTimeBetween.AutoSize = true;
+            this.lblTimeBetween.Location = new System.Drawing.Point(154, 54);
+            this.lblTimeBetween.Name = "lblTimeBetween";
+            this.lblTimeBetween.Size = new System.Drawing.Size(0, 13);
+            this.lblTimeBetween.TabIndex = 9;
+            // 
+            // chkResetBetLoss
+            // 
+            this.chkResetBetLoss.AutoSize = true;
+            this.chkResetBetLoss.Location = new System.Drawing.Point(32, 125);
+            this.chkResetBetLoss.Name = "chkResetBetLoss";
+            this.chkResetBetLoss.Size = new System.Drawing.Size(81, 17);
+            this.chkResetBetLoss.TabIndex = 54;
+            this.chkResetBetLoss.Text = "Reset after ";
+            this.chkResetBetLoss.UseVisualStyleBackColor = true;
+            // 
+            // nudResetBetLoss
+            // 
+            this.nudResetBetLoss.Location = new System.Drawing.Point(118, 122);
+            this.nudResetBetLoss.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudResetBetLoss.Name = "nudResetBetLoss";
+            this.nudResetBetLoss.Size = new System.Drawing.Size(64, 20);
+            this.nudResetBetLoss.TabIndex = 55;
+            this.nudResetBetLoss.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(188, 124);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(80, 13);
+            this.label57.TabIndex = 56;
+            this.label57.Text = "Losses in a row";
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(188, 124);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(71, 13);
+            this.label58.TabIndex = 69;
+            this.label58.Text = "Wins in a row";
+            // 
+            // nudResetWins
+            // 
+            this.nudResetWins.Location = new System.Drawing.Point(118, 122);
+            this.nudResetWins.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudResetWins.Name = "nudResetWins";
+            this.nudResetWins.Size = new System.Drawing.Size(64, 20);
+            this.nudResetWins.TabIndex = 68;
+            this.nudResetWins.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkResetBetWins
+            // 
+            this.chkResetBetWins.AutoSize = true;
+            this.chkResetBetWins.Location = new System.Drawing.Point(32, 125);
+            this.chkResetBetWins.Name = "chkResetBetWins";
+            this.chkResetBetWins.Size = new System.Drawing.Size(81, 17);
+            this.chkResetBetWins.TabIndex = 67;
+            this.chkResetBetWins.Text = "Reset after ";
+            this.chkResetBetWins.UseVisualStyleBackColor = true;
+            // 
             // gckBrowser
             // 
             this.gckBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gckBrowser.Location = new System.Drawing.Point(0, 42);
             this.gckBrowser.Name = "gckBrowser";
             this.gckBrowser.Size = new System.Drawing.Size(843, 777);
-            this.gckBrowser.TabIndex = 1;
+            this.gckBrowser.TabIndex = 6;
             // 
             // cDiceBot
             // 
@@ -2419,6 +2822,8 @@
             this.tabControl2.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage10.ResumeLayout(false);
+            this.tabPage10.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).EndInit();
@@ -2455,13 +2860,19 @@
             this.groupBox1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.tabPage11.ResumeLayout(false);
+            this.tabPage11.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBotSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetSeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBetLoss)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private Browser gckBrowser;
+        
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblWins;
         private System.Windows.Forms.Label label14;
@@ -2662,6 +3073,38 @@
         private System.Windows.Forms.CheckBox chkEmail;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage10;
+        private System.Windows.Forms.RadioButton rdbWinReduce;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.RadioButton rdbWinMaxMultiplier;
+        private System.Windows.Forms.TextBox txtWinDevider;
+        private System.Windows.Forms.RadioButton rdbWinDevider;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.RadioButton rdbWinConstant;
+        private System.Windows.Forms.TextBox txtWinNBets;
+        private System.Windows.Forms.TextBox txtWinMultiplier;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.TextBox txtWinMaxMultiplies;
+        private Browser gckBrowser;
+        private System.Windows.Forms.TabPage tabPage11;
+        private System.Windows.Forms.RadioButton rdbResetSeedLosses;
+        private System.Windows.Forms.RadioButton rdbResetSeedWins;
+        private System.Windows.Forms.RadioButton rdbResetSeedBets;
+        private System.Windows.Forms.NumericUpDown nudResetSeed;
+        private System.Windows.Forms.CheckBox chkResetSeed;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.NumericUpDown nudBotSpeed;
+        private System.Windows.Forms.CheckBox chkBotSpeed;
+        private System.Windows.Forms.Label lblTimeBetween;
+        private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.NumericUpDown nudResetBetLoss;
+        private System.Windows.Forms.CheckBox chkResetBetLoss;
+        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.NumericUpDown nudResetWins;
+        private System.Windows.Forms.CheckBox chkResetBetWins;
 
     }
 }
