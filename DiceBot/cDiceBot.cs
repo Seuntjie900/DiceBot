@@ -19,7 +19,7 @@ using System.Net;
 using System.Media;
 using Microsoft.VisualBasic;
 using System.Security.Cryptography;
-
+using WMPLib;
 namespace DiceBot
 {
     
@@ -47,6 +47,8 @@ namespace DiceBot
         double avgloss = 0;
         double avgwin = 0;
         double avgstreak = 0;
+        double currentprofit = 0;
+        double profit = 0;
         int numwinstreasks = 0;
         int numlosesreaks = 0;
         int numstreaks = 0;
@@ -96,6 +98,8 @@ namespace DiceBot
         public string Botname = "";
         public Email Emails { get; set; }
         Simulation lastsim;
+        string ching = "";
+        string salarm = "";
         #endregion
 
         #region Auto Invest Divest Vars
@@ -129,8 +133,22 @@ namespace DiceBot
             
             InitializeComponent();
 
-            
-            
+            System.Net.IWebProxy defproxy = System.Net.WebRequest.GetSystemWebProxy();
+            Uri proxy = defproxy.GetProxy(new Uri("http://just-dice.com"));
+            if (proxy.AbsoluteUri != new Uri("http://just-dice.com").AbsoluteUri)
+            {
+                Skybound.Gecko.GeckoPreferences.User["network.proxy.http"] = proxy.Host;
+                Skybound.Gecko.GeckoPreferences.User["network.proxy.http_port"] = proxy.Port;
+                Skybound.Gecko.GeckoPreferences.User["network.proxy.ssl"] = proxy.Host;
+                Skybound.Gecko.GeckoPreferences.User["network.proxy.ssl_port"] = proxy.Port;
+                Skybound.Gecko.GeckoPreferences.User["network.proxy.type"] = 1;
+                Skybound.Gecko.GeckoPreferences.User["signon.autologin.proxy"] = false;
+                //0 – Direct connection, no proxy. (Default)
+                //1 – Manual proxy configuration.
+                //2 – Proxy auto-configuration (PAC).
+                //4 – Auto-detect proxy settings.
+                //5 – Use system proxy settings (Default in Linux).     
+            }
 
             #region tooltip Texts
             ToolTip tt = new ToolTip();
@@ -228,7 +246,15 @@ namespace DiceBot
         
         private void Form1_Load(object sender, EventArgs e)
         {
-            gckBrowser.Navigate("http://just-dice.com/");
+            if (txtSecretURL.Text == "")
+            {
+                gckBrowser.Navigate("http://just-dice.com/");
+            }
+            else
+            {
+
+                gckBrowser.Navigate(txtSecretURL.Text);
+            }
             testInputs();
         }
         //Statistics
@@ -242,7 +268,7 @@ namespace DiceBot
         {
             lblLoseStreak.Text = WorstStreak.ToString();
             lblLosses.Text = Losses.ToString();
-            double profit = 0;
+            
             if (StartBalance != -1)
             {
                 profit = (PreviousBalance - StartBalance);
@@ -584,8 +610,33 @@ namespace DiceBot
                 waiter = -1; withdraw = false;
                 TrayIcon.BalloonTipText = "Withdraw " + txtAmount.Text + "Complete\nRestarting Bets";
                 TrayIcon.ShowBalloonTip(1000);
-                if (Sound && SoundWithdraw)
-                    (new SoundPlayer(@"media\withdraw.wav")).Play();
+                try
+                {
+                    if (Sound && SoundWithdraw)
+                    {
+                        if (ching == "")
+                        {
+                            (new SoundPlayer(@"media\withdraw.wav")).Play();
+                        }
+                        else
+                        {
+                            if (ching.Substring(ching.LastIndexOf(".")).ToLower() == "mp3")
+                            {
+                                WindowsMediaPlayer player = new WindowsMediaPlayer();
+                                player.URL = ching;
+                                player.controls.play();
+                            }
+                            else
+                            {
+                                (new SoundPlayer(ching)).Play();
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to play CHING, pelase make sure file exists");
+                }
                 withdrew = true;
                 Emails.SendWithdraw(Amount, PreviousBalance-Amount, txtTo.Text);
                 StartBalance -= Amount;
@@ -652,8 +703,33 @@ namespace DiceBot
                 waiter = 0; invest = false;
                 TrayIcon.BalloonTipText = "Invest " + txtAmount.Text + "Complete\nRestarting Bets";
                 TrayIcon.ShowBalloonTip(1000);
-                if (Sound && SoundWithdraw)
-                    (new SoundPlayer(@"media\withdraw.wav")).Play();
+                try
+                {
+                    if (Sound && SoundWithdraw)
+                    {
+                        if (ching == "")
+                        {
+                            (new SoundPlayer(@"media\withdraw.wav")).Play();
+                        }
+                        else
+                        {
+                            if (ching.Substring(ching.LastIndexOf(".")).ToLower() == "mp3")
+                            {
+                                WindowsMediaPlayer player = new WindowsMediaPlayer();
+                                player.URL = ching;
+                                player.controls.play();
+                            }
+                            else
+                            {
+                                (new SoundPlayer(ching)).Play();
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to play CHING, pelase make sure file exists");
+                }
                 string invested = "";
                 try
                 {
@@ -732,7 +808,7 @@ namespace DiceBot
             }
             double dBalance = PreviousBalance;
             if (valid)
-             dBalance= Getbalance();
+                dBalance = Getbalance();
 
                 if (dBalance != PreviousBalance && dBalance != -1 || withdrew)
                 {
@@ -742,10 +818,10 @@ namespace DiceBot
                 }
                 else if (dBalance == PreviousBalance && dBalance != -1 || withdrew)
                 {
-                    if ((DateTime.Now - dtLastBet).Seconds + ((DateTime.Now - dtLastBet).Minutes * 60) > 120)
+                    if ((DateTime.Now - dtLastBet).Seconds + ((DateTime.Now - dtLastBet).Minutes * 60) > 120 && !stop)
                     {
 
-                        gckBrowser.Refresh();
+                        gckBrowser.Reload();
                         dtLastBet = DateTime.Now;
                         restartcounter = 0;
                     }
@@ -770,7 +846,7 @@ namespace DiceBot
                 {
                     ResetSeed();
                 }
-
+            
             
         }
 
@@ -794,6 +870,8 @@ namespace DiceBot
 
                 if (LargestBet < Lastbet)
                     LargestBet = Lastbet;
+
+                //if its a win
                 if (dBalance > PreviousBalance && !(withdraw || invest || reset))
                 {
                     
@@ -814,17 +892,42 @@ namespace DiceBot
                         {
                             WinMultiplier *= WinDevider;
                         }
+                        if (Winstreak == 0)
+                        {
+                            currentprofit = 0;
+                        }
+                        currentprofit += (Lastbet*(99/Chance))-Lastbet;
                         Lastbet *= WinMultiplier;
                         if (Winstreak == 0)
+                        {
                             Lastbet = MinBet;
+                            
+                        }
                         Wins++;
                         Winstreak++;
                         if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
                         {
                             Lastbet = MinBet;
                         }
+                        if (chkChangeWinStreak.Checked && (Winstreak == nudChangeWinStreak.Value))
+                        {
+                            Lastbet = (double)nudChangeWinStreakTo.Value;
+                        }
                         if (Winstreak >= nudLastStreakWin.Value)
                             laststreakwin = Winstreak;
+
+                        if (currentprofit > ((double)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
+                        {
+                            Stop();
+                        }
+                        if (Winstreak >= nudStopWinStreak.Value && chkStopWinStreak.Checked)
+                        {
+                            Stop();
+                        }
+                        if (profit >= (double)nudStopWinBtc.Value && chkStopWinBtc.Checked)
+                        {
+                            Stop();
+                        }
                         if (Losestreak != 0)
                         {
                             double avglosecalc = avgloss * numlosesreaks;
@@ -876,9 +979,14 @@ namespace DiceBot
                         }
                     }
                 }
+
+                    //if its a loss
                 else if (dBalance < PreviousBalance && !(withdraw || invest || reset))
                 {
+                    //do i use this line?
                     iMultiplyCounter++;
+
+                    //stop multiplying if at max or if it goes below 1
                     if (rdbMaxMultiplier.Checked && Losestreak >= MaxMultiplies)
                     {
                         Multiplier = 1;
@@ -889,20 +997,36 @@ namespace DiceBot
                         if (Multiplier < 1)
                             Multiplier = 1;
                     }
+                        //adjust multiplier according to devider
                     else if (rdbReduce.Checked && Losestreak == Devidecounter && Losestreak > 0)
                     {
                         Multiplier *= Devider;
                     }
+                    //reset current profit when switching from a winning streak to a losing streak
+                    if (Losestreak == 0)
+                    {
+                        currentprofit = 0;
+                    }
+
+                    //adjust profit
+                    currentprofit -= Lastbet;
+                    //set new bet size
                     Lastbet *= Multiplier;
                     
+                    //increase losses and losestreak
                     Losses++;
                     Losestreak++;
+                    
+                    //reset bet to minimum if applicable
                     if (chkResetBetLoss.Checked && Losestreak % nudResetBetLoss.Value == 0)
                     {
                         Lastbet = MinBet;
                     }
+                    //update last losing streak if it is above the specified value to show in the stats
                     if (Losestreak >= nudLastStreakLose.Value)
                         laststreaklose = Losestreak;
+
+                    //switch high low if applied in the zig zag tab
                     if (chkReverse.Checked)
                     {
                         if (rdbReverseLoss.Checked && Losestreak % reversebets == 0)
@@ -910,6 +1034,34 @@ namespace DiceBot
                             high = !high;
                         }
                     }
+
+                    //change bet after a certain losing streak
+                    if (chkChangeLoseStreak.Checked && (Losestreak == nudChangeLoseStreak.Value))
+                    {
+                        Lastbet = (double)nudChangeLoseStreakTo.Value;
+                    }
+                    
+                    
+                    //stop conditions:
+                    //stop if lose streak is higher than specified
+                    if (Losestreak >= nudStopLossStreak.Value && chkStopLossStreak.Checked)
+                    {
+                        Stop();
+                    }
+
+                    //stop if current profit drops below specified value/ loss is larger than specified value
+                    if (currentprofit <= (0.0 - (double)nudStopLossBtcStreal.Value) && chkStopLossBtcStreak.Checked)
+                    {
+                        Stop();
+                    }
+
+                    // stop if total profit/total loss is below/above certain value
+                    if (profit <= 0.0-(double)nudStopLossBtc.Value && chkStopLossBtc.Checked)
+                    {
+                        Stop();
+                    }
+
+                    //when switching from win streak to lose streak, calculate some stats
                     if (Winstreak != 0)
                     {
                         double avgwincalc = avgwin * numwinstreasks;
@@ -935,18 +1087,23 @@ namespace DiceBot
                             }
                         }
                     }
-                    Winstreak = 0;
-                    if (Sound && SoundStreak && Losestreak > SoundStreakCount)
-                        new SoundPlayer("Media\\alarm.wav").Play();
 
+                    //reset win streak
+                    Winstreak = 0;
+
+                    //sounds
+                    if (Sound && SoundStreak && Losestreak > SoundStreakCount)
+                        playalarm();
+                    //email
                     if (Emails.Streak && Losestreak > Emails.StreakSize)
                         Emails.SendStreak(Losestreak, Emails.StreakSize, dBalance);
 
                     
-
+                    //update worst streaks
                     if (Losestreak > WorstStreak)
                         WorstStreak = Losestreak;
 
+                    //reset win multplier
                     WinMultiplier = dparse(txtWinMultiplier.Text);
 
                 }
@@ -984,7 +1141,7 @@ namespace DiceBot
                     TrayIcon.ShowBalloonTip(1000);
                     Stop();
                     if (Sound && SoundLow)
-                        new SoundPlayer("Media\\alarm.wav").Play();
+                        playalarm();
                     TrayIcon.BalloonTipText = "DiceBot has Stopped Betting\nThe next bet will will have put your Balance below your lower limit";
 
                     if (Emails.Lower)
@@ -1027,7 +1184,36 @@ namespace DiceBot
 
         }
 
-       
+        void playalarm()
+        {
+            try
+            {
+                
+                    if (salarm == "")
+                    {
+                        (new SoundPlayer(@"media\alarm.wav")).Play();
+                    }
+                    else
+                    {
+                        int ext = salarm.LastIndexOf(".")+1;
+                        if (salarm.Substring(ext).ToLower() == "mp3")
+                        {
+                            WindowsMediaPlayer player = new WindowsMediaPlayer();
+                            player.URL = salarm;
+                            player.controls.play();
+                        }
+                        else
+                        {
+                            (new SoundPlayer(salarm)).Play();
+                        }
+                    }
+                
+            }
+            catch
+            {
+                MessageBox.Show("Failed to play Alarm, pelase make sure file exists");
+            }
+        }
 
         private void tmStop_Tick(object sender, EventArgs e)
         {
@@ -1154,7 +1340,7 @@ namespace DiceBot
         private void btnStop_Click(object sender, EventArgs e)
         {
             
-            if (chkOnWin.Checked)
+            if (chkStopOnWin.Checked)
             {
                 stoponwin = true;
             }
@@ -1172,9 +1358,170 @@ namespace DiceBot
         {
             using (StreamWriter sw = new StreamWriter(file))
             {
+               
                 try
                 {
+                    sw.WriteLine("SaveVersion|" + "2");
+                    sw.WriteLine("Amount|" + txtAmount.Text);
+                    sw.WriteLine("Limit|"+txtLimit.Text);
+                    if (chkLimit.Checked)
+                        sw.WriteLine("LimitEnabled|1");
+                    else
+                        sw.WriteLine("LimitEnabled|0");
+                     sw.WriteLine("LowerLimit|"+txtLowerLimit.Text);
+                    sw.Write("LowerLimitEnabled|");
+                    if (chkLowerLimit.Checked)
+                        sw.WriteLine("1");
+                    else
+                        sw.WriteLine("0");
+
+                    sw.WriteLine("MinBet|"+txtMinBet.Text);
+                    sw.WriteLine("Multiplier|"+txtMultiplier.Text);
+                    sw.WriteLine("URL|"+txtSecretURL.Text);
+                    sw.WriteLine("To|"+txtTo.Text);
+                    sw.Write("OnStop|");
+                    if (rdbInvest.Checked)
+                    {
+                        sw.WriteLine("0");
+                    }
+                    else if (rdbStop.Checked)
+                    {
+                        sw.WriteLine("1");
+                    }
+                    else
+                    {
+                        sw.WriteLine("2");
+                    }
+                    sw.Write("StopOnWin|");
+                    if (chkStopOnWin.Checked)
+                        sw.WriteLine("1");
+                    else
+                        sw.WriteLine("0");
+                    
+                    sw.WriteLine("Chance|"+txtChance.Text);
+                    sw.WriteLine("MaxMultiply|"+txtMaxMultiply.Text);
+                    sw.WriteLine("NBets|"+txtNBets.Text);
+                    sw.WriteLine("Devider|"+ txtDevider.Text);
+                    sw.Write("MultiplierMode|");
+                    if (rdbMaxMultiplier.Checked)
+                        sw.WriteLine("0");
+                    else if (rdbDevider.Checked)
+                        sw.WriteLine("1");
+                    else if (rdbConstant.Checked)
+                        sw.WriteLine("2");
+                    else sw.WriteLine("3");
+                    sw.Write("ReverseEnabled|");
+                    if (chkReverse.Checked)
+                        sw.WriteLine("1");
+                    else sw.WriteLine("0");
+                    sw.Write("ReverseMode|");
+                    if (rdbReverseBets.Checked)
+                        sw.WriteLine("0");
+                    else if (rdbReverseLoss.Checked)
+                        sw.WriteLine("1");
+                    else if (rdbReverseWins.Checked)
+                        sw.WriteLine("2");
+                    sw.WriteLine("ReverseOn|"+NudReverse.Value.ToString("00"));
+
+                    sw.WriteLine("LastStreakWin|" + nudLastStreakWin.Value.ToString("00"));
+                    sw.WriteLine("LastStreakLose|"+nudLastStreakLose.Value.ToString("00"));
+                    
+                    sw.Write("ResetBetLossEnabled|");
+                    if (chkResetBetLoss.Checked)
+                    {
+                        sw.WriteLine("1");
+                    }
+                    else
+                    {
+                        sw.WriteLine("0");
+                    }
+                    sw.WriteLine("ResetBetLossValue|"+nudResetBetLoss.Value.ToString());
+
+                    sw.Write("ResetBetWinsEnabled|");
+                    if (chkResetBetWins.Checked)
+                        sw.WriteLine("1");
+                    else
+                        sw.WriteLine("0");
+                    sw.WriteLine("ResetWinsValue|"+nudResetWins.Value.ToString());
+                    sw.WriteLine("WinMultiplier|" + txtWinMultiplier.Text);
+                    sw.WriteLine("WinMaxMultiplies|" + txtWinMaxMultiplies.Text);
+                    sw.WriteLine("WinNBets|" + txtWinNBets.Text);
+                    sw.WriteLine("WinDevider|" + txtWinDevider.Text);
+                    sw.Write("WinMultiplyMode|");
+                    if (rdbWinConstant.Checked)
+                        sw.WriteLine("0");
+                    else if (rdbWinDevider.Checked)
+                        sw.WriteLine("1");
+                    else if (rdbWinMaxMultiplier.Checked)
+                        sw.WriteLine("2");
+                    else if (rdbWinReduce.Checked)
+                        sw.WriteLine("3");
+
                     string msg = "";
+                    if (chkBotSpeed.Checked)
+                        msg = "1";
+                    else msg = "0";
+                    sw.WriteLine("BotSpeedEnabled|"+msg);
+                    sw.WriteLine("BotSpeedValue|" + nudBotSpeed.Value.ToString());
+                    if (chkResetSeed.Checked)
+                        msg = "1";
+                    else msg= "0";
+                    sw.WriteLine("ResetSeedEnabled|" + msg);
+                    
+                    if (rdbResetSeedBets.Checked)
+                        msg = "0";
+                    else if (rdbResetSeedWins.Checked)
+                        msg = "1";
+                    else if (rdbResetSeedLosses.Checked)
+                        msg = "2";
+                    sw.WriteLine("ResetSeedMode|"+msg);
+                        sw.WriteLine("ResetSeedValue|"+nudResetSeed.Value.ToString());
+                    
+                    if (chkStopLossStreak.Checked) msg = "1";
+                    else msg="0";
+                    sw.WriteLine("StopAfterLoseStreakEnabled|"+msg);                    
+                    sw.WriteLine("StopAfterLoseStreakValue|"+nudStopLossStreak.Value.ToString());
+                    
+                    if ( chkStopLossBtcStreak.Checked ) msg = "1";
+                    else msg="0";
+                    sw.WriteLine("StopAfterLoseStreakBtcEnabled|"+msg);
+                    sw.WriteLine("StopAfterLoseStreakBtcValue|"+nudStopLossBtcStreal.Value.ToString());
+                    
+                    if (  chkStopLossBtc.Checked ) msg = "1";
+                    else msg="0";
+                    sw.WriteLine("StopAfterLoseBtcEnabled|"+msg);
+                    sw.WriteLine("StopAfterLoseBtcValue|"+nudStopLossBtc.Value.ToString());
+                    
+                    
+                    
+                    if ( chkChangeLoseStreak.Checked ) msg = "1";
+                    else msg="0";
+                    sw.WriteLine("ChangeAfterLoseStreakEnabled|"+msg);
+                    sw.WriteLine("ChangeAfterLoseStreakSize|"+nudChangeLoseStreak.Value.ToString());
+                    sw.WriteLine("ChangeAfterLoseStreakTo|"+nudChangeLoseStreakTo.Value.ToString());
+
+
+                    if (chkStopWinStreak.Checked) msg = "1";
+                    else msg = "0";
+                    sw.WriteLine("StopAfterWinStreakEnabled|" + msg);
+                    sw.WriteLine("StopAfterWinStreakValue|" + nudStopWinStreak.Value.ToString());
+                    if (chkStopWinBtcStreak.Checked) msg = "1";
+                    else msg = "0";
+                    sw.WriteLine("StopAfterWinStreakBtcEnabled|" + msg);
+                    sw.WriteLine("StopAfterWinStreakBtcValue|" + nudStopWinBtcStreak.Value.ToString());
+                    if (chkStopWinBtc.Checked) msg = "1";
+                    else msg = "0";
+                    sw.WriteLine("StopAfterWinBtcEnabled|" + msg);
+                    sw.WriteLine("StopAfterWinBtcValue|" + nudStopWinBtc.Value.ToString());
+
+                    if (chkChangeWinStreak.Checked) msg = "1";
+                    else msg = "0";
+                    sw.WriteLine("ChangeAfterWinStreakEnabled|" + msg);
+                    sw.WriteLine("ChangeAfterWinStreakSize|" + nudChangeWinStreak.Value.ToString());
+                    sw.WriteLine("ChangeAfterWinStreakTo|" + nudChangeWinStreakTo.Value.ToString());
+                    
+                    #region old save, Not applicable
+                    /*string msg = "";
                     msg += txtAmount.Text + ";";
                     msg += txtLimit.Text + ";";
                     if (chkLimit.Checked)
@@ -1278,7 +1625,8 @@ namespace DiceBot
                         msg += "2";
                     msg += ";";
                         msg+= nudResetSeed.Value.ToString();
-                    sw.WriteLine(msg);
+                    sw.WriteLine(msg);*/
+                    #endregion
                 }
                 catch
                 {
@@ -1291,11 +1639,9 @@ namespace DiceBot
             return (load(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"));
         }
 
-        bool load(string File)
+        bool oldLoad(string File)
         {
-            try
-            {
-                using (StreamReader sw = new StreamReader(File))
+            using (StreamReader sw = new StreamReader(File))
                 {
                     string msg = sw.ReadLine();
                     string[] values = msg.Split(',');
@@ -1332,10 +1678,10 @@ namespace DiceBot
 
                     if (values[i++] == "1")
                     {
-                        chkOnWin.Checked = true;
+                        chkStopOnWin.Checked = true;
                     }
                     else
-                        chkOnWin.Checked = false;
+                        chkStopOnWin.Checked = false;
                     if (!sw.EndOfStream)
                     {
                         msg = sw.ReadLine();
@@ -1430,8 +1776,133 @@ namespace DiceBot
                             nudResetSeed.Value = iparse(values[i++]);
                         }
                     }
+                }
+            variabledisable();
+            return true;
+        }
+
+        string getvalue(List<SavedItem> list, string item)
+        {
+            foreach (SavedItem cur in list)
+            {
+                if (cur.Name.ToUpper() == item.ToUpper())
+                {
+                    return cur.Value;
+                }
+
+            }
+            return "0-0-0";
+        }
+
+        bool load(string File)
+        {
+            try
+            {
+                string header = "";
+                using (StreamReader sr = new StreamReader(File))
+                {
+                    header = sr.ReadLine();
+                }
+                               
+                //if load file is not of version 2 or above, do old load
+                if (!header.ToUpper().Contains("VERSION"))
+                {
+                    return oldLoad(File);
+                }
+                //else do normal load
+                else
+                {
+                    List<SavedItem> saveditems = new List<SavedItem>();
+                    using (StreamReader sr = new StreamReader(File))
+                    {                        
+                        while (!sr.EndOfStream)
+                        {
+                            string[] s = sr.ReadLine().Split('|');
+                            saveditems.Add(new SavedItem(s[0],s[1]));
+                        }
+                    }
+                    txtAmount.Text=getvalue( saveditems, "Amount");
+                    txtLimit.Text = getvalue(saveditems, "Limit");
+                    chkLimit.Checked= (getvalue(saveditems, "LimitEnabled") == "1");
+                    txtLowerLimit.Text = getvalue(saveditems, "LowerLimit");
+                    chkLowerLimit.Checked = (getvalue(saveditems, "LowerLimitEnabled") == "1");
+                    txtMinBet.Text = getvalue(saveditems, "MinBet");
+                    txtMultiplier.Text = getvalue(saveditems, "Multiplier");
+                    txtSecretURL.Text = getvalue(saveditems, "URL");
+                    txtTo.Text = getvalue(saveditems, "To");
+                    string temp = getvalue(saveditems, "OnStop");
+                    rdbInvest.Checked = (temp == "0");
+                    rdbStop.Checked = (temp == "1");
+                    rdbWithdraw.Checked = (temp == "2");
+                    chkStopOnWin.Checked = ("1"==getvalue(saveditems, "StopOnWin"));
+                    txtChance.Text = getvalue(saveditems, "Chance");
+                    txtMaxMultiply.Text = getvalue(saveditems, "MaxMultiply");
+                    txtNBets.Text = getvalue(saveditems, "NBets");
+                    txtDevider.Text = getvalue(saveditems, "devider");
+                    temp = getvalue(saveditems, "MultiplierMode");
+                    rdbMaxMultiplier.Checked = (temp == "0");
+                    rdbDevider.Checked = (temp == "1");
+                    rdbConstant.Checked = (temp == "2");
+                    rdbReduce.Checked = (temp=="3");
+                    chkReverse.Checked = ("1"==getvalue(saveditems, "ReverseEnabled"));
+                    temp = getvalue(saveditems, "ReverseMode");
+                    rdbReverseBets.Checked = (temp == "0");
+                    rdbReverseLoss.Checked = (temp == "1");
+                    rdbReverseWins.Checked = (temp == "2");
+                    NudReverse.Value = (decimal)dparse(getvalue(saveditems, "ReverseOn"));
+                    nudLastStreakWin.Value = (decimal)dparse(getvalue(saveditems, "LastStreakWin"));
+                    nudLastStreakLose.Value = (decimal)dparse(getvalue(saveditems, "LastStreakLose"));
+                    chkResetBetLoss.Checked = ("1"==getvalue(saveditems, "ResetBetLossEnabled"));
+                    nudResetBetLoss.Value = (decimal)dparse(getvalue(saveditems, "ResetBetLossValue"));
+                    chkResetBetWins.Checked = ("1"==getvalue(saveditems, "ResetBetWinsEnabled"));
+                    nudResetWins.Value = (decimal)dparse(getvalue(saveditems, "ResetWinsValue"));
+                    txtWinMultiplier.Text = getvalue(saveditems, "WinMultiplier");
+                    txtWinMaxMultiplies.Text = getvalue(saveditems, "WinMaxMultiplies");
+                    txtWinNBets.Text = getvalue(saveditems, "WinNBets");
+                    txtWinDevider.Text = getvalue(saveditems, "WinDevider");
+                    temp = getvalue(saveditems, "WinMultiplyMode");
+                    rdbWinConstant.Checked = ("0" == temp);
+                    rdbWinDevider.Checked = ("1" == temp);
+                    rdbWinMaxMultiplier.Checked = ("2" == temp);
+                    rdbWinReduce.Checked = ("3" == temp);
+                    chkBotSpeed.Checked = ("1"==getvalue(saveditems, "BotSpeedEnabled"));
+                    nudBotSpeed.Value = (decimal)dparse(getvalue(saveditems, "BotSpeedValue"));
+                    chkResetSeed.Checked = ("1"==getvalue(saveditems, "ResetSeedEnabled"));
+                    temp = getvalue(saveditems, "ResetSeedMode");
+                    rdbResetSeedBets.Checked = ("0" == temp);
+                    rdbResetSeedWins.Checked = ("1" == temp);
+                    rdbResetSeedLosses.Checked = ("2" == temp);
+                    nudResetSeed.Value=(decimal)dparse(getvalue(saveditems, "ResetSeedValue"));
+
+                    chkStopLossStreak.Checked = ("1" == getvalue(saveditems, "StopAfterLoseStreakEnabled"));
+                    nudStopLossStreak.Value = (decimal)dparse(getvalue(saveditems, "StopAfterLoseStreakValue"));
+                    chkStopLossBtcStreak.Checked = ("1" == getvalue(saveditems, "StopAfterLoseStreakBtcEnabled"));
+                    nudStopLossBtcStreal.Value = (decimal)dparse(getvalue(saveditems, "StopAfterLoseStreakBtcValue"));
+                    chkStopLossBtc.Checked = ("1" == getvalue(saveditems, "StopAfterLoseBtcEnabled"));
+                    nudStopLossBtc.Value = (decimal)dparse(getvalue(saveditems, "StopAfterLoseBtcValue"));
+
+                    chkChangeLoseStreak.Checked = ("1" == getvalue(saveditems, "ChangeAfterLoseStreakEnabled"));
+                    nudChangeLoseStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterLoseStreakSize"));
+                    nudChangeLoseStreakTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterLoseStreakTo"));
+
+
+                    chkStopWinStreak.Checked = ("1" == getvalue(saveditems, "StopAfterWinStreakEnabled"));
+                    nudStopWinStreak.Value = (decimal)dparse(getvalue(saveditems, "StopAfterWinStreakValue"));
+                    chkStopWinBtcStreak.Checked = ("1" == getvalue(saveditems, "StopAfterWinStreakBtcEnabled"));
+                    nudStopWinBtcStreak.Value = (decimal)dparse(getvalue(saveditems, "StopAfterWinStreakBtcValue"));
+                    chkStopWinBtc.Checked = ("1" == getvalue(saveditems, "StopAfterWinBtcEnabled"));
+                    nudStopWinBtc.Value = (decimal)dparse(getvalue(saveditems, "StopAfterWinBtcValue"));
+
+                    chkChangeWinStreak.Checked = ("1" == getvalue(saveditems, "ChangeAfterWinStreakEnabled"));
+                    nudChangeWinStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterWInStreakSize"));
+                    nudChangeWinStreakTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterWInStreakTo"));
+               
+                
 
                 }
+
+                
+                
                 variabledisable();
                 return true;
             }
@@ -1440,26 +1911,56 @@ namespace DiceBot
                 return false;
             }
         }
-        public void loadsettings()
+
+        bool loadsettingsold()
         {
-            try
+            using (StreamReader sr = new StreamReader(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\Psettings"))
             {
-                using (StreamReader sr = new StreamReader(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\Psettings"))
+                //NCPuser,ncppass,autologin
+                string info = sr.ReadLine();
+                string[] chars = info.Split(' ');
+                string suser = "";
+                string spass = "";
+                bool login = false;
+                bool start = false;
+                int word = 0;
+                for (int i = 0; i < chars.Length; i++)
                 {
-                    //NCPuser,ncppass,autologin
-                    string info = sr.ReadLine();
-                    string[] chars = info.Split(' ');
-                    string suser = "";
-                    string spass = "";
-                    bool login = false;
-                    bool start = false;
-                    int word = 0;                    
+                    int num = 0;
+                    if (int.TryParse(chars[i], out num))
+                    {
+                        if ((char)num == ',' || (char)num == ';')
+                            word++;
+                        else
+                            switch (word)
+                            {
+                                case 0: suser += (char)num; break;
+                                case 1: spass += (char)num; break;
+                                case 2: if ((char)num == '1') login = true; else login = false; break;
+                                case 3: if ((char)num == '1') start = true; else start = false; break;
+                            }
+                    }
+                }
+                autologin = login;
+                password = spass;
+                username = suser;
+                autostart = start;
+                if (word == 2)
+                {
+
+                    info = sr.ReadLine();
+                    chars = info.Split(' ');
+                    suser = "";
+                    spass = "";
+
+                    login = false;
+                    word = 0;
                     for (int i = 0; i < chars.Length; i++)
                     {
                         int num = 0;
                         if (int.TryParse(chars[i], out num))
                         {
-                            if ((char)num == ',' || (char)num == ';')
+                            if ((char)num == ',')
                                 word++;
                             else
                                 switch (word)
@@ -1475,22 +1976,83 @@ namespace DiceBot
                     password = spass;
                     username = suser;
                     autostart = start;
-                    if (word == 2)
-                    {
+                }
 
-                        info = sr.ReadLine();
-                        chars = info.Split(' ');
-                        suser = "";
-                        spass = "";
-                        
-                        login = false;
-                        word = 0;
+                info = sr.ReadLine();
+                string[] values = info.Split(',');
+                if (info.Contains(";"))
+                    values = info.Split(';');
+                int j = 0;
+                tray = (values[j++] == "1");
+                Botname = values[j++];
+                if (values[j++] != "1")
+                {
+                    Emails.Enable = false;
+                    Emails.emailaddress = values[j++];
+                    Emails.Lower = Emails.Streak = Emails.Withdraw = (values[j] == "1");
+                    j += 3;
+                }
+                else
+                {
+                    Emails.Enable = true;
+                    Emails.emailaddress = values[j++];
+                    Emails.Withdraw = ((values[j++] == "1"));
+                    Emails.Lower = ((values[j++] == "1"));
+                    Emails.Streak = ((values[j++] == "1"));
+                }
+                Emails.StreakSize = iparse(values[j++]);
+                if (values.Count() == j)
+                {
+                    Emails.SMTP = values[j++];
+                }
+
+                info = sr.ReadLine();
+                values = info.Split(',');
+                j = 0;
+                SoundWithdraw = (values[j++] == "1");
+                if (values[j++] != "1")
+                {
+                    Sound = false;
+                    SoundLow = SoundStreak = (values[j] == "1");
+                    j += 2;
+                }
+                else
+                {
+                    Sound = true;
+                    SoundLow = ((values[j++] == "1"));
+                    SoundStreak = ((values[j++] == "1"));
+                }
+                SoundStreakCount = iparse(values[j++]);
+
+            }
+            return true;
+        }
+
+        public void loadsettings()
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\Psettings"))
+                {
+
+                    string test = sr.ReadLine();
+                    if (test != "new")
+                        loadsettingsold();
+                    else
+                    {
+                        string info = sr.ReadLine();
+                        string[] chars = info.Split(' ');
+                        string suser = "";
+                        string spass = "";
+                        bool login = false;
+                        bool start = false;
+                        int word = 0;
                         for (int i = 0; i < chars.Length; i++)
                         {
                             int num = 0;
                             if (int.TryParse(chars[i], out num))
                             {
-                                if ((char)num == ',')
+                                if ((char)num == ',' || (char)num == ';')
                                     word++;
                                 else
                                     switch (word)
@@ -1506,53 +2068,67 @@ namespace DiceBot
                         password = spass;
                         username = suser;
                         autostart = start;
-                    }
+                        if (word == 2)
+                        {
 
-                    info = sr.ReadLine();
-                    string[] values = info.Split(',');
-                    if (info.Contains(";"))
-                     values = info.Split(';');
-                    int j = 0;
-                    tray = (values[j++] == "1");
-                    Botname = values[j++];
-                    if (values[j++] != "1")
-                    {
-                        Emails.Enable = false;
-                        Emails.emailaddress = values[j++];
-                        Emails.Lower = Emails.Streak = Emails.Withdraw = (values[j] == "1");
-                        j += 3;
-                    }
-                    else
-                    {
-                        Emails.Enable = true;
-                        Emails.emailaddress = values[j++];
-                        Emails.Withdraw = ((values[j++] == "1"));
-                        Emails.Lower = ((values[j++] == "1"));
-                        Emails.Streak = ((values[j++] == "1"));
-                    }
-                    Emails.StreakSize = iparse(values[j++]);
-                    if (values.Count() == j)
-                    {
-                        Emails.SMTP = values[j++];
-                    }
+                            info = sr.ReadLine();
+                            chars = info.Split(' ');
+                            suser = "";
+                            spass = "";
 
-                    info = sr.ReadLine();
-                    values = info.Split(',');
-                    j=0;
-                    SoundWithdraw = (values[j++] == "1");
-                    if (values[j++] != "1")
-                    {
-                        Sound = false;
-                       SoundLow = SoundStreak = (values[j] == "1");
-                       j += 2;
+                            login = false;
+                            word = 0;
+                            for (int i = 0; i < chars.Length; i++)
+                            {
+                                int num = 0;
+                                if (int.TryParse(chars[i], out num))
+                                {
+                                    if ((char)num == ',')
+                                        word++;
+                                    else
+                                        switch (word)
+                                        {
+                                            case 0: suser += (char)num; break;
+                                            case 1: spass += (char)num; break;
+                                            case 2: if ((char)num == '1') login = true; else login = false; break;
+                                            case 3: if ((char)num == '1') start = true; else start = false; break;
+                                        }
+                                }
+                            }
+                            autologin = login;
+                            password = spass;
+                            username = suser;
+                            autostart = start;
+                        }
+                        List<SavedItem> saveditems = new List<SavedItem>();
+                        while (!sr.EndOfStream)
+                        {
+                            string[] temp = sr.ReadLine().Split('|');
+                            saveditems.Add(new SavedItem(temp[0],temp[1]));
+                        }
+                        //string msg = "";
+                        tray = ("1"==getvalue(saveditems, "Tray"));
+                        Botname = getvalue(saveditems, "BotName");
+                        Emails.Enable = ("1"==getvalue(saveditems, "enableEmail"));
+                        Emails.emailaddress = getvalue(saveditems, "emailaddress");
+                        Emails.Withdraw = ("1"==getvalue(saveditems, "emailwithdraw"));
+                        Emails.Lower = ("1"==getvalue(saveditems, "emaillow"));
+                        Emails.Streak = ("1" == getvalue(saveditems, "emailstreak"));
+                        Emails.StreakSize = iparse(getvalue(saveditems, "emailstreakval"));
+                        Emails.SMTP = getvalue(saveditems, "SMTP");
+
+                        SoundWithdraw = ("1" ==getvalue(saveditems, "CoinEnabled"));
+                        ching= txtPathChing.Text = getvalue(saveditems, "CoinPath");
+                        Sound = ("1"==getvalue(saveditems, "AlarmEnabled"));
+                        SoundLow = ("1" == getvalue(saveditems, "AlarmLowEnabled"));
+                        SoundStreak = ("1" == getvalue(saveditems, "AlarmStreakEnabled"));
+                        SoundStreakCount =iparse(getvalue(saveditems, "AlarmStreakValue"));
+                        salarm= txtPathAlarm.Text = getvalue(saveditems, "AlarmPath");
+                        nudEmailStreak.Value = (decimal)Emails.StreakSize;
+                        nudSoundStreak.Value = SoundStreakCount;
+
+
                     }
-                    else
-                    {
-                        Sound = true;
-                        SoundLow = ((values[j++] == "1"));
-                        SoundStreak = ((values[j++] == "1"));
-                    }
-                    SoundStreakCount = iparse(values[j++]);
 
                 }
 
@@ -1586,10 +2162,9 @@ namespace DiceBot
         {
             using (StreamWriter sw = new StreamWriter(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\Psettings"))
             {
-
-                
-
-                //JDuser,JDPass,AutoLogin,AutoStart
+                sw.WriteLine("new");
+                //sw.WriteLine("User|" + txtJDUser.Text);
+                //sw.WriteLine("Seed|"+txtJDPass.Text);
                 string temp2 = txtJDUser.Text + "," + txtJDPass.Text + ",";
                 if (chkJDAutoLogin.Checked)
                     temp2 += "1,";
@@ -1605,49 +2180,102 @@ namespace DiceBot
                 }
                 sw.WriteLine(jdline);
 
-                //tray,botname,enableemail,emailaddress,emailwithdraw,emailinvest,emaillow,emailstreak,emailstreakval
-                string temp3 = "";
-                if (chkTray.Checked)
-                    temp3 += "1,";
-                else temp3 += "0,";
-                temp3 += txtBot.Text + ",";
-                if (chkEmail.Checked)
-                    temp3 += "1,";
-                else temp3 += "0,";
-                temp3 += txtEmail.Text + ",";
-                if (chkEmailWithdraw.Checked)
-                    temp3 += "1,";
-                else temp3 += "0,";
-                if (chkEmailLowLimit.Checked)
-                    temp3 += "1,";
-                else temp3 += "0,";
-                if (chkEmailStreak.Checked)
-                    temp3 += "1,";
-                else temp3 += "0,";
-                temp3 += nudEmailStreak.Value.ToString();
-                temp3 += "," + Emails.SMTP;
-                sw.WriteLine(temp3);
+                ////tray,botname,enableemail,emailaddress,emailwithdraw,emailinvest,emaillow,emailstreak,emailstreakval
+                string msg = "";
+                msg = (chkTray.Checked) ? "1" : "0";                
+                sw.WriteLine("tray|"+msg);
+                sw.WriteLine("botmname|"+txtBot.Text);
+                msg = (chkEmail.Checked) ? "1" : "0";  
+                sw.WriteLine("enableemail|"+msg);
+                sw.WriteLine("emailaddress|"+txtEmail.Text);
+                msg = (chkEmailWithdraw.Checked) ? "1" : "0";  
+                sw.WriteLine("emailwithdraw|"+msg);
+                msg = (chkEmailLowLimit.Checked) ? "1" : "0";  
+                sw.WriteLine("emaillow|"+msg);
+                msg = (chkEmailStreak.Checked) ? "1" : "0";  
+                sw.WriteLine("emailstreak|"+msg);
+                sw.WriteLine("emailstreakval|"+nudEmailStreak.Value.ToString());
+                sw.WriteLine("SMTP|" + Emails.SMTP);
+                
 
-                //soundcoin,soundalarm,soundlower,soundstrea,soundstreakvalue
-                temp3 = "";
-                if (chkSoundWithdraw.Checked)
-                    temp3 += "1,";
-                else temp3 += "0,";
-                if (chkAlarm.Checked)
-                    temp3 += "1,";
-                else temp3 += "0,";
-                if (chkSoundLowLimit.Checked)
-                    temp3 += "1,";
-                else temp3 += "0,";
-                if (chkSoundStreak.Checked)
-                    temp3 += "1,";
-                else temp3 += "0,";
-                temp3 += nudSoundStreak.Value.ToString();
-                sw.WriteLine(temp3);
+                ////soundcoin,soundalarm,soundlower,soundstrea,soundstreakvalue
+               
+                msg = (chkSoundWithdraw.Checked) ? "1" : "0";
+                sw.WriteLine("CoinEnabled|" + msg);
+                sw.WriteLine("CoinPath|" + txtPathChing.Text);
+                msg = (chkAlarm.Checked) ? "1" : "0";
+                sw.WriteLine("AlarmEnabled|" + msg);
+                msg = (chkSoundLowLimit.Checked) ? "1" : "0";
+                sw.WriteLine("AlarmLowEnabled|" + msg);
+                msg = (chkSoundStreak.Checked) ? "1" : "0";
+                sw.WriteLine("AlarmStreakEnabled|" + msg);
+
+                sw.WriteLine("AlarmStreakValue|" + nudSoundStreak.Value.ToString());
+                sw.WriteLine("AlarmPath|" + txtPathAlarm.Text);
+                
+
+
+
+                #region old Save
+                ////JDuser,JDPass,AutoLogin,AutoStart
+                //string temp2 = txtJDUser.Text + "," + txtJDPass.Text + ",";
+                //if (chkJDAutoLogin.Checked)
+                //    temp2 += "1,";
+                //else temp2 += "0";
+                //if (chkJDAutoStart.Checked)
+                //    temp2 += "1,";
+                //else temp2 += "0";
+                //string jdline = "";
+
+                //foreach (char c in temp2)
+                //{
+                //    jdline += ((int)c).ToString() + " ";
+                //}
+                //sw.WriteLine(jdline);
+
+                ////tray,botname,enableemail,emailaddress,emailwithdraw,emailinvest,emaillow,emailstreak,emailstreakval
+                //string temp3 = "";
+                //if (chkTray.Checked)
+                //    temp3 += "1,";
+                //else temp3 += "0,";
+                //temp3 += txtBot.Text + ",";
+                //if (chkEmail.Checked)
+                //    temp3 += "1,";
+                //else temp3 += "0,";
+                //temp3 += txtEmail.Text + ",";
+                //if (chkEmailWithdraw.Checked)
+                //    temp3 += "1,";
+                //else temp3 += "0,";
+                //if (chkEmailLowLimit.Checked)
+                //    temp3 += "1,";
+                //else temp3 += "0,";
+                //if (chkEmailStreak.Checked)
+                //    temp3 += "1,";
+                //else temp3 += "0,";
+                //temp3 += nudEmailStreak.Value.ToString();
+                //temp3 += "," + Emails.SMTP;
+                //sw.WriteLine(temp3);
+
+                ////soundcoin,soundalarm,soundlower,soundstrea,soundstreakvalue
+                //temp3 = "";
+                //if (chkSoundWithdraw.Checked)
+                //    temp3 += "1,";
+                //else temp3 += "0,";
+                //if (chkAlarm.Checked)
+                //    temp3 += "1,";
+                //else temp3 += "0,";
+                //if (chkSoundLowLimit.Checked)
+                //    temp3 += "1,";
+                //else temp3 += "0,";
+                //if (chkSoundStreak.Checked)
+                //    temp3 += "1,";
+                //else temp3 += "0,";
+                //temp3 += nudSoundStreak.Value.ToString();
+                //sw.WriteLine(temp3);
+                #endregion
             }
         }
         
-
         private void btnImport_Click(object sender, EventArgs e)
         {
             bool valid = true;
@@ -1756,11 +2384,28 @@ namespace DiceBot
         double dparse(string text)
         {
             double number = -1;
+            string test = "0.000001";
+            double dtest = 0;
+            if (double.TryParse(test, out dtest))
+            {
+                if (dtest != 0.000001)
+                {
+                    text = text.Replace(".", ",");
+                }
+                else
+                {
+                    text = text.Replace(",", ".");
+                }
+            }
+            else
+            {
+                text = text.Replace(",", ".");
+            }
 
-            text = text.Replace(",", ".");
+            //text = text.Replace(",", ".");
             if (!double.TryParse(text, out number))
             {
-                text = text.Replace(".", ",");
+                //text = text.Replace(".", ",");
                 if (!double.TryParse(text, out number))
                     return -1;
             }
@@ -2285,7 +2930,10 @@ namespace DiceBot
                     dMultiplier = startMultiplier;
                     if (chkReverse.Checked && rdbReverseWins.Checked && winstreak % reversebets == 0)
                         high = !high;
-
+                    if (chkChangeWinStreak.Checked && (winstreak == nudChangeWinStreak.Value))
+                    {
+                        lastbet = (double)nudChangeWinStreakTo.Value;
+                    }
 
                 }
                 else
@@ -2312,7 +2960,11 @@ namespace DiceBot
                     {
                         dMultiplier *= devider;
                     }
-                    
+                    if (chkChangeLoseStreak.Checked && (losstreak == nudChangeLoseStreak.Value))
+                    {
+                        lastbet = (double)nudChangeLoseStreakTo.Value;
+                    }
+
                     lastbet *= dMultiplier;
                     if (lastbet > balance)
                         break;
@@ -2463,14 +3115,10 @@ namespace DiceBot
         private void btnSaveUser_Click(object sender, EventArgs e)
         {
             writesettings();
+            loadsettings();
         }
 
-        private void btnSMTP_Click(object sender, EventArgs e)
-        {
-            string smtp = Interaction.InputBox("Enter new smtp server address", "SMTP", "smtp.secrueserver.net");
-            Emails.SMTP = smtp;
-        }
-
+        
         private void nudBotSpeed_ValueChanged(object sender, EventArgs e)
         {
             if (nudBotSpeed.Value != (decimal)0.0)
@@ -2478,6 +3126,38 @@ namespace DiceBot
                 lblTimeBetween.Text = (1 / nudBotSpeed.Value).ToString("##0.0000") + "Seconds";
             }
         }
+
+        private void btnSMTP_Click_1(object sender, EventArgs e)
+        {
+            string smtp = Interaction.InputBox("Enter new smtp server address", "SMTP", "smtp.secrueserver.net");
+            Emails.SMTP = smtp;
+            
+        }
+
+        private void btnBrowseChing_Click(object sender, EventArgs e)
+        {
+            bool ching = ((sender as Button).Name == "btnBrowseChing");
+            OpenFileDialog ofdSound = new OpenFileDialog();
+            ofdSound.CheckFileExists = true;
+            ofdSound.Filter = "MP3|*.mp3|Wave Files|*.wav";
+            if (ofdSound.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (ching)
+                {
+                    this.ching = ofdSound.FileName;
+                    txtPathChing.Text = this.ching;
+                }
+                else
+                {
+                    salarm = ofdSound.FileName;
+                    txtPathAlarm.Text = salarm;
+                }
+            }
+        }
+
+        
+
+        
 
     }
 

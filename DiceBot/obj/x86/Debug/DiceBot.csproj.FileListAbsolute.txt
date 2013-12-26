@@ -55,3 +55,5 @@ C:\Users\seunt_000\Documents\GitHub\souceforge\dicebot\DiceBot\obj\x86\Debug\Dic
 C:\Users\seunt_000\Documents\GitHub\souceforge\dicebot\DiceBot\obj\x86\Debug\DiceBot.cSettings.resources
 C:\Users\seunt_000\Documents\GitHub\souceforge\dicebot\DiceBot\obj\x86\Debug\DiceBot.StreakTable.resources
 C:\Users\seunt_000\Documents\GitHub\souceforge\dicebot\DiceBot\obj\x86\Debug\DiceBot.csproj.GenerateResource.Cache
+C:\Users\seunt_000\Documents\GitHub\souceforge\dicebot\DiceBot\obj\x86\Debug\Interop.WMPLib.dll
+C:\Users\seunt_000\Documents\GitHub\souceforge\dicebot\DiceBot\obj\x86\Debug\DiceBot.csproj.ResolveComReference.cache
