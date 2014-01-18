@@ -25,7 +25,7 @@ namespace DiceBot
     
     public partial class cDiceBot : Form
     {
-
+        Random r = new Random();
         #region Variables
         Random rand = new Random();
         double StartBalance = 0;        
@@ -220,6 +220,12 @@ namespace DiceBot
             Xpcom.Initialize(Environment.CurrentDirectory + "\\xulrunner\\");
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
+                if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
+                    "If this is the first time you are running Dice Bot, it is highly recommended you see the begginners guide"+
+                    "\n\nGo to Beginners Guide now?", "Warning", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    Process.Start("https://bitcointalk.org/index.php?topic=391870");
+                }
                 try
                 {
 
@@ -238,7 +244,7 @@ namespace DiceBot
                 loadsettings();
                 
             }
-
+            
             tmStop.Enabled = true;
             
         }
@@ -351,6 +357,10 @@ namespace DiceBot
             lblLargestBet.Text = LargestBet.ToString("0.00000000");
             lblLargestLoss.Text = LargestLoss.ToString("0.00000000");
             lblLargestWin.Text = LargestWin.ToString("0.00000000");
+            if (Losses != 0)
+            {
+                lblLuck.Text = (((double)Wins / (double)Losses) * 100.0).ToString("00.00") +"%";
+            }
         }
 
         int maxbets()//Start
@@ -378,7 +388,13 @@ namespace DiceBot
             while (total < PreviousBalance)
             {
                 if (bets > 0)
+                {
                     curbet *= Multiplier;
+                }
+                if (bets == nudChangeLoseStreak.Value && chkChangeLoseStreak.Checked)
+                {
+                    curbet = (double)nudChangeLoseStreakTo.Value;
+                }
                 bets++;
                 total += curbet;
                 if (bets > 500)
@@ -402,6 +418,10 @@ namespace DiceBot
                         dmultiplier *= Devider;
 
                     curbet *= dmultiplier;
+                }
+                if (bets == nudChangeLoseStreak.Value && chkChangeLoseStreak.Checked)
+                {
+                    curbet = (double)nudChangeLoseStreakTo.Value;
                 }
                 bets++;
                 total += curbet;
@@ -427,6 +447,10 @@ namespace DiceBot
 
                     curbet *= dmultiplier;
                 }
+                if (bets == nudChangeLoseStreak.Value && chkChangeLoseStreak.Checked)
+                {
+                    curbet = (double)nudChangeLoseStreakTo.Value;
+                }
                 bets++;
                 total += curbet;
                 if (bets > 500)
@@ -450,6 +474,10 @@ namespace DiceBot
                         dmultiplier *= Devider;
 
                     curbet *= dmultiplier;
+                }
+                if (bets == nudChangeLoseStreak.Value && chkChangeLoseStreak.Checked)
+                {
+                    curbet = (double)nudChangeLoseStreakTo.Value;
                 }
                 bets++;
                 total += curbet;
@@ -679,8 +707,8 @@ namespace DiceBot
             }
             if (waiter == 15)
             {
-                GeckoInputElement gieAmount = new GeckoInputElement(gckBrowser.Document.GetElementById("invest_input").DomObject);
-                gieAmount.Value = txtAmount.Text;
+                //GeckoInputElement gieAmount = new GeckoInputElement(gckBrowser.Document.GetElementById("invest_input").DomObject);
+                //gieAmount.Value = txtAmount.Text;
             }
             if (waiter == 20)
             {
@@ -778,7 +806,7 @@ namespace DiceBot
 
         void Start()
         {
-            rtbDonate.Text = "Please feel free to donate. \t\tBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 \t\tLtc: LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy";
+            rtbDonate.Text = "Please feel free to donate. \t\tBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 \t\tLtc: LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy \t\tDoge:DR32dpGniJP9mJo4NpzXGCTdsJLcp4td2X";
             Winstreak = 0;
             Losestreak = 0;
             save();
@@ -808,20 +836,53 @@ namespace DiceBot
             }
             double dBalance = PreviousBalance;
             if (valid)
+            {
                 dBalance = Getbalance();
 
+            }
                 if (dBalance != PreviousBalance && dBalance != -1 || withdrew)
                 {
                     if (PreviousBalance == 0)
                         StartBalance = dBalance;
                     PreviousBalance = dBalance;
+
+                    try
+                    {
+                        
+                        GeckoInputElement giebets = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("bets")[0].DomObject);
+                        string bets = giebets.InnerHtml.Replace(",","");
+                        double dbets = dparse(bets);
+                        GeckoInputElement gieprofit = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("myprofit")[0].DomObject);
+                        string myprofit = gieprofit.InnerHtml.Replace(",", "");
+                        double dprof = dparse(myprofit);
+                        
+                        writeprofitbet((int)dbets, dprof);
+                        writeprofittime(DateTime.Now, dprof);
+                        writecurrentprofitbet(Wins + Losses, profit);
+                        writecurrentprofittime(DateAndTime.Now, profit);
+                        writebankrollbet((int)dbets, dBalance);
+                        writebankrolltime(DateTime.Now, dBalance);
+                    }
+                    catch
+                    {
+
+                    }
+
                 }
                 else if (dBalance == PreviousBalance && dBalance != -1 || withdrew)
                 {
                     if ((DateTime.Now - dtLastBet).Seconds + ((DateTime.Now - dtLastBet).Minutes * 60) > 120 && !stop)
                     {
 
-                        gckBrowser.Reload();
+
+                        if (txtSecretURL.Text != "")
+                        {
+                            gckBrowser.Navigate(txtSecretURL.Text);
+                        }
+                        else
+                        {
+                            gckBrowser.Navigate("http://just-dice.com");
+                        }
                         dtLastBet = DateTime.Now;
                         restartcounter = 0;
                     }
@@ -901,7 +962,15 @@ namespace DiceBot
                         if (Winstreak == 0)
                         {
                             Lastbet = MinBet;
-                            
+                            try
+                            {
+                                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
+                                gie.Value = Chance.ToString().Replace(',', '.');
+                            }
+                            catch
+                            {
+
+                            }
                         }
                         Wins++;
                         Winstreak++;
@@ -912,6 +981,18 @@ namespace DiceBot
                         if (chkChangeWinStreak.Checked && (Winstreak == nudChangeWinStreak.Value))
                         {
                             Lastbet = (double)nudChangeWinStreakTo.Value;
+                        }
+                        if (chkChangeChanceWin.Checked && (Winstreak == nudChangeChanceWinStreak.Value))
+                        {
+                            try
+                            {
+                                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
+                                gie.Value = nudChangeChanceWinTo.Value.ToString().Replace(',', '.');
+                            }
+                            catch
+                            {
+
+                            }
                         }
                         if (Winstreak >= nudLastStreakWin.Value)
                             laststreakwin = Winstreak;
@@ -1039,6 +1120,20 @@ namespace DiceBot
                     if (chkChangeLoseStreak.Checked && (Losestreak == nudChangeLoseStreak.Value))
                     {
                         Lastbet = (double)nudChangeLoseStreakTo.Value;
+                    }
+
+                    //change chance after a certain losing streak
+                    if (chkChangeChanceLose.Checked && (Losestreak == nudChangeChanceLoseStreak.Value))
+                    {
+                        try
+                        {
+                            GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
+                            gie.Value = nudChangeChanceLoseTo.Value.ToString().Replace(',', '.');
+                        }
+                        catch
+                        {
+
+                        }
                     }
                     
                     
@@ -1263,6 +1358,18 @@ namespace DiceBot
         protected override void OnClosing(CancelEventArgs e)
         {
             save();
+            if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
+            {
+                File.Delete(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim");
+            }
+            if (File.Exists("currentprofitbet.txt"))
+            {
+                File.Delete("currentprofitbet.txt");
+            }
+            if (File.Exists("currentprofittime.txt"))
+            {
+                File.Delete("currentprofittime.txt");
+             }
             base.OnClosing(e);
             Application.Exit();
         }
@@ -1352,8 +1459,68 @@ namespace DiceBot
         void save()
         {
             save(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings");
+            savepersonal();
         }
 
+        void savepersonal()
+        {
+            using (StreamWriter sw = new StreamWriter(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings3"))
+            {
+                sw.WriteLine("Amount|" + txtAmount.Text);
+                sw.WriteLine("Limit|" + txtLimit.Text);
+                if (chkLimit.Checked)
+                    sw.WriteLine("LimitEnabled|1");
+                else
+                    sw.WriteLine("LimitEnabled|0");
+                sw.WriteLine("LowerLimit|" + txtLowerLimit.Text);
+                sw.Write("LowerLimitEnabled|");
+                if (chkLowerLimit.Checked)
+                    sw.WriteLine("1");
+                else
+                    sw.WriteLine("0");
+                sw.WriteLine("URL|" + txtSecretURL.Text);
+                sw.WriteLine("To|" + txtTo.Text);
+                sw.Write("OnStop|");
+                if (rdbInvest.Checked)
+                {
+                    sw.WriteLine("0");
+                }
+                else if (rdbStop.Checked)
+                {
+                    sw.WriteLine("1");
+                }
+                else
+                {
+                    sw.WriteLine("2");
+                }
+                sw.Write("StopOnWin|");
+                if (chkStopOnWin.Checked)
+                    sw.WriteLine("1");
+                else
+                    sw.WriteLine("0");
+                sw.WriteLine("LastStreakWin|" + nudLastStreakWin.Value.ToString("00"));
+                sw.WriteLine("LastStreakLose|" + nudLastStreakLose.Value.ToString("00"));
+                string msg = "";
+                if (chkBotSpeed.Checked)
+                    msg = "1";
+                else msg = "0";
+                sw.WriteLine("BotSpeedEnabled|" + msg);
+                sw.WriteLine("BotSpeedValue|" + nudBotSpeed.Value.ToString());
+                if (chkResetSeed.Checked)
+                    msg = "1";
+                else msg = "0";
+                sw.WriteLine("ResetSeedEnabled|" + msg);
+
+                if (rdbResetSeedBets.Checked)
+                    msg = "0";
+                else if (rdbResetSeedWins.Checked)
+                    msg = "1";
+                else if (rdbResetSeedLosses.Checked)
+                    msg = "2";
+                sw.WriteLine("ResetSeedMode|" + msg);
+                sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
+            }
+        }
         void save(string file)
         {
             using (StreamWriter sw = new StreamWriter(file))
@@ -1362,42 +1529,8 @@ namespace DiceBot
                 try
                 {
                     sw.WriteLine("SaveVersion|" + "2");
-                    sw.WriteLine("Amount|" + txtAmount.Text);
-                    sw.WriteLine("Limit|"+txtLimit.Text);
-                    if (chkLimit.Checked)
-                        sw.WriteLine("LimitEnabled|1");
-                    else
-                        sw.WriteLine("LimitEnabled|0");
-                     sw.WriteLine("LowerLimit|"+txtLowerLimit.Text);
-                    sw.Write("LowerLimitEnabled|");
-                    if (chkLowerLimit.Checked)
-                        sw.WriteLine("1");
-                    else
-                        sw.WriteLine("0");
-
                     sw.WriteLine("MinBet|"+txtMinBet.Text);
                     sw.WriteLine("Multiplier|"+txtMultiplier.Text);
-                    sw.WriteLine("URL|"+txtSecretURL.Text);
-                    sw.WriteLine("To|"+txtTo.Text);
-                    sw.Write("OnStop|");
-                    if (rdbInvest.Checked)
-                    {
-                        sw.WriteLine("0");
-                    }
-                    else if (rdbStop.Checked)
-                    {
-                        sw.WriteLine("1");
-                    }
-                    else
-                    {
-                        sw.WriteLine("2");
-                    }
-                    sw.Write("StopOnWin|");
-                    if (chkStopOnWin.Checked)
-                        sw.WriteLine("1");
-                    else
-                        sw.WriteLine("0");
-                    
                     sw.WriteLine("Chance|"+txtChance.Text);
                     sw.WriteLine("MaxMultiply|"+txtMaxMultiply.Text);
                     sw.WriteLine("NBets|"+txtNBets.Text);
@@ -1422,10 +1555,6 @@ namespace DiceBot
                     else if (rdbReverseWins.Checked)
                         sw.WriteLine("2");
                     sw.WriteLine("ReverseOn|"+NudReverse.Value.ToString("00"));
-
-                    sw.WriteLine("LastStreakWin|" + nudLastStreakWin.Value.ToString("00"));
-                    sw.WriteLine("LastStreakLose|"+nudLastStreakLose.Value.ToString("00"));
-                    
                     sw.Write("ResetBetLossEnabled|");
                     if (chkResetBetLoss.Checked)
                     {
@@ -1458,24 +1587,7 @@ namespace DiceBot
                         sw.WriteLine("3");
 
                     string msg = "";
-                    if (chkBotSpeed.Checked)
-                        msg = "1";
-                    else msg = "0";
-                    sw.WriteLine("BotSpeedEnabled|"+msg);
-                    sw.WriteLine("BotSpeedValue|" + nudBotSpeed.Value.ToString());
-                    if (chkResetSeed.Checked)
-                        msg = "1";
-                    else msg= "0";
-                    sw.WriteLine("ResetSeedEnabled|" + msg);
                     
-                    if (rdbResetSeedBets.Checked)
-                        msg = "0";
-                    else if (rdbResetSeedWins.Checked)
-                        msg = "1";
-                    else if (rdbResetSeedLosses.Checked)
-                        msg = "2";
-                    sw.WriteLine("ResetSeedMode|"+msg);
-                        sw.WriteLine("ResetSeedValue|"+nudResetSeed.Value.ToString());
                     
                     if (chkStopLossStreak.Checked) msg = "1";
                     else msg="0";
@@ -1520,6 +1632,13 @@ namespace DiceBot
                     sw.WriteLine("ChangeAfterWinStreakSize|" + nudChangeWinStreak.Value.ToString());
                     sw.WriteLine("ChangeAfterWinStreakTo|" + nudChangeWinStreakTo.Value.ToString());
                     
+                    sw.WriteLine("ChangeChanceAfterLoseStreakEnabled|" + ((chkChangeChanceLose.Checked)?"1":"0"));
+                    sw.WriteLine("ChangeChanceAfterLoseStreakSize|" + nudChangeChanceLoseStreak.Value.ToString("00"));
+                    sw.WriteLine("ChangeChanceAfterLoseStreakValue|" + nudChangeChanceLoseTo.Value.ToString());
+
+                    sw.WriteLine("ChangeChanceAfterWinStreakEnabled|" + ((chkChangeChanceWin.Checked) ? "1" : "0"));
+                    sw.WriteLine("ChangeChanceAfterWinStreakSize|" + nudChangeChanceWinStreak.Value.ToString("00"));
+                    sw.WriteLine("ChangeChanceAfterWinStreakValue|" + nudChangeChanceWinTo.Value.ToString());
                     #region old save, Not applicable
                     /*string msg = "";
                     msg += txtAmount.Text + ";";
@@ -1636,6 +1755,7 @@ namespace DiceBot
         }
         bool load()
         {
+            
             return (load(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"));
         }
 
@@ -1787,6 +1907,10 @@ namespace DiceBot
             {
                 if (cur.Name.ToUpper() == item.ToUpper())
                 {
+                    if (cur.Name == "ReverseOn")
+                    {
+
+                    }
                     return cur.Value;
                 }
 
@@ -1819,6 +1943,17 @@ namespace DiceBot
                         {
                             string[] s = sr.ReadLine().Split('|');
                             saveditems.Add(new SavedItem(s[0],s[1]));
+                        }
+                    }
+                    if (System.IO.File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings3"))
+                    {
+                        using (StreamReader sr = new StreamReader(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings3"))
+                        {
+                            while (!sr.EndOfStream)
+                            {
+                                string[] s = sr.ReadLine().Split('|');
+                                saveditems.Add(new SavedItem(s[0], s[1]));
+                            }
                         }
                     }
                     txtAmount.Text=getvalue( saveditems, "Amount");
@@ -1896,8 +2031,15 @@ namespace DiceBot
                     chkChangeWinStreak.Checked = ("1" == getvalue(saveditems, "ChangeAfterWinStreakEnabled"));
                     nudChangeWinStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterWInStreakSize"));
                     nudChangeWinStreakTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterWInStreakTo"));
-               
-                
+
+                    chkChangeChanceLose.Checked = ("1" == getvalue(saveditems, "ChangeChanceAfterLoseStreakEnabled"));
+                    nudChangeChanceLoseStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterLoseStreakSize"));
+                    nudChangeChanceLoseTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterLoseStreakValue"));
+
+                    chkChangeChanceWin.Checked = ("1" == getvalue(saveditems, "ChangeChanceAfterWinStreakEnabled"));
+                    nudChangeChanceWinStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterWinStreakSize"));
+                    nudChangeChanceWinTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterWinStreakValue"));
+                    
 
                 }
 
@@ -2184,7 +2326,7 @@ namespace DiceBot
                 string msg = "";
                 msg = (chkTray.Checked) ? "1" : "0";                
                 sw.WriteLine("tray|"+msg);
-                sw.WriteLine("botmname|"+txtBot.Text);
+                sw.WriteLine("botname|"+txtBot.Text);
                 msg = (chkEmail.Checked) ? "1" : "0";  
                 sw.WriteLine("enableemail|"+msg);
                 sw.WriteLine("emailaddress|"+txtEmail.Text);
@@ -2399,7 +2541,7 @@ namespace DiceBot
             }
             else
             {
-                text = text.Replace(",", ".");
+                text = text.Replace(".", ",");
             }
 
             //text = text.Replace(",", ".");
@@ -2851,12 +2993,15 @@ namespace DiceBot
         }
 
         #region Simulate and bet generator
-
-        Simulation runsim()
+        Simulation tempsim;
+        bool simstarted = false;
+        Thread simthread;
+        void runsim()
         {
+
             
-           
             double dMultiplier = Multiplier;
+            double WinMultiplier = this.WinMultiplier;
             double startMultiplier = Multiplier;
             int numbets = (int)nudSimNumBets.Value;
             int bets = 1;
@@ -2868,11 +3013,14 @@ namespace DiceBot
             int largestlostreak = 0;
             int MaxMultiplies = this.MaxMultiplies;
             double devider = this.Devider;
+            double WinDevider = this.WinDevider;
             double devidercounter = this.Devidecounter;
             double balance = (double)nudSimBalance.Value;
             double lastbet = MinBet;
             double minbet = MinBet;
+            double chance = Chance;
             double profit = 0;
+            double currentprofit = this.currentprofit;
             string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
             string server = "";
 
@@ -2892,7 +3040,7 @@ namespace DiceBot
                 sserver += Convert.ToChar(b);
             }
             
-            Simulation sim = new Simulation(balance.ToString("0.00000000"), bets.ToString(), sserver, client);
+            tempsim = new Simulation(balance.ToString("0.00000000"), bets.ToString(), sserver, client);
             while (bets <= numbets)
             {
                 //string columns = "Bet Number,LuckyNumber,Chance,Roll,Result,Wagered,Profit,Balance,Total Profit";
@@ -2901,14 +3049,14 @@ namespace DiceBot
                 betstring += number.ToString() + ","+Chance.ToString()+",";
                 bool win = false;
                 if (high)
-                    betstring += ">" + (100 - Chance) + ",";
+                    betstring += ">" + (100 - chance) + ",";
                 else
-                    betstring += "<" + Chance+",";
-                if (high && number > 100 - Chance)
+                    betstring += "<" + chance+",";
+                if (high && number > 100 - chance)
                 {
                     win = true;
                 }
-                else if (!high && number < Chance)
+                else if (!high && number < chance)
                 {
                     win = true;
                 }
@@ -2916,24 +3064,71 @@ namespace DiceBot
                 if (win)
                 {
                     betstring += "win,";
+                    if (rdbWinMaxMultiplier.Checked && winstreak >= WinMaxMultiplies)
+                    {
+                       WinMultiplier = 1;
+                    }
+                    else if (rdbWinDevider.Checked && winstreak % WinDevidecounter == 0 && winstreak > 0)
+                    {
+                        WinMultiplier *= WinDevider;
+                    }
+                    else if (rdbWinReduce.Checked && winstreak == WinDevidecounter && winstreak > 0)
+                    {
+                        WinMultiplier *= WinDevider;
+                    }
+                    if (winstreak == 0)
+                    {
+                        currentprofit = 0;
+                    }
+                    profit += (lastbet * 99 / chance) - lastbet;
+                    betstring += lastbet + ",";
+                    betstring += (lastbet * 99 / chance) - lastbet + ",";
+                    balance += (lastbet * 99 / chance) - lastbet;
+                    currentprofit += (lastbet*(99/Chance))-lastbet;
+                        Lastbet *= WinMultiplier;
+                        if (winstreak == 0)
+                        { 
+                            lastbet = minbet; 
+                        }
+                    
                     wins++;
                     winstreak++;
-                    if (largestwinstreak < winstreak)
-                        largestwinstreak = winstreak;
-                    losstreak = 0;
-                    dMultiplier = startMultiplier;
-                    profit += (lastbet * 99 / Chance) - lastbet;
-                    betstring += lastbet + ",";
-                    betstring += (lastbet * 99 / Chance) - lastbet+",";
-                    balance += (lastbet * 99 / Chance) - lastbet;
-                    lastbet = minbet;
-                    dMultiplier = startMultiplier;
-                    if (chkReverse.Checked && rdbReverseWins.Checked && winstreak % reversebets == 0)
-                        high = !high;
+                    if (chkResetBetWins.Checked && winstreak % nudResetWins.Value == 0)
+                    {
+                        lastbet = minbet;
+                    }
                     if (chkChangeWinStreak.Checked && (winstreak == nudChangeWinStreak.Value))
                     {
                         lastbet = (double)nudChangeWinStreakTo.Value;
                     }
+                    if (chkChangeChanceWin.Checked && (winstreak == nudChangeChanceWinStreak.Value))
+                    {
+                        
+                            chance = (double)nudChangeChanceWinTo.Value;
+                        
+                    }
+                    if (largestwinstreak < winstreak)
+                        largestwinstreak = winstreak;
+                    if (losstreak != 0)
+                    {
+                        try
+                        {
+                            chance = Chance;
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                    losstreak = 0;
+                    dMultiplier = startMultiplier;
+                    
+                    //lastbet = minbet;
+                    dMultiplier = startMultiplier;
+                    if (chkReverse.Checked && rdbReverseWins.Checked && winstreak % reversebets == 0)
+                        high = !high;
+                    
+                    
 
                 }
                 else
@@ -2964,6 +3159,12 @@ namespace DiceBot
                     {
                         lastbet = (double)nudChangeLoseStreakTo.Value;
                     }
+                    if (chkChangeChanceLose.Checked && (losstreak == nudChangeChanceLoseStreak.Value))
+                    {
+                        
+                            chance = (double)nudChangeChanceLoseTo.Value;
+                        
+                    }
 
                     lastbet *= dMultiplier;
                     if (lastbet > balance)
@@ -2973,26 +3174,80 @@ namespace DiceBot
                 }
                 betstring += balance + ",";
                 betstring += profit;
-                sim.bets.Add(betstring);
+                tempsim.bets.Add(betstring);
                 bets++;
+                if (bets % 1000 == 0)
+                {
+                    Updatetext(lblSimProgress, ((double)bets / (double)numbets * 100.00).ToString("00.00")+"%");
+                }
+                if (bets % 10000 == 0)
+                {
+                    using (StreamWriter sw = File.AppendText(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
+                    {
+                        foreach (string tmpbet in tempsim.bets)
+                        {
+                            sw.WriteLine(tmpbet);
+                        }
+                        
+                    }
+                    tempsim.bets.Clear();
+                }
                 if (chkReverse.Checked && rdbReverseBets.Checked && bets % reversebets == 0)
                     high = !high;
             }
 
-            lblSimLosses.Text = losses.ToString();
-            lblSimProfit.Text = profit.ToString("0.00000000");
-            lblSimWins.Text = wins.ToString();
-            lblSimEndBalance.Text = balance.ToString("0.00000000");
-            lblSimLoseStreak.Text = largestlostreak.ToString();
-            lblSimWinStreak.Text = largestwinstreak.ToString();
-            
-            return sim;
+            Updatetext(lblSimLosses,losses.ToString());
+            Updatetext(lblSimProfit, profit.ToString("0.00000000"));
+            Updatetext(lblSimWins,wins.ToString());
+            Updatetext(lblSimEndBalance, balance.ToString("0.00000000"));
+            Updatetext(lblSimLoseStreak,largestlostreak.ToString());
+            Updatetext(lblSimWinStreak,largestwinstreak.ToString());
+            using (StreamWriter sw =  File.AppendText(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
+            {
+                foreach (string tmpbet in tempsim.bets)
+                {                    
+                    sw.WriteLine(tmpbet);
+                }
+                tempsim.bets.Clear();
+            }
+            //return tempsim;
 
+        }
+
+        delegate void DelAlterMsgLog(Control TextBox, string Text);
+        public static void Updatetext(Control TextBox, string Text)
+        {
+            if (TextBox.InvokeRequired)
+            {
+                DelAlterMsgLog del = new DelAlterMsgLog(Updatetext);
+                TextBox.Invoke(del, TextBox, Text);
+            }
+            else
+            {
+                TextBox.Text = Text;
+            }
         }
 
         private void btnSim_Click(object sender, EventArgs e)
         {
-            lastsim = runsim();
+            bool go = true;
+            if (nudSimNumBets.Value >= 1000000)
+            {
+                go = (MessageBox.Show("To keep RAM usage to a minimum, "+
+                                        "\nthe sim data is temporarily stored on your"+
+                                        "\nlocal C: drive. This file can become very large," +
+                                        "\nApproximately 80MB per 1M bets. This file is"+
+                                        "\ndeleted when the bot is closed normally.\n\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes);
+            }
+            if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
+            {
+                File.Delete(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim");
+            }
+            tmrSimulation.Enabled = true;
+            lblSimRun.Text = "Running Simulation, Please Wait";
+            lblSimRun.ForeColor = Color.Red;
+            simthread = new Thread(new ThreadStart(runsim));
+            simthread.Start();
         }
 
         private double getlucky(string server, string client, int nonce)
@@ -3046,16 +3301,21 @@ namespace DiceBot
                 {
                     if (lastsim == null)
                     {
-                        lastsim = runsim();
+                        MessageBox.Show("Please run a simulation first");
                     }
-                    using (StreamWriter sw = new StreamWriter(svdExportSim.FileName))
+                    else
                     {
-                        foreach (string s in lastsim.bets)
+                        /*using (StreamWriter sw = new StreamWriter(svdExportSim.FileName))
                         {
-                            sw.WriteLine(s);
-                        }
+                            foreach (string s in lastsim.bets)
+                            {
+                                sw.WriteLine(s);
+                            }
+                        }*/
+                        File.Copy(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim", svdExportSim.FileName);
+                        
+                        MessageBox.Show("exported to " + svdExportSim.FileName);
                     }
-                    MessageBox.Show("exported to " + svdExportSim.FileName);
                 }
                 catch
                 {
@@ -3100,6 +3360,19 @@ namespace DiceBot
             }
         }
 
+        private void tmrSimulation_Tick(object sender, EventArgs e)
+        {
+            if (simthread != null)
+            {
+                if (!simthread.IsAlive)
+                {
+                    tmrSimulation.Enabled = false;
+                    lblSimRun.ForeColor = Color.Green;
+                    lblSimRun.Text = "Simulation Completed";
+                    lastsim = tempsim;
+                }
+            }
+        }
         #endregion
 
         private void btnResetStats_Click(object sender, EventArgs e)
@@ -3155,9 +3428,373 @@ namespace DiceBot
             }
         }
 
+       
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://bitcointalk.org/index.php?topic=391870");
+        }
+
+
+        
+
+        #region charts
+        //button for generating random charts - for testing purposes
+        private void button1_Click(object sender, EventArgs e)
+        {
+            List<double> x = new List<double>();
+            List<double> y = new List<double>();
+            double previous = 0;
+            for (int i = 0; i < r.Next(1000, 100000); i++)
+            {
+                x.Add(i);
+                int tmp = r.Next(0, 10);
+                if (tmp % 2 == 0)
+                {
+                    previous -= tmp;
+                }
+                else
+                    previous += tmp;
+                y.Add(previous);
+            }
+
+            dataset ds = new dataset();
+            ds.XValues = x.ToArray();
+            ds.YValues = y.ToArray();
+            ds.XAxis = "Time/Bets";
+            ds.YAxis = "Profit/Loss/Wagered";
+            Graph g = new Graph(ds, false);
+            g.Show();
+        }
+
+        #region Store Chart Data
+
+        void writeprofitbet(int betnum, double profit)
+        {
+            using (StreamWriter sw = File.AppendText("profitbet.txt"))
+            {
+                sw.WriteLine(betnum.ToString() + "|" + profit.ToString());
+            }
+        }
+
+        void writeprofittime(DateTime timestamp, double profit)
+        {
+            using (StreamWriter sw = File.AppendText("profittime.txt"))
+            {
+                sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
+            }
+        }
+
+        void writecurrentprofitbet(int betnum, double profit)
+        {
+            using (StreamWriter sw = File.AppendText("currentprofitbet.txt"))
+            {
+                sw.WriteLine(betnum.ToString() + "|" + profit.ToString());
+            }
+        }
+
+        void writecurrentprofittime(DateTime timestamp, double profit)
+        {
+            using (StreamWriter sw = File.AppendText("currentprofittime.txt"))
+            {
+                sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
+            }
+        }
+
+        void writesiteprofit(DateTime timestamp, double profit)
+        {
+            using (StreamWriter sw = File.AppendText("siteprofit.txt"))
+            {
+                sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
+            }
+        }
+
+        void writebankrollbet(int betnum, double profit)
+        {
+            using (StreamWriter sw = File.AppendText("bankrollbet.txt"))
+            {
+                sw.WriteLine(betnum.ToString() + "|" + profit.ToString());
+            }
+        }
+
+        void writebankrolltime(DateTime timestamp, double profit)
+        {
+            using (StreamWriter sw = File.AppendText("bankrolltime.txt"))
+            {
+                sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
+            }
+        }
+
+        #endregion
+
+
+        #region generate charts
+
+
+        private void tmrSiteProfit_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("sprofitraw")[0].DomObject);
+                string sBalance = gieBalance.InnerHtml.Replace(",", "");
+                double siteBalance = dparse(sBalance);
+                if (siteBalance != 0)
+                    writesiteprofit(DateTime.Now, siteBalance);
+            }
+            catch
+            {
+
+            }
+        }
+
+        void profitbet()
+        {
+            if (File.Exists("profitbet.txt"))
+            {
+                using (StreamReader sr = new StreamReader("profitbet.txt"))
+                {
+                    List<double> x = new List<double>();
+                    List<double> y = new List<double>();
+                    while (!sr.EndOfStream)
+                    {
+                        string tmp = sr.ReadLine();
+                        x.Add(dparse(tmp.Split('|')[0]));
+                        y.Add(dparse(tmp.Split('|')[1]));
+                    }
+                    dataset ds = new dataset();
+                    ds.XAxis = "Bets";
+                    ds.YAxis = "Profit";
+                    ds.XValues = x.ToArray();
+                    ds.YValues = y.ToArray();
+                    new Graph(ds, false).Show();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void profittime()
+        {
+            if (File.Exists("profittime.txt"))
+            {
+                using (StreamReader sr = new StreamReader("profittime.txt"))
+                {
+                    List<double> x = new List<double>();
+                    List<double> y = new List<double>();
+                    while (!sr.EndOfStream)
+                    {
+                        string tmp = sr.ReadLine();
+                        DateTime dt = DateTime.Parse(tmp.Split('|')[0]);
+                        x.Add(dt.Ticks);
+                        y.Add(dparse(tmp.Split('|')[1]));
+                    }
+                    dataset ds = new dataset();
+                    ds.XAxis = "Time";
+                    ds.YAxis = "Profit";
+                    ds.XValues = x.ToArray();
+                    ds.YValues = y.ToArray();
+                    new Graph(ds,true).Show();
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void currentprofitbet()
+        {
+            if (File.Exists("currentprofitbet.txt"))
+            {
+                using (StreamReader sr = new StreamReader("currentprofitbet.txt"))
+                {
+                    List<double> x = new List<double>();
+                    List<double> y = new List<double>();
+                    while (!sr.EndOfStream)
+                    {
+                        string tmp = sr.ReadLine();
+                        x.Add(dparse(tmp.Split('|')[0]));
+                        y.Add(dparse(tmp.Split('|')[1]));
+                    }
+                    dataset ds = new dataset();
+                    ds.XAxis = "Bets";
+                    ds.YAxis = "Profit";
+                    ds.XValues = x.ToArray();
+                    ds.YValues = y.ToArray();
+                    new Graph(ds,false).Show();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void currentprofittime()
+        {
+            if (File.Exists("currentprofittime.txt"))
+            {
+                using (StreamReader sr = new StreamReader("currentprofittime.txt"))
+                {
+                    List<double> x = new List<double>();
+                    List<double> y = new List<double>();
+                    while (!sr.EndOfStream)
+                    {
+                        string tmp = sr.ReadLine();
+                        DateTime dt = DateTime.Parse(tmp.Split('|')[0]);
+                        x.Add(dt.Ticks);
+                        y.Add(dparse(tmp.Split('|')[1]));
+                    }
+                    dataset ds = new dataset();
+                    ds.XAxis = "Time";
+                    ds.YAxis = "Profit";
+                    ds.XValues = x.ToArray();
+                    ds.YValues = y.ToArray();
+                    new Graph(ds,true).Show();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void sitebet()
+        {
+            if (File.Exists("siteprofit.txt"))
+            {
+                using (StreamReader sr = new StreamReader("siteprofit.txt"))
+                {
+                    List<double> x = new List<double>();
+                    List<double> y = new List<double>();
+                    while (!sr.EndOfStream)
+                    {
+                        string tmp = sr.ReadLine();
+                        DateTime dt = DateTime.Parse(tmp.Split('|')[0]);
+                        x.Add(dt.Ticks);
+                        y.Add(dparse(tmp.Split('|')[1]));
+                    }
+                    dataset ds = new dataset();
+                    ds.XAxis = "Time";
+                    ds.YAxis = "Site Profit";
+                    ds.XValues = x.ToArray();
+                    ds.YValues = y.ToArray();
+                    new Graph(ds,true).Show();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Could not retrieve data. Please wait a few minutes so the bot can start collecting data", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void bankrollbet()
+        {
+            if (File.Exists("bankrollbet.txt"))
+            {
+                using (StreamReader sr = new StreamReader("bankrollbet.txt"))
+                {
+                    List<double> x = new List<double>();
+                    List<double> y = new List<double>();
+                    while (!sr.EndOfStream)
+                    {
+                        string tmp = sr.ReadLine();
+                        x.Add(dparse(tmp.Split('|')[0]));
+                        y.Add(dparse(tmp.Split('|')[1]));
+                    }
+                    dataset ds = new dataset();
+                    ds.XAxis = "Bets";
+                    ds.YAxis = "Bankroll";
+                    ds.XValues = x.ToArray();
+                    ds.YValues = y.ToArray();
+                    new Graph(ds, false).Show();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void bankrolltime()
+        {
+            if (File.Exists("bankrolltime.txt"))
+            {
+                using (StreamReader sr = new StreamReader("bankrolltime.txt"))
+                {
+                    List<double> x = new List<double>();
+                    List<double> y = new List<double>();
+                    while (!sr.EndOfStream)
+                    {
+                        string tmp = sr.ReadLine();
+                        DateTime dt = DateTime.Parse(tmp.Split('|')[0]);
+                        x.Add(dt.Ticks);
+                        y.Add(dparse(tmp.Split('|')[1]));
+                    }
+                    dataset ds = new dataset();
+                    ds.XAxis = "Time";
+                    ds.YAxis = "Bankroll";
+                    ds.XValues = x.ToArray();
+                    ds.YValues = y.ToArray();
+                    new Graph(ds, true).Show();
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnGraphProfitBets_Click(object sender, EventArgs e)
+        {
+            currentprofitbet();
+        }
+
+        private void btnGraphProfitTime_Click(object sender, EventArgs e)
+        {
+            currentprofittime();
+        }
+
+        private void btnChartAllTimeProfitBets_Click(object sender, EventArgs e)
+        {
+            profitbet();
+        }
+
+        private void btnChartAllTimeProfitTime_Click(object sender, EventArgs e)
+        {
+            profittime();
+        }
+
+        private void btnSiteProfitTime_Click(object sender, EventArgs e)
+        {
+            sitebet();
+        }
+
+        private void btnChartBankrollBets_Click(object sender, EventArgs e)
+        {
+            bankrollbet();
+        }
+
+        private void btnChartsBankrollTime_Click(object sender, EventArgs e)
+        {
+            bankrolltime();
+        }
+        #endregion
+        #endregion
+
+        private void nudStopLossBtcStreal_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
         
 
         
+
 
     }
 
