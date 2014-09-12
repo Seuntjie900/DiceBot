@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Skybound.Gecko;
-using Skybound.Gecko.DOM;
+using Gecko;
+using Gecko.DOM;
 using System.Windows.Input;
 
 namespace DiceBot
