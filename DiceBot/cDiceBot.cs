@@ -637,7 +637,7 @@ namespace DiceBot
                     }
                     else
                     {
-                        gckBrowser.Navigate("javascript:var cusid_ele = document.getElementsByClassName('btn btn-primary btn-large diceHighButton'); for (var i = 0; i < cusid_ele.length; ++i) { var item = cusid_ele[i];   item.click();}");
+                        gckBrowser.Navigate("javascript:var cusid_ele = document.getElementsByClassName('btn btn-primary btn-large diceLoButton'); for (var i = 0; i < cusid_ele.length; ++i) { var item = cusid_ele[i];   item.click();}");
                     }
 
                 }
@@ -939,14 +939,29 @@ namespace DiceBot
 
                     try
                     {
-                        
-                        GeckoInputElement giebets = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("bets")[0].DomObject);
-                        string bets = giebets.InnerHtml.Replace(",","");
-                        double dbets = dparse(bets, ref convert);
-                        GeckoInputElement gieprofit = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("myprofit")[0].DomObject);
-                        string myprofit = gieprofit.InnerHtml.Replace(",", "");
-                        double dprof = dparse(myprofit, ref convert);
-                        
+                        string bets = "";
+                        double dbets = 0;
+                        string myprofit = "";
+                        double dprof = 0;
+                        if (rdbJD.Checked)
+                        {
+                            GeckoInputElement giebets = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("bets")[0].DomObject);
+                             bets = giebets.InnerHtml.Replace(",", "");
+                             dbets = dparse(bets, ref convert);
+                            GeckoInputElement gieprofit = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("myprofit")[0].DomObject);
+                             myprofit = gieprofit.InnerHtml.Replace(",", "");
+                             dprof = dparse(myprofit, ref convert);
+                        }
+                        else if (rdbRPC.Checked)
+                        {
+                            GeckoInputElement giebets = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("myBtcBets")[0].DomObject);
+                            bets = giebets.InnerHtml.Replace(",", "");
+                            dbets = dparse(bets, ref convert);
+                            GeckoInputElement gieprofit = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("myBtcProfit")[0].DomObject);
+                            myprofit = gieprofit.InnerHtml.Replace(",", "");
+                            dprof = dparse(myprofit, ref convert);
+                        }
+
                         writeprofitbet((int)dbets, dprof);
                         writeprofittime(DateTime.Now, dprof);
                         writecurrentprofitbet(Wins + Losses, profit);
@@ -3784,9 +3799,22 @@ namespace DiceBot
         {
             try
             {
-                GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("sprofitraw")[0].DomObject);
-                string sBalance = gieBalance.InnerHtml.Replace(",", "");
-                double siteBalance = dparse(sBalance, ref convert);
+                string sBalance = "";
+                double siteBalance = 0;
+                if (rdbJD.Checked)
+                {
+                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("sprofitraw")[0].DomObject);
+                    sBalance = gieBalance.InnerHtml.Replace(",", "");
+                    siteBalance = dparse(sBalance, ref convert);
+                }
+                else if (rdbRPC.Checked)
+                {
+                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("diceHouseProfit")[0].DomObject);
+                    sBalance = gieBalance.InnerHtml.Replace(",", "");
+                    sBalance = sBalance.Substring(0, sBalance.Length - 2);
+                    siteBalance = dparse(sBalance, ref convert);
+                    
+                }
                 if (siteBalance != 0 && convert)
                     writesiteprofit(DateTime.Now, siteBalance);
             }

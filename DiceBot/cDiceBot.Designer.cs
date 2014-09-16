@@ -327,6 +327,8 @@
             this.tmBetting = new System.Windows.Forms.Timer(this.components);
             this.tmStop = new System.Windows.Forms.Timer(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
+            this.rdbRPC = new System.Windows.Forms.RadioButton();
+            this.rdbJD = new System.Windows.Forms.RadioButton();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.pbLoading = new System.Windows.Forms.ProgressBar();
             this.btnGo = new System.Windows.Forms.Button();
@@ -341,8 +343,6 @@
             this.tmrSiteProfit = new System.Windows.Forms.Timer(this.components);
             this.gckBrowser = new Gecko.GeckoWebBrowser();
             this.tmBet = new System.Windows.Forms.Timer(this.components);
-            this.rdbJD = new System.Windows.Forms.RadioButton();
-            this.rdbRPC = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -3783,6 +3783,30 @@
             this.panel3.Size = new System.Drawing.Size(1202, 42);
             this.panel3.TabIndex = 4;
             // 
+            // rdbRPC
+            // 
+            this.rdbRPC.AutoSize = true;
+            this.rdbRPC.Checked = true;
+            this.rdbRPC.Location = new System.Drawing.Point(879, 22);
+            this.rdbRPC.Name = "rdbRPC";
+            this.rdbRPC.Size = new System.Drawing.Size(67, 17);
+            this.rdbRPC.TabIndex = 6;
+            this.rdbRPC.TabStop = true;
+            this.rdbRPC.Text = "PRCdice";
+            this.rdbRPC.UseVisualStyleBackColor = true;
+            this.rdbRPC.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
+            // rdbJD
+            // 
+            this.rdbJD.AutoSize = true;
+            this.rdbJD.Location = new System.Drawing.Point(879, 2);
+            this.rdbJD.Name = "rdbJD";
+            this.rdbJD.Size = new System.Drawing.Size(69, 17);
+            this.rdbJD.TabIndex = 5;
+            this.rdbJD.Text = "Just-Dice";
+            this.rdbJD.UseVisualStyleBackColor = true;
+            this.rdbJD.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
@@ -3876,30 +3900,6 @@
             // tmBet
             // 
             this.tmBet.Tick += new System.EventHandler(this.tmBet_Tick);
-            // 
-            // rdbJD
-            // 
-            this.rdbJD.AutoSize = true;
-            this.rdbJD.Location = new System.Drawing.Point(879, 2);
-            this.rdbJD.Name = "rdbJD";
-            this.rdbJD.Size = new System.Drawing.Size(69, 17);
-            this.rdbJD.TabIndex = 5;
-            this.rdbJD.Text = "Just-Dice";
-            this.rdbJD.UseVisualStyleBackColor = true;
-            this.rdbJD.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // rdbRPC
-            // 
-            this.rdbRPC.AutoSize = true;
-            this.rdbRPC.Checked = true;
-            this.rdbRPC.Location = new System.Drawing.Point(879, 22);
-            this.rdbRPC.Name = "rdbRPC";
-            this.rdbRPC.Size = new System.Drawing.Size(67, 17);
-            this.rdbRPC.TabIndex = 6;
-            this.rdbRPC.TabStop = true;
-            this.rdbRPC.Text = "RPCdice";
-            this.rdbRPC.UseVisualStyleBackColor = true;
-            this.rdbRPC.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // cDiceBot
             // 
