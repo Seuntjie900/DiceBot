@@ -343,6 +343,9 @@
             this.tmrSiteProfit = new System.Windows.Forms.Timer(this.components);
             this.gckBrowser = new Gecko.GeckoWebBrowser();
             this.tmBet = new System.Windows.Forms.Timer(this.components);
+            this.chkPercentage = new System.Windows.Forms.CheckBox();
+            this.nudPercentage = new System.Windows.Forms.NumericUpDown();
+            this.label81 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -410,6 +413,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -2488,6 +2492,9 @@
             // 
             // Mutawa
             // 
+            this.Mutawa.Controls.Add(this.label81);
+            this.Mutawa.Controls.Add(this.nudPercentage);
+            this.Mutawa.Controls.Add(this.chkPercentage);
             this.Mutawa.Controls.Add(this.nudMKDecrement);
             this.Mutawa.Controls.Add(this.nudMKIncrement);
             this.Mutawa.Controls.Add(this.label80);
@@ -2525,7 +2532,7 @@
             0,
             0,
             131072});
-            this.nudMKDecrement.Location = new System.Drawing.Point(129, 259);
+            this.nudMKDecrement.Location = new System.Drawing.Point(129, 208);
             this.nudMKDecrement.Name = "nudMKDecrement";
             this.nudMKDecrement.Size = new System.Drawing.Size(94, 20);
             this.nudMKDecrement.TabIndex = 20;
@@ -2538,7 +2545,7 @@
             0,
             0,
             131072});
-            this.nudMKIncrement.Location = new System.Drawing.Point(129, 236);
+            this.nudMKIncrement.Location = new System.Drawing.Point(129, 185);
             this.nudMKIncrement.Name = "nudMKIncrement";
             this.nudMKIncrement.Size = new System.Drawing.Size(94, 20);
             this.nudMKIncrement.TabIndex = 19;
@@ -2546,7 +2553,7 @@
             // label80
             // 
             this.label80.AutoSize = true;
-            this.label80.Location = new System.Drawing.Point(41, 261);
+            this.label80.Location = new System.Drawing.Point(41, 210);
             this.label80.Name = "label80";
             this.label80.Size = new System.Drawing.Size(76, 13);
             this.label80.TabIndex = 18;
@@ -2555,7 +2562,7 @@
             // label79
             // 
             this.label79.AutoSize = true;
-            this.label79.Location = new System.Drawing.Point(46, 238);
+            this.label79.Location = new System.Drawing.Point(46, 187);
             this.label79.Name = "label79";
             this.label79.Size = new System.Drawing.Size(71, 13);
             this.label79.TabIndex = 17;
@@ -2564,7 +2571,7 @@
             // chkMK
             // 
             this.chkMK.AutoSize = true;
-            this.chkMK.Location = new System.Drawing.Point(26, 218);
+            this.chkMK.Location = new System.Drawing.Point(26, 167);
             this.chkMK.Name = "chkMK";
             this.chkMK.Size = new System.Drawing.Size(82, 17);
             this.chkMK.TabIndex = 16;
@@ -2573,7 +2580,7 @@
             // 
             // nudMutawaWins
             // 
-            this.nudMutawaWins.Location = new System.Drawing.Point(88, 74);
+            this.nudMutawaWins.Location = new System.Drawing.Point(277, 42);
             this.nudMutawaWins.Name = "nudMutawaWins";
             this.nudMutawaWins.Size = new System.Drawing.Size(40, 20);
             this.nudMutawaWins.TabIndex = 15;
@@ -2586,7 +2593,7 @@
             // label78
             // 
             this.label78.AutoSize = true;
-            this.label78.Location = new System.Drawing.Point(44, 76);
+            this.label78.Location = new System.Drawing.Point(233, 44);
             this.label78.Name = "label78";
             this.label78.Size = new System.Drawing.Size(34, 13);
             this.label78.TabIndex = 14;
@@ -2595,7 +2602,7 @@
             // nudtrazelloseto
             // 
             this.nudtrazelloseto.DecimalPlaces = 8;
-            this.nudtrazelloseto.Location = new System.Drawing.Point(198, 155);
+            this.nudtrazelloseto.Location = new System.Drawing.Point(176, 116);
             this.nudtrazelloseto.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -2613,7 +2620,7 @@
             // nudtrazelwinto
             // 
             this.nudtrazelwinto.DecimalPlaces = 8;
-            this.nudtrazelwinto.Location = new System.Drawing.Point(198, 129);
+            this.nudtrazelwinto.Location = new System.Drawing.Point(176, 90);
             this.nudtrazelwinto.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -2631,7 +2638,7 @@
             // label77
             // 
             this.label77.AutoSize = true;
-            this.label77.Location = new System.Drawing.Point(169, 157);
+            this.label77.Location = new System.Drawing.Point(147, 118);
             this.label77.Name = "label77";
             this.label77.Size = new System.Drawing.Size(23, 13);
             this.label77.TabIndex = 11;
@@ -2640,7 +2647,7 @@
             // label76
             // 
             this.label76.AutoSize = true;
-            this.label76.Location = new System.Drawing.Point(169, 131);
+            this.label76.Location = new System.Drawing.Point(147, 92);
             this.label76.Name = "label76";
             this.label76.Size = new System.Drawing.Size(23, 13);
             this.label76.TabIndex = 10;
@@ -2649,7 +2656,7 @@
             // nudTrazelMultiplier
             // 
             this.nudTrazelMultiplier.DecimalPlaces = 3;
-            this.nudTrazelMultiplier.Location = new System.Drawing.Point(129, 186);
+            this.nudTrazelMultiplier.Location = new System.Drawing.Point(107, 141);
             this.nudTrazelMultiplier.Name = "nudTrazelMultiplier";
             this.nudTrazelMultiplier.Size = new System.Drawing.Size(60, 20);
             this.nudTrazelMultiplier.TabIndex = 9;
@@ -2662,7 +2669,7 @@
             // label75
             // 
             this.label75.AutoSize = true;
-            this.label75.Location = new System.Drawing.Point(68, 188);
+            this.label75.Location = new System.Drawing.Point(46, 143);
             this.label75.Name = "label75";
             this.label75.Size = new System.Drawing.Size(51, 13);
             this.label75.TabIndex = 8;
@@ -2671,7 +2678,7 @@
             // NudTrazelLose
             // 
             this.NudTrazelLose.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.NudTrazelLose.Location = new System.Drawing.Point(129, 154);
+            this.NudTrazelLose.Location = new System.Drawing.Point(107, 115);
             this.NudTrazelLose.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -2688,7 +2695,7 @@
             // 
             // nudTrazelWin
             // 
-            this.nudTrazelWin.Location = new System.Drawing.Point(129, 128);
+            this.nudTrazelWin.Location = new System.Drawing.Point(107, 89);
             this.nudTrazelWin.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -2706,7 +2713,7 @@
             // label74
             // 
             this.label74.AutoSize = true;
-            this.label74.Location = new System.Drawing.Point(56, 156);
+            this.label74.Location = new System.Drawing.Point(34, 117);
             this.label74.Name = "label74";
             this.label74.Size = new System.Drawing.Size(67, 13);
             this.label74.TabIndex = 5;
@@ -2715,7 +2722,7 @@
             // label73
             // 
             this.label73.AutoSize = true;
-            this.label73.Location = new System.Drawing.Point(60, 131);
+            this.label73.Location = new System.Drawing.Point(38, 92);
             this.label73.Name = "label73";
             this.label73.Size = new System.Drawing.Size(63, 13);
             this.label73.TabIndex = 4;
@@ -2724,7 +2731,7 @@
             // chkTrazel
             // 
             this.chkTrazel.AutoSize = true;
-            this.chkTrazel.Location = new System.Drawing.Point(27, 102);
+            this.chkTrazel.Location = new System.Drawing.Point(26, 72);
             this.chkTrazel.Name = "chkTrazel";
             this.chkTrazel.Size = new System.Drawing.Size(55, 17);
             this.chkTrazel.TabIndex = 3;
@@ -2957,9 +2964,9 @@
             this.label55.AutoSize = true;
             this.label55.Location = new System.Drawing.Point(162, 212);
             this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(80, 13);
+            this.label55.Size = new System.Drawing.Size(84, 13);
             this.label55.TabIndex = 65;
-            this.label55.Text = "Bets per minute";
+            this.label55.Text = "Bets per second";
             // 
             // nudBotSpeed
             // 
@@ -3901,6 +3908,33 @@
             // 
             this.tmBet.Tick += new System.EventHandler(this.tmBet_Tick);
             // 
+            // chkPercentage
+            // 
+            this.chkPercentage.AutoSize = true;
+            this.chkPercentage.Location = new System.Drawing.Point(26, 235);
+            this.chkPercentage.Name = "chkPercentage";
+            this.chkPercentage.Size = new System.Drawing.Size(153, 17);
+            this.chkPercentage.TabIndex = 21;
+            this.chkPercentage.Text = "Bet Percentage of balance";
+            this.chkPercentage.UseVisualStyleBackColor = true;
+            // 
+            // nudPercentage
+            // 
+            this.nudPercentage.DecimalPlaces = 2;
+            this.nudPercentage.Location = new System.Drawing.Point(158, 258);
+            this.nudPercentage.Name = "nudPercentage";
+            this.nudPercentage.Size = new System.Drawing.Size(50, 20);
+            this.nudPercentage.TabIndex = 22;
+            // 
+            // label81
+            // 
+            this.label81.AutoSize = true;
+            this.label81.Location = new System.Drawing.Point(57, 260);
+            this.label81.Name = "label81";
+            this.label81.Size = new System.Drawing.Size(95, 13);
+            this.label81.TabIndex = 23;
+            this.label81.Text = "Percentage to bet:";
+            // 
             // cDiceBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4001,6 +4035,7 @@
             this.groupBox1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4321,6 +4356,9 @@
         private System.Windows.Forms.Timer tmBet;
         private System.Windows.Forms.RadioButton rdbRPC;
         private System.Windows.Forms.RadioButton rdbJD;
+        private System.Windows.Forms.Label label81;
+        private System.Windows.Forms.NumericUpDown nudPercentage;
+        private System.Windows.Forms.CheckBox chkPercentage;
 
     }
 }

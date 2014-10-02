@@ -29,6 +29,7 @@ namespace DiceBot
         Random r = new Random();
         #region Variables
         Random rand = new Random();
+        bool retriedbet = false;
         double StartBalance = 0;        
         double Lastbet = 0;
         double MinBet = 0;
@@ -76,6 +77,7 @@ namespace DiceBot
         int reversebets = 0;
         int laststreaklose = 0;
         int laststreakwin = 0;
+        int Currency = 0;
         bool stop = true;
         bool withdraw = false;
         bool invest = false;
@@ -571,18 +573,24 @@ namespace DiceBot
             {
                 string sBalance = "";
                 //JD
-                //GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_balance").DomObject);
-                //sBalance = gieBalance.Value;
-
-                //PRC
-                GeckoNodeCollection gieBalanceitems = (gckBrowser.Document.GetElementsByClassName("myBalance"));
-                GeckoInputElement gieBalance = null;
-                foreach (GeckoNode node in gieBalanceitems)
+                if (rdbJD.Checked)
                 {
-                    gieBalance = new GeckoInputElement(node.DomObject);
+                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_balance").DomObject);
+                    sBalance = gieBalance.Value;
                 }
-                sBalance = gieBalance.InnerHtml;
-                sBalance = sBalance.Substring(0, sBalance.IndexOf(" "));
+                else
+                {
+                    //PRC
+                    GeckoNodeCollection gieBalanceitems = (gckBrowser.Document.GetElementsByClassName("myBalance"));
+                    GeckoInputElement gieBalance = null;
+                    foreach (GeckoNode node in gieBalanceitems)
+                    {
+                        gieBalance = new GeckoInputElement(node.DomObject);
+                    }
+                    sBalance = gieBalance.InnerHtml;
+                    sBalance = sBalance.Substring(0, sBalance.IndexOf(" "));
+                }
+                
 
                 
                 double dBalance = dparse(sBalance, ref convert);
@@ -977,25 +985,45 @@ namespace DiceBot
                 }
                 else if (dBalance == PreviousBalance && convert || withdrew)
                 {
-                    if ((DateTime.Now - dtLastBet).Seconds + ((DateTime.Now - dtLastBet).Minutes * 60) > 120 && !stop)
+                    if ((DateTime.Now - dtLastBet).TotalSeconds > 30 && !stop)
                     {
-                        if (txtSecretURL.Text != "")
+                        if (rdbRPC.Checked && !retriedbet)
                         {
-                            gckBrowser.Navigate(txtSecretURL.Text);
+                            retriedbet = true;
+                            PlaceBet();
                         }
-                        else
-                        {
-                            gckBrowser.Navigate("http://just-dice.com");
-                        }
-                        dtLastBet = DateTime.Now;
-                        restartcounter = 0;
                     }
-                    if (restartcounter == 30 && !stop)
+                    if ((DateTime.Now - dtLastBet).TotalSeconds > 120 && !stop)
+                    {
+                        
+                        if (restartcounter > 25)
+                        {
+                            if (txtSecretURL.Text != "")
+                            {
+                                gckBrowser.Navigate(txtSecretURL.Text);
+                            }
+                            else
+                            {
+                                gckBrowser.Navigate("http://just-dice.com");
+                            }
+                            dtLastBet = DateTime.Now;
+                            restartcounter = 0;
+                        }
+                        
+                    }
+                    if (restartcounter == 30 )
+                    {
+                        if (rdbRPC.Checked)
+                        {
+
+                            GeckoSelectElement gse = new GeckoSelectElement(gckBrowser.Document.GetElementById("diceCurrencyValue").DomObject);
+                            gse.SelectedIndex = Currency;
+                        }
+
+                    }
+                    if (restartcounter < 50 && !stop)
                     {
                         Start(true);
-                    }
-                    if (restartcounter < 50)
-                    {
                         restartcounter++;
                     }
                 }
@@ -1021,6 +1049,7 @@ namespace DiceBot
         int trazellose = 0;
         void DoBet(double dBalance)
         {
+            retriedbet = false;
             if (!stop && !gckBrowser.IsBusy && !(withdraw || invest ||reset))
             {
                 double betresult = dBalance - PreviousBalance;
@@ -1072,8 +1101,16 @@ namespace DiceBot
                             }
                             try
                             {
-                                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                                gie.Value = Chance.ToString().Replace(',', '.');
+                                if (rdbJD.Checked)
+                                {
+                                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
+                                    gie.Value = Chance.ToString().Replace(',', '.');
+                                }
+                                else
+                                {
+                                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("diceChance").DomObject);
+                                    gie.Value = Chance.ToString().Replace(',', '.');
+                                }
                             }
                             catch
                             {
@@ -1084,7 +1121,10 @@ namespace DiceBot
                         Winstreak++;
                         trazelwin++;
                         trazellose = 0;
-                        high = starthigh;
+                        if (chkTrazel.Checked)
+                        {
+                            high = starthigh;
+                        }
                         CalculateLuck(true);
                         if (chkMK.Checked)
                         {
@@ -1132,8 +1172,16 @@ namespace DiceBot
                         {
                             try
                             {
-                                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                                gie.Value = nudChangeChanceWinTo.Value.ToString().Replace(',', '.');
+                                if (rdbJD.Checked)
+                                {
+                                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
+                                    gie.Value = nudChangeChanceWinTo.Value.ToString().Replace(',', '.');
+                                }
+                                else
+                                {
+                                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("diceChance").DomObject);
+                                    gie.Value = nudChangeChanceWinTo.Value.ToString().Replace(',', '.');
+                                }
                             }
                             catch
                             {
@@ -1242,7 +1290,10 @@ namespace DiceBot
                     {
                         Multiplier = (double)nudTrazelMultiplier.Value;
                     }
-                    high = starthigh;
+                    if (chkTrazel.Checked)
+                    {
+                        high = starthigh;
+                    }
                     if (chkTrazel.Checked && Losestreak+1 >= (double)NudTrazelLose.Value && !trazelmultiply)
                     {
                         Lastbet = (double)nudtrazelloseto.Value;
@@ -1309,8 +1360,17 @@ namespace DiceBot
                     {
                         try
                         {
-                            GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                            gie.Value = nudChangeChanceLoseTo.Value.ToString().Replace(',', '.');
+                            if (rdbJD.Checked)
+                            {
+                                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
+                                gie.Value = nudChangeChanceLoseTo.Value.ToString().Replace(',', '.');
+                            }
+                            else
+                            {
+                                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("diceChance").DomObject);
+                                gie.Value = nudChangeChanceLoseTo.Value.ToString().Replace(',', '.');
+                            }
+                            
                         }
                         catch
                         {
@@ -1444,7 +1504,10 @@ namespace DiceBot
                     
                 }
 
-
+                if (chkPercentage.Checked)
+                {
+                    Lastbet = (double)(nudPercentage.Value/(decimal)100.0) * dBalance;
+                }
                 if ((dBalance != PreviousBalance || withdrew) && !(stop ||reset || withdraw ||invest))
                 {
                     tmBet.Enabled = true;
@@ -1467,15 +1530,23 @@ namespace DiceBot
         string dislog = "";
         private void tmBet_Tick(object sender, EventArgs e)
         {
-            GeckoInputElement gieBet = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("btn btn-primary btn-large diceHighButton")[0].DomObject);
-            dislog += gieBet.GetAttribute("style")+"\n";
-            
-            //
-            if (!gieBet.GetAttribute("style").ToLower().Contains("none"))
+            try
             {
-                Thread.Sleep(100);
-                PlaceBet();
+                GeckoInputElement gieBet = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("btn btn-primary btn-large diceHighButton")[0].DomObject);
+                dislog += gieBet.GetAttribute("style") + "\n";
+
+                //
+                if (!gieBet.GetAttribute("style").ToLower().Contains("none"))
+                {
+                    Thread.Sleep(100);
+                    PlaceBet();
+                }
             }
+            catch
+            {
+
+            }
+
         }
 
         void dobetmuakakathingy(double dBalance)
@@ -1580,6 +1651,11 @@ namespace DiceBot
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            if (rdbRPC.Checked)
+            {
+                GeckoSelectElement gse = new GeckoSelectElement(gckBrowser.Document.GetElementById("diceCurrencyValue").DomObject);
+                Currency = gse.SelectedIndex;
+            }
             if (!madescript)
             {
 
@@ -2769,8 +2845,18 @@ namespace DiceBot
             testInputs();
             try
             {
-                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                gie.Value = Chance.ToString().Replace(',', '.');
+                //diceChance
+                if (rdbRPC.Checked)
+                {
+                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("diceChance").DomObject);
+                    gie.Value = Chance.ToString().Replace(',', '.');
+                }
+                else
+                {
+                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
+                    gie.Value = Chance.ToString().Replace(',', '.');
+                }
+                
             }
             catch
             {
