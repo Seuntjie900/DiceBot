@@ -107,19 +107,7 @@ namespace DiceBot
         string salarm = "";
         #endregion
 
-        #region Auto Invest Divest Vars
-        decimal PrincipleInvest = 0.085m;
-        decimal SitelowestProfits = 9999999999999;
-        DateTime sitelowrecorded = new DateTime();
-        decimal SitelowesProfits2 = 9999999999999;
-        DateTime sitelowrecorded2 = new DateTime();
-        decimal SitelowestProfits3 = 9999999999999;
-        DateTime sitelowrecorded3 = new DateTime();
-        DateTime lastprofit = new DateTime();
-        decimal MyProfit = 0;
-        DateTime lastinvest = DateTime.Now;
-        #endregion
-
+        DiceSite CurrentSite;
         private double dPreviousBalance;
         
 
@@ -141,7 +129,7 @@ namespace DiceBot
         {
             
             InitializeComponent();
-           
+            gckBrowser.Navigating += gckBrowser_Navigating;
             #region tooltip Texts
             ToolTip tt = new ToolTip();
             tt.SetToolTip(lblZigZag1, "After every n bets/wins/losses \n(as specified to the right), \nthe bot will switch from \nbetting high to low or vica verca");
@@ -208,6 +196,7 @@ namespace DiceBot
             #endregion
 
             Gecko.Xpcom.Initialize(Environment.CurrentDirectory + "\\xulrunner\\");
+            
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -236,7 +225,47 @@ namespace DiceBot
             }
             
             tmStop.Enabled = true;
+            switch (cmbSite.SelectedIndex)
+            {
+                case 0: CurrentSite = new JD(); break;
+                case 1: CurrentSite = new PRC(); break;
+                case 2: CurrentSite = new D999(); break;
+                //case 3: CurrentSite = new PD(); break;
+            }
+            if (cmbSite.SelectedIndex==-1)
+            {
+                cmbSite.SelectedIndex=0;
+            }
+        }
+
+        void gckBrowser_Navigating(object sender, Gecko.Events.GeckoNavigatingEventArgs e)
+        {
             
+            string url = e.Uri.AbsoluteUri.ToLower().Replace("http://", "").Replace("https://", "");
+            if (url.StartsWith("just-dice.com") ||
+                    url.StartsWith("www.just-dice.com") ||
+                    url.StartsWith("just-dice.com") ||
+                    url.StartsWith("www.just-dice.com")) 
+            {
+                cmbSite.SelectedIndex = 0;
+            }
+            if (url.StartsWith("prcdice.eu") ||
+                     url.StartsWith("www.prcdice.eu") ||
+                     url.StartsWith("prcdice.eu") ||
+                     url.StartsWith("www.prcdice.eu"))
+            {
+                cmbSite.SelectedIndex = 1;
+
+            }
+
+            if (url.StartsWith("999dice.com") ||
+                     url.StartsWith("www.999dice.com") ||
+                     url.StartsWith("999dice.com") ||
+                     url.StartsWith("www.999dice.com"))
+            {
+                cmbSite.SelectedIndex = 2;
+            }
+
         }
 
         
@@ -573,26 +602,8 @@ namespace DiceBot
             {
                 string sBalance = "";
                 //JD
-                if (rdbJD.Checked)
-                {
-                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_balance").DomObject);
-                    sBalance = gieBalance.Value;
-                }
-                else
-                {
-                    //PRC
-                    GeckoNodeCollection gieBalanceitems = (gckBrowser.Document.GetElementsByClassName("myBalance"));
-                    GeckoInputElement gieBalance = null;
-                    foreach (GeckoNode node in gieBalanceitems)
-                    {
-                        gieBalance = new GeckoInputElement(node.DomObject);
-                    }
-                    sBalance = gieBalance.InnerHtml;
-                    sBalance = sBalance.Substring(0, sBalance.IndexOf(" "));
-                }
-                
-
-                
+                sBalance = CurrentSite.GetbalanceValue(gckBrowser);
+               
                 double dBalance = dparse(sBalance, ref convert);
                 if (convert)
                 {
@@ -611,45 +622,16 @@ namespace DiceBot
                 return -1;
             }
         }
-        bool madescript = false;
+        
         void PlaceBet()
         {
             try
             {
                 //JD
-                if (rdbJD.Checked)
-                {
-                    GeckoInputElement gieChance = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                    gieChance.TextContent = txtChance.Text;
-                    GeckoInputElement gieBet = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_bet").DomObject);
-                    gieBet.Value = Lastbet.ToString("0.00000000").Replace(',', '.');
-                    if (high)
-                        gckBrowser.Navigate("javascript:clicked_action_bet_hi()");
-                    else
-                        gckBrowser.Navigate("javascript:clicked_action_bet_lo()");
-                    dtLastBet = DateTime.Now;
-                }
-                //PRC
-                else if (rdbRPC.Checked)
-                {
-                    GeckoInputElement gieChance = new GeckoInputElement(gckBrowser.Document.GetElementById("diceChance").DomObject);
-                    gieChance.Value = txtChance.Text;
-                    GeckoInputElement gieBet = new GeckoInputElement(gckBrowser.Document.GetElementById("diceBetAmount").DomObject);
-                    gieBet.Value = Lastbet.ToString("0.00000000").Replace(',', '.');
-
-
-                    if (high)
-                    {
-                        gckBrowser.Navigate("javascript:var cusid_ele = document.getElementsByClassName('btn btn-primary btn-large diceHighButton'); for (var i = 0; i < cusid_ele.length; ++i) { var item = cusid_ele[i];   item.click();}");
-
-                    }
-                    else
-                    {
-                        gckBrowser.Navigate("javascript:var cusid_ele = document.getElementsByClassName('btn btn-primary btn-large diceLoButton'); for (var i = 0; i < cusid_ele.length; ++i) { var item = cusid_ele[i];   item.click();}");
-                    }
-
-                }
-
+                //CurrentSite.SetChance(txtChance.Text, gckBrowser);
+                CurrentSite.SetAmount(Lastbet, gckBrowser);
+                CurrentSite.PlaceBet(high, gckBrowser);
+                
                 dtLastBet = DateTime.Now;
                 tmBet.Enabled = false;
                 
@@ -662,196 +644,114 @@ namespace DiceBot
 
         void Withdraw()
         {
-
-            if (waiter == 0)
-            {
-                gckBrowser.Navigate("javascript:clicked_action_withdraw();");
-            }
-            if (waiter == 11)
-            {
-                GeckoInputElement gieAddress = new GeckoInputElement(gckBrowser.Document.GetElementById("wd_address").DomObject);
-                GeckoInputElement gieAmount = new GeckoInputElement(gckBrowser.Document.GetElementById("wd_amount").DomObject);
-                gieAddress.Value = txtTo.Text;
-                gieAmount.Value = txtAmount.Text;
-
-            }
-            if (waiter == 20)
-            {
-                gckBrowser.Navigate("javascript:socket.emit('withdraw',csrf,'" + txtTo.Text + "','" + txtAmount.Text + "',0)");
-            }
-
-            if (waiter == 30)
-            {
-
-                if (txtSecretURL.Text != "")
+            if (CurrentSite.AutoWithdraw)
+                if (CurrentSite.Withdraw(dparse(txtAmount.Text, ref convert), txtTo.Text, waiter++, txtSecretURL.Text, gckBrowser))
                 {
-                    gckBrowser.Navigate(txtSecretURL.Text);
-                }
-                else
-                {
-                    gckBrowser.Navigate("http://just-dice.com");
-                }
-            }
-            if (waiter == 100)
-            {
-                waiter = -1; withdraw = false;
-                TrayIcon.BalloonTipText = "Withdraw " + txtAmount.Text + "Complete\nRestarting Bets";
-                TrayIcon.ShowBalloonTip(1000);
-                try
-                {
-                    if (Sound && SoundWithdraw)
+
+                    withdraw = false;
+                    TrayIcon.BalloonTipText = "Withdraw " + txtAmount.Text + "Complete\nRestarting Bets";
+                    TrayIcon.ShowBalloonTip(1000);
+                    try
                     {
-                        if (ching == "")
+                        if (Sound && SoundWithdraw)
                         {
-                            (new SoundPlayer(@"media\withdraw.wav")).Play();
-                        }
-                        else
-                        {
-                            if (ching.Substring(ching.LastIndexOf(".")).ToLower() == "mp3")
+                            if (ching == "")
                             {
-                                WindowsMediaPlayer player = new WindowsMediaPlayer();
-                                player.URL = ching;
-                                player.controls.play();
+                                (new SoundPlayer(@"media\withdraw.wav")).Play();
                             }
                             else
                             {
-                                (new SoundPlayer(ching)).Play();
+                                if (ching.Substring(ching.LastIndexOf(".")).ToLower() == "mp3")
+                                {
+                                    WindowsMediaPlayer player = new WindowsMediaPlayer();
+                                    player.URL = ching;
+                                    player.controls.play();
+                                }
+                                else
+                                {
+                                    (new SoundPlayer(ching)).Play();
+                                }
                             }
                         }
                     }
+                    catch
+                    {
+                        MessageBox.Show("Failed to play CHING, pelase make sure file exists");
+                    }
+                    withdrew = true;
+                    Emails.SendWithdraw(Amount, PreviousBalance - Amount, txtTo.Text);
+                    StartBalance -= Amount;
+                    Start(true);
                 }
-                catch
-                {
-                    MessageBox.Show("Failed to play CHING, pelase make sure file exists");
-                }
-                withdrew = true;
-                Emails.SendWithdraw(Amount, PreviousBalance-Amount, txtTo.Text);
-                StartBalance -= Amount;
-                Start(true);
-            }
-
-            waiter++;
         }
 
         void Invest()
         {
 
-            if (waiter == 0)
+            if (CurrentSite.AutoInvest)
             {
-                //gckBrowser.Navigate("javascript:socket.emit('invest',csrf,'0.01',0)");
-
-                /*foreach (GeckoElement ge in gckBrowser.Document.GetElementsByTagName("a"))
+                if (CurrentSite.Invest(dparse(txtAmount.Text, ref convert), waiter++, txtSecretURL.Text, gckBrowser))
                 {
-                    if (ge.TextContent.Contains("invest"))
+                    invest = false;
+                    TrayIcon.BalloonTipText = "Invest " + txtAmount.Text + "Complete\nRestarting Bets";
+                    TrayIcon.ShowBalloonTip(1000);
+                    try
                     {
-                        GeckoLinkElement eglink = new GeckoLinkElement(ge.DomObject);
-                        eglink.Id = "hello";
-                        gckBrowser.Update();
-                        GeckoElement ge2 = gckBrowser.Document.GetElementById("hello");
-                    }
-                }*/
-                /*GeckoElement gec = gckBrowser.Document.GetElementById("linkinvest");
-                if (txtSecretURL.Text!="")
-                {
-                    gckBrowser.Navigate("javascript:window.location.href = '"+txtSecretURL.Text+"/#invest'");
-                }
-                else
-                    gckBrowser.Navigate("javascript:window.location.href = 'http://just-dice.com/#invest'");*/
-
-
-            }
-            if (waiter == 5)
-            {
-                gckBrowser.Navigate("javascript:clicked_action_invest();");
-            }
-            if (waiter == 15)
-            {
-                //GeckoInputElement gieAmount = new GeckoInputElement(gckBrowser.Document.GetElementById("invest_input").DomObject);
-                //gieAmount.Value = txtAmount.Text;
-            }
-            if (waiter == 20)
-            {
-                gckBrowser.Navigate("javascript:socket.emit('invest',csrf,'" + txtAmount.Text + "',0)");
-            }
-            if (waiter == 30)
-            {
-
-                if (txtSecretURL.Text != "")
-                {
-                    gckBrowser.Navigate(txtSecretURL.Text);
-                }
-                else
-                {
-                    gckBrowser.Navigate("http://just-dice.com");
-                }
-            }
-            if (waiter == 100)
-            {
-                waiter = 0; invest = false;
-                TrayIcon.BalloonTipText = "Invest " + txtAmount.Text + "Complete\nRestarting Bets";
-                TrayIcon.ShowBalloonTip(1000);
-                try
-                {
-                    if (Sound && SoundWithdraw)
-                    {
-                        if (ching == "")
+                        if (Sound && SoundWithdraw)
                         {
-                            (new SoundPlayer(@"media\withdraw.wav")).Play();
-                        }
-                        else
-                        {
-                            if (ching.Substring(ching.LastIndexOf(".")).ToLower() == "mp3")
+                            if (ching == "")
                             {
-                                WindowsMediaPlayer player = new WindowsMediaPlayer();
-                                player.URL = ching;
-                                player.controls.play();
+                                (new SoundPlayer(@"media\withdraw.wav")).Play();
                             }
                             else
                             {
-                                (new SoundPlayer(ching)).Play();
+                                if (ching.Substring(ching.LastIndexOf(".")).ToLower() == "mp3")
+                                {
+                                    WindowsMediaPlayer player = new WindowsMediaPlayer();
+                                    player.URL = ching;
+                                    player.controls.play();
+                                }
+                                else
+                                {
+                                    (new SoundPlayer(ching)).Play();
+                                }
                             }
                         }
                     }
-                }
-                catch
-                {
-                    MessageBox.Show("Failed to play CHING, pelase make sure file exists");
-                }
-                string invested = "";
-                try
-                {
-                    GeckoElement ge = (GeckoElement)gckBrowser.Document.GetElementsByClassName("investment")[0];
-                    invested = ge.TextContent;
-                }
-                catch
-                {
+                    catch
+                    {
+                        MessageBox.Show("Failed to play CHING, pelase make sure file exists");
+                    }
+                    string invested = "";
+                    try
+                    {
+                        GeckoElement ge = (GeckoElement)gckBrowser.Document.GetElementsByClassName("investment")[0];
+                        invested = ge.TextContent;
+                    }
+                    catch
+                    {
 
+                    }
+                    withdrew = true;
+                    bool success = false;
+                    Emails.SendInvest(Amount, Getbalance(out success), dparse(invested, ref convert));
+                    StartBalance -= Amount;
+                    Start(true);
                 }
-                withdrew = true;
-                bool success = false;
-                Emails.SendInvest(Amount, Getbalance(out success), dparse(invested, ref convert));
-                StartBalance -= Amount;
-                Start(true);
+
             }
-
-            waiter++;
         }
 
         void ResetSeed()
         {
             if (waiter == 20)
             {
-                if (rdbJD.Checked)
-                    gckBrowser.Navigate("javascript:clicked_action_random()");
-                else if (rdbRPC.Checked)
-                {
-                    gckBrowser.Navigate("javascript:var cusid_ele = document.getElementsByClassName('btn btn-inverse newSeedButton'); for (var i = 0; i < cusid_ele.length; ++i) { var item = cusid_ele[i];   item.click();}");
-
-                }
+                CurrentSite.ResetSeed(gckBrowser);
+                
             }
             if (waiter == 50)
             {
-                if (rdbJD.Checked)
+                if (CurrentSite is JD)
                 {
                     if (txtSecretURL.Text != "")
                     {
@@ -884,7 +784,7 @@ namespace DiceBot
                 save();
 
                 stoponwin = false;
-                //stop = false;
+                
 
                 dtStarted = DateTime.Now;
             }
@@ -900,26 +800,6 @@ namespace DiceBot
             }
         }
 
-        /*void Start(double bet)
-        {
-            rtbDonate.Text = "Please feel free to donate. \t\tBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 \t\tLtc: LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy \t\tDoge:DR32dpGniJP9mJo4NpzXGCTdsJLcp4td2X";
-            //Winstreak = 0;
-            //Losestreak = 0;
-            //save();
-
-            //stoponwin = false;
-            //stop = false;
-
-            //dtStarted = DateTime.Now;
-
-            if (testInputs())
-            {
-                stop = false;
-                //Lastbet = bet;
-                //mutawaprev = (double)nudChangeWinStreakTo.Value / (double)nudMutawaMultiplier.Value;
-                PlaceBet();
-            }
-        }*/
 
         private void tmBetting_Tick(object sender, EventArgs e)
         {
@@ -951,24 +831,11 @@ namespace DiceBot
                         double dbets = 0;
                         string myprofit = "";
                         double dprof = 0;
-                        if (rdbJD.Checked)
-                        {
-                            GeckoInputElement giebets = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("bets")[0].DomObject);
-                             bets = giebets.InnerHtml.Replace(",", "");
-                             dbets = dparse(bets, ref convert);
-                            GeckoInputElement gieprofit = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("myprofit")[0].DomObject);
-                             myprofit = gieprofit.InnerHtml.Replace(",", "");
-                             dprof = dparse(myprofit, ref convert);
-                        }
-                        else if (rdbRPC.Checked)
-                        {
-                            GeckoInputElement giebets = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("myBtcBets")[0].DomObject);
-                            bets = giebets.InnerHtml.Replace(",", "");
-                            dbets = dparse(bets, ref convert);
-                            GeckoInputElement gieprofit = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("myBtcProfit")[0].DomObject);
-                            myprofit = gieprofit.InnerHtml.Replace(",", "");
-                            dprof = dparse(myprofit, ref convert);
-                        }
+                        bets  = CurrentSite.GetTotalBets(gckBrowser).Replace(",", "");
+                        dbets = dparse(bets, ref convert);
+                        myprofit = CurrentSite.GetMyProfit(gckBrowser).Replace(",", "");
+                        dprof = dparse(myprofit, ref convert);
+                        
 
                         writeprofitbet((int)dbets, dprof);
                         writeprofittime(DateTime.Now, dprof);
@@ -987,7 +854,7 @@ namespace DiceBot
                 {
                     if ((DateTime.Now - dtLastBet).TotalSeconds > 30 && !stop)
                     {
-                        if (rdbRPC.Checked && !retriedbet)
+                        if (cmbSite.SelectedIndex==1 && !retriedbet)
                         {
                             retriedbet = true;
                             PlaceBet();
@@ -1013,7 +880,7 @@ namespace DiceBot
                     }
                     if (restartcounter == 30 )
                     {
-                        if (rdbRPC.Checked)
+                        if (CurrentSite is PRC)
                         {
 
                             GeckoSelectElement gse = new GeckoSelectElement(gckBrowser.Document.GetElementById("diceCurrencyValue").DomObject);
@@ -1021,7 +888,7 @@ namespace DiceBot
                         }
 
                     }
-                    if (restartcounter < 50 && !stop)
+                    if (restartcounter > 50 && restartcounter < 51 && !stop)
                     {
                         Start(true);
                         restartcounter++;
@@ -1046,7 +913,7 @@ namespace DiceBot
         double mutawaprev = 0;
         bool trazelmultiply = false;
         int trazelwin = 0;
-        int trazellose = 0;
+        
         void DoBet(double dBalance)
         {
             retriedbet = false;
@@ -1101,16 +968,8 @@ namespace DiceBot
                             }
                             try
                             {
-                                if (rdbJD.Checked)
-                                {
-                                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                                    gie.Value = Chance.ToString().Replace(',', '.');
-                                }
-                                else
-                                {
-                                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("diceChance").DomObject);
-                                    gie.Value = Chance.ToString().Replace(',', '.');
-                                }
+                                CurrentSite.SetChance( Chance.ToString().Replace(',', '.'), gckBrowser);
+                                
                             }
                             catch
                             {
@@ -1120,7 +979,7 @@ namespace DiceBot
                         Wins++;
                         Winstreak++;
                         trazelwin++;
-                        trazellose = 0;
+                        
                         if (chkTrazel.Checked)
                         {
                             high = starthigh;
@@ -1172,26 +1031,15 @@ namespace DiceBot
                         {
                             try
                             {
-                                if (rdbJD.Checked)
-                                {
-                                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                                    gie.Value = nudChangeChanceWinTo.Value.ToString().Replace(',', '.');
-                                }
-                                else
-                                {
-                                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("diceChance").DomObject);
-                                    gie.Value = nudChangeChanceWinTo.Value.ToString().Replace(',', '.');
-                                }
+                                CurrentSite.SetChance(nudChangeChanceWinTo.Value.ToString().Replace(',', '.'), gckBrowser);
+                                
                             }
                             catch
                             {
 
                             }
                         }
-                        /*if (chkTrazel.Checked && Winstreak > (double)nudChangeWinStreak.Value )
-                        {
-                            trazelmultiply = true;
-                        }*/
+                        
                         if (Winstreak >= nudLastStreakWin.Value)
                             laststreakwin = Winstreak;
 
@@ -1237,11 +1085,7 @@ namespace DiceBot
                         
                         
                     }
-                    /*else
-                    {
-                        dPreviousBalance = dBalance;
-                    }*/
-                    //Lastbet = MinBet;
+                    
                     if (stoponwin)
                     {
                         Stop();
@@ -1360,16 +1204,8 @@ namespace DiceBot
                     {
                         try
                         {
-                            if (rdbJD.Checked)
-                            {
-                                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                                gie.Value = nudChangeChanceLoseTo.Value.ToString().Replace(',', '.');
-                            }
-                            else
-                            {
-                                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("diceChance").DomObject);
-                                gie.Value = nudChangeChanceLoseTo.Value.ToString().Replace(',', '.');
-                            }
+                            CurrentSite.SetChance(nudChangeChanceLoseTo.Value.ToString().Replace(',', '.'), gckBrowser);
+                            
                             
                         }
                         catch
@@ -1527,20 +1363,18 @@ namespace DiceBot
             }
 
         }
-        string dislog = "";
+        
         private void tmBet_Tick(object sender, EventArgs e)
         {
             try
             {
-                GeckoInputElement gieBet = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("btn btn-primary btn-large diceHighButton")[0].DomObject);
-                dislog += gieBet.GetAttribute("style") + "\n";
 
-                //
-                if (!gieBet.GetAttribute("style").ToLower().Contains("none"))
+                if (CurrentSite.ReadyToBet(gckBrowser))
                 {
                     Thread.Sleep(100);
                     PlaceBet();
                 }
+               
             }
             catch
             {
@@ -1549,11 +1383,7 @@ namespace DiceBot
 
         }
 
-        void dobetmuakakathingy(double dBalance)
-        {
-
-        }
-
+      
         void playalarm()
         {
             try
@@ -1651,25 +1481,12 @@ namespace DiceBot
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if (rdbRPC.Checked)
+            if (CurrentSite is PRC)
             {
                 GeckoSelectElement gse = new GeckoSelectElement(gckBrowser.Document.GetElementById("diceCurrencyValue").DomObject);
                 Currency = gse.SelectedIndex;
             }
-            if (!madescript)
-            {
-
-                var script = gckBrowser.Document.CreateElement("script");
-                script.TextContent = "function bethigh(){var cusid_ele = document.getElementsByClassName('btn btn-primary btn-large diceHighButton'); for (var i = 0; i < cusid_ele.length; ++i) { var item = cusid_ele[i];   item.click();}}";
-                gckBrowser.Document.Body.AppendChild(script);
-
-                var script2 = gckBrowser.Document.CreateElement("script");
-                script2.TextContent = "function betlow(){var cusid_ele = document.getElementsByClassName('btn btn-primary btn-large diceLowButton'); for (var i = 0; i < cusid_ele.length; ++i) { var item = cusid_ele[i];   item.click();}}";
-                gckBrowser.Document.Body.AppendChild(script2);
-                madescript = true;
-            }
-            Application.DoEvents();
-
+           
             if ((sender as Button).Name.ToUpper().Contains("HIGH"))
             {
                 starthigh = high = true;
@@ -1686,31 +1503,8 @@ namespace DiceBot
 
         void Login()
         {
-            try
-            {
-                GeckoInputElement gieUser = new GeckoInputElement(gckBrowser.Document.GetElementById("username").DomObject);
-                GeckoInputElement giePass = new GeckoInputElement(gckBrowser.Document.GetElementsByName("password")[0].DomObject);
-                
-                GeckoInputElement gieSubmit = null;
-                foreach (GeckoElement gie in gckBrowser.Document.GetElementsByTagName("input"))
-                {
-                    if (gie.GetAttribute("type") == "submit")
-                    {
-                        gieSubmit = new GeckoInputElement(gie.DomObject);
-                        break;
-                    }
-                }
-                
-                gieUser.Value = username;
-                giePass.Value = password;
-                if (autologin)
-                    gieSubmit.Click();
-                loggedin = true;
-            }
-            catch
-            {
-                loggedin = false;
-            }
+            if (CurrentSite.AutoLogin)
+                loggedin = CurrentSite.Login(username, password, gckBrowser);
 
         }
         private void button1_Click_1(object sender, EventArgs e)
@@ -1746,11 +1540,6 @@ namespace DiceBot
         private void btnStop_Click(object sender, EventArgs e)
         {
             
-            if (chkStopOnWin.Checked)
-            {
-                stoponwin = true;
-            }
-            else
             Stop();
         }
 
@@ -1792,11 +1581,7 @@ namespace DiceBot
                 {
                     sw.WriteLine("2");
                 }
-                sw.Write("StopOnWin|");
-                if (chkStopOnWin.Checked)
-                    sw.WriteLine("1");
-                else
-                    sw.WriteLine("0");
+                
                 sw.WriteLine("LastStreakWin|" + nudLastStreakWin.Value.ToString("00"));
                 sw.WriteLine("LastStreakLose|" + nudLastStreakLose.Value.ToString("00"));
                 string msg = "";
@@ -2114,10 +1899,12 @@ namespace DiceBot
 
                     if (values[i++] == "1")
                     {
-                        chkStopOnWin.Checked = true;
+                        //chkStopOnWin.Checked = true;
                     }
                     else
-                        chkStopOnWin.Checked = false;
+                    { 
+                        //chkStopOnWin.Checked = false;
+                    }
                     if (!sw.EndOfStream)
                     {
                         msg = sw.ReadLine();
@@ -2285,7 +2072,7 @@ namespace DiceBot
                     rdbInvest.Checked = (temp == "0");
                     rdbStop.Checked = (temp == "1");
                     rdbWithdraw.Checked = (temp == "2");
-                    chkStopOnWin.Checked = ("1"==getvalue(saveditems, "StopOnWin"));
+                    //chkStopOnWin.Checked = ("1"==getvalue(saveditems, "StopOnWin"));
                     txtChance.Text = getvalue(saveditems, "Chance");
                     txtMaxMultiply.Text = getvalue(saveditems, "MaxMultiply");
                     txtNBets.Text = getvalue(saveditems, "NBets");
@@ -2845,18 +2632,8 @@ namespace DiceBot
             testInputs();
             try
             {
-                //diceChance
-                if (rdbRPC.Checked)
-                {
-                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("diceChance").DomObject);
-                    gie.Value = Chance.ToString().Replace(',', '.');
-                }
-                else
-                {
-                    GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("pct_chance").DomObject);
-                    gie.Value = Chance.ToString().Replace(',', '.');
-                }
-                
+                CurrentSite.SetChance(Chance.ToString().Replace(",", "."), gckBrowser);
+                                
             }
             catch
             {
@@ -3145,202 +2922,10 @@ namespace DiceBot
 
         #endregion
 
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        /*private void btnSettings_Click(object sender, EventArgs e)
-        {
-            new cSettings(this).Show();
-        }*/
-
-        #region auto invest divest
-        bool divesting = false;
-        bool divesting2 = false;
-
-        private void tmrCheckInvest_Tick(object sender, EventArgs e)
-        {
-            #region invest hour
-
-            if (chkHour.Checked)
-            {
-                if ((lastinvest - DateTime.Now).Hours > nudHours.Value)
-                {
-                    if (waiter == 0)
-                    {
-                        bool success = false;
-                        gckBrowser.Navigate("javascript:socket.emit('invest',csrf,'" + ((decimal)Getbalance(out success) * (decimal)nudInvestHour.Value / (decimal)100.0).ToString() + "',0)");
-                    }
-                    if (waiter == 2)
-                    {
-                        gckBrowser.Navigate("http://Just-dice.com");
-                        lastinvest = DateTime.Now;
-                        waiter = -1;
-                    }
-                    waiter++;
-                }
-            }
-#endregion
-            #region divest profit
-            if (chkDivestProf.Checked)
-            {
-                string sBalance="999999";
-                try
-                {
-                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("investment")[0].DomObject);
-                     sBalance = gieBalance.InnerHtml;
-                }
-                    catch
-                {
-                    
-                }
-                    decimal curinvested = 0;
-                    if (decimal.TryParse(sBalance, out curinvested) || divesting)
-                    {
-                        if ((PrincipleInvest / curinvested) < 1 || divesting)
-                        {
-                            if ((PrincipleInvest / curinvested * 100) > nudProfitPer.Value || divesting)
-                            {
-                                if (waiter == 0)
-                                {
-                                    gckBrowser.Navigate("javascript:socket.emit('divest',csrf,'" + ((curinvested * nudProfitPer.Value) / 100).ToString() + "',0)");
-                                    divesting = true;
-                                }
-                                else if (waiter == 2)
-                                {
-                                    gckBrowser.Navigate("http://Just-dice.com");
-                                    waiter = -1;
-                                    divesting = false;
-                                }
-                                waiter++;
-                            }
-                        }
-                    }
-            }
-            #endregion
-
-            #region site profit
-            if (chkSiteProfit.Checked)
-            {
-                string sBalance = "s";
-                decimal NewProfit = 0;
-                try
-                {
-                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("sprofitraw")[0].DomObject);
-                    sBalance = gieBalance.InnerHtml;
-
-                }
-                catch
-                {
-
-                }
-                if (decimal.TryParse(sBalance, out NewProfit) || divesting2)
-                {
-                    decimal oldprofit = SitelowestProfits;
-
-                        if (oldprofit < 0 && NewProfit < 0)
-                        {
-                            if (oldprofit / NewProfit < 1)
-                            {
-                                if ((oldprofit / NewProfit) * 100m > nudTotalDivestPer.Value)
-                                {
-
-                                    if (waiter == 0)
-                                    {
-                                        gckBrowser.Navigate("javascript:socket.emit(\"divest\",csrf,\"all\",divest_code.val()");
-                                        divesting2 = true;
-                                    }
-
-
-                                }
-                            }
-                            
-                        }
-                        if (oldprofit > 0 && NewProfit > 0)
-                        {
-                            if (NewProfit / oldprofit < 1)
-                            {
-                                if ((NewProfit / oldprofit) * 100m > nudTotalDivestPer.Value)
-                                {
-
-                                    if (waiter == 0)
-                                    {
-                                        gckBrowser.Navigate("javascript:socket.emit(\"divest\",csrf,\"all\",divest_code.val()");
-                                        divesting2 = true;
-                                    }
-
-
-                                }
-                            }
-                        }
-
-                        if (waiter == 2 && divesting2)
-                        {
-                            gckBrowser.Navigate("http://Just-dice.com");
-                            waiter = -1;
-                            divesting = false;
-                        }
-                    if (divesting2)
-                        waiter++;
-                    
-                }
-            }
-            if ((DateTime.Now - lastprofit).Hours >= 1)
-            {
-                string sBalance = "s";
-                decimal NewProfit = 0;
-                try
-                {
-                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("sprofitraw")[0].DomObject);
-                    sBalance = gieBalance.InnerHtml;
-                }
-                catch
-                {
-
-                }
-                if (decimal.TryParse(sBalance, out NewProfit))
-                {
-                    if (NewProfit < SitelowestProfits)
-                    {
-                        SitelowestProfits3 = SitelowesProfits2;
-                        sitelowrecorded3 = sitelowrecorded2;
-                        SitelowesProfits2 = SitelowestProfits;
-                        sitelowrecorded2 = sitelowrecorded;
-                        SitelowestProfits = NewProfit;
-                        sitelowrecorded = DateTime.Now;
-
-                    }
-                }
-            }
-            #endregion
-
-        }
-
-        private void txtPrince_Leave(object sender, EventArgs e)
-        {
-            if (!decimal.TryParse(txtPrince.Text, out PrincipleInvest))
-            {
-                MessageBox.Show("Principle not a valid number");
-            }
-        }
-        #endregion
-
-
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-            reversebets = (int)NudReverse.Value;
-            NudReverse.Value = reversebets;
-        }
-
-        private void tabPage5_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
         #region Simulate and bet generator
         Simulation tempsim;
-        bool simstarted = false;
+        
         Thread simthread;
         void runsim()
         {
@@ -3624,7 +3209,7 @@ namespace DiceBot
                 hex.AppendFormat("{0:x2}", b);
 
 
-            for (int i = 0; i < hex.Length; i+=(rdbRPC.Checked )?charstouse:1)
+            for (int i = 0; i < hex.Length; i+=(CurrentSite is PRC )?charstouse:1)
             {
 
                 string s = hex.ToString().Substring(i, charstouse);
@@ -3652,13 +3237,7 @@ namespace DiceBot
                     }
                     else
                     {
-                        /*using (StreamWriter sw = new StreamWriter(svdExportSim.FileName))
-                        {
-                            foreach (string s in lastsim.bets)
-                            {
-                                sw.WriteLine(s);
-                            }
-                        }*/
+                       
                         File.Copy(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim", svdExportSim.FileName);
                         
                         MessageBox.Show("exported to " + svdExportSim.FileName);
@@ -3887,13 +3466,13 @@ namespace DiceBot
             {
                 string sBalance = "";
                 double siteBalance = 0;
-                if (rdbJD.Checked)
+                if (CurrentSite is JD)
                 {
                     GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("sprofitraw")[0].DomObject);
                     sBalance = gieBalance.InnerHtml.Replace(",", "");
                     siteBalance = dparse(sBalance, ref convert);
                 }
-                else if (rdbRPC.Checked)
+                else if (CurrentSite is PRC)
                 {
                     GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("diceHouseProfit")[0].DomObject);
                     sBalance = gieBalance.InnerHtml.Replace(",", "");
@@ -4149,30 +3728,34 @@ namespace DiceBot
         #endregion
         #endregion
 
-        private void nudStopLossBtcStreal_ValueChanged(object sender, EventArgs e)
-        {
 
+        private void btnStopOnWin_Click(object sender, EventArgs e)
+        {
+            stoponwin = true;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void cmbSite_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rdbJD.Checked)
+            string url = txtSecretURL.Text.ToLower().Replace("http://", "").Replace("https://", "");
+            switch (cmbSite.SelectedIndex)
             {
-                rdbInvest.Enabled = true;
-                rdbWithdraw.Enabled = true;
+                case 0: CurrentSite = new JD(); if (!(url.StartsWith("just-dice.com") || url.StartsWith("www.just-dice.com"))){gckBrowser.Navigate("just-dice.com");} break;
+
+                case 1: CurrentSite = new PRC(); if (!(url.StartsWith("prcdice.eu") || url.StartsWith("www.prcdice.eu"))) { gckBrowser.Navigate("prcdice.eu"); } break;
+
+                case 2: CurrentSite = new D999(); if (!(url.StartsWith("999dice.com") || url.StartsWith("www.999dice.com"))) { gckBrowser.Navigate("999dice.com"); }  break;
+                //case 3: CurrentSite = new PD(); break;
             }
-            else
-            {
-                rdbStop.Checked=true;
-                rdbInvest.Enabled = false;
-                rdbWithdraw.Enabled = false;
-            }
+            rdbInvest.Enabled = CurrentSite.AutoInvest;
+            if (!rdbInvest.Enabled)
+                rdbInvest.Checked = false;
+            rdbWithdraw.Enabled = CurrentSite.AutoWithdraw;
+            if (!rdbWithdraw.Enabled)
+                rdbWithdraw.Checked = false;
+            
         }
+
+        
 
         
 

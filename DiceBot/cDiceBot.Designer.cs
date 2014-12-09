@@ -215,6 +215,9 @@
             this.btnGraphProfitBets = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.Mutawa = new System.Windows.Forms.TabPage();
+            this.label81 = new System.Windows.Forms.Label();
+            this.nudPercentage = new System.Windows.Forms.NumericUpDown();
+            this.chkPercentage = new System.Windows.Forms.CheckBox();
             this.nudMKDecrement = new System.Windows.Forms.NumericUpDown();
             this.nudMKIncrement = new System.Windows.Forms.NumericUpDown();
             this.label80 = new System.Windows.Forms.Label();
@@ -239,8 +242,8 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.btnImport = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.btnStopOnWin = new System.Windows.Forms.Button();
             this.btnStartLow = new System.Windows.Forms.Button();
-            this.chkStopOnWin = new System.Windows.Forms.CheckBox();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnStartHigh = new System.Windows.Forms.Button();
             this.tabPage11 = new System.Windows.Forms.TabPage();
@@ -327,8 +330,7 @@
             this.tmBetting = new System.Windows.Forms.Timer(this.components);
             this.tmStop = new System.Windows.Forms.Timer(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
-            this.rdbRPC = new System.Windows.Forms.RadioButton();
-            this.rdbJD = new System.Windows.Forms.RadioButton();
+            this.cmbSite = new System.Windows.Forms.ComboBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.pbLoading = new System.Windows.Forms.ProgressBar();
             this.btnGo = new System.Windows.Forms.Button();
@@ -343,9 +345,6 @@
             this.tmrSiteProfit = new System.Windows.Forms.Timer(this.components);
             this.gckBrowser = new Gecko.GeckoWebBrowser();
             this.tmBet = new System.Windows.Forms.Timer(this.components);
-            this.chkPercentage = new System.Windows.Forms.CheckBox();
-            this.nudPercentage = new System.Windows.Forms.NumericUpDown();
-            this.label81 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -384,6 +383,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).BeginInit();
             this.tabPage12.SuspendLayout();
             this.Mutawa.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMKDecrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMKIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMutawaWins)).BeginInit();
@@ -413,7 +413,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -1312,7 +1311,6 @@
             0,
             0,
             458752});
-            this.nudStopLossBtcStreal.ValueChanged += new System.EventHandler(this.nudStopLossBtcStreal_ValueChanged);
             // 
             // chkStopLossBtcStreak
             // 
@@ -2027,7 +2025,6 @@
             this.NudReverse.Name = "NudReverse";
             this.NudReverse.Size = new System.Drawing.Size(36, 20);
             this.NudReverse.TabIndex = 2;
-            this.NudReverse.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // lblZigZag1
             // 
@@ -2067,7 +2064,6 @@
             this.tabPage5.TabIndex = 2;
             this.tabPage5.Text = "Simulate";
             this.tabPage5.UseVisualStyleBackColor = true;
-            this.tabPage5.Click += new System.EventHandler(this.tabPage5_Click);
             // 
             // lblSimProgress
             // 
@@ -2524,6 +2520,33 @@
             this.Mutawa.Text = "Custom";
             this.Mutawa.UseVisualStyleBackColor = true;
             // 
+            // label81
+            // 
+            this.label81.AutoSize = true;
+            this.label81.Location = new System.Drawing.Point(57, 260);
+            this.label81.Name = "label81";
+            this.label81.Size = new System.Drawing.Size(95, 13);
+            this.label81.TabIndex = 23;
+            this.label81.Text = "Percentage to bet:";
+            // 
+            // nudPercentage
+            // 
+            this.nudPercentage.DecimalPlaces = 2;
+            this.nudPercentage.Location = new System.Drawing.Point(158, 258);
+            this.nudPercentage.Name = "nudPercentage";
+            this.nudPercentage.Size = new System.Drawing.Size(50, 20);
+            this.nudPercentage.TabIndex = 22;
+            // 
+            // chkPercentage
+            // 
+            this.chkPercentage.AutoSize = true;
+            this.chkPercentage.Location = new System.Drawing.Point(26, 235);
+            this.chkPercentage.Name = "chkPercentage";
+            this.chkPercentage.Size = new System.Drawing.Size(153, 17);
+            this.chkPercentage.TabIndex = 21;
+            this.chkPercentage.Text = "Bet Percentage of balance";
+            this.chkPercentage.UseVisualStyleBackColor = true;
+            // 
             // nudMKDecrement
             // 
             this.nudMKDecrement.DecimalPlaces = 8;
@@ -2769,7 +2792,6 @@
             this.checkBox1.TabIndex = 0;
             this.checkBox1.Text = "Use Mutawa";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // btnExport
             // 
@@ -2793,8 +2815,8 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.btnStopOnWin);
             this.panel4.Controls.Add(this.btnStartLow);
-            this.panel4.Controls.Add(this.chkStopOnWin);
             this.panel4.Controls.Add(this.btnStop);
             this.panel4.Controls.Add(this.btnStartHigh);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -2802,6 +2824,16 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(342, 63);
             this.panel4.TabIndex = 49;
+            // 
+            // btnStopOnWin
+            // 
+            this.btnStopOnWin.Location = new System.Drawing.Point(174, 6);
+            this.btnStopOnWin.Name = "btnStopOnWin";
+            this.btnStopOnWin.Size = new System.Drawing.Size(111, 23);
+            this.btnStopOnWin.TabIndex = 42;
+            this.btnStopOnWin.Text = "Stop On Win";
+            this.btnStopOnWin.UseVisualStyleBackColor = true;
+            this.btnStopOnWin.Click += new System.EventHandler(this.btnStopOnWin_Click);
             // 
             // btnStartLow
             // 
@@ -2812,18 +2844,6 @@
             this.btnStartLow.Text = "Start Low";
             this.btnStartLow.UseVisualStyleBackColor = true;
             this.btnStartLow.Click += new System.EventHandler(this.btnStart_Click);
-            // 
-            // chkStopOnWin
-            // 
-            this.chkStopOnWin.AutoSize = true;
-            this.chkStopOnWin.Checked = true;
-            this.chkStopOnWin.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkStopOnWin.Location = new System.Drawing.Point(174, 9);
-            this.chkStopOnWin.Name = "chkStopOnWin";
-            this.chkStopOnWin.Size = new System.Drawing.Size(105, 17);
-            this.chkStopOnWin.TabIndex = 39;
-            this.chkStopOnWin.Text = "Stop on next win";
-            this.chkStopOnWin.UseVisualStyleBackColor = true;
             // 
             // btnStop
             // 
@@ -3180,7 +3200,6 @@
             this.txtPrince.Size = new System.Drawing.Size(100, 20);
             this.txtPrince.TabIndex = 28;
             this.txtPrince.Text = "10";
-            this.txtPrince.Leave += new System.EventHandler(this.txtPrince_Leave);
             // 
             // label3
             // 
@@ -3777,8 +3796,7 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.rdbRPC);
-            this.panel3.Controls.Add(this.rdbJD);
+            this.panel3.Controls.Add(this.cmbSite);
             this.panel3.Controls.Add(this.linkLabel1);
             this.panel3.Controls.Add(this.pbLoading);
             this.panel3.Controls.Add(this.btnGo);
@@ -3790,29 +3808,19 @@
             this.panel3.Size = new System.Drawing.Size(1202, 42);
             this.panel3.TabIndex = 4;
             // 
-            // rdbRPC
+            // cmbSite
             // 
-            this.rdbRPC.AutoSize = true;
-            this.rdbRPC.Checked = true;
-            this.rdbRPC.Location = new System.Drawing.Point(879, 22);
-            this.rdbRPC.Name = "rdbRPC";
-            this.rdbRPC.Size = new System.Drawing.Size(67, 17);
-            this.rdbRPC.TabIndex = 6;
-            this.rdbRPC.TabStop = true;
-            this.rdbRPC.Text = "PRCdice";
-            this.rdbRPC.UseVisualStyleBackColor = true;
-            this.rdbRPC.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
-            // 
-            // rdbJD
-            // 
-            this.rdbJD.AutoSize = true;
-            this.rdbJD.Location = new System.Drawing.Point(879, 2);
-            this.rdbJD.Name = "rdbJD";
-            this.rdbJD.Size = new System.Drawing.Size(69, 17);
-            this.rdbJD.TabIndex = 5;
-            this.rdbJD.Text = "Just-Dice";
-            this.rdbJD.UseVisualStyleBackColor = true;
-            this.rdbJD.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.cmbSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSite.FormattingEnabled = true;
+            this.cmbSite.Items.AddRange(new object[] {
+            "Just-Dice",
+            "PRC",
+            "999Dice"});
+            this.cmbSite.Location = new System.Drawing.Point(868, 11);
+            this.cmbSite.Name = "cmbSite";
+            this.cmbSite.Size = new System.Drawing.Size(111, 21);
+            this.cmbSite.TabIndex = 5;
+            this.cmbSite.SelectedIndexChanged += new System.EventHandler(this.cmbSite_SelectedIndexChanged);
             // 
             // linkLabel1
             // 
@@ -3883,7 +3891,6 @@
             // 
             this.tmrCheckInvest.Enabled = true;
             this.tmrCheckInvest.Interval = 1000;
-            this.tmrCheckInvest.Tick += new System.EventHandler(this.tmrCheckInvest_Tick);
             // 
             // tmrSimulation
             // 
@@ -3907,33 +3914,6 @@
             // tmBet
             // 
             this.tmBet.Tick += new System.EventHandler(this.tmBet_Tick);
-            // 
-            // chkPercentage
-            // 
-            this.chkPercentage.AutoSize = true;
-            this.chkPercentage.Location = new System.Drawing.Point(26, 235);
-            this.chkPercentage.Name = "chkPercentage";
-            this.chkPercentage.Size = new System.Drawing.Size(153, 17);
-            this.chkPercentage.TabIndex = 21;
-            this.chkPercentage.Text = "Bet Percentage of balance";
-            this.chkPercentage.UseVisualStyleBackColor = true;
-            // 
-            // nudPercentage
-            // 
-            this.nudPercentage.DecimalPlaces = 2;
-            this.nudPercentage.Location = new System.Drawing.Point(158, 258);
-            this.nudPercentage.Name = "nudPercentage";
-            this.nudPercentage.Size = new System.Drawing.Size(50, 20);
-            this.nudPercentage.TabIndex = 22;
-            // 
-            // label81
-            // 
-            this.label81.AutoSize = true;
-            this.label81.Location = new System.Drawing.Point(57, 260);
-            this.label81.Name = "label81";
-            this.label81.Size = new System.Drawing.Size(95, 13);
-            this.label81.TabIndex = 23;
-            this.label81.Text = "Percentage to bet:";
             // 
             // cDiceBot
             // 
@@ -3997,6 +3977,7 @@
             this.tabPage12.ResumeLayout(false);
             this.Mutawa.ResumeLayout(false);
             this.Mutawa.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMKDecrement)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMKIncrement)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMutawaWins)).EndInit();
@@ -4007,7 +3988,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudTrazelWin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMutawaMultiplier)).EndInit();
             this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             this.tabPage11.ResumeLayout(false);
             this.tabPage11.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetSeed)).EndInit();
@@ -4035,7 +4015,6 @@
             this.groupBox1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4077,7 +4056,6 @@
         private System.Windows.Forms.Label lblMaxBets;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.CheckBox chkStopOnWin;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnStartHigh;
         private System.Windows.Forms.Label lblDevider;
@@ -4354,11 +4332,11 @@
         private System.Windows.Forms.CheckBox chkMK;
         private Gecko.GeckoWebBrowser gckBrowser;
         private System.Windows.Forms.Timer tmBet;
-        private System.Windows.Forms.RadioButton rdbRPC;
-        private System.Windows.Forms.RadioButton rdbJD;
         private System.Windows.Forms.Label label81;
         private System.Windows.Forms.NumericUpDown nudPercentage;
         private System.Windows.Forms.CheckBox chkPercentage;
+        private System.Windows.Forms.Button btnStopOnWin;
+        private System.Windows.Forms.ComboBox cmbSite;
 
     }
 }

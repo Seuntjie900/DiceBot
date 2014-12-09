@@ -41,7 +41,7 @@
             this.pnlGraph.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlGraph.Location = new System.Drawing.Point(0, 0);
             this.pnlGraph.Name = "pnlGraph";
-            this.pnlGraph.Size = new System.Drawing.Size(850, 750);
+            this.pnlGraph.Size = new System.Drawing.Size(1534, 831);
             this.pnlGraph.TabIndex = 0;
             this.pnlGraph.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlGraph_Paint);
             // 
@@ -50,9 +50,9 @@
             this.pnlButtons.Controls.Add(this.btnSave);
             this.pnlButtons.Controls.Add(this.btnClose);
             this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlButtons.Location = new System.Drawing.Point(0, 750);
+            this.pnlButtons.Location = new System.Drawing.Point(0, 831);
             this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Size = new System.Drawing.Size(850, 30);
+            this.pnlButtons.Size = new System.Drawing.Size(1534, 30);
             this.pnlButtons.TabIndex = 1;
             // 
             // btnSave
@@ -84,7 +84,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(850, 780);
+            this.ClientSize = new System.Drawing.Size(1534, 861);
             this.Controls.Add(this.pnlGraph);
             this.Controls.Add(this.pnlButtons);
             this.Name = "Graph";
