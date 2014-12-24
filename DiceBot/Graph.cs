@@ -15,6 +15,8 @@ namespace DiceBot
         dataset Data;
         Graphics graph;
         bool timestamps = false;
+        Random R = new Random();
+        string tmpName = "";
         public Graph()
         {
             InitializeComponent();
@@ -28,6 +30,7 @@ namespace DiceBot
             graph = pnlGraph.CreateGraphics();
             Data = data;
             this.timestamps = timestamps;
+            drawgraph(graph);
         }
 
         void drawgraph(Graphics graph)
@@ -52,8 +55,9 @@ namespace DiceBot
             bets.ChartType = SeriesChartType.Line;
             tmp.Size = new System.Drawing.Size(1500, 800);
             tmp.Series.Add(bets);
-            string filename = "tmp.png";
-            tmp.SaveImage(filename, ChartImageFormat.Png);
+            tmpName = "tmp_" + R.Next(9999999).ToString() + ".png";
+
+            tmp.SaveImage(tmpName, ChartImageFormat.Png);
            
         }
 
@@ -76,7 +80,7 @@ namespace DiceBot
         {
             try
             {
-                graph.DrawImage(new Bitmap("tmp.png"), new Point(0, 0));
+                graph.DrawImage(new Bitmap(tmpName), new Point(0, 0));
             }
             catch
             {

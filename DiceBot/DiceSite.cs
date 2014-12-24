@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Gecko;
 using Gecko.DOM;
+using System.Security.Cryptography;
+using System.Globalization;
 namespace DiceBot
 {
     public abstract class DiceSite
@@ -12,7 +14,7 @@ namespace DiceBot
         public bool AutoInvest { get; set; }
         public bool ChangeSeed {get;set;}
         public bool AutoLogin { get; set; }
-
+        public string Name { get; protected set; }
         public abstract void PlaceBet(bool High, Gecko.GeckoWebBrowser gckBrowser);
         public abstract void SetChance(string Chance, Gecko.GeckoWebBrowser gckBrowser);
         public abstract void SetAmount(double Amount, Gecko.GeckoWebBrowser gckBrowser);
@@ -37,6 +39,45 @@ namespace DiceBot
         public abstract string GetTotalBets(Gecko.GeckoWebBrowser gckBrowser);
         public abstract string GetMyProfit(Gecko.GeckoWebBrowser gckBrowser);
         public abstract bool ReadyToBet(Gecko.GeckoWebBrowser gckBrowser);
+        public virtual double GetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+            
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = /*nonce.ToString() + ":" + */client + ":" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+            
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i+=charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+                
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }
+            return 0;
+        }
     }
 
     public class PRC : DiceSite
@@ -47,6 +88,7 @@ namespace DiceBot
             AutoWithdraw = false;
             ChangeSeed = true;
             AutoLogin = false;
+            this.Name = "PRC";
         }
 
         public override void PlaceBet(bool high, Gecko.GeckoWebBrowser gckBrowser)
@@ -129,7 +171,12 @@ namespace DiceBot
                 return false;
         }
 
-        
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            server = nonce + ":" + server + ":" + nonce;
+            client = nonce + ":" + client;
+            return base.GetLucky(server, client, nonce);
+        }
     }
 
     public class JD : DiceSite
@@ -140,6 +187,7 @@ namespace DiceBot
             AutoWithdraw = true;
             ChangeSeed = true;
             AutoLogin = true;
+            Name = "JD";
         }
         public override void PlaceBet(bool High, GeckoWebBrowser gckBrowser)
         {
@@ -376,12 +424,21 @@ namespace DiceBot
             AutoWithdraw = true;
             ChangeSeed = false;
             AutoLogin = true;
+            Name = "D999";
         }
 
         public override void PlaceBet(bool High, GeckoWebBrowser gckBrowser)
         {
-            GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("BetLowButton").DomObject);
-            gie.Click();
+            if (!High)
+            {
+                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("BetLowButton").DomObject);
+                gie.Click();
+            }
+            else
+            {
+                GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("BetHighButton").DomObject);
+                gie.Click();
+            }
         }
 
         public override void SetChance(string Chance, GeckoWebBrowser gckBrowser)
@@ -505,6 +562,419 @@ namespace DiceBot
             {
                 return false;
             }
+        }
+
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            Func<string, byte[]> strtobytes = s => Enumerable
+        .Range(0, s.Length / 2)
+        .Select(x => byte.Parse(s.Substring(x * 2, 2), NumberStyles.HexNumber))
+        .ToArray();
+            byte[] bserver = strtobytes(server);
+            byte[] bclient = strtobytes(client).Reverse().ToArray();
+            byte[] num = BitConverter.GetBytes(nonce).Reverse().ToArray();
+            byte[] data = bserver.Concat(bclient).Concat(num).ToArray();
+            using (SHA512 sha512 = new SHA512Managed())
+            {
+               
+                byte[] hash = sha512.ComputeHash(sha512.ComputeHash(data));
+                while (true)
+                {
+                    for (int x = 0; x <= 61; x += 3)
+                    {
+                        long result = (hash[x] << 16) | (hash[x + 1] << 8) | hash[x + 2];
+                        if (result < 16000000)
+                            return result % 1000000;
+                    }
+                    hash = sha512.ComputeHash(hash);
+                }
+            }
+        }
+    }
+
+
+    public class SafeDice: DiceSite
+    {
+        
+        double lastamount = 0;
+        string lastprofit = "";
+        bool checklastprofit = false;
+
+        public SafeDice():base()
+        {
+            AutoInvest = false;
+            AutoWithdraw = true;
+            ChangeSeed = false;
+            AutoLogin = false;
+            Name = "SafeD";
+        }
+        public override void PlaceBet(bool High, GeckoWebBrowser gckBrowser)
+        {
+            try
+            {
+                GeckoInputElement gietmp = new GeckoInputElement(gckBrowser.Document.GetElementById("hiloswitch").DomObject);
+                   
+            }
+            catch
+            {
+                
+                new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("ng-switch ng-pristine ng-untouched ng-valid")[0].DomObject).Id="hiloswitch";
+                
+            }
+            if (High)
+            {
+                try
+                {
+                    GeckoInputElement gieHigh = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("switch-on switch-animate")[0].DomObject);
+                    gieHigh = new GeckoInputElement(gckBrowser.Document.GetElementById("hiloswitch").DomObject);
+                    gieHigh.Click();
+
+                }
+                catch
+                {
+
+                }
+
+            }
+            else
+            {
+                try
+                {
+                    GeckoInputElement gieLow = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("switch-off switch-animate")[0].DomObject);
+                    gieLow = new GeckoInputElement(gckBrowser.Document.GetElementById("hiloswitch").DomObject);
+                    gieLow.Click();
+                }
+                catch
+                {
+
+                }
+            }
+            try
+            {
+                GeckoInputElement gie_test = new GeckoInputElement(gckBrowser.Document.GetElementById("btn-roll").DomObject);
+            }
+            catch
+            {
+                (new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("btn-circle btn-alt m-t-20")[0].DomObject)).Id = "btn-roll";
+            }
+
+            
+            using (AutoJSContext Context = new AutoJSContext(gckBrowser.Window.JSContext))
+            {
+                string JSresult = "";
+                Context.EvaluateScript("$(\"#btn-roll\").click();", (nsISupports)gckBrowser.Window.DomWindow, out JSresult);
+            }
+        }
+
+        public override void SetChance(string Chance, GeckoWebBrowser gckBrowser)
+        {
+            try
+            {
+                GeckoInputElement gie_old = new GeckoInputElement(gckBrowser.Document.GetElementById("txtChance").DomObject);
+            }
+            catch
+            {
+                
+                (new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("form-control ng-win-chance ng-pristine ng-untouched ng-valid ng-valid-required ng-valid-min-chance ng-valid-max-chance")[0].DomObject)).Id = "txtChance";
+            }
+            GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("txtChance").DomObject);
+            using (AutoJSContext Context = new AutoJSContext(gckBrowser.Window.JSContext))
+            {
+                string JSresult = "";
+                Context.EvaluateScript("$(\"#txtChance\").val('"+Chance+"').change();", (nsISupports)gckBrowser.Window.DomWindow, out JSresult);
+            }
+            
+        }
+
+        public override void SetAmount(double Amount, GeckoWebBrowser gckBrowser)
+        {
+            try
+            {
+                GeckoInputElement gie_tst = new GeckoInputElement(gckBrowser.Document.GetElementById("txtAmount").DomObject);
+            }
+            catch
+            {
+                (new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("form-control ng-bet-amount ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-required ng-valid-max-balance")[0].DomObject)).Id = "txtAmount";
+            }
+            GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("txtAmount").DomObject);
+            GeckoInputElement gieProfitOnWin = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("m-l-20")[0].DomObject);
+            lastprofit = gieProfitOnWin.TextContent;
+            if (Amount!= lastamount)
+            {
+                
+                checklastprofit = true;
+                lastamount = Amount;
+                using (AutoJSContext Context = new AutoJSContext(gckBrowser.Window.JSContext))
+                {
+                    string JSresult = "";
+                    Context.EvaluateScript("$(\"#txtAmount\").val('" + Amount.ToString("0.00000000") + "').change();", (nsISupports)gckBrowser.Window.DomWindow, out JSresult);
+                }
+            }
+            else
+            {
+                checklastprofit = false;
+            }
+            
+        }
+
+        public override void ResetSeed(GeckoWebBrowser gckBrowser)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetClientSeed(string Seed, GeckoWebBrowser gckBrowser)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetbalanceValue(GeckoWebBrowser gckBrowser)
+        {
+            //m-t-5 m-b-0 ng-balance ng-isolate-scope
+            try
+            {
+                GeckoInputElement gie_old = new GeckoInputElement(gckBrowser.Document.GetElementById("txtBalance").DomObject);
+            }
+            catch
+            {
+                new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("m-t-5 m-b-0 ng-balance ng-isolate-scope")[0].DomObject).Id = "lblBalance";
+            }
+            GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("lblBalance").DomObject);
+            return gie.TextContent;
+            
+        }
+
+        public override string GetSiteProfitValue(GeckoWebBrowser gckBrowser)
+        {
+            GeckoNodeCollection nodes = gckBrowser.Document.GetElementsByClassName("nav navbar-text");
+            foreach (GeckoNode Node in nodes)
+            {
+                if (Node.TextContent.ToLower().StartsWith("profit"))
+                {
+                    return Node.TextContent.Substring(Node.TextContent.IndexOf(":" + 2));
+                }
+            }
+            throw new IndexOutOfRangeException();
+        }
+
+        public override string GetTotalBets(GeckoWebBrowser gckBrowser)
+        {
+            
+            
+            GeckoNodeCollection nodes = gckBrowser.Document.GetElementsByClassName("media");
+            if (nodes.Length<5)
+            {
+                try
+                {
+                    GeckoNodeCollection tmpnodes = gckBrowser.Document.GetElementsByClassName("btn btn-sm btn-alt");
+                    foreach (GeckoNode tmpNode in tmpnodes)
+                    {
+                        if (tmpNode.TextContent=="")
+                        {
+                            new GeckoInputElement(tmpNode.DomObject).Click();
+                            GeckoNode tmpNode2 = gckBrowser.Document.GetElementsByClassName("tab-pane ng-scope")[0];
+                            GeckoDivElement gie = new GeckoDivElement(tmpNode2.DomObject);
+                            gie.SetAttribute("id","pnlBets");
+                            using (AutoJSContext Context = new AutoJSContext(gckBrowser.Window.JSContext))
+                            {
+                                string JSresult = "";
+                                Context.EvaluateScript("$(\"#pnlBets\").addClass(\"active\")", (nsISupports)gckBrowser.Window.DomWindow, out JSresult);
+                            }
+                            break;
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+            nodes = gckBrowser.Document.GetElementsByClassName("media");
+            foreach (GeckoNode Node in nodes)
+            {
+                if (Node.TextContent.ToLower().Contains("bets"))
+                {
+                    return Node.ChildNodes[0].TextContent.Substring(0, Node.TextContent.IndexOf("B"));
+                }
+            }
+            throw new IndexOutOfRangeException();
+        }
+
+        public override string GetMyProfit(GeckoWebBrowser gckBrowser)
+        {
+            GeckoNodeCollection nodes = gckBrowser.Document.GetElementsByClassName("media");
+            foreach (GeckoNode Node in nodes)
+            {
+                if (Node.TextContent.ToLower().Contains("profit"))
+                {
+                    return Node.ChildNodes[0].TextContent.Substring(0, Node.TextContent.IndexOf("P"));
+                }
+            }
+            throw new IndexOutOfRangeException();
+        }
+
+        public override bool Withdraw(double Amount, string Address, int Counter, string secretURL, GeckoWebBrowser gckBrowser)
+        {
+            if (Counter==0)
+            { 
+                GeckoNodeCollection tmpnodes = gckBrowser.Document.GetElementsByClassName("btn btn-sm btn-alt");
+                foreach (GeckoNode tmpNode in tmpnodes)
+                {
+                    if (tmpNode.TextContent == "WITHDRAW")
+                    {
+                        new GeckoInputElement(tmpNode.DomObject).Click();
+                    }
+                }
+            }
+
+            if (Counter==5)
+            {
+                GeckoInputElement gieAddress = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched")[0].DomObject);
+                gieAddress.Value = Address;
+                gieAddress.Id = "txtWDAddress";
+                using (AutoJSContext Context = new AutoJSContext(gckBrowser.Window.JSContext))
+                {
+                    string JSresult = "";
+                    Context.EvaluateScript("$(\"#txtWDAddress\").change()", (nsISupports)gckBrowser.Window.DomWindow, out JSresult);
+                }
+                
+                
+            }
+            if (Counter==15)
+            {
+                GeckoInputElement gieAmount = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("form-control ng-pristine ng-valid ng-valid-min ng-valid-required ng-untouched")[0].DomObject);
+                gieAmount.Value = Amount.ToString("0.00000000");
+                gieAmount.Id =
+                    "txtWDAmount";
+                using (AutoJSContext Context = new AutoJSContext(gckBrowser.Window.JSContext))
+                {
+                    string JSresult = "";
+                    Context.EvaluateScript("$(\"#txtWDAmount\").change()", (nsISupports)gckBrowser.Window.DomWindow, out JSresult);
+                }
+            }
+            if (Counter==25)
+            {
+                GeckoNodeCollection nodes = gckBrowser.Document.GetElementsByClassName("btn btn-alt");
+                foreach (GeckoNode node in nodes)
+                {
+                    try
+                    {
+                        GeckoInputElement gietmp = new GeckoInputElement(node.DomObject);
+                        if (gietmp.Value == "Withdraw")
+                        {
+                            new GeckoInputElement(node.DomObject).Click();
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+                
+            }
+            if (Counter==35)
+            {
+                GeckoNodeCollection tmpnodes = gckBrowser.Document.GetElementsByClassName("btn btn-sm btn-alt");
+                foreach (GeckoNode tmpNode in tmpnodes)
+                {
+                    if (tmpNode.TextContent == "")
+                    {
+                        new GeckoInputElement(tmpNode.DomObject).Click();
+                    }
+                }
+            }
+            if (Counter==45)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public override bool ReadyToBet(GeckoWebBrowser gckBrowser)
+        {
+            try
+            {
+                try
+                { 
+                    
+                    (new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("btn-circle btn-alt m-t-20")[0].DomObject)).Id = "btnRoll";
+                    
+                    if (checklastprofit)
+                    {
+                        GeckoInputElement gieProfitOnWin = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("m-l-20")[0].DomObject);
+                        string txt = gieProfitOnWin.TextContent;
+                        if (txt!=lastprofit)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                    catch
+                {
+
+                }
+            }
+                
+            
+            catch
+            {
+
+            }
+            return false;
+        }
+
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            string comb = nonce + ":" + client + server + ":" + nonce;
+
+            SHA512 betgenerator = SHA512.Create();
+            
+
+            int charstouse = 5;
+            
+            List<byte> buffer = new List<byte>();
+
+            foreach (char c in comb)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            //compute first hash
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+            comb = hex.ToString();
+            buffer = new List<byte>();
+
+            //convert hash to new byte array
+            foreach (char c in comb)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }
+            return 0;
         }
     }
 }

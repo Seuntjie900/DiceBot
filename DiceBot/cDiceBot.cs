@@ -25,7 +25,8 @@ namespace DiceBot
     
     public partial class cDiceBot : Form
     {
-        
+        private const string vers = "2.5.4";
+
         Random r = new Random();
         #region Variables
         Random rand = new Random();
@@ -74,7 +75,7 @@ namespace DiceBot
         int WinDevidecounter = 0;
         int SoundStreakCount = 15;
         int restartcounter = 0;
-        int reversebets = 0;
+        
         int laststreaklose = 0;
         int laststreakwin = 0;
         int Currency = 0;
@@ -127,7 +128,11 @@ namespace DiceBot
 
         public cDiceBot()
         {
-            
+            if (!Directory.Exists("data"))
+            {
+                Directory.CreateDirectory("data");
+                
+            }
             InitializeComponent();
             gckBrowser.Navigating += gckBrowser_Navigating;
             #region tooltip Texts
@@ -230,14 +235,40 @@ namespace DiceBot
                 case 0: CurrentSite = new JD(); break;
                 case 1: CurrentSite = new PRC(); break;
                 case 2: CurrentSite = new D999(); break;
-                //case 3: CurrentSite = new PD(); break;
+                //case 3: CurrentSite = new PRC2(); break;
+                case 3: CurrentSite = new SafeDice(); break;
             }
             if (cmbSite.SelectedIndex==-1)
             {
                 cmbSite.SelectedIndex=0;
             }
+            Thread tGetVers = new Thread(new ThreadStart(getversion));
+            tGetVers.Start();
         }
 
+        //check if the current version of the bot is the latest version available
+        void getversion()
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("http://seuntjie.com/Dicebot/vs.html");
+                HttpWebResponse EmitResponse = (HttpWebResponse)request.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                if (sEmitResponse!=vers)
+                {
+                    if (MessageBox.Show("A new version of DiceBot is available. Do you want to go to the download page now?","Update Available", MessageBoxButtons.YesNo)== System.Windows.Forms.DialogResult.Yes)
+                    {
+                        Process.Start("http://sourceforge.net/projects/seuntjiejddb");
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        //make sure that the correct dice site interface is being used for the current site
         void gckBrowser_Navigating(object sender, Gecko.Events.GeckoNavigatingEventArgs e)
         {
             
@@ -264,6 +295,14 @@ namespace DiceBot
                      url.StartsWith("www.999dice.com"))
             {
                 cmbSite.SelectedIndex = 2;
+            }
+            /*if (url.StartsWith("") )
+            {
+                cmbSite.SelectedIndex = 3;
+            }*/
+            if (url.StartsWith("safedice.com") || url.StartsWith("www.safedice.com"))
+            {
+                cmbSite.SelectedIndex = 3;
             }
 
         }
@@ -594,6 +633,29 @@ namespace DiceBot
             double dBalance = Getbalance( out success);
             stop = true;
             TotalTime += (DateTime.Now - dtStarted);
+            if (RunningSimulation)
+            {
+                Updatetext(lblSimLosses, Losses.ToString());
+                Updatetext(lblSimProfit, profit.ToString("0.00000000"));
+                Updatetext(lblSimWins, Wins.ToString());
+                Updatetext(lblSimEndBalance, PreviousBalance.ToString("0.00000000"));
+                Updatetext(lblSimLoseStreak, WorstStreak.ToString());
+                Updatetext(lblSimWinStreak, BestStreak.ToString());
+                using (StreamWriter sw = File.AppendText(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
+                {
+                    foreach (string tmpbet in tempsim.bets)
+                    {
+                        sw.WriteLine(tmpbet);
+                    }
+                    tempsim.bets.Clear();
+                }
+                //return tempsim;
+                //RunningSimulation = false;
+                PreviousBalance=tmpbalance;
+                Wins=  tmpwins ;
+                Losses = tmplosses;
+                StartBalance = tmpStartBalance ;
+            }
         }
 
         double Getbalance(out bool success)
@@ -622,18 +684,28 @@ namespace DiceBot
                 return -1;
             }
         }
-        
+
+        int SafeDiceCounter = 0;
         void PlaceBet()
         {
             try
             {
                 //JD
                 //CurrentSite.SetChance(txtChance.Text, gckBrowser);
-                CurrentSite.SetAmount(Lastbet, gckBrowser);
-                CurrentSite.PlaceBet(high, gckBrowser);
+                if (CurrentSite is SafeDice)
+                    SafeDiceCounter++;
+                if (!(CurrentSite is SafeDice) || SafeDiceCounter == 1)
+                {
+                    CurrentSite.SetAmount(Lastbet, gckBrowser);
+                }
+                if (!(CurrentSite is SafeDice) || SafeDiceCounter >= 2)
+                {
+                    CurrentSite.PlaceBet(high, gckBrowser);
+                    SafeDiceCounter = 0;
+                    dtLastBet = DateTime.Now;
+                    EnableTimer(tmBet, false);
+                }
                 
-                dtLastBet = DateTime.Now;
-                tmBet.Enabled = false;
                 
             }
             catch
@@ -722,19 +794,10 @@ namespace DiceBot
                     {
                         MessageBox.Show("Failed to play CHING, pelase make sure file exists");
                     }
-                    string invested = "";
-                    try
-                    {
-                        GeckoElement ge = (GeckoElement)gckBrowser.Document.GetElementsByClassName("investment")[0];
-                        invested = ge.TextContent;
-                    }
-                    catch
-                    {
-
-                    }
+                    
                     withdrew = true;
                     bool success = false;
-                    Emails.SendInvest(Amount, Getbalance(out success), dparse(invested, ref convert));
+                    Emails.SendInvest(Amount, Getbalance(out success), dparse("-0", ref convert));
                     StartBalance -= Amount;
                     Start(true);
                 }
@@ -744,39 +807,48 @@ namespace DiceBot
 
         void ResetSeed()
         {
-            if (waiter == 20)
+            if (CurrentSite.ChangeSeed)
             {
-                CurrentSite.ResetSeed(gckBrowser);
-                
-            }
-            if (waiter == 50)
-            {
-                if (CurrentSite is JD)
+                if (waiter == 20)
                 {
-                    if (txtSecretURL.Text != "")
-                    {
-                        gckBrowser.Navigate(txtSecretURL.Text);
-                    }
-                    else
-                    {
-                        gckBrowser.Navigate("http://just-dice.com");
-                    }
+                    CurrentSite.ResetSeed(gckBrowser);
+
                 }
-                else waiter = 100;
+                if (waiter == 50)
+                {
+                    if (CurrentSite is JD)
+                    {
+                        if (txtSecretURL.Text != "")
+                        {
+                            gckBrowser.Navigate(txtSecretURL.Text);
+                        }
+                        else
+                        {
+                            gckBrowser.Navigate("http://just-dice.com");
+                        }
+                    }
+                    else waiter = 100;
+                }
+                if (waiter == 100)
+                {
+                    waiter = 0; reset = false;
+                    withdrew = true;
+                    Start(true);
+                }
+                waiter++;
             }
-            if (waiter == 100)
+            else
             {
                 waiter = 0; reset = false;
                 withdrew = true;
                 Start(true);
             }
-            waiter++;
         }
 
         void Start(bool Continue)
         {
 
-            rtbDonate.Text = "Please feel free to donate. \t\tBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 \t\tLtc: LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy \t\tDoge:DR32dpGniJP9mJo4NpzXGCTdsJLcp4td2X";
+            
             if (!Continue)
             {
                 Winstreak = 0;
@@ -796,7 +868,17 @@ namespace DiceBot
                     Lastbet = MinBet;
                     mutawaprev = (double)nudChangeWinStreakTo.Value / (double)nudMutawaMultiplier.Value;
                 }
-                PlaceBet();
+                if (RunningSimulation)
+                {
+                    setInterval(tmBet, 1);
+                    Simbet();
+                }
+                else
+                {
+                    setInterval(tmBet, 100);
+                    //PlaceBet();
+                    EnableTimer(tmBet, true);
+                }
             }
         }
 
@@ -811,15 +893,17 @@ namespace DiceBot
                     valid = false;
                 }
             }
-            double dBalance = PreviousBalance;
-            
-            if (valid)
+            if (!RunningSimulation)
             {
-                bool success = false;
-                dBalance = Getbalance(out success);
+                double dBalance = PreviousBalance;
 
-            }
-                if ((dBalance != PreviousBalance && convert || withdrew ) && dBalance>0)
+                if (valid)
+                {
+                    bool success = false;
+                    dBalance = Getbalance(out success);
+
+                }
+                if ((dBalance != PreviousBalance && convert || withdrew) && dBalance > 0)
                 {
                     if (PreviousBalance == 0)
                         StartBalance = dBalance;
@@ -831,18 +915,20 @@ namespace DiceBot
                         double dbets = 0;
                         string myprofit = "";
                         double dprof = 0;
-                        bets  = CurrentSite.GetTotalBets(gckBrowser).Replace(",", "");
+                        bets = CurrentSite.GetTotalBets(gckBrowser).Replace(",", "");
                         dbets = dparse(bets, ref convert);
                         myprofit = CurrentSite.GetMyProfit(gckBrowser).Replace(",", "");
                         dprof = dparse(myprofit, ref convert);
-                        
 
-                        writeprofitbet((int)dbets, dprof);
-                        writeprofittime(DateTime.Now, dprof);
-                        writecurrentprofitbet(Wins + Losses, profit);
-                        writecurrentprofittime(DateAndTime.Now, profit);
-                        writebankrollbet((int)dbets, dBalance);
-                        writebankrolltime(DateTime.Now, dBalance);
+                        if (!RunningSimulation)
+                        {
+                            writeprofitbet((int)dbets, dprof);
+                            writeprofittime(DateTime.Now, dprof);
+                            writecurrentprofitbet(Wins + Losses, profit);
+                            writecurrentprofittime(DateAndTime.Now, profit);
+                            writebankrollbet((int)dbets, dBalance);
+                            writebankrolltime(DateTime.Now, dBalance);
+                        }
                     }
                     catch
                     {
@@ -854,15 +940,17 @@ namespace DiceBot
                 {
                     if ((DateTime.Now - dtLastBet).TotalSeconds > 30 && !stop)
                     {
-                        if (cmbSite.SelectedIndex==1 && !retriedbet)
+                        if ((CurrentSite is PRC || CurrentSite is SafeDice) && !retriedbet)
                         {
                             retriedbet = true;
-                            PlaceBet();
+                            //PlaceBet();
+                            EnableTimer(tmBet, true);
+
                         }
                     }
                     if ((DateTime.Now - dtLastBet).TotalSeconds > 120 && !stop)
                     {
-                        
+
                         if (restartcounter > 25)
                         {
                             if (txtSecretURL.Text != "")
@@ -876,9 +964,9 @@ namespace DiceBot
                             dtLastBet = DateTime.Now;
                             restartcounter = 0;
                         }
-                        
+
                     }
-                    if (restartcounter == 30 )
+                    if (restartcounter == 30)
                     {
                         if (CurrentSite is PRC)
                         {
@@ -906,8 +994,8 @@ namespace DiceBot
                 {
                     ResetSeed();
                 }
-            
-            
+
+            }
         }
 
         double mutawaprev = 0;
@@ -968,6 +1056,8 @@ namespace DiceBot
                             }
                             try
                             {
+                                Chance = dparse(txtChance.Text, ref convert);
+                                if (!RunningSimulation)
                                 CurrentSite.SetChance( Chance.ToString().Replace(',', '.'), gckBrowser);
                                 
                             }
@@ -1031,6 +1121,8 @@ namespace DiceBot
                         {
                             try
                             {
+                                Chance = (double)nudChangeChanceWinTo.Value;
+                                if (!RunningSimulation)
                                 CurrentSite.SetChance(nudChangeChanceWinTo.Value.ToString().Replace(',', '.'), gckBrowser);
                                 
                             }
@@ -1096,7 +1188,7 @@ namespace DiceBot
 
                     if (chkReverse.Checked)
                     {
-                        if (rdbReverseWins.Checked && Winstreak % reversebets == 0)
+                        if (rdbReverseWins.Checked && Winstreak % NudReverse.Value == 0)
                         {
                             high = !high;
                         }
@@ -1161,6 +1253,7 @@ namespace DiceBot
                     //increase losses and losestreak
                     Losses++;
                     Losestreak++;
+                    
                     CalculateLuck(false);
                     if (chkMK.Checked)
                     {
@@ -1183,7 +1276,7 @@ namespace DiceBot
                     //switch high low if applied in the zig zag tab
                     if (chkReverse.Checked)
                     {
-                        if (rdbReverseLoss.Checked && Losestreak % reversebets == 0)
+                        if (rdbReverseLoss.Checked && Losestreak % NudReverse.Value == 0)
                         {
                             high = !high;
                         }
@@ -1204,7 +1297,9 @@ namespace DiceBot
                     {
                         try
                         {
-                            CurrentSite.SetChance(nudChangeChanceLoseTo.Value.ToString().Replace(',', '.'), gckBrowser);
+                            Chance = (double)nudChangeChanceLoseTo.Value;
+                            if (!RunningSimulation)
+                                CurrentSite.SetChance(nudChangeChanceLoseTo.Value.ToString().Replace(',', '.'), gckBrowser);
                             
                             
                         }
@@ -1269,14 +1364,17 @@ namespace DiceBot
                     Winstreak = 0;
 
                     //sounds
+                    if (!RunningSimulation)
                     if (Sound && SoundStreak && Losestreak > SoundStreakCount)
                         playalarm();
                     //email
+                    if (!RunningSimulation)
                     if (Emails.Streak && Losestreak > Emails.StreakSize)
                         Emails.SendStreak(Losestreak, Emails.StreakSize, dBalance);
 
                     
                     //update worst streaks
+                    if (!RunningSimulation)
                     if (Losestreak > WorstStreak)
                         WorstStreak = Losestreak;
 
@@ -1286,12 +1384,12 @@ namespace DiceBot
                 }
                 if (chkReverse.Checked)
                 {
-                    if (rdbReverseBets.Checked && (Wins+Losses) % reversebets == 0 )
+                    if (rdbReverseBets.Checked && (Wins+Losses) % NudReverse.Value == 0 )
                     {
                         high = !high;
                     }
                 }
-
+                if (!RunningSimulation)
                 if (dBalance > Limit && chkLimit.Checked)
                 {
 
@@ -1312,6 +1410,7 @@ namespace DiceBot
 
                     }
                 }
+                if (!RunningSimulation)
                 if (dBalance - Lastbet < LowerLimit && chkLowerLimit.Checked)
                 {
                     TrayIcon.BalloonTipText = "Balance lower than " + txtLowerLimit + "\nStopping Bets...";
@@ -1326,7 +1425,7 @@ namespace DiceBot
                 }
 
 
-
+                if (!RunningSimulation)
                 if ( Wins!=0 && Losses!=0 && chkResetSeed.Checked)
                 {
                     if ( ((rdbResetSeedBets.Checked && (Wins+Losses) % nudResetSeed.Value == 0) ||
@@ -1344,12 +1443,22 @@ namespace DiceBot
                 {
                     Lastbet = (double)(nudPercentage.Value/(decimal)100.0) * dBalance;
                 }
+                if (RunningSimulation && Wins + Losses > nudSimNumBets.Value)
+                {
+                    Stop();
+                }
+                if (RunningSimulation && Lastbet>PreviousBalance)
+                {
+                    Stop();
+                }
                 if ((dBalance != PreviousBalance || withdrew) && !(stop ||reset || withdraw ||invest))
                 {
-                    tmBet.Enabled = true;
+                    //tmBet.Enabled = true;
+                    EnableTimer(tmBet, true);
                     dPreviousBalance = dBalance;
                     try
                     {
+                        //if (!RunningSimulation)
                         UpdateStats();
                     }
                     catch
@@ -1361,14 +1470,50 @@ namespace DiceBot
 
 
             }
+            if (RunningSimulation && stop)
+                RunningSimulation = false;
 
         }
-        
+
+    delegate void dEnableTimer(System.Windows.Forms.Timer tmr, bool enabled);
+    void EnableTimer(System.Windows.Forms.Timer tmr, bool enabled)
+    {
+        if (InvokeRequired)
+        {
+            Invoke(new dEnableTimer(EnableTimer), tmr, enabled);
+            return;
+        }
+        else
+        {
+            tmr.Enabled = enabled;
+        }
+
+    }
+    delegate void dSetTimerInterval(System.Windows.Forms.Timer tmr, int Interval);
+    void setInterval(System.Windows.Forms.Timer tmr, int Interval)
+    {
+        if (InvokeRequired)
+        {
+            Invoke(new dSetTimerInterval(setInterval), tmr, Interval);
+            return;
+        }
+        else
+        {
+            tmr.Interval = Interval;
+        }
+
+    }
+
+        bool RunningSimulation = false;
         private void tmBet_Tick(object sender, EventArgs e)
         {
             try
             {
-
+                if (RunningSimulation)
+                {
+                    Simbet();
+                }
+                else
                 if (CurrentSite.ReadyToBet(gckBrowser))
                 {
                     Thread.Sleep(100);
@@ -1475,6 +1620,14 @@ namespace DiceBot
             {
                 File.Delete("currentprofittime.txt");
              }
+            string[] files = Directory.GetFiles(".");
+            foreach (string F in files)
+            {
+                if (F.StartsWith(".\\tmp_"))
+                {
+                    File.Delete(F);
+                }
+            }
             base.OnClosing(e);
             Application.Exit();
         }
@@ -1507,16 +1660,7 @@ namespace DiceBot
                 loggedin = CurrentSite.Login(username, password, gckBrowser);
 
         }
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            GeckoInputElement gieUser = new GeckoInputElement(gckBrowser.Document.GetElementById("username").DomObject);
-            GeckoInputElement giePass = new GeckoInputElement(gckBrowser.Document.GetElementById("password").DomObject);
-            GeckoInputElement gieSubmit = new GeckoInputElement(gckBrowser.Document.GetElementsByTagName("submit")[0].DomObject);
-            gieUser.Value = username;
-            giePass.Value = password;
-            gieSubmit.Click();
-            GeckoElement gksubmit = gckBrowser.Document.Body;
-        }
+        
         #endregion
 
 
@@ -1603,6 +1747,8 @@ namespace DiceBot
                     msg = "2";
                 sw.WriteLine("ResetSeedMode|" + msg);
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
+                sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
+                
                 
             }
         }
@@ -2159,6 +2305,11 @@ namespace DiceBot
                     nudMKIncrement.Value = (decimal)dparse(getvalue(saveditems, "MKIncrement"), ref convert);
                     nudMKDecrement.Value = (decimal)dparse(getvalue(saveditems, "MKDecrement"), ref convert);
                     chkMK.Checked = ("1" == getvalue(saveditems, "MKEnabled"));
+                    txtQuickSwitch.Text = getvalue(saveditems, "QuickSwitchFolder");
+                    if (txtQuickSwitch.Text!="")
+                    {
+                        btnStratRefresh_Click(btnStratRefresh, new EventArgs() );
+                    }
                 }
 
                 
@@ -2386,7 +2537,7 @@ namespace DiceBot
                         salarm= txtPathAlarm.Text = getvalue(saveditems, "AlarmPath");
                         nudEmailStreak.Value = (decimal)Emails.StreakSize;
                         nudSoundStreak.Value = SoundStreakCount;
-
+                        
 
                     }
 
@@ -2927,189 +3078,95 @@ namespace DiceBot
         Simulation tempsim;
         
         Thread simthread;
+        string server = "";
+        string client = "";
+        double tmpbalance = 0;
+        int tmpwins = 0;
+        int tmplosses = 0;
+        double tmpStartBalance = 0;
         void runsim()
         {
-
+            tmpbalance = PreviousBalance;
+            tmpwins = Wins;
+            tmplosses = Losses;
+            tmpStartBalance = StartBalance;
+            StartBalance = dPreviousBalance = (double)nudSimBalance.Value;
+            Wins = Losses = 0;
             
-            double dMultiplier = Multiplier;
-            double WinMultiplier = this.WinMultiplier;
-            double startMultiplier = Multiplier;
-            int numbets = (int)nudSimNumBets.Value;
-            int bets = 1;
-            int wins = 0;
-            int losses = 0;
-            int winstreak = 0;
-            int losstreak = 0;
-            int largestwinstreak = 0;
-            int largestlostreak = 0;
-            int MaxMultiplies = this.MaxMultiplies;
-            double devider = this.Devider;
-            double WinDevider = this.WinDevider;
-            double devidercounter = this.Devidecounter;
-            double balance = (double)nudSimBalance.Value;
-            double lastbet = MinBet;
-            double minbet = MinBet;
-            double chance = Chance;
-            double profit = 0;
-            double currentprofit = this.currentprofit;
+            
+            
             string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
-            string server = "";
+            server = "";
 
             for (int i = 0; i < 64; i++)
             {
                 server += (chars[rand.Next(0, chars.Length)]);
             }
-            string client = "";
+            client = "";
             for (int i = 0; i < 24; i++)
             {
                 client += rand.Next(0, 10).ToString();
             }
-            
+
             string sserver = "";
             foreach (byte b in server)
             {
                 sserver += Convert.ToChar(b);
             }
             
-            tempsim = new Simulation(balance.ToString("0.00000000"), bets.ToString(), sserver, client);
-            while (bets <= numbets)
+            tempsim = new Simulation(dPreviousBalance.ToString("0.00000000"), (Wins+Losses).ToString(), sserver, client);
+            RunningSimulation = true;
+            stop = false;
+            Lastbet = MinBet;
+            Start(false);
+            
+        }
+
+        void Simbet()
+        {
+            dtLastBet = DateTime.Now;
+            EnableTimer(tmBet, false);
+            if (Wins + Losses <= nudSimNumBets.Value)
             {
-                //string columns = "Bet Number,LuckyNumber,Chance,Roll,Result,Wagered,Profit,Balance,Total Profit";
-                string betstring = bets+",";
-                double number = getlucky(server, client, bets);
-                betstring += number.ToString() + ","+Chance.ToString()+",";
+                string betstring = (Wins + Losses).ToString() + ",";
+                double number = CurrentSite.GetLucky(server, client, Wins + Losses);
+                betstring += number.ToString() + "," + Chance.ToString() + ",";
                 bool win = false;
                 if (high)
-                    betstring += ">" + (100 - chance) + ",";
+                    betstring += ">" + (100 - Chance) + ",";
                 else
-                    betstring += "<" + chance+",";
-                if (high && number > 100 - chance)
+                    betstring += "<" + Chance + ",";
+                if (high && number > 100 - Chance)
                 {
                     win = true;
                 }
-                else if (!high && number < chance)
+                else if (!high && number < Chance)
                 {
                     win = true;
                 }
-
                 if (win)
                 {
                     betstring += "win,";
-                    if (rdbWinMaxMultiplier.Checked && winstreak >= WinMaxMultiplies)
-                    {
-                       WinMultiplier = 1;
-                    }
-                    else if (rdbWinDevider.Checked && winstreak % WinDevidecounter == 0 && winstreak > 0)
-                    {
-                        WinMultiplier *= WinDevider;
-                    }
-                    else if (rdbWinReduce.Checked && winstreak == WinDevidecounter && winstreak > 0)
-                    {
-                        WinMultiplier *= WinDevider;
-                    }
-                    if (winstreak == 0)
-                    {
-                        currentprofit = 0;
-                    }
-                    profit += (lastbet * 99 / chance) - lastbet;
-                    betstring += lastbet + ",";
-                    betstring += (lastbet * 99 / chance) - lastbet + ",";
-                    balance += (lastbet * 99 / chance) - lastbet;
-                    currentprofit += (lastbet*(99/Chance))-lastbet;
-                        Lastbet *= WinMultiplier;
-                        if (winstreak == 0)
-                        { 
-                            lastbet = minbet; 
-                        }
-                    
-                    wins++;
-                    winstreak++;
-                    if (chkResetBetWins.Checked && winstreak % nudResetWins.Value == 0)
-                    {
-                        lastbet = minbet;
-                    }
-                    if (chkChangeWinStreak.Checked && (winstreak == nudChangeWinStreak.Value))
-                    {
-                        lastbet = (double)nudChangeWinStreakTo.Value;
-                    }
-                    if (chkChangeChanceWin.Checked && (winstreak == nudChangeChanceWinStreak.Value))
-                    {
-                        
-                            chance = (double)nudChangeChanceWinTo.Value;
-                        
-                    }
-                    if (largestwinstreak < winstreak)
-                        largestwinstreak = winstreak;
-                    if (losstreak != 0)
-                    {
-                        try
-                        {
-                            chance = Chance;
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                    losstreak = 0;
-                    dMultiplier = startMultiplier;
-                    
-                    //lastbet = minbet;
-                    dMultiplier = startMultiplier;
-                    if (chkReverse.Checked && rdbReverseWins.Checked && winstreak % reversebets == 0)
-                        high = !high;
-                    
-                    
+                    betstring += Lastbet + ",";
+                    betstring += (Lastbet * 99 / Chance) - Lastbet + ",";
+                    this.PreviousBalance = dPreviousBalance + (Lastbet * (99 / Chance));
 
                 }
                 else
                 {
-                    betstring += "lose,";
-                    losses++;
-                    losstreak++;
-                    if (largestlostreak < losstreak)
-                        largestlostreak = losstreak;
-                    winstreak = 0;
-                    betstring += lastbet + ",";
-                    betstring += - lastbet + ",";
-                    profit -= lastbet;
-                    balance -= lastbet;
-                    if (rdbMaxMultiplier.Checked && losstreak == MaxMultiplies)
-                    {
-                        dMultiplier = 1;
-                    }
-                    if (rdbDevider.Checked && losstreak % devidercounter == 0)
-                    {
-                        dMultiplier *= devider;
-                    }
-                    if (rdbReduce.Checked && losstreak == devidercounter)
-                    {
-                        dMultiplier *= devider;
-                    }
-                    if (chkChangeLoseStreak.Checked && (losstreak == nudChangeLoseStreak.Value))
-                    {
-                        lastbet = (double)nudChangeLoseStreakTo.Value;
-                    }
-                    if (chkChangeChanceLose.Checked && (losstreak == nudChangeChanceLoseStreak.Value))
-                    {
-                        
-                            chance = (double)nudChangeChanceLoseTo.Value;
-                        
-                    }
 
-                    lastbet *= dMultiplier;
-                    if (lastbet > balance)
-                        break;
-                    if (chkReverse.Checked && rdbReverseLoss.Checked && losstreak % reversebets == 0)
-                        high = !high;
+                    betstring += "lose,";
+                    betstring += Lastbet + ",";
+                    betstring += -Lastbet + ",";
+                    this.PreviousBalance = dPreviousBalance - Lastbet;
                 }
-                betstring += balance + ",";
+                betstring += PreviousBalance + ",";
                 betstring += profit;
                 tempsim.bets.Add(betstring);
-                bets++;
+                int bets = Wins + Losses;
                 if (bets % 1000 == 0)
                 {
-                    Updatetext(lblSimProgress, ((double)bets / (double)numbets * 100.00).ToString("00.00")+"%");
+                    Updatetext(lblSimProgress, ((double)bets / (double)nudSimNumBets.Value * 100.00).ToString("00.00") + "%");
                 }
                 if (bets % 10000 == 0)
                 {
@@ -3119,30 +3176,12 @@ namespace DiceBot
                         {
                             sw.WriteLine(tmpbet);
                         }
-                        
+
                     }
                     tempsim.bets.Clear();
                 }
-                if (chkReverse.Checked && rdbReverseBets.Checked && bets % reversebets == 0)
-                    high = !high;
             }
-
-            Updatetext(lblSimLosses,losses.ToString());
-            Updatetext(lblSimProfit, profit.ToString("0.00000000"));
-            Updatetext(lblSimWins,wins.ToString());
-            Updatetext(lblSimEndBalance, balance.ToString("0.00000000"));
-            Updatetext(lblSimLoseStreak,largestlostreak.ToString());
-            Updatetext(lblSimWinStreak,largestwinstreak.ToString());
-            using (StreamWriter sw =  File.AppendText(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
-            {
-                foreach (string tmpbet in tempsim.bets)
-                {                    
-                    sw.WriteLine(tmpbet);
-                }
-                tempsim.bets.Clear();
-            }
-            //return tempsim;
-
+            
         }
 
         delegate void DelAlterMsgLog(Control TextBox, string Text);
@@ -3161,65 +3200,34 @@ namespace DiceBot
 
         private void btnSim_Click(object sender, EventArgs e)
         {
-            bool go = true;
-            if (nudSimNumBets.Value >= 1000000)
+            if (! stop)
             {
-                go = (MessageBox.Show("To keep RAM usage to a minimum, "+
-                                        "\nthe sim data is temporarily stored on your"+
-                                        "\nlocal C: drive. This file can become very large," +
-                                        "\nApproximately 80MB per 1M bets. This file is"+
-                                        "\ndeleted when the bot is closed normally.\n\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes);
+                MessageBox.Show("Please stop the bot before running a simulation.");
             }
-            if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
-            {
-                File.Delete(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim");
+            else
+            { 
+                bool go = true;
+                if (nudSimNumBets.Value >= 1000000)
+                {
+                    go = (MessageBox.Show("To keep RAM usage to a minimum, "+
+                                            "\nthe sim data is temporarily stored on your"+
+                                            "\nlocal C: drive. This file can become very large," +
+                                            "\nApproximately 80MB per 1M bets. This file is"+
+                                            "\ndeleted when the bot is closed normally.\n\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes);
+                }
+                if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
+                {
+                    File.Delete(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim");
+                }
+                tmrSimulation.Enabled = true;
+                lblSimRun.Text = "Running Simulation, Please Wait";
+                lblSimRun.ForeColor = Color.Red;
+                simthread = new Thread(new ThreadStart(runsim));
+                simthread.Start();
             }
-            tmrSimulation.Enabled = true;
-            lblSimRun.Text = "Running Simulation, Please Wait";
-            lblSimRun.ForeColor = Color.Red;
-            simthread = new Thread(new ThreadStart(runsim));
-            simthread.Start();
         }
 
-        private double getlucky(string server, string client, int nonce)
-        {
-            HMACSHA512 betgenerator = new HMACSHA512();
-            server = nonce + ":" + server + ":" + nonce;
-            int charstouse = 5;
-            List<byte> serverb = new List<byte>();
-
-            for (int i = 0; i < server.Length; i++)
-            {
-                serverb.Add(Convert.ToByte(server[i]));
-            }
-
-            betgenerator.Key = serverb.ToArray();
-
-            List<byte> buffer = new List<byte>();
-            string msg = nonce.ToString() + ":" + client + ":" + nonce.ToString();
-            foreach (char c in msg)
-            {
-                buffer.Add(Convert.ToByte(c));
-            }
-            
-            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
-
-            StringBuilder hex = new StringBuilder(hash.Length * 2);
-            foreach (byte b in hash)
-                hex.AppendFormat("{0:x2}", b);
-
-
-            for (int i = 0; i < hex.Length; i+=(CurrentSite is PRC )?charstouse:1)
-            {
-
-                string s = hex.ToString().Substring(i, charstouse);
-                
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
-                if (lucky < 1000000)
-                    return lucky / 10000;
-            }
-            return 0;
-        }
+        
 
         private void btnExportSim_Click(object sender, EventArgs e)
         {
@@ -3261,7 +3269,7 @@ namespace DiceBot
                 
                 for (decimal i = nudGenBetsStart.Value; i < nudGenBetsStart.Value + nudGenBetsAmount.Value; i++)
                 {
-                    string curstring = i.ToString() + "," + getlucky(txtServerSeed.Text, txtClientSeed.Text, (int)i).ToString();
+                    string curstring = i.ToString() + "," + CurrentSite.GetLucky(txtServerSeed.Text, txtClientSeed.Text, (int)i).ToString();
                     Betlist.Add(curstring);
                 }
                 try
@@ -3288,16 +3296,20 @@ namespace DiceBot
 
         private void tmrSimulation_Tick(object sender, EventArgs e)
         {
-            if (simthread != null)
+            if (!RunningSimulation)
+            {
+                tmrSimulation.Enabled = false;
+                lblSimRun.ForeColor = Color.Green;
+                lblSimRun.Text = "Simulation Completed";
+                lastsim = tempsim;
+            }
+            /*if (simthread != null)
             {
                 if (!simthread.IsAlive)
                 {
-                    tmrSimulation.Enabled = false;
-                    lblSimRun.ForeColor = Color.Green;
-                    lblSimRun.Text = "Simulation Completed";
-                    lastsim = tempsim;
+                    
                 }
-            }
+            }*/
         }
         #endregion
 
@@ -3400,7 +3412,7 @@ namespace DiceBot
 
         void writeprofitbet(int betnum, double profit)
         {
-            using (StreamWriter sw = File.AppendText("profitbet.txt"))
+            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name+ "profitbet.txt"))
             {
                 sw.WriteLine(betnum.ToString() + "|" + profit.ToString());
             }
@@ -3408,7 +3420,7 @@ namespace DiceBot
 
         void writeprofittime(DateTime timestamp, double profit)
         {
-            using (StreamWriter sw = File.AppendText("profittime.txt"))
+            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "profittime.txt"))
             {
                 sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
             }
@@ -3416,7 +3428,7 @@ namespace DiceBot
 
         void writecurrentprofitbet(int betnum, double profit)
         {
-            using (StreamWriter sw = File.AppendText("currentprofitbet.txt"))
+            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "currentprofitbet.txt"))
             {
                 sw.WriteLine(betnum.ToString() + "|" + profit.ToString());
             }
@@ -3424,7 +3436,7 @@ namespace DiceBot
 
         void writecurrentprofittime(DateTime timestamp, double profit)
         {
-            using (StreamWriter sw = File.AppendText("currentprofittime.txt"))
+            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "currentprofittime.txt"))
             {
                 sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
             }
@@ -3432,7 +3444,7 @@ namespace DiceBot
 
         void writesiteprofit(DateTime timestamp, double profit)
         {
-            using (StreamWriter sw = File.AppendText("siteprofit.txt"))
+            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "siteprofit.txt"))
             {
                 sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
             }
@@ -3440,7 +3452,7 @@ namespace DiceBot
 
         void writebankrollbet(int betnum, double profit)
         {
-            using (StreamWriter sw = File.AppendText("bankrollbet.txt"))
+            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "bankrollbet.txt"))
             {
                 sw.WriteLine(betnum.ToString() + "|" + profit.ToString());
             }
@@ -3448,7 +3460,7 @@ namespace DiceBot
 
         void writebankrolltime(DateTime timestamp, double profit)
         {
-            using (StreamWriter sw = File.AppendText("bankrolltime.txt"))
+            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "bankrolltime.txt"))
             {
                 sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
             }
@@ -3466,20 +3478,9 @@ namespace DiceBot
             {
                 string sBalance = "";
                 double siteBalance = 0;
-                if (CurrentSite is JD)
-                {
-                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("sprofitraw")[0].DomObject);
-                    sBalance = gieBalance.InnerHtml.Replace(",", "");
-                    siteBalance = dparse(sBalance, ref convert);
-                }
-                else if (CurrentSite is PRC)
-                {
-                    GeckoInputElement gieBalance = new GeckoInputElement(gckBrowser.Document.GetElementsByClassName("diceHouseProfit")[0].DomObject);
-                    sBalance = gieBalance.InnerHtml.Replace(",", "");
-                    sBalance = sBalance.Substring(0, sBalance.Length - 2);
-                    siteBalance = dparse(sBalance, ref convert);
-                    
-                }
+                sBalance = CurrentSite.GetSiteProfitValue(gckBrowser).Replace(",", ".");
+                siteBalance = dparse(sBalance, ref convert);
+                
                 if (siteBalance != 0 && convert)
                     writesiteprofit(DateTime.Now, siteBalance);
             }
@@ -3491,9 +3492,9 @@ namespace DiceBot
 
         void profitbet()
         {
-            if (File.Exists("profitbet.txt"))
+            if (File.Exists("data\\"+CurrentSite.Name + "profitbet.txt"))
             {
-                using (StreamReader sr = new StreamReader("profitbet.txt"))
+                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "profitbet.txt"))
                 {
                     List<double> x = new List<double>();
                     List<double> y = new List<double>();
@@ -3519,9 +3520,9 @@ namespace DiceBot
 
         void profittime()
         {
-            if (File.Exists("profittime.txt"))
+            if (File.Exists("data\\"+CurrentSite.Name + "profittime.txt"))
             {
-                using (StreamReader sr = new StreamReader("profittime.txt"))
+                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "profittime.txt"))
                 {
                     List<double> x = new List<double>();
                     List<double> y = new List<double>();
@@ -3549,9 +3550,9 @@ namespace DiceBot
 
         void currentprofitbet()
         {
-            if (File.Exists("currentprofitbet.txt"))
+            if (File.Exists("data\\"+CurrentSite.Name + "currentprofitbet.txt"))
             {
-                using (StreamReader sr = new StreamReader("currentprofitbet.txt"))
+                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "currentprofitbet.txt"))
                 {
                     List<double> x = new List<double>();
                     List<double> y = new List<double>();
@@ -3577,9 +3578,9 @@ namespace DiceBot
 
         void currentprofittime()
         {
-            if (File.Exists("currentprofittime.txt"))
+            if (File.Exists("data\\"+CurrentSite.Name + "currentprofittime.txt"))
             {
-                using (StreamReader sr = new StreamReader("currentprofittime.txt"))
+                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "currentprofittime.txt"))
                 {
                     List<double> x = new List<double>();
                     List<double> y = new List<double>();
@@ -3606,9 +3607,9 @@ namespace DiceBot
 
         void sitebet()
         {
-            if (File.Exists("siteprofit.txt"))
+            if (File.Exists("data\\"+CurrentSite.Name + "siteprofit.txt"))
             {
-                using (StreamReader sr = new StreamReader("siteprofit.txt"))
+                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "siteprofit.txt"))
                 {
                     List<double> x = new List<double>();
                     List<double> y = new List<double>();
@@ -3635,9 +3636,9 @@ namespace DiceBot
 
         void bankrollbet()
         {
-            if (File.Exists("bankrollbet.txt"))
+            if (File.Exists("data\\"+CurrentSite.Name + "bankrollbet.txt"))
             {
-                using (StreamReader sr = new StreamReader("bankrollbet.txt"))
+                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "bankrollbet.txt"))
                 {
                     List<double> x = new List<double>();
                     List<double> y = new List<double>();
@@ -3663,9 +3664,9 @@ namespace DiceBot
 
         void bankrolltime()
         {
-            if (File.Exists("bankrolltime.txt"))
+            if (File.Exists("data\\"+CurrentSite.Name + "bankrolltime.txt"))
             {
-                using (StreamReader sr = new StreamReader("bankrolltime.txt"))
+                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "bankrolltime.txt"))
                 {
                     List<double> x = new List<double>();
                     List<double> y = new List<double>();
@@ -3741,10 +3742,13 @@ namespace DiceBot
             {
                 case 0: CurrentSite = new JD(); if (!(url.StartsWith("just-dice.com") || url.StartsWith("www.just-dice.com"))){gckBrowser.Navigate("just-dice.com");} break;
 
-                case 1: CurrentSite = new PRC(); if (!(url.StartsWith("prcdice.eu") || url.StartsWith("www.prcdice.eu"))) { gckBrowser.Navigate("prcdice.eu"); } break;
+                case 1: CurrentSite = new PRC(); if (!(url.StartsWith("prcdice.eu") || url.StartsWith("www.prcdice.eu"))) { gckBrowser.Navigate("prcdice.eu?af=seuntjie"); } break;
 
-                case 2: CurrentSite = new D999(); if (!(url.StartsWith("999dice.com") || url.StartsWith("www.999dice.com"))) { gckBrowser.Navigate("999dice.com"); }  break;
-                //case 3: CurrentSite = new PD(); break;
+                case 2: CurrentSite = new D999(); if (!(url.StartsWith("999dice.com") || url.StartsWith("www.999dice.com"))) { gckBrowser.Navigate("www.999dice.com/?20073598"); } break;
+
+                //case 3: CurrentSite = new PRC2(); if (!(url.StartsWith("") )) { gckBrowser.Navigate(""); } break;
+                case 3: CurrentSite = new SafeDice(); if (!(url.StartsWith("safedice.com"))) { gckBrowser.Navigate("safedice.com/?r=1050"); } break;
+                
             }
             rdbInvest.Enabled = CurrentSite.AutoInvest;
             if (!rdbInvest.Enabled)
@@ -3755,18 +3759,54 @@ namespace DiceBot
             
         }
 
-        
+        private void btnBrowseStratFolder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fdb = new FolderBrowserDialog();
+            if (fdb.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                txtQuickSwitch.Text = fdb.SelectedPath;
+            }
+        }
 
-        
+        private void btnStratRefresh_Click(object sender, EventArgs e)
+        {
+            lsbStrats.Items.Clear();
+            cmbStrat.Items.Clear();
+            if (Directory.Exists(txtQuickSwitch.Text))
+            {
+                foreach (string x in Directory.GetFiles(txtQuickSwitch.Text))
+                {
+                    using (StreamReader sr = new StreamReader(x))
+                    {
+                        string tmptxt = sr.ReadLine();
+                        if (tmptxt.StartsWith("SaveVersion"))
+                        {
+                            lsbStrats.Items.Add( new FileInfo(x).Name );
+                            cmbStrat.Items.Add(new FileInfo(x).Name);
+                        }
+                    }
+                }
+            }
+        }
 
-        
+        private void cmbStrat_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (File.Exists(txtQuickSwitch.Text+"\\"+cmbStrat.SelectedItem.ToString()))
+            {
+                load(txtQuickSwitch.Text + "\\" + cmbStrat.SelectedItem.ToString());
+            }
+        }
 
-        
-
+        private void cmbStrat_Click(object sender, EventArgs e)
+        {
+            if (cmbStrat.Items.Count<1)
+            {
+                MessageBox.Show("Theres nothing here! You probably still need to specify a folder for this feature to work.\n\n"+
+                    "Go to the Advanced Bet Settings tab, then click the browse button below the 'Quick Switch Folder' text box.\n"+
+                    "Select a folder with some exported strategies in and click refresh. The usable files will be identified and the strategies loaded. You can now switch between them using the drop down menu.");
+            }
+        }
 
     }
 
-    
-
-    
 }

@@ -247,6 +247,12 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.btnStartHigh = new System.Windows.Forms.Button();
             this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.label84 = new System.Windows.Forms.Label();
+            this.lsbStrats = new System.Windows.Forms.ListBox();
+            this.btnStratRefresh = new System.Windows.Forms.Button();
+            this.btnBrowseStratFolder = new System.Windows.Forms.Button();
+            this.txtQuickSwitch = new System.Windows.Forms.TextBox();
+            this.label83 = new System.Windows.Forms.Label();
             this.lblTimeBetween = new System.Windows.Forms.Label();
             this.label56 = new System.Windows.Forms.Label();
             this.rdbResetSeedLosses = new System.Windows.Forms.RadioButton();
@@ -330,6 +336,8 @@
             this.tmBetting = new System.Windows.Forms.Timer(this.components);
             this.tmStop = new System.Windows.Forms.Timer(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label82 = new System.Windows.Forms.Label();
+            this.cmbStrat = new System.Windows.Forms.ComboBox();
             this.cmbSite = new System.Windows.Forms.ComboBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.pbLoading = new System.Windows.Forms.ProgressBar();
@@ -421,7 +429,7 @@
             this.panel1.Controls.Add(this.tabControl3);
             this.panel1.Controls.Add(this.tabControl1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(824, 42);
+            this.panel1.Location = new System.Drawing.Point(1106, 42);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(378, 777);
             this.panel1.TabIndex = 2;
@@ -2330,11 +2338,6 @@
             0,
             0,
             0});
-            this.nudGenBetsStart.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.nudGenBetsStart.Name = "nudGenBetsStart";
             this.nudGenBetsStart.Size = new System.Drawing.Size(75, 20);
             this.nudGenBetsStart.TabIndex = 5;
@@ -2867,6 +2870,12 @@
             // 
             // tabPage11
             // 
+            this.tabPage11.Controls.Add(this.label84);
+            this.tabPage11.Controls.Add(this.lsbStrats);
+            this.tabPage11.Controls.Add(this.btnStratRefresh);
+            this.tabPage11.Controls.Add(this.btnBrowseStratFolder);
+            this.tabPage11.Controls.Add(this.txtQuickSwitch);
+            this.tabPage11.Controls.Add(this.label83);
             this.tabPage11.Controls.Add(this.lblTimeBetween);
             this.tabPage11.Controls.Add(this.label56);
             this.tabPage11.Controls.Add(this.rdbResetSeedLosses);
@@ -2896,6 +2905,59 @@
             this.tabPage11.TabIndex = 3;
             this.tabPage11.Text = "Advanced Bet Settings";
             this.tabPage11.UseVisualStyleBackColor = true;
+            // 
+            // label84
+            // 
+            this.label84.AutoSize = true;
+            this.label84.Location = new System.Drawing.Point(16, 396);
+            this.label84.Name = "label84";
+            this.label84.Size = new System.Drawing.Size(103, 13);
+            this.label84.TabIndex = 78;
+            this.label84.Text = "Available Strategies:";
+            // 
+            // lsbStrats
+            // 
+            this.lsbStrats.FormattingEnabled = true;
+            this.lsbStrats.Location = new System.Drawing.Point(125, 396);
+            this.lsbStrats.Name = "lsbStrats";
+            this.lsbStrats.Size = new System.Drawing.Size(217, 69);
+            this.lsbStrats.TabIndex = 77;
+            // 
+            // btnStratRefresh
+            // 
+            this.btnStratRefresh.Location = new System.Drawing.Point(187, 367);
+            this.btnStratRefresh.Name = "btnStratRefresh";
+            this.btnStratRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnStratRefresh.TabIndex = 76;
+            this.btnStratRefresh.Text = "Refresh";
+            this.btnStratRefresh.UseVisualStyleBackColor = true;
+            this.btnStratRefresh.Click += new System.EventHandler(this.btnStratRefresh_Click);
+            // 
+            // btnBrowseStratFolder
+            // 
+            this.btnBrowseStratFolder.Location = new System.Drawing.Point(267, 367);
+            this.btnBrowseStratFolder.Name = "btnBrowseStratFolder";
+            this.btnBrowseStratFolder.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowseStratFolder.TabIndex = 75;
+            this.btnBrowseStratFolder.Text = "Browse";
+            this.btnBrowseStratFolder.UseVisualStyleBackColor = true;
+            this.btnBrowseStratFolder.Click += new System.EventHandler(this.btnBrowseStratFolder_Click);
+            // 
+            // txtQuickSwitch
+            // 
+            this.txtQuickSwitch.Location = new System.Drawing.Point(125, 341);
+            this.txtQuickSwitch.Name = "txtQuickSwitch";
+            this.txtQuickSwitch.Size = new System.Drawing.Size(217, 20);
+            this.txtQuickSwitch.TabIndex = 74;
+            // 
+            // label83
+            // 
+            this.label83.AutoSize = true;
+            this.label83.Location = new System.Drawing.Point(20, 344);
+            this.label83.Name = "label83";
+            this.label83.Size = new System.Drawing.Size(105, 13);
+            this.label83.TabIndex = 73;
+            this.label83.Text = "Quick Switch Folder:";
             // 
             // lblTimeBetween
             // 
@@ -3796,6 +3858,8 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.label82);
+            this.panel3.Controls.Add(this.cmbStrat);
             this.panel3.Controls.Add(this.cmbSite);
             this.panel3.Controls.Add(this.linkLabel1);
             this.panel3.Controls.Add(this.pbLoading);
@@ -3805,8 +3869,28 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1202, 42);
+            this.panel3.Size = new System.Drawing.Size(1484, 42);
             this.panel3.TabIndex = 4;
+            // 
+            // label82
+            // 
+            this.label82.AutoSize = true;
+            this.label82.Location = new System.Drawing.Point(1010, 14);
+            this.label82.Name = "label82";
+            this.label82.Size = new System.Drawing.Size(113, 13);
+            this.label82.TabIndex = 7;
+            this.label82.Text = "Quick Select Strategy:";
+            // 
+            // cmbStrat
+            // 
+            this.cmbStrat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbStrat.FormattingEnabled = true;
+            this.cmbStrat.Location = new System.Drawing.Point(1129, 11);
+            this.cmbStrat.Name = "cmbStrat";
+            this.cmbStrat.Size = new System.Drawing.Size(121, 21);
+            this.cmbStrat.TabIndex = 6;
+            this.cmbStrat.SelectedIndexChanged += new System.EventHandler(this.cmbStrat_SelectedIndexChanged);
+            this.cmbStrat.Click += new System.EventHandler(this.cmbStrat_Click);
             // 
             // cmbSite
             // 
@@ -3814,8 +3898,9 @@
             this.cmbSite.FormattingEnabled = true;
             this.cmbSite.Items.AddRange(new object[] {
             "Just-Dice",
-            "PRC",
-            "999Dice"});
+            "PRCDice",
+            "999Dice",
+            "SafeDice"});
             this.cmbSite.Location = new System.Drawing.Point(868, 11);
             this.cmbSite.Name = "cmbSite";
             this.cmbSite.Size = new System.Drawing.Size(111, 21);
@@ -3836,7 +3921,7 @@
             // pbLoading
             // 
             this.pbLoading.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pbLoading.Location = new System.Drawing.Point(985, 0);
+            this.pbLoading.Location = new System.Drawing.Point(1267, 0);
             this.pbLoading.Name = "pbLoading";
             this.pbLoading.Size = new System.Drawing.Size(217, 42);
             this.pbLoading.TabIndex = 3;
@@ -3874,9 +3959,10 @@
             this.rtbDonate.Location = new System.Drawing.Point(0, 819);
             this.rtbDonate.Name = "rtbDonate";
             this.rtbDonate.ReadOnly = true;
-            this.rtbDonate.Size = new System.Drawing.Size(1202, 23);
+            this.rtbDonate.Size = new System.Drawing.Size(1484, 23);
             this.rtbDonate.TabIndex = 5;
-            this.rtbDonate.Text = "";
+            this.rtbDonate.Text = "Please feel free to donate. \\t\\tBtc:  1EHPYeVGkquij8eMRQqwyb5bjpooyyfgn5 \\t\\tLtc:" +
+    " LQvMRbyuuSVsvXA3mQQM3zXT53hb34CEzy \\t\\tDoge:DR32dpGniJP9mJo4NpzXGCTdsJLcp4td2X";
             // 
             // TrayIcon
             // 
@@ -3907,7 +3993,7 @@
             this.gckBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gckBrowser.Location = new System.Drawing.Point(0, 42);
             this.gckBrowser.Name = "gckBrowser";
-            this.gckBrowser.Size = new System.Drawing.Size(824, 777);
+            this.gckBrowser.Size = new System.Drawing.Size(1106, 777);
             this.gckBrowser.TabIndex = 6;
             this.gckBrowser.UseHttpActivityObserver = false;
             // 
@@ -3919,7 +4005,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1202, 842);
+            this.ClientSize = new System.Drawing.Size(1484, 842);
             this.Controls.Add(this.gckBrowser);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel3);
@@ -4337,6 +4423,14 @@
         private System.Windows.Forms.CheckBox chkPercentage;
         private System.Windows.Forms.Button btnStopOnWin;
         private System.Windows.Forms.ComboBox cmbSite;
+        private System.Windows.Forms.Label label82;
+        private System.Windows.Forms.ComboBox cmbStrat;
+        private System.Windows.Forms.Label label84;
+        private System.Windows.Forms.ListBox lsbStrats;
+        private System.Windows.Forms.Button btnStratRefresh;
+        private System.Windows.Forms.Button btnBrowseStratFolder;
+        private System.Windows.Forms.TextBox txtQuickSwitch;
+        private System.Windows.Forms.Label label83;
 
     }
 }
