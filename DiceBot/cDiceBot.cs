@@ -25,7 +25,7 @@ namespace DiceBot
     
     public partial class cDiceBot : Form
     {
-        private const string vers = "2.5.4";
+        private const string vers = "2.5.5";
 
         Random r = new Random();
         #region Variables
@@ -106,6 +106,9 @@ namespace DiceBot
         Simulation lastsim;
         string ching = "";
         string salarm = "";
+
+        //labouchere
+        List<double> LabList = new List<double>();
         #endregion
 
         DiceSite CurrentSite;
@@ -254,9 +257,11 @@ namespace DiceBot
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("http://seuntjie.com/Dicebot/vs.html");
                 HttpWebResponse EmitResponse = (HttpWebResponse)request.GetResponse();
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                if (sEmitResponse!=vers)
+                string[] ss = sEmitResponse.Split('|');
+                if (ss[0]!=vers)
                 {
-                    if (MessageBox.Show("A new version of DiceBot is available. Do you want to go to the download page now?","Update Available", MessageBoxButtons.YesNo)== System.Windows.Forms.DialogResult.Yes)
+                    string newfeatures = ss.Length>1?"New features include: "+ss[1]:"";
+                    if (MessageBox.Show("A new version of DiceBot is available. "+newfeatures+" \n\nDo you want to go to the download page now?","Update Available", MessageBoxButtons.YesNo)== System.Windows.Forms.DialogResult.Yes)
                     {
                         Process.Start("http://sourceforge.net/projects/seuntjiejddb");
                     }
@@ -281,8 +286,6 @@ namespace DiceBot
                 cmbSite.SelectedIndex = 0;
             }
             if (url.StartsWith("prcdice.eu") ||
-                     url.StartsWith("www.prcdice.eu") ||
-                     url.StartsWith("prcdice.eu") ||
                      url.StartsWith("www.prcdice.eu"))
             {
                 cmbSite.SelectedIndex = 1;
@@ -312,7 +315,7 @@ namespace DiceBot
         {
             if (txtSecretURL.Text == "")
             {
-                gckBrowser.Navigate("https://prcdice.eu/");
+                gckBrowser.Navigate("https://prcdice.eu");
             }
             else
             {
@@ -692,12 +695,18 @@ namespace DiceBot
             {
                 //JD
                 //CurrentSite.SetChance(txtChance.Text, gckBrowser);
+                /*if (CurrentSite is PD)
+                    if ((CurrentSite as PD).chance == 0)
+                        CurrentSite.SetChance(Chance.ToString(), gckBrowser);*/
                 if (CurrentSite is SafeDice)
                     SafeDiceCounter++;
                 if (!(CurrentSite is SafeDice) || SafeDiceCounter == 1)
                 {
                     CurrentSite.SetAmount(Lastbet, gckBrowser);
                 }
+                if (!CurrentSite.ReadyToBet(gckBrowser))
+                    return;
+                
                 if (!(CurrentSite is SafeDice) || SafeDiceCounter >= 2)
                 {
                     CurrentSite.PlaceBet(high, gckBrowser);
@@ -863,9 +872,25 @@ namespace DiceBot
             if (testInputs())
             {
                 stop = false;
+                if (chkLabEnable.Checked)
+                {
+                    LabList = new List<double>();
+                    string[] lines = GetLabList();
+                    foreach (string s in lines)
+                    {
+                        LabList.Add(dparse(s,ref convert));
+                    }
+                }
                 if (!Continue)
                 {
                     Lastbet = MinBet;
+                    if (chkLabEnable.Checked)
+                    {
+                        if (LabList.Count == 1)
+                            Lastbet = LabList[0];
+                        else
+                            Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                    }
                     mutawaprev = (double)nudChangeWinStreakTo.Value / (double)nudMutawaMultiplier.Value;
                 }
                 if (RunningSimulation)
@@ -966,16 +991,7 @@ namespace DiceBot
                         }
 
                     }
-                    if (restartcounter == 30)
-                    {
-                        if (CurrentSite is PRC)
-                        {
-
-                            GeckoSelectElement gse = new GeckoSelectElement(gckBrowser.Document.GetElementById("diceCurrencyValue").DomObject);
-                            gse.SelectedIndex = Currency;
-                        }
-
-                    }
+                    
                     if (restartcounter > 50 && restartcounter < 51 && !stop)
                     {
                         Start(true);
@@ -1025,6 +1041,63 @@ namespace DiceBot
                 //if its a win
                 if (dBalance > PreviousBalance && !(withdraw || invest || reset))
                 {
+
+                    //do laboucghere logic
+                    if (chkLabEnable.Checked)
+                    {
+                        if (chkReverseLab.Checked)
+                        {
+                            if (LabList.Count == 1)
+                                LabList.Add(LabList[0]);
+                            else
+                                LabList.Add(LabList[0] + LabList[LabList.Count - 1]);
+                        }
+                        else if (LabList.Count > 1)
+                        {
+                            LabList.RemoveAt(0);
+                            LabList.RemoveAt(LabList.Count - 1);
+                            if (LabList.Count == 0)
+                            {
+                                if (rdbLabStop.Checked)
+                                    Stop();
+                                else
+                                {
+                                    string[] ss = GetLabList();
+                                    LabList = new List<double>();
+                                    foreach (string s in ss)
+                                    {
+                                        LabList.Add(dparse(s, ref convert));
+                                    }
+                                    if (LabList.Count == 1)
+                                        Lastbet = LabList[0];
+                                    else if (LabList.Count > 1)
+                                        Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            if (rdbLabStop.Checked)
+                                Stop();
+                            else
+                            {
+                                string[] ss = GetLabList();
+                                LabList = new List<double>();
+                                foreach (string s in ss)
+                                {
+                                    LabList.Add(dparse(s, ref convert));
+                                }
+                                if (LabList.Count == 1)
+                                    Lastbet = LabList[0];
+                                else if (LabList.Count > 1)
+                                    Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                            }
+                        }
+                    }
+
+                    //end labouchere logic
+
                     
                     if (PreviousBalance != 0)
                     {
@@ -1198,6 +1271,51 @@ namespace DiceBot
                     //if its a loss
                 else if (dBalance < PreviousBalance && !(withdraw || invest || reset))
                 {
+
+                    //do laboucghere logic
+                    if (chkLabEnable.Checked)
+                    { 
+                        if (!chkReverseLab.Checked)
+                        {
+                            if (LabList.Count == 1)
+                                LabList.Add(LabList[0]);
+                            else
+                            LabList.Add(LabList[0] + LabList[LabList.Count - 1]);
+                        }
+                        else
+                        {
+                            if (LabList.Count > 1)
+                            {
+                                LabList.RemoveAt(0);
+                                LabList.RemoveAt(LabList.Count - 1);
+                                if (LabList.Count == 0)
+                                    Stop();
+                            }
+                            else
+                            {
+                                if (rdbLabStop.Checked)
+                                    Stop();
+                                else
+                                {
+                                    string[] ss = GetLabList();
+                                    LabList = new List<double>();
+                                    foreach (string s in ss)
+                                    {
+                                        LabList.Add(dparse(s, ref convert));
+                                    }
+                                    if (LabList.Count == 1)
+                                        Lastbet = LabList[0];
+                                    else if (LabList.Count > 1)
+                                        Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                                }
+                            }
+                        }
+                    }
+
+
+                    //end labouchere logic
+
+
                     //do i use this line?
                     iMultiplyCounter++;
 
@@ -1443,6 +1561,32 @@ namespace DiceBot
                 {
                     Lastbet = (double)(nudPercentage.Value/(decimal)100.0) * dBalance;
                 }
+                if (chkLabEnable.Checked)
+                {
+                    if (LabList.Count == 1)
+                        Lastbet = LabList[0];
+                    else if (LabList.Count > 1)
+                        Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                    else
+                    {
+                        if (rdbLabStop.Checked)
+                            Stop();
+                        else
+                        {
+                            string[] ss = GetLabList();
+                            LabList = new List<double>();
+                            foreach ( string s in ss)
+                            {
+                                LabList.Add(dparse(s, ref convert));
+                            }
+                            if (LabList.Count == 1)
+                                Lastbet = LabList[0];
+                            else if (LabList.Count > 1)
+                                Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                        }
+
+                    }
+                }
                 if (RunningSimulation && Wins + Losses > nudSimNumBets.Value)
                 {
                     Stop();
@@ -1503,6 +1647,20 @@ namespace DiceBot
         }
 
     }
+
+        delegate string[] dGetLabList();
+        string[] GetLabList()
+        {
+            if (InvokeRequired)
+            {
+                return (string[])Invoke(new dGetLabList(GetLabList));
+                
+            }
+            else
+            {
+                return rtbBets.Lines;
+            }
+        }
 
         bool RunningSimulation = false;
         private void tmBet_Tick(object sender, EventArgs e)
@@ -1607,6 +1765,10 @@ namespace DiceBot
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            /*if (CurrentSite is PD)
+            {
+                (CurrentSite as PD).ispd = false;
+            }*/
             save();
             if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
             {
@@ -1634,11 +1796,7 @@ namespace DiceBot
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if (CurrentSite is PRC)
-            {
-                GeckoSelectElement gse = new GeckoSelectElement(gckBrowser.Document.GetElementById("diceCurrencyValue").DomObject);
-                Currency = gse.SelectedIndex;
-            }
+           
            
             if ((sender as Button).Name.ToUpper().Contains("HIGH"))
             {
@@ -1752,6 +1910,7 @@ namespace DiceBot
                 
             }
         }
+        
         void save(string file)
         {
             using (StreamWriter sw = new StreamWriter(file))
@@ -1885,6 +2044,21 @@ namespace DiceBot
                     sw.WriteLine("MKIncrement|" + nudMKIncrement.Value.ToString());
                     sw.WriteLine("MKDecrement|" + nudMKDecrement.Value.ToString());
                     sw.WriteLine("MKEnabled|" + (chkMK.Checked ? "1" : "0"));
+
+                    sw.WriteLine("LabEnabled|" + (chkLabEnable.Checked ? "1" : "0"));
+                    sw.WriteLine("LabReverse|" + (chkReverseLab.Checked ? "1" : "0"));
+                    string labtmp = "";
+                    foreach (string s in rtbBets.Lines)
+                    {
+                        if (labtmp != "")
+                            labtmp += "?";
+                        labtmp += s;
+                    }
+                    sw.WriteLine("LabValues|" + labtmp);
+
+                    //rdbLabRestart.Checked = ("1" == getvalue(saveditems, "LabComplete"));
+                    //rdbLabStop.Checked = ("2" == getvalue(saveditems, "LabComplete"));
+                    sw.WriteLine("LabComplete|" + (rdbLabStop.Checked ? "2" : "1"));
 
                     #region old save, Not applicable
                     /*string msg = "";
@@ -2310,6 +2484,18 @@ namespace DiceBot
                     {
                         btnStratRefresh_Click(btnStratRefresh, new EventArgs() );
                     }
+
+                    chkLabEnable.Checked = ("1" == getvalue(saveditems, "LabEnabled"));
+                    chkReverseLab.Checked = ("1" == getvalue(saveditems, "LabReverse"));
+
+                   string[] tmp =getvalue(saveditems, "LabValues").Split('?');
+                    if (tmp.Length>0)
+                    { 
+                        if (tmp[0]!="0-0-0")
+                            rtbBets.Lines = getvalue(saveditems, "LabValues").Split('?');
+                    }
+                    rdbLabRestart.Checked = ("1" == getvalue(saveditems, "LabComplete"));
+                    rdbLabStop.Checked = ("2" == getvalue(saveditems, "LabComplete"));
                 }
 
                 
@@ -3738,11 +3924,17 @@ namespace DiceBot
         private void cmbSite_SelectedIndexChanged(object sender, EventArgs e)
         {
             string url = txtSecretURL.Text.ToLower().Replace("http://", "").Replace("https://", "");
+            /*if (CurrentSite is PD)
+            {
+                (CurrentSite as PD).ispd = false;
+            }*/
             switch (cmbSite.SelectedIndex)
             {
                 case 0: CurrentSite = new JD(); if (!(url.StartsWith("just-dice.com") || url.StartsWith("www.just-dice.com"))){gckBrowser.Navigate("just-dice.com");} break;
 
-                case 1: CurrentSite = new PRC(); if (!(url.StartsWith("prcdice.eu") || url.StartsWith("www.prcdice.eu"))) { gckBrowser.Navigate("prcdice.eu?af=seuntjie"); } break;
+                case 1: CurrentSite = new PRC(); if (!(url.StartsWith("prcdice.eu") || url.StartsWith("prcdice.eu"))) { gckBrowser.Navigate("https://prcdice.eu/ref/357"); } break;//############
+                    //############################################
+                    //############################################
 
                 case 2: CurrentSite = new D999(); if (!(url.StartsWith("999dice.com") || url.StartsWith("www.999dice.com"))) { gckBrowser.Navigate("www.999dice.com/?20073598"); } break;
 
@@ -3806,6 +3998,47 @@ namespace DiceBot
                     "Select a folder with some exported strategies in and click refresh. The usable files will be identified and the strategies loaded. You can now switch between them using the drop down menu.");
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            /*CurrentSite = new PD();
+            CurrentSite.Login("","", gckBrowser);*/
+        }
+
+        private void btnBrowseLab_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofdLab = new OpenFileDialog();
+            if (ofdLab.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (File.Exists(ofdLab.FileName))
+                try
+                {
+                    string s = File.ReadAllText(ofdLab.FileName);
+                    string[] ss = s.Split('\n');
+                    foreach (string sss in ss)
+                    {
+                        dparse(sss, ref convert);
+                        if (!convert)
+                            break;
+                    }
+                    if (convert)
+                    {
+                        rtbBets.Text = s;
+                        
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid bets file. Please make sure there are only bets in the file, 1 per line. NO other characters are permitted.");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Invalid bets file. Please make sure there are only bets in the file, 1 per line. NO other characters are permitted.");
+                }
+            }
+        }
+
+        
 
     }
 

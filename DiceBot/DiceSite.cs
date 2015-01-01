@@ -6,6 +6,9 @@ using Gecko;
 using Gecko.DOM;
 using System.Security.Cryptography;
 using System.Globalization;
+using System.Web;
+using System.Net;
+using System.IO;
 namespace DiceBot
 {
     public abstract class DiceSite
@@ -80,15 +83,20 @@ namespace DiceBot
         }
     }
 
-    public class PRC : DiceSite
+    public class PRC_old : DiceSite
     {
-        public PRC()
+        double currentbet = 0;
+        double lastbet = 0;
+        DateTime dtlastbet = new DateTime();
+
+        public PRC_old()
         {
             AutoInvest = false;
             AutoWithdraw = false;
             ChangeSeed = true;
             AutoLogin = false;
             this.Name = "PRC";
+            dtlastbet = DateTime.Now;
         }
 
         public override void PlaceBet(bool high, Gecko.GeckoWebBrowser gckBrowser)
@@ -102,6 +110,8 @@ namespace DiceBot
             {
                 gckBrowser.Navigate("javascript:var cusid_ele = document.getElementsByClassName('btn btn-primary btn-large diceLoButton'); for (var i = 0; i < cusid_ele.length; ++i) { var item = cusid_ele[i];   item.click();}");
             }
+            lastbet = currentbet;
+            dtlastbet = DateTime.Now;
         }
 
         public override void SetChance(string Chance, Gecko.GeckoWebBrowser gckBrowser)
@@ -114,6 +124,9 @@ namespace DiceBot
         {
             GeckoInputElement gieBet = new GeckoInputElement(gckBrowser.Document.GetElementById("diceBetAmount").DomObject);
             gieBet.Value = Amount.ToString("0.00000000").Replace(',', '.');
+            currentbet = Amount;
+            if (lastbet == 0)
+                lastbet = Amount;
         }
 
         public override void ResetSeed(Gecko.GeckoWebBrowser gckBrowser)
@@ -165,7 +178,35 @@ namespace DiceBot
             if (!gieBet.GetAttribute("style").ToLower().Contains("none"))
             {
                 System.Threading.Thread.Sleep(100);
-                return true;
+                double millis = (DateTime.Now - dtlastbet).TotalMilliseconds;
+                bool ready = false;
+                if (lastbet < 0.00000010 || currentbet < 0.00000010)
+                {
+                    ready = millis > 1000;
+                }
+                else if (lastbet < 0.0000010 || currentbet < 0.0000010)
+                {
+                    ready = millis > 800;
+                }
+                else if (lastbet < 0.000010 || currentbet < 0.000010)
+                {
+                    ready = millis > 600;
+                }
+                else if (lastbet < 0.00010 || currentbet < 0.00010)
+                {
+                    ready = millis > 400;
+                }
+                else if (lastbet < 0.0010 || currentbet < 0.0010)
+                {
+                    ready = millis > 200;
+                }
+                else
+                {
+                    ready = true;
+                }
+
+                return ready;
+                
             }
             else
                 return false;
@@ -345,77 +386,7 @@ namespace DiceBot
 
 
     //fuck primedice and their stupid ember shit!
-    public class PD : DiceSite
-    {
-        public PD()
-        {
-            AutoInvest = false;
-            AutoWithdraw = false;
-            ChangeSeed = false;
-        }
-
-        public override void PlaceBet(bool High, GeckoWebBrowser gckBrowser)
-        {
-
-            GeckoNodeCollection ctrls = gckBrowser.Document.GetElementsByClassName("btn btn--primary btn--huge btn--limited btn--block text--center");
-            GeckoInputElement gie = null;
-            foreach (GeckoNode gn in ctrls)
-            {
-                gie = new GeckoInputElement(gn.DomObject);
-            }
-            gie.Click();
-            
-        }
-
-        public override void SetChance(string Chance, GeckoWebBrowser gckBrowser)
-        {
-            GeckoInputElement gieChance = new GeckoInputElement(gckBrowser.Document.GetElementById("ember2802").DomObject);
-            gieChance.Value = Chance;
-        }
-
-        public override void SetAmount(double Amount, GeckoWebBrowser gckBrowser)
-        {
-            GeckoInputElement gieAmount = new GeckoInputElement(gckBrowser.Document.GetElementById("ember768").DomObject);
-            gieAmount.Value = Amount.ToString("0.00000000");
-
-        }
-
-        public override void ResetSeed(GeckoWebBrowser gckBrowser)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetClientSeed(string Seed, GeckoWebBrowser gckBrowser)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetbalanceValue(GeckoWebBrowser gckBrowser)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetSiteProfitValue(GeckoWebBrowser gckBrowser)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetTotalBets(GeckoWebBrowser gckBrowser)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetMyProfit(GeckoWebBrowser gckBrowser)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ReadyToBet(GeckoWebBrowser gckBrowser)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
+   
     public class D999 : DiceSite
     {
         public D999()
@@ -591,7 +562,6 @@ namespace DiceBot
             }
         }
     }
-
 
     public class SafeDice: DiceSite
     {
@@ -977,4 +947,175 @@ namespace DiceBot
             return 0;
         }
     }
+
+    public class PRC : DiceSite
+    {
+        double currentbet = 0;
+        double lastbet = 0;
+        DateTime dtlastbet = new DateTime();
+        string lastablance = "";
+        public PRC()
+            : base()
+        {
+            AutoInvest = false;
+            AutoWithdraw = false;
+            AutoLogin = false;
+            ChangeSeed = false;
+            Name = "prc2";
+            dtlastbet = DateTime.Now;
+        }
+
+        public override void PlaceBet(bool High, GeckoWebBrowser gckBrowser)
+        {
+            if (High)
+            {
+                GeckoInputElement gieBetHigh = new GeckoInputElement(gckBrowser.Document.GetElementById("betHiButton").DomObject);
+                gieBetHigh.Click();
+
+            }
+            else
+            {
+                GeckoInputElement gieBetHigh = new GeckoInputElement(gckBrowser.Document.GetElementById("betLoButton").DomObject);
+                gieBetHigh.Click();
+            }
+            lastbet = currentbet;
+            
+        }
+
+        public override void SetChance(string Chance, Gecko.GeckoWebBrowser gckBrowser)
+        {
+            GeckoInputElement gie = new GeckoInputElement(gckBrowser.Document.GetElementById("betChance").DomObject);
+            gie.Value = Chance;
+            using (AutoJSContext Context = new AutoJSContext(gckBrowser.Window.JSContext))
+            {
+                string JSresult = "";
+                Context.EvaluateScript("$(\"#betChance\").change();", (nsISupports)gckBrowser.Window.DomWindow, out JSresult);
+            }
+        }
+
+        public override void SetAmount(double Amount, Gecko.GeckoWebBrowser gckBrowser)
+        {
+            GeckoInputElement gieBet = new GeckoInputElement(gckBrowser.Document.GetElementById("betAmount").DomObject);
+            gieBet.Value = Amount.ToString("0.00000000").Replace(',', '.');
+            currentbet = Amount;
+            if (lastbet == 0)
+                lastbet = currentbet;
+            using (AutoJSContext Context = new AutoJSContext(gckBrowser.Window.JSContext))
+            {
+                string JSresult = "";
+                Context.EvaluateScript("$(\"#betAmount\").change();", (nsISupports)gckBrowser.Window.DomWindow, out JSresult);
+            }
+        }
+
+        public override void ResetSeed(GeckoWebBrowser gckBrowser)
+        {
+            GeckoNodeCollection btns = gckBrowser.Document.GetElementsByClassName("btn btn-default btn-sm btn-block");
+            foreach (GeckoNode gn in btns)
+            {
+                GeckoInputElement gieSeed = new GeckoInputElement(gn.DomObject);
+                if (gieSeed.TextContent.ToLower() == "generate new server seed")
+                {
+                    gieSeed.Click();
+
+                }
+
+            }
+
+        }
+
+        public override void SetClientSeed(string Seed, GeckoWebBrowser gckBrowser)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetbalanceValue(GeckoWebBrowser gckBrowser)
+        {
+            GeckoDivElement gieBalance = new GeckoDivElement(gckBrowser.Document.GetElementById("userBalance").DomObject);
+
+            string sBalance = gieBalance.InnerHtml;
+            
+            if (lastablance != sBalance)
+            {
+                lastablance = sBalance;
+                dtlastbet = DateTime.Now;
+            }
+
+            return sBalance;
+        }
+
+        public override string GetSiteProfitValue(GeckoWebBrowser gckBrowser)
+        {
+            try
+            {
+                GeckoDivElement gieBalance = new GeckoDivElement(gckBrowser.Document.GetElementById("siteProfit").DomObject);
+
+                string sBalance = gieBalance.InnerHtml;
+                
+                return sBalance;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        public override string GetTotalBets(GeckoWebBrowser gckBrowser)
+        {
+            GeckoDivElement gieBalance = new GeckoDivElement(gckBrowser.Document.GetElementById("myTotalBets").DomObject);
+
+            string sBalance = gieBalance.InnerHtml;
+            
+            return sBalance;
+        }
+
+        public override string GetMyProfit(GeckoWebBrowser gckBrowser)
+        {
+            GeckoDivElement gieBalance = new GeckoDivElement(gckBrowser.Document.GetElementById("myProfit").DomObject);
+
+            string sBalance = gieBalance.InnerHtml;
+            
+            return sBalance;
+        }
+
+        public override bool ReadyToBet(GeckoWebBrowser gckBrowser)
+        {
+            double millis = (DateTime.Now - dtlastbet).TotalMilliseconds;
+            bool ready = true;
+
+            if (lastbet <= 0.0010 || currentbet <= 0.0010)
+            {
+                ready = millis > 200;
+            } 
+            if (lastbet <= 0.00010 || currentbet <= 0.00010)
+            {
+                ready = millis > 400;
+            }
+            if (lastbet <= 0.000010 || currentbet <= 0.000010)
+            {
+                ready = millis > 600;
+            }
+            
+            if (lastbet <= 0.0000010 || currentbet <= 0.0000010)
+            {
+                ready = millis > 800;
+            }
+            
+            if (lastbet <= 0.00000010 || currentbet <= 0.00000010)
+            {
+                ready = millis > 1000;
+            }
+            
+            
+
+            return ready;
+        }
+
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            server = nonce + ":" + server + ":" + nonce;
+            client = nonce + ":" + client;
+            return base.GetLucky(server, client, nonce);
+        }
+    }
+
 }
