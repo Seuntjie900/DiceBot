@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System;
 
 namespace DiceBot
 {
@@ -26,6 +27,29 @@ namespace DiceBot
             string jsonString = Encoding.UTF8.GetString(ms.ToArray());
             ms.Close();
             return jsonString;
+        }
+        public static string ToDateString(DateTime Value)
+        {
+            TimeSpan dt = Value - DateTime.Parse("1970/01/01 00:00:00");
+            double mili = dt.TotalMilliseconds;
+            return ((long)mili).ToString();
+
+        }
+
+        public static DateTime ToDateTime2(string milliseconds)
+        {
+            try
+            {
+                DateTime dotNetDate = new DateTime(1970, 1, 1);
+                dotNetDate = dotNetDate.AddMilliseconds(Convert.ToInt64(milliseconds));
+                return dotNetDate;
+            }
+            catch
+            {
+                string s = milliseconds.ToLower().Replace("z", " ").Replace("t", " ");
+                DateTime dotNetDate = DateTime.Parse(s);
+                return dotNetDate;
+            }
         }
 
     }

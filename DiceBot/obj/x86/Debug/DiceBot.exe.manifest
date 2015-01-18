@@ -43,41 +43,50 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="589312">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="602112">
       <assemblyIdentity name="DiceBot" version="2.5.5.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>+K3VTqqqyNmbb16P991VN6e4W0w=</dsig:DigestValue>
+        <dsig:DigestValue>oMnLYp5ZIIGozrf4FJQUCC2yKYU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Geckofx-Core.dll" size="1421312">
-      <assemblyIdentity name="Geckofx-Core" version="29.0.11.0" publicKeyToken="3209AC31600D1857" language="neutral" processorArchitecture="x86" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="JDCAPI.dll" size="59904">
+      <assemblyIdentity name="JDCAPI" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>J+eW7xJ51m2tod0o1scjAamt0Pk=</dsig:DigestValue>
+        <dsig:DigestValue>rEZnp7jggOPIJWFq+b8JydcSUjk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Geckofx-Winforms.dll" size="134144">
-      <assemblyIdentity name="Geckofx-Winforms" version="29.0.11.0" publicKeyToken="3209AC31600D1857" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Data.SQLite.dll" size="275968">
+      <assemblyIdentity name="System.Data.SQLite" version="1.0.94.0" publicKeyToken="DB937BC2D44FF139" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>6iwyfR71k0714AaVAXt055k2l+Q=</dsig:DigestValue>
+        <dsig:DigestValue>rJlQg0ggntkuyNYaeOJe51u2aNk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
+  <file name="DiceBot.exe.config" size="934">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>fkTPvbLiFKUSPQRTb1QVovVkzQo=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="red-dice-icon.ico" size="132542">
     <hash>
       <dsig:Transforms>

@@ -1,3 +1,0 @@
-# PSM Certificate Override Settings file
-# This is a generated file!  Do not edit.
-test.prcdice.eu:443	OID.2.16.840.1.101.3.4.2.1	3E:5D:09:9E:6C:B6:8F:77:3E:8B:88:6E:83:9C:CB:B0:3C:1D:84:14:A8:C1:BE:2A:11:C5:FD:31:67:2D:7D:27	M	AAAAAAAAAAAAAAAQAAAAhy0msbx67FNMmI7uzzEMFCcwgYQxOzA5BgNVBAsMMmdl  bmVyYXRlZCBieSBhdmFzdCEgYW50aXZpcnVzIGZvciBTU0wvVExTIHNjYW5uaW5n  MR8wHQYDVQQKDBZhdmFzdCEgV2ViL01haWwgU2hpZWxkMSQwIgYDVQQDDBthdmFz  dCEgV2ViL01haWwgU2hpZWxkIFJvb3Q=

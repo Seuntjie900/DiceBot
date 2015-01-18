@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Gecko;
-using Gecko.DOM;
+
 using System.Security.Cryptography;
 using System.Globalization;
 using System.Web;
@@ -13,35 +12,54 @@ namespace DiceBot
 {
     public abstract class DiceSite
     {
+        protected cDiceBot Parent;
         public bool AutoWithdraw { get; set; }
         public bool AutoInvest { get; set; }
         public bool ChangeSeed {get;set;}
         public bool AutoLogin { get; set; }
+        public decimal edge = 1;
         public string Name { get; protected set; }
-        public abstract void PlaceBet(bool High, Gecko.GeckoWebBrowser gckBrowser);
-        public abstract void SetChance(string Chance, Gecko.GeckoWebBrowser gckBrowser);
-        public abstract void SetAmount(double Amount, Gecko.GeckoWebBrowser gckBrowser);
-        public abstract void ResetSeed(Gecko.GeckoWebBrowser gckBrowser);
-        public abstract void SetClientSeed(string Seed, Gecko.GeckoWebBrowser gckBrowser);
-        public virtual bool Invest(double Amount, int Counter, string secretURL, GeckoWebBrowser gckBrowser)
+        public double chance = 0;
+        protected double amount = 0;
+        protected double balance = 0;
+        protected int bets = 0;
+        protected double profit = 0;
+        protected double siteprofit = 0;
+        protected bool High = false;
+        public abstract void PlaceBet(bool High);
+        public abstract void SetChance(string Chance);
+        public abstract void SetAmount(double Amount);
+        public abstract void ResetSeed();
+        public abstract void SetClientSeed(string Seed);
+        public virtual bool Invest(double Amount, int Counter)
         {
             return true;
 
         }
-        public virtual bool Withdraw(double Amount, string Address, int Counter, string secretURL, GeckoWebBrowser gckBrowser)
+        public virtual bool Withdraw(double Amount, string Address, int Counter)
         {
             return true;
         }
-        public virtual bool Login(string Username, string Password, GeckoWebBrowser gckBrowser)
+        public virtual bool Login(string Username, string Password)
         {
             return true;
 
         }
-        public abstract string GetbalanceValue(Gecko.GeckoWebBrowser gckBrowser);
-        public abstract string GetSiteProfitValue(Gecko.GeckoWebBrowser gckBrowser);
-        public abstract string GetTotalBets(Gecko.GeckoWebBrowser gckBrowser);
-        public abstract string GetMyProfit(Gecko.GeckoWebBrowser gckBrowser);
-        public abstract bool ReadyToBet(Gecko.GeckoWebBrowser gckBrowser);
+        public virtual bool Login(string Username, string Password, string twofa)
+        {
+            return true;
+
+        }
+        public virtual bool Register(string username, string password)
+        {
+            return false;
+        }
+        public abstract string GetbalanceValue();
+        public abstract string GetSiteProfitValue();
+        public abstract string GetTotalBets();
+        public abstract string GetMyProfit();
+        public abstract bool ReadyToBet();
+        public string BetURL = "";
         public virtual double GetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
@@ -83,7 +101,7 @@ namespace DiceBot
         }
     }
 
-    public class PRC_old : DiceSite
+    /*public class PRC_old : DiceSite
     {
         double currentbet = 0;
         double lastbet = 0;
@@ -218,9 +236,9 @@ namespace DiceBot
             client = nonce + ":" + client;
             return base.GetLucky(server, client, nonce);
         }
-    }
+    }*/
 
-    public class JD : DiceSite
+    /*public class JD : DiceSite
     {
         public JD()
         {
@@ -383,11 +401,11 @@ namespace DiceBot
             }
         }
     }
-
+    */
 
     //fuck primedice and their stupid ember shit!
    
-    public class D999 : DiceSite
+    /*public class D999 : DiceSite
     {
         public D999()
         {
@@ -561,9 +579,9 @@ namespace DiceBot
                 }
             }
         }
-    }
+    }*/
 
-    public class SafeDice: DiceSite
+    /*public class SafeDice: DiceSite
     {
         
         double lastamount = 0;
@@ -946,9 +964,9 @@ namespace DiceBot
             }
             return 0;
         }
-    }
+    }*/
 
-    public class PRC : DiceSite
+    /*public class PRC : DiceSite
     {
         double currentbet = 0;
         double lastbet = 0;
@@ -1116,6 +1134,6 @@ namespace DiceBot
             client = nonce + ":" + client;
             return base.GetLucky(server, client, nonce);
         }
-    }
+    }*/
 
 }
