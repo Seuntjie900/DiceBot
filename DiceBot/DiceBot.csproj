@@ -119,6 +119,7 @@
     <Compile Include="Graph.Designer.cs">
       <DependentUpon>Graph.cs</DependentUpon>
     </Compile>
+    <Compile Include="imgur.cs" />
     <Compile Include="JD.cs" />
     <Compile Include="json.cs" />
     <Compile Include="Messagehelpr.cs" />

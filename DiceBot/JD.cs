@@ -17,7 +17,14 @@ namespace DiceBot
             BetURL = "https://just-dice.com/bets/";
             Instance.OnResult += Instance_OnResult;
             Instance.OnAddress += Instance_OnAddress;
+            Instance.OnJDError += Instance_OnJDError;
             this.Parent = Parent;
+            Name = "JustDice";
+        }
+
+        void Instance_OnJDError(Various Error)
+        {
+            Parent.updateStatus(Error.args[0]);
         }
 
         void Instance_OnAddress(Various Address)
@@ -43,6 +50,7 @@ namespace DiceBot
 
         public override void PlaceBet(bool High)
         {
+            Parent.updateStatus("Betting " + amount + " at " + chance + " " + (High?"High":"Low"));
             Instance.Bet(chance, amount, High);
         }
 
@@ -58,6 +66,7 @@ namespace DiceBot
 
         public override void ResetSeed()
         {
+            Parent.updateStatus("Resetting Seed");
             Instance.Randomize();
         }
 
@@ -91,14 +100,18 @@ namespace DiceBot
             return true;
         }
 
-        public override bool Invest(double Amount, int Counter)
+        public override bool Invest(double Amount)
         {
+            Parent.updateStatus(string.Format("Investing {0:0.00000000}", Amount));
             Instance.Invest(Amount,0);
+            System.Threading.Thread.Sleep(1500);
             return true;
         }
-        public override bool Withdraw(double Amount, string Address, int Counter)
+        public override bool Withdraw(double Amount, string Address)
         {
+            Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
             Instance.Withdraw(Address, Amount ,"");
+            System.Threading.Thread.Sleep(1500);
             return true;
         }
         public override bool Login(string Username, string Password, string twoFa)

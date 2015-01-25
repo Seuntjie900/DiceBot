@@ -7,105 +7,63 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-
 namespace DiceBot
 {
     public partial class Graph : Form
     {
-        dataset Data;
-        Graphics graph;
-        bool timestamps = false;
-        Random R = new Random();
-        string tmpName = "";
-        public Graph()
+        
+        decimal Profit = 0;
+        long betcount = 0;
+        public Graph(Bet[] _Bets)
         {
             InitializeComponent();
-            graph = pnlGraph.CreateGraphics();
-            drawgraph(graph);
-        }
-
-        public Graph(dataset data, bool timestamps)
-        {
-            InitializeComponent();
-            graph = pnlGraph.CreateGraphics();
-            Data = data;
-            this.timestamps = timestamps;
-            drawgraph(graph);
-        }
-
-        void drawgraph(Graphics graph)
-        {
-            Chart tmp = new Chart();
-            tmp.ChartAreas.Add(new ChartArea(""));
-            Series bets = new Series("");
-            bets.Name = "";
-
-            bets.LegendText = "";
-            bets.IsVisibleInLegend = true;
-            tmp.ChartAreas[0].AxisX.Minimum = 0;
-            tmp.ChartAreas[0].AxisX.Title = "Bets";
-            tmp.ChartAreas[0].AxisY.Title = "Profit (Btc)";
-            tmp.ChartAreas[0].AxisY2.Title = "Wagered";
-            tmp.Legends.Add(bets.Legend);
-
-            for (int i = 0; i < Data.XValues.Length; i++)
-            {
-                bets.Points.Add(new DataPoint(Data.XValues[i], Data.YValues[i]));
-            }
-            bets.ChartType = SeriesChartType.Line;
-            tmp.Size = new System.Drawing.Size(1500, 800);
-            tmp.Series.Add(bets);
-            tmpName = "tmp_" + R.Next(9999999).ToString() + ".png";
-
-            tmp.SaveImage(tmpName, ChartImageFormat.Png);
-           
-        }
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            if (svdChart.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                using (Bitmap b = new Bitmap(850, 750))
+            Series Bets;
+            Bets = new Series("Profit");
+            Bets.ChartType = SeriesChartType.Line;
+             chrtProfitChart.ChartAreas[0].AxisX.Minimum = 0;
+            chrtProfitChart.ChartAreas[0].AxisX.Title = "Bets";
+            
+            chrtProfitChart.ChartAreas[0].AxisY.Title = "Profit (Btc)";
+            chrtProfitChart.ChartAreas[0].AxisY2.Title = "Wagered";
+            chrtProfitChart.Legends.Add(Bets.Legend);
+            if (_Bets!=null)
+            { 
+                foreach (Bet NewBet in _Bets)
                 {
-                    using (Graphics graph = Graphics.FromImage(b))
-                    {
-                        drawgraph(graph);
-                    }
-                    b.Save(svdChart.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                    Bets.Points.Add(new DataPoint(++betcount, (double)(Profit += NewBet.Profit)));
                 }
             }
+            chrtProfitChart.Series.Add(Bets);
+
+            //chrtProfitChart.Show();
         }
 
-        private void pnlGraph_Paint(object sender, PaintEventArgs e)
+        public void AddBet(Bet NewBet)
         {
-            try
-            {
-                graph.DrawImage(new Bitmap(tmpName), new Point(0, 0));
-            }
-            catch
-            {
-
-            }
-            
+            chrtProfitChart.Series[0].Points.Add(new DataPoint(++betcount, (double)(Profit += NewBet.Profit)));
+            //chrtProfitChart.Show();
         }
 
-        
-        private void btnClose_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "(*.png)|*.png";
+            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                textBox1.Text = sfd.FileName;
+                //chrtProfitChart.SaveImage( sfd.FileName+ ".png", ChartImageFormat.Png);
+            }
         }
 
-
-    }
-
-    public class dataset
-    {
-        public string XAxis { get; set; }
-
-        public string YAxis { get; set; }
-
-        public double[] XValues { get; set; }
-
-        public double[] YValues { get; set; }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            chrtProfitChart.SaveImage(textBox1.Text+ ".png", ChartImageFormat.Png);
+            if (checkBox1.Checked)
+            {
+                string url = imgur.UploadImage(textBox1.Text+ ".png");
+                if (url!="" && url!= null)
+                System.Diagnostics.Process.Start(url);
+            }
+        }
     }
 }

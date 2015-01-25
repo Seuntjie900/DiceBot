@@ -31,12 +31,12 @@ namespace DiceBot
         public abstract void SetAmount(double Amount);
         public abstract void ResetSeed();
         public abstract void SetClientSeed(string Seed);
-        public virtual bool Invest(double Amount, int Counter)
+        public virtual bool Invest(double Amount)
         {
             return true;
 
         }
-        public virtual bool Withdraw(double Amount, string Address, int Counter)
+        public virtual bool Withdraw(double Amount, string Address)
         {
             return true;
         }

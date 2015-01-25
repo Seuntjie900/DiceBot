@@ -24,8 +24,9 @@ namespace DiceBot
     public partial class cDiceBot : Form
     {
         private const string vers = "2.5.5";
-
+        DateTime OpenTime = DateTime.UtcNow;
         Random r = new Random();
+        Graph LiveGraph;
         #region Variables
         Random rand = new Random();
         bool retriedbet = false;
@@ -131,7 +132,7 @@ namespace DiceBot
 
         public cDiceBot()
         {
-            sqlite_helper tmp = new sqlite_helper();
+            sqlite_helper.CheckDBS();
             if (!Directory.Exists("data"))
             {
                 Directory.CreateDirectory("data");
@@ -694,11 +695,11 @@ namespace DiceBot
         void Withdraw()
         {
             if (CurrentSite.AutoWithdraw)
-                if (CurrentSite.Withdraw(dparse(txtAmount.Text, ref convert), txtTo.Text, waiter++))
+                if (CurrentSite.Withdraw(dparse(txtAmount.Text, ref convert), txtTo.Text))
                 {
 
-                    withdraw = false;
-                    TrayIcon.BalloonTipText = "Withdraw " + txtAmount.Text + "Complete\nRestarting Bets";
+                    //withdraw = false;
+                    TrayIcon.BalloonTipText = "Withdraw " + txtAmount.Text + " Complete\nRestarting Bets";
                     TrayIcon.ShowBalloonTip(1000);
                     try
                     {
@@ -727,10 +728,10 @@ namespace DiceBot
                     {
                         MessageBox.Show("Failed to play CHING, pelase make sure file exists");
                     }
-                    withdrew = true;
+                    //withdrew = true;
                     Emails.SendWithdraw(Amount, PreviousBalance - Amount, txtTo.Text);
                     StartBalance -= Amount;
-                    Start(true);
+                    //Start(true);
                 }
         }
 
@@ -739,9 +740,9 @@ namespace DiceBot
 
             if (CurrentSite.AutoInvest)
             {
-                if (CurrentSite.Invest(dparse(txtAmount.Text, ref convert), waiter++))
+                if (CurrentSite.Invest(dparse(txtAmount.Text, ref convert)))
                 {
-                    invest = false;
+                    //invest = false;
                     TrayIcon.BalloonTipText = "Invest " + txtAmount.Text + "Complete\nRestarting Bets";
                     TrayIcon.ShowBalloonTip(1000);
                     try
@@ -772,11 +773,11 @@ namespace DiceBot
                         MessageBox.Show("Failed to play CHING, pelase make sure file exists");
                     }
                     
-                    withdrew = true;
+                    //withdrew = true;
                     bool success = false;
                     Emails.SendInvest(Amount, Getbalance(out success), dparse("-0", ref convert));
                     StartBalance -= Amount;
-                    Start(true);
+                    //Start(true);
                 }
 
             }
@@ -884,15 +885,7 @@ namespace DiceBot
                         myprofit = CurrentSite.GetMyProfit().Replace(",", "");
                         dprof = dparse(myprofit, ref convert);
 
-                        if (!RunningSimulation)
-                        {
-                            writeprofitbet((int)dbets, dprof);
-                            writeprofittime(DateTime.Now, dprof);
-                            writecurrentprofitbet(Wins + Losses, profit);
-                            writecurrentprofittime(DateAndTime.Now, profit);
-                            writebankrollbet((int)dbets, dBalance);
-                            writebankrolltime(DateTime.Now, dBalance);
-                        }
+                      
                     }
                     catch
                     {
@@ -951,7 +944,7 @@ namespace DiceBot
         public void DoBet(bool Win, double profit)
         {
             retriedbet = false;
-            if (!stop && !(withdraw || invest ||reset))
+            if (!stop && !reset)
             {
                 //double betresult = dBalance - PreviousBalance;
                 if (Win)
@@ -969,7 +962,7 @@ namespace DiceBot
                     LargestBet = Lastbet;
 
                 //if its a win
-                if (Win && !(withdraw || invest || reset))
+                if (Win && !(reset))
                 {
 
                     //do laboucghere logic
@@ -1199,7 +1192,7 @@ namespace DiceBot
                 }
 
                     //if its a loss
-                else if (!Win && !(withdraw || invest || reset))
+                else if (!Win && !(reset))
                 {
 
                     //do laboucghere logic
@@ -1447,14 +1440,12 @@ namespace DiceBot
                     }
                     else if (rdbWithdraw.Checked)
                     {
-                        withdraw = true;
-                        waiter = 0;
+                        Withdraw();
 
                     }
                     else if (rdbInvest.Checked)
                     {
-                        waiter = 0;
-                        invest = true;
+                        Invest();
 
                     }
                 }
@@ -1517,14 +1508,11 @@ namespace DiceBot
 
                     }
                 }
-                if (RunningSimulation && Wins + Losses > nudSimNumBets.Value)
+                if (RunningSimulation && (Wins + Losses > nudSimNumBets.Value || Lastbet>PreviousBalance))
                 {
                     Stop();
                 }
-                if (RunningSimulation && Lastbet>PreviousBalance)
-                {
-                    Stop();
-                }
+                
                 if (!(stop ||reset || withdraw ||invest))
                 {
                     //tmBet.Enabled = true;
@@ -3232,11 +3220,13 @@ namespace DiceBot
                 {
                     win = true;
                 }
+                double betProfit = 0;
                 if (win)
                 {
                     betstring += "win,";
                     betstring += Lastbet + ",";
-                    betstring += (Lastbet * 99 / Chance) - Lastbet + ",";
+                    betProfit = (Lastbet * 99 / Chance) - Lastbet;
+                    betstring += betProfit  + ",";
                     this.PreviousBalance = dPreviousBalance + (Lastbet * (99 / Chance));
 
                 }
@@ -3245,7 +3235,8 @@ namespace DiceBot
 
                     betstring += "lose,";
                     betstring += Lastbet + ",";
-                    betstring += -Lastbet + ",";
+                    betProfit = -Lastbet ;
+                    betstring +=  betProfit +",";
                     this.PreviousBalance = dPreviousBalance - Lastbet;
                 }
                 betstring += PreviousBalance + ",";
@@ -3268,7 +3259,11 @@ namespace DiceBot
                     }
                     tempsim.bets.Clear();
                 }
+
+                GetBetResult(PreviousBalance, win, betProfit);
             }
+            else
+                Stop();
             
         }
 
@@ -3471,12 +3466,11 @@ namespace DiceBot
         //button for generating random charts - for testing purposes
         private void button1_Click(object sender, EventArgs e)
         {
-            List<double> x = new List<double>();
-            List<double> y = new List<double>();
+            List<Bet> tmpBets = new List<Bet>();
             double previous = 0;
             for (int i = 0; i < r.Next(1000, 100000); i++)
             {
-                x.Add(i);
+                
                 int tmp = r.Next(0, 10);
                 if (tmp % 2 == 0)
                 {
@@ -3484,336 +3478,90 @@ namespace DiceBot
                 }
                 else
                     previous += tmp;
-                y.Add(previous);
+                tmpBets.Add(new Bet { Id = i, Profit = (decimal)previous });
             }
 
-            dataset ds = new dataset();
-            ds.XValues = x.ToArray();
-            ds.YValues = y.ToArray();
-            ds.XAxis = "Time/Bets";
-            ds.YAxis = "Profit/Loss/Wagered";
-            Graph g = new Graph(ds, false);
+            Graph g = new Graph(tmpBets.ToArray());
             g.Show();
         }
 
-        #region Store Chart Data
-
-        void writeprofitbet(int betnum, double profit)
-        {
-            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name+ "profitbet.txt"))
-            {
-                sw.WriteLine(betnum.ToString() + "|" + profit.ToString());
-            }
-        }
-
-        void writeprofittime(DateTime timestamp, double profit)
-        {
-            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "profittime.txt"))
-            {
-                sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
-            }
-        }
-
-        void writecurrentprofitbet(int betnum, double profit)
-        {
-            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "currentprofitbet.txt"))
-            {
-                sw.WriteLine(betnum.ToString() + "|" + profit.ToString());
-            }
-        }
-
-        void writecurrentprofittime(DateTime timestamp, double profit)
-        {
-            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "currentprofittime.txt"))
-            {
-                sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
-            }
-        }
-
-        void writesiteprofit(DateTime timestamp, double profit)
-        {
-            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "siteprofit.txt"))
-            {
-                sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
-            }
-        }
-
-        void writebankrollbet(int betnum, double profit)
-        {
-            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "bankrollbet.txt"))
-            {
-                sw.WriteLine(betnum.ToString() + "|" + profit.ToString());
-            }
-        }
-
-        void writebankrolltime(DateTime timestamp, double profit)
-        {
-            using (StreamWriter sw = File.AppendText("data\\"+CurrentSite.Name + "bankrolltime.txt"))
-            {
-                sw.WriteLine(timestamp.ToString() + "|" + profit.ToString());
-            }
-        }
-
-        #endregion
-
+    
 
         #region generate charts
 
 
-        private void tmrSiteProfit_Tick(object sender, EventArgs e)
+        
+        
+        private void btnChartBetID_Click(object sender, EventArgs e)
         {
-            try
-            {
-                string sBalance = "";
-                double siteBalance = 0;
-                sBalance = CurrentSite.GetSiteProfitValue().Replace(",", ".");
-                siteBalance = dparse(sBalance, ref convert);
-                
-                if (siteBalance != 0 && convert)
-                    writesiteprofit(DateTime.Now, siteBalance);
-            }
-            catch
-            {
-
-            }
+            Graph g = new Graph(sqlite_helper.GetBetForCharts(CurrentSite.Name, (long)nudGraphStartBetID.Value));
+            g.Show();
         }
 
-        void profitbet()
+        private void btnChartTimeRange_Click(object sender, EventArgs e)
         {
-            if (File.Exists("data\\"+CurrentSite.Name + "profitbet.txt"))
-            {
-                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "profitbet.txt"))
-                {
-                    List<double> x = new List<double>();
-                    List<double> y = new List<double>();
-                    while (!sr.EndOfStream)
-                    {
-                        string tmp = sr.ReadLine();
-                        x.Add(dparse(tmp.Split('|')[0], ref convert));
-                        y.Add(dparse(tmp.Split('|')[1], ref convert));
-                    }
-                    dataset ds = new dataset();
-                    ds.XAxis = "Bets";
-                    ds.YAxis = "Profit";
-                    ds.XValues = x.ToArray();
-                    ds.YValues = y.ToArray();
-                    new Graph(ds, false).Show();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Graph g = new Graph(sqlite_helper.GetBetForCharts(CurrentSite.Name, dtpStart.Value, dtpEnd.Value));
+            g.Show();
         }
-
-        void profittime()
-        {
-            if (File.Exists("data\\"+CurrentSite.Name + "profittime.txt"))
-            {
-                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "profittime.txt"))
-                {
-                    List<double> x = new List<double>();
-                    List<double> y = new List<double>();
-                    while (!sr.EndOfStream)
-                    {
-                        string tmp = sr.ReadLine();
-                        DateTime dt = DateTime.Parse(tmp.Split('|')[0]);
-                        x.Add(dt.Ticks);
-                        y.Add(dparse(tmp.Split('|')[1], ref convert));
-                    }
-                    dataset ds = new dataset();
-                    ds.XAxis = "Time";
-                    ds.YAxis = "Profit";
-                    ds.XValues = x.ToArray();
-                    ds.YValues = y.ToArray();
-                    new Graph(ds,true).Show();
-                }
-
-            }
-            else
-            {
-                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void currentprofitbet()
-        {
-            if (File.Exists("data\\"+CurrentSite.Name + "currentprofitbet.txt"))
-            {
-                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "currentprofitbet.txt"))
-                {
-                    List<double> x = new List<double>();
-                    List<double> y = new List<double>();
-                    while (!sr.EndOfStream)
-                    {
-                        string tmp = sr.ReadLine();
-                        x.Add(dparse(tmp.Split('|')[0], ref convert));
-                        y.Add(dparse(tmp.Split('|')[1], ref convert));
-                    }
-                    dataset ds = new dataset();
-                    ds.XAxis = "Bets";
-                    ds.YAxis = "Profit";
-                    ds.XValues = x.ToArray();
-                    ds.YValues = y.ToArray();
-                    new Graph(ds,false).Show();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void currentprofittime()
-        {
-            if (File.Exists("data\\"+CurrentSite.Name + "currentprofittime.txt"))
-            {
-                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "currentprofittime.txt"))
-                {
-                    List<double> x = new List<double>();
-                    List<double> y = new List<double>();
-                    while (!sr.EndOfStream)
-                    {
-                        string tmp = sr.ReadLine();
-                        DateTime dt = DateTime.Parse(tmp.Split('|')[0]);
-                        x.Add(dt.Ticks);
-                        y.Add(dparse(tmp.Split('|')[1], ref convert));
-                    }
-                    dataset ds = new dataset();
-                    ds.XAxis = "Time";
-                    ds.YAxis = "Profit";
-                    ds.XValues = x.ToArray();
-                    ds.YValues = y.ToArray();
-                    new Graph(ds,true).Show();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void sitebet()
-        {
-            if (File.Exists("data\\"+CurrentSite.Name + "siteprofit.txt"))
-            {
-                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "siteprofit.txt"))
-                {
-                    List<double> x = new List<double>();
-                    List<double> y = new List<double>();
-                    while (!sr.EndOfStream)
-                    {
-                        string tmp = sr.ReadLine();
-                        DateTime dt = DateTime.Parse(tmp.Split('|')[0]);
-                        x.Add(dt.Ticks);
-                        y.Add(dparse(tmp.Split('|')[1], ref convert));
-                    }
-                    dataset ds = new dataset();
-                    ds.XAxis = "Time";
-                    ds.YAxis = "Site Profit";
-                    ds.XValues = x.ToArray();
-                    ds.YValues = y.ToArray();
-                    new Graph(ds,true).Show();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Could not retrieve data. Please wait a few minutes so the bot can start collecting data", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void bankrollbet()
-        {
-            if (File.Exists("data\\"+CurrentSite.Name + "bankrollbet.txt"))
-            {
-                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "bankrollbet.txt"))
-                {
-                    List<double> x = new List<double>();
-                    List<double> y = new List<double>();
-                    while (!sr.EndOfStream)
-                    {
-                        string tmp = sr.ReadLine();
-                        x.Add(dparse(tmp.Split('|')[0], ref convert));
-                        y.Add(dparse(tmp.Split('|')[1], ref convert));
-                    }
-                    dataset ds = new dataset();
-                    ds.XAxis = "Bets";
-                    ds.YAxis = "Bankroll";
-                    ds.XValues = x.ToArray();
-                    ds.YValues = y.ToArray();
-                    new Graph(ds, false).Show();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void bankrolltime()
-        {
-            if (File.Exists("data\\"+CurrentSite.Name + "bankrolltime.txt"))
-            {
-                using (StreamReader sr = new StreamReader("data\\"+CurrentSite.Name + "bankrolltime.txt"))
-                {
-                    List<double> x = new List<double>();
-                    List<double> y = new List<double>();
-                    while (!sr.EndOfStream)
-                    {
-                        string tmp = sr.ReadLine();
-                        DateTime dt = DateTime.Parse(tmp.Split('|')[0]);
-                        x.Add(dt.Ticks);
-                        y.Add(dparse(tmp.Split('|')[1], ref convert));
-                    }
-                    dataset ds = new dataset();
-                    ds.XAxis = "Time";
-                    ds.YAxis = "Bankroll";
-                    ds.XValues = x.ToArray();
-                    ds.YValues = y.ToArray();
-                    new Graph(ds, true).Show();
-                }
-
-            }
-            else
-            {
-                MessageBox.Show("Could not retrieve data. Try placing a few bets first", "SORRY", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void btnGraphProfitBets_Click(object sender, EventArgs e)
         {
-            currentprofitbet();
+            bool created = false;
+            if (LiveGraph != null)
+            {
+                if (LiveGraph.IsDisposed)
+                {
+                    LiveGraph = new Graph(sqlite_helper.GetBetForCharts(CurrentSite.Name, OpenTime, DateTime.Now.AddYears(1)));
+                    LiveGraph.Show();
+                    created = true;
+                }
+            }
+            else
+            {
+                LiveGraph = new Graph(sqlite_helper.GetBetForCharts(CurrentSite.Name, OpenTime, DateTime.Now.AddYears(1)));
+                LiveGraph.Show();
+                created = true;
+            }
+            if (!created)
+                MessageBox.Show("Live chart is already open. Please close the current live chart window before opening a new one.");
+            //currentprofitbet();
         }
 
         private void btnGraphProfitTime_Click(object sender, EventArgs e)
         {
-            currentprofittime();
+            Graph g = new Graph(sqlite_helper.GetBetForCharts(CurrentSite.Name, OpenTime, OpenTime.AddYears(1)));
+            g.Show();
         }
 
         private void btnChartAllTimeProfitBets_Click(object sender, EventArgs e)
         {
-            profitbet();
+            bool created = false;
+            if (LiveGraph != null)
+            {
+                if (LiveGraph.IsDisposed)
+                {
+                    LiveGraph = new Graph(sqlite_helper.GetBetForCharts(CurrentSite.Name));
+                    LiveGraph.Show();
+                    created = true;
+                }
+            }
+            else
+            {
+                LiveGraph = new Graph(sqlite_helper.GetBetForCharts(CurrentSite.Name));
+                LiveGraph.Show();
+                created = true;
+            }
+            if (!created)
+                MessageBox.Show("Live chart is already open. Please close the current live chart window before opening a new one.");
+            
         }
 
         private void btnChartAllTimeProfitTime_Click(object sender, EventArgs e)
         {
-            profittime();
+            Graph g = new Graph(sqlite_helper.GetBetForCharts(CurrentSite.Name));
+            g.Show();
         }
 
-        private void btnSiteProfitTime_Click(object sender, EventArgs e)
-        {
-            sitebet();
-        }
 
-        private void btnChartBankrollBets_Click(object sender, EventArgs e)
-        {
-            bankrollbet();
-        }
-
-        private void btnChartsBankrollTime_Click(object sender, EventArgs e)
-        {
-            bankrolltime();
-        }
         #endregion
         #endregion
 
@@ -4124,6 +3872,10 @@ namespace DiceBot
             }
             else
             {
+                if (LiveGraph != null)
+                    if (!LiveGraph.IsDisposed)
+                        LiveGraph.AddBet(Bet as Bet);
+                sqlite_helper.AddBet(Bet as Bet, CurrentSite.Name);
                 BetsToShow.Insert(0, (Bet)Bet);
                 if (BetsToShow.Count>100)
                 {
@@ -4133,10 +3885,10 @@ namespace DiceBot
                 bs.DataSource = BetsToShow;
                 dataGridView1.DataSource = bs;
                 foreach (DataGridViewRow Myrow in dataGridView1.Rows)
-                {            //Here 2 cell is target value and 1 cell is Volume
+                {           
                     if (Myrow.Cells[6].Value != null)
                     {
-                        if ((decimal)Myrow.Cells[6].Value < 0)// Or your condition 
+                        if (((bool)Myrow.Cells[3].Value ? (decimal)Myrow.Cells[5].Value < 100m - (decimal)(Myrow.Cells[4].Value) : (decimal)Myrow.Cells[5].Value > (decimal)(Myrow.Cells[4].Value)))
                         {
                             Myrow.DefaultCellStyle.BackColor = Color.Pink;
                         }
@@ -4219,6 +3971,8 @@ namespace DiceBot
                 lblApiBetProfit.Text = ((nudApiBet.Value * nudApiPayout.Value) - nudApiBet.Value).ToString("0.00000000"); 
             }
         }
+
+        
 
         
 

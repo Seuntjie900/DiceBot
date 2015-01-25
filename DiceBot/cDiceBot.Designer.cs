@@ -218,11 +218,8 @@
             this.label26 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.tbCharts = new System.Windows.Forms.TabPage();
-            this.btnChartsBankrollTime = new System.Windows.Forms.Button();
-            this.btnChartBankrollBets = new System.Windows.Forms.Button();
             this.btnChartAllTimeProfitTime = new System.Windows.Forms.Button();
             this.btnChartAllTimeProfitBets = new System.Windows.Forms.Button();
-            this.btnSiteProfitTime = new System.Windows.Forms.Button();
             this.btnGraphProfitTime = new System.Windows.Forms.Button();
             this.btnGraphProfitBets = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -339,7 +336,6 @@
             this.ofdExport = new System.Windows.Forms.SaveFileDialog();
             this.tmrCheckInvest = new System.Windows.Forms.Timer(this.components);
             this.tmrSimulation = new System.Windows.Forms.Timer(this.components);
-            this.tmrSiteProfit = new System.Windows.Forms.Timer(this.components);
             this.tmBet = new System.Windows.Forms.Timer(this.components);
             this.pnlApiInfo = new System.Windows.Forms.Panel();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -390,6 +386,14 @@
             this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.label94 = new System.Windows.Forms.Label();
+            this.label95 = new System.Windows.Forms.Label();
+            this.label96 = new System.Windows.Forms.Label();
+            this.dtpStart = new System.Windows.Forms.DateTimePicker();
+            this.dtpEnd = new System.Windows.Forms.DateTimePicker();
+            this.nudGraphStartBetID = new System.Windows.Forms.NumericUpDown();
+            this.btnChartBetID = new System.Windows.Forms.Button();
+            this.btnChartTimeRange = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -464,6 +468,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -1126,9 +1131,9 @@
             this.lblMinBet.AutoSize = true;
             this.lblMinBet.Location = new System.Drawing.Point(15, 59);
             this.lblMinBet.Name = "lblMinBet";
-            this.lblMinBet.Size = new System.Drawing.Size(70, 13);
+            this.lblMinBet.Size = new System.Drawing.Size(65, 13);
             this.lblMinBet.TabIndex = 63;
-            this.lblMinBet.Text = "Minimum Bet:";
+            this.lblMinBet.Text = "Starting Bet:";
             // 
             // tabControl2
             // 
@@ -2554,11 +2559,16 @@
             // 
             // tbCharts
             // 
-            this.tbCharts.Controls.Add(this.btnChartsBankrollTime);
-            this.tbCharts.Controls.Add(this.btnChartBankrollBets);
+            this.tbCharts.Controls.Add(this.btnChartTimeRange);
+            this.tbCharts.Controls.Add(this.btnChartBetID);
+            this.tbCharts.Controls.Add(this.nudGraphStartBetID);
+            this.tbCharts.Controls.Add(this.dtpEnd);
+            this.tbCharts.Controls.Add(this.dtpStart);
+            this.tbCharts.Controls.Add(this.label96);
+            this.tbCharts.Controls.Add(this.label95);
+            this.tbCharts.Controls.Add(this.label94);
             this.tbCharts.Controls.Add(this.btnChartAllTimeProfitTime);
             this.tbCharts.Controls.Add(this.btnChartAllTimeProfitBets);
-            this.tbCharts.Controls.Add(this.btnSiteProfitTime);
             this.tbCharts.Controls.Add(this.btnGraphProfitTime);
             this.tbCharts.Controls.Add(this.btnGraphProfitBets);
             this.tbCharts.Controls.Add(this.button1);
@@ -2570,80 +2580,50 @@
             this.tbCharts.Text = "Charts";
             this.tbCharts.UseVisualStyleBackColor = true;
             // 
-            // btnChartsBankrollTime
-            // 
-            this.btnChartsBankrollTime.Location = new System.Drawing.Point(156, 156);
-            this.btnChartsBankrollTime.Name = "btnChartsBankrollTime";
-            this.btnChartsBankrollTime.Size = new System.Drawing.Size(75, 55);
-            this.btnChartsBankrollTime.TabIndex = 74;
-            this.btnChartsBankrollTime.Text = "Bankroll / Time";
-            this.btnChartsBankrollTime.UseVisualStyleBackColor = true;
-            this.btnChartsBankrollTime.Click += new System.EventHandler(this.btnChartsBankrollTime_Click);
-            // 
-            // btnChartBankrollBets
-            // 
-            this.btnChartBankrollBets.Location = new System.Drawing.Point(73, 156);
-            this.btnChartBankrollBets.Name = "btnChartBankrollBets";
-            this.btnChartBankrollBets.Size = new System.Drawing.Size(75, 55);
-            this.btnChartBankrollBets.TabIndex = 73;
-            this.btnChartBankrollBets.Text = "Bankroll / Bets";
-            this.btnChartBankrollBets.UseVisualStyleBackColor = true;
-            this.btnChartBankrollBets.Click += new System.EventHandler(this.btnChartBankrollBets_Click);
-            // 
             // btnChartAllTimeProfitTime
             // 
-            this.btnChartAllTimeProfitTime.Location = new System.Drawing.Point(156, 95);
+            this.btnChartAllTimeProfitTime.Location = new System.Drawing.Point(166, 95);
             this.btnChartAllTimeProfitTime.Name = "btnChartAllTimeProfitTime";
-            this.btnChartAllTimeProfitTime.Size = new System.Drawing.Size(75, 55);
+            this.btnChartAllTimeProfitTime.Size = new System.Drawing.Size(135, 55);
             this.btnChartAllTimeProfitTime.TabIndex = 72;
-            this.btnChartAllTimeProfitTime.Text = "All Time Profit/ Time";
+            this.btnChartAllTimeProfitTime.Text = "All Time Static Chart";
             this.btnChartAllTimeProfitTime.UseVisualStyleBackColor = true;
             this.btnChartAllTimeProfitTime.Click += new System.EventHandler(this.btnChartAllTimeProfitTime_Click);
             // 
             // btnChartAllTimeProfitBets
             // 
-            this.btnChartAllTimeProfitBets.Location = new System.Drawing.Point(73, 95);
+            this.btnChartAllTimeProfitBets.Location = new System.Drawing.Point(14, 95);
             this.btnChartAllTimeProfitBets.Name = "btnChartAllTimeProfitBets";
-            this.btnChartAllTimeProfitBets.Size = new System.Drawing.Size(75, 55);
+            this.btnChartAllTimeProfitBets.Size = new System.Drawing.Size(134, 55);
             this.btnChartAllTimeProfitBets.TabIndex = 71;
-            this.btnChartAllTimeProfitBets.Text = "All Time Profit/ Bets";
+            this.btnChartAllTimeProfitBets.Text = "All Time Live Chart";
             this.btnChartAllTimeProfitBets.UseVisualStyleBackColor = true;
             this.btnChartAllTimeProfitBets.Click += new System.EventHandler(this.btnChartAllTimeProfitBets_Click);
             // 
-            // btnSiteProfitTime
-            // 
-            this.btnSiteProfitTime.Location = new System.Drawing.Point(156, 217);
-            this.btnSiteProfitTime.Name = "btnSiteProfitTime";
-            this.btnSiteProfitTime.Size = new System.Drawing.Size(75, 55);
-            this.btnSiteProfitTime.TabIndex = 70;
-            this.btnSiteProfitTime.Text = "Site Profit/ Time";
-            this.btnSiteProfitTime.UseVisualStyleBackColor = true;
-            this.btnSiteProfitTime.Click += new System.EventHandler(this.btnSiteProfitTime_Click);
-            // 
             // btnGraphProfitTime
             // 
-            this.btnGraphProfitTime.Location = new System.Drawing.Point(156, 34);
+            this.btnGraphProfitTime.Location = new System.Drawing.Point(166, 34);
             this.btnGraphProfitTime.Name = "btnGraphProfitTime";
-            this.btnGraphProfitTime.Size = new System.Drawing.Size(75, 55);
+            this.btnGraphProfitTime.Size = new System.Drawing.Size(135, 55);
             this.btnGraphProfitTime.TabIndex = 69;
-            this.btnGraphProfitTime.Text = "Current Profit/ Time";
+            this.btnGraphProfitTime.Text = "Static Session Chart";
             this.btnGraphProfitTime.UseVisualStyleBackColor = true;
             this.btnGraphProfitTime.Click += new System.EventHandler(this.btnGraphProfitTime_Click);
             // 
             // btnGraphProfitBets
             // 
-            this.btnGraphProfitBets.Location = new System.Drawing.Point(73, 34);
+            this.btnGraphProfitBets.Location = new System.Drawing.Point(13, 34);
             this.btnGraphProfitBets.Name = "btnGraphProfitBets";
-            this.btnGraphProfitBets.Size = new System.Drawing.Size(75, 55);
+            this.btnGraphProfitBets.Size = new System.Drawing.Size(135, 55);
             this.btnGraphProfitBets.TabIndex = 68;
-            this.btnGraphProfitBets.Text = "Current Profit/ Bets";
+            this.btnGraphProfitBets.Text = "Session Live Chart";
             this.btnGraphProfitBets.UseVisualStyleBackColor = true;
             this.btnGraphProfitBets.Click += new System.EventHandler(this.btnGraphProfitBets_Click);
             // 
             // button1
             // 
             this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(253, 243);
+            this.button1.Location = new System.Drawing.Point(350, 293);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 42);
             this.button1.TabIndex = 67;
@@ -3874,12 +3854,6 @@
             // 
             this.tmrSimulation.Tick += new System.EventHandler(this.tmrSimulation_Tick);
             // 
-            // tmrSiteProfit
-            // 
-            this.tmrSiteProfit.Enabled = true;
-            this.tmrSiteProfit.Interval = 60000;
-            this.tmrSiteProfit.Tick += new System.EventHandler(this.tmrSiteProfit_Tick);
-            // 
             // tmBet
             // 
             this.tmBet.Tick += new System.EventHandler(this.tmBet_Tick);
@@ -4301,10 +4275,10 @@
             this.nudApiChance.Size = new System.Drawing.Size(161, 26);
             this.nudApiChance.TabIndex = 4;
             this.nudApiChance.Value = new decimal(new int[] {
-            1,
+            495,
             0,
             0,
-            262144});
+            65536});
             this.nudApiChance.ValueChanged += new System.EventHandler(this.nudApiBet_ValueChanged);
             // 
             // nudApiBet
@@ -4317,11 +4291,6 @@
             2,
             0,
             0});
-            this.nudApiBet.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            524288});
             this.nudApiBet.Name = "nudApiBet";
             this.nudApiBet.Size = new System.Drawing.Size(161, 26);
             this.nudApiBet.TabIndex = 3;
@@ -4424,6 +4393,79 @@
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
             // 
+            // label94
+            // 
+            this.label94.AutoSize = true;
+            this.label94.Location = new System.Drawing.Point(26, 170);
+            this.label94.Name = "label94";
+            this.label94.Size = new System.Drawing.Size(107, 13);
+            this.label94.TabIndex = 73;
+            this.label94.Text = "All bets Above bet id:";
+            // 
+            // label95
+            // 
+            this.label95.AutoSize = true;
+            this.label95.Location = new System.Drawing.Point(28, 218);
+            this.label95.Name = "label95";
+            this.label95.Size = new System.Drawing.Size(90, 13);
+            this.label95.TabIndex = 74;
+            this.label95.Text = "All Bets Between ";
+            // 
+            // label96
+            // 
+            this.label96.AutoSize = true;
+            this.label96.Location = new System.Drawing.Point(89, 244);
+            this.label96.Name = "label96";
+            this.label96.Size = new System.Drawing.Size(29, 13);
+            this.label96.TabIndex = 75;
+            this.label96.Text = "And ";
+            // 
+            // dtpStart
+            // 
+            this.dtpStart.Location = new System.Drawing.Point(124, 212);
+            this.dtpStart.Name = "dtpStart";
+            this.dtpStart.Size = new System.Drawing.Size(200, 20);
+            this.dtpStart.TabIndex = 76;
+            // 
+            // dtpEnd
+            // 
+            this.dtpEnd.Location = new System.Drawing.Point(124, 238);
+            this.dtpEnd.Name = "dtpEnd";
+            this.dtpEnd.Size = new System.Drawing.Size(200, 20);
+            this.dtpEnd.TabIndex = 77;
+            // 
+            // nudGraphStartBetID
+            // 
+            this.nudGraphStartBetID.Location = new System.Drawing.Point(139, 168);
+            this.nudGraphStartBetID.Maximum = new decimal(new int[] {
+            276447232,
+            23283,
+            0,
+            0});
+            this.nudGraphStartBetID.Name = "nudGraphStartBetID";
+            this.nudGraphStartBetID.Size = new System.Drawing.Size(120, 20);
+            this.nudGraphStartBetID.TabIndex = 78;
+            // 
+            // btnChartBetID
+            // 
+            this.btnChartBetID.Location = new System.Drawing.Point(269, 165);
+            this.btnChartBetID.Name = "btnChartBetID";
+            this.btnChartBetID.Size = new System.Drawing.Size(123, 23);
+            this.btnChartBetID.TabIndex = 79;
+            this.btnChartBetID.Text = "Draw Chart";
+            this.btnChartBetID.UseVisualStyleBackColor = true;
+            this.btnChartBetID.Click += new System.EventHandler(this.btnChartBetID_Click);
+            // 
+            // btnChartTimeRange
+            // 
+            this.btnChartTimeRange.Location = new System.Drawing.Point(339, 212);
+            this.btnChartTimeRange.Name = "btnChartTimeRange";
+            this.btnChartTimeRange.Size = new System.Drawing.Size(75, 46);
+            this.btnChartTimeRange.TabIndex = 80;
+            this.btnChartTimeRange.Text = "Draw Chart";
+            this.btnChartTimeRange.UseVisualStyleBackColor = true;
+            this.btnChartTimeRange.Click += new System.EventHandler(this.btnChartTimeRange_Click);
+            // 
             // cDiceBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4488,6 +4530,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsAmount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).EndInit();
             this.tbCharts.ResumeLayout(false);
+            this.tbCharts.PerformLayout();
             this.tbCustom.ResumeLayout(false);
             this.tbCustom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).EndInit();
@@ -4533,6 +4576,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4608,7 +4652,6 @@
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.Timer tmrSimulation;
         private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.Timer tmrSiteProfit;
         private System.Windows.Forms.Label lblLuck;
         private System.Windows.Forms.Label label69;
         private System.Windows.Forms.Timer tmBet;
@@ -4744,11 +4787,8 @@
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TabPage tbCharts;
-        private System.Windows.Forms.Button btnChartsBankrollTime;
-        private System.Windows.Forms.Button btnChartBankrollBets;
         private System.Windows.Forms.Button btnChartAllTimeProfitTime;
         private System.Windows.Forms.Button btnChartAllTimeProfitBets;
-        private System.Windows.Forms.Button btnSiteProfitTime;
         private System.Windows.Forms.Button btnGraphProfitTime;
         private System.Windows.Forms.Button btnGraphProfitBets;
         private System.Windows.Forms.Button button1;
@@ -4900,6 +4940,14 @@
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Label label93;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button btnChartTimeRange;
+        private System.Windows.Forms.Button btnChartBetID;
+        private System.Windows.Forms.NumericUpDown nudGraphStartBetID;
+        private System.Windows.Forms.DateTimePicker dtpEnd;
+        private System.Windows.Forms.DateTimePicker dtpStart;
+        private System.Windows.Forms.Label label96;
+        private System.Windows.Forms.Label label95;
+        private System.Windows.Forms.Label label94;
 
     }
 }

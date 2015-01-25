@@ -28,6 +28,7 @@ namespace DiceBot
             Thread t = new Thread(GetBalanceThread);
             t.Start();
             this.Parent = Parent;
+            Name = "PrimeDice";
         }
         
 
@@ -178,6 +179,8 @@ namespace DiceBot
             }
             catch (WebException e)
             {
+                string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                Parent.updateStatus(sEmitResponse);
                 if (e.Message.Contains("401"))
                 {
                     System.Windows.Forms.MessageBox.Show("Could not log in. Please ensure the username, passowrd and 2fa code are all correct.");
@@ -227,11 +230,15 @@ namespace DiceBot
             }
             catch (WebException e)
             {
+                string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                Parent.updateStatus(sEmitResponse);
                 if (e.Message.Contains("429"))
                 {
                     Thread .Sleep(500);
                     placebetthread();
                 }
+                
+
             }
         }
 
@@ -274,6 +281,8 @@ namespace DiceBot
             }
             catch (WebException e)
             {
+                string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                Parent.updateStatus(sEmitResponse);
                 if (e.Message.Contains("429"))
                 {
                     Thread.Sleep(2000);
@@ -313,25 +322,34 @@ namespace DiceBot
             return true;
         }
 
-        public override bool Withdraw(double Amount, string Address, int Counter)
+        public override bool Withdraw(double Amount, string Address)
         {
-            Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
-            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/withdraw?access_token=" + accesstoken);
-            betrequest.Method = "POST";
-            string post = string.Format("amount={0}&address={1}", (Amount * 100000000).ToString(""), Address);
-            betrequest.ContentLength = post.Length;
-            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-            using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+            try
             {
+                
+                Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
+                Thread.Sleep(500);
+                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/withdraw?access_token=" + accesstoken);
+                betrequest.Method = "POST";
+                string post = string.Format("amount={0}&address={1}", (Amount * 100000000).ToString(""), Address);
+                betrequest.ContentLength = post.Length;
+                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
-                writer.Write(post);
+                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                {
+
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+
+
+                return true;
             }
-            HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-
-            
-            return true;
+            catch
+            {
+                return false;
+            }
         }
 
         public override double GetLucky(string server, string client, int nonce)
@@ -392,9 +410,11 @@ namespace DiceBot
             }
             catch (WebException e)
             {
+                string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                Parent.updateStatus(sEmitResponse);
                 if (e.Message.Contains("429"))
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(1500);
                     return getDepositAddress();
                 }
                 return "";
