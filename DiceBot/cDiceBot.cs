@@ -3227,7 +3227,7 @@ namespace DiceBot
                     betstring += Lastbet + ",";
                     betProfit = (Lastbet * 99 / Chance) - Lastbet;
                     betstring += betProfit  + ",";
-                    this.PreviousBalance = dPreviousBalance + (Lastbet * (99 / Chance));
+                    
 
                 }
                 else
@@ -3237,8 +3237,9 @@ namespace DiceBot
                     betstring += Lastbet + ",";
                     betProfit = -Lastbet ;
                     betstring +=  betProfit +",";
-                    this.PreviousBalance = dPreviousBalance - Lastbet;
+                    
                 }
+                this.PreviousBalance = dPreviousBalance + betProfit;
                 betstring += PreviousBalance + ",";
                 betstring += profit;
                 tempsim.bets.Add(betstring);
