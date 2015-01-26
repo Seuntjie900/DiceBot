@@ -99,6 +99,46 @@ namespace DiceBot
             }
             return 0;
         }
+        public static double sGetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = /*nonce.ToString() + ":" + */client + ":" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }
+            return 0;
+        }
+
     }
 
     /*public class PRC_old : DiceSite

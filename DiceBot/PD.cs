@@ -13,9 +13,9 @@ namespace DiceBot
     public class PD : DiceSite
     {
         string accesstoken = "";
-        
+        DateTime LastSeedReset = new DateTime();
         public bool ispd = true;
-        bool High = false;
+        
         DateTime lastupdate = new DateTime();
 
         public PD(cDiceBot Parent)
@@ -250,8 +250,8 @@ namespace DiceBot
 
         public override void SetChance(string Chance)
         {
-            Parent.updateChance(decimal.Parse(Chance));
-            chance = double.Parse(Chance);
+            Parent.updateChance(decimal.Parse(Chance, System.Globalization.CultureInfo.InvariantCulture));
+            chance = double.Parse(Chance, System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public override void SetAmount(double Amount)
@@ -262,33 +262,42 @@ namespace DiceBot
 
         public override void ResetSeed()
         {
-            try
+            if ((DateTime.Now - LastSeedReset).TotalSeconds>90)
             {
-                Parent.updateStatus("Resetting Seed");
-            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/seed?access_token=" + accesstoken);
-            betrequest.Method = "POST";
-            string post = string.Format("seed={0}", Guid.NewGuid().ToString().Replace("-","").Substring(0,20));
-            betrequest.ContentLength = post.Length;
-            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-            using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-            {
-
-                writer.Write(post);
-            }
-            HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-            }
-            catch (WebException e)
-            {
-                string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                Parent.updateStatus(sEmitResponse);
-                if (e.Message.Contains("429"))
+                try
                 {
-                    Thread.Sleep(2000);
-                    ResetSeed();
+                    LastSeedReset = DateTime.Now;
+                    Parent.updateStatus("Resetting Seed");
+                    HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/seed?access_token=" + accesstoken);
+                    betrequest.Method = "POST";
+                    string post = string.Format("seed={0}", Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20));
+                    betrequest.ContentLength = post.Length;
+                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+                    using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                    {
+
+                        writer.Write(post);
+                    }
+                    HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
+                    string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                }
+                catch (WebException e)
+                {
+                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                    Parent.updateStatus(sEmitResponse);
+                    if (e.Message.Contains("429"))
+                    {
+                        Thread.Sleep(2000);
+                        ResetSeed();
+                    }
                 }
             }
+            else
+            {
+                Parent.updateStatus("Too soon to reset seed. Delaying reset.");
+            }
+            
 
         }
 
@@ -353,6 +362,45 @@ namespace DiceBot
         }
 
         public override double GetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = client + "-" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }
+            return 0;
+        }
+        public static double sGetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -456,8 +504,8 @@ namespace DiceBot
             Bet tmp = new Bet 
             {
                 Amount = (decimal)amount / 100000000m, 
-                date = json.ToDateTime2(timestamp), 
-                Id=decimal.Parse(id), 
+                date = json.ToDateTime2(timestamp),
+                Id = decimal.Parse(id, System.Globalization.CultureInfo.InvariantCulture), 
                 Profit=(decimal)profit/100000000m, 
                 Roll=(decimal)roll, 
                 high=condition==">",

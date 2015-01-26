@@ -18,6 +18,8 @@ namespace DiceBot
 
     public class Bet
     {
+
+        
         public string Currency { get; set; }
         public decimal Id { get; set; }
         private decimal chance = 0;
@@ -77,8 +79,12 @@ namespace DiceBot
         public Bet()
         {
             serverhash = serverseed = clientseed = "";
-            nonce = 0;
+            Id = -1;
+            Roll = -1;
+            nonce = -1;
         }
+
+        public bool Verified { get; set; }
 
     }
    

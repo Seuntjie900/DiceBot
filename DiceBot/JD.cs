@@ -44,7 +44,7 @@ namespace DiceBot
                 Parent.updateWagered(result.wagered );
                 Parent.updateWins(result.stats.wins);
                 Parent.AddBet(ToBet(result));
-                Parent.GetBetResult(double.Parse(result.balance), result.win, (double.Parse(result.this_profit)));
+                Parent.GetBetResult(double.Parse(result.balance, System.Globalization.CultureInfo.InvariantCulture), result.win, (double.Parse(result.this_profit, System.Globalization.CultureInfo.InvariantCulture)));
             }
         }
 
@@ -56,7 +56,7 @@ namespace DiceBot
 
         public override void SetChance(string Chance)
         {
-            this.chance = double.Parse(Chance);
+            this.chance = double.Parse(Chance, System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public override void SetAmount(double Amount)
@@ -131,13 +131,13 @@ namespace DiceBot
         Bet ToBet(JDCAPI.Result curBet)
         {
             Bet tmp = new Bet();
-            tmp.Amount = decimal.Parse(curBet.bet);
+            tmp.Amount = decimal.Parse(curBet.bet, System.Globalization.CultureInfo.InvariantCulture);
             tmp.date = json.ToDateTime2( curBet.date.ToString());
             tmp.Id = (long)curBet.betid;
-            tmp.Profit = decimal.Parse(curBet.this_profit);
+            tmp.Profit = decimal.Parse(curBet.this_profit, System.Globalization.CultureInfo.InvariantCulture);
             tmp.Roll = (decimal)curBet.lucky;
             tmp.high = curBet.high;
-            tmp.Chance = decimal.Parse(curBet.chance);
+            tmp.Chance = decimal.Parse(curBet.chance, System.Globalization.CultureInfo.InvariantCulture);
             tmp.nonce = curBet.nonce;
             
             return tmp;

@@ -37,8 +37,8 @@ namespace DiceBot
         double WinMultiplier = 0;
         double Limit = 0;
         double Amount = 0;
-        double loading = 0;
-        double loadammount = 2;
+        
+        
         double LargestBet = 0;
         double LargestWin = 0;
         double LargestLoss = 0;
@@ -66,7 +66,7 @@ namespace DiceBot
         int WorstStreak3 = 0;
         int Losestreak = 0;
         int timecounter = 0;
-        int waiter = 0;
+        
         int iMultiplyCounter = 0;
         int MaxMultiplies = 0;
         int WinMaxMultiplies = 0;
@@ -128,6 +128,23 @@ namespace DiceBot
         {
             PreviousBalance = (double)Balance;
             DoBet(win, (double)Profit);
+            if (!RunningSimulation)
+            {
+                AddChartPoint(profit);
+            }
+        }
+
+        delegate void dAddChartPoint(double Profit);
+        void AddChartPoint(double Profit)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new dAddChartPoint(AddChartPoint), profit);
+            }
+            else
+            {
+                chrtEmbeddedLiveChart.Series[0].Points.AddY(profit + Profit);
+            }
         }
 
         public cDiceBot()
@@ -139,7 +156,7 @@ namespace DiceBot
                 
             }
             InitializeComponent();
-            
+            cmbSettingMode.SelectedIndex = 0;
             #region tooltip Texts
             ToolTip tt = new ToolTip();
             tt.SetToolTip(lblZigZag1, "After every n bets/wins/losses \n(as specified to the right), \nthe bot will switch from \nbetting high to low or vica verca");
@@ -180,24 +197,24 @@ namespace DiceBot
             tt.SetToolTip( lblMaxMultiplier,
                 "In a losing streak, the bet will\n" +
                 "will be multiplied untill the streak\n" +
-                "reaches "+txtMaxMultiply.Text +" bets. The following bets\n"+
+                "reaches "+nudMaxMultiplies.Value.ToString("0.00000") +" bets. The following bets\n"+
                 "will be with the same amount"); 
                 tt.SetToolTip( lblAfter,
-                "with every " + txtNBets.Text + " losses in a row,\n" +
+                "with every " + nudNbets.Value + " losses in a row,\n" +
                 "the muliplier will be multiplied with\n" +
-                txtDevider.Text+". The idea is to decrease the size\n"+
+                nudDevider.Value.ToString("0.00000")+". The idea is to decrease the size\n"+
                 "the multiplier, keep the value between\n"+
                 "0.9 and 0.5. Minimum Multiplier is 1"); 
                 tt.SetToolTip( lblAfter2,
-            "with every " + txtNBets.Text + " losses in a row,\n" +
+            "with every " + nudNbets.Value.ToString() + " losses in a row,\n" +
             "the muliplier will be multiplied with\n" +
-            txtDevider.Text + ". The idea is to decrease the size\n" +
+            nudDevider.Value.ToString("0.00000") + ". The idea is to decrease the size\n" +
             "the multiplier, keep the value between\n" +
             "0.9 and 0.5. Minimum Multiplier is 1"); 
                 tt.SetToolTip( lblDevider,
-            "with every " + txtNBets.Text + " losses in a row,\n" +
+            "with every " + nudNbets.Value.ToString() + " losses in a row,\n" +
             "the muliplier will be multiplied with\n" +
-            txtDevider.Text + ". The idea is to decrease the size\n" +
+            nudDevider.Value.ToString("0.00000") + ". The idea is to decrease the size\n" +
             "the multiplier, keep the value between\n" +
             "0.9 and 0.5. Minimum Multiplier is 1"); 
                 
@@ -415,8 +432,9 @@ namespace DiceBot
             double total = 0;
             int bets = 0;
             double curbet = MinBet;
-            bool convert = false;
-            double Multiplier = dparse(txtMultiplier.Text, ref convert);
+            
+            double Multiplier = (double)(nudMultiplier.Value);
+
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -441,7 +459,7 @@ namespace DiceBot
             int bets = 0;
             double curbet = MinBet;
             int n = Devidecounter;
-            double dmultiplier = dparse(txtMultiplier.Text, ref convert); ;
+            double dmultiplier = (double)(nudMultiplier.Value);
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -469,7 +487,7 @@ namespace DiceBot
             int bets = 0;
             double curbet = MinBet;
             int n = Devidecounter;
-            double dmultiplier = dparse(txtMultiplier.Text, ref convert); ; ;
+            double dmultiplier = (double)(nudMultiplier.Value);
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -497,7 +515,7 @@ namespace DiceBot
             int bets = 0;
             double curbet = MinBet;
             int n = Devidecounter;
-            double dmultiplier = dparse(txtMultiplier.Text, ref convert); ; ;
+            double dmultiplier = (double)(nudMultiplier.Value);
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -657,7 +675,7 @@ namespace DiceBot
             }
         }
 
-        int SafeDiceCounter = 0;
+        
         void PlaceBet()
         {
             try
@@ -679,7 +697,7 @@ namespace DiceBot
                 //if (!(CurrentSite is SafeDice) || SafeDiceCounter >= 2)
                 {
                     CurrentSite.PlaceBet(high);
-                    SafeDiceCounter = 0;
+                    
                     dtLastBet = DateTime.Now;
                     EnableTimer(tmBet, false);
                 }
@@ -695,11 +713,11 @@ namespace DiceBot
         void Withdraw()
         {
             if (CurrentSite.AutoWithdraw)
-                if (CurrentSite.Withdraw(dparse(txtAmount.Text, ref convert), txtTo.Text))
+                if (CurrentSite.Withdraw((double)(nudAmount.Value), txtTo.Text))
                 {
 
                     //withdraw = false;
-                    TrayIcon.BalloonTipText = "Withdraw " + txtAmount.Text + " Complete\nRestarting Bets";
+                    TrayIcon.BalloonTipText = "Withdraw " + nudAmount.Value + " Complete\nRestarting Bets";
                     TrayIcon.ShowBalloonTip(1000);
                     try
                     {
@@ -740,10 +758,10 @@ namespace DiceBot
 
             if (CurrentSite.AutoInvest)
             {
-                if (CurrentSite.Invest(dparse(txtAmount.Text, ref convert)))
+                if (CurrentSite.Invest((double)(nudAmount.Value)))
                 {
                     //invest = false;
-                    TrayIcon.BalloonTipText = "Invest " + txtAmount.Text + "Complete\nRestarting Bets";
+                    TrayIcon.BalloonTipText = "Invest " + nudAmount.Value + "Complete\nRestarting Bets";
                     TrayIcon.ShowBalloonTip(1000);
                     try
                     {
@@ -804,7 +822,7 @@ namespace DiceBot
                 save();
 
                 stoponwin = false;
-                Chance = double.Parse(txtChance.Text);
+                Chance = (double)nudChance.Value;
                 CurrentSite.SetChance(Chance.ToString("0.00000000"));
 
                 dtStarted = DateTime.Now;
@@ -1052,7 +1070,7 @@ namespace DiceBot
                             }
                             try
                             {
-                                Chance = dparse(txtChance.Text, ref convert);
+                                Chance = (double)(nudChance.Value);
                                 if (!RunningSimulation)
                                 CurrentSite.SetChance( Chance.ToString().Replace(',', '.'));
                                 
@@ -1073,7 +1091,7 @@ namespace DiceBot
                         CalculateLuck(true);
                         if (chkMK.Checked)
                         {
-                            if (double.Parse((Lastbet - (double)nudMKDecrement.Value).ToString("0.00000000")) > 0)
+                            if (double.Parse((Lastbet - (double)nudMKDecrement.Value).ToString("0.00000000"), System.Globalization.CultureInfo.InvariantCulture) > 0)
                             {
                                 Lastbet -= (double)nudMKDecrement.Value;
                             }
@@ -1180,7 +1198,7 @@ namespace DiceBot
                     }
                     iMultiplyCounter = 0;
                     
-                    Multiplier = dparse(txtMultiplier.Text, ref convert);
+                    Multiplier = (double)(nudMultiplier.Value);
 
                     if (chkReverse.Checked)
                     {
@@ -1420,7 +1438,7 @@ namespace DiceBot
                         WorstStreak = Losestreak;
 
                     //reset win multplier
-                    WinMultiplier = dparse(txtWinMultiplier.Text, ref convert);
+                    WinMultiplier = (double)(nudWinMultiplier.Value);
 
                 }
                 if (chkReverse.Checked)
@@ -1452,7 +1470,7 @@ namespace DiceBot
                 if (!RunningSimulation)
                 if (dPreviousBalance - Lastbet < LowerLimit && chkLowerLimit.Checked)
                 {
-                    TrayIcon.BalloonTipText = "Balance lower than " + txtLowerLimit + "\nStopping Bets...";
+                    TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
                     TrayIcon.ShowBalloonTip(1000);
                     Stop();
                     if (Sound && SoundLow)
@@ -1471,7 +1489,7 @@ namespace DiceBot
                        (rdbResetSeedWins.Checked && Wins % nudResetSeed.Value == 0 && Losestreak==0)||
                        (rdbResetSeedLosses.Checked && Losses % nudResetSeed.Value == 0 && Winstreak == 0)) && !withdrew)
                     {
-                        waiter = 0;
+                        
                         reset = true;
                         ResetSeed();
                     }
@@ -1746,13 +1764,13 @@ namespace DiceBot
         {
             using (StreamWriter sw = new StreamWriter(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings3"))
             {
-                sw.WriteLine("Amount|" + txtAmount.Text);
-                sw.WriteLine("Limit|" + txtLimit.Text);
+                sw.WriteLine("Amount|" + nudAmount.Value);
+                sw.WriteLine("Limit|" + nudLimit.Value);
                 if (chkLimit.Checked)
                     sw.WriteLine("LimitEnabled|1");
                 else
                     sw.WriteLine("LimitEnabled|0");
-                sw.WriteLine("LowerLimit|" + txtLowerLimit.Text);
+                sw.WriteLine("LowerLimit|" + nudLowerLimit.Value);
                 sw.Write("LowerLimitEnabled|");
                 if (chkLowerLimit.Checked)
                     sw.WriteLine("1");
@@ -1809,12 +1827,12 @@ namespace DiceBot
                 try
                 {
                     sw.WriteLine("SaveVersion|" + "2");
-                    sw.WriteLine("MinBet|"+txtMinBet.Text);
-                    sw.WriteLine("Multiplier|"+txtMultiplier.Text);
-                    sw.WriteLine("Chance|"+txtChance.Text);
-                    sw.WriteLine("MaxMultiply|"+txtMaxMultiply.Text);
-                    sw.WriteLine("NBets|"+txtNBets.Text);
-                    sw.WriteLine("Devider|"+ txtDevider.Text);
+                    sw.WriteLine("MinBet|"+nudMinBet.Value);
+                    sw.WriteLine("Multiplier|"+nudMultiplier.Value);
+                    sw.WriteLine("Chance|"+nudChance.Value);
+                    sw.WriteLine("MaxMultiply|"+nudMaxMultiplies.Value);
+                    sw.WriteLine("NBets|"+nudNbets.Value);
+                    sw.WriteLine("Devider|"+ nudDevider.Value);
                     sw.Write("MultiplierMode|");
                     if (rdbMaxMultiplier.Checked)
                         sw.WriteLine("0");
@@ -1852,10 +1870,10 @@ namespace DiceBot
                     else
                         sw.WriteLine("0");
                     sw.WriteLine("ResetWinsValue|"+nudResetWins.Value.ToString());
-                    sw.WriteLine("WinMultiplier|" + txtWinMultiplier.Text);
-                    sw.WriteLine("WinMaxMultiplies|" + txtWinMaxMultiplies.Text);
-                    sw.WriteLine("WinNBets|" + txtWinNBets.Text);
-                    sw.WriteLine("WinDevider|" + txtWinDevider.Text);
+                    sw.WriteLine("WinMultiplier|" + nudWinMultiplier.Value);
+                    sw.WriteLine("WinMaxMultiplies|" + nudWinMaxMultiplies.Value);
+                    sw.WriteLine("WinNBets|" + nudWinNBets.Value);
+                    sw.WriteLine("WinDevider|" + nudWinDevider.Value);
                     sw.Write("WinMultiplyMode|");
                     if (rdbWinConstant.Checked)
                         sw.WriteLine("0");
@@ -2079,19 +2097,19 @@ namespace DiceBot
                     if (msg.Contains(";"))
                         values = msg.Split(';');
                     int i = 0;
-                    txtAmount.Text = values[i++];
-                    txtLimit.Text = values[i++];
+                    nudAmount.Value = decimal.Parse(values[i++]);
+                    nudLimit.Value = decimal.Parse(values[i++]);
                     if (values[i++] == "1")
                         chkLimit.Checked = true;
                     else
                         chkLimit.Checked = false;
-                    txtLowerLimit.Text = values[i++];
+                    nudLowerLimit.Value = decimal.Parse(values[i++]);
                     if (values[i++] == "1")
                         chkLowerLimit.Checked = true;
                     else
                         chkLowerLimit.Checked = false;
-                    txtMinBet.Text = values[i++];
-                    txtMultiplier.Text = values[i++];
+                    nudMinBet.Value = decimal.Parse(values[i++]);
+                    nudMultiplier.Value = decimal.Parse(values[i++]);
                     
                     txtTo.Text = values[i++];
                     string action = values[i++];
@@ -2122,10 +2140,10 @@ namespace DiceBot
                         if (msg.Contains(";"))
                             values = msg.Split(';');
                         i = 0;
-                        txtChance.Text = values[i++];
-                        txtMaxMultiply.Text = values[i++];
-                        txtNBets.Text = values[i++];
-                        txtDevider.Text = values[i++];
+                        nudChance.Value = decimal.Parse(values[i++]);
+                        nudMaxMultiplies.Value = decimal.Parse(values[i++]);
+                        nudNbets.Value = decimal.Parse(values[i++]);
+                        nudDevider.Value = decimal.Parse(values[i++]);
                         string s = values[i++];
                         if (s == "0")
                             rdbMaxMultiplier.Checked = true;
@@ -2174,11 +2192,11 @@ namespace DiceBot
                         nudResetBetLoss.Value = (decimal)dparse(values[i++], ref convert);
                         chkResetBetWins.Checked = (values[i++] == "1");
                         nudResetWins.Value = (decimal)dparse(values[i++], ref convert);
-                        
-                        txtWinMultiplier.Text = values[i++];
-                        txtWinMaxMultiplies.Text = values[i++];
-                        txtWinNBets.Text  = values[i++];
-                        txtWinDevider.Text = values[i++];
+
+                        nudWinMultiplier.Value = decimal.Parse(values[i++]);
+                        nudWinMaxMultiplies.Value = decimal.Parse(values[i++]);
+                        nudWinNBets.Value = decimal.Parse(values[i++]);
+                        nudWinDevider.Value = decimal.Parse(values[i++]);
                         string cur = values[i++];
                         rdbWinConstant.Checked = (cur == "0");
                         rdbWinDevider.Checked = (cur == "1");
@@ -2269,13 +2287,13 @@ namespace DiceBot
                             }
                         }
                     }
-                    txtAmount.Text=getvalue( saveditems, "Amount");
-                    txtLimit.Text = getvalue(saveditems, "Limit");
+                    nudAmount.Value=decimal.Parse(getvalue( saveditems, "Amount"));
+                    nudLimit.Value = decimal.Parse(getvalue(saveditems, "Limit"));
                     chkLimit.Checked= (getvalue(saveditems, "LimitEnabled") == "1");
-                    txtLowerLimit.Text = getvalue(saveditems, "LowerLimit");
+                    nudLowerLimit.Value = decimal.Parse(getvalue(saveditems, "LowerLimit"));
                     chkLowerLimit.Checked = (getvalue(saveditems, "LowerLimitEnabled") == "1");
-                    txtMinBet.Text = getvalue(saveditems, "MinBet");
-                    txtMultiplier.Text = getvalue(saveditems, "Multiplier");
+                    nudMinBet.Value = decimal.Parse(getvalue(saveditems, "MinBet"));
+                    nudMultiplier.Value = decimal.Parse(getvalue(saveditems, "Multiplier"));
                     
                     txtTo.Text = getvalue(saveditems, "To");
                     string temp = getvalue(saveditems, "OnStop");
@@ -2283,10 +2301,10 @@ namespace DiceBot
                     rdbStop.Checked = (temp == "1");
                     rdbWithdraw.Checked = (temp == "2");
                     //chkStopOnWin.Checked = ("1"==getvalue(saveditems, "StopOnWin"));
-                    txtChance.Text = getvalue(saveditems, "Chance");
-                    txtMaxMultiply.Text = getvalue(saveditems, "MaxMultiply");
-                    txtNBets.Text = getvalue(saveditems, "NBets");
-                    txtDevider.Text = getvalue(saveditems, "devider");
+                    nudChance.Value = decimal.Parse(getvalue(saveditems, "Chance"));
+                    nudMaxMultiplies.Value = decimal.Parse(getvalue(saveditems, "MaxMultiply"));
+                    nudNbets.Value = decimal.Parse(getvalue(saveditems, "NBets"));
+                    nudDevider.Value = decimal.Parse(getvalue(saveditems, "devider"));
                     temp = getvalue(saveditems, "MultiplierMode");
                     rdbMaxMultiplier.Checked = (temp == "0");
                     rdbDevider.Checked = (temp == "1");
@@ -2304,10 +2322,10 @@ namespace DiceBot
                     nudResetBetLoss.Value = (decimal)dparse(getvalue(saveditems, "ResetBetLossValue"), ref convert);
                     chkResetBetWins.Checked = ("1"==getvalue(saveditems, "ResetBetWinsEnabled"));
                     nudResetWins.Value = (decimal)dparse(getvalue(saveditems, "ResetWinsValue"), ref convert);
-                    txtWinMultiplier.Text = getvalue(saveditems, "WinMultiplier");
-                    txtWinMaxMultiplies.Text = getvalue(saveditems, "WinMaxMultiplies");
-                    txtWinNBets.Text = getvalue(saveditems, "WinNBets");
-                    txtWinDevider.Text = getvalue(saveditems, "WinDevider");
+                    nudWinMultiplier.Value = decimal.Parse(getvalue(saveditems, "WinMultiplier"));
+                    nudWinMaxMultiplies.Value = decimal.Parse(getvalue(saveditems, "WinMaxMultiplies"));
+                    nudWinNBets.Value = decimal.Parse(getvalue(saveditems, "WinNBets"));
+                    nudWinDevider.Value = decimal.Parse(getvalue(saveditems, "WinDevider"));
                     temp = getvalue(saveditems, "WinMultiplyMode");
                     rdbWinConstant.Checked = ("0" == temp);
                     rdbWinDevider.Checked = ("1" == temp);
@@ -2816,41 +2834,41 @@ namespace DiceBot
             //set active controlls for on loss multiplier
             if (rdbConstant.Checked)
             {
-                txtMaxMultiply.Enabled = false;
-                txtNBets.Enabled = false;
-                txtDevider.Enabled = false;
+                nudMaxMultiplies.Enabled = false;
+                nudNbets.Enabled = false;
+                nudDevider.Enabled = false;
             }
             if (rdbDevider.Checked || rdbReduce.Checked)
             {
-                txtMaxMultiply.Enabled = false;
-                txtNBets.Enabled = true;
-                txtDevider.Enabled = true;
+                nudMaxMultiplies.Enabled = false;
+                nudNbets.Enabled = true;
+                nudDevider.Enabled = true;
             }
             if (rdbMaxMultiplier.Checked)
             {
-                txtMaxMultiply.Enabled = true;
-                txtNBets.Enabled = false;
-                txtDevider.Enabled = false;
+                nudMaxMultiplies.Enabled = true;
+                nudNbets.Enabled = false;
+                nudDevider.Enabled = false;
             }
 
             //set active controlls for on win multiplier
             if (rdbWinConstant.Checked)
             {
-                txtWinMaxMultiplies.Enabled = false;
-                txtWinNBets.Enabled = false;
-                txtWinDevider.Enabled = false;
+                nudWinMaxMultiplies.Enabled = false;
+                nudWinNBets.Enabled = false;
+                nudWinDevider.Enabled = false;
             }
             if (rdbWinDevider.Checked || rdbWinReduce.Checked)
             {
-                txtWinMaxMultiplies.Enabled = false;
-                txtWinNBets.Enabled = true;
-                txtWinDevider.Enabled = true;
+                nudWinMaxMultiplies.Enabled = false;
+                nudWinNBets.Enabled = true;
+                nudWinDevider.Enabled = true;
             }
             if (rdbWinMaxMultiplier.Checked)
             {
-                txtWinMaxMultiplies.Enabled = true;
-                txtWinNBets.Enabled = false;
-                txtWinDevider.Enabled = false;
+                nudWinMaxMultiplies.Enabled = true;
+                nudWinNBets.Enabled = false;
+                nudWinDevider.Enabled = false;
             }
         }
 
@@ -2938,19 +2956,19 @@ namespace DiceBot
                 valid = false;
                 sMessage += "Please enter a valid number in the Limit Field\n";
             }*/
-            Limit = dparse(txtLimit.Text, ref convert);
+            Limit = (double)(nudLimit.Value);
             if (Limit == -1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Limit Field\n";
             }
-            LowerLimit = dparse(txtLowerLimit.Text, ref convert);
+            LowerLimit = (double)(nudLowerLimit.Value);
             if (LowerLimit == -1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Limit Field\n";
             }
-            Amount = dparse(txtAmount.Text, ref convert);
+            Amount = (double)(nudAmount.Value);
             if (Amount==-1)
             {
                 valid = false;
@@ -2961,13 +2979,13 @@ namespace DiceBot
                 valid = false;
                 sMessage += "Please enter a valid Address in the Address Field\n";
             }
-            MinBet = dparse(txtMinBet.Text, ref convert);
+            MinBet = (double)(nudMinBet.Value);
             if (MinBet==-1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Minimum Bet Field\n";
             }
-            Chance = dparse(txtChance.Text, ref convert);
+            Chance = (double)(nudChance.Value);
             if (Chance == -1)
             {
                 valid = false;
@@ -2977,49 +2995,49 @@ namespace DiceBot
             {
 
             }
-            Multiplier= dparse(txtMultiplier.Text, ref convert);
+            Multiplier = (double)(nudMultiplier.Value);
             if (Multiplier == -1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Multiplier Field\n";
             }
-            MaxMultiplies= iparse(txtMaxMultiply.Text);
+            MaxMultiplies= (int)(nudMaxMultiplies.Value);
             if (MaxMultiplies==-1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Max Multplies Field\n";
             }
-            Devidecounter = iparse(txtNBets.Text);
+            Devidecounter = (int)( nudNbets.Value);
             if (Devidecounter==-1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the After n bets Field\n";
             }
-            Devider = dparse(txtDevider.Text, ref convert);
+            Devider = (double)(nudDevider.Value);
             if (Devider == -1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Times Multiplier By Field\n";
             }
-            WinMultiplier = dparse(txtWinMultiplier.Text, ref convert);
+            WinMultiplier = (int)(nudWinMultiplier.Value);
             if (WinMultiplier == -1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Multiplier Field\n";
             }
-            WinMaxMultiplies = iparse(txtWinMaxMultiplies.Text);
+            WinMaxMultiplies = (int)(nudWinMaxMultiplies.Value);
             if (WinMaxMultiplies == -1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Max Multplies Field\n";
             }
-            WinDevidecounter = iparse(txtWinNBets.Text);
+            WinDevidecounter = (int)(nudWinNBets.Value);
             if (WinDevidecounter == -1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the After n bets Field\n";
             }
-            WinDevider = dparse(txtWinDevider.Text, ref convert);
+            WinDevider = (double)(nudWinDevider.Value);
             if (WinDevider == -1)
             {
                 valid = false;
@@ -3574,7 +3592,7 @@ namespace DiceBot
 
         private void cmbSite_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string url ="";
+            
             if (CurrentSite is PD)
             {
                 (CurrentSite as PD).ispd = false;
@@ -3702,7 +3720,7 @@ namespace DiceBot
             }
             else
             {
-                lblApiBalance.Text = decimal.Parse(Balance.ToString()).ToString("0.00000000");
+                lblApiBalance.Text = decimal.Parse(Balance.ToString(), System.Globalization.CultureInfo.InvariantCulture).ToString("0.00000000");
             }
         }
 
@@ -3971,6 +3989,18 @@ namespace DiceBot
                     nudApiChance.Value = chance;
                 lblApiBetProfit.Text = ((nudApiBet.Value * nudApiPayout.Value) - nudApiBet.Value).ToString("0.00000000"); 
             }
+        }
+
+        //settings mode combobox
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnBetHistory_Click(object sender, EventArgs e)
+        {
+            BetHistory tmp = new BetHistory(CurrentSite.Name);
+            tmp.Show();
         }
 
         

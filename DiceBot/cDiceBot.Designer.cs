@@ -30,6 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage7 = new System.Windows.Forms.TabPage();
@@ -92,14 +95,18 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.Settings = new System.Windows.Forms.GroupBox();
-            this.txtChance = new System.Windows.Forms.TextBox();
+            this.nudChance = new System.Windows.Forms.NumericUpDown();
+            this.nudMinBet = new System.Windows.Forms.NumericUpDown();
             this.lblChance = new System.Windows.Forms.Label();
-            this.txtMinBet = new System.Windows.Forms.TextBox();
             this.lblMinBet = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tbMartingale = new System.Windows.Forms.TabPage();
             this.tabControl4 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.nudDevider = new System.Windows.Forms.NumericUpDown();
+            this.nudNbets = new System.Windows.Forms.NumericUpDown();
+            this.nudMaxMultiplies = new System.Windows.Forms.NumericUpDown();
+            this.nudMultiplier = new System.Windows.Forms.NumericUpDown();
             this.nudChangeChanceLoseTo = new System.Windows.Forms.NumericUpDown();
             this.label67 = new System.Windows.Forms.Label();
             this.nudChangeChanceLoseStreak = new System.Windows.Forms.NumericUpDown();
@@ -125,10 +132,6 @@
             this.lblMultiplier = new System.Windows.Forms.Label();
             this.lblDevider = new System.Windows.Forms.Label();
             this.rdbMaxMultiplier = new System.Windows.Forms.RadioButton();
-            this.txtDevider = new System.Windows.Forms.TextBox();
-            this.txtNBets = new System.Windows.Forms.TextBox();
-            this.txtMultiplier = new System.Windows.Forms.TextBox();
-            this.txtMaxMultiply = new System.Windows.Forms.TextBox();
             this.rdbDevider = new System.Windows.Forms.RadioButton();
             this.lblAfter2 = new System.Windows.Forms.Label();
             this.rdbConstant = new System.Windows.Forms.RadioButton();
@@ -159,11 +162,6 @@
             this.rdbWinReduce = new System.Windows.Forms.RadioButton();
             this.label44 = new System.Windows.Forms.Label();
             this.label45 = new System.Windows.Forms.Label();
-            this.rdbWinMaxMultiplier = new System.Windows.Forms.RadioButton();
-            this.txtWinDevider = new System.Windows.Forms.TextBox();
-            this.txtWinNBets = new System.Windows.Forms.TextBox();
-            this.txtWinMultiplier = new System.Windows.Forms.TextBox();
-            this.txtWinMaxMultiplies = new System.Windows.Forms.TextBox();
             this.rdbWinDevider = new System.Windows.Forms.RadioButton();
             this.label46 = new System.Windows.Forms.Label();
             this.rdbWinConstant = new System.Windows.Forms.RadioButton();
@@ -218,6 +216,14 @@
             this.label26 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.tbCharts = new System.Windows.Forms.TabPage();
+            this.btnChartTimeRange = new System.Windows.Forms.Button();
+            this.btnChartBetID = new System.Windows.Forms.Button();
+            this.nudGraphStartBetID = new System.Windows.Forms.NumericUpDown();
+            this.dtpEnd = new System.Windows.Forms.DateTimePicker();
+            this.dtpStart = new System.Windows.Forms.DateTimePicker();
+            this.label96 = new System.Windows.Forms.Label();
+            this.label95 = new System.Windows.Forms.Label();
+            this.label94 = new System.Windows.Forms.Label();
             this.btnChartAllTimeProfitTime = new System.Windows.Forms.Button();
             this.btnChartAllTimeProfitBets = new System.Windows.Forms.Button();
             this.btnGraphProfitTime = new System.Windows.Forms.Button();
@@ -261,10 +267,7 @@
             this.btnStratRefresh = new System.Windows.Forms.Button();
             this.btnBrowseStratFolder = new System.Windows.Forms.Button();
             this.txtQuickSwitch = new System.Windows.Forms.TextBox();
-            this.txtLowerLimit = new System.Windows.Forms.TextBox();
             this.txtTo = new System.Windows.Forms.TextBox();
-            this.txtAmount = new System.Windows.Forms.TextBox();
-            this.txtLimit = new System.Windows.Forms.TextBox();
             this.label83 = new System.Windows.Forms.Label();
             this.lblTimeBetween = new System.Windows.Forms.Label();
             this.label56 = new System.Windows.Forms.Label();
@@ -323,6 +326,8 @@
             this.tmBetting = new System.Windows.Forms.Timer(this.components);
             this.tmStop = new System.Windows.Forms.Timer(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label97 = new System.Windows.Forms.Label();
+            this.cmbSettingMode = new System.Windows.Forms.ComboBox();
             this.lblStatus = new System.Windows.Forms.Label();
             this.label93 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -339,7 +344,6 @@
             this.tmBet = new System.Windows.Forms.Timer(this.components);
             this.pnlApiInfo = new System.Windows.Forms.Panel();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel5 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lblApiWagered = new System.Windows.Forms.Label();
@@ -377,6 +381,18 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
+            this.nudWinMultiplier = new System.Windows.Forms.NumericUpDown();
+            this.rdbWinMaxMultiplier = new System.Windows.Forms.RadioButton();
+            this.nudWinMaxMultiplies = new System.Windows.Forms.NumericUpDown();
+            this.nudWinNBets = new System.Windows.Forms.NumericUpDown();
+            this.nudWinDevider = new System.Windows.Forms.NumericUpDown();
+            this.nudLimit = new System.Windows.Forms.NumericUpDown();
+            this.nudLowerLimit = new System.Windows.Forms.NumericUpDown();
+            this.nudAmount = new System.Windows.Forms.NumericUpDown();
+            this.btnBetHistory = new System.Windows.Forms.Button();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.chrtEmbeddedLiveChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -386,14 +402,6 @@
             this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.label94 = new System.Windows.Forms.Label();
-            this.label95 = new System.Windows.Forms.Label();
-            this.label96 = new System.Windows.Forms.Label();
-            this.dtpStart = new System.Windows.Forms.DateTimePicker();
-            this.dtpEnd = new System.Windows.Forms.DateTimePicker();
-            this.nudGraphStartBetID = new System.Windows.Forms.NumericUpDown();
-            this.btnChartBetID = new System.Windows.Forms.Button();
-            this.btnChartTimeRange = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -403,10 +411,16 @@
             this.tabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.Settings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinBet)).BeginInit();
             this.tabControl2.SuspendLayout();
             this.tbMartingale.SuspendLayout();
             this.tabControl4.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDevider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNbets)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMultiplies)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreakTo)).BeginInit();
@@ -434,6 +448,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).BeginInit();
             this.tbCharts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).BeginInit();
             this.tbCustom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMKDecrement)).BeginInit();
@@ -459,7 +474,6 @@
             this.panel3.SuspendLayout();
             this.pnlApiInfo.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel5.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
@@ -467,8 +481,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiPayout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMaxMultiplies)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinNBets)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinDevider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLowerLimit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAmount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -486,10 +512,10 @@
             // 
             this.tabControl3.Controls.Add(this.tabPage7);
             this.tabControl3.Controls.Add(this.tabPage8);
-            this.tabControl3.Location = new System.Drawing.Point(3, 517);
+            this.tabControl3.Location = new System.Drawing.Point(2, 534);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(449, 260);
+            this.tabControl3.Size = new System.Drawing.Size(464, 260);
             this.tabControl3.TabIndex = 14;
             // 
             // tabPage7
@@ -528,7 +554,7 @@
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(441, 234);
+            this.tabPage7.Size = new System.Drawing.Size(456, 234);
             this.tabPage7.TabIndex = 0;
             this.tabPage7.Text = "Stats";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -835,7 +861,7 @@
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(441, 234);
+            this.tabPage8.Size = new System.Drawing.Size(456, 234);
             this.tabPage8.TabIndex = 1;
             this.tabPage8.Text = "More Stats";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -1065,10 +1091,10 @@
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage11);
             this.tabControl1.Controls.Add(this.tabPage9);
-            this.tabControl1.Location = new System.Drawing.Point(3, 6);
+            this.tabControl1.Location = new System.Drawing.Point(2, 23);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(453, 512);
+            this.tabControl1.Size = new System.Drawing.Size(468, 512);
             this.tabControl1.TabIndex = 13;
             // 
             // tabPage3
@@ -1076,16 +1102,16 @@
             this.tabPage3.Controls.Add(this.Settings);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(445, 486);
+            this.tabPage3.Size = new System.Drawing.Size(460, 486);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Bet Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
-            this.Settings.Controls.Add(this.txtChance);
+            this.Settings.Controls.Add(this.nudChance);
+            this.Settings.Controls.Add(this.nudMinBet);
             this.Settings.Controls.Add(this.lblChance);
-            this.Settings.Controls.Add(this.txtMinBet);
             this.Settings.Controls.Add(this.lblMinBet);
             this.Settings.Controls.Add(this.tabControl2);
             this.Settings.Controls.Add(this.btnExport);
@@ -1094,37 +1120,47 @@
             this.Settings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Settings.Location = new System.Drawing.Point(0, 0);
             this.Settings.Name = "Settings";
-            this.Settings.Size = new System.Drawing.Size(445, 486);
+            this.Settings.Size = new System.Drawing.Size(460, 486);
             this.Settings.TabIndex = 13;
             this.Settings.TabStop = false;
             this.Settings.Text = "Settings";
             // 
-            // txtChance
+            // nudChance
             // 
-            this.txtChance.Location = new System.Drawing.Point(221, 56);
-            this.txtChance.Name = "txtChance";
-            this.txtChance.Size = new System.Drawing.Size(47, 20);
-            this.txtChance.TabIndex = 66;
-            this.txtChance.Text = "50";
-            this.txtChance.Leave += new System.EventHandler(this.txtChance_Leave);
+            this.nudChance.DecimalPlaces = 4;
+            this.nudChance.Location = new System.Drawing.Point(256, 56);
+            this.nudChance.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            131072});
+            this.nudChance.Name = "nudChance";
+            this.nudChance.Size = new System.Drawing.Size(84, 20);
+            this.nudChance.TabIndex = 68;
+            this.nudChance.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // nudMinBet
+            // 
+            this.nudMinBet.DecimalPlaces = 8;
+            this.nudMinBet.Location = new System.Drawing.Point(86, 56);
+            this.nudMinBet.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudMinBet.Name = "nudMinBet";
+            this.nudMinBet.Size = new System.Drawing.Size(85, 20);
+            this.nudMinBet.TabIndex = 67;
+            this.nudMinBet.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // lblChance
             // 
             this.lblChance.AutoSize = true;
-            this.lblChance.Location = new System.Drawing.Point(168, 59);
+            this.lblChance.Location = new System.Drawing.Point(203, 59);
             this.lblChance.Name = "lblChance";
             this.lblChance.Size = new System.Drawing.Size(47, 13);
             this.lblChance.TabIndex = 65;
             this.lblChance.Text = "Chance:";
-            // 
-            // txtMinBet
-            // 
-            this.txtMinBet.Location = new System.Drawing.Point(91, 56);
-            this.txtMinBet.Name = "txtMinBet";
-            this.txtMinBet.Size = new System.Drawing.Size(64, 20);
-            this.txtMinBet.TabIndex = 64;
-            this.txtMinBet.Text = "0.000001";
-            this.txtMinBet.Leave += new System.EventHandler(this.txtChance_Leave);
             // 
             // lblMinBet
             // 
@@ -1149,7 +1185,7 @@
             this.tabControl2.Multiline = true;
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(439, 367);
+            this.tabControl2.Size = new System.Drawing.Size(454, 367);
             this.tabControl2.TabIndex = 52;
             // 
             // tbMartingale
@@ -1158,7 +1194,7 @@
             this.tbMartingale.Location = new System.Drawing.Point(4, 22);
             this.tbMartingale.Name = "tbMartingale";
             this.tbMartingale.Padding = new System.Windows.Forms.Padding(3);
-            this.tbMartingale.Size = new System.Drawing.Size(431, 341);
+            this.tbMartingale.Size = new System.Drawing.Size(446, 341);
             this.tbMartingale.TabIndex = 6;
             this.tbMartingale.Text = "Martingale";
             this.tbMartingale.UseVisualStyleBackColor = true;
@@ -1171,11 +1207,15 @@
             this.tabControl4.Location = new System.Drawing.Point(3, 3);
             this.tabControl4.Name = "tabControl4";
             this.tabControl4.SelectedIndex = 0;
-            this.tabControl4.Size = new System.Drawing.Size(425, 335);
+            this.tabControl4.Size = new System.Drawing.Size(440, 335);
             this.tabControl4.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.nudDevider);
+            this.tabPage1.Controls.Add(this.nudNbets);
+            this.tabPage1.Controls.Add(this.nudMaxMultiplies);
+            this.tabPage1.Controls.Add(this.nudMultiplier);
             this.tabPage1.Controls.Add(this.nudChangeChanceLoseTo);
             this.tabPage1.Controls.Add(this.label67);
             this.tabPage1.Controls.Add(this.nudChangeChanceLoseStreak);
@@ -1201,10 +1241,6 @@
             this.tabPage1.Controls.Add(this.lblMultiplier);
             this.tabPage1.Controls.Add(this.lblDevider);
             this.tabPage1.Controls.Add(this.rdbMaxMultiplier);
-            this.tabPage1.Controls.Add(this.txtDevider);
-            this.tabPage1.Controls.Add(this.txtNBets);
-            this.tabPage1.Controls.Add(this.txtMultiplier);
-            this.tabPage1.Controls.Add(this.txtMaxMultiply);
             this.tabPage1.Controls.Add(this.rdbDevider);
             this.tabPage1.Controls.Add(this.lblAfter2);
             this.tabPage1.Controls.Add(this.rdbConstant);
@@ -1213,10 +1249,65 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(417, 309);
+            this.tabPage1.Size = new System.Drawing.Size(432, 309);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Multiplier on loss";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // nudDevider
+            // 
+            this.nudDevider.DecimalPlaces = 5;
+            this.nudDevider.Location = new System.Drawing.Point(116, 97);
+            this.nudDevider.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudDevider.Name = "nudDevider";
+            this.nudDevider.Size = new System.Drawing.Size(87, 20);
+            this.nudDevider.TabIndex = 79;
+            this.nudDevider.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // nudNbets
+            // 
+            this.nudNbets.Location = new System.Drawing.Point(116, 66);
+            this.nudNbets.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudNbets.Name = "nudNbets";
+            this.nudNbets.Size = new System.Drawing.Size(53, 20);
+            this.nudNbets.TabIndex = 78;
+            this.nudNbets.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // nudMaxMultiplies
+            // 
+            this.nudMaxMultiplies.DecimalPlaces = 5;
+            this.nudMaxMultiplies.Location = new System.Drawing.Point(116, 40);
+            this.nudMaxMultiplies.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudMaxMultiplies.Name = "nudMaxMultiplies";
+            this.nudMaxMultiplies.Size = new System.Drawing.Size(87, 20);
+            this.nudMaxMultiplies.TabIndex = 77;
+            this.nudMaxMultiplies.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // nudMultiplier
+            // 
+            this.nudMultiplier.DecimalPlaces = 5;
+            this.nudMultiplier.Location = new System.Drawing.Point(116, 11);
+            this.nudMultiplier.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudMultiplier.Name = "nudMultiplier";
+            this.nudMultiplier.Size = new System.Drawing.Size(87, 20);
+            this.nudMultiplier.TabIndex = 76;
+            this.nudMultiplier.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // nudChangeChanceLoseTo
             // 
@@ -1228,7 +1319,7 @@
             0,
             0});
             this.nudChangeChanceLoseTo.Name = "nudChangeChanceLoseTo";
-            this.nudChangeChanceLoseTo.Size = new System.Drawing.Size(47, 20);
+            this.nudChangeChanceLoseTo.Size = new System.Drawing.Size(79, 20);
             this.nudChangeChanceLoseTo.TabIndex = 75;
             // 
             // label67
@@ -1470,6 +1561,7 @@
             0,
             0,
             0});
+            this.nudResetBetLoss.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // chkResetBetLoss
             // 
@@ -1490,6 +1582,7 @@
             this.rdbReduce.TabIndex = 53;
             this.rdbReduce.Text = "Change Once";
             this.rdbReduce.UseVisualStyleBackColor = true;
+            this.rdbReduce.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // lblMultiplier
             // 
@@ -1518,38 +1611,7 @@
             this.rdbMaxMultiplier.TabIndex = 3;
             this.rdbMaxMultiplier.Text = "Max";
             this.rdbMaxMultiplier.UseVisualStyleBackColor = true;
-            // 
-            // txtDevider
-            // 
-            this.txtDevider.Location = new System.Drawing.Point(118, 96);
-            this.txtDevider.Name = "txtDevider";
-            this.txtDevider.Size = new System.Drawing.Size(50, 20);
-            this.txtDevider.TabIndex = 51;
-            this.txtDevider.Text = "0.95";
-            // 
-            // txtNBets
-            // 
-            this.txtNBets.Location = new System.Drawing.Point(118, 65);
-            this.txtNBets.Name = "txtNBets";
-            this.txtNBets.Size = new System.Drawing.Size(30, 20);
-            this.txtNBets.TabIndex = 49;
-            this.txtNBets.Text = "3";
-            // 
-            // txtMultiplier
-            // 
-            this.txtMultiplier.Location = new System.Drawing.Point(118, 10);
-            this.txtMultiplier.Name = "txtMultiplier";
-            this.txtMultiplier.Size = new System.Drawing.Size(64, 20);
-            this.txtMultiplier.TabIndex = 45;
-            this.txtMultiplier.Text = "2.07";
-            // 
-            // txtMaxMultiply
-            // 
-            this.txtMaxMultiply.Location = new System.Drawing.Point(118, 39);
-            this.txtMaxMultiply.Name = "txtMaxMultiply";
-            this.txtMaxMultiply.Size = new System.Drawing.Size(64, 20);
-            this.txtMaxMultiply.TabIndex = 47;
-            this.txtMaxMultiply.Text = "10";
+            this.rdbMaxMultiplier.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // rdbDevider
             // 
@@ -1560,11 +1622,12 @@
             this.rdbDevider.TabIndex = 4;
             this.rdbDevider.Text = "Variable";
             this.rdbDevider.UseVisualStyleBackColor = true;
+            this.rdbDevider.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // lblAfter2
             // 
             this.lblAfter2.AutoSize = true;
-            this.lblAfter2.Location = new System.Drawing.Point(154, 68);
+            this.lblAfter2.Location = new System.Drawing.Point(175, 68);
             this.lblAfter2.Name = "lblAfter2";
             this.lblAfter2.Size = new System.Drawing.Size(28, 13);
             this.lblAfter2.TabIndex = 50;
@@ -1581,6 +1644,7 @@
             this.rdbConstant.TabStop = true;
             this.rdbConstant.Text = "Contstant";
             this.rdbConstant.UseVisualStyleBackColor = true;
+            this.rdbConstant.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // lblAfter
             // 
@@ -1602,6 +1666,10 @@
             // 
             // tabPage10
             // 
+            this.tabPage10.Controls.Add(this.nudWinDevider);
+            this.tabPage10.Controls.Add(this.nudWinNBets);
+            this.tabPage10.Controls.Add(this.nudWinMaxMultiplies);
+            this.tabPage10.Controls.Add(this.nudWinMultiplier);
             this.tabPage10.Controls.Add(this.nudChangeChanceWinTo);
             this.tabPage10.Controls.Add(this.label68);
             this.tabPage10.Controls.Add(this.nudChangeChanceWinStreak);
@@ -1627,10 +1695,6 @@
             this.tabPage10.Controls.Add(this.label44);
             this.tabPage10.Controls.Add(this.label45);
             this.tabPage10.Controls.Add(this.rdbWinMaxMultiplier);
-            this.tabPage10.Controls.Add(this.txtWinDevider);
-            this.tabPage10.Controls.Add(this.txtWinNBets);
-            this.tabPage10.Controls.Add(this.txtWinMultiplier);
-            this.tabPage10.Controls.Add(this.txtWinMaxMultiplies);
             this.tabPage10.Controls.Add(this.rdbWinDevider);
             this.tabPage10.Controls.Add(this.label46);
             this.tabPage10.Controls.Add(this.rdbWinConstant);
@@ -1638,7 +1702,7 @@
             this.tabPage10.Controls.Add(this.label54);
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(417, 309);
+            this.tabPage10.Size = new System.Drawing.Size(432, 309);
             this.tabPage10.TabIndex = 3;
             this.tabPage10.Text = "Multiply on win";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -1915,6 +1979,7 @@
             this.rdbWinReduce.TabIndex = 66;
             this.rdbWinReduce.Text = "Change Once";
             this.rdbWinReduce.UseVisualStyleBackColor = true;
+            this.rdbWinReduce.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // label44
             // 
@@ -1934,48 +1999,6 @@
             this.label45.TabIndex = 65;
             this.label45.Text = "Times Multiplier by:";
             // 
-            // rdbWinMaxMultiplier
-            // 
-            this.rdbWinMaxMultiplier.AutoSize = true;
-            this.rdbWinMaxMultiplier.Location = new System.Drawing.Point(217, 9);
-            this.rdbWinMaxMultiplier.Name = "rdbWinMaxMultiplier";
-            this.rdbWinMaxMultiplier.Size = new System.Drawing.Size(45, 17);
-            this.rdbWinMaxMultiplier.TabIndex = 54;
-            this.rdbWinMaxMultiplier.Text = "Max";
-            this.rdbWinMaxMultiplier.UseVisualStyleBackColor = true;
-            // 
-            // txtWinDevider
-            // 
-            this.txtWinDevider.Location = new System.Drawing.Point(118, 96);
-            this.txtWinDevider.Name = "txtWinDevider";
-            this.txtWinDevider.Size = new System.Drawing.Size(50, 20);
-            this.txtWinDevider.TabIndex = 64;
-            this.txtWinDevider.Text = "0.95";
-            // 
-            // txtWinNBets
-            // 
-            this.txtWinNBets.Location = new System.Drawing.Point(118, 65);
-            this.txtWinNBets.Name = "txtWinNBets";
-            this.txtWinNBets.Size = new System.Drawing.Size(30, 20);
-            this.txtWinNBets.TabIndex = 62;
-            this.txtWinNBets.Text = "3";
-            // 
-            // txtWinMultiplier
-            // 
-            this.txtWinMultiplier.Location = new System.Drawing.Point(118, 10);
-            this.txtWinMultiplier.Name = "txtWinMultiplier";
-            this.txtWinMultiplier.Size = new System.Drawing.Size(64, 20);
-            this.txtWinMultiplier.TabIndex = 58;
-            this.txtWinMultiplier.Text = "1";
-            // 
-            // txtWinMaxMultiplies
-            // 
-            this.txtWinMaxMultiplies.Location = new System.Drawing.Point(118, 39);
-            this.txtWinMaxMultiplies.Name = "txtWinMaxMultiplies";
-            this.txtWinMaxMultiplies.Size = new System.Drawing.Size(64, 20);
-            this.txtWinMaxMultiplies.TabIndex = 60;
-            this.txtWinMaxMultiplies.Text = "10";
-            // 
             // rdbWinDevider
             // 
             this.rdbWinDevider.AutoSize = true;
@@ -1985,11 +2008,12 @@
             this.rdbWinDevider.TabIndex = 55;
             this.rdbWinDevider.Text = "Variable";
             this.rdbWinDevider.UseVisualStyleBackColor = true;
+            this.rdbWinDevider.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(154, 68);
+            this.label46.Location = new System.Drawing.Point(174, 68);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(28, 13);
             this.label46.TabIndex = 63;
@@ -2006,6 +2030,7 @@
             this.rdbWinConstant.TabStop = true;
             this.rdbWinConstant.Text = "Contstant";
             this.rdbWinConstant.UseVisualStyleBackColor = true;
+            this.rdbWinConstant.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // label47
             // 
@@ -2039,7 +2064,7 @@
             this.tbLabouchère.Location = new System.Drawing.Point(4, 22);
             this.tbLabouchère.Name = "tbLabouchère";
             this.tbLabouchère.Padding = new System.Windows.Forms.Padding(3);
-            this.tbLabouchère.Size = new System.Drawing.Size(431, 341);
+            this.tbLabouchère.Size = new System.Drawing.Size(446, 341);
             this.tbLabouchère.TabIndex = 7;
             this.tbLabouchère.Text = "Labouchère";
             this.tbLabouchère.UseVisualStyleBackColor = true;
@@ -2143,7 +2168,7 @@
             this.tbZigZag.Location = new System.Drawing.Point(4, 22);
             this.tbZigZag.Name = "tbZigZag";
             this.tbZigZag.Padding = new System.Windows.Forms.Padding(3);
-            this.tbZigZag.Size = new System.Drawing.Size(431, 341);
+            this.tbZigZag.Size = new System.Drawing.Size(446, 341);
             this.tbZigZag.TabIndex = 1;
             this.tbZigZag.Text = "Zig Zag Settings";
             this.tbZigZag.UseVisualStyleBackColor = true;
@@ -2198,9 +2223,19 @@
             0,
             0,
             0});
+            this.NudReverse.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.NudReverse.Name = "NudReverse";
-            this.NudReverse.Size = new System.Drawing.Size(36, 20);
+            this.NudReverse.Size = new System.Drawing.Size(64, 20);
             this.NudReverse.TabIndex = 2;
+            this.NudReverse.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // lblZigZag1
             // 
@@ -2236,7 +2271,7 @@
             this.tbSimulation.Location = new System.Drawing.Point(4, 22);
             this.tbSimulation.Name = "tbSimulation";
             this.tbSimulation.Padding = new System.Windows.Forms.Padding(3);
-            this.tbSimulation.Size = new System.Drawing.Size(431, 341);
+            this.tbSimulation.Size = new System.Drawing.Size(446, 341);
             this.tbSimulation.TabIndex = 2;
             this.tbSimulation.Text = "Simulate";
             this.tbSimulation.UseVisualStyleBackColor = true;
@@ -2440,6 +2475,7 @@
             // 
             // tbVerify
             // 
+            this.tbVerify.Controls.Add(this.btnBetHistory);
             this.tbVerify.Controls.Add(this.btnGenerateBets);
             this.tbVerify.Controls.Add(this.nudGenBetsAmount);
             this.tbVerify.Controls.Add(this.label28);
@@ -2452,14 +2488,14 @@
             this.tbVerify.Location = new System.Drawing.Point(4, 22);
             this.tbVerify.Name = "tbVerify";
             this.tbVerify.Padding = new System.Windows.Forms.Padding(3);
-            this.tbVerify.Size = new System.Drawing.Size(431, 341);
+            this.tbVerify.Size = new System.Drawing.Size(446, 341);
             this.tbVerify.TabIndex = 3;
             this.tbVerify.Text = "Check  Bets";
             this.tbVerify.UseVisualStyleBackColor = true;
             // 
             // btnGenerateBets
             // 
-            this.btnGenerateBets.Location = new System.Drawing.Point(83, 103);
+            this.btnGenerateBets.Location = new System.Drawing.Point(82, 181);
             this.btnGenerateBets.Name = "btnGenerateBets";
             this.btnGenerateBets.Size = new System.Drawing.Size(165, 23);
             this.btnGenerateBets.TabIndex = 8;
@@ -2469,7 +2505,7 @@
             // 
             // nudGenBetsAmount
             // 
-            this.nudGenBetsAmount.Location = new System.Drawing.Point(255, 74);
+            this.nudGenBetsAmount.Location = new System.Drawing.Point(254, 152);
             this.nudGenBetsAmount.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -2492,7 +2528,7 @@
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(164, 78);
+            this.label28.Location = new System.Drawing.Point(163, 156);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(81, 13);
             this.label28.TabIndex = 6;
@@ -2500,7 +2536,7 @@
             // 
             // nudGenBetsStart
             // 
-            this.nudGenBetsStart.Location = new System.Drawing.Point(83, 74);
+            this.nudGenBetsStart.Location = new System.Drawing.Point(82, 152);
             this.nudGenBetsStart.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -2518,7 +2554,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(20, 78);
+            this.label27.Location = new System.Drawing.Point(19, 156);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(58, 13);
             this.label27.TabIndex = 4;
@@ -2526,14 +2562,14 @@
             // 
             // txtClientSeed
             // 
-            this.txtClientSeed.Location = new System.Drawing.Point(83, 49);
+            this.txtClientSeed.Location = new System.Drawing.Point(82, 127);
             this.txtClientSeed.Name = "txtClientSeed";
             this.txtClientSeed.Size = new System.Drawing.Size(245, 20);
             this.txtClientSeed.TabIndex = 3;
             // 
             // txtServerSeed
             // 
-            this.txtServerSeed.Location = new System.Drawing.Point(83, 7);
+            this.txtServerSeed.Location = new System.Drawing.Point(82, 85);
             this.txtServerSeed.Multiline = true;
             this.txtServerSeed.Name = "txtServerSeed";
             this.txtServerSeed.Size = new System.Drawing.Size(245, 39);
@@ -2542,7 +2578,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(13, 52);
+            this.label26.Location = new System.Drawing.Point(12, 130);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(64, 13);
             this.label26.TabIndex = 2;
@@ -2551,7 +2587,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(8, 7);
+            this.label21.Location = new System.Drawing.Point(7, 85);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(69, 13);
             this.label21.TabIndex = 0;
@@ -2575,10 +2611,83 @@
             this.tbCharts.Location = new System.Drawing.Point(4, 22);
             this.tbCharts.Name = "tbCharts";
             this.tbCharts.Padding = new System.Windows.Forms.Padding(3);
-            this.tbCharts.Size = new System.Drawing.Size(431, 341);
+            this.tbCharts.Size = new System.Drawing.Size(446, 341);
             this.tbCharts.TabIndex = 4;
             this.tbCharts.Text = "Charts";
             this.tbCharts.UseVisualStyleBackColor = true;
+            // 
+            // btnChartTimeRange
+            // 
+            this.btnChartTimeRange.Location = new System.Drawing.Point(339, 212);
+            this.btnChartTimeRange.Name = "btnChartTimeRange";
+            this.btnChartTimeRange.Size = new System.Drawing.Size(75, 46);
+            this.btnChartTimeRange.TabIndex = 80;
+            this.btnChartTimeRange.Text = "Draw Chart";
+            this.btnChartTimeRange.UseVisualStyleBackColor = true;
+            this.btnChartTimeRange.Click += new System.EventHandler(this.btnChartTimeRange_Click);
+            // 
+            // btnChartBetID
+            // 
+            this.btnChartBetID.Location = new System.Drawing.Point(269, 165);
+            this.btnChartBetID.Name = "btnChartBetID";
+            this.btnChartBetID.Size = new System.Drawing.Size(123, 23);
+            this.btnChartBetID.TabIndex = 79;
+            this.btnChartBetID.Text = "Draw Chart";
+            this.btnChartBetID.UseVisualStyleBackColor = true;
+            this.btnChartBetID.Click += new System.EventHandler(this.btnChartBetID_Click);
+            // 
+            // nudGraphStartBetID
+            // 
+            this.nudGraphStartBetID.Location = new System.Drawing.Point(139, 168);
+            this.nudGraphStartBetID.Maximum = new decimal(new int[] {
+            276447232,
+            23283,
+            0,
+            0});
+            this.nudGraphStartBetID.Name = "nudGraphStartBetID";
+            this.nudGraphStartBetID.Size = new System.Drawing.Size(120, 20);
+            this.nudGraphStartBetID.TabIndex = 78;
+            // 
+            // dtpEnd
+            // 
+            this.dtpEnd.Location = new System.Drawing.Point(124, 238);
+            this.dtpEnd.Name = "dtpEnd";
+            this.dtpEnd.Size = new System.Drawing.Size(200, 20);
+            this.dtpEnd.TabIndex = 77;
+            // 
+            // dtpStart
+            // 
+            this.dtpStart.Location = new System.Drawing.Point(124, 212);
+            this.dtpStart.Name = "dtpStart";
+            this.dtpStart.Size = new System.Drawing.Size(200, 20);
+            this.dtpStart.TabIndex = 76;
+            // 
+            // label96
+            // 
+            this.label96.AutoSize = true;
+            this.label96.Location = new System.Drawing.Point(89, 244);
+            this.label96.Name = "label96";
+            this.label96.Size = new System.Drawing.Size(29, 13);
+            this.label96.TabIndex = 75;
+            this.label96.Text = "And ";
+            // 
+            // label95
+            // 
+            this.label95.AutoSize = true;
+            this.label95.Location = new System.Drawing.Point(28, 218);
+            this.label95.Name = "label95";
+            this.label95.Size = new System.Drawing.Size(90, 13);
+            this.label95.TabIndex = 74;
+            this.label95.Text = "All Bets Between ";
+            // 
+            // label94
+            // 
+            this.label94.AutoSize = true;
+            this.label94.Location = new System.Drawing.Point(26, 170);
+            this.label94.Name = "label94";
+            this.label94.Size = new System.Drawing.Size(107, 13);
+            this.label94.TabIndex = 73;
+            this.label94.Text = "All bets Above bet id:";
             // 
             // btnChartAllTimeProfitTime
             // 
@@ -2661,7 +2770,7 @@
             this.tbCustom.Location = new System.Drawing.Point(4, 22);
             this.tbCustom.Name = "tbCustom";
             this.tbCustom.Padding = new System.Windows.Forms.Padding(3);
-            this.tbCustom.Size = new System.Drawing.Size(431, 341);
+            this.tbCustom.Size = new System.Drawing.Size(446, 341);
             this.tbCustom.TabIndex = 5;
             this.tbCustom.Text = "Custom";
             this.tbCustom.UseVisualStyleBackColor = true;
@@ -2968,7 +3077,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(3, 449);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(439, 34);
+            this.panel4.Size = new System.Drawing.Size(454, 34);
             this.panel4.TabIndex = 49;
             // 
             // btnStopOnWin
@@ -3013,15 +3122,15 @@
             // 
             // tabPage11
             // 
+            this.tabPage11.Controls.Add(this.nudAmount);
+            this.tabPage11.Controls.Add(this.nudLowerLimit);
+            this.tabPage11.Controls.Add(this.nudLimit);
             this.tabPage11.Controls.Add(this.label84);
             this.tabPage11.Controls.Add(this.lsbStrats);
             this.tabPage11.Controls.Add(this.btnStratRefresh);
             this.tabPage11.Controls.Add(this.btnBrowseStratFolder);
             this.tabPage11.Controls.Add(this.txtQuickSwitch);
-            this.tabPage11.Controls.Add(this.txtLowerLimit);
             this.tabPage11.Controls.Add(this.txtTo);
-            this.tabPage11.Controls.Add(this.txtAmount);
-            this.tabPage11.Controls.Add(this.txtLimit);
             this.tabPage11.Controls.Add(this.label83);
             this.tabPage11.Controls.Add(this.lblTimeBetween);
             this.tabPage11.Controls.Add(this.label56);
@@ -3044,7 +3153,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(445, 486);
+            this.tabPage11.Size = new System.Drawing.Size(460, 486);
             this.tabPage11.TabIndex = 3;
             this.tabPage11.Text = "Advanced Bet Settings";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -3093,14 +3202,6 @@
             this.txtQuickSwitch.Size = new System.Drawing.Size(217, 20);
             this.txtQuickSwitch.TabIndex = 74;
             // 
-            // txtLowerLimit
-            // 
-            this.txtLowerLimit.Location = new System.Drawing.Point(108, 40);
-            this.txtLowerLimit.Name = "txtLowerLimit";
-            this.txtLowerLimit.Size = new System.Drawing.Size(66, 20);
-            this.txtLowerLimit.TabIndex = 59;
-            this.txtLowerLimit.Text = "0.05";
-            // 
             // txtTo
             // 
             this.txtTo.Location = new System.Drawing.Point(108, 177);
@@ -3108,22 +3209,6 @@
             this.txtTo.Size = new System.Drawing.Size(237, 20);
             this.txtTo.TabIndex = 54;
             this.txtTo.Text = "address here";
-            // 
-            // txtAmount
-            // 
-            this.txtAmount.Location = new System.Drawing.Point(108, 154);
-            this.txtAmount.Name = "txtAmount";
-            this.txtAmount.Size = new System.Drawing.Size(64, 20);
-            this.txtAmount.TabIndex = 53;
-            this.txtAmount.Text = "0.01";
-            // 
-            // txtLimit
-            // 
-            this.txtLimit.Location = new System.Drawing.Point(108, 9);
-            this.txtLimit.Name = "txtLimit";
-            this.txtLimit.Size = new System.Drawing.Size(66, 20);
-            this.txtLimit.TabIndex = 52;
-            this.txtLimit.Text = "1";
             // 
             // label83
             // 
@@ -3261,7 +3346,7 @@
             // chkLowerLimit
             // 
             this.chkLowerLimit.AutoSize = true;
-            this.chkLowerLimit.Location = new System.Drawing.Point(193, 40);
+            this.chkLowerLimit.Location = new System.Drawing.Point(226, 42);
             this.chkLowerLimit.Name = "chkLowerLimit";
             this.chkLowerLimit.Size = new System.Drawing.Size(65, 17);
             this.chkLowerLimit.TabIndex = 60;
@@ -3280,7 +3365,7 @@
             // chkLimit
             // 
             this.chkLimit.AutoSize = true;
-            this.chkLimit.Location = new System.Drawing.Point(193, 8);
+            this.chkLimit.Location = new System.Drawing.Point(226, 10);
             this.chkLimit.Name = "chkLimit";
             this.chkLimit.Size = new System.Drawing.Size(65, 17);
             this.chkLimit.TabIndex = 57;
@@ -3379,7 +3464,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(445, 486);
+            this.tabPage9.Size = new System.Drawing.Size(460, 486);
             this.tabPage9.TabIndex = 2;
             this.tabPage9.Text = "DiceBot Settings";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -3738,6 +3823,8 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.label97);
+            this.panel3.Controls.Add(this.cmbSettingMode);
             this.panel3.Controls.Add(this.lblStatus);
             this.panel3.Controls.Add(this.label93);
             this.panel3.Controls.Add(this.label13);
@@ -3750,6 +3837,31 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1484, 42);
             this.panel3.TabIndex = 4;
+            // 
+            // label97
+            // 
+            this.label97.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label97.AutoSize = true;
+            this.label97.Location = new System.Drawing.Point(1267, 11);
+            this.label97.Name = "label97";
+            this.label97.Size = new System.Drawing.Size(78, 13);
+            this.label97.TabIndex = 12;
+            this.label97.Text = "Settings Mode:";
+            // 
+            // cmbSettingMode
+            // 
+            this.cmbSettingMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbSettingMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSettingMode.FormattingEnabled = true;
+            this.cmbSettingMode.Items.AddRange(new object[] {
+            "Basic",
+            "Advanced",
+            "Programmer"});
+            this.cmbSettingMode.Location = new System.Drawing.Point(1351, 8);
+            this.cmbSettingMode.Name = "cmbSettingMode";
+            this.cmbSettingMode.Size = new System.Drawing.Size(121, 21);
+            this.cmbSettingMode.TabIndex = 11;
+            this.cmbSettingMode.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // lblStatus
             // 
@@ -3781,7 +3893,7 @@
             // label82
             // 
             this.label82.AutoSize = true;
-            this.label82.Location = new System.Drawing.Point(1240, 14);
+            this.label82.Location = new System.Drawing.Point(946, 11);
             this.label82.Name = "label82";
             this.label82.Size = new System.Drawing.Size(113, 13);
             this.label82.TabIndex = 7;
@@ -3791,7 +3903,7 @@
             // 
             this.cmbStrat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbStrat.FormattingEnabled = true;
-            this.cmbStrat.Location = new System.Drawing.Point(1359, 11);
+            this.cmbStrat.Location = new System.Drawing.Point(1065, 8);
             this.cmbStrat.Name = "cmbStrat";
             this.cmbStrat.Size = new System.Drawing.Size(121, 21);
             this.cmbStrat.TabIndex = 6;
@@ -3817,7 +3929,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(934, 14);
+            this.linkLabel1.Location = new System.Drawing.Point(640, 11);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(297, 13);
             this.linkLabel1.TabIndex = 4;
@@ -3870,7 +3982,7 @@
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.dataGridView1);
+            this.groupBox6.Controls.Add(this.splitContainer1);
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(0, 187);
             this.groupBox6.Name = "groupBox6";
@@ -3878,27 +3990,6 @@
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Bets:";
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AutoGenerateColumns = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.idDataGridViewTextBoxColumn,
-            this.dateDataGridViewTextBoxColumn,
-            this.amountDataGridViewTextBoxColumn,
-            this.highDataGridViewCheckBoxColumn,
-            this.chanceDataGridViewTextBoxColumn,
-            this.rollDataGridViewTextBoxColumn,
-            this.profitDataGridViewTextBoxColumn,
-            this.nonceDataGridViewTextBoxColumn});
-            this.dataGridView1.DataSource = this.betBindingSource;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 16);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1022, 571);
-            this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // panel5
             // 
@@ -4331,6 +4422,177 @@
             this.label22.TabIndex = 0;
             this.label22.Text = "Bet:";
             // 
+            // nudWinMultiplier
+            // 
+            this.nudWinMultiplier.DecimalPlaces = 5;
+            this.nudWinMultiplier.Location = new System.Drawing.Point(116, 9);
+            this.nudWinMultiplier.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudWinMultiplier.Name = "nudWinMultiplier";
+            this.nudWinMultiplier.Size = new System.Drawing.Size(86, 20);
+            this.nudWinMultiplier.TabIndex = 89;
+            this.nudWinMultiplier.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // rdbWinMaxMultiplier
+            // 
+            this.rdbWinMaxMultiplier.AutoSize = true;
+            this.rdbWinMaxMultiplier.Location = new System.Drawing.Point(217, 9);
+            this.rdbWinMaxMultiplier.Name = "rdbWinMaxMultiplier";
+            this.rdbWinMaxMultiplier.Size = new System.Drawing.Size(45, 17);
+            this.rdbWinMaxMultiplier.TabIndex = 54;
+            this.rdbWinMaxMultiplier.Text = "Max";
+            this.rdbWinMaxMultiplier.UseVisualStyleBackColor = true;
+            this.rdbWinMaxMultiplier.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // nudWinMaxMultiplies
+            // 
+            this.nudWinMaxMultiplies.DecimalPlaces = 5;
+            this.nudWinMaxMultiplies.Location = new System.Drawing.Point(116, 40);
+            this.nudWinMaxMultiplies.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudWinMaxMultiplies.Name = "nudWinMaxMultiplies";
+            this.nudWinMaxMultiplies.Size = new System.Drawing.Size(86, 20);
+            this.nudWinMaxMultiplies.TabIndex = 90;
+            this.nudWinMaxMultiplies.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // nudWinNBets
+            // 
+            this.nudWinNBets.Location = new System.Drawing.Point(116, 66);
+            this.nudWinNBets.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudWinNBets.Name = "nudWinNBets";
+            this.nudWinNBets.Size = new System.Drawing.Size(52, 20);
+            this.nudWinNBets.TabIndex = 91;
+            this.nudWinNBets.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // nudWinDevider
+            // 
+            this.nudWinDevider.DecimalPlaces = 5;
+            this.nudWinDevider.Location = new System.Drawing.Point(116, 97);
+            this.nudWinDevider.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudWinDevider.Name = "nudWinDevider";
+            this.nudWinDevider.Size = new System.Drawing.Size(86, 20);
+            this.nudWinDevider.TabIndex = 92;
+            this.nudWinDevider.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // nudLimit
+            // 
+            this.nudLimit.DecimalPlaces = 8;
+            this.nudLimit.Location = new System.Drawing.Point(108, 10);
+            this.nudLimit.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudLimit.Name = "nudLimit";
+            this.nudLimit.Size = new System.Drawing.Size(105, 20);
+            this.nudLimit.TabIndex = 79;
+            // 
+            // nudLowerLimit
+            // 
+            this.nudLowerLimit.DecimalPlaces = 8;
+            this.nudLowerLimit.Location = new System.Drawing.Point(108, 39);
+            this.nudLowerLimit.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudLowerLimit.Name = "nudLowerLimit";
+            this.nudLowerLimit.Size = new System.Drawing.Size(105, 20);
+            this.nudLowerLimit.TabIndex = 80;
+            // 
+            // nudAmount
+            // 
+            this.nudAmount.DecimalPlaces = 8;
+            this.nudAmount.Location = new System.Drawing.Point(108, 155);
+            this.nudAmount.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudAmount.Name = "nudAmount";
+            this.nudAmount.Size = new System.Drawing.Size(105, 20);
+            this.nudAmount.TabIndex = 81;
+            // 
+            // btnBetHistory
+            // 
+            this.btnBetHistory.Location = new System.Drawing.Point(82, 22);
+            this.btnBetHistory.Name = "btnBetHistory";
+            this.btnBetHistory.Size = new System.Drawing.Size(82, 39);
+            this.btnBetHistory.TabIndex = 9;
+            this.btnBetHistory.Text = "View Bet History";
+            this.btnBetHistory.UseVisualStyleBackColor = true;
+            this.btnBetHistory.Click += new System.EventHandler(this.btnBetHistory_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 16);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.chrtEmbeddedLiveChart);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
+            this.splitContainer1.Size = new System.Drawing.Size(1022, 571);
+            this.splitContainer1.SplitterDistance = 340;
+            this.splitContainer1.TabIndex = 0;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AutoGenerateColumns = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.idDataGridViewTextBoxColumn,
+            this.dateDataGridViewTextBoxColumn,
+            this.amountDataGridViewTextBoxColumn,
+            this.highDataGridViewCheckBoxColumn,
+            this.chanceDataGridViewTextBoxColumn,
+            this.rollDataGridViewTextBoxColumn,
+            this.profitDataGridViewTextBoxColumn,
+            this.nonceDataGridViewTextBoxColumn});
+            this.dataGridView1.DataSource = this.betBindingSource;
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(1022, 227);
+            this.dataGridView1.TabIndex = 1;
+            // 
+            // chrtEmbeddedLiveChart
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
+            this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Name = "Legend1";
+            this.chrtEmbeddedLiveChart.Legends.Add(legend1);
+            this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
+            this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Profit";
+            this.chrtEmbeddedLiveChart.Series.Add(series1);
+            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(1022, 340);
+            this.chrtEmbeddedLiveChart.TabIndex = 0;
+            this.chrtEmbeddedLiveChart.Text = "chart1";
+            // 
             // idDataGridViewTextBoxColumn
             // 
             this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
@@ -4393,79 +4655,6 @@
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
             // 
-            // label94
-            // 
-            this.label94.AutoSize = true;
-            this.label94.Location = new System.Drawing.Point(26, 170);
-            this.label94.Name = "label94";
-            this.label94.Size = new System.Drawing.Size(107, 13);
-            this.label94.TabIndex = 73;
-            this.label94.Text = "All bets Above bet id:";
-            // 
-            // label95
-            // 
-            this.label95.AutoSize = true;
-            this.label95.Location = new System.Drawing.Point(28, 218);
-            this.label95.Name = "label95";
-            this.label95.Size = new System.Drawing.Size(90, 13);
-            this.label95.TabIndex = 74;
-            this.label95.Text = "All Bets Between ";
-            // 
-            // label96
-            // 
-            this.label96.AutoSize = true;
-            this.label96.Location = new System.Drawing.Point(89, 244);
-            this.label96.Name = "label96";
-            this.label96.Size = new System.Drawing.Size(29, 13);
-            this.label96.TabIndex = 75;
-            this.label96.Text = "And ";
-            // 
-            // dtpStart
-            // 
-            this.dtpStart.Location = new System.Drawing.Point(124, 212);
-            this.dtpStart.Name = "dtpStart";
-            this.dtpStart.Size = new System.Drawing.Size(200, 20);
-            this.dtpStart.TabIndex = 76;
-            // 
-            // dtpEnd
-            // 
-            this.dtpEnd.Location = new System.Drawing.Point(124, 238);
-            this.dtpEnd.Name = "dtpEnd";
-            this.dtpEnd.Size = new System.Drawing.Size(200, 20);
-            this.dtpEnd.TabIndex = 77;
-            // 
-            // nudGraphStartBetID
-            // 
-            this.nudGraphStartBetID.Location = new System.Drawing.Point(139, 168);
-            this.nudGraphStartBetID.Maximum = new decimal(new int[] {
-            276447232,
-            23283,
-            0,
-            0});
-            this.nudGraphStartBetID.Name = "nudGraphStartBetID";
-            this.nudGraphStartBetID.Size = new System.Drawing.Size(120, 20);
-            this.nudGraphStartBetID.TabIndex = 78;
-            // 
-            // btnChartBetID
-            // 
-            this.btnChartBetID.Location = new System.Drawing.Point(269, 165);
-            this.btnChartBetID.Name = "btnChartBetID";
-            this.btnChartBetID.Size = new System.Drawing.Size(123, 23);
-            this.btnChartBetID.TabIndex = 79;
-            this.btnChartBetID.Text = "Draw Chart";
-            this.btnChartBetID.UseVisualStyleBackColor = true;
-            this.btnChartBetID.Click += new System.EventHandler(this.btnChartBetID_Click);
-            // 
-            // btnChartTimeRange
-            // 
-            this.btnChartTimeRange.Location = new System.Drawing.Point(339, 212);
-            this.btnChartTimeRange.Name = "btnChartTimeRange";
-            this.btnChartTimeRange.Size = new System.Drawing.Size(75, 46);
-            this.btnChartTimeRange.TabIndex = 80;
-            this.btnChartTimeRange.Text = "Draw Chart";
-            this.btnChartTimeRange.UseVisualStyleBackColor = true;
-            this.btnChartTimeRange.Click += new System.EventHandler(this.btnChartTimeRange_Click);
-            // 
             // cDiceBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4493,11 +4682,17 @@
             this.tabPage3.ResumeLayout(false);
             this.Settings.ResumeLayout(false);
             this.Settings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinBet)).EndInit();
             this.tabControl2.ResumeLayout(false);
             this.tbMartingale.ResumeLayout(false);
             this.tabControl4.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDevider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNbets)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMultiplies)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreakTo)).EndInit();
@@ -4531,6 +4726,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).EndInit();
             this.tbCharts.ResumeLayout(false);
             this.tbCharts.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).EndInit();
             this.tbCustom.ResumeLayout(false);
             this.tbCustom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).EndInit();
@@ -4564,7 +4760,6 @@
             this.panel3.PerformLayout();
             this.pnlApiInfo.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel5.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -4575,8 +4770,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiPayout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMaxMultiplies)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinNBets)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinDevider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLowerLimit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAmount)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4661,9 +4868,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.GroupBox Settings;
-        private System.Windows.Forms.TextBox txtChance;
         private System.Windows.Forms.Label lblChance;
-        private System.Windows.Forms.TextBox txtMinBet;
         private System.Windows.Forms.Label lblMinBet;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tbMartingale;
@@ -4694,10 +4899,6 @@
         private System.Windows.Forms.Label lblMultiplier;
         private System.Windows.Forms.Label lblDevider;
         private System.Windows.Forms.RadioButton rdbMaxMultiplier;
-        private System.Windows.Forms.TextBox txtDevider;
-        private System.Windows.Forms.TextBox txtNBets;
-        private System.Windows.Forms.TextBox txtMultiplier;
-        private System.Windows.Forms.TextBox txtMaxMultiply;
         private System.Windows.Forms.RadioButton rdbDevider;
         private System.Windows.Forms.Label lblAfter2;
         private System.Windows.Forms.RadioButton rdbConstant;
@@ -4728,11 +4929,6 @@
         private System.Windows.Forms.RadioButton rdbWinReduce;
         private System.Windows.Forms.Label label44;
         private System.Windows.Forms.Label label45;
-        private System.Windows.Forms.RadioButton rdbWinMaxMultiplier;
-        private System.Windows.Forms.TextBox txtWinDevider;
-        private System.Windows.Forms.TextBox txtWinNBets;
-        private System.Windows.Forms.TextBox txtWinMultiplier;
-        private System.Windows.Forms.TextBox txtWinMaxMultiplies;
         private System.Windows.Forms.RadioButton rdbWinDevider;
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.RadioButton rdbWinConstant;
@@ -4830,10 +5026,7 @@
         private System.Windows.Forms.Button btnStratRefresh;
         private System.Windows.Forms.Button btnBrowseStratFolder;
         private System.Windows.Forms.TextBox txtQuickSwitch;
-        private System.Windows.Forms.TextBox txtLowerLimit;
         private System.Windows.Forms.TextBox txtTo;
-        private System.Windows.Forms.TextBox txtAmount;
-        private System.Windows.Forms.TextBox txtLimit;
         private System.Windows.Forms.Label label83;
         private System.Windows.Forms.Label lblTimeBetween;
         private System.Windows.Forms.Label label56;
@@ -4914,15 +5107,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewLinkColumn idDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dateDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn amountDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn highDataGridViewCheckBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chanceDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn rollDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn profitDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nonceDataGridViewTextBoxColumn;
         private System.Windows.Forms.BindingSource betBindingSource;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Label label89;
@@ -4948,6 +5132,34 @@
         private System.Windows.Forms.Label label96;
         private System.Windows.Forms.Label label95;
         private System.Windows.Forms.Label label94;
+        private System.Windows.Forms.ComboBox cmbSettingMode;
+        private System.Windows.Forms.Label label97;
+        private System.Windows.Forms.NumericUpDown nudChance;
+        private System.Windows.Forms.NumericUpDown nudMinBet;
+        private System.Windows.Forms.NumericUpDown nudNbets;
+        private System.Windows.Forms.NumericUpDown nudMaxMultiplies;
+        private System.Windows.Forms.NumericUpDown nudMultiplier;
+        private System.Windows.Forms.NumericUpDown nudDevider;
+        private System.Windows.Forms.NumericUpDown nudWinNBets;
+        private System.Windows.Forms.NumericUpDown nudWinMaxMultiplies;
+        private System.Windows.Forms.NumericUpDown nudWinMultiplier;
+        private System.Windows.Forms.RadioButton rdbWinMaxMultiplier;
+        private System.Windows.Forms.NumericUpDown nudWinDevider;
+        private System.Windows.Forms.NumericUpDown nudAmount;
+        private System.Windows.Forms.NumericUpDown nudLowerLimit;
+        private System.Windows.Forms.NumericUpDown nudLimit;
+        private System.Windows.Forms.Button btnBetHistory;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chrtEmbeddedLiveChart;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewLinkColumn idDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dateDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn amountDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn highDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chanceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rollDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn profitDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nonceDataGridViewTextBoxColumn;
 
     }
 }
