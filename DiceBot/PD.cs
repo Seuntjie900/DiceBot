@@ -179,14 +179,18 @@ namespace DiceBot
             }
             catch (WebException e)
             {
-                string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                Parent.updateStatus(sEmitResponse);
-                if (e.Message.Contains("401"))
+                if (e.Response != null)
                 {
-                    System.Windows.Forms.MessageBox.Show("Could not log in. Please ensure the username, passowrd and 2fa code are all correct.");
+
+                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                    Parent.updateStatus(sEmitResponse);
+                    if (e.Message.Contains("401"))
+                    {
+                        System.Windows.Forms.MessageBox.Show("Could not log in. Please ensure the username, passowrd and 2fa code are all correct.");
+                    }
+                    
                 }
                 return false;
-
             }
         }
 
@@ -230,8 +234,11 @@ namespace DiceBot
             }
             catch (WebException e)
             {
-                string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                Parent.updateStatus(sEmitResponse);
+                if (e.Response != null)
+                {
+                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                    Parent.updateStatus(sEmitResponse);
+                }
                 if (e.Message.Contains("429"))
                 {
                     Thread .Sleep(500);
@@ -284,12 +291,16 @@ namespace DiceBot
                 }
                 catch (WebException e)
                 {
-                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                    Parent.updateStatus(sEmitResponse);
-                    if (e.Message.Contains("429"))
+                    if (e.Response != null)
                     {
-                        Thread.Sleep(2000);
-                        ResetSeed();
+
+                        string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                        Parent.updateStatus(sEmitResponse);
+                        if (e.Message.Contains("429"))
+                        {
+                            Thread.Sleep(2000);
+                            ResetSeed();
+                        }
                     }
                 }
             }
@@ -458,12 +469,17 @@ namespace DiceBot
             }
             catch (WebException e)
             {
-                string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                Parent.updateStatus(sEmitResponse);
-                if (e.Message.Contains("429"))
+                if (e.Response != null)
                 {
-                    Thread.Sleep(1500);
-                    return getDepositAddress();
+
+                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                    Parent.updateStatus(sEmitResponse);
+                    if (e.Message.Contains("429"))
+                    {
+                        Thread.Sleep(1500);
+                        return getDepositAddress();
+                    }
+                    
                 }
                 return "";
             }

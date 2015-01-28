@@ -3992,9 +3992,40 @@ namespace DiceBot
         }
 
         //settings mode combobox
+        List<TabPage> Tabs = new List<TabPage>();
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (cmbSettingMode.SelectedIndex==0 && tcBetSettings.TabCount>3)
+            {
+                Tabs.Add(tcBetSettings.TabPages[3]);
+                tcBetSettings.TabPages.RemoveAt(3);
+                Tabs.Add(tcBetSettings.TabPages[3]);
+                tcBetSettings.TabPages.RemoveAt(3);
+                Tabs.Add(tcBetSettings.TabPages[3]);
+                tcBetSettings.TabPages.RemoveAt(3);
+                Tabs.Add(tcBetSettings.TabPages[3]);
+                tcBetSettings.TabPages.RemoveAt(3);
+                pnlMartingaleLossAdvanced.Visible = false;
+                pnlMartingaleWinAdvanced.Visible = false;
+                pnlAdvancedAdvanced.Visible = false;
+                label82.Visible = false;
+                cmbStrat.Visible = false;
+                
+            }
+            else if (cmbSettingMode.SelectedIndex==1)
+            {
+                for (int i = 0; i < Tabs.Count; i++)
+                {
+                    tcBetSettings.TabPages.Add(Tabs[i]);
+                    Tabs.RemoveAt(i--);
+                    pnlMartingaleLossAdvanced.Visible = true;
+                    pnlMartingaleWinAdvanced.Visible = true;
+                    pnlAdvancedAdvanced.Visible = true;
+                    label82.Visible = true;
+                    cmbStrat.Visible = true;
+                }
+            }
+                
         }
 
         private void btnBetHistory_Click(object sender, EventArgs e)
