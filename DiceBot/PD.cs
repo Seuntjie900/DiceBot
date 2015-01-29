@@ -288,6 +288,8 @@ namespace DiceBot
                     }
                     HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
                     string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                    PDseeds tmpSeed = json.JsonDeserialize<PDseeds>(sEmitResponse);
+                    sqlite_helper.InsertSeed(tmpSeed.seeds.previous_server_hashed, tmpSeed.seeds.previous_server);
                 }
                 catch (WebException e)
                 {
@@ -484,6 +486,28 @@ namespace DiceBot
                 return "";
             }
         }
+
+        public override void Disconnect()
+        {
+            ispd = false;
+            if (accesstoken!="")
+            try
+            {
+                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/logout?access_token=" + accesstoken);
+                betrequest.Method = "GET";
+                
+                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+
+                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                
+            }
+            catch
+            {
+
+            }
+        }
     }
 
     public class pdlogin
@@ -546,5 +570,17 @@ namespace DiceBot
         public decimal profit { get; set; }
         public decimal wagered { get; set; }
         public string address { get; set; }
+    }
+
+    public class PDseeds
+    {
+        public PDseeds seeds { get; set; }
+        public long nonce { get; set; }
+        public string client { get; set; }
+        public string previous_server { get; set; }
+        public string previous_client { get; set; }
+        public string previous_server_hashed { get; set; }
+        public string next_seed { get; set; }
+        public string server { get; set; }
     }
 }

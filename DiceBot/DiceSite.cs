@@ -138,7 +138,7 @@ namespace DiceBot
             }
             return 0;
         }
-
+        public abstract void Disconnect();
     }
 
     /*public class PRC_old : DiceSite

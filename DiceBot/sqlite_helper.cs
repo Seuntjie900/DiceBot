@@ -15,20 +15,6 @@ namespace DiceBot
             return new SQLiteConnection(constring);
         }
         
-        /*public sqlite_helper()
-        {
-            if (File.Exists("DiceBot.db"))
-            {
-                sqcon = new SQLiteConnection("Data Source=DiceBot.db;Version=3;New=True;Compress=True;");
-            }
-            else
-            {
-                sqcon = new SQLiteConnection("Data Source=DiceBot.db;Version=3;New=False;Compress=True;");
-            }
-            sqcon.Open();
-            CheckDBS();
-        }*/
-
         public static void CheckDBS()
         {
             SQLiteConnection sqcon = GetConnection();

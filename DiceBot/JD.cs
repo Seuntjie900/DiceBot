@@ -18,8 +18,14 @@ namespace DiceBot
             Instance.OnResult += Instance_OnResult;
             Instance.OnAddress += Instance_OnAddress;
             Instance.OnJDError += Instance_OnJDError;
+            Instance.OnSecretHash += Instance_OnSecretHash;
             this.Parent = Parent;
             Name = "JustDice";
+        }
+
+        void Instance_OnSecretHash(Various secretHash)
+        {
+            
         }
 
         void Instance_OnJDError(Various Error)
@@ -143,6 +149,11 @@ namespace DiceBot
             tmp.nonce = curBet.nonce;
             
             return tmp;
+        }
+
+        public override void Disconnect()
+        {
+            Instance.Disconnect();
         }
     }
 }

@@ -23,6 +23,7 @@ namespace DiceBot
     
     public partial class cDiceBot : Form
     {
+        Control[] ControlsToDisable;
         private const string vers = "2.5.5";
         DateTime OpenTime = DateTime.UtcNow;
         Random r = new Random();
@@ -147,6 +148,24 @@ namespace DiceBot
             }
         }
 
+        void EnableNotLoggedInControls(bool Enabled)
+        { 
+            foreach (Control c in ControlsToDisable)
+            {
+                c.Enabled = Enabled;
+            }
+            if (Enabled)
+            { 
+                btnRegister.Enabled = false;
+                btnLogIn.Text = "Logout";
+            }
+            else
+            {
+                btnRegister.Enabled = true;
+                btnLogIn.Text = "Log In";
+            }
+        }
+
         public cDiceBot()
         {
             sqlite_helper.CheckDBS();
@@ -156,6 +175,8 @@ namespace DiceBot
                 
             }
             InitializeComponent();
+            ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow };
+            EnableNotLoggedInControls(false);
             cmbSettingMode.SelectedIndex = 0;
             chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
             chrtEmbeddedLiveChart.ChartAreas[0].AxisX.Minimum = 0;
@@ -1492,7 +1513,7 @@ namespace DiceBot
                        (rdbResetSeedLosses.Checked && Losses % nudResetSeed.Value == 0 && Winstreak == 0)) && !withdrew)
                     {
                         
-                        reset = true;
+                        //reset = true;
                         ResetSeed();
                     }
                     
@@ -1682,9 +1703,9 @@ namespace DiceBot
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (CurrentSite is PD)
+            if (CurrentSite != null)
             {
-                (CurrentSite as PD).ispd = false;
+                CurrentSite.Disconnect();
             }
             save();
             if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
@@ -3594,7 +3615,11 @@ namespace DiceBot
 
         private void cmbSite_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            EnableNotLoggedInControls(false);
+            if (CurrentSite!=null)
+            {
+                CurrentSite.Disconnect();
+            }
             if (CurrentSite is PD)
             {
                 (CurrentSite as PD).ispd = false;
@@ -3925,7 +3950,23 @@ namespace DiceBot
 
         private void btnLogIn_Click(object sender, EventArgs e)
         {
-            CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text);
+            if ((sender as Button).Text == "Log In")
+            {
+                if (CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text))
+                {
+                    EnableNotLoggedInControls(true);
+
+                }
+            }
+            else
+            {
+                if (CurrentSite!=null)
+                {
+                    Stop();
+                    CurrentSite.Disconnect();
+                    EnableNotLoggedInControls(false);
+                }
+            }
         }
 
 
@@ -3933,7 +3974,10 @@ namespace DiceBot
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            CurrentSite.Register(txtApiUsername.Text, txtApiPassword.Text);
+            if (CurrentSite.Register(txtApiUsername.Text, txtApiPassword.Text))
+            {
+                EnableNotLoggedInControls(true);
+            }
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
