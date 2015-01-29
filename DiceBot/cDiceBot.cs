@@ -157,6 +157,8 @@ namespace DiceBot
             }
             InitializeComponent();
             cmbSettingMode.SelectedIndex = 0;
+            chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
+            chrtEmbeddedLiveChart.ChartAreas[0].AxisX.Minimum = 0;
             #region tooltip Texts
             ToolTip tt = new ToolTip();
             tt.SetToolTip(lblZigZag1, "After every n bets/wins/losses \n(as specified to the right), \nthe bot will switch from \nbetting high to low or vica verca");
@@ -4033,6 +4035,62 @@ namespace DiceBot
             BetHistory tmp = new BetHistory(CurrentSite.Name);
             tmp.Show();
         }
+
+        private void btnWithdraw_Click(object sender, EventArgs e)
+        {
+            if (CurrentSite.AutoWithdraw)
+            {
+                string Response = Interaction.InputBox("Amount to withdraw: ", "Withdraw", "0", -1, -1);
+                double tmpAmount = 0;
+                if (double.TryParse(Response, out tmpAmount))
+                {
+                    string Address = Interaction.InputBox("Bitcoin Address: ", "Withdraw", "", -1, -1);
+                    System.Text.RegularExpressions.Regex txt = null;
+
+                    txt = new System.Text.RegularExpressions.Regex(@"^[13][a-km-zA-HJ-NP-Z0-9]{26,33}$");
+
+                    bool valid = txt.IsMatch(Address);
+                    if (valid)
+                    {
+
+                        CurrentSite.Withdraw(tmpAmount, "");
+                    }
+                    else
+
+                        MessageBox.Show("Invalid Address");
+                }
+                else
+                {
+                    MessageBox.Show("Input not a valid number");
+                }
+            }
+        }
+
+        //will invest at default kelly for multikelly sites with a default, 0.5% for multikelly sites that have no default.
+        private void btnInvest_Click(object sender, EventArgs e)
+        {
+            if (CurrentSite.AutoInvest)
+            {
+                string Response = Interaction.InputBox("Amount to invest: ", "Invest", "0", -1, -1);
+                double tmpAmount = 0;
+                if (double.TryParse(Response, out tmpAmount))
+                {
+                    CurrentSite.Invest(tmpAmount);
+                    
+                }
+                else
+                {
+                    MessageBox.Show("Input not a valid number");
+                }
+            }
+        }
+
+        private void btnTip_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This feature has not yet been implemented.");
+        }
+
+        
 
         
 

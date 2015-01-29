@@ -36,8 +36,9 @@ namespace DiceBot
         {
             if (IsMine)
             {
+                
                 bets = int.Parse(result.bets);
-                Parent.updateBalance((decimal)(balance ));
+                Parent.updateBalance(Instance.Balance);
                 Parent.updateBets(result.bets);
                 Parent.updateLosses(result.stats.losses);
                 Parent.updateProfit(result.profit );
@@ -67,6 +68,7 @@ namespace DiceBot
         public override void ResetSeed()
         {
             Parent.updateStatus("Resetting Seed");
+            
             Instance.Randomize();
         }
 
@@ -135,7 +137,7 @@ namespace DiceBot
             tmp.date = json.ToDateTime2( curBet.date.ToString());
             tmp.Id = (long)curBet.betid;
             tmp.Profit = decimal.Parse(curBet.this_profit, System.Globalization.CultureInfo.InvariantCulture);
-            tmp.Roll = (decimal)curBet.lucky;
+            tmp.Roll = (decimal)curBet.lucky/10000m;
             tmp.high = curBet.high;
             tmp.Chance = decimal.Parse(curBet.chance, System.Globalization.CultureInfo.InvariantCulture);
             tmp.nonce = curBet.nonce;

@@ -1,0 +1,43 @@
+Todo:
+losing streak table redo
+Proxy Authentication.
+bad streak redo
+verify rolls
+extra strategies - Fibbonachi and d’Alembert
+programmer mode (access to variables, write code for own strategies)
+implement other sites (requires prc api)
+advanced zig zag
+logout
+login loader
+disable buttons and inputs untill logged in
+multilingual support
+finish tooltips
+clean up code
+finish sqlite implementation
+view old bets table - stil needs work
+withdraw button
+invest button
+tip button
+on closing kill all api threads
+get server seed on randomize
+Look for server seed of old bets
+Disconnect + logout on site change or close
+seperate stats and bet method from dobet() to easily switch between strategies
+Use radio buttons for different strategy modes (martingale, labouchere, fibbonachi etc)
+
+
+
+Done:
+v3:
+fix simulations - done, i think
+chart - done
+live charts -done
+fix int and decimal parser for regions -- should be done
+zero betting/pre-betting
+pd seed reset limiter
+use NUDS instead of textboxes everywhere
+beginner mode (hide certain settings) -done
+advanced mode (show all settings) -done
+pd error messages -Done for now
+jd ROLL -Fixed
+JD balance -Fixed

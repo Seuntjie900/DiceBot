@@ -20,7 +20,9 @@ namespace DiceBot
             Series Bets;
             Bets = new Series("Profit");
             Bets.ChartType = SeriesChartType.Line;
-             chrtProfitChart.ChartAreas[0].AxisX.Minimum = 0;
+            chrtProfitChart.Series[0].Points.AddXY(0, 0);
+            chrtProfitChart.ChartAreas[0].AxisX.Minimum = 0;
+            chrtProfitChart.ChartAreas[0].AxisX.Minimum = 0;
             chrtProfitChart.ChartAreas[0].AxisX.Title = "Bets";
             
             chrtProfitChart.ChartAreas[0].AxisY.Title = "Profit (Btc)";
