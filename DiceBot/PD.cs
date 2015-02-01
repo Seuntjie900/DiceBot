@@ -433,7 +433,7 @@ namespace DiceBot
             {
                 buffer.Add(Convert.ToByte(c));
             }
-
+            
             byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
 
             StringBuilder hex = new StringBuilder(hash.Length * 2);
@@ -448,7 +448,11 @@ namespace DiceBot
 
                 double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
-                    return lucky / 10000;
+                {
+                    lucky %= 10000;
+                    return lucky / 100;
+
+                }
             }
             return 0;
         }

@@ -11,7 +11,6 @@ multilingual support
 finish tooltips
 clean up code
 finish sqlite implementation
-view old bets table - stil needs work. Implement data pager instead of just a gridview
 tip button
 get server seed on randomize
 Look for server seed of old bets
@@ -40,6 +39,4 @@ invest button
 logout
 disable certain buttons untill logged in
 on closing kill all api threads
-
-
-"{\"seeds\":{\"nonce\":0,\"client\":\"cdf4e6d3bfa642f7833f\",\"previous_server\":\"16d106a17421ce0411327ee4cd28586847e5db88f40aec73a3723f6c11acee2f\",\"previous_client\":\"66db049cae394073a914\",\"previous_server_hashed\":\"47330cec2e66d493ade7f72f736d01909ecd5a863fb167e334dbec29a0da5d3f\",\"next_seed\":\"d3aa9ba234bc874c5f560981b9f1e5e1032d4532bdd5a53d38bd2b10f7ca6971\",\"server\":\"fe55bc534c4f0fdd0a4a8522111ad648fe9335cc32980fe7e82fdd2eba77318b\"}}"
+view old bets table - stil needs work. Implement data pager instead of just a gridview

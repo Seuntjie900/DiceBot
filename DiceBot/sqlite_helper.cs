@@ -273,7 +273,7 @@ namespace DiceBot
             return null;
         }
 
-        public static Bet[]GetBetHistory(string site)
+        public static Bet[] GetBetHistory(string site)
         {
             using (SQLiteConnection sqcon = GetConnection())
             {
@@ -359,6 +359,233 @@ namespace DiceBot
                 sqcon.Close();
             }
             
+        }
+
+        public static Bet[] Search(bool betid, bool chance, bool stake, bool roll, bool profit, bool client, bool server, bool hash, int high, int verified, string Query, string SiteName)
+        {
+            Query = Query.Replace("'", "\"");
+            string searchSring = "select bet.*,seed.server from bet, seed where bet.hash=seed.hash ";
+            if (SiteName != "")
+            {
+                searchSring += " and site = '" + SiteName + "'";
+            }
+            searchSring += " and (";
+            if (betid)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " betid like '" + Query + "'";
+            }
+            if (chance)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " chance like '" + Query + "'";
+            }
+            if (stake)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " stake like '" + Query + "'";
+            }
+            if (roll)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " lucky like '" + Query + "'";
+            }
+            if (profit)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " profit like '" + Query + "'";
+            }
+            if (client)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " client like '" + Query + "'";
+            }
+            if (server)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " server like '" + Query + "'";
+            }
+            if (hash)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " hash like '" + Query + "'";
+            }
+            searchSring += " )";
+            if (high == 1)
+            {
+                searchSring += " and high = 1";
+            }
+            else if (high == 2)
+            {
+                searchSring += " and high = 0";
+            }
+            
+            using (SQLiteConnection sqcon = GetConnection())
+            {
+
+                try
+                {
+                    sqcon.Open();
+                    SQLiteCommand Command = new SQLiteCommand(searchSring, sqcon);
+
+                    SQLiteDataReader Reader = Command.ExecuteReader();
+                    List<Bet> Bets = new List<Bet>();
+                    while (Reader.Read())
+                    {
+                        Bet b = (BetParser(Reader));
+                        if ((b.Verified && verified == 1) || (!b.Verified && verified == 2) || verified == 3)
+                        {
+                            Bets.Add(b);
+                        }
+                    }
+                    sqcon.Close();
+                    return Bets.ToArray();
+                }
+                catch
+                {
+                }
+                sqcon.Close();
+
+            }
+            return null;
+        }
+        public static Bet[] Search(bool betid, bool chance, bool stake, bool roll, bool profit, bool client, bool server, bool hash, int high, int verified, string Query, string SiteName, DateTime Start, DateTime End)
+        {
+            Query = Query.Replace("'", "\"");
+            string searchSring = "select bet.*,seed.server from bet, seed where bet.hash=seed.hash ";
+            if ( SiteName != "")
+            {
+                searchSring += " and site = '" + SiteName + "'";
+            }
+            searchSring += " (";
+            if (betid)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " betid like '" + Query + "'";
+            }
+            if (chance)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " chance like '" + Query + "'";
+            }
+            if (stake)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " stake like '" + Query + "'";
+            }
+            if (roll)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " lucky like '" + Query + "'";
+            }
+            if (profit)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " profit like '" + Query + "'";
+            }
+            if (client)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " client like '" + Query + "'";
+            }
+            if (server)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " server like '" + Query + "'";
+            }
+            if (hash)
+            {
+                if (!searchSring.EndsWith("("))
+                {
+                    searchSring += " or";
+                }
+                searchSring += " hash like '" + Query + "'";
+            }
+            searchSring += " )";
+            if (high==1)
+            {
+
+                searchSring += " and high = 1";
+            }
+            else if (high==2)
+            {
+                searchSring += " and high = 0";
+            }
+            searchSring += "and date >= '" + Start.ToShortDateString() + "'";
+            searchSring += "and date <= '" + End.ToShortDateString() + "'";
+            using (SQLiteConnection sqcon = GetConnection())
+            {
+
+                try
+                {
+                    sqcon.Open();
+                    SQLiteCommand Command = new SQLiteCommand(searchSring, sqcon);
+                    
+                    SQLiteDataReader Reader = Command.ExecuteReader();
+                    List<Bet> Bets = new List<Bet>();
+                    while (Reader.Read())
+                    {
+                        Bet b = (BetParser(Reader));
+                        if ((b.Verified && verified==1)||(!b.Verified && verified==2)||verified==3)
+                        {
+                            Bets.Add(b);
+                        }
+                    }
+                    sqcon.Close();
+                    return Bets.ToArray();
+                }
+                catch
+                {
+                }
+                sqcon.Close();
+                
+            }
+            return null;
         }
     }
 
