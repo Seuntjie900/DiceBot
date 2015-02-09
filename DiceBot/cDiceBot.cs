@@ -118,6 +118,7 @@ namespace DiceBot
         {
             decimal Previous = 0;
             decimal Current = (decimal)MinBet ;
+            lstFibonacci.Items.Clear();
             for (int i =0; i<100; i++)
             {
                 lstFibonacci.Items.Add(string.Format("{0}. {1}", i, Current));
@@ -2045,7 +2046,7 @@ namespace DiceBot
                
                 try
                 {
-                    sw.WriteLine("SaveVersion|" + "2");
+                    sw.WriteLine("SaveVersion|" + "3");
                     sw.WriteLine("MinBet|"+nudMinBet.Value);
                     sw.WriteLine("Multiplier|"+nudMultiplier.Value);
                     sw.WriteLine("Chance|"+nudChance.Value);
@@ -2172,7 +2173,7 @@ namespace DiceBot
                     sw.WriteLine("MKDecrement|" + nudMKDecrement.Value.ToString());
                     sw.WriteLine("MKEnabled|" + (chkMK.Checked ? "1" : "0"));
 
-                    sw.WriteLine("LabEnabled|" + (rdbLabEnable.Checked ? "1" : "0"));
+                    
                     sw.WriteLine("LabReverse|" + (chkReverseLab.Checked ? "1" : "0"));
                     string labtmp = "";
                     foreach (string s in rtbBets.Lines)
@@ -2182,11 +2183,49 @@ namespace DiceBot
                         labtmp += s;
                     }
                     sw.WriteLine("LabValues|" + labtmp);
-
-                    //rdbLabRestart.Checked = ("1" == getvalue(saveditems, "LabComplete"));
-                    //rdbLabStop.Checked = ("2" == getvalue(saveditems, "LabComplete"));
                     sw.WriteLine("LabComplete|" + (rdbLabStop.Checked ? "2" : "1"));
 
+                    int Strat = 0;
+                    if (rdbMartingale.Checked)
+                        Strat = 0;
+                    else if (rdbLabEnable.Checked)
+                        Strat = 1;
+                    else if (rdbFibonacci.Checked)
+                        Strat = 2;
+                    else if (rdbAlembert.Checked)
+                        Strat = 3;
+                    else if (rdbPreset.Checked)
+                        Strat = 4;
+                    sw.WriteLine("Strategy|" + Strat);
+
+                    sw.WriteLine("FibonacciLoss|" + (rdbFiboLossIncrement.Checked ? "0" : rdbFiboLossReset.Checked ? "1" : "2"));
+                    sw.WriteLine("FibonacciWin|" + (rdbFiboWinIncrement.Checked ? "0" : rdbFiboWinReset.Checked ? "1" : "2"));
+                    sw.WriteLine("FibonacciLevel|" + (rdbFiboLevelStop.Checked ? "0" : "1"));
+                    sw.WriteLine("FibonacciLevelEnabled|" + (chkFiboLevel.Checked ? "0" : "1"));
+                    sw.WriteLine("FibonacciLossSteps|" + nudFiboLossIncrement.Value);
+                    sw.WriteLine("FibonacciWinSteps|" + nudFiboWinIncrement.Value);
+                    sw.WriteLine("FibonnaciLevelSteps|" + nudFiboLeve.Value);
+
+                    sw.WriteLine("dAlembertLossIncrement|" + nudAlembertIncrementLoss.Value);
+                    sw.WriteLine("dAlembertLossStretch|" + nudAlembertStretchLoss.Value);
+                    sw.WriteLine("dAlembertWinIncrement|" + nudAlembertIncrementWin.Value);
+                    sw.WriteLine("dAlembertWinStretch|" + nudAlembertStretchWin.Value);
+
+
+                    string presettmp = "";
+                    foreach (string s in rtbPresetList.Lines)
+                    {
+                        if (presettmp != "")
+                            presettmp += "?";
+                        presettmp += s;
+                    }
+                    sw.WriteLine("PresetValues|" + presettmp);
+                    sw.WriteLine("PresetEnd|"+ (rdbPresetEndReset.Checked?0:rdbPresetEndStep.Checked?1:2));
+                    sw.WriteLine("PresetEndStep|"+nudPresetEndStep.Value);
+                    sw.WriteLine("PresetLoss|" + (rdbPresetLossReset.Checked ? 0 : rdbPresetLossStep.Checked ? 1 : 2));
+                    sw.WriteLine("PresetLossStep|" + nudPresetLossStep.Value);
+                    sw.WriteLine("PresetWin|" + (rdbPresetWinReset.Checked ? 0 : rdbPresetWinStep.Checked ? 1 : 2));
+                    sw.WriteLine("PresetWinStep|" + nudPresetWinStep.Value);
                     #region old save, Not applicable
                     /*string msg = "";
                     msg += txtAmount.Text + ";";
@@ -2612,7 +2651,7 @@ namespace DiceBot
                         btnStratRefresh_Click(btnStratRefresh, new EventArgs() );
                     }
 
-                    rdbLabEnable.Checked = ("1" == getvalue(saveditems, "LabEnabled"));
+                    
                     chkReverseLab.Checked = ("1" == getvalue(saveditems, "LabReverse"));
 
                    string[] tmp =getvalue(saveditems, "LabValues").Split('?');
@@ -2626,6 +2665,69 @@ namespace DiceBot
 
                     cmbSite.SelectedIndex = int.Parse(getvalue(saveditems, "Site"));
                     cmbSettingMode.SelectedIndex = int.Parse(getvalue(saveditems, "SettingsMode"));
+
+
+                    int Strat = int.Parse(getvalue(saveditems, "Strategy"));
+                    switch (Strat)
+                    {
+                        case 0: rdbMartingale.Checked = true; break;
+                            case 1: rdbLabEnable.Checked = true; break;
+                            case 2: rdbFibonacci.Checked = true; break;
+                            case 3: rdbAlembert.Checked = true; break;
+                            case 4: rdbPreset.Checked = true; break;
+                    }
+
+                    
+                    temp = getvalue(saveditems,"FibonacciLoss" );
+                    rdbFiboLossIncrement.Checked = temp=="0";
+                    rdbFiboLossReset.Checked = temp=="1";
+                    rdbFiboLossStop.Checked = temp=="2";
+                    nudFiboLossIncrement.Value = decimal.Parse(getvalue(saveditems,"FibonacciLossSteps"));
+
+                    temp = getvalue(saveditems,"FibonacciLevel" );
+                    rdbFiboLevelReset.Checked = temp=="1";
+                    rdbFiboLevelStop.Checked = temp == "2";
+                    chkFiboLevel.Checked = getvalue(saveditems, "FibonacciLevelEnabled") == "1";
+                    nudFiboLeve.Value = decimal.Parse(getvalue(saveditems, "FibonnaciLevelSteps"));
+
+                    temp = getvalue(saveditems,"FibonacciWin" );
+                    rdbFiboWinIncrement.Checked = temp=="0";
+                    rdbFiboWinReset.Checked = temp=="1";
+                    rdbFiboWinStop.Checked = temp=="2";
+                    nudFiboWinIncrement.Value = decimal.Parse(getvalue(saveditems, "FibonacciWinSteps"));
+
+
+                   
+                    nudAlembertIncrementLoss.Value = decimal.Parse(getvalue(saveditems, "dAlembertLossIncrement"));
+                    nudAlembertStretchLoss.Value = decimal.Parse(getvalue(saveditems, "dAlembertLossStretch"));
+                    nudAlembertIncrementWin.Value = decimal.Parse(getvalue(saveditems, "dAlembertWinIncrement"));
+                    nudAlembertStretchWin.Value = decimal.Parse(getvalue(saveditems, "dAlembertWinStretch"));
+
+
+                  
+                    tmp = getvalue(saveditems, "PresetValues").Split('?');
+                    if (tmp.Length > 0)
+                    {
+                        if (tmp[0] != "0-0-0")
+                            rtbBets.Lines = tmp;
+                    }
+                    temp = getvalue(saveditems, "PresetEnd");
+                    rdbPresetEndReset.Checked = temp == "0";
+                    rdbPresetEndStep.Checked = temp == "1";
+                    rdbPresetEndStop.Checked = temp == "2";
+                    temp = getvalue(saveditems, "PresetLoss");
+                    rdbPresetLossReset.Checked = temp == "0";
+                    rdbPresetLossStep.Checked = temp == "1";
+                    rdbPresetLossStop.Checked = temp == "2";
+                    temp = getvalue(saveditems, "PresetWin");
+                    rdbPresetWinReset.Checked = temp == "0";
+                    rdbPresetWinStep.Checked = temp == "1";
+                    rdbPresetWinStop.Checked = temp == "2";
+
+                    nudPresetEndStep.Value = decimal.Parse(getvalue(saveditems, "PresetEndStep"));
+                    nudPresetLossStep.Value = decimal.Parse(getvalue(saveditems, "PresetLossStep"));
+                    nudPresetWinStep.Value = decimal.Parse(getvalue(saveditems, "PresetWinStep"));
+
                 }
 
                 
@@ -3170,7 +3272,7 @@ namespace DiceBot
 
         bool testInputs()
         {
-            populateFiboNacci();
+            
             string sMessage = "";
             bool valid = true;
             //double d = double.Parse(txtLimit.Text.Replace('.',','));
@@ -3266,6 +3368,7 @@ namespace DiceBot
                 valid = false;
                 sMessage += "Please enter a valid number in the Times Multiplier By Field\n";
             }
+            populateFiboNacci();
             if (!valid)
                 MessageBox.Show(sMessage);
             return valid;
@@ -4345,7 +4448,9 @@ namespace DiceBot
             if (tmp != rdbMartingale)
             {
                 if (rdbMartingale.Checked && tmp.Checked)
+                {
                     rdbMartingale.Checked = false;
+                }
             }
             if (tmp != rdbLabEnable)
             {
@@ -4361,6 +4466,19 @@ namespace DiceBot
             {
                 if (rdbPreset.Checked && tmp.Checked)
                     rdbPreset.Checked = false;
+            }
+            if (tmp == rdbMartingale)
+            {
+                if (tmp.Checked)
+                {
+                    gbCustom.Enabled = true;
+                    gbCustom.Text = "";
+                }
+                else
+                {
+                    gbCustom.Enabled = false;
+                    gbCustom.Text = "These settings can only be used with martingale";
+                }
             }
         }
 

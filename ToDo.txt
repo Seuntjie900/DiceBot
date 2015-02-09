@@ -1,17 +1,10 @@
 Todo:
-implement other sites (requires prc api)
+implement other sites (requires prc api. Safedice API incomplete.)
 finish sqlite implementation
 tip button
 get server seed on randomize (JD)
 Look for server seed of old bets (automatically? on button click?)
 programmer mode (access to variables, write code for own strategies)
-update save files
-
-preset list:
-  on loss, stop/reset/increment x (+/-)
-  on win, stop/reset/increment x(+/-)
-  reaches end of list, reset/stop/decrement x
-  
 
 
 Not essential:
@@ -48,3 +41,4 @@ add settings mode, site to private settings file
 seperate stats and bet method from dobet() to easily switch between strategies
 extra strategies - Fibbonachi and d’Alembert, preset list
 Use radio buttons for different strategy modes (martingale, labouchere, fibbonachi etc)
+update save files
