@@ -34,32 +34,25 @@ namespace DiceBot
 
         void GetBalanceThread()
         {
-            try
+            while (ispd)
+            if (accesstoken!="" && (DateTime.Now - lastupdate).TotalSeconds>60)
             {
-                while (ispd)
-                    if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
-                    {
-                        HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
-                        betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                        HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                        string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
+                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
+                string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
 
-                        pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
-                        balance = tmpu.user.balance; //i assume
-                        bets = tmpu.user.bets;
-                        Parent.updateBalance((decimal)(balance / 100000000.0));
-                        Parent.updateBets(tmpu.user.bets);
-                        Parent.updateLosses(tmpu.user.losses);
-                        Parent.updateProfit(tmpu.user.profit / 100000000m);
-                        Parent.updateWagered(tmpu.user.wagered / 100000000m);
-                        Parent.updateWins(tmpu.user.wins);
-                        lastupdate = DateTime.Now;
-                        Thread.Sleep(1000);
-                    }
-            }
-            catch
-            {
-
+                pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
+                balance = tmpu.user.balance; //i assume
+                bets = tmpu.user.bets;
+                Parent.updateBalance((decimal)(balance / 100000000.0));
+                Parent.updateBets(tmpu.user.bets);
+                Parent.updateLosses(tmpu.user.losses);
+                Parent.updateProfit(tmpu.user.profit / 100000000m);
+                Parent.updateWagered(tmpu.user.wagered / 100000000m);
+                Parent.updateWins(tmpu.user.wins);
+                lastupdate = DateTime.Now;
+                Thread.Sleep(1000);
             }
         }
 

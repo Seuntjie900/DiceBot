@@ -5,10 +5,18 @@ finish sqlite implementation
 tip button
 get server seed on randomize (JD)
 Look for server seed of old bets
+seperate stats and bet method from dobet() to easily switch between strategies
 Use radio buttons for different strategy modes (martingale, labouchere, fibbonachi etc)
 programmer mode (access to variables, write code for own strategies)
 
+
+fibonacci:
+  set base bet
+  set stop point.
+  set reset point
+
 d’Alembert:
+  base
   increment by x on wins
   decrement by y on loss
   stretch losses by a
@@ -17,10 +25,9 @@ d’Alembert:
 
 
 preset list:
-  on loss, stop/reset/increment x (+/-)
-  on win, stop/reset/increment x(+/-)
-  reaches end of list, reset/stop/decrement x
-  
+  on loss, increment x (+/-)
+  on win, reset, increment x(+/-)
+  reaches end of list, reset, stop, decrement x
 
 
 Not essential:
@@ -54,4 +61,3 @@ on closing kill all api threads
 view old bets table - stil needs work. Implement data pager instead of just a gridview
 Disconnect + logout on site change or close
 add settings mode, site to private settings file
-seperate stats and bet method from dobet() to easily switch between strategies

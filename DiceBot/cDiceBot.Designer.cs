@@ -30,214 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.Settings = new System.Windows.Forms.GroupBox();
-            this.nudChance = new System.Windows.Forms.NumericUpDown();
-            this.nudMinBet = new System.Windows.Forms.NumericUpDown();
-            this.lblChance = new System.Windows.Forms.Label();
-            this.lblMinBet = new System.Windows.Forms.Label();
-            this.tcBets = new System.Windows.Forms.TabControl();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tbMartingale = new System.Windows.Forms.TabPage();
-            this.rdbMartingale = new System.Windows.Forms.RadioButton();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.nudDevider = new System.Windows.Forms.NumericUpDown();
-            this.nudNbets = new System.Windows.Forms.NumericUpDown();
-            this.nudMaxMultiplies = new System.Windows.Forms.NumericUpDown();
-            this.nudMultiplier = new System.Windows.Forms.NumericUpDown();
-            this.rdbReduce = new System.Windows.Forms.RadioButton();
-            this.lblMultiplier = new System.Windows.Forms.Label();
-            this.lblDevider = new System.Windows.Forms.Label();
-            this.rdbMaxMultiplier = new System.Windows.Forms.RadioButton();
-            this.rdbDevider = new System.Windows.Forms.RadioButton();
-            this.lblAfter2 = new System.Windows.Forms.Label();
-            this.rdbConstant = new System.Windows.Forms.RadioButton();
-            this.lblAfter = new System.Windows.Forms.Label();
-            this.lblMaxMultiplier = new System.Windows.Forms.Label();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.nudWinDevider = new System.Windows.Forms.NumericUpDown();
-            this.nudWinNBets = new System.Windows.Forms.NumericUpDown();
-            this.nudWinMaxMultiplies = new System.Windows.Forms.NumericUpDown();
-            this.nudWinMultiplier = new System.Windows.Forms.NumericUpDown();
-            this.rdbWinReduce = new System.Windows.Forms.RadioButton();
-            this.label44 = new System.Windows.Forms.Label();
-            this.label45 = new System.Windows.Forms.Label();
-            this.rdbWinMaxMultiplier = new System.Windows.Forms.RadioButton();
-            this.rdbWinDevider = new System.Windows.Forms.RadioButton();
-            this.label46 = new System.Windows.Forms.Label();
-            this.rdbWinConstant = new System.Windows.Forms.RadioButton();
-            this.label47 = new System.Windows.Forms.Label();
-            this.label54 = new System.Windows.Forms.Label();
-            this.tbLabouchère = new System.Windows.Forms.TabPage();
-            this.rdbLabEnable = new System.Windows.Forms.RadioButton();
-            this.rdbLabRestart = new System.Windows.Forms.RadioButton();
-            this.rdbLabStop = new System.Windows.Forms.RadioButton();
-            this.label86 = new System.Windows.Forms.Label();
-            this.label85 = new System.Windows.Forms.Label();
-            this.btnBrowseLab = new System.Windows.Forms.Button();
-            this.rtbBets = new System.Windows.Forms.RichTextBox();
-            this.label87 = new System.Windows.Forms.Label();
-            this.chkReverseLab = new System.Windows.Forms.CheckBox();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.rdbFiboLevelReset = new System.Windows.Forms.RadioButton();
-            this.rdbFiboLevelStop = new System.Windows.Forms.RadioButton();
-            this.chkFiboLevel = new System.Windows.Forms.CheckBox();
-            this.label66 = new System.Windows.Forms.Label();
-            this.nudFiboLeve = new System.Windows.Forms.NumericUpDown();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.rdbFiboWinStop = new System.Windows.Forms.RadioButton();
-            this.rdbFiboWinReset = new System.Windows.Forms.RadioButton();
-            this.rdbFiboWinIncrement = new System.Windows.Forms.RadioButton();
-            this.label98 = new System.Windows.Forms.Label();
-            this.nudFiboWinIncrement = new System.Windows.Forms.NumericUpDown();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.rdbFiboLossStop = new System.Windows.Forms.RadioButton();
-            this.rdbFiboLossReset = new System.Windows.Forms.RadioButton();
-            this.rdbFiboLossIncrement = new System.Windows.Forms.RadioButton();
-            this.label99 = new System.Windows.Forms.Label();
-            this.nudFiboLossIncrement = new System.Windows.Forms.NumericUpDown();
-            this.lstFibonacci = new System.Windows.Forms.ListBox();
-            this.rdbFibonacci = new System.Windows.Forms.RadioButton();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.rdbAlembert = new System.Windows.Forms.RadioButton();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.rdbPreset = new System.Windows.Forms.RadioButton();
-            this.tbCustom = new System.Windows.Forms.TabPage();
-            this.gbCustom = new System.Windows.Forms.GroupBox();
-            this.label81 = new System.Windows.Forms.Label();
-            this.nudPercentage = new System.Windows.Forms.NumericUpDown();
-            this.chkPercentage = new System.Windows.Forms.CheckBox();
-            this.nudMKDecrement = new System.Windows.Forms.NumericUpDown();
-            this.nudMKIncrement = new System.Windows.Forms.NumericUpDown();
-            this.label80 = new System.Windows.Forms.Label();
-            this.label79 = new System.Windows.Forms.Label();
-            this.chkMK = new System.Windows.Forms.CheckBox();
-            this.nudMutawaWins = new System.Windows.Forms.NumericUpDown();
-            this.label78 = new System.Windows.Forms.Label();
-            this.nudtrazelloseto = new System.Windows.Forms.NumericUpDown();
-            this.nudtrazelwinto = new System.Windows.Forms.NumericUpDown();
-            this.label77 = new System.Windows.Forms.Label();
-            this.label76 = new System.Windows.Forms.Label();
-            this.nudTrazelMultiplier = new System.Windows.Forms.NumericUpDown();
-            this.label75 = new System.Windows.Forms.Label();
-            this.NudTrazelLose = new System.Windows.Forms.NumericUpDown();
-            this.nudTrazelWin = new System.Windows.Forms.NumericUpDown();
-            this.label74 = new System.Windows.Forms.Label();
-            this.label73 = new System.Windows.Forms.Label();
-            this.chkTrazel = new System.Windows.Forms.CheckBox();
-            this.label70 = new System.Windows.Forms.Label();
-            this.nudMutawaMultiplier = new System.Windows.Forms.NumericUpDown();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.gbLosses = new System.Windows.Forms.GroupBox();
-            this.nudChangeChanceLoseTo = new System.Windows.Forms.NumericUpDown();
-            this.label67 = new System.Windows.Forms.Label();
-            this.nudChangeChanceLoseStreak = new System.Windows.Forms.NumericUpDown();
-            this.chkChangeChanceLose = new System.Windows.Forms.CheckBox();
-            this.nudChangeLoseStreakTo = new System.Windows.Forms.NumericUpDown();
-            this.label65 = new System.Windows.Forms.Label();
-            this.nudChangeLoseStreak = new System.Windows.Forms.NumericUpDown();
-            this.chkChangeLoseStreak = new System.Windows.Forms.CheckBox();
-            this.label63 = new System.Windows.Forms.Label();
-            this.nudStopLossBtc = new System.Windows.Forms.NumericUpDown();
-            this.chkStopLossBtc = new System.Windows.Forms.CheckBox();
-            this.label60 = new System.Windows.Forms.Label();
-            this.nudStopLossBtcStreal = new System.Windows.Forms.NumericUpDown();
-            this.chkStopLossBtcStreak = new System.Windows.Forms.CheckBox();
-            this.label59 = new System.Windows.Forms.Label();
-            this.nudStopLossStreak = new System.Windows.Forms.NumericUpDown();
-            this.chkStopLossStreak = new System.Windows.Forms.CheckBox();
-            this.label57 = new System.Windows.Forms.Label();
-            this.nudResetBetLoss = new System.Windows.Forms.NumericUpDown();
-            this.chkResetBetLoss = new System.Windows.Forms.CheckBox();
-            this.gbWins = new System.Windows.Forms.GroupBox();
-            this.nudChangeChanceWinTo = new System.Windows.Forms.NumericUpDown();
-            this.label68 = new System.Windows.Forms.Label();
-            this.nudChangeChanceWinStreak = new System.Windows.Forms.NumericUpDown();
-            this.chkChangeChanceWin = new System.Windows.Forms.CheckBox();
-            this.nudChangeWinStreakTo = new System.Windows.Forms.NumericUpDown();
-            this.label72 = new System.Windows.Forms.Label();
-            this.nudChangeWinStreak = new System.Windows.Forms.NumericUpDown();
-            this.chkChangeWinStreak = new System.Windows.Forms.CheckBox();
-            this.label64 = new System.Windows.Forms.Label();
-            this.nudStopWinBtc = new System.Windows.Forms.NumericUpDown();
-            this.chkStopWinBtc = new System.Windows.Forms.CheckBox();
-            this.label61 = new System.Windows.Forms.Label();
-            this.nudStopWinBtcStreak = new System.Windows.Forms.NumericUpDown();
-            this.chkStopWinBtcStreak = new System.Windows.Forms.CheckBox();
-            this.label62 = new System.Windows.Forms.Label();
-            this.nudStopWinStreak = new System.Windows.Forms.NumericUpDown();
-            this.chkStopWinStreak = new System.Windows.Forms.CheckBox();
-            this.label58 = new System.Windows.Forms.Label();
-            this.nudResetWins = new System.Windows.Forms.NumericUpDown();
-            this.chkResetBetWins = new System.Windows.Forms.CheckBox();
-            this.tbCharts = new System.Windows.Forms.TabPage();
-            this.btnChartTimeRange = new System.Windows.Forms.Button();
-            this.btnChartBetID = new System.Windows.Forms.Button();
-            this.nudGraphStartBetID = new System.Windows.Forms.NumericUpDown();
-            this.dtpEnd = new System.Windows.Forms.DateTimePicker();
-            this.dtpStart = new System.Windows.Forms.DateTimePicker();
-            this.label96 = new System.Windows.Forms.Label();
-            this.label95 = new System.Windows.Forms.Label();
-            this.label94 = new System.Windows.Forms.Label();
-            this.btnChartAllTimeProfitTime = new System.Windows.Forms.Button();
-            this.btnChartAllTimeProfitBets = new System.Windows.Forms.Button();
-            this.btnGraphProfitTime = new System.Windows.Forms.Button();
-            this.btnGraphProfitBets = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.tbSimulation = new System.Windows.Forms.TabPage();
-            this.lblSimProgress = new System.Windows.Forms.Label();
-            this.lblSimRun = new System.Windows.Forms.Label();
-            this.lblSimLoseStreak = new System.Windows.Forms.Label();
-            this.lblSimWinStreak = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.lblSimEndBalance = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
-            this.btnExportSim = new System.Windows.Forms.Button();
-            this.lblSimLosses = new System.Windows.Forms.Label();
-            this.lblSimWins = new System.Windows.Forms.Label();
-            this.lblSimLOssesLabel = new System.Windows.Forms.Label();
-            this.lblSimWinsLabel = new System.Windows.Forms.Label();
-            this.lblSimProfit = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.btnSim = new System.Windows.Forms.Button();
-            this.nudSimBalance = new System.Windows.Forms.NumericUpDown();
-            this.lblSimStartingBalance = new System.Windows.Forms.Label();
-            this.nudSimNumBets = new System.Windows.Forms.NumericUpDown();
-            this.lblSimAmountBets = new System.Windows.Forms.Label();
-            this.tbVerify = new System.Windows.Forms.TabPage();
-            this.btnBetHistory = new System.Windows.Forms.Button();
-            this.btnGenerateBets = new System.Windows.Forms.Button();
-            this.nudGenBetsAmount = new System.Windows.Forms.NumericUpDown();
-            this.label28 = new System.Windows.Forms.Label();
-            this.nudGenBetsStart = new System.Windows.Forms.NumericUpDown();
-            this.label27 = new System.Windows.Forms.Label();
-            this.txtClientSeed = new System.Windows.Forms.TextBox();
-            this.txtServerSeed = new System.Windows.Forms.TextBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.tbZigZag = new System.Windows.Forms.TabPage();
-            this.rdbReverseBets = new System.Windows.Forms.RadioButton();
-            this.rdbReverseLoss = new System.Windows.Forms.RadioButton();
-            this.rdbReverseWins = new System.Windows.Forms.RadioButton();
-            this.chkReverse = new System.Windows.Forms.CheckBox();
-            this.NudReverse = new System.Windows.Forms.NumericUpDown();
-            this.lblZigZag1 = new System.Windows.Forms.Label();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.btnImport = new System.Windows.Forms.Button();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.btnStopOnWin = new System.Windows.Forms.Button();
-            this.btnStartLow = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.btnStartHigh = new System.Windows.Forms.Button();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.pnlAdvancedAdvanced = new System.Windows.Forms.Panel();
             this.label84 = new System.Windows.Forms.Label();
@@ -425,21 +222,185 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.groupBox12 = new System.Windows.Forms.GroupBox();
-            this.nudAlembertStretchLoss = new System.Windows.Forms.NumericUpDown();
-            this.label102 = new System.Windows.Forms.Label();
-            this.label101 = new System.Windows.Forms.Label();
-            this.label100 = new System.Windows.Forms.Label();
-            this.nudAlembertIncrementLoss = new System.Windows.Forms.NumericUpDown();
-            this.label71 = new System.Windows.Forms.Label();
-            this.groupBox13 = new System.Windows.Forms.GroupBox();
-            this.nudAlembertStretchWin = new System.Windows.Forms.NumericUpDown();
-            this.label103 = new System.Windows.Forms.Label();
-            this.label104 = new System.Windows.Forms.Label();
-            this.label105 = new System.Windows.Forms.Label();
-            this.nudAlembertIncrementWin = new System.Windows.Forms.NumericUpDown();
-            this.label106 = new System.Windows.Forms.Label();
+            this.Settings = new System.Windows.Forms.GroupBox();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.btnStartHigh = new System.Windows.Forms.Button();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.btnStartLow = new System.Windows.Forms.Button();
+            this.btnStopOnWin = new System.Windows.Forms.Button();
+            this.btnImport = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
+            this.lblMinBet = new System.Windows.Forms.Label();
+            this.lblChance = new System.Windows.Forms.Label();
+            this.nudMinBet = new System.Windows.Forms.NumericUpDown();
+            this.nudChance = new System.Windows.Forms.NumericUpDown();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tbVerify = new System.Windows.Forms.TabPage();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.txtServerSeed = new System.Windows.Forms.TextBox();
+            this.txtClientSeed = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.nudGenBetsStart = new System.Windows.Forms.NumericUpDown();
+            this.label28 = new System.Windows.Forms.Label();
+            this.nudGenBetsAmount = new System.Windows.Forms.NumericUpDown();
+            this.btnGenerateBets = new System.Windows.Forms.Button();
+            this.btnBetHistory = new System.Windows.Forms.Button();
+            this.tbSimulation = new System.Windows.Forms.TabPage();
+            this.lblSimAmountBets = new System.Windows.Forms.Label();
+            this.nudSimNumBets = new System.Windows.Forms.NumericUpDown();
+            this.lblSimStartingBalance = new System.Windows.Forms.Label();
+            this.nudSimBalance = new System.Windows.Forms.NumericUpDown();
+            this.btnSim = new System.Windows.Forms.Button();
+            this.label29 = new System.Windows.Forms.Label();
+            this.lblSimProfit = new System.Windows.Forms.Label();
+            this.lblSimWinsLabel = new System.Windows.Forms.Label();
+            this.lblSimLOssesLabel = new System.Windows.Forms.Label();
+            this.lblSimWins = new System.Windows.Forms.Label();
+            this.lblSimLosses = new System.Windows.Forms.Label();
+            this.btnExportSim = new System.Windows.Forms.Button();
+            this.label31 = new System.Windows.Forms.Label();
+            this.lblSimEndBalance = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.lblSimWinStreak = new System.Windows.Forms.Label();
+            this.lblSimLoseStreak = new System.Windows.Forms.Label();
+            this.lblSimRun = new System.Windows.Forms.Label();
+            this.lblSimProgress = new System.Windows.Forms.Label();
+            this.tbCharts = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnGraphProfitBets = new System.Windows.Forms.Button();
+            this.btnGraphProfitTime = new System.Windows.Forms.Button();
+            this.btnChartAllTimeProfitBets = new System.Windows.Forms.Button();
+            this.btnChartAllTimeProfitTime = new System.Windows.Forms.Button();
+            this.label94 = new System.Windows.Forms.Label();
+            this.label95 = new System.Windows.Forms.Label();
+            this.label96 = new System.Windows.Forms.Label();
+            this.dtpStart = new System.Windows.Forms.DateTimePicker();
+            this.dtpEnd = new System.Windows.Forms.DateTimePicker();
+            this.nudGraphStartBetID = new System.Windows.Forms.NumericUpDown();
+            this.btnChartBetID = new System.Windows.Forms.Button();
+            this.btnChartTimeRange = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tbLabouchère = new System.Windows.Forms.TabPage();
+            this.chkReverseLab = new System.Windows.Forms.CheckBox();
+            this.chkLabEnable = new System.Windows.Forms.CheckBox();
+            this.label87 = new System.Windows.Forms.Label();
+            this.rtbBets = new System.Windows.Forms.RichTextBox();
+            this.btnBrowseLab = new System.Windows.Forms.Button();
+            this.label85 = new System.Windows.Forms.Label();
+            this.label86 = new System.Windows.Forms.Label();
+            this.rdbLabStop = new System.Windows.Forms.RadioButton();
+            this.rdbLabRestart = new System.Windows.Forms.RadioButton();
+            this.tcBets = new System.Windows.Forms.TabControl();
+            this.tbMartingale = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tbCustom = new System.Windows.Forms.TabPage();
+            this.label81 = new System.Windows.Forms.Label();
+            this.nudPercentage = new System.Windows.Forms.NumericUpDown();
+            this.chkPercentage = new System.Windows.Forms.CheckBox();
+            this.nudMKDecrement = new System.Windows.Forms.NumericUpDown();
+            this.nudMKIncrement = new System.Windows.Forms.NumericUpDown();
+            this.label80 = new System.Windows.Forms.Label();
+            this.label79 = new System.Windows.Forms.Label();
+            this.chkMK = new System.Windows.Forms.CheckBox();
+            this.nudMutawaWins = new System.Windows.Forms.NumericUpDown();
+            this.label78 = new System.Windows.Forms.Label();
+            this.nudtrazelloseto = new System.Windows.Forms.NumericUpDown();
+            this.nudtrazelwinto = new System.Windows.Forms.NumericUpDown();
+            this.label77 = new System.Windows.Forms.Label();
+            this.label76 = new System.Windows.Forms.Label();
+            this.nudTrazelMultiplier = new System.Windows.Forms.NumericUpDown();
+            this.label75 = new System.Windows.Forms.Label();
+            this.NudTrazelLose = new System.Windows.Forms.NumericUpDown();
+            this.nudTrazelWin = new System.Windows.Forms.NumericUpDown();
+            this.label74 = new System.Windows.Forms.Label();
+            this.label73 = new System.Windows.Forms.Label();
+            this.chkTrazel = new System.Windows.Forms.CheckBox();
+            this.label70 = new System.Windows.Forms.Label();
+            this.nudMutawaMultiplier = new System.Windows.Forms.NumericUpDown();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.gbWins = new System.Windows.Forms.GroupBox();
+            this.nudChangeChanceWinTo = new System.Windows.Forms.NumericUpDown();
+            this.label68 = new System.Windows.Forms.Label();
+            this.nudChangeChanceWinStreak = new System.Windows.Forms.NumericUpDown();
+            this.chkChangeChanceWin = new System.Windows.Forms.CheckBox();
+            this.nudChangeWinStreakTo = new System.Windows.Forms.NumericUpDown();
+            this.label72 = new System.Windows.Forms.Label();
+            this.nudChangeWinStreak = new System.Windows.Forms.NumericUpDown();
+            this.chkChangeWinStreak = new System.Windows.Forms.CheckBox();
+            this.label64 = new System.Windows.Forms.Label();
+            this.nudStopWinBtc = new System.Windows.Forms.NumericUpDown();
+            this.chkStopWinBtc = new System.Windows.Forms.CheckBox();
+            this.label61 = new System.Windows.Forms.Label();
+            this.nudStopWinBtcStreak = new System.Windows.Forms.NumericUpDown();
+            this.chkStopWinBtcStreak = new System.Windows.Forms.CheckBox();
+            this.label62 = new System.Windows.Forms.Label();
+            this.nudStopWinStreak = new System.Windows.Forms.NumericUpDown();
+            this.chkStopWinStreak = new System.Windows.Forms.CheckBox();
+            this.label58 = new System.Windows.Forms.Label();
+            this.nudResetWins = new System.Windows.Forms.NumericUpDown();
+            this.chkResetBetWins = new System.Windows.Forms.CheckBox();
+            this.gbLosses = new System.Windows.Forms.GroupBox();
+            this.nudChangeChanceLoseTo = new System.Windows.Forms.NumericUpDown();
+            this.label67 = new System.Windows.Forms.Label();
+            this.nudChangeChanceLoseStreak = new System.Windows.Forms.NumericUpDown();
+            this.chkChangeChanceLose = new System.Windows.Forms.CheckBox();
+            this.nudChangeLoseStreakTo = new System.Windows.Forms.NumericUpDown();
+            this.label65 = new System.Windows.Forms.Label();
+            this.nudChangeLoseStreak = new System.Windows.Forms.NumericUpDown();
+            this.chkChangeLoseStreak = new System.Windows.Forms.CheckBox();
+            this.label63 = new System.Windows.Forms.Label();
+            this.nudStopLossBtc = new System.Windows.Forms.NumericUpDown();
+            this.chkStopLossBtc = new System.Windows.Forms.CheckBox();
+            this.label60 = new System.Windows.Forms.Label();
+            this.nudStopLossBtcStreal = new System.Windows.Forms.NumericUpDown();
+            this.chkStopLossBtcStreak = new System.Windows.Forms.CheckBox();
+            this.label59 = new System.Windows.Forms.Label();
+            this.nudStopLossStreak = new System.Windows.Forms.NumericUpDown();
+            this.chkStopLossStreak = new System.Windows.Forms.CheckBox();
+            this.label57 = new System.Windows.Forms.Label();
+            this.nudResetBetLoss = new System.Windows.Forms.NumericUpDown();
+            this.chkResetBetLoss = new System.Windows.Forms.CheckBox();
+            this.tbZigZag = new System.Windows.Forms.TabPage();
+            this.rdbReverseBets = new System.Windows.Forms.RadioButton();
+            this.rdbReverseLoss = new System.Windows.Forms.RadioButton();
+            this.rdbReverseWins = new System.Windows.Forms.RadioButton();
+            this.chkReverse = new System.Windows.Forms.CheckBox();
+            this.NudReverse = new System.Windows.Forms.NumericUpDown();
+            this.lblZigZag1 = new System.Windows.Forms.Label();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.nudWinDevider = new System.Windows.Forms.NumericUpDown();
+            this.nudWinNBets = new System.Windows.Forms.NumericUpDown();
+            this.nudWinMaxMultiplies = new System.Windows.Forms.NumericUpDown();
+            this.nudWinMultiplier = new System.Windows.Forms.NumericUpDown();
+            this.rdbWinReduce = new System.Windows.Forms.RadioButton();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.rdbWinMaxMultiplier = new System.Windows.Forms.RadioButton();
+            this.rdbWinDevider = new System.Windows.Forms.RadioButton();
+            this.label46 = new System.Windows.Forms.Label();
+            this.rdbWinConstant = new System.Windows.Forms.RadioButton();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.nudDevider = new System.Windows.Forms.NumericUpDown();
+            this.nudNbets = new System.Windows.Forms.NumericUpDown();
+            this.nudMaxMultiplies = new System.Windows.Forms.NumericUpDown();
+            this.nudMultiplier = new System.Windows.Forms.NumericUpDown();
+            this.rdbReduce = new System.Windows.Forms.RadioButton();
+            this.lblMultiplier = new System.Windows.Forms.Label();
+            this.lblDevider = new System.Windows.Forms.Label();
+            this.rdbMaxMultiplier = new System.Windows.Forms.RadioButton();
+            this.rdbDevider = new System.Windows.Forms.RadioButton();
+            this.lblAfter2 = new System.Windows.Forms.Label();
+            this.rdbConstant = new System.Windows.Forms.RadioButton();
+            this.lblAfter = new System.Windows.Forms.Label();
+            this.lblMaxMultiplier = new System.Windows.Forms.Label();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -451,76 +412,6 @@
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel1.SuspendLayout();
             this.tcSettings.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            this.Settings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChance)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMinBet)).BeginInit();
-            this.tcBets.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tbMartingale.SuspendLayout();
-            this.groupBox9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDevider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudNbets)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMultiplies)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).BeginInit();
-            this.groupBox8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWinDevider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWinNBets)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWinMaxMultiplies)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier)).BeginInit();
-            this.tbLabouchère.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.panel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFiboLeve)).BeginInit();
-            this.groupBox11.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFiboWinIncrement)).BeginInit();
-            this.groupBox10.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFiboLossIncrement)).BeginInit();
-            this.tabPage5.SuspendLayout();
-            this.tabPage6.SuspendLayout();
-            this.tbCustom.SuspendLayout();
-            this.gbCustom.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMKDecrement)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMKIncrement)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMutawaWins)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudtrazelloseto)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudtrazelwinto)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTrazelMultiplier)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NudTrazelLose)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTrazelWin)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMutawaMultiplier)).BeginInit();
-            this.tabPage4.SuspendLayout();
-            this.gbLosses.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreakTo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreak)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtc)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtcStreal)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossStreak)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudResetBetLoss)).BeginInit();
-            this.gbWins.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinTo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinStreak)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreakTo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreak)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtc)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtcStreak)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinStreak)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).BeginInit();
-            this.tbCharts.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).BeginInit();
-            this.tbSimulation.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSimBalance)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSimNumBets)).BeginInit();
-            this.tbVerify.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsAmount)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).BeginInit();
-            this.tbZigZag.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).BeginInit();
-            this.panel4.SuspendLayout();
             this.tabPage11.SuspendLayout();
             this.pnlAdvancedAdvanced.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetSeed)).BeginInit();
@@ -556,13 +447,66 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiPayout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).BeginInit();
-            this.panel7.SuspendLayout();
-            this.groupBox12.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAlembertStretchLoss)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAlembertIncrementLoss)).BeginInit();
-            this.groupBox13.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAlembertStretchWin)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAlembertIncrementWin)).BeginInit();
+            this.Settings.SuspendLayout();
+            this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinBet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChance)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            this.tbVerify.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsAmount)).BeginInit();
+            this.tbSimulation.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSimNumBets)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSimBalance)).BeginInit();
+            this.tbCharts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tbLabouchère.SuspendLayout();
+            this.tcBets.SuspendLayout();
+            this.tbMartingale.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.tbCustom.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMKDecrement)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMKIncrement)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMutawaWins)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudtrazelloseto)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudtrazelwinto)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTrazelMultiplier)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NudTrazelLose)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTrazelWin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMutawaMultiplier)).BeginInit();
+            this.gbWins.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinTo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinStreak)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreakTo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreak)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtc)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtcStreak)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinStreak)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).BeginInit();
+            this.gbLosses.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreakTo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreak)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtc)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtcStreal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossStreak)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBetLoss)).BeginInit();
+            this.tbZigZag.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).BeginInit();
+            this.groupBox8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinDevider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinNBets)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMaxMultiplies)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier)).BeginInit();
+            this.groupBox9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDevider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNbets)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMultiplies)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -588,2493 +532,6 @@
             this.tcSettings.SelectedIndex = 0;
             this.tcSettings.Size = new System.Drawing.Size(456, 540);
             this.tcSettings.TabIndex = 13;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.Settings);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(448, 514);
-            this.tabPage3.TabIndex = 0;
-            this.tabPage3.Text = "Bet Settings";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // Settings
-            // 
-            this.Settings.Controls.Add(this.nudChance);
-            this.Settings.Controls.Add(this.nudMinBet);
-            this.Settings.Controls.Add(this.lblChance);
-            this.Settings.Controls.Add(this.lblMinBet);
-            this.Settings.Controls.Add(this.tcBets);
-            this.Settings.Controls.Add(this.btnExport);
-            this.Settings.Controls.Add(this.btnImport);
-            this.Settings.Controls.Add(this.panel4);
-            this.Settings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Settings.Location = new System.Drawing.Point(0, 0);
-            this.Settings.Name = "Settings";
-            this.Settings.Size = new System.Drawing.Size(448, 514);
-            this.Settings.TabIndex = 13;
-            this.Settings.TabStop = false;
-            this.Settings.Text = "Settings";
-            // 
-            // nudChance
-            // 
-            this.nudChance.DecimalPlaces = 4;
-            this.nudChance.Location = new System.Drawing.Point(256, 56);
-            this.nudChance.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            131072});
-            this.nudChance.Name = "nudChance";
-            this.nudChance.Size = new System.Drawing.Size(84, 20);
-            this.nudChance.TabIndex = 68;
-            this.nudChance.Value = new decimal(new int[] {
-            495,
-            0,
-            0,
-            65536});
-            this.nudChance.ValueChanged += new System.EventHandler(this.txtChance_Leave);
-            // 
-            // nudMinBet
-            // 
-            this.nudMinBet.DecimalPlaces = 8;
-            this.nudMinBet.Location = new System.Drawing.Point(86, 56);
-            this.nudMinBet.Maximum = new decimal(new int[] {
-            1410065408,
-            2,
-            0,
-            0});
-            this.nudMinBet.Name = "nudMinBet";
-            this.nudMinBet.Size = new System.Drawing.Size(85, 20);
-            this.nudMinBet.TabIndex = 67;
-            this.nudMinBet.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            393216});
-            this.nudMinBet.ValueChanged += new System.EventHandler(this.txtChance_Leave);
-            // 
-            // lblChance
-            // 
-            this.lblChance.AutoSize = true;
-            this.lblChance.Location = new System.Drawing.Point(203, 59);
-            this.lblChance.Name = "lblChance";
-            this.lblChance.Size = new System.Drawing.Size(47, 13);
-            this.lblChance.TabIndex = 65;
-            this.lblChance.Text = "Chance:";
-            // 
-            // lblMinBet
-            // 
-            this.lblMinBet.AutoSize = true;
-            this.lblMinBet.Location = new System.Drawing.Point(15, 59);
-            this.lblMinBet.Name = "lblMinBet";
-            this.lblMinBet.Size = new System.Drawing.Size(65, 13);
-            this.lblMinBet.TabIndex = 63;
-            this.lblMinBet.Text = "Starting Bet:";
-            // 
-            // tcBets
-            // 
-            this.tcBets.Controls.Add(this.tabPage2);
-            this.tcBets.Controls.Add(this.tabPage4);
-            this.tcBets.Controls.Add(this.tbCharts);
-            this.tcBets.Controls.Add(this.tbSimulation);
-            this.tcBets.Controls.Add(this.tbVerify);
-            this.tcBets.Controls.Add(this.tbZigZag);
-            this.tcBets.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tcBets.Location = new System.Drawing.Point(3, 93);
-            this.tcBets.Multiline = true;
-            this.tcBets.Name = "tcBets";
-            this.tcBets.SelectedIndex = 0;
-            this.tcBets.Size = new System.Drawing.Size(442, 384);
-            this.tcBets.TabIndex = 52;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.tabControl1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(434, 358);
-            this.tabPage2.TabIndex = 7;
-            this.tabPage2.Text = "Strategy";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tbMartingale);
-            this.tabControl1.Controls.Add(this.tbLabouchère);
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Controls.Add(this.tabPage6);
-            this.tabControl1.Controls.Add(this.tbCustom);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(3, 3);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(428, 352);
-            this.tabControl1.TabIndex = 0;
-            // 
-            // tbMartingale
-            // 
-            this.tbMartingale.Controls.Add(this.rdbMartingale);
-            this.tbMartingale.Controls.Add(this.groupBox9);
-            this.tbMartingale.Controls.Add(this.groupBox8);
-            this.tbMartingale.Location = new System.Drawing.Point(4, 22);
-            this.tbMartingale.Name = "tbMartingale";
-            this.tbMartingale.Padding = new System.Windows.Forms.Padding(3);
-            this.tbMartingale.Size = new System.Drawing.Size(420, 326);
-            this.tbMartingale.TabIndex = 10;
-            this.tbMartingale.Text = "Martingale";
-            this.tbMartingale.UseVisualStyleBackColor = true;
-            // 
-            // rdbMartingale
-            // 
-            this.rdbMartingale.AutoSize = true;
-            this.rdbMartingale.Location = new System.Drawing.Point(8, 6);
-            this.rdbMartingale.Name = "rdbMartingale";
-            this.rdbMartingale.Size = new System.Drawing.Size(96, 17);
-            this.rdbMartingale.TabIndex = 3;
-            this.rdbMartingale.TabStop = true;
-            this.rdbMartingale.Text = "Use Martingale";
-            this.rdbMartingale.UseVisualStyleBackColor = true;
-            this.rdbMartingale.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
-            // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.nudDevider);
-            this.groupBox9.Controls.Add(this.nudNbets);
-            this.groupBox9.Controls.Add(this.nudMaxMultiplies);
-            this.groupBox9.Controls.Add(this.nudMultiplier);
-            this.groupBox9.Controls.Add(this.rdbReduce);
-            this.groupBox9.Controls.Add(this.lblMultiplier);
-            this.groupBox9.Controls.Add(this.lblDevider);
-            this.groupBox9.Controls.Add(this.rdbMaxMultiplier);
-            this.groupBox9.Controls.Add(this.rdbDevider);
-            this.groupBox9.Controls.Add(this.lblAfter2);
-            this.groupBox9.Controls.Add(this.rdbConstant);
-            this.groupBox9.Controls.Add(this.lblAfter);
-            this.groupBox9.Controls.Add(this.lblMaxMultiplier);
-            this.groupBox9.Location = new System.Drawing.Point(8, 29);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(341, 140);
-            this.groupBox9.TabIndex = 2;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Multiplier on Loss";
-            // 
-            // nudDevider
-            // 
-            this.nudDevider.DecimalPlaces = 5;
-            this.nudDevider.Location = new System.Drawing.Point(122, 112);
-            this.nudDevider.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudDevider.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            327680});
-            this.nudDevider.Name = "nudDevider";
-            this.nudDevider.Size = new System.Drawing.Size(87, 20);
-            this.nudDevider.TabIndex = 92;
-            this.nudDevider.Value = new decimal(new int[] {
-            95,
-            0,
-            0,
-            131072});
-            // 
-            // nudNbets
-            // 
-            this.nudNbets.Location = new System.Drawing.Point(122, 81);
-            this.nudNbets.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.nudNbets.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudNbets.Name = "nudNbets";
-            this.nudNbets.Size = new System.Drawing.Size(53, 20);
-            this.nudNbets.TabIndex = 91;
-            this.nudNbets.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // nudMaxMultiplies
-            // 
-            this.nudMaxMultiplies.Location = new System.Drawing.Point(122, 55);
-            this.nudMaxMultiplies.Maximum = new decimal(new int[] {
-            1410065408,
-            2,
-            0,
-            0});
-            this.nudMaxMultiplies.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMaxMultiplies.Name = "nudMaxMultiplies";
-            this.nudMaxMultiplies.Size = new System.Drawing.Size(87, 20);
-            this.nudMaxMultiplies.TabIndex = 90;
-            this.nudMaxMultiplies.Value = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            // 
-            // nudMultiplier
-            // 
-            this.nudMultiplier.DecimalPlaces = 5;
-            this.nudMultiplier.Location = new System.Drawing.Point(122, 26);
-            this.nudMultiplier.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudMultiplier.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            327680});
-            this.nudMultiplier.Name = "nudMultiplier";
-            this.nudMultiplier.Size = new System.Drawing.Size(87, 20);
-            this.nudMultiplier.TabIndex = 89;
-            this.nudMultiplier.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // rdbReduce
-            // 
-            this.rdbReduce.AutoSize = true;
-            this.rdbReduce.Location = new System.Drawing.Point(223, 96);
-            this.rdbReduce.Name = "rdbReduce";
-            this.rdbReduce.Size = new System.Drawing.Size(91, 17);
-            this.rdbReduce.TabIndex = 88;
-            this.rdbReduce.Text = "Change Once";
-            this.rdbReduce.UseVisualStyleBackColor = true;
-            // 
-            // lblMultiplier
-            // 
-            this.lblMultiplier.AutoSize = true;
-            this.lblMultiplier.Location = new System.Drawing.Point(67, 28);
-            this.lblMultiplier.Name = "lblMultiplier";
-            this.lblMultiplier.Size = new System.Drawing.Size(51, 13);
-            this.lblMultiplier.TabIndex = 83;
-            this.lblMultiplier.Text = "Multiplier:";
-            // 
-            // lblDevider
-            // 
-            this.lblDevider.AutoSize = true;
-            this.lblDevider.Location = new System.Drawing.Point(22, 114);
-            this.lblDevider.Name = "lblDevider";
-            this.lblDevider.Size = new System.Drawing.Size(96, 13);
-            this.lblDevider.TabIndex = 87;
-            this.lblDevider.Text = "Times Multiplier by:";
-            // 
-            // rdbMaxMultiplier
-            // 
-            this.rdbMaxMultiplier.AutoSize = true;
-            this.rdbMaxMultiplier.Location = new System.Drawing.Point(223, 24);
-            this.rdbMaxMultiplier.Name = "rdbMaxMultiplier";
-            this.rdbMaxMultiplier.Size = new System.Drawing.Size(45, 17);
-            this.rdbMaxMultiplier.TabIndex = 80;
-            this.rdbMaxMultiplier.Text = "Max";
-            this.rdbMaxMultiplier.UseVisualStyleBackColor = true;
-            // 
-            // rdbDevider
-            // 
-            this.rdbDevider.AutoSize = true;
-            this.rdbDevider.Location = new System.Drawing.Point(223, 50);
-            this.rdbDevider.Name = "rdbDevider";
-            this.rdbDevider.Size = new System.Drawing.Size(63, 17);
-            this.rdbDevider.TabIndex = 81;
-            this.rdbDevider.Text = "Variable";
-            this.rdbDevider.UseVisualStyleBackColor = true;
-            // 
-            // lblAfter2
-            // 
-            this.lblAfter2.AutoSize = true;
-            this.lblAfter2.Location = new System.Drawing.Point(181, 83);
-            this.lblAfter2.Name = "lblAfter2";
-            this.lblAfter2.Size = new System.Drawing.Size(28, 13);
-            this.lblAfter2.TabIndex = 86;
-            this.lblAfter2.Text = "Bets";
-            // 
-            // rdbConstant
-            // 
-            this.rdbConstant.AutoSize = true;
-            this.rdbConstant.Checked = true;
-            this.rdbConstant.Location = new System.Drawing.Point(223, 73);
-            this.rdbConstant.Name = "rdbConstant";
-            this.rdbConstant.Size = new System.Drawing.Size(70, 17);
-            this.rdbConstant.TabIndex = 82;
-            this.rdbConstant.TabStop = true;
-            this.rdbConstant.Text = "Contstant";
-            this.rdbConstant.UseVisualStyleBackColor = true;
-            // 
-            // lblAfter
-            // 
-            this.lblAfter.AutoSize = true;
-            this.lblAfter.Location = new System.Drawing.Point(86, 83);
-            this.lblAfter.Name = "lblAfter";
-            this.lblAfter.Size = new System.Drawing.Size(32, 13);
-            this.lblAfter.TabIndex = 85;
-            this.lblAfter.Text = "After ";
-            // 
-            // lblMaxMultiplier
-            // 
-            this.lblMaxMultiplier.AutoSize = true;
-            this.lblMaxMultiplier.Location = new System.Drawing.Point(42, 57);
-            this.lblMaxMultiplier.Name = "lblMaxMultiplier";
-            this.lblMaxMultiplier.Size = new System.Drawing.Size(76, 13);
-            this.lblMaxMultiplier.TabIndex = 84;
-            this.lblMaxMultiplier.Text = "Max Multiplies:";
-            // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.nudWinDevider);
-            this.groupBox8.Controls.Add(this.nudWinNBets);
-            this.groupBox8.Controls.Add(this.nudWinMaxMultiplies);
-            this.groupBox8.Controls.Add(this.nudWinMultiplier);
-            this.groupBox8.Controls.Add(this.rdbWinReduce);
-            this.groupBox8.Controls.Add(this.label44);
-            this.groupBox8.Controls.Add(this.label45);
-            this.groupBox8.Controls.Add(this.rdbWinMaxMultiplier);
-            this.groupBox8.Controls.Add(this.rdbWinDevider);
-            this.groupBox8.Controls.Add(this.label46);
-            this.groupBox8.Controls.Add(this.rdbWinConstant);
-            this.groupBox8.Controls.Add(this.label47);
-            this.groupBox8.Controls.Add(this.label54);
-            this.groupBox8.Location = new System.Drawing.Point(8, 175);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(341, 140);
-            this.groupBox8.TabIndex = 1;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Multiplier on Win";
-            // 
-            // nudWinDevider
-            // 
-            this.nudWinDevider.DecimalPlaces = 5;
-            this.nudWinDevider.Location = new System.Drawing.Point(122, 107);
-            this.nudWinDevider.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.nudWinDevider.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            327680});
-            this.nudWinDevider.Name = "nudWinDevider";
-            this.nudWinDevider.Size = new System.Drawing.Size(86, 20);
-            this.nudWinDevider.TabIndex = 105;
-            this.nudWinDevider.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            327680});
-            // 
-            // nudWinNBets
-            // 
-            this.nudWinNBets.Location = new System.Drawing.Point(122, 76);
-            this.nudWinNBets.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.nudWinNBets.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudWinNBets.Name = "nudWinNBets";
-            this.nudWinNBets.Size = new System.Drawing.Size(52, 20);
-            this.nudWinNBets.TabIndex = 104;
-            this.nudWinNBets.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // nudWinMaxMultiplies
-            // 
-            this.nudWinMaxMultiplies.Location = new System.Drawing.Point(122, 50);
-            this.nudWinMaxMultiplies.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.nudWinMaxMultiplies.Minimum = new decimal(new int[] {
-            999,
-            0,
-            0,
-            0});
-            this.nudWinMaxMultiplies.Name = "nudWinMaxMultiplies";
-            this.nudWinMaxMultiplies.Size = new System.Drawing.Size(86, 20);
-            this.nudWinMaxMultiplies.TabIndex = 103;
-            this.nudWinMaxMultiplies.Value = new decimal(new int[] {
-            999,
-            0,
-            0,
-            0});
-            // 
-            // nudWinMultiplier
-            // 
-            this.nudWinMultiplier.DecimalPlaces = 5;
-            this.nudWinMultiplier.Location = new System.Drawing.Point(122, 19);
-            this.nudWinMultiplier.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudWinMultiplier.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            327680});
-            this.nudWinMultiplier.Name = "nudWinMultiplier";
-            this.nudWinMultiplier.Size = new System.Drawing.Size(86, 20);
-            this.nudWinMultiplier.TabIndex = 102;
-            this.nudWinMultiplier.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // rdbWinReduce
-            // 
-            this.rdbWinReduce.AutoSize = true;
-            this.rdbWinReduce.Location = new System.Drawing.Point(223, 91);
-            this.rdbWinReduce.Name = "rdbWinReduce";
-            this.rdbWinReduce.Size = new System.Drawing.Size(91, 17);
-            this.rdbWinReduce.TabIndex = 101;
-            this.rdbWinReduce.Text = "Change Once";
-            this.rdbWinReduce.UseVisualStyleBackColor = true;
-            // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(67, 23);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(51, 13);
-            this.label44.TabIndex = 96;
-            this.label44.Text = "Multiplier:";
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(43, 113);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(96, 13);
-            this.label45.TabIndex = 100;
-            this.label45.Text = "Times Multiplier by:";
-            // 
-            // rdbWinMaxMultiplier
-            // 
-            this.rdbWinMaxMultiplier.AutoSize = true;
-            this.rdbWinMaxMultiplier.Location = new System.Drawing.Point(223, 19);
-            this.rdbWinMaxMultiplier.Name = "rdbWinMaxMultiplier";
-            this.rdbWinMaxMultiplier.Size = new System.Drawing.Size(45, 17);
-            this.rdbWinMaxMultiplier.TabIndex = 93;
-            this.rdbWinMaxMultiplier.Text = "Max";
-            this.rdbWinMaxMultiplier.UseVisualStyleBackColor = true;
-            // 
-            // rdbWinDevider
-            // 
-            this.rdbWinDevider.AutoSize = true;
-            this.rdbWinDevider.Location = new System.Drawing.Point(223, 45);
-            this.rdbWinDevider.Name = "rdbWinDevider";
-            this.rdbWinDevider.Size = new System.Drawing.Size(63, 17);
-            this.rdbWinDevider.TabIndex = 94;
-            this.rdbWinDevider.Text = "Variable";
-            this.rdbWinDevider.UseVisualStyleBackColor = true;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(180, 78);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(28, 13);
-            this.label46.TabIndex = 99;
-            this.label46.Text = "Bets";
-            // 
-            // rdbWinConstant
-            // 
-            this.rdbWinConstant.AutoSize = true;
-            this.rdbWinConstant.Checked = true;
-            this.rdbWinConstant.Location = new System.Drawing.Point(223, 68);
-            this.rdbWinConstant.Name = "rdbWinConstant";
-            this.rdbWinConstant.Size = new System.Drawing.Size(70, 17);
-            this.rdbWinConstant.TabIndex = 95;
-            this.rdbWinConstant.TabStop = true;
-            this.rdbWinConstant.Text = "Contstant";
-            this.rdbWinConstant.UseVisualStyleBackColor = true;
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(86, 78);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(32, 13);
-            this.label47.TabIndex = 98;
-            this.label47.Text = "After ";
-            // 
-            // label54
-            // 
-            this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(42, 52);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(76, 13);
-            this.label54.TabIndex = 97;
-            this.label54.Text = "Max Multiplies:";
-            // 
-            // tbLabouchère
-            // 
-            this.tbLabouchère.Controls.Add(this.panel7);
-            this.tbLabouchère.Controls.Add(this.rdbLabEnable);
-            this.tbLabouchère.Controls.Add(this.label85);
-            this.tbLabouchère.Controls.Add(this.btnBrowseLab);
-            this.tbLabouchère.Controls.Add(this.rtbBets);
-            this.tbLabouchère.Controls.Add(this.label87);
-            this.tbLabouchère.Controls.Add(this.chkReverseLab);
-            this.tbLabouchère.Location = new System.Drawing.Point(4, 22);
-            this.tbLabouchère.Name = "tbLabouchère";
-            this.tbLabouchère.Padding = new System.Windows.Forms.Padding(3);
-            this.tbLabouchère.Size = new System.Drawing.Size(420, 326);
-            this.tbLabouchère.TabIndex = 9;
-            this.tbLabouchère.Text = "Labouchère";
-            this.tbLabouchère.UseVisualStyleBackColor = true;
-            // 
-            // rdbLabEnable
-            // 
-            this.rdbLabEnable.AutoSize = true;
-            this.rdbLabEnable.Location = new System.Drawing.Point(6, 6);
-            this.rdbLabEnable.Name = "rdbLabEnable";
-            this.rdbLabEnable.Size = new System.Drawing.Size(104, 17);
-            this.rdbLabEnable.TabIndex = 14;
-            this.rdbLabEnable.TabStop = true;
-            this.rdbLabEnable.Text = "Use Labouchère";
-            this.rdbLabEnable.UseVisualStyleBackColor = true;
-            this.rdbLabEnable.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
-            // 
-            // rdbLabRestart
-            // 
-            this.rdbLabRestart.AutoSize = true;
-            this.rdbLabRestart.Location = new System.Drawing.Point(38, 48);
-            this.rdbLabRestart.Name = "rdbLabRestart";
-            this.rdbLabRestart.Size = new System.Drawing.Size(59, 17);
-            this.rdbLabRestart.TabIndex = 13;
-            this.rdbLabRestart.Text = "Restart";
-            this.rdbLabRestart.UseVisualStyleBackColor = true;
-            // 
-            // rdbLabStop
-            // 
-            this.rdbLabStop.AutoSize = true;
-            this.rdbLabStop.Checked = true;
-            this.rdbLabStop.Location = new System.Drawing.Point(38, 25);
-            this.rdbLabStop.Name = "rdbLabStop";
-            this.rdbLabStop.Size = new System.Drawing.Size(47, 17);
-            this.rdbLabStop.TabIndex = 12;
-            this.rdbLabStop.TabStop = true;
-            this.rdbLabStop.Text = "Stop";
-            this.rdbLabStop.UseVisualStyleBackColor = true;
-            // 
-            // label86
-            // 
-            this.label86.AutoSize = true;
-            this.label86.Location = new System.Drawing.Point(22, 9);
-            this.label86.Name = "label86";
-            this.label86.Size = new System.Drawing.Size(129, 13);
-            this.label86.TabIndex = 11;
-            this.label86.Text = "When a series completes:";
-            // 
-            // label85
-            // 
-            this.label85.AutoSize = true;
-            this.label85.Location = new System.Drawing.Point(226, 92);
-            this.label85.Name = "label85";
-            this.label85.Size = new System.Drawing.Size(198, 13);
-            this.label85.TabIndex = 10;
-            this.label85.Text = "Browse for a file containing 1 bet per line";
-            // 
-            // btnBrowseLab
-            // 
-            this.btnBrowseLab.Location = new System.Drawing.Point(298, 66);
-            this.btnBrowseLab.Name = "btnBrowseLab";
-            this.btnBrowseLab.Size = new System.Drawing.Size(75, 23);
-            this.btnBrowseLab.TabIndex = 9;
-            this.btnBrowseLab.Text = "Browse";
-            this.btnBrowseLab.UseVisualStyleBackColor = true;
-            // 
-            // rtbBets
-            // 
-            this.rtbBets.Location = new System.Drawing.Point(48, 35);
-            this.rtbBets.Name = "rtbBets";
-            this.rtbBets.Size = new System.Drawing.Size(160, 300);
-            this.rtbBets.TabIndex = 8;
-            this.rtbBets.Text = "0.0001\n0.0001\n0.0002\n0.0002\n0.0002\n0.0001\n0.0001";
-            // 
-            // label87
-            // 
-            this.label87.AutoSize = true;
-            this.label87.Location = new System.Drawing.Point(11, 35);
-            this.label87.Name = "label87";
-            this.label87.Size = new System.Drawing.Size(31, 13);
-            this.label87.TabIndex = 7;
-            this.label87.Text = "Bets:";
-            // 
-            // chkReverseLab
-            // 
-            this.chkReverseLab.AutoSize = true;
-            this.chkReverseLab.Location = new System.Drawing.Point(298, 43);
-            this.chkReverseLab.Name = "chkReverseLab";
-            this.chkReverseLab.Size = new System.Drawing.Size(126, 17);
-            this.chkReverseLab.TabIndex = 2;
-            this.chkReverseLab.Text = "Reverse Labouchère";
-            this.chkReverseLab.UseVisualStyleBackColor = true;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.panel6);
-            this.tabPage1.Controls.Add(this.groupBox11);
-            this.tabPage1.Controls.Add(this.groupBox10);
-            this.tabPage1.Controls.Add(this.lstFibonacci);
-            this.tabPage1.Controls.Add(this.rdbFibonacci);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(420, 326);
-            this.tabPage1.TabIndex = 13;
-            this.tabPage1.Text = "Fibonacci";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // panel6
-            // 
-            this.panel6.Controls.Add(this.rdbFiboLevelReset);
-            this.panel6.Controls.Add(this.rdbFiboLevelStop);
-            this.panel6.Controls.Add(this.chkFiboLevel);
-            this.panel6.Controls.Add(this.label66);
-            this.panel6.Controls.Add(this.nudFiboLeve);
-            this.panel6.Location = new System.Drawing.Point(195, 208);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(214, 112);
-            this.panel6.TabIndex = 36;
-            // 
-            // rdbFiboLevelReset
-            // 
-            this.rdbFiboLevelReset.AutoSize = true;
-            this.rdbFiboLevelReset.Location = new System.Drawing.Point(31, 49);
-            this.rdbFiboLevelReset.Name = "rdbFiboLevelReset";
-            this.rdbFiboLevelReset.Size = new System.Drawing.Size(53, 17);
-            this.rdbFiboLevelReset.TabIndex = 36;
-            this.rdbFiboLevelReset.TabStop = true;
-            this.rdbFiboLevelReset.Text = "Reset";
-            this.rdbFiboLevelReset.UseVisualStyleBackColor = true;
-            // 
-            // rdbFiboLevelStop
-            // 
-            this.rdbFiboLevelStop.AutoSize = true;
-            this.rdbFiboLevelStop.Location = new System.Drawing.Point(31, 26);
-            this.rdbFiboLevelStop.Name = "rdbFiboLevelStop";
-            this.rdbFiboLevelStop.Size = new System.Drawing.Size(47, 17);
-            this.rdbFiboLevelStop.TabIndex = 35;
-            this.rdbFiboLevelStop.TabStop = true;
-            this.rdbFiboLevelStop.Text = "Stop";
-            this.rdbFiboLevelStop.UseVisualStyleBackColor = true;
-            // 
-            // chkFiboLevel
-            // 
-            this.chkFiboLevel.AutoSize = true;
-            this.chkFiboLevel.Location = new System.Drawing.Point(6, 3);
-            this.chkFiboLevel.Name = "chkFiboLevel";
-            this.chkFiboLevel.Size = new System.Drawing.Size(84, 17);
-            this.chkFiboLevel.TabIndex = 34;
-            this.chkFiboLevel.Text = "When Level";
-            this.chkFiboLevel.UseVisualStyleBackColor = true;
-            // 
-            // label66
-            // 
-            this.label66.AutoSize = true;
-            this.label66.Location = new System.Drawing.Point(149, 5);
-            this.label66.Name = "label66";
-            this.label66.Size = new System.Drawing.Size(56, 13);
-            this.label66.TabIndex = 33;
-            this.label66.Text = "is reached";
-            // 
-            // nudFiboLeve
-            // 
-            this.nudFiboLeve.Location = new System.Drawing.Point(96, 1);
-            this.nudFiboLeve.Name = "nudFiboLeve";
-            this.nudFiboLeve.Size = new System.Drawing.Size(47, 20);
-            this.nudFiboLeve.TabIndex = 32;
-            // 
-            // groupBox11
-            // 
-            this.groupBox11.Controls.Add(this.rdbFiboWinStop);
-            this.groupBox11.Controls.Add(this.rdbFiboWinReset);
-            this.groupBox11.Controls.Add(this.rdbFiboWinIncrement);
-            this.groupBox11.Controls.Add(this.label98);
-            this.groupBox11.Controls.Add(this.nudFiboWinIncrement);
-            this.groupBox11.Location = new System.Drawing.Point(195, 108);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(219, 94);
-            this.groupBox11.TabIndex = 30;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "On Win";
-            // 
-            // rdbFiboWinStop
-            // 
-            this.rdbFiboWinStop.AutoSize = true;
-            this.rdbFiboWinStop.Location = new System.Drawing.Point(6, 65);
-            this.rdbFiboWinStop.Name = "rdbFiboWinStop";
-            this.rdbFiboWinStop.Size = new System.Drawing.Size(81, 17);
-            this.rdbFiboWinStop.TabIndex = 34;
-            this.rdbFiboWinStop.TabStop = true;
-            this.rdbFiboWinStop.Text = "Stop on win";
-            this.rdbFiboWinStop.UseVisualStyleBackColor = true;
-            // 
-            // rdbFiboWinReset
-            // 
-            this.rdbFiboWinReset.AutoSize = true;
-            this.rdbFiboWinReset.Location = new System.Drawing.Point(6, 42);
-            this.rdbFiboWinReset.Name = "rdbFiboWinReset";
-            this.rdbFiboWinReset.Size = new System.Drawing.Size(87, 17);
-            this.rdbFiboWinReset.TabIndex = 33;
-            this.rdbFiboWinReset.TabStop = true;
-            this.rdbFiboWinReset.Text = "Reset on win";
-            this.rdbFiboWinReset.UseVisualStyleBackColor = true;
-            // 
-            // rdbFiboWinIncrement
-            // 
-            this.rdbFiboWinIncrement.AutoSize = true;
-            this.rdbFiboWinIncrement.Location = new System.Drawing.Point(6, 19);
-            this.rdbFiboWinIncrement.Name = "rdbFiboWinIncrement";
-            this.rdbFiboWinIncrement.Size = new System.Drawing.Size(72, 17);
-            this.rdbFiboWinIncrement.TabIndex = 32;
-            this.rdbFiboWinIncrement.TabStop = true;
-            this.rdbFiboWinIncrement.Text = "Increment";
-            this.rdbFiboWinIncrement.UseVisualStyleBackColor = true;
-            // 
-            // label98
-            // 
-            this.label98.AutoSize = true;
-            this.label98.Location = new System.Drawing.Point(141, 21);
-            this.label98.Name = "label98";
-            this.label98.Size = new System.Drawing.Size(68, 13);
-            this.label98.TabIndex = 28;
-            this.label98.Text = "Steps on win";
-            // 
-            // nudFiboWinIncrement
-            // 
-            this.nudFiboWinIncrement.Location = new System.Drawing.Point(89, 17);
-            this.nudFiboWinIncrement.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.nudFiboWinIncrement.Name = "nudFiboWinIncrement";
-            this.nudFiboWinIncrement.Size = new System.Drawing.Size(46, 20);
-            this.nudFiboWinIncrement.TabIndex = 27;
-            // 
-            // groupBox10
-            // 
-            this.groupBox10.Controls.Add(this.rdbFiboLossStop);
-            this.groupBox10.Controls.Add(this.rdbFiboLossReset);
-            this.groupBox10.Controls.Add(this.rdbFiboLossIncrement);
-            this.groupBox10.Controls.Add(this.label99);
-            this.groupBox10.Controls.Add(this.nudFiboLossIncrement);
-            this.groupBox10.Location = new System.Drawing.Point(195, 8);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(219, 94);
-            this.groupBox10.TabIndex = 29;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "On Loss";
-            // 
-            // rdbFiboLossStop
-            // 
-            this.rdbFiboLossStop.AutoSize = true;
-            this.rdbFiboLossStop.Location = new System.Drawing.Point(6, 65);
-            this.rdbFiboLossStop.Name = "rdbFiboLossStop";
-            this.rdbFiboLossStop.Size = new System.Drawing.Size(83, 17);
-            this.rdbFiboLossStop.TabIndex = 34;
-            this.rdbFiboLossStop.TabStop = true;
-            this.rdbFiboLossStop.Text = "Stop on loss";
-            this.rdbFiboLossStop.UseVisualStyleBackColor = true;
-            // 
-            // rdbFiboLossReset
-            // 
-            this.rdbFiboLossReset.AutoSize = true;
-            this.rdbFiboLossReset.Location = new System.Drawing.Point(6, 42);
-            this.rdbFiboLossReset.Name = "rdbFiboLossReset";
-            this.rdbFiboLossReset.Size = new System.Drawing.Size(89, 17);
-            this.rdbFiboLossReset.TabIndex = 33;
-            this.rdbFiboLossReset.TabStop = true;
-            this.rdbFiboLossReset.Text = "Reset on loss";
-            this.rdbFiboLossReset.UseVisualStyleBackColor = true;
-            // 
-            // rdbFiboLossIncrement
-            // 
-            this.rdbFiboLossIncrement.AutoSize = true;
-            this.rdbFiboLossIncrement.Location = new System.Drawing.Point(6, 19);
-            this.rdbFiboLossIncrement.Name = "rdbFiboLossIncrement";
-            this.rdbFiboLossIncrement.Size = new System.Drawing.Size(72, 17);
-            this.rdbFiboLossIncrement.TabIndex = 32;
-            this.rdbFiboLossIncrement.TabStop = true;
-            this.rdbFiboLossIncrement.Text = "Increment";
-            this.rdbFiboLossIncrement.UseVisualStyleBackColor = true;
-            // 
-            // label99
-            // 
-            this.label99.AutoSize = true;
-            this.label99.Location = new System.Drawing.Point(141, 21);
-            this.label99.Name = "label99";
-            this.label99.Size = new System.Drawing.Size(70, 13);
-            this.label99.TabIndex = 28;
-            this.label99.Text = "Steps on loss";
-            // 
-            // nudFiboLossIncrement
-            // 
-            this.nudFiboLossIncrement.Location = new System.Drawing.Point(89, 17);
-            this.nudFiboLossIncrement.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.nudFiboLossIncrement.Name = "nudFiboLossIncrement";
-            this.nudFiboLossIncrement.Size = new System.Drawing.Size(46, 20);
-            this.nudFiboLossIncrement.TabIndex = 27;
-            // 
-            // lstFibonacci
-            // 
-            this.lstFibonacci.FormattingEnabled = true;
-            this.lstFibonacci.Location = new System.Drawing.Point(8, 31);
-            this.lstFibonacci.Name = "lstFibonacci";
-            this.lstFibonacci.Size = new System.Drawing.Size(185, 290);
-            this.lstFibonacci.TabIndex = 16;
-            // 
-            // rdbFibonacci
-            // 
-            this.rdbFibonacci.AutoSize = true;
-            this.rdbFibonacci.Checked = true;
-            this.rdbFibonacci.Location = new System.Drawing.Point(8, 8);
-            this.rdbFibonacci.Name = "rdbFibonacci";
-            this.rdbFibonacci.Size = new System.Drawing.Size(93, 17);
-            this.rdbFibonacci.TabIndex = 15;
-            this.rdbFibonacci.TabStop = true;
-            this.rdbFibonacci.Text = "Use Fibonacci";
-            this.rdbFibonacci.UseVisualStyleBackColor = true;
-            this.rdbFibonacci.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.groupBox13);
-            this.tabPage5.Controls.Add(this.groupBox12);
-            this.tabPage5.Controls.Add(this.rdbAlembert);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(420, 326);
-            this.tabPage5.TabIndex = 14;
-            this.tabPage5.Text = "d’Alembert";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // rdbAlembert
-            // 
-            this.rdbAlembert.AutoSize = true;
-            this.rdbAlembert.Checked = true;
-            this.rdbAlembert.Location = new System.Drawing.Point(6, 6);
-            this.rdbAlembert.Name = "rdbAlembert";
-            this.rdbAlembert.Size = new System.Drawing.Size(96, 17);
-            this.rdbAlembert.TabIndex = 15;
-            this.rdbAlembert.TabStop = true;
-            this.rdbAlembert.Text = "Use d\'Alembert";
-            this.rdbAlembert.UseVisualStyleBackColor = true;
-            this.rdbAlembert.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.Controls.Add(this.rdbPreset);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(420, 326);
-            this.tabPage6.TabIndex = 15;
-            this.tabPage6.Text = "Preset List";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // rdbPreset
-            // 
-            this.rdbPreset.AutoSize = true;
-            this.rdbPreset.Location = new System.Drawing.Point(6, 6);
-            this.rdbPreset.Name = "rdbPreset";
-            this.rdbPreset.Size = new System.Drawing.Size(96, 17);
-            this.rdbPreset.TabIndex = 15;
-            this.rdbPreset.TabStop = true;
-            this.rdbPreset.Text = "Use Preset List";
-            this.rdbPreset.UseVisualStyleBackColor = true;
-            this.rdbPreset.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
-            // 
-            // tbCustom
-            // 
-            this.tbCustom.Controls.Add(this.gbCustom);
-            this.tbCustom.Location = new System.Drawing.Point(4, 22);
-            this.tbCustom.Name = "tbCustom";
-            this.tbCustom.Padding = new System.Windows.Forms.Padding(3);
-            this.tbCustom.Size = new System.Drawing.Size(420, 326);
-            this.tbCustom.TabIndex = 11;
-            this.tbCustom.Text = "Custom";
-            this.tbCustom.UseVisualStyleBackColor = true;
-            // 
-            // gbCustom
-            // 
-            this.gbCustom.Controls.Add(this.label81);
-            this.gbCustom.Controls.Add(this.nudPercentage);
-            this.gbCustom.Controls.Add(this.chkPercentage);
-            this.gbCustom.Controls.Add(this.nudMKDecrement);
-            this.gbCustom.Controls.Add(this.nudMKIncrement);
-            this.gbCustom.Controls.Add(this.label80);
-            this.gbCustom.Controls.Add(this.label79);
-            this.gbCustom.Controls.Add(this.chkMK);
-            this.gbCustom.Controls.Add(this.nudMutawaWins);
-            this.gbCustom.Controls.Add(this.label78);
-            this.gbCustom.Controls.Add(this.nudtrazelloseto);
-            this.gbCustom.Controls.Add(this.nudtrazelwinto);
-            this.gbCustom.Controls.Add(this.label77);
-            this.gbCustom.Controls.Add(this.label76);
-            this.gbCustom.Controls.Add(this.nudTrazelMultiplier);
-            this.gbCustom.Controls.Add(this.label75);
-            this.gbCustom.Controls.Add(this.NudTrazelLose);
-            this.gbCustom.Controls.Add(this.nudTrazelWin);
-            this.gbCustom.Controls.Add(this.label74);
-            this.gbCustom.Controls.Add(this.label73);
-            this.gbCustom.Controls.Add(this.chkTrazel);
-            this.gbCustom.Controls.Add(this.label70);
-            this.gbCustom.Controls.Add(this.nudMutawaMultiplier);
-            this.gbCustom.Controls.Add(this.checkBox1);
-            this.gbCustom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbCustom.Enabled = false;
-            this.gbCustom.Location = new System.Drawing.Point(3, 3);
-            this.gbCustom.Name = "gbCustom";
-            this.gbCustom.Size = new System.Drawing.Size(414, 320);
-            this.gbCustom.TabIndex = 0;
-            this.gbCustom.TabStop = false;
-            // 
-            // label81
-            // 
-            this.label81.AutoSize = true;
-            this.label81.Location = new System.Drawing.Point(94, 272);
-            this.label81.Name = "label81";
-            this.label81.Size = new System.Drawing.Size(95, 13);
-            this.label81.TabIndex = 47;
-            this.label81.Text = "Percentage to bet:";
-            // 
-            // nudPercentage
-            // 
-            this.nudPercentage.DecimalPlaces = 8;
-            this.nudPercentage.Location = new System.Drawing.Point(195, 270);
-            this.nudPercentage.Name = "nudPercentage";
-            this.nudPercentage.Size = new System.Drawing.Size(103, 20);
-            this.nudPercentage.TabIndex = 46;
-            // 
-            // chkPercentage
-            // 
-            this.chkPercentage.AutoSize = true;
-            this.chkPercentage.Location = new System.Drawing.Point(63, 247);
-            this.chkPercentage.Name = "chkPercentage";
-            this.chkPercentage.Size = new System.Drawing.Size(153, 17);
-            this.chkPercentage.TabIndex = 45;
-            this.chkPercentage.Text = "Bet Percentage of balance";
-            this.chkPercentage.UseVisualStyleBackColor = true;
-            // 
-            // nudMKDecrement
-            // 
-            this.nudMKDecrement.DecimalPlaces = 8;
-            this.nudMKDecrement.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.nudMKDecrement.Location = new System.Drawing.Point(166, 220);
-            this.nudMKDecrement.Name = "nudMKDecrement";
-            this.nudMKDecrement.Size = new System.Drawing.Size(94, 20);
-            this.nudMKDecrement.TabIndex = 44;
-            // 
-            // nudMKIncrement
-            // 
-            this.nudMKIncrement.DecimalPlaces = 8;
-            this.nudMKIncrement.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.nudMKIncrement.Location = new System.Drawing.Point(166, 197);
-            this.nudMKIncrement.Name = "nudMKIncrement";
-            this.nudMKIncrement.Size = new System.Drawing.Size(94, 20);
-            this.nudMKIncrement.TabIndex = 43;
-            // 
-            // label80
-            // 
-            this.label80.AutoSize = true;
-            this.label80.Location = new System.Drawing.Point(78, 222);
-            this.label80.Name = "label80";
-            this.label80.Size = new System.Drawing.Size(76, 13);
-            this.label80.TabIndex = 42;
-            this.label80.Text = "Decrement by:";
-            // 
-            // label79
-            // 
-            this.label79.AutoSize = true;
-            this.label79.Location = new System.Drawing.Point(83, 199);
-            this.label79.Name = "label79";
-            this.label79.Size = new System.Drawing.Size(71, 13);
-            this.label79.TabIndex = 41;
-            this.label79.Text = "Increment by:";
-            // 
-            // chkMK
-            // 
-            this.chkMK.AutoSize = true;
-            this.chkMK.Location = new System.Drawing.Point(63, 179);
-            this.chkMK.Name = "chkMK";
-            this.chkMK.Size = new System.Drawing.Size(82, 17);
-            this.chkMK.TabIndex = 40;
-            this.chkMK.Text = "mmmmkkkk";
-            this.chkMK.UseVisualStyleBackColor = true;
-            // 
-            // nudMutawaWins
-            // 
-            this.nudMutawaWins.Location = new System.Drawing.Point(314, 54);
-            this.nudMutawaWins.Name = "nudMutawaWins";
-            this.nudMutawaWins.Size = new System.Drawing.Size(40, 20);
-            this.nudMutawaWins.TabIndex = 39;
-            this.nudMutawaWins.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label78
-            // 
-            this.label78.AutoSize = true;
-            this.label78.Location = new System.Drawing.Point(270, 56);
-            this.label78.Name = "label78";
-            this.label78.Size = new System.Drawing.Size(34, 13);
-            this.label78.TabIndex = 38;
-            this.label78.Text = "Wins:";
-            // 
-            // nudtrazelloseto
-            // 
-            this.nudtrazelloseto.DecimalPlaces = 8;
-            this.nudtrazelloseto.Location = new System.Drawing.Point(213, 128);
-            this.nudtrazelloseto.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudtrazelloseto.Name = "nudtrazelloseto";
-            this.nudtrazelloseto.Size = new System.Drawing.Size(79, 20);
-            this.nudtrazelloseto.TabIndex = 37;
-            this.nudtrazelloseto.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            // 
-            // nudtrazelwinto
-            // 
-            this.nudtrazelwinto.DecimalPlaces = 8;
-            this.nudtrazelwinto.Location = new System.Drawing.Point(213, 102);
-            this.nudtrazelwinto.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudtrazelwinto.Name = "nudtrazelwinto";
-            this.nudtrazelwinto.Size = new System.Drawing.Size(79, 20);
-            this.nudtrazelwinto.TabIndex = 36;
-            this.nudtrazelwinto.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            // 
-            // label77
-            // 
-            this.label77.AutoSize = true;
-            this.label77.Location = new System.Drawing.Point(184, 130);
-            this.label77.Name = "label77";
-            this.label77.Size = new System.Drawing.Size(23, 13);
-            this.label77.TabIndex = 35;
-            this.label77.Text = "To:";
-            // 
-            // label76
-            // 
-            this.label76.AutoSize = true;
-            this.label76.Location = new System.Drawing.Point(184, 104);
-            this.label76.Name = "label76";
-            this.label76.Size = new System.Drawing.Size(23, 13);
-            this.label76.TabIndex = 34;
-            this.label76.Text = "To:";
-            // 
-            // nudTrazelMultiplier
-            // 
-            this.nudTrazelMultiplier.DecimalPlaces = 3;
-            this.nudTrazelMultiplier.Location = new System.Drawing.Point(144, 153);
-            this.nudTrazelMultiplier.Name = "nudTrazelMultiplier";
-            this.nudTrazelMultiplier.Size = new System.Drawing.Size(60, 20);
-            this.nudTrazelMultiplier.TabIndex = 33;
-            this.nudTrazelMultiplier.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // label75
-            // 
-            this.label75.AutoSize = true;
-            this.label75.Location = new System.Drawing.Point(83, 155);
-            this.label75.Name = "label75";
-            this.label75.Size = new System.Drawing.Size(51, 13);
-            this.label75.TabIndex = 32;
-            this.label75.Text = "Multiplier:";
-            // 
-            // NudTrazelLose
-            // 
-            this.NudTrazelLose.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.NudTrazelLose.Location = new System.Drawing.Point(144, 127);
-            this.NudTrazelLose.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.NudTrazelLose.Name = "NudTrazelLose";
-            this.NudTrazelLose.Size = new System.Drawing.Size(40, 20);
-            this.NudTrazelLose.TabIndex = 31;
-            this.NudTrazelLose.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
-            // nudTrazelWin
-            // 
-            this.nudTrazelWin.Location = new System.Drawing.Point(144, 101);
-            this.nudTrazelWin.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudTrazelWin.Name = "nudTrazelWin";
-            this.nudTrazelWin.Size = new System.Drawing.Size(40, 20);
-            this.nudTrazelWin.TabIndex = 30;
-            this.nudTrazelWin.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
-            // label74
-            // 
-            this.label74.AutoSize = true;
-            this.label74.Location = new System.Drawing.Point(71, 129);
-            this.label74.Name = "label74";
-            this.label74.Size = new System.Drawing.Size(67, 13);
-            this.label74.TabIndex = 29;
-            this.label74.Text = "Lose Streak:";
-            // 
-            // label73
-            // 
-            this.label73.AutoSize = true;
-            this.label73.Location = new System.Drawing.Point(75, 104);
-            this.label73.Name = "label73";
-            this.label73.Size = new System.Drawing.Size(63, 13);
-            this.label73.TabIndex = 28;
-            this.label73.Text = "Win Streak:";
-            // 
-            // chkTrazel
-            // 
-            this.chkTrazel.AutoSize = true;
-            this.chkTrazel.Location = new System.Drawing.Point(63, 84);
-            this.chkTrazel.Name = "chkTrazel";
-            this.chkTrazel.Size = new System.Drawing.Size(55, 17);
-            this.chkTrazel.TabIndex = 27;
-            this.chkTrazel.Text = "Trazel";
-            this.chkTrazel.UseVisualStyleBackColor = true;
-            // 
-            // label70
-            // 
-            this.label70.AutoSize = true;
-            this.label70.Location = new System.Drawing.Point(60, 56);
-            this.label70.Name = "label70";
-            this.label70.Size = new System.Drawing.Size(59, 13);
-            this.label70.TabIndex = 26;
-            this.label70.Text = "Multiply by:";
-            // 
-            // nudMutawaMultiplier
-            // 
-            this.nudMutawaMultiplier.DecimalPlaces = 8;
-            this.nudMutawaMultiplier.Location = new System.Drawing.Point(125, 54);
-            this.nudMutawaMultiplier.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudMutawaMultiplier.Name = "nudMutawaMultiplier";
-            this.nudMutawaMultiplier.Size = new System.Drawing.Size(120, 20);
-            this.nudMutawaMultiplier.TabIndex = 25;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(63, 31);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(86, 17);
-            this.checkBox1.TabIndex = 24;
-            this.checkBox1.Text = "Use Mutawa";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.gbLosses);
-            this.tabPage4.Controls.Add(this.gbWins);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(434, 358);
-            this.tabPage4.TabIndex = 8;
-            this.tabPage4.Text = "Stop Conditions";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // gbLosses
-            // 
-            this.gbLosses.Controls.Add(this.nudChangeChanceLoseTo);
-            this.gbLosses.Controls.Add(this.label67);
-            this.gbLosses.Controls.Add(this.nudChangeChanceLoseStreak);
-            this.gbLosses.Controls.Add(this.chkChangeChanceLose);
-            this.gbLosses.Controls.Add(this.nudChangeLoseStreakTo);
-            this.gbLosses.Controls.Add(this.label65);
-            this.gbLosses.Controls.Add(this.nudChangeLoseStreak);
-            this.gbLosses.Controls.Add(this.chkChangeLoseStreak);
-            this.gbLosses.Controls.Add(this.label63);
-            this.gbLosses.Controls.Add(this.nudStopLossBtc);
-            this.gbLosses.Controls.Add(this.chkStopLossBtc);
-            this.gbLosses.Controls.Add(this.label60);
-            this.gbLosses.Controls.Add(this.nudStopLossBtcStreal);
-            this.gbLosses.Controls.Add(this.chkStopLossBtcStreak);
-            this.gbLosses.Controls.Add(this.label59);
-            this.gbLosses.Controls.Add(this.nudStopLossStreak);
-            this.gbLosses.Controls.Add(this.chkStopLossStreak);
-            this.gbLosses.Controls.Add(this.label57);
-            this.gbLosses.Controls.Add(this.nudResetBetLoss);
-            this.gbLosses.Controls.Add(this.chkResetBetLoss);
-            this.gbLosses.Location = new System.Drawing.Point(11, 6);
-            this.gbLosses.Name = "gbLosses";
-            this.gbLosses.Size = new System.Drawing.Size(413, 168);
-            this.gbLosses.TabIndex = 1;
-            this.gbLosses.TabStop = false;
-            this.gbLosses.Text = "stop/reset conditions on losses";
-            // 
-            // nudChangeChanceLoseTo
-            // 
-            this.nudChangeChanceLoseTo.DecimalPlaces = 5;
-            this.nudChangeChanceLoseTo.Location = new System.Drawing.Point(300, 138);
-            this.nudChangeChanceLoseTo.Name = "nudChangeChanceLoseTo";
-            this.nudChangeChanceLoseTo.Size = new System.Drawing.Size(79, 20);
-            this.nudChangeChanceLoseTo.TabIndex = 117;
-            // 
-            // label67
-            // 
-            this.label67.AutoSize = true;
-            this.label67.Location = new System.Drawing.Point(127, 142);
-            this.label67.Name = "label67";
-            this.label67.Size = new System.Drawing.Size(173, 13);
-            this.label67.TabIndex = 116;
-            this.label67.Text = "Losses in a row, change chance to";
-            // 
-            // nudChangeChanceLoseStreak
-            // 
-            this.nudChangeChanceLoseStreak.Location = new System.Drawing.Point(84, 138);
-            this.nudChangeChanceLoseStreak.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudChangeChanceLoseStreak.Name = "nudChangeChanceLoseStreak";
-            this.nudChangeChanceLoseStreak.Size = new System.Drawing.Size(37, 20);
-            this.nudChangeChanceLoseStreak.TabIndex = 115;
-            // 
-            // chkChangeChanceLose
-            // 
-            this.chkChangeChanceLose.AutoSize = true;
-            this.chkChangeChanceLose.Location = new System.Drawing.Point(33, 140);
-            this.chkChangeChanceLose.Name = "chkChangeChanceLose";
-            this.chkChangeChanceLose.Size = new System.Drawing.Size(51, 17);
-            this.chkChangeChanceLose.TabIndex = 114;
-            this.chkChangeChanceLose.Text = "After ";
-            this.chkChangeChanceLose.UseVisualStyleBackColor = true;
-            // 
-            // nudChangeLoseStreakTo
-            // 
-            this.nudChangeLoseStreakTo.DecimalPlaces = 8;
-            this.nudChangeLoseStreakTo.Location = new System.Drawing.Point(285, 114);
-            this.nudChangeLoseStreakTo.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudChangeLoseStreakTo.Name = "nudChangeLoseStreakTo";
-            this.nudChangeLoseStreakTo.Size = new System.Drawing.Size(84, 20);
-            this.nudChangeLoseStreakTo.TabIndex = 113;
-            // 
-            // label65
-            // 
-            this.label65.AutoSize = true;
-            this.label65.Location = new System.Drawing.Point(127, 118);
-            this.label65.Name = "label65";
-            this.label65.Size = new System.Drawing.Size(152, 13);
-            this.label65.TabIndex = 111;
-            this.label65.Text = "Losses in a row, change bet to";
-            // 
-            // nudChangeLoseStreak
-            // 
-            this.nudChangeLoseStreak.Location = new System.Drawing.Point(84, 114);
-            this.nudChangeLoseStreak.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudChangeLoseStreak.Name = "nudChangeLoseStreak";
-            this.nudChangeLoseStreak.Size = new System.Drawing.Size(37, 20);
-            this.nudChangeLoseStreak.TabIndex = 110;
-            // 
-            // chkChangeLoseStreak
-            // 
-            this.chkChangeLoseStreak.AutoSize = true;
-            this.chkChangeLoseStreak.Location = new System.Drawing.Point(33, 117);
-            this.chkChangeLoseStreak.Name = "chkChangeLoseStreak";
-            this.chkChangeLoseStreak.Size = new System.Drawing.Size(48, 17);
-            this.chkChangeLoseStreak.TabIndex = 109;
-            this.chkChangeLoseStreak.Text = "After";
-            this.chkChangeLoseStreak.UseVisualStyleBackColor = true;
-            // 
-            // label63
-            // 
-            this.label63.AutoSize = true;
-            this.label63.Location = new System.Drawing.Point(209, 95);
-            this.label63.Name = "label63";
-            this.label63.Size = new System.Drawing.Size(29, 13);
-            this.label63.TabIndex = 108;
-            this.label63.Text = "Loss";
-            // 
-            // nudStopLossBtc
-            // 
-            this.nudStopLossBtc.DecimalPlaces = 8;
-            this.nudStopLossBtc.Location = new System.Drawing.Point(119, 93);
-            this.nudStopLossBtc.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudStopLossBtc.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            458752});
-            this.nudStopLossBtc.Name = "nudStopLossBtc";
-            this.nudStopLossBtc.Size = new System.Drawing.Size(84, 20);
-            this.nudStopLossBtc.TabIndex = 107;
-            this.nudStopLossBtc.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            458752});
-            // 
-            // chkStopLossBtc
-            // 
-            this.chkStopLossBtc.AutoSize = true;
-            this.chkStopLossBtc.Location = new System.Drawing.Point(33, 94);
-            this.chkStopLossBtc.Name = "chkStopLossBtc";
-            this.chkStopLossBtc.Size = new System.Drawing.Size(73, 17);
-            this.chkStopLossBtc.TabIndex = 106;
-            this.chkStopLossBtc.Text = "Stop After";
-            this.chkStopLossBtc.UseVisualStyleBackColor = true;
-            // 
-            // label60
-            // 
-            this.label60.AutoSize = true;
-            this.label60.Location = new System.Drawing.Point(209, 69);
-            this.label60.Name = "label60";
-            this.label60.Size = new System.Drawing.Size(63, 13);
-            this.label60.TabIndex = 105;
-            this.label60.Text = "Streak Loss";
-            // 
-            // nudStopLossBtcStreal
-            // 
-            this.nudStopLossBtcStreal.DecimalPlaces = 8;
-            this.nudStopLossBtcStreal.Location = new System.Drawing.Point(119, 67);
-            this.nudStopLossBtcStreal.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudStopLossBtcStreal.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            458752});
-            this.nudStopLossBtcStreal.Name = "nudStopLossBtcStreal";
-            this.nudStopLossBtcStreal.Size = new System.Drawing.Size(84, 20);
-            this.nudStopLossBtcStreal.TabIndex = 104;
-            this.nudStopLossBtcStreal.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            458752});
-            // 
-            // chkStopLossBtcStreak
-            // 
-            this.chkStopLossBtcStreak.AutoSize = true;
-            this.chkStopLossBtcStreak.Location = new System.Drawing.Point(33, 68);
-            this.chkStopLossBtcStreak.Name = "chkStopLossBtcStreak";
-            this.chkStopLossBtcStreak.Size = new System.Drawing.Size(73, 17);
-            this.chkStopLossBtcStreak.TabIndex = 103;
-            this.chkStopLossBtcStreak.Text = "Stop After";
-            this.chkStopLossBtcStreak.UseVisualStyleBackColor = true;
-            // 
-            // label59
-            // 
-            this.label59.AutoSize = true;
-            this.label59.Location = new System.Drawing.Point(192, 43);
-            this.label59.Name = "label59";
-            this.label59.Size = new System.Drawing.Size(80, 13);
-            this.label59.TabIndex = 102;
-            this.label59.Text = "Losses in a row";
-            // 
-            // nudStopLossStreak
-            // 
-            this.nudStopLossStreak.Location = new System.Drawing.Point(119, 41);
-            this.nudStopLossStreak.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudStopLossStreak.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudStopLossStreak.Name = "nudStopLossStreak";
-            this.nudStopLossStreak.Size = new System.Drawing.Size(64, 20);
-            this.nudStopLossStreak.TabIndex = 101;
-            this.nudStopLossStreak.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // chkStopLossStreak
-            // 
-            this.chkStopLossStreak.AutoSize = true;
-            this.chkStopLossStreak.Location = new System.Drawing.Point(33, 42);
-            this.chkStopLossStreak.Name = "chkStopLossStreak";
-            this.chkStopLossStreak.Size = new System.Drawing.Size(73, 17);
-            this.chkStopLossStreak.TabIndex = 100;
-            this.chkStopLossStreak.Text = "Stop After";
-            this.chkStopLossStreak.UseVisualStyleBackColor = true;
-            // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(192, 18);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(80, 13);
-            this.label57.TabIndex = 99;
-            this.label57.Text = "Losses in a row";
-            // 
-            // nudResetBetLoss
-            // 
-            this.nudResetBetLoss.Location = new System.Drawing.Point(119, 16);
-            this.nudResetBetLoss.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudResetBetLoss.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudResetBetLoss.Name = "nudResetBetLoss";
-            this.nudResetBetLoss.Size = new System.Drawing.Size(64, 20);
-            this.nudResetBetLoss.TabIndex = 98;
-            this.nudResetBetLoss.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // chkResetBetLoss
-            // 
-            this.chkResetBetLoss.AutoSize = true;
-            this.chkResetBetLoss.Location = new System.Drawing.Point(33, 19);
-            this.chkResetBetLoss.Name = "chkResetBetLoss";
-            this.chkResetBetLoss.Size = new System.Drawing.Size(81, 17);
-            this.chkResetBetLoss.TabIndex = 97;
-            this.chkResetBetLoss.Text = "Reset after ";
-            this.chkResetBetLoss.UseVisualStyleBackColor = true;
-            // 
-            // gbWins
-            // 
-            this.gbWins.Controls.Add(this.nudChangeChanceWinTo);
-            this.gbWins.Controls.Add(this.label68);
-            this.gbWins.Controls.Add(this.nudChangeChanceWinStreak);
-            this.gbWins.Controls.Add(this.chkChangeChanceWin);
-            this.gbWins.Controls.Add(this.nudChangeWinStreakTo);
-            this.gbWins.Controls.Add(this.label72);
-            this.gbWins.Controls.Add(this.nudChangeWinStreak);
-            this.gbWins.Controls.Add(this.chkChangeWinStreak);
-            this.gbWins.Controls.Add(this.label64);
-            this.gbWins.Controls.Add(this.nudStopWinBtc);
-            this.gbWins.Controls.Add(this.chkStopWinBtc);
-            this.gbWins.Controls.Add(this.label61);
-            this.gbWins.Controls.Add(this.nudStopWinBtcStreak);
-            this.gbWins.Controls.Add(this.chkStopWinBtcStreak);
-            this.gbWins.Controls.Add(this.label62);
-            this.gbWins.Controls.Add(this.nudStopWinStreak);
-            this.gbWins.Controls.Add(this.chkStopWinStreak);
-            this.gbWins.Controls.Add(this.label58);
-            this.gbWins.Controls.Add(this.nudResetWins);
-            this.gbWins.Controls.Add(this.chkResetBetWins);
-            this.gbWins.Location = new System.Drawing.Point(15, 180);
-            this.gbWins.Name = "gbWins";
-            this.gbWins.Size = new System.Drawing.Size(409, 172);
-            this.gbWins.TabIndex = 0;
-            this.gbWins.TabStop = false;
-            this.gbWins.Text = "stop/reset conditions on wins";
-            // 
-            // nudChangeChanceWinTo
-            // 
-            this.nudChangeChanceWinTo.DecimalPlaces = 5;
-            this.nudChangeChanceWinTo.Location = new System.Drawing.Point(296, 140);
-            this.nudChangeChanceWinTo.Name = "nudChangeChanceWinTo";
-            this.nudChangeChanceWinTo.Size = new System.Drawing.Size(76, 20);
-            this.nudChangeChanceWinTo.TabIndex = 130;
-            // 
-            // label68
-            // 
-            this.label68.AutoSize = true;
-            this.label68.Location = new System.Drawing.Point(123, 144);
-            this.label68.Name = "label68";
-            this.label68.Size = new System.Drawing.Size(159, 13);
-            this.label68.TabIndex = 129;
-            this.label68.Text = "Win in a row, change chance to";
-            // 
-            // nudChangeChanceWinStreak
-            // 
-            this.nudChangeChanceWinStreak.Location = new System.Drawing.Point(80, 140);
-            this.nudChangeChanceWinStreak.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudChangeChanceWinStreak.Name = "nudChangeChanceWinStreak";
-            this.nudChangeChanceWinStreak.Size = new System.Drawing.Size(37, 20);
-            this.nudChangeChanceWinStreak.TabIndex = 128;
-            // 
-            // chkChangeChanceWin
-            // 
-            this.chkChangeChanceWin.AutoSize = true;
-            this.chkChangeChanceWin.Location = new System.Drawing.Point(29, 142);
-            this.chkChangeChanceWin.Name = "chkChangeChanceWin";
-            this.chkChangeChanceWin.Size = new System.Drawing.Size(51, 17);
-            this.chkChangeChanceWin.TabIndex = 127;
-            this.chkChangeChanceWin.Text = "After ";
-            this.chkChangeChanceWin.UseVisualStyleBackColor = true;
-            // 
-            // nudChangeWinStreakTo
-            // 
-            this.nudChangeWinStreakTo.DecimalPlaces = 8;
-            this.nudChangeWinStreakTo.Location = new System.Drawing.Point(272, 117);
-            this.nudChangeWinStreakTo.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudChangeWinStreakTo.Name = "nudChangeWinStreakTo";
-            this.nudChangeWinStreakTo.Size = new System.Drawing.Size(84, 20);
-            this.nudChangeWinStreakTo.TabIndex = 126;
-            // 
-            // label72
-            // 
-            this.label72.AutoSize = true;
-            this.label72.Location = new System.Drawing.Point(123, 121);
-            this.label72.Name = "label72";
-            this.label72.Size = new System.Drawing.Size(143, 13);
-            this.label72.TabIndex = 124;
-            this.label72.Text = "Wins in a row, change bet to";
-            // 
-            // nudChangeWinStreak
-            // 
-            this.nudChangeWinStreak.Location = new System.Drawing.Point(82, 117);
-            this.nudChangeWinStreak.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudChangeWinStreak.Name = "nudChangeWinStreak";
-            this.nudChangeWinStreak.Size = new System.Drawing.Size(35, 20);
-            this.nudChangeWinStreak.TabIndex = 123;
-            // 
-            // chkChangeWinStreak
-            // 
-            this.chkChangeWinStreak.AutoSize = true;
-            this.chkChangeWinStreak.Location = new System.Drawing.Point(29, 119);
-            this.chkChangeWinStreak.Name = "chkChangeWinStreak";
-            this.chkChangeWinStreak.Size = new System.Drawing.Size(48, 17);
-            this.chkChangeWinStreak.TabIndex = 122;
-            this.chkChangeWinStreak.Text = "After";
-            this.chkChangeWinStreak.UseVisualStyleBackColor = true;
-            // 
-            // label64
-            // 
-            this.label64.AutoSize = true;
-            this.label64.Location = new System.Drawing.Point(205, 96);
-            this.label64.Name = "label64";
-            this.label64.Size = new System.Drawing.Size(31, 13);
-            this.label64.TabIndex = 121;
-            this.label64.Text = "Profit";
-            // 
-            // nudStopWinBtc
-            // 
-            this.nudStopWinBtc.DecimalPlaces = 8;
-            this.nudStopWinBtc.Location = new System.Drawing.Point(115, 94);
-            this.nudStopWinBtc.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudStopWinBtc.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            458752});
-            this.nudStopWinBtc.Name = "nudStopWinBtc";
-            this.nudStopWinBtc.Size = new System.Drawing.Size(84, 20);
-            this.nudStopWinBtc.TabIndex = 120;
-            this.nudStopWinBtc.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            458752});
-            // 
-            // chkStopWinBtc
-            // 
-            this.chkStopWinBtc.AutoSize = true;
-            this.chkStopWinBtc.Location = new System.Drawing.Point(29, 95);
-            this.chkStopWinBtc.Name = "chkStopWinBtc";
-            this.chkStopWinBtc.Size = new System.Drawing.Size(73, 17);
-            this.chkStopWinBtc.TabIndex = 119;
-            this.chkStopWinBtc.Text = "Stop After";
-            this.chkStopWinBtc.UseVisualStyleBackColor = true;
-            // 
-            // label61
-            // 
-            this.label61.AutoSize = true;
-            this.label61.Location = new System.Drawing.Point(205, 70);
-            this.label61.Name = "label61";
-            this.label61.Size = new System.Drawing.Size(85, 13);
-            this.label61.TabIndex = 118;
-            this.label61.Text = "Streak Winnings";
-            // 
-            // nudStopWinBtcStreak
-            // 
-            this.nudStopWinBtcStreak.DecimalPlaces = 8;
-            this.nudStopWinBtcStreak.Location = new System.Drawing.Point(115, 68);
-            this.nudStopWinBtcStreak.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudStopWinBtcStreak.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            458752});
-            this.nudStopWinBtcStreak.Name = "nudStopWinBtcStreak";
-            this.nudStopWinBtcStreak.Size = new System.Drawing.Size(84, 20);
-            this.nudStopWinBtcStreak.TabIndex = 117;
-            this.nudStopWinBtcStreak.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            458752});
-            // 
-            // chkStopWinBtcStreak
-            // 
-            this.chkStopWinBtcStreak.AutoSize = true;
-            this.chkStopWinBtcStreak.Location = new System.Drawing.Point(29, 69);
-            this.chkStopWinBtcStreak.Name = "chkStopWinBtcStreak";
-            this.chkStopWinBtcStreak.Size = new System.Drawing.Size(73, 17);
-            this.chkStopWinBtcStreak.TabIndex = 116;
-            this.chkStopWinBtcStreak.Text = "Stop After";
-            this.chkStopWinBtcStreak.UseVisualStyleBackColor = true;
-            // 
-            // label62
-            // 
-            this.label62.AutoSize = true;
-            this.label62.Location = new System.Drawing.Point(188, 44);
-            this.label62.Name = "label62";
-            this.label62.Size = new System.Drawing.Size(71, 13);
-            this.label62.TabIndex = 115;
-            this.label62.Text = "Wins in a row";
-            // 
-            // nudStopWinStreak
-            // 
-            this.nudStopWinStreak.Location = new System.Drawing.Point(115, 42);
-            this.nudStopWinStreak.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudStopWinStreak.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudStopWinStreak.Name = "nudStopWinStreak";
-            this.nudStopWinStreak.Size = new System.Drawing.Size(64, 20);
-            this.nudStopWinStreak.TabIndex = 114;
-            this.nudStopWinStreak.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // chkStopWinStreak
-            // 
-            this.chkStopWinStreak.AutoSize = true;
-            this.chkStopWinStreak.Location = new System.Drawing.Point(29, 43);
-            this.chkStopWinStreak.Name = "chkStopWinStreak";
-            this.chkStopWinStreak.Size = new System.Drawing.Size(73, 17);
-            this.chkStopWinStreak.TabIndex = 113;
-            this.chkStopWinStreak.Text = "Stop After";
-            this.chkStopWinStreak.UseVisualStyleBackColor = true;
-            // 
-            // label58
-            // 
-            this.label58.AutoSize = true;
-            this.label58.Location = new System.Drawing.Point(185, 18);
-            this.label58.Name = "label58";
-            this.label58.Size = new System.Drawing.Size(71, 13);
-            this.label58.TabIndex = 112;
-            this.label58.Text = "Wins in a row";
-            // 
-            // nudResetWins
-            // 
-            this.nudResetWins.Location = new System.Drawing.Point(115, 16);
-            this.nudResetWins.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudResetWins.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudResetWins.Name = "nudResetWins";
-            this.nudResetWins.Size = new System.Drawing.Size(64, 20);
-            this.nudResetWins.TabIndex = 111;
-            this.nudResetWins.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // chkResetBetWins
-            // 
-            this.chkResetBetWins.AutoSize = true;
-            this.chkResetBetWins.Location = new System.Drawing.Point(29, 19);
-            this.chkResetBetWins.Name = "chkResetBetWins";
-            this.chkResetBetWins.Size = new System.Drawing.Size(81, 17);
-            this.chkResetBetWins.TabIndex = 110;
-            this.chkResetBetWins.Text = "Reset after ";
-            this.chkResetBetWins.UseVisualStyleBackColor = true;
-            // 
-            // tbCharts
-            // 
-            this.tbCharts.Controls.Add(this.btnChartTimeRange);
-            this.tbCharts.Controls.Add(this.btnChartBetID);
-            this.tbCharts.Controls.Add(this.nudGraphStartBetID);
-            this.tbCharts.Controls.Add(this.dtpEnd);
-            this.tbCharts.Controls.Add(this.dtpStart);
-            this.tbCharts.Controls.Add(this.label96);
-            this.tbCharts.Controls.Add(this.label95);
-            this.tbCharts.Controls.Add(this.label94);
-            this.tbCharts.Controls.Add(this.btnChartAllTimeProfitTime);
-            this.tbCharts.Controls.Add(this.btnChartAllTimeProfitBets);
-            this.tbCharts.Controls.Add(this.btnGraphProfitTime);
-            this.tbCharts.Controls.Add(this.btnGraphProfitBets);
-            this.tbCharts.Controls.Add(this.button1);
-            this.tbCharts.Location = new System.Drawing.Point(4, 22);
-            this.tbCharts.Name = "tbCharts";
-            this.tbCharts.Padding = new System.Windows.Forms.Padding(3);
-            this.tbCharts.Size = new System.Drawing.Size(434, 358);
-            this.tbCharts.TabIndex = 4;
-            this.tbCharts.Text = "Charts";
-            this.tbCharts.UseVisualStyleBackColor = true;
-            // 
-            // btnChartTimeRange
-            // 
-            this.btnChartTimeRange.Location = new System.Drawing.Point(339, 212);
-            this.btnChartTimeRange.Name = "btnChartTimeRange";
-            this.btnChartTimeRange.Size = new System.Drawing.Size(75, 46);
-            this.btnChartTimeRange.TabIndex = 80;
-            this.btnChartTimeRange.Text = "Draw Chart";
-            this.btnChartTimeRange.UseVisualStyleBackColor = true;
-            this.btnChartTimeRange.Click += new System.EventHandler(this.btnChartTimeRange_Click);
-            // 
-            // btnChartBetID
-            // 
-            this.btnChartBetID.Location = new System.Drawing.Point(269, 165);
-            this.btnChartBetID.Name = "btnChartBetID";
-            this.btnChartBetID.Size = new System.Drawing.Size(123, 23);
-            this.btnChartBetID.TabIndex = 79;
-            this.btnChartBetID.Text = "Draw Chart";
-            this.btnChartBetID.UseVisualStyleBackColor = true;
-            this.btnChartBetID.Click += new System.EventHandler(this.btnChartBetID_Click);
-            // 
-            // nudGraphStartBetID
-            // 
-            this.nudGraphStartBetID.Location = new System.Drawing.Point(139, 168);
-            this.nudGraphStartBetID.Maximum = new decimal(new int[] {
-            276447232,
-            23283,
-            0,
-            0});
-            this.nudGraphStartBetID.Name = "nudGraphStartBetID";
-            this.nudGraphStartBetID.Size = new System.Drawing.Size(120, 20);
-            this.nudGraphStartBetID.TabIndex = 78;
-            // 
-            // dtpEnd
-            // 
-            this.dtpEnd.Location = new System.Drawing.Point(124, 238);
-            this.dtpEnd.Name = "dtpEnd";
-            this.dtpEnd.Size = new System.Drawing.Size(200, 20);
-            this.dtpEnd.TabIndex = 77;
-            // 
-            // dtpStart
-            // 
-            this.dtpStart.Location = new System.Drawing.Point(124, 212);
-            this.dtpStart.Name = "dtpStart";
-            this.dtpStart.Size = new System.Drawing.Size(200, 20);
-            this.dtpStart.TabIndex = 76;
-            // 
-            // label96
-            // 
-            this.label96.AutoSize = true;
-            this.label96.Location = new System.Drawing.Point(89, 244);
-            this.label96.Name = "label96";
-            this.label96.Size = new System.Drawing.Size(29, 13);
-            this.label96.TabIndex = 75;
-            this.label96.Text = "And ";
-            // 
-            // label95
-            // 
-            this.label95.AutoSize = true;
-            this.label95.Location = new System.Drawing.Point(28, 218);
-            this.label95.Name = "label95";
-            this.label95.Size = new System.Drawing.Size(90, 13);
-            this.label95.TabIndex = 74;
-            this.label95.Text = "All Bets Between ";
-            // 
-            // label94
-            // 
-            this.label94.AutoSize = true;
-            this.label94.Location = new System.Drawing.Point(26, 170);
-            this.label94.Name = "label94";
-            this.label94.Size = new System.Drawing.Size(107, 13);
-            this.label94.TabIndex = 73;
-            this.label94.Text = "All bets Above bet id:";
-            // 
-            // btnChartAllTimeProfitTime
-            // 
-            this.btnChartAllTimeProfitTime.Location = new System.Drawing.Point(166, 95);
-            this.btnChartAllTimeProfitTime.Name = "btnChartAllTimeProfitTime";
-            this.btnChartAllTimeProfitTime.Size = new System.Drawing.Size(135, 55);
-            this.btnChartAllTimeProfitTime.TabIndex = 72;
-            this.btnChartAllTimeProfitTime.Text = "All Time Static Chart";
-            this.btnChartAllTimeProfitTime.UseVisualStyleBackColor = true;
-            this.btnChartAllTimeProfitTime.Click += new System.EventHandler(this.btnChartAllTimeProfitTime_Click);
-            // 
-            // btnChartAllTimeProfitBets
-            // 
-            this.btnChartAllTimeProfitBets.Location = new System.Drawing.Point(14, 95);
-            this.btnChartAllTimeProfitBets.Name = "btnChartAllTimeProfitBets";
-            this.btnChartAllTimeProfitBets.Size = new System.Drawing.Size(134, 55);
-            this.btnChartAllTimeProfitBets.TabIndex = 71;
-            this.btnChartAllTimeProfitBets.Text = "All Time Live Chart";
-            this.btnChartAllTimeProfitBets.UseVisualStyleBackColor = true;
-            this.btnChartAllTimeProfitBets.Click += new System.EventHandler(this.btnChartAllTimeProfitBets_Click);
-            // 
-            // btnGraphProfitTime
-            // 
-            this.btnGraphProfitTime.Location = new System.Drawing.Point(166, 34);
-            this.btnGraphProfitTime.Name = "btnGraphProfitTime";
-            this.btnGraphProfitTime.Size = new System.Drawing.Size(135, 55);
-            this.btnGraphProfitTime.TabIndex = 69;
-            this.btnGraphProfitTime.Text = "Static Session Chart";
-            this.btnGraphProfitTime.UseVisualStyleBackColor = true;
-            this.btnGraphProfitTime.Click += new System.EventHandler(this.btnGraphProfitTime_Click);
-            // 
-            // btnGraphProfitBets
-            // 
-            this.btnGraphProfitBets.Location = new System.Drawing.Point(13, 34);
-            this.btnGraphProfitBets.Name = "btnGraphProfitBets";
-            this.btnGraphProfitBets.Size = new System.Drawing.Size(135, 55);
-            this.btnGraphProfitBets.TabIndex = 68;
-            this.btnGraphProfitBets.Text = "Session Live Chart";
-            this.btnGraphProfitBets.UseVisualStyleBackColor = true;
-            this.btnGraphProfitBets.Click += new System.EventHandler(this.btnGraphProfitBets_Click);
-            // 
-            // button1
-            // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(350, 293);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 42);
-            this.button1.TabIndex = 67;
-            this.button1.Text = "Random Graph";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // tbSimulation
-            // 
-            this.tbSimulation.Controls.Add(this.lblSimProgress);
-            this.tbSimulation.Controls.Add(this.lblSimRun);
-            this.tbSimulation.Controls.Add(this.lblSimLoseStreak);
-            this.tbSimulation.Controls.Add(this.lblSimWinStreak);
-            this.tbSimulation.Controls.Add(this.label33);
-            this.tbSimulation.Controls.Add(this.label34);
-            this.tbSimulation.Controls.Add(this.lblSimEndBalance);
-            this.tbSimulation.Controls.Add(this.label31);
-            this.tbSimulation.Controls.Add(this.btnExportSim);
-            this.tbSimulation.Controls.Add(this.lblSimLosses);
-            this.tbSimulation.Controls.Add(this.lblSimWins);
-            this.tbSimulation.Controls.Add(this.lblSimLOssesLabel);
-            this.tbSimulation.Controls.Add(this.lblSimWinsLabel);
-            this.tbSimulation.Controls.Add(this.lblSimProfit);
-            this.tbSimulation.Controls.Add(this.label29);
-            this.tbSimulation.Controls.Add(this.btnSim);
-            this.tbSimulation.Controls.Add(this.nudSimBalance);
-            this.tbSimulation.Controls.Add(this.lblSimStartingBalance);
-            this.tbSimulation.Controls.Add(this.nudSimNumBets);
-            this.tbSimulation.Controls.Add(this.lblSimAmountBets);
-            this.tbSimulation.Location = new System.Drawing.Point(4, 22);
-            this.tbSimulation.Name = "tbSimulation";
-            this.tbSimulation.Padding = new System.Windows.Forms.Padding(3);
-            this.tbSimulation.Size = new System.Drawing.Size(434, 358);
-            this.tbSimulation.TabIndex = 2;
-            this.tbSimulation.Text = "Simulate";
-            this.tbSimulation.UseVisualStyleBackColor = true;
-            // 
-            // lblSimProgress
-            // 
-            this.lblSimProgress.AutoSize = true;
-            this.lblSimProgress.Location = new System.Drawing.Point(115, 160);
-            this.lblSimProgress.Name = "lblSimProgress";
-            this.lblSimProgress.Size = new System.Drawing.Size(0, 13);
-            this.lblSimProgress.TabIndex = 19;
-            // 
-            // lblSimRun
-            // 
-            this.lblSimRun.AutoSize = true;
-            this.lblSimRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSimRun.Location = new System.Drawing.Point(101, 133);
-            this.lblSimRun.Name = "lblSimRun";
-            this.lblSimRun.Size = new System.Drawing.Size(0, 17);
-            this.lblSimRun.TabIndex = 18;
-            // 
-            // lblSimLoseStreak
-            // 
-            this.lblSimLoseStreak.AutoSize = true;
-            this.lblSimLoseStreak.Location = new System.Drawing.Point(247, 87);
-            this.lblSimLoseStreak.Name = "lblSimLoseStreak";
-            this.lblSimLoseStreak.Size = new System.Drawing.Size(0, 13);
-            this.lblSimLoseStreak.TabIndex = 17;
-            // 
-            // lblSimWinStreak
-            // 
-            this.lblSimWinStreak.AutoSize = true;
-            this.lblSimWinStreak.Location = new System.Drawing.Point(247, 74);
-            this.lblSimWinStreak.Name = "lblSimWinStreak";
-            this.lblSimWinStreak.Size = new System.Drawing.Size(0, 13);
-            this.lblSimWinStreak.TabIndex = 16;
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(174, 87);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(67, 13);
-            this.label33.TabIndex = 15;
-            this.label33.Text = "Lose Streak:";
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(182, 74);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(61, 13);
-            this.label34.TabIndex = 14;
-            this.label34.Text = "Win streak:";
-            // 
-            // lblSimEndBalance
-            // 
-            this.lblSimEndBalance.AutoSize = true;
-            this.lblSimEndBalance.Location = new System.Drawing.Point(247, 14);
-            this.lblSimEndBalance.Name = "lblSimEndBalance";
-            this.lblSimEndBalance.Size = new System.Drawing.Size(0, 13);
-            this.lblSimEndBalance.TabIndex = 13;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(194, 14);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(49, 13);
-            this.label31.TabIndex = 12;
-            this.label31.Text = "Balance:";
-            // 
-            // btnExportSim
-            // 
-            this.btnExportSim.Location = new System.Drawing.Point(15, 98);
-            this.btnExportSim.Name = "btnExportSim";
-            this.btnExportSim.Size = new System.Drawing.Size(86, 23);
-            this.btnExportSim.TabIndex = 11;
-            this.btnExportSim.Text = "Export Sim";
-            this.btnExportSim.UseVisualStyleBackColor = true;
-            this.btnExportSim.Click += new System.EventHandler(this.btnExportSim_Click);
-            // 
-            // lblSimLosses
-            // 
-            this.lblSimLosses.AutoSize = true;
-            this.lblSimLosses.Location = new System.Drawing.Point(247, 58);
-            this.lblSimLosses.Name = "lblSimLosses";
-            this.lblSimLosses.Size = new System.Drawing.Size(0, 13);
-            this.lblSimLosses.TabIndex = 10;
-            // 
-            // lblSimWins
-            // 
-            this.lblSimWins.AutoSize = true;
-            this.lblSimWins.Location = new System.Drawing.Point(247, 44);
-            this.lblSimWins.Name = "lblSimWins";
-            this.lblSimWins.Size = new System.Drawing.Size(0, 13);
-            this.lblSimWins.TabIndex = 9;
-            // 
-            // lblSimLOssesLabel
-            // 
-            this.lblSimLOssesLabel.AutoSize = true;
-            this.lblSimLOssesLabel.Location = new System.Drawing.Point(200, 58);
-            this.lblSimLOssesLabel.Name = "lblSimLOssesLabel";
-            this.lblSimLOssesLabel.Size = new System.Drawing.Size(43, 13);
-            this.lblSimLOssesLabel.TabIndex = 8;
-            this.lblSimLOssesLabel.Text = "Losses:";
-            // 
-            // lblSimWinsLabel
-            // 
-            this.lblSimWinsLabel.AutoSize = true;
-            this.lblSimWinsLabel.Location = new System.Drawing.Point(209, 44);
-            this.lblSimWinsLabel.Name = "lblSimWinsLabel";
-            this.lblSimWinsLabel.Size = new System.Drawing.Size(34, 13);
-            this.lblSimWinsLabel.TabIndex = 7;
-            this.lblSimWinsLabel.Text = "Wins:";
-            // 
-            // lblSimProfit
-            // 
-            this.lblSimProfit.AutoSize = true;
-            this.lblSimProfit.Location = new System.Drawing.Point(247, 31);
-            this.lblSimProfit.Name = "lblSimProfit";
-            this.lblSimProfit.Size = new System.Drawing.Size(0, 13);
-            this.lblSimProfit.TabIndex = 6;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(209, 31);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(34, 13);
-            this.label29.TabIndex = 5;
-            this.label29.Text = "Profit:";
-            // 
-            // btnSim
-            // 
-            this.btnSim.Location = new System.Drawing.Point(15, 69);
-            this.btnSim.Name = "btnSim";
-            this.btnSim.Size = new System.Drawing.Size(86, 23);
-            this.btnSim.TabIndex = 4;
-            this.btnSim.Text = "Run Sim";
-            this.btnSim.UseVisualStyleBackColor = true;
-            this.btnSim.Click += new System.EventHandler(this.btnSim_Click);
-            // 
-            // nudSimBalance
-            // 
-            this.nudSimBalance.DecimalPlaces = 8;
-            this.nudSimBalance.Location = new System.Drawing.Point(104, 40);
-            this.nudSimBalance.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudSimBalance.Name = "nudSimBalance";
-            this.nudSimBalance.Size = new System.Drawing.Size(86, 20);
-            this.nudSimBalance.TabIndex = 3;
-            this.nudSimBalance.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            // 
-            // lblSimStartingBalance
-            // 
-            this.lblSimStartingBalance.AutoSize = true;
-            this.lblSimStartingBalance.Location = new System.Drawing.Point(10, 42);
-            this.lblSimStartingBalance.Name = "lblSimStartingBalance";
-            this.lblSimStartingBalance.Size = new System.Drawing.Size(88, 13);
-            this.lblSimStartingBalance.TabIndex = 2;
-            this.lblSimStartingBalance.Text = "Starting Balance:";
-            // 
-            // nudSimNumBets
-            // 
-            this.nudSimNumBets.Location = new System.Drawing.Point(105, 14);
-            this.nudSimNumBets.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudSimNumBets.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudSimNumBets.Name = "nudSimNumBets";
-            this.nudSimNumBets.Size = new System.Drawing.Size(85, 20);
-            this.nudSimNumBets.TabIndex = 1;
-            this.nudSimNumBets.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            // 
-            // lblSimAmountBets
-            // 
-            this.lblSimAmountBets.AutoSize = true;
-            this.lblSimAmountBets.Location = new System.Drawing.Point(17, 18);
-            this.lblSimAmountBets.Name = "lblSimAmountBets";
-            this.lblSimAmountBets.Size = new System.Drawing.Size(81, 13);
-            this.lblSimAmountBets.TabIndex = 0;
-            this.lblSimAmountBets.Text = "Amount of bets:";
-            // 
-            // tbVerify
-            // 
-            this.tbVerify.Controls.Add(this.btnBetHistory);
-            this.tbVerify.Controls.Add(this.btnGenerateBets);
-            this.tbVerify.Controls.Add(this.nudGenBetsAmount);
-            this.tbVerify.Controls.Add(this.label28);
-            this.tbVerify.Controls.Add(this.nudGenBetsStart);
-            this.tbVerify.Controls.Add(this.label27);
-            this.tbVerify.Controls.Add(this.txtClientSeed);
-            this.tbVerify.Controls.Add(this.txtServerSeed);
-            this.tbVerify.Controls.Add(this.label26);
-            this.tbVerify.Controls.Add(this.label21);
-            this.tbVerify.Location = new System.Drawing.Point(4, 22);
-            this.tbVerify.Name = "tbVerify";
-            this.tbVerify.Padding = new System.Windows.Forms.Padding(3);
-            this.tbVerify.Size = new System.Drawing.Size(434, 358);
-            this.tbVerify.TabIndex = 3;
-            this.tbVerify.Text = "Check  Bets";
-            this.tbVerify.UseVisualStyleBackColor = true;
-            // 
-            // btnBetHistory
-            // 
-            this.btnBetHistory.Location = new System.Drawing.Point(82, 22);
-            this.btnBetHistory.Name = "btnBetHistory";
-            this.btnBetHistory.Size = new System.Drawing.Size(82, 39);
-            this.btnBetHistory.TabIndex = 9;
-            this.btnBetHistory.Text = "View Bet History";
-            this.btnBetHistory.UseVisualStyleBackColor = true;
-            this.btnBetHistory.Click += new System.EventHandler(this.btnBetHistory_Click);
-            // 
-            // btnGenerateBets
-            // 
-            this.btnGenerateBets.Location = new System.Drawing.Point(82, 181);
-            this.btnGenerateBets.Name = "btnGenerateBets";
-            this.btnGenerateBets.Size = new System.Drawing.Size(165, 23);
-            this.btnGenerateBets.TabIndex = 8;
-            this.btnGenerateBets.Text = "Generate Bets";
-            this.btnGenerateBets.UseVisualStyleBackColor = true;
-            this.btnGenerateBets.Click += new System.EventHandler(this.btnGenerateBets_Click);
-            // 
-            // nudGenBetsAmount
-            // 
-            this.nudGenBetsAmount.Location = new System.Drawing.Point(254, 152);
-            this.nudGenBetsAmount.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudGenBetsAmount.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudGenBetsAmount.Name = "nudGenBetsAmount";
-            this.nudGenBetsAmount.Size = new System.Drawing.Size(76, 20);
-            this.nudGenBetsAmount.TabIndex = 7;
-            this.nudGenBetsAmount.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(163, 156);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(81, 13);
-            this.label28.TabIndex = 6;
-            this.label28.Text = "Amount of bets:";
-            // 
-            // nudGenBetsStart
-            // 
-            this.nudGenBetsStart.Location = new System.Drawing.Point(82, 152);
-            this.nudGenBetsStart.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudGenBetsStart.Name = "nudGenBetsStart";
-            this.nudGenBetsStart.Size = new System.Drawing.Size(75, 20);
-            this.nudGenBetsStart.TabIndex = 5;
-            this.nudGenBetsStart.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(19, 156);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(58, 13);
-            this.label27.TabIndex = 4;
-            this.label27.Text = "Start From:";
-            // 
-            // txtClientSeed
-            // 
-            this.txtClientSeed.Location = new System.Drawing.Point(82, 127);
-            this.txtClientSeed.Name = "txtClientSeed";
-            this.txtClientSeed.Size = new System.Drawing.Size(245, 20);
-            this.txtClientSeed.TabIndex = 3;
-            // 
-            // txtServerSeed
-            // 
-            this.txtServerSeed.Location = new System.Drawing.Point(82, 85);
-            this.txtServerSeed.Multiline = true;
-            this.txtServerSeed.Name = "txtServerSeed";
-            this.txtServerSeed.Size = new System.Drawing.Size(245, 39);
-            this.txtServerSeed.TabIndex = 1;
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(12, 130);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(64, 13);
-            this.label26.TabIndex = 2;
-            this.label26.Text = "Client Seed:";
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(7, 85);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(69, 13);
-            this.label21.TabIndex = 0;
-            this.label21.Text = "Server Seed:";
-            // 
-            // tbZigZag
-            // 
-            this.tbZigZag.Controls.Add(this.rdbReverseBets);
-            this.tbZigZag.Controls.Add(this.rdbReverseLoss);
-            this.tbZigZag.Controls.Add(this.rdbReverseWins);
-            this.tbZigZag.Controls.Add(this.chkReverse);
-            this.tbZigZag.Controls.Add(this.NudReverse);
-            this.tbZigZag.Controls.Add(this.lblZigZag1);
-            this.tbZigZag.Location = new System.Drawing.Point(4, 22);
-            this.tbZigZag.Name = "tbZigZag";
-            this.tbZigZag.Padding = new System.Windows.Forms.Padding(3);
-            this.tbZigZag.Size = new System.Drawing.Size(434, 358);
-            this.tbZigZag.TabIndex = 13;
-            this.tbZigZag.Text = "Zig Zag";
-            this.tbZigZag.UseVisualStyleBackColor = true;
-            // 
-            // rdbReverseBets
-            // 
-            this.rdbReverseBets.AutoSize = true;
-            this.rdbReverseBets.Checked = true;
-            this.rdbReverseBets.Location = new System.Drawing.Point(24, 100);
-            this.rdbReverseBets.Name = "rdbReverseBets";
-            this.rdbReverseBets.Size = new System.Drawing.Size(46, 17);
-            this.rdbReverseBets.TabIndex = 6;
-            this.rdbReverseBets.TabStop = true;
-            this.rdbReverseBets.Text = "Bets";
-            this.rdbReverseBets.UseVisualStyleBackColor = true;
-            // 
-            // rdbReverseLoss
-            // 
-            this.rdbReverseLoss.AutoSize = true;
-            this.rdbReverseLoss.Location = new System.Drawing.Point(24, 77);
-            this.rdbReverseLoss.Name = "rdbReverseLoss";
-            this.rdbReverseLoss.Size = new System.Drawing.Size(58, 17);
-            this.rdbReverseLoss.TabIndex = 5;
-            this.rdbReverseLoss.Text = "Losses";
-            this.rdbReverseLoss.UseVisualStyleBackColor = true;
-            // 
-            // rdbReverseWins
-            // 
-            this.rdbReverseWins.AutoSize = true;
-            this.rdbReverseWins.Location = new System.Drawing.Point(24, 54);
-            this.rdbReverseWins.Name = "rdbReverseWins";
-            this.rdbReverseWins.Size = new System.Drawing.Size(49, 17);
-            this.rdbReverseWins.TabIndex = 4;
-            this.rdbReverseWins.Text = "Wins";
-            this.rdbReverseWins.UseVisualStyleBackColor = true;
-            // 
-            // chkReverse
-            // 
-            this.chkReverse.AutoSize = true;
-            this.chkReverse.Location = new System.Drawing.Point(24, 18);
-            this.chkReverse.Name = "chkReverse";
-            this.chkReverse.Size = new System.Drawing.Size(99, 17);
-            this.chkReverse.TabIndex = 3;
-            this.chkReverse.Text = "Enable Zig Zag";
-            this.chkReverse.UseVisualStyleBackColor = true;
-            // 
-            // NudReverse
-            // 
-            this.NudReverse.Location = new System.Drawing.Point(149, 36);
-            this.NudReverse.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.NudReverse.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.NudReverse.Name = "NudReverse";
-            this.NudReverse.Size = new System.Drawing.Size(64, 20);
-            this.NudReverse.TabIndex = 2;
-            this.NudReverse.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // lblZigZag1
-            // 
-            this.lblZigZag1.AutoSize = true;
-            this.lblZigZag1.Location = new System.Drawing.Point(21, 38);
-            this.lblZigZag1.Name = "lblZigZag1";
-            this.lblZigZag1.Size = new System.Drawing.Size(121, 13);
-            this.lblZigZag1.TabIndex = 1;
-            this.lblZigZag1.Text = "Switch High/Low every ";
-            // 
-            // btnExport
-            // 
-            this.btnExport.Location = new System.Drawing.Point(179, 20);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(162, 23);
-            this.btnExport.TabIndex = 51;
-            this.btnExport.Text = "Export";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // btnImport
-            // 
-            this.btnImport.Location = new System.Drawing.Point(6, 20);
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(149, 23);
-            this.btnImport.TabIndex = 50;
-            this.btnImport.Text = "Import";
-            this.btnImport.UseVisualStyleBackColor = true;
-            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.btnStopOnWin);
-            this.panel4.Controls.Add(this.btnStartLow);
-            this.panel4.Controls.Add(this.btnStop);
-            this.panel4.Controls.Add(this.btnStartHigh);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(3, 477);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(442, 34);
-            this.panel4.TabIndex = 49;
-            // 
-            // btnStopOnWin
-            // 
-            this.btnStopOnWin.Location = new System.Drawing.Point(341, 6);
-            this.btnStopOnWin.Name = "btnStopOnWin";
-            this.btnStopOnWin.Size = new System.Drawing.Size(87, 23);
-            this.btnStopOnWin.TabIndex = 42;
-            this.btnStopOnWin.Text = "Stop On Win";
-            this.btnStopOnWin.UseVisualStyleBackColor = true;
-            this.btnStopOnWin.Click += new System.EventHandler(this.btnStopOnWin_Click);
-            // 
-            // btnStartLow
-            // 
-            this.btnStartLow.Location = new System.Drawing.Point(117, 6);
-            this.btnStartLow.Name = "btnStartLow";
-            this.btnStartLow.Size = new System.Drawing.Size(87, 23);
-            this.btnStartLow.TabIndex = 41;
-            this.btnStartLow.Text = "Start Low";
-            this.btnStartLow.UseVisualStyleBackColor = true;
-            this.btnStartLow.Click += new System.EventHandler(this.btnStart_Click);
-            // 
-            // btnStop
-            // 
-            this.btnStop.Location = new System.Drawing.Point(232, 6);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(87, 23);
-            this.btnStop.TabIndex = 38;
-            this.btnStop.Text = "Stop";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // btnStartHigh
-            // 
-            this.btnStartHigh.Location = new System.Drawing.Point(15, 6);
-            this.btnStartHigh.Name = "btnStartHigh";
-            this.btnStartHigh.Size = new System.Drawing.Size(87, 23);
-            this.btnStartHigh.TabIndex = 37;
-            this.btnStartHigh.Text = "Start High";
-            this.btnStartHigh.UseVisualStyleBackColor = true;
-            this.btnStartHigh.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // tabPage11
             // 
@@ -4580,18 +2037,18 @@
             // 
             // chrtEmbeddedLiveChart
             // 
-            chartArea3.Name = "ChartArea1";
-            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea3);
+            chartArea2.Name = "ChartArea1";
+            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea2);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Name = "Legend1";
-            this.chrtEmbeddedLiveChart.Legends.Add(legend3);
+            legend2.Name = "Legend1";
+            this.chrtEmbeddedLiveChart.Legends.Add(legend2);
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "Legend1";
-            series3.Name = "Profit";
-            this.chrtEmbeddedLiveChart.Series.Add(series3);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Profit";
+            this.chrtEmbeddedLiveChart.Series.Add(series2);
             this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(1022, 347);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
@@ -5080,167 +2537,2208 @@
             this.label22.TabIndex = 0;
             this.label22.Text = "Bet:";
             // 
-            // panel7
+            // Settings
             // 
-            this.panel7.Controls.Add(this.rdbLabRestart);
-            this.panel7.Controls.Add(this.rdbLabStop);
-            this.panel7.Controls.Add(this.label86);
-            this.panel7.Location = new System.Drawing.Point(204, 120);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(189, 99);
-            this.panel7.TabIndex = 15;
+            this.Settings.Controls.Add(this.nudChance);
+            this.Settings.Controls.Add(this.nudMinBet);
+            this.Settings.Controls.Add(this.lblChance);
+            this.Settings.Controls.Add(this.lblMinBet);
+            this.Settings.Controls.Add(this.tcBets);
+            this.Settings.Controls.Add(this.btnExport);
+            this.Settings.Controls.Add(this.btnImport);
+            this.Settings.Controls.Add(this.panel4);
+            this.Settings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Settings.Location = new System.Drawing.Point(0, 0);
+            this.Settings.Name = "Settings";
+            this.Settings.Size = new System.Drawing.Size(448, 514);
+            this.Settings.TabIndex = 13;
+            this.Settings.TabStop = false;
+            this.Settings.Text = "Settings";
             // 
-            // groupBox12
+            // panel4
             // 
-            this.groupBox12.Controls.Add(this.nudAlembertStretchLoss);
-            this.groupBox12.Controls.Add(this.label102);
-            this.groupBox12.Controls.Add(this.label101);
-            this.groupBox12.Controls.Add(this.label100);
-            this.groupBox12.Controls.Add(this.nudAlembertIncrementLoss);
-            this.groupBox12.Controls.Add(this.label71);
-            this.groupBox12.Location = new System.Drawing.Point(8, 29);
-            this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(262, 113);
-            this.groupBox12.TabIndex = 16;
-            this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "On Loss";
+            this.panel4.Controls.Add(this.btnStopOnWin);
+            this.panel4.Controls.Add(this.btnStartLow);
+            this.panel4.Controls.Add(this.btnStop);
+            this.panel4.Controls.Add(this.btnStartHigh);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel4.Location = new System.Drawing.Point(3, 477);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(442, 34);
+            this.panel4.TabIndex = 49;
             // 
-            // nudAlembertStretchLoss
+            // btnStartHigh
             // 
-            this.nudAlembertStretchLoss.Location = new System.Drawing.Point(102, 57);
-            this.nudAlembertStretchLoss.Name = "nudAlembertStretchLoss";
-            this.nudAlembertStretchLoss.Size = new System.Drawing.Size(64, 20);
-            this.nudAlembertStretchLoss.TabIndex = 27;
+            this.btnStartHigh.Location = new System.Drawing.Point(15, 6);
+            this.btnStartHigh.Name = "btnStartHigh";
+            this.btnStartHigh.Size = new System.Drawing.Size(87, 23);
+            this.btnStartHigh.TabIndex = 37;
+            this.btnStartHigh.Text = "Start High";
+            this.btnStartHigh.UseVisualStyleBackColor = true;
+            this.btnStartHigh.Click += new System.EventHandler(this.btnStart_Click);
             // 
-            // label102
+            // btnStop
             // 
-            this.label102.AutoSize = true;
-            this.label102.Location = new System.Drawing.Point(181, 61);
-            this.label102.Name = "label102";
-            this.label102.Size = new System.Drawing.Size(27, 13);
-            this.label102.TabIndex = 26;
-            this.label102.Text = "bets";
+            this.btnStop.Location = new System.Drawing.Point(232, 6);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(87, 23);
+            this.btnStop.TabIndex = 38;
+            this.btnStop.Text = "Stop";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
-            // label101
+            // btnStartLow
             // 
-            this.label101.AutoSize = true;
-            this.label101.Location = new System.Drawing.Point(6, 61);
-            this.label101.Name = "label101";
-            this.label101.Size = new System.Drawing.Size(90, 13);
-            this.label101.TabIndex = 25;
-            this.label101.Text = "Stretch losses by ";
+            this.btnStartLow.Location = new System.Drawing.Point(117, 6);
+            this.btnStartLow.Name = "btnStartLow";
+            this.btnStartLow.Size = new System.Drawing.Size(87, 23);
+            this.btnStartLow.TabIndex = 41;
+            this.btnStartLow.Text = "Start Low";
+            this.btnStartLow.UseVisualStyleBackColor = true;
+            this.btnStartLow.Click += new System.EventHandler(this.btnStart_Click);
             // 
-            // label100
+            // btnStopOnWin
             // 
-            this.label100.AutoSize = true;
-            this.label100.Location = new System.Drawing.Point(204, 25);
-            this.label100.Name = "label100";
-            this.label100.Size = new System.Drawing.Size(42, 13);
-            this.label100.TabIndex = 24;
-            this.label100.Text = "On loss";
+            this.btnStopOnWin.Location = new System.Drawing.Point(341, 6);
+            this.btnStopOnWin.Name = "btnStopOnWin";
+            this.btnStopOnWin.Size = new System.Drawing.Size(87, 23);
+            this.btnStopOnWin.TabIndex = 42;
+            this.btnStopOnWin.Text = "Stop On Win";
+            this.btnStopOnWin.UseVisualStyleBackColor = true;
+            this.btnStopOnWin.Click += new System.EventHandler(this.btnStopOnWin_Click);
             // 
-            // nudAlembertIncrementLoss
+            // btnImport
             // 
-            this.nudAlembertIncrementLoss.DecimalPlaces = 8;
-            this.nudAlembertIncrementLoss.Location = new System.Drawing.Point(102, 21);
-            this.nudAlembertIncrementLoss.Minimum = new decimal(new int[] {
-            100,
+            this.btnImport.Location = new System.Drawing.Point(6, 20);
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Size = new System.Drawing.Size(149, 23);
+            this.btnImport.TabIndex = 50;
+            this.btnImport.Text = "Import";
+            this.btnImport.UseVisualStyleBackColor = true;
+            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(179, 20);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(162, 23);
+            this.btnExport.TabIndex = 51;
+            this.btnExport.Text = "Export";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // lblMinBet
+            // 
+            this.lblMinBet.AutoSize = true;
+            this.lblMinBet.Location = new System.Drawing.Point(15, 59);
+            this.lblMinBet.Name = "lblMinBet";
+            this.lblMinBet.Size = new System.Drawing.Size(65, 13);
+            this.lblMinBet.TabIndex = 63;
+            this.lblMinBet.Text = "Starting Bet:";
+            // 
+            // lblChance
+            // 
+            this.lblChance.AutoSize = true;
+            this.lblChance.Location = new System.Drawing.Point(203, 59);
+            this.lblChance.Name = "lblChance";
+            this.lblChance.Size = new System.Drawing.Size(47, 13);
+            this.lblChance.TabIndex = 65;
+            this.lblChance.Text = "Chance:";
+            // 
+            // nudMinBet
+            // 
+            this.nudMinBet.DecimalPlaces = 8;
+            this.nudMinBet.Location = new System.Drawing.Point(86, 56);
+            this.nudMinBet.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudMinBet.Name = "nudMinBet";
+            this.nudMinBet.Size = new System.Drawing.Size(85, 20);
+            this.nudMinBet.TabIndex = 67;
+            this.nudMinBet.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // nudChance
+            // 
+            this.nudChance.DecimalPlaces = 4;
+            this.nudChance.Location = new System.Drawing.Point(256, 56);
+            this.nudChance.Maximum = new decimal(new int[] {
+            9999,
             0,
             0,
-            -2147483648});
-            this.nudAlembertIncrementLoss.Name = "nudAlembertIncrementLoss";
-            this.nudAlembertIncrementLoss.Size = new System.Drawing.Size(96, 20);
-            this.nudAlembertIncrementLoss.TabIndex = 23;
-            this.nudAlembertIncrementLoss.Value = new decimal(new int[] {
+            131072});
+            this.nudChance.Name = "nudChance";
+            this.nudChance.Size = new System.Drawing.Size(84, 20);
+            this.nudChance.TabIndex = 68;
+            this.nudChance.ValueChanged += new System.EventHandler(this.txtChance_Leave);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.Settings);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(448, 514);
+            this.tabPage3.TabIndex = 0;
+            this.tabPage3.Text = "Bet Settings";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tbVerify
+            // 
+            this.tbVerify.Controls.Add(this.btnBetHistory);
+            this.tbVerify.Controls.Add(this.btnGenerateBets);
+            this.tbVerify.Controls.Add(this.nudGenBetsAmount);
+            this.tbVerify.Controls.Add(this.label28);
+            this.tbVerify.Controls.Add(this.nudGenBetsStart);
+            this.tbVerify.Controls.Add(this.label27);
+            this.tbVerify.Controls.Add(this.txtClientSeed);
+            this.tbVerify.Controls.Add(this.txtServerSeed);
+            this.tbVerify.Controls.Add(this.label26);
+            this.tbVerify.Controls.Add(this.label21);
+            this.tbVerify.Location = new System.Drawing.Point(4, 22);
+            this.tbVerify.Name = "tbVerify";
+            this.tbVerify.Padding = new System.Windows.Forms.Padding(3);
+            this.tbVerify.Size = new System.Drawing.Size(434, 358);
+            this.tbVerify.TabIndex = 3;
+            this.tbVerify.Text = "Check  Bets";
+            this.tbVerify.UseVisualStyleBackColor = true;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(7, 85);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(69, 13);
+            this.label21.TabIndex = 0;
+            this.label21.Text = "Server Seed:";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(12, 130);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(64, 13);
+            this.label26.TabIndex = 2;
+            this.label26.Text = "Client Seed:";
+            // 
+            // txtServerSeed
+            // 
+            this.txtServerSeed.Location = new System.Drawing.Point(82, 85);
+            this.txtServerSeed.Multiline = true;
+            this.txtServerSeed.Name = "txtServerSeed";
+            this.txtServerSeed.Size = new System.Drawing.Size(245, 39);
+            this.txtServerSeed.TabIndex = 1;
+            // 
+            // txtClientSeed
+            // 
+            this.txtClientSeed.Location = new System.Drawing.Point(82, 127);
+            this.txtClientSeed.Name = "txtClientSeed";
+            this.txtClientSeed.Size = new System.Drawing.Size(245, 20);
+            this.txtClientSeed.TabIndex = 3;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(19, 156);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(58, 13);
+            this.label27.TabIndex = 4;
+            this.label27.Text = "Start From:";
+            // 
+            // nudGenBetsStart
+            // 
+            this.nudGenBetsStart.Location = new System.Drawing.Point(82, 152);
+            this.nudGenBetsStart.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudGenBetsStart.Name = "nudGenBetsStart";
+            this.nudGenBetsStart.Size = new System.Drawing.Size(75, 20);
+            this.nudGenBetsStart.TabIndex = 5;
+            this.nudGenBetsStart.Value = new decimal(new int[] {
             1,
             0,
             0,
-            524288});
+            0});
             // 
-            // label71
+            // label28
             // 
-            this.label71.AutoSize = true;
-            this.label71.Location = new System.Drawing.Point(4, 25);
-            this.label71.Name = "label71";
-            this.label71.Size = new System.Drawing.Size(86, 13);
-            this.label71.TabIndex = 22;
-            this.label71.Text = "Increment bet by";
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(163, 156);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(81, 13);
+            this.label28.TabIndex = 6;
+            this.label28.Text = "Amount of bets:";
             // 
-            // groupBox13
+            // nudGenBetsAmount
             // 
-            this.groupBox13.Controls.Add(this.nudAlembertStretchWin);
-            this.groupBox13.Controls.Add(this.label103);
-            this.groupBox13.Controls.Add(this.label104);
-            this.groupBox13.Controls.Add(this.label105);
-            this.groupBox13.Controls.Add(this.nudAlembertIncrementWin);
-            this.groupBox13.Controls.Add(this.label106);
-            this.groupBox13.Location = new System.Drawing.Point(8, 148);
-            this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(262, 113);
-            this.groupBox13.TabIndex = 17;
-            this.groupBox13.TabStop = false;
-            this.groupBox13.Text = "On Win";
-            // 
-            // nudAlembertStretchWin
-            // 
-            this.nudAlembertStretchWin.Location = new System.Drawing.Point(102, 57);
-            this.nudAlembertStretchWin.Name = "nudAlembertStretchWin";
-            this.nudAlembertStretchWin.Size = new System.Drawing.Size(64, 20);
-            this.nudAlembertStretchWin.TabIndex = 27;
-            // 
-            // label103
-            // 
-            this.label103.AutoSize = true;
-            this.label103.Location = new System.Drawing.Point(181, 61);
-            this.label103.Name = "label103";
-            this.label103.Size = new System.Drawing.Size(27, 13);
-            this.label103.TabIndex = 26;
-            this.label103.Text = "bets";
-            // 
-            // label104
-            // 
-            this.label104.AutoSize = true;
-            this.label104.Location = new System.Drawing.Point(6, 61);
-            this.label104.Name = "label104";
-            this.label104.Size = new System.Drawing.Size(82, 13);
-            this.label104.TabIndex = 25;
-            this.label104.Text = "Stretch wins by ";
-            // 
-            // label105
-            // 
-            this.label105.AutoSize = true;
-            this.label105.Location = new System.Drawing.Point(204, 25);
-            this.label105.Name = "label105";
-            this.label105.Size = new System.Drawing.Size(40, 13);
-            this.label105.TabIndex = 24;
-            this.label105.Text = "On win";
-            // 
-            // nudAlembertIncrementWin
-            // 
-            this.nudAlembertIncrementWin.DecimalPlaces = 8;
-            this.nudAlembertIncrementWin.Location = new System.Drawing.Point(102, 21);
-            this.nudAlembertIncrementWin.Minimum = new decimal(new int[] {
-            100,
+            this.nudGenBetsAmount.Location = new System.Drawing.Point(254, 152);
+            this.nudGenBetsAmount.Maximum = new decimal(new int[] {
+            100000,
             0,
             0,
-            -2147483648});
-            this.nudAlembertIncrementWin.Name = "nudAlembertIncrementWin";
-            this.nudAlembertIncrementWin.Size = new System.Drawing.Size(96, 20);
-            this.nudAlembertIncrementWin.TabIndex = 23;
-            this.nudAlembertIncrementWin.Value = new decimal(new int[] {
+            0});
+            this.nudGenBetsAmount.Minimum = new decimal(new int[] {
             1,
             0,
             0,
-            -2146959360});
+            0});
+            this.nudGenBetsAmount.Name = "nudGenBetsAmount";
+            this.nudGenBetsAmount.Size = new System.Drawing.Size(76, 20);
+            this.nudGenBetsAmount.TabIndex = 7;
+            this.nudGenBetsAmount.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             // 
-            // label106
+            // btnGenerateBets
             // 
-            this.label106.AutoSize = true;
-            this.label106.Location = new System.Drawing.Point(4, 25);
-            this.label106.Name = "label106";
-            this.label106.Size = new System.Drawing.Size(86, 13);
-            this.label106.TabIndex = 22;
-            this.label106.Text = "Increment bet by";
+            this.btnGenerateBets.Location = new System.Drawing.Point(82, 181);
+            this.btnGenerateBets.Name = "btnGenerateBets";
+            this.btnGenerateBets.Size = new System.Drawing.Size(165, 23);
+            this.btnGenerateBets.TabIndex = 8;
+            this.btnGenerateBets.Text = "Generate Bets";
+            this.btnGenerateBets.UseVisualStyleBackColor = true;
+            this.btnGenerateBets.Click += new System.EventHandler(this.btnGenerateBets_Click);
+            // 
+            // btnBetHistory
+            // 
+            this.btnBetHistory.Location = new System.Drawing.Point(82, 22);
+            this.btnBetHistory.Name = "btnBetHistory";
+            this.btnBetHistory.Size = new System.Drawing.Size(82, 39);
+            this.btnBetHistory.TabIndex = 9;
+            this.btnBetHistory.Text = "View Bet History";
+            this.btnBetHistory.UseVisualStyleBackColor = true;
+            this.btnBetHistory.Click += new System.EventHandler(this.btnBetHistory_Click);
+            // 
+            // tbSimulation
+            // 
+            this.tbSimulation.Controls.Add(this.lblSimProgress);
+            this.tbSimulation.Controls.Add(this.lblSimRun);
+            this.tbSimulation.Controls.Add(this.lblSimLoseStreak);
+            this.tbSimulation.Controls.Add(this.lblSimWinStreak);
+            this.tbSimulation.Controls.Add(this.label33);
+            this.tbSimulation.Controls.Add(this.label34);
+            this.tbSimulation.Controls.Add(this.lblSimEndBalance);
+            this.tbSimulation.Controls.Add(this.label31);
+            this.tbSimulation.Controls.Add(this.btnExportSim);
+            this.tbSimulation.Controls.Add(this.lblSimLosses);
+            this.tbSimulation.Controls.Add(this.lblSimWins);
+            this.tbSimulation.Controls.Add(this.lblSimLOssesLabel);
+            this.tbSimulation.Controls.Add(this.lblSimWinsLabel);
+            this.tbSimulation.Controls.Add(this.lblSimProfit);
+            this.tbSimulation.Controls.Add(this.label29);
+            this.tbSimulation.Controls.Add(this.btnSim);
+            this.tbSimulation.Controls.Add(this.nudSimBalance);
+            this.tbSimulation.Controls.Add(this.lblSimStartingBalance);
+            this.tbSimulation.Controls.Add(this.nudSimNumBets);
+            this.tbSimulation.Controls.Add(this.lblSimAmountBets);
+            this.tbSimulation.Location = new System.Drawing.Point(4, 22);
+            this.tbSimulation.Name = "tbSimulation";
+            this.tbSimulation.Padding = new System.Windows.Forms.Padding(3);
+            this.tbSimulation.Size = new System.Drawing.Size(434, 358);
+            this.tbSimulation.TabIndex = 2;
+            this.tbSimulation.Text = "Simulate";
+            this.tbSimulation.UseVisualStyleBackColor = true;
+            // 
+            // lblSimAmountBets
+            // 
+            this.lblSimAmountBets.AutoSize = true;
+            this.lblSimAmountBets.Location = new System.Drawing.Point(17, 18);
+            this.lblSimAmountBets.Name = "lblSimAmountBets";
+            this.lblSimAmountBets.Size = new System.Drawing.Size(81, 13);
+            this.lblSimAmountBets.TabIndex = 0;
+            this.lblSimAmountBets.Text = "Amount of bets:";
+            // 
+            // nudSimNumBets
+            // 
+            this.nudSimNumBets.Location = new System.Drawing.Point(105, 14);
+            this.nudSimNumBets.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudSimNumBets.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSimNumBets.Name = "nudSimNumBets";
+            this.nudSimNumBets.Size = new System.Drawing.Size(85, 20);
+            this.nudSimNumBets.TabIndex = 1;
+            this.nudSimNumBets.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // lblSimStartingBalance
+            // 
+            this.lblSimStartingBalance.AutoSize = true;
+            this.lblSimStartingBalance.Location = new System.Drawing.Point(10, 42);
+            this.lblSimStartingBalance.Name = "lblSimStartingBalance";
+            this.lblSimStartingBalance.Size = new System.Drawing.Size(88, 13);
+            this.lblSimStartingBalance.TabIndex = 2;
+            this.lblSimStartingBalance.Text = "Starting Balance:";
+            // 
+            // nudSimBalance
+            // 
+            this.nudSimBalance.DecimalPlaces = 8;
+            this.nudSimBalance.Location = new System.Drawing.Point(104, 40);
+            this.nudSimBalance.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudSimBalance.Name = "nudSimBalance";
+            this.nudSimBalance.Size = new System.Drawing.Size(86, 20);
+            this.nudSimBalance.TabIndex = 3;
+            this.nudSimBalance.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            // 
+            // btnSim
+            // 
+            this.btnSim.Location = new System.Drawing.Point(15, 69);
+            this.btnSim.Name = "btnSim";
+            this.btnSim.Size = new System.Drawing.Size(86, 23);
+            this.btnSim.TabIndex = 4;
+            this.btnSim.Text = "Run Sim";
+            this.btnSim.UseVisualStyleBackColor = true;
+            this.btnSim.Click += new System.EventHandler(this.btnSim_Click);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(209, 31);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(34, 13);
+            this.label29.TabIndex = 5;
+            this.label29.Text = "Profit:";
+            // 
+            // lblSimProfit
+            // 
+            this.lblSimProfit.AutoSize = true;
+            this.lblSimProfit.Location = new System.Drawing.Point(247, 31);
+            this.lblSimProfit.Name = "lblSimProfit";
+            this.lblSimProfit.Size = new System.Drawing.Size(0, 13);
+            this.lblSimProfit.TabIndex = 6;
+            // 
+            // lblSimWinsLabel
+            // 
+            this.lblSimWinsLabel.AutoSize = true;
+            this.lblSimWinsLabel.Location = new System.Drawing.Point(209, 44);
+            this.lblSimWinsLabel.Name = "lblSimWinsLabel";
+            this.lblSimWinsLabel.Size = new System.Drawing.Size(34, 13);
+            this.lblSimWinsLabel.TabIndex = 7;
+            this.lblSimWinsLabel.Text = "Wins:";
+            // 
+            // lblSimLOssesLabel
+            // 
+            this.lblSimLOssesLabel.AutoSize = true;
+            this.lblSimLOssesLabel.Location = new System.Drawing.Point(200, 58);
+            this.lblSimLOssesLabel.Name = "lblSimLOssesLabel";
+            this.lblSimLOssesLabel.Size = new System.Drawing.Size(43, 13);
+            this.lblSimLOssesLabel.TabIndex = 8;
+            this.lblSimLOssesLabel.Text = "Losses:";
+            // 
+            // lblSimWins
+            // 
+            this.lblSimWins.AutoSize = true;
+            this.lblSimWins.Location = new System.Drawing.Point(247, 44);
+            this.lblSimWins.Name = "lblSimWins";
+            this.lblSimWins.Size = new System.Drawing.Size(0, 13);
+            this.lblSimWins.TabIndex = 9;
+            // 
+            // lblSimLosses
+            // 
+            this.lblSimLosses.AutoSize = true;
+            this.lblSimLosses.Location = new System.Drawing.Point(247, 58);
+            this.lblSimLosses.Name = "lblSimLosses";
+            this.lblSimLosses.Size = new System.Drawing.Size(0, 13);
+            this.lblSimLosses.TabIndex = 10;
+            // 
+            // btnExportSim
+            // 
+            this.btnExportSim.Location = new System.Drawing.Point(15, 98);
+            this.btnExportSim.Name = "btnExportSim";
+            this.btnExportSim.Size = new System.Drawing.Size(86, 23);
+            this.btnExportSim.TabIndex = 11;
+            this.btnExportSim.Text = "Export Sim";
+            this.btnExportSim.UseVisualStyleBackColor = true;
+            this.btnExportSim.Click += new System.EventHandler(this.btnExportSim_Click);
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(194, 14);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(49, 13);
+            this.label31.TabIndex = 12;
+            this.label31.Text = "Balance:";
+            // 
+            // lblSimEndBalance
+            // 
+            this.lblSimEndBalance.AutoSize = true;
+            this.lblSimEndBalance.Location = new System.Drawing.Point(247, 14);
+            this.lblSimEndBalance.Name = "lblSimEndBalance";
+            this.lblSimEndBalance.Size = new System.Drawing.Size(0, 13);
+            this.lblSimEndBalance.TabIndex = 13;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(182, 74);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(61, 13);
+            this.label34.TabIndex = 14;
+            this.label34.Text = "Win streak:";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(174, 87);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(67, 13);
+            this.label33.TabIndex = 15;
+            this.label33.Text = "Lose Streak:";
+            // 
+            // lblSimWinStreak
+            // 
+            this.lblSimWinStreak.AutoSize = true;
+            this.lblSimWinStreak.Location = new System.Drawing.Point(247, 74);
+            this.lblSimWinStreak.Name = "lblSimWinStreak";
+            this.lblSimWinStreak.Size = new System.Drawing.Size(0, 13);
+            this.lblSimWinStreak.TabIndex = 16;
+            // 
+            // lblSimLoseStreak
+            // 
+            this.lblSimLoseStreak.AutoSize = true;
+            this.lblSimLoseStreak.Location = new System.Drawing.Point(247, 87);
+            this.lblSimLoseStreak.Name = "lblSimLoseStreak";
+            this.lblSimLoseStreak.Size = new System.Drawing.Size(0, 13);
+            this.lblSimLoseStreak.TabIndex = 17;
+            // 
+            // lblSimRun
+            // 
+            this.lblSimRun.AutoSize = true;
+            this.lblSimRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSimRun.Location = new System.Drawing.Point(101, 133);
+            this.lblSimRun.Name = "lblSimRun";
+            this.lblSimRun.Size = new System.Drawing.Size(0, 17);
+            this.lblSimRun.TabIndex = 18;
+            // 
+            // lblSimProgress
+            // 
+            this.lblSimProgress.AutoSize = true;
+            this.lblSimProgress.Location = new System.Drawing.Point(115, 160);
+            this.lblSimProgress.Name = "lblSimProgress";
+            this.lblSimProgress.Size = new System.Drawing.Size(0, 13);
+            this.lblSimProgress.TabIndex = 19;
+            // 
+            // tbCharts
+            // 
+            this.tbCharts.Controls.Add(this.btnChartTimeRange);
+            this.tbCharts.Controls.Add(this.btnChartBetID);
+            this.tbCharts.Controls.Add(this.nudGraphStartBetID);
+            this.tbCharts.Controls.Add(this.dtpEnd);
+            this.tbCharts.Controls.Add(this.dtpStart);
+            this.tbCharts.Controls.Add(this.label96);
+            this.tbCharts.Controls.Add(this.label95);
+            this.tbCharts.Controls.Add(this.label94);
+            this.tbCharts.Controls.Add(this.btnChartAllTimeProfitTime);
+            this.tbCharts.Controls.Add(this.btnChartAllTimeProfitBets);
+            this.tbCharts.Controls.Add(this.btnGraphProfitTime);
+            this.tbCharts.Controls.Add(this.btnGraphProfitBets);
+            this.tbCharts.Controls.Add(this.button1);
+            this.tbCharts.Location = new System.Drawing.Point(4, 22);
+            this.tbCharts.Name = "tbCharts";
+            this.tbCharts.Padding = new System.Windows.Forms.Padding(3);
+            this.tbCharts.Size = new System.Drawing.Size(434, 358);
+            this.tbCharts.TabIndex = 4;
+            this.tbCharts.Text = "Charts";
+            this.tbCharts.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(350, 293);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 42);
+            this.button1.TabIndex = 67;
+            this.button1.Text = "Random Graph";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // btnGraphProfitBets
+            // 
+            this.btnGraphProfitBets.Location = new System.Drawing.Point(13, 34);
+            this.btnGraphProfitBets.Name = "btnGraphProfitBets";
+            this.btnGraphProfitBets.Size = new System.Drawing.Size(135, 55);
+            this.btnGraphProfitBets.TabIndex = 68;
+            this.btnGraphProfitBets.Text = "Session Live Chart";
+            this.btnGraphProfitBets.UseVisualStyleBackColor = true;
+            this.btnGraphProfitBets.Click += new System.EventHandler(this.btnGraphProfitBets_Click);
+            // 
+            // btnGraphProfitTime
+            // 
+            this.btnGraphProfitTime.Location = new System.Drawing.Point(166, 34);
+            this.btnGraphProfitTime.Name = "btnGraphProfitTime";
+            this.btnGraphProfitTime.Size = new System.Drawing.Size(135, 55);
+            this.btnGraphProfitTime.TabIndex = 69;
+            this.btnGraphProfitTime.Text = "Static Session Chart";
+            this.btnGraphProfitTime.UseVisualStyleBackColor = true;
+            this.btnGraphProfitTime.Click += new System.EventHandler(this.btnGraphProfitTime_Click);
+            // 
+            // btnChartAllTimeProfitBets
+            // 
+            this.btnChartAllTimeProfitBets.Location = new System.Drawing.Point(14, 95);
+            this.btnChartAllTimeProfitBets.Name = "btnChartAllTimeProfitBets";
+            this.btnChartAllTimeProfitBets.Size = new System.Drawing.Size(134, 55);
+            this.btnChartAllTimeProfitBets.TabIndex = 71;
+            this.btnChartAllTimeProfitBets.Text = "All Time Live Chart";
+            this.btnChartAllTimeProfitBets.UseVisualStyleBackColor = true;
+            this.btnChartAllTimeProfitBets.Click += new System.EventHandler(this.btnChartAllTimeProfitBets_Click);
+            // 
+            // btnChartAllTimeProfitTime
+            // 
+            this.btnChartAllTimeProfitTime.Location = new System.Drawing.Point(166, 95);
+            this.btnChartAllTimeProfitTime.Name = "btnChartAllTimeProfitTime";
+            this.btnChartAllTimeProfitTime.Size = new System.Drawing.Size(135, 55);
+            this.btnChartAllTimeProfitTime.TabIndex = 72;
+            this.btnChartAllTimeProfitTime.Text = "All Time Static Chart";
+            this.btnChartAllTimeProfitTime.UseVisualStyleBackColor = true;
+            this.btnChartAllTimeProfitTime.Click += new System.EventHandler(this.btnChartAllTimeProfitTime_Click);
+            // 
+            // label94
+            // 
+            this.label94.AutoSize = true;
+            this.label94.Location = new System.Drawing.Point(26, 170);
+            this.label94.Name = "label94";
+            this.label94.Size = new System.Drawing.Size(107, 13);
+            this.label94.TabIndex = 73;
+            this.label94.Text = "All bets Above bet id:";
+            // 
+            // label95
+            // 
+            this.label95.AutoSize = true;
+            this.label95.Location = new System.Drawing.Point(28, 218);
+            this.label95.Name = "label95";
+            this.label95.Size = new System.Drawing.Size(90, 13);
+            this.label95.TabIndex = 74;
+            this.label95.Text = "All Bets Between ";
+            // 
+            // label96
+            // 
+            this.label96.AutoSize = true;
+            this.label96.Location = new System.Drawing.Point(89, 244);
+            this.label96.Name = "label96";
+            this.label96.Size = new System.Drawing.Size(29, 13);
+            this.label96.TabIndex = 75;
+            this.label96.Text = "And ";
+            // 
+            // dtpStart
+            // 
+            this.dtpStart.Location = new System.Drawing.Point(124, 212);
+            this.dtpStart.Name = "dtpStart";
+            this.dtpStart.Size = new System.Drawing.Size(200, 20);
+            this.dtpStart.TabIndex = 76;
+            // 
+            // dtpEnd
+            // 
+            this.dtpEnd.Location = new System.Drawing.Point(124, 238);
+            this.dtpEnd.Name = "dtpEnd";
+            this.dtpEnd.Size = new System.Drawing.Size(200, 20);
+            this.dtpEnd.TabIndex = 77;
+            // 
+            // nudGraphStartBetID
+            // 
+            this.nudGraphStartBetID.Location = new System.Drawing.Point(139, 168);
+            this.nudGraphStartBetID.Maximum = new decimal(new int[] {
+            276447232,
+            23283,
+            0,
+            0});
+            this.nudGraphStartBetID.Name = "nudGraphStartBetID";
+            this.nudGraphStartBetID.Size = new System.Drawing.Size(120, 20);
+            this.nudGraphStartBetID.TabIndex = 78;
+            // 
+            // btnChartBetID
+            // 
+            this.btnChartBetID.Location = new System.Drawing.Point(269, 165);
+            this.btnChartBetID.Name = "btnChartBetID";
+            this.btnChartBetID.Size = new System.Drawing.Size(123, 23);
+            this.btnChartBetID.TabIndex = 79;
+            this.btnChartBetID.Text = "Draw Chart";
+            this.btnChartBetID.UseVisualStyleBackColor = true;
+            this.btnChartBetID.Click += new System.EventHandler(this.btnChartBetID_Click);
+            // 
+            // btnChartTimeRange
+            // 
+            this.btnChartTimeRange.Location = new System.Drawing.Point(339, 212);
+            this.btnChartTimeRange.Name = "btnChartTimeRange";
+            this.btnChartTimeRange.Size = new System.Drawing.Size(75, 46);
+            this.btnChartTimeRange.TabIndex = 80;
+            this.btnChartTimeRange.Text = "Draw Chart";
+            this.btnChartTimeRange.UseVisualStyleBackColor = true;
+            this.btnChartTimeRange.Click += new System.EventHandler(this.btnChartTimeRange_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.tabControl1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(434, 358);
+            this.tabPage2.TabIndex = 7;
+            this.tabPage2.Text = "Strategy";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tbMartingale);
+            this.tabControl1.Controls.Add(this.tbLabouchère);
+            this.tabControl1.Controls.Add(this.tbZigZag);
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage6);
+            this.tabControl1.Controls.Add(this.tbCustom);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(428, 352);
+            this.tabControl1.TabIndex = 0;
+            // 
+            // tbLabouchère
+            // 
+            this.tbLabouchère.Controls.Add(this.rdbLabRestart);
+            this.tbLabouchère.Controls.Add(this.rdbLabStop);
+            this.tbLabouchère.Controls.Add(this.label86);
+            this.tbLabouchère.Controls.Add(this.label85);
+            this.tbLabouchère.Controls.Add(this.btnBrowseLab);
+            this.tbLabouchère.Controls.Add(this.rtbBets);
+            this.tbLabouchère.Controls.Add(this.label87);
+            this.tbLabouchère.Controls.Add(this.chkLabEnable);
+            this.tbLabouchère.Controls.Add(this.chkReverseLab);
+            this.tbLabouchère.Location = new System.Drawing.Point(4, 22);
+            this.tbLabouchère.Name = "tbLabouchère";
+            this.tbLabouchère.Padding = new System.Windows.Forms.Padding(3);
+            this.tbLabouchère.Size = new System.Drawing.Size(420, 326);
+            this.tbLabouchère.TabIndex = 9;
+            this.tbLabouchère.Text = "Labouchère";
+            this.tbLabouchère.UseVisualStyleBackColor = true;
+            // 
+            // chkReverseLab
+            // 
+            this.chkReverseLab.AutoSize = true;
+            this.chkReverseLab.Location = new System.Drawing.Point(298, 43);
+            this.chkReverseLab.Name = "chkReverseLab";
+            this.chkReverseLab.Size = new System.Drawing.Size(126, 17);
+            this.chkReverseLab.TabIndex = 2;
+            this.chkReverseLab.Text = "Reverse Labouchère";
+            this.chkReverseLab.UseVisualStyleBackColor = true;
+            // 
+            // chkLabEnable
+            // 
+            this.chkLabEnable.AutoSize = true;
+            this.chkLabEnable.Location = new System.Drawing.Point(298, 20);
+            this.chkLabEnable.Name = "chkLabEnable";
+            this.chkLabEnable.Size = new System.Drawing.Size(119, 17);
+            this.chkLabEnable.TabIndex = 3;
+            this.chkLabEnable.Text = "Enable Labouchère";
+            this.chkLabEnable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkLabEnable.UseVisualStyleBackColor = true;
+            // 
+            // label87
+            // 
+            this.label87.AutoSize = true;
+            this.label87.Location = new System.Drawing.Point(12, 6);
+            this.label87.Name = "label87";
+            this.label87.Size = new System.Drawing.Size(31, 13);
+            this.label87.TabIndex = 7;
+            this.label87.Text = "Bets:";
+            // 
+            // rtbBets
+            // 
+            this.rtbBets.Location = new System.Drawing.Point(48, 6);
+            this.rtbBets.Name = "rtbBets";
+            this.rtbBets.Size = new System.Drawing.Size(160, 329);
+            this.rtbBets.TabIndex = 8;
+            this.rtbBets.Text = "0.0001\n0.0001\n0.0002\n0.0002\n0.0002\n0.0001\n0.0001";
+            // 
+            // btnBrowseLab
+            // 
+            this.btnBrowseLab.Location = new System.Drawing.Point(298, 66);
+            this.btnBrowseLab.Name = "btnBrowseLab";
+            this.btnBrowseLab.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowseLab.TabIndex = 9;
+            this.btnBrowseLab.Text = "Browse";
+            this.btnBrowseLab.UseVisualStyleBackColor = true;
+            // 
+            // label85
+            // 
+            this.label85.AutoSize = true;
+            this.label85.Location = new System.Drawing.Point(226, 92);
+            this.label85.Name = "label85";
+            this.label85.Size = new System.Drawing.Size(198, 13);
+            this.label85.TabIndex = 10;
+            this.label85.Text = "Browse for a file containing 1 bet per line";
+            // 
+            // label86
+            // 
+            this.label86.AutoSize = true;
+            this.label86.Location = new System.Drawing.Point(227, 128);
+            this.label86.Name = "label86";
+            this.label86.Size = new System.Drawing.Size(129, 13);
+            this.label86.TabIndex = 11;
+            this.label86.Text = "When a series completes:";
+            // 
+            // rdbLabStop
+            // 
+            this.rdbLabStop.AutoSize = true;
+            this.rdbLabStop.Checked = true;
+            this.rdbLabStop.Location = new System.Drawing.Point(271, 144);
+            this.rdbLabStop.Name = "rdbLabStop";
+            this.rdbLabStop.Size = new System.Drawing.Size(47, 17);
+            this.rdbLabStop.TabIndex = 12;
+            this.rdbLabStop.TabStop = true;
+            this.rdbLabStop.Text = "Stop";
+            this.rdbLabStop.UseVisualStyleBackColor = true;
+            // 
+            // rdbLabRestart
+            // 
+            this.rdbLabRestart.AutoSize = true;
+            this.rdbLabRestart.Location = new System.Drawing.Point(271, 167);
+            this.rdbLabRestart.Name = "rdbLabRestart";
+            this.rdbLabRestart.Size = new System.Drawing.Size(59, 17);
+            this.rdbLabRestart.TabIndex = 13;
+            this.rdbLabRestart.Text = "Restart";
+            this.rdbLabRestart.UseVisualStyleBackColor = true;
+            // 
+            // tcBets
+            // 
+            this.tcBets.Controls.Add(this.tabPage2);
+            this.tcBets.Controls.Add(this.tabPage4);
+            this.tcBets.Controls.Add(this.tbCharts);
+            this.tcBets.Controls.Add(this.tbSimulation);
+            this.tcBets.Controls.Add(this.tbVerify);
+            this.tcBets.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tcBets.Location = new System.Drawing.Point(3, 93);
+            this.tcBets.Multiline = true;
+            this.tcBets.Name = "tcBets";
+            this.tcBets.SelectedIndex = 0;
+            this.tcBets.Size = new System.Drawing.Size(442, 384);
+            this.tcBets.TabIndex = 52;
+            // 
+            // tbMartingale
+            // 
+            this.tbMartingale.Controls.Add(this.groupBox9);
+            this.tbMartingale.Controls.Add(this.groupBox8);
+            this.tbMartingale.Location = new System.Drawing.Point(4, 22);
+            this.tbMartingale.Name = "tbMartingale";
+            this.tbMartingale.Padding = new System.Windows.Forms.Padding(3);
+            this.tbMartingale.Size = new System.Drawing.Size(420, 326);
+            this.tbMartingale.TabIndex = 10;
+            this.tbMartingale.Text = "Martingale";
+            this.tbMartingale.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.gbLosses);
+            this.tabPage4.Controls.Add(this.gbWins);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(434, 358);
+            this.tabPage4.TabIndex = 8;
+            this.tabPage4.Text = "Stop Conditions";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // tbCustom
+            // 
+            this.tbCustom.Controls.Add(this.label81);
+            this.tbCustom.Controls.Add(this.nudPercentage);
+            this.tbCustom.Controls.Add(this.chkPercentage);
+            this.tbCustom.Controls.Add(this.nudMKDecrement);
+            this.tbCustom.Controls.Add(this.nudMKIncrement);
+            this.tbCustom.Controls.Add(this.label80);
+            this.tbCustom.Controls.Add(this.label79);
+            this.tbCustom.Controls.Add(this.chkMK);
+            this.tbCustom.Controls.Add(this.nudMutawaWins);
+            this.tbCustom.Controls.Add(this.label78);
+            this.tbCustom.Controls.Add(this.nudtrazelloseto);
+            this.tbCustom.Controls.Add(this.nudtrazelwinto);
+            this.tbCustom.Controls.Add(this.label77);
+            this.tbCustom.Controls.Add(this.label76);
+            this.tbCustom.Controls.Add(this.nudTrazelMultiplier);
+            this.tbCustom.Controls.Add(this.label75);
+            this.tbCustom.Controls.Add(this.NudTrazelLose);
+            this.tbCustom.Controls.Add(this.nudTrazelWin);
+            this.tbCustom.Controls.Add(this.label74);
+            this.tbCustom.Controls.Add(this.label73);
+            this.tbCustom.Controls.Add(this.chkTrazel);
+            this.tbCustom.Controls.Add(this.label70);
+            this.tbCustom.Controls.Add(this.nudMutawaMultiplier);
+            this.tbCustom.Controls.Add(this.checkBox1);
+            this.tbCustom.Location = new System.Drawing.Point(4, 22);
+            this.tbCustom.Name = "tbCustom";
+            this.tbCustom.Padding = new System.Windows.Forms.Padding(3);
+            this.tbCustom.Size = new System.Drawing.Size(420, 326);
+            this.tbCustom.TabIndex = 11;
+            this.tbCustom.Text = "Custom";
+            this.tbCustom.UseVisualStyleBackColor = true;
+            // 
+            // label81
+            // 
+            this.label81.AutoSize = true;
+            this.label81.Location = new System.Drawing.Point(57, 260);
+            this.label81.Name = "label81";
+            this.label81.Size = new System.Drawing.Size(95, 13);
+            this.label81.TabIndex = 23;
+            this.label81.Text = "Percentage to bet:";
+            // 
+            // nudPercentage
+            // 
+            this.nudPercentage.DecimalPlaces = 8;
+            this.nudPercentage.Location = new System.Drawing.Point(158, 258);
+            this.nudPercentage.Name = "nudPercentage";
+            this.nudPercentage.Size = new System.Drawing.Size(103, 20);
+            this.nudPercentage.TabIndex = 22;
+            // 
+            // chkPercentage
+            // 
+            this.chkPercentage.AutoSize = true;
+            this.chkPercentage.Location = new System.Drawing.Point(26, 235);
+            this.chkPercentage.Name = "chkPercentage";
+            this.chkPercentage.Size = new System.Drawing.Size(153, 17);
+            this.chkPercentage.TabIndex = 21;
+            this.chkPercentage.Text = "Bet Percentage of balance";
+            this.chkPercentage.UseVisualStyleBackColor = true;
+            // 
+            // nudMKDecrement
+            // 
+            this.nudMKDecrement.DecimalPlaces = 8;
+            this.nudMKDecrement.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudMKDecrement.Location = new System.Drawing.Point(129, 208);
+            this.nudMKDecrement.Name = "nudMKDecrement";
+            this.nudMKDecrement.Size = new System.Drawing.Size(94, 20);
+            this.nudMKDecrement.TabIndex = 20;
+            // 
+            // nudMKIncrement
+            // 
+            this.nudMKIncrement.DecimalPlaces = 8;
+            this.nudMKIncrement.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudMKIncrement.Location = new System.Drawing.Point(129, 185);
+            this.nudMKIncrement.Name = "nudMKIncrement";
+            this.nudMKIncrement.Size = new System.Drawing.Size(94, 20);
+            this.nudMKIncrement.TabIndex = 19;
+            // 
+            // label80
+            // 
+            this.label80.AutoSize = true;
+            this.label80.Location = new System.Drawing.Point(41, 210);
+            this.label80.Name = "label80";
+            this.label80.Size = new System.Drawing.Size(76, 13);
+            this.label80.TabIndex = 18;
+            this.label80.Text = "Decrement by:";
+            // 
+            // label79
+            // 
+            this.label79.AutoSize = true;
+            this.label79.Location = new System.Drawing.Point(46, 187);
+            this.label79.Name = "label79";
+            this.label79.Size = new System.Drawing.Size(71, 13);
+            this.label79.TabIndex = 17;
+            this.label79.Text = "Increment by:";
+            // 
+            // chkMK
+            // 
+            this.chkMK.AutoSize = true;
+            this.chkMK.Location = new System.Drawing.Point(26, 167);
+            this.chkMK.Name = "chkMK";
+            this.chkMK.Size = new System.Drawing.Size(82, 17);
+            this.chkMK.TabIndex = 16;
+            this.chkMK.Text = "mmmmkkkk";
+            this.chkMK.UseVisualStyleBackColor = true;
+            // 
+            // nudMutawaWins
+            // 
+            this.nudMutawaWins.Location = new System.Drawing.Point(277, 42);
+            this.nudMutawaWins.Name = "nudMutawaWins";
+            this.nudMutawaWins.Size = new System.Drawing.Size(40, 20);
+            this.nudMutawaWins.TabIndex = 15;
+            this.nudMutawaWins.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Location = new System.Drawing.Point(233, 44);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(34, 13);
+            this.label78.TabIndex = 14;
+            this.label78.Text = "Wins:";
+            // 
+            // nudtrazelloseto
+            // 
+            this.nudtrazelloseto.DecimalPlaces = 8;
+            this.nudtrazelloseto.Location = new System.Drawing.Point(176, 116);
+            this.nudtrazelloseto.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudtrazelloseto.Name = "nudtrazelloseto";
+            this.nudtrazelloseto.Size = new System.Drawing.Size(79, 20);
+            this.nudtrazelloseto.TabIndex = 13;
+            this.nudtrazelloseto.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            // 
+            // nudtrazelwinto
+            // 
+            this.nudtrazelwinto.DecimalPlaces = 8;
+            this.nudtrazelwinto.Location = new System.Drawing.Point(176, 90);
+            this.nudtrazelwinto.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudtrazelwinto.Name = "nudtrazelwinto";
+            this.nudtrazelwinto.Size = new System.Drawing.Size(79, 20);
+            this.nudtrazelwinto.TabIndex = 12;
+            this.nudtrazelwinto.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            // 
+            // label77
+            // 
+            this.label77.AutoSize = true;
+            this.label77.Location = new System.Drawing.Point(147, 118);
+            this.label77.Name = "label77";
+            this.label77.Size = new System.Drawing.Size(23, 13);
+            this.label77.TabIndex = 11;
+            this.label77.Text = "To:";
+            // 
+            // label76
+            // 
+            this.label76.AutoSize = true;
+            this.label76.Location = new System.Drawing.Point(147, 92);
+            this.label76.Name = "label76";
+            this.label76.Size = new System.Drawing.Size(23, 13);
+            this.label76.TabIndex = 10;
+            this.label76.Text = "To:";
+            // 
+            // nudTrazelMultiplier
+            // 
+            this.nudTrazelMultiplier.DecimalPlaces = 3;
+            this.nudTrazelMultiplier.Location = new System.Drawing.Point(107, 141);
+            this.nudTrazelMultiplier.Name = "nudTrazelMultiplier";
+            this.nudTrazelMultiplier.Size = new System.Drawing.Size(60, 20);
+            this.nudTrazelMultiplier.TabIndex = 9;
+            this.nudTrazelMultiplier.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label75
+            // 
+            this.label75.AutoSize = true;
+            this.label75.Location = new System.Drawing.Point(46, 143);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(51, 13);
+            this.label75.TabIndex = 8;
+            this.label75.Text = "Multiplier:";
+            // 
+            // NudTrazelLose
+            // 
+            this.NudTrazelLose.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.NudTrazelLose.Location = new System.Drawing.Point(107, 115);
+            this.NudTrazelLose.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.NudTrazelLose.Name = "NudTrazelLose";
+            this.NudTrazelLose.Size = new System.Drawing.Size(40, 20);
+            this.NudTrazelLose.TabIndex = 7;
+            this.NudTrazelLose.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // nudTrazelWin
+            // 
+            this.nudTrazelWin.Location = new System.Drawing.Point(107, 89);
+            this.nudTrazelWin.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudTrazelWin.Name = "nudTrazelWin";
+            this.nudTrazelWin.Size = new System.Drawing.Size(40, 20);
+            this.nudTrazelWin.TabIndex = 6;
+            this.nudTrazelWin.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.Location = new System.Drawing.Point(34, 117);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(67, 13);
+            this.label74.TabIndex = 5;
+            this.label74.Text = "Lose Streak:";
+            // 
+            // label73
+            // 
+            this.label73.AutoSize = true;
+            this.label73.Location = new System.Drawing.Point(38, 92);
+            this.label73.Name = "label73";
+            this.label73.Size = new System.Drawing.Size(63, 13);
+            this.label73.TabIndex = 4;
+            this.label73.Text = "Win Streak:";
+            // 
+            // chkTrazel
+            // 
+            this.chkTrazel.AutoSize = true;
+            this.chkTrazel.Location = new System.Drawing.Point(26, 72);
+            this.chkTrazel.Name = "chkTrazel";
+            this.chkTrazel.Size = new System.Drawing.Size(55, 17);
+            this.chkTrazel.TabIndex = 3;
+            this.chkTrazel.Text = "Trazel";
+            this.chkTrazel.UseVisualStyleBackColor = true;
+            // 
+            // label70
+            // 
+            this.label70.AutoSize = true;
+            this.label70.Location = new System.Drawing.Point(23, 44);
+            this.label70.Name = "label70";
+            this.label70.Size = new System.Drawing.Size(59, 13);
+            this.label70.TabIndex = 2;
+            this.label70.Text = "Multiply by:";
+            // 
+            // nudMutawaMultiplier
+            // 
+            this.nudMutawaMultiplier.DecimalPlaces = 8;
+            this.nudMutawaMultiplier.Location = new System.Drawing.Point(88, 42);
+            this.nudMutawaMultiplier.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudMutawaMultiplier.Name = "nudMutawaMultiplier";
+            this.nudMutawaMultiplier.Size = new System.Drawing.Size(120, 20);
+            this.nudMutawaMultiplier.TabIndex = 1;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(26, 19);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(86, 17);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Use Mutawa";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // gbWins
+            // 
+            this.gbWins.Controls.Add(this.nudChangeChanceWinTo);
+            this.gbWins.Controls.Add(this.label68);
+            this.gbWins.Controls.Add(this.nudChangeChanceWinStreak);
+            this.gbWins.Controls.Add(this.chkChangeChanceWin);
+            this.gbWins.Controls.Add(this.nudChangeWinStreakTo);
+            this.gbWins.Controls.Add(this.label72);
+            this.gbWins.Controls.Add(this.nudChangeWinStreak);
+            this.gbWins.Controls.Add(this.chkChangeWinStreak);
+            this.gbWins.Controls.Add(this.label64);
+            this.gbWins.Controls.Add(this.nudStopWinBtc);
+            this.gbWins.Controls.Add(this.chkStopWinBtc);
+            this.gbWins.Controls.Add(this.label61);
+            this.gbWins.Controls.Add(this.nudStopWinBtcStreak);
+            this.gbWins.Controls.Add(this.chkStopWinBtcStreak);
+            this.gbWins.Controls.Add(this.label62);
+            this.gbWins.Controls.Add(this.nudStopWinStreak);
+            this.gbWins.Controls.Add(this.chkStopWinStreak);
+            this.gbWins.Controls.Add(this.label58);
+            this.gbWins.Controls.Add(this.nudResetWins);
+            this.gbWins.Controls.Add(this.chkResetBetWins);
+            this.gbWins.Location = new System.Drawing.Point(15, 180);
+            this.gbWins.Name = "gbWins";
+            this.gbWins.Size = new System.Drawing.Size(409, 172);
+            this.gbWins.TabIndex = 0;
+            this.gbWins.TabStop = false;
+            this.gbWins.Text = "stop/reset conditions on wins";
+            // 
+            // nudChangeChanceWinTo
+            // 
+            this.nudChangeChanceWinTo.DecimalPlaces = 5;
+            this.nudChangeChanceWinTo.Location = new System.Drawing.Point(296, 140);
+            this.nudChangeChanceWinTo.Name = "nudChangeChanceWinTo";
+            this.nudChangeChanceWinTo.Size = new System.Drawing.Size(76, 20);
+            this.nudChangeChanceWinTo.TabIndex = 130;
+            // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.Location = new System.Drawing.Point(123, 144);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(159, 13);
+            this.label68.TabIndex = 129;
+            this.label68.Text = "Win in a row, change chance to";
+            // 
+            // nudChangeChanceWinStreak
+            // 
+            this.nudChangeChanceWinStreak.Location = new System.Drawing.Point(80, 140);
+            this.nudChangeChanceWinStreak.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudChangeChanceWinStreak.Name = "nudChangeChanceWinStreak";
+            this.nudChangeChanceWinStreak.Size = new System.Drawing.Size(37, 20);
+            this.nudChangeChanceWinStreak.TabIndex = 128;
+            // 
+            // chkChangeChanceWin
+            // 
+            this.chkChangeChanceWin.AutoSize = true;
+            this.chkChangeChanceWin.Location = new System.Drawing.Point(29, 142);
+            this.chkChangeChanceWin.Name = "chkChangeChanceWin";
+            this.chkChangeChanceWin.Size = new System.Drawing.Size(51, 17);
+            this.chkChangeChanceWin.TabIndex = 127;
+            this.chkChangeChanceWin.Text = "After ";
+            this.chkChangeChanceWin.UseVisualStyleBackColor = true;
+            // 
+            // nudChangeWinStreakTo
+            // 
+            this.nudChangeWinStreakTo.DecimalPlaces = 8;
+            this.nudChangeWinStreakTo.Location = new System.Drawing.Point(272, 117);
+            this.nudChangeWinStreakTo.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudChangeWinStreakTo.Name = "nudChangeWinStreakTo";
+            this.nudChangeWinStreakTo.Size = new System.Drawing.Size(84, 20);
+            this.nudChangeWinStreakTo.TabIndex = 126;
+            // 
+            // label72
+            // 
+            this.label72.AutoSize = true;
+            this.label72.Location = new System.Drawing.Point(123, 121);
+            this.label72.Name = "label72";
+            this.label72.Size = new System.Drawing.Size(143, 13);
+            this.label72.TabIndex = 124;
+            this.label72.Text = "Wins in a row, change bet to";
+            // 
+            // nudChangeWinStreak
+            // 
+            this.nudChangeWinStreak.Location = new System.Drawing.Point(82, 117);
+            this.nudChangeWinStreak.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudChangeWinStreak.Name = "nudChangeWinStreak";
+            this.nudChangeWinStreak.Size = new System.Drawing.Size(35, 20);
+            this.nudChangeWinStreak.TabIndex = 123;
+            // 
+            // chkChangeWinStreak
+            // 
+            this.chkChangeWinStreak.AutoSize = true;
+            this.chkChangeWinStreak.Location = new System.Drawing.Point(29, 119);
+            this.chkChangeWinStreak.Name = "chkChangeWinStreak";
+            this.chkChangeWinStreak.Size = new System.Drawing.Size(48, 17);
+            this.chkChangeWinStreak.TabIndex = 122;
+            this.chkChangeWinStreak.Text = "After";
+            this.chkChangeWinStreak.UseVisualStyleBackColor = true;
+            // 
+            // label64
+            // 
+            this.label64.AutoSize = true;
+            this.label64.Location = new System.Drawing.Point(205, 96);
+            this.label64.Name = "label64";
+            this.label64.Size = new System.Drawing.Size(31, 13);
+            this.label64.TabIndex = 121;
+            this.label64.Text = "Profit";
+            // 
+            // nudStopWinBtc
+            // 
+            this.nudStopWinBtc.DecimalPlaces = 8;
+            this.nudStopWinBtc.Location = new System.Drawing.Point(115, 94);
+            this.nudStopWinBtc.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudStopWinBtc.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            458752});
+            this.nudStopWinBtc.Name = "nudStopWinBtc";
+            this.nudStopWinBtc.Size = new System.Drawing.Size(84, 20);
+            this.nudStopWinBtc.TabIndex = 120;
+            this.nudStopWinBtc.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            458752});
+            // 
+            // chkStopWinBtc
+            // 
+            this.chkStopWinBtc.AutoSize = true;
+            this.chkStopWinBtc.Location = new System.Drawing.Point(29, 95);
+            this.chkStopWinBtc.Name = "chkStopWinBtc";
+            this.chkStopWinBtc.Size = new System.Drawing.Size(73, 17);
+            this.chkStopWinBtc.TabIndex = 119;
+            this.chkStopWinBtc.Text = "Stop After";
+            this.chkStopWinBtc.UseVisualStyleBackColor = true;
+            // 
+            // label61
+            // 
+            this.label61.AutoSize = true;
+            this.label61.Location = new System.Drawing.Point(205, 70);
+            this.label61.Name = "label61";
+            this.label61.Size = new System.Drawing.Size(85, 13);
+            this.label61.TabIndex = 118;
+            this.label61.Text = "Streak Winnings";
+            // 
+            // nudStopWinBtcStreak
+            // 
+            this.nudStopWinBtcStreak.DecimalPlaces = 8;
+            this.nudStopWinBtcStreak.Location = new System.Drawing.Point(115, 68);
+            this.nudStopWinBtcStreak.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudStopWinBtcStreak.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            458752});
+            this.nudStopWinBtcStreak.Name = "nudStopWinBtcStreak";
+            this.nudStopWinBtcStreak.Size = new System.Drawing.Size(84, 20);
+            this.nudStopWinBtcStreak.TabIndex = 117;
+            this.nudStopWinBtcStreak.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            458752});
+            // 
+            // chkStopWinBtcStreak
+            // 
+            this.chkStopWinBtcStreak.AutoSize = true;
+            this.chkStopWinBtcStreak.Location = new System.Drawing.Point(29, 69);
+            this.chkStopWinBtcStreak.Name = "chkStopWinBtcStreak";
+            this.chkStopWinBtcStreak.Size = new System.Drawing.Size(73, 17);
+            this.chkStopWinBtcStreak.TabIndex = 116;
+            this.chkStopWinBtcStreak.Text = "Stop After";
+            this.chkStopWinBtcStreak.UseVisualStyleBackColor = true;
+            // 
+            // label62
+            // 
+            this.label62.AutoSize = true;
+            this.label62.Location = new System.Drawing.Point(188, 44);
+            this.label62.Name = "label62";
+            this.label62.Size = new System.Drawing.Size(71, 13);
+            this.label62.TabIndex = 115;
+            this.label62.Text = "Wins in a row";
+            // 
+            // nudStopWinStreak
+            // 
+            this.nudStopWinStreak.Location = new System.Drawing.Point(115, 42);
+            this.nudStopWinStreak.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudStopWinStreak.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudStopWinStreak.Name = "nudStopWinStreak";
+            this.nudStopWinStreak.Size = new System.Drawing.Size(64, 20);
+            this.nudStopWinStreak.TabIndex = 114;
+            this.nudStopWinStreak.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkStopWinStreak
+            // 
+            this.chkStopWinStreak.AutoSize = true;
+            this.chkStopWinStreak.Location = new System.Drawing.Point(29, 43);
+            this.chkStopWinStreak.Name = "chkStopWinStreak";
+            this.chkStopWinStreak.Size = new System.Drawing.Size(73, 17);
+            this.chkStopWinStreak.TabIndex = 113;
+            this.chkStopWinStreak.Text = "Stop After";
+            this.chkStopWinStreak.UseVisualStyleBackColor = true;
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(185, 18);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(71, 13);
+            this.label58.TabIndex = 112;
+            this.label58.Text = "Wins in a row";
+            // 
+            // nudResetWins
+            // 
+            this.nudResetWins.Location = new System.Drawing.Point(115, 16);
+            this.nudResetWins.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudResetWins.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudResetWins.Name = "nudResetWins";
+            this.nudResetWins.Size = new System.Drawing.Size(64, 20);
+            this.nudResetWins.TabIndex = 111;
+            this.nudResetWins.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkResetBetWins
+            // 
+            this.chkResetBetWins.AutoSize = true;
+            this.chkResetBetWins.Location = new System.Drawing.Point(29, 19);
+            this.chkResetBetWins.Name = "chkResetBetWins";
+            this.chkResetBetWins.Size = new System.Drawing.Size(81, 17);
+            this.chkResetBetWins.TabIndex = 110;
+            this.chkResetBetWins.Text = "Reset after ";
+            this.chkResetBetWins.UseVisualStyleBackColor = true;
+            // 
+            // gbLosses
+            // 
+            this.gbLosses.Controls.Add(this.nudChangeChanceLoseTo);
+            this.gbLosses.Controls.Add(this.label67);
+            this.gbLosses.Controls.Add(this.nudChangeChanceLoseStreak);
+            this.gbLosses.Controls.Add(this.chkChangeChanceLose);
+            this.gbLosses.Controls.Add(this.nudChangeLoseStreakTo);
+            this.gbLosses.Controls.Add(this.label65);
+            this.gbLosses.Controls.Add(this.nudChangeLoseStreak);
+            this.gbLosses.Controls.Add(this.chkChangeLoseStreak);
+            this.gbLosses.Controls.Add(this.label63);
+            this.gbLosses.Controls.Add(this.nudStopLossBtc);
+            this.gbLosses.Controls.Add(this.chkStopLossBtc);
+            this.gbLosses.Controls.Add(this.label60);
+            this.gbLosses.Controls.Add(this.nudStopLossBtcStreal);
+            this.gbLosses.Controls.Add(this.chkStopLossBtcStreak);
+            this.gbLosses.Controls.Add(this.label59);
+            this.gbLosses.Controls.Add(this.nudStopLossStreak);
+            this.gbLosses.Controls.Add(this.chkStopLossStreak);
+            this.gbLosses.Controls.Add(this.label57);
+            this.gbLosses.Controls.Add(this.nudResetBetLoss);
+            this.gbLosses.Controls.Add(this.chkResetBetLoss);
+            this.gbLosses.Location = new System.Drawing.Point(11, 6);
+            this.gbLosses.Name = "gbLosses";
+            this.gbLosses.Size = new System.Drawing.Size(413, 168);
+            this.gbLosses.TabIndex = 1;
+            this.gbLosses.TabStop = false;
+            this.gbLosses.Text = "stop/reset conditions on losses";
+            // 
+            // nudChangeChanceLoseTo
+            // 
+            this.nudChangeChanceLoseTo.DecimalPlaces = 5;
+            this.nudChangeChanceLoseTo.Location = new System.Drawing.Point(300, 138);
+            this.nudChangeChanceLoseTo.Name = "nudChangeChanceLoseTo";
+            this.nudChangeChanceLoseTo.Size = new System.Drawing.Size(79, 20);
+            this.nudChangeChanceLoseTo.TabIndex = 117;
+            // 
+            // label67
+            // 
+            this.label67.AutoSize = true;
+            this.label67.Location = new System.Drawing.Point(127, 142);
+            this.label67.Name = "label67";
+            this.label67.Size = new System.Drawing.Size(173, 13);
+            this.label67.TabIndex = 116;
+            this.label67.Text = "Losses in a row, change chance to";
+            // 
+            // nudChangeChanceLoseStreak
+            // 
+            this.nudChangeChanceLoseStreak.Location = new System.Drawing.Point(84, 138);
+            this.nudChangeChanceLoseStreak.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudChangeChanceLoseStreak.Name = "nudChangeChanceLoseStreak";
+            this.nudChangeChanceLoseStreak.Size = new System.Drawing.Size(37, 20);
+            this.nudChangeChanceLoseStreak.TabIndex = 115;
+            // 
+            // chkChangeChanceLose
+            // 
+            this.chkChangeChanceLose.AutoSize = true;
+            this.chkChangeChanceLose.Location = new System.Drawing.Point(33, 140);
+            this.chkChangeChanceLose.Name = "chkChangeChanceLose";
+            this.chkChangeChanceLose.Size = new System.Drawing.Size(51, 17);
+            this.chkChangeChanceLose.TabIndex = 114;
+            this.chkChangeChanceLose.Text = "After ";
+            this.chkChangeChanceLose.UseVisualStyleBackColor = true;
+            // 
+            // nudChangeLoseStreakTo
+            // 
+            this.nudChangeLoseStreakTo.DecimalPlaces = 8;
+            this.nudChangeLoseStreakTo.Location = new System.Drawing.Point(285, 114);
+            this.nudChangeLoseStreakTo.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudChangeLoseStreakTo.Name = "nudChangeLoseStreakTo";
+            this.nudChangeLoseStreakTo.Size = new System.Drawing.Size(84, 20);
+            this.nudChangeLoseStreakTo.TabIndex = 113;
+            // 
+            // label65
+            // 
+            this.label65.AutoSize = true;
+            this.label65.Location = new System.Drawing.Point(127, 118);
+            this.label65.Name = "label65";
+            this.label65.Size = new System.Drawing.Size(152, 13);
+            this.label65.TabIndex = 111;
+            this.label65.Text = "Losses in a row, change bet to";
+            // 
+            // nudChangeLoseStreak
+            // 
+            this.nudChangeLoseStreak.Location = new System.Drawing.Point(84, 114);
+            this.nudChangeLoseStreak.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudChangeLoseStreak.Name = "nudChangeLoseStreak";
+            this.nudChangeLoseStreak.Size = new System.Drawing.Size(37, 20);
+            this.nudChangeLoseStreak.TabIndex = 110;
+            // 
+            // chkChangeLoseStreak
+            // 
+            this.chkChangeLoseStreak.AutoSize = true;
+            this.chkChangeLoseStreak.Location = new System.Drawing.Point(33, 117);
+            this.chkChangeLoseStreak.Name = "chkChangeLoseStreak";
+            this.chkChangeLoseStreak.Size = new System.Drawing.Size(48, 17);
+            this.chkChangeLoseStreak.TabIndex = 109;
+            this.chkChangeLoseStreak.Text = "After";
+            this.chkChangeLoseStreak.UseVisualStyleBackColor = true;
+            // 
+            // label63
+            // 
+            this.label63.AutoSize = true;
+            this.label63.Location = new System.Drawing.Point(209, 95);
+            this.label63.Name = "label63";
+            this.label63.Size = new System.Drawing.Size(29, 13);
+            this.label63.TabIndex = 108;
+            this.label63.Text = "Loss";
+            // 
+            // nudStopLossBtc
+            // 
+            this.nudStopLossBtc.DecimalPlaces = 8;
+            this.nudStopLossBtc.Location = new System.Drawing.Point(119, 93);
+            this.nudStopLossBtc.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudStopLossBtc.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            458752});
+            this.nudStopLossBtc.Name = "nudStopLossBtc";
+            this.nudStopLossBtc.Size = new System.Drawing.Size(84, 20);
+            this.nudStopLossBtc.TabIndex = 107;
+            this.nudStopLossBtc.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            458752});
+            // 
+            // chkStopLossBtc
+            // 
+            this.chkStopLossBtc.AutoSize = true;
+            this.chkStopLossBtc.Location = new System.Drawing.Point(33, 94);
+            this.chkStopLossBtc.Name = "chkStopLossBtc";
+            this.chkStopLossBtc.Size = new System.Drawing.Size(73, 17);
+            this.chkStopLossBtc.TabIndex = 106;
+            this.chkStopLossBtc.Text = "Stop After";
+            this.chkStopLossBtc.UseVisualStyleBackColor = true;
+            // 
+            // label60
+            // 
+            this.label60.AutoSize = true;
+            this.label60.Location = new System.Drawing.Point(209, 69);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(63, 13);
+            this.label60.TabIndex = 105;
+            this.label60.Text = "Streak Loss";
+            // 
+            // nudStopLossBtcStreal
+            // 
+            this.nudStopLossBtcStreal.DecimalPlaces = 8;
+            this.nudStopLossBtcStreal.Location = new System.Drawing.Point(119, 67);
+            this.nudStopLossBtcStreal.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudStopLossBtcStreal.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            458752});
+            this.nudStopLossBtcStreal.Name = "nudStopLossBtcStreal";
+            this.nudStopLossBtcStreal.Size = new System.Drawing.Size(84, 20);
+            this.nudStopLossBtcStreal.TabIndex = 104;
+            this.nudStopLossBtcStreal.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            458752});
+            // 
+            // chkStopLossBtcStreak
+            // 
+            this.chkStopLossBtcStreak.AutoSize = true;
+            this.chkStopLossBtcStreak.Location = new System.Drawing.Point(33, 68);
+            this.chkStopLossBtcStreak.Name = "chkStopLossBtcStreak";
+            this.chkStopLossBtcStreak.Size = new System.Drawing.Size(73, 17);
+            this.chkStopLossBtcStreak.TabIndex = 103;
+            this.chkStopLossBtcStreak.Text = "Stop After";
+            this.chkStopLossBtcStreak.UseVisualStyleBackColor = true;
+            // 
+            // label59
+            // 
+            this.label59.AutoSize = true;
+            this.label59.Location = new System.Drawing.Point(192, 43);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(80, 13);
+            this.label59.TabIndex = 102;
+            this.label59.Text = "Losses in a row";
+            // 
+            // nudStopLossStreak
+            // 
+            this.nudStopLossStreak.Location = new System.Drawing.Point(119, 41);
+            this.nudStopLossStreak.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudStopLossStreak.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudStopLossStreak.Name = "nudStopLossStreak";
+            this.nudStopLossStreak.Size = new System.Drawing.Size(64, 20);
+            this.nudStopLossStreak.TabIndex = 101;
+            this.nudStopLossStreak.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkStopLossStreak
+            // 
+            this.chkStopLossStreak.AutoSize = true;
+            this.chkStopLossStreak.Location = new System.Drawing.Point(33, 42);
+            this.chkStopLossStreak.Name = "chkStopLossStreak";
+            this.chkStopLossStreak.Size = new System.Drawing.Size(73, 17);
+            this.chkStopLossStreak.TabIndex = 100;
+            this.chkStopLossStreak.Text = "Stop After";
+            this.chkStopLossStreak.UseVisualStyleBackColor = true;
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(192, 18);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(80, 13);
+            this.label57.TabIndex = 99;
+            this.label57.Text = "Losses in a row";
+            // 
+            // nudResetBetLoss
+            // 
+            this.nudResetBetLoss.Location = new System.Drawing.Point(119, 16);
+            this.nudResetBetLoss.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudResetBetLoss.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudResetBetLoss.Name = "nudResetBetLoss";
+            this.nudResetBetLoss.Size = new System.Drawing.Size(64, 20);
+            this.nudResetBetLoss.TabIndex = 98;
+            this.nudResetBetLoss.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkResetBetLoss
+            // 
+            this.chkResetBetLoss.AutoSize = true;
+            this.chkResetBetLoss.Location = new System.Drawing.Point(33, 19);
+            this.chkResetBetLoss.Name = "chkResetBetLoss";
+            this.chkResetBetLoss.Size = new System.Drawing.Size(81, 17);
+            this.chkResetBetLoss.TabIndex = 97;
+            this.chkResetBetLoss.Text = "Reset after ";
+            this.chkResetBetLoss.UseVisualStyleBackColor = true;
+            // 
+            // tbZigZag
+            // 
+            this.tbZigZag.Controls.Add(this.rdbReverseBets);
+            this.tbZigZag.Controls.Add(this.rdbReverseLoss);
+            this.tbZigZag.Controls.Add(this.rdbReverseWins);
+            this.tbZigZag.Controls.Add(this.chkReverse);
+            this.tbZigZag.Controls.Add(this.NudReverse);
+            this.tbZigZag.Controls.Add(this.lblZigZag1);
+            this.tbZigZag.Location = new System.Drawing.Point(4, 22);
+            this.tbZigZag.Name = "tbZigZag";
+            this.tbZigZag.Padding = new System.Windows.Forms.Padding(3);
+            this.tbZigZag.Size = new System.Drawing.Size(420, 326);
+            this.tbZigZag.TabIndex = 12;
+            this.tbZigZag.Text = "Zig Zag";
+            this.tbZigZag.UseVisualStyleBackColor = true;
+            // 
+            // rdbReverseBets
+            // 
+            this.rdbReverseBets.AutoSize = true;
+            this.rdbReverseBets.Checked = true;
+            this.rdbReverseBets.Location = new System.Drawing.Point(24, 100);
+            this.rdbReverseBets.Name = "rdbReverseBets";
+            this.rdbReverseBets.Size = new System.Drawing.Size(46, 17);
+            this.rdbReverseBets.TabIndex = 6;
+            this.rdbReverseBets.TabStop = true;
+            this.rdbReverseBets.Text = "Bets";
+            this.rdbReverseBets.UseVisualStyleBackColor = true;
+            // 
+            // rdbReverseLoss
+            // 
+            this.rdbReverseLoss.AutoSize = true;
+            this.rdbReverseLoss.Location = new System.Drawing.Point(24, 77);
+            this.rdbReverseLoss.Name = "rdbReverseLoss";
+            this.rdbReverseLoss.Size = new System.Drawing.Size(58, 17);
+            this.rdbReverseLoss.TabIndex = 5;
+            this.rdbReverseLoss.Text = "Losses";
+            this.rdbReverseLoss.UseVisualStyleBackColor = true;
+            // 
+            // rdbReverseWins
+            // 
+            this.rdbReverseWins.AutoSize = true;
+            this.rdbReverseWins.Location = new System.Drawing.Point(24, 54);
+            this.rdbReverseWins.Name = "rdbReverseWins";
+            this.rdbReverseWins.Size = new System.Drawing.Size(49, 17);
+            this.rdbReverseWins.TabIndex = 4;
+            this.rdbReverseWins.Text = "Wins";
+            this.rdbReverseWins.UseVisualStyleBackColor = true;
+            // 
+            // chkReverse
+            // 
+            this.chkReverse.AutoSize = true;
+            this.chkReverse.Location = new System.Drawing.Point(24, 18);
+            this.chkReverse.Name = "chkReverse";
+            this.chkReverse.Size = new System.Drawing.Size(99, 17);
+            this.chkReverse.TabIndex = 3;
+            this.chkReverse.Text = "Enable Zig Zag";
+            this.chkReverse.UseVisualStyleBackColor = true;
+            // 
+            // NudReverse
+            // 
+            this.NudReverse.Location = new System.Drawing.Point(149, 36);
+            this.NudReverse.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.NudReverse.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.NudReverse.Name = "NudReverse";
+            this.NudReverse.Size = new System.Drawing.Size(64, 20);
+            this.NudReverse.TabIndex = 2;
+            this.NudReverse.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblZigZag1
+            // 
+            this.lblZigZag1.AutoSize = true;
+            this.lblZigZag1.Location = new System.Drawing.Point(21, 38);
+            this.lblZigZag1.Name = "lblZigZag1";
+            this.lblZigZag1.Size = new System.Drawing.Size(121, 13);
+            this.lblZigZag1.TabIndex = 1;
+            this.lblZigZag1.Text = "Switch High/Low every ";
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.nudWinDevider);
+            this.groupBox8.Controls.Add(this.nudWinNBets);
+            this.groupBox8.Controls.Add(this.nudWinMaxMultiplies);
+            this.groupBox8.Controls.Add(this.nudWinMultiplier);
+            this.groupBox8.Controls.Add(this.rdbWinReduce);
+            this.groupBox8.Controls.Add(this.label44);
+            this.groupBox8.Controls.Add(this.label45);
+            this.groupBox8.Controls.Add(this.rdbWinMaxMultiplier);
+            this.groupBox8.Controls.Add(this.rdbWinDevider);
+            this.groupBox8.Controls.Add(this.label46);
+            this.groupBox8.Controls.Add(this.rdbWinConstant);
+            this.groupBox8.Controls.Add(this.label47);
+            this.groupBox8.Controls.Add(this.label54);
+            this.groupBox8.Location = new System.Drawing.Point(19, 171);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(378, 149);
+            this.groupBox8.TabIndex = 1;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Multiplier on Win";
+            // 
+            // nudWinDevider
+            // 
+            this.nudWinDevider.DecimalPlaces = 5;
+            this.nudWinDevider.Location = new System.Drawing.Point(143, 111);
+            this.nudWinDevider.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudWinDevider.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
+            this.nudWinDevider.Name = "nudWinDevider";
+            this.nudWinDevider.Size = new System.Drawing.Size(86, 20);
+            this.nudWinDevider.TabIndex = 105;
+            this.nudWinDevider.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
+            // 
+            // nudWinNBets
+            // 
+            this.nudWinNBets.Location = new System.Drawing.Point(143, 80);
+            this.nudWinNBets.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudWinNBets.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudWinNBets.Name = "nudWinNBets";
+            this.nudWinNBets.Size = new System.Drawing.Size(52, 20);
+            this.nudWinNBets.TabIndex = 104;
+            this.nudWinNBets.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // nudWinMaxMultiplies
+            // 
+            this.nudWinMaxMultiplies.Location = new System.Drawing.Point(143, 54);
+            this.nudWinMaxMultiplies.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudWinMaxMultiplies.Minimum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            this.nudWinMaxMultiplies.Name = "nudWinMaxMultiplies";
+            this.nudWinMaxMultiplies.Size = new System.Drawing.Size(86, 20);
+            this.nudWinMaxMultiplies.TabIndex = 103;
+            this.nudWinMaxMultiplies.Value = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            // 
+            // nudWinMultiplier
+            // 
+            this.nudWinMultiplier.DecimalPlaces = 5;
+            this.nudWinMultiplier.Location = new System.Drawing.Point(143, 23);
+            this.nudWinMultiplier.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudWinMultiplier.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
+            this.nudWinMultiplier.Name = "nudWinMultiplier";
+            this.nudWinMultiplier.Size = new System.Drawing.Size(86, 20);
+            this.nudWinMultiplier.TabIndex = 102;
+            this.nudWinMultiplier.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // rdbWinReduce
+            // 
+            this.rdbWinReduce.AutoSize = true;
+            this.rdbWinReduce.Location = new System.Drawing.Point(244, 95);
+            this.rdbWinReduce.Name = "rdbWinReduce";
+            this.rdbWinReduce.Size = new System.Drawing.Size(91, 17);
+            this.rdbWinReduce.TabIndex = 101;
+            this.rdbWinReduce.Text = "Change Once";
+            this.rdbWinReduce.UseVisualStyleBackColor = true;
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(88, 27);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(51, 13);
+            this.label44.TabIndex = 96;
+            this.label44.Text = "Multiplier:";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(43, 113);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(96, 13);
+            this.label45.TabIndex = 100;
+            this.label45.Text = "Times Multiplier by:";
+            // 
+            // rdbWinMaxMultiplier
+            // 
+            this.rdbWinMaxMultiplier.AutoSize = true;
+            this.rdbWinMaxMultiplier.Location = new System.Drawing.Point(244, 23);
+            this.rdbWinMaxMultiplier.Name = "rdbWinMaxMultiplier";
+            this.rdbWinMaxMultiplier.Size = new System.Drawing.Size(45, 17);
+            this.rdbWinMaxMultiplier.TabIndex = 93;
+            this.rdbWinMaxMultiplier.Text = "Max";
+            this.rdbWinMaxMultiplier.UseVisualStyleBackColor = true;
+            // 
+            // rdbWinDevider
+            // 
+            this.rdbWinDevider.AutoSize = true;
+            this.rdbWinDevider.Location = new System.Drawing.Point(244, 49);
+            this.rdbWinDevider.Name = "rdbWinDevider";
+            this.rdbWinDevider.Size = new System.Drawing.Size(63, 17);
+            this.rdbWinDevider.TabIndex = 94;
+            this.rdbWinDevider.Text = "Variable";
+            this.rdbWinDevider.UseVisualStyleBackColor = true;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(201, 82);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(28, 13);
+            this.label46.TabIndex = 99;
+            this.label46.Text = "Bets";
+            // 
+            // rdbWinConstant
+            // 
+            this.rdbWinConstant.AutoSize = true;
+            this.rdbWinConstant.Checked = true;
+            this.rdbWinConstant.Location = new System.Drawing.Point(244, 72);
+            this.rdbWinConstant.Name = "rdbWinConstant";
+            this.rdbWinConstant.Size = new System.Drawing.Size(70, 17);
+            this.rdbWinConstant.TabIndex = 95;
+            this.rdbWinConstant.TabStop = true;
+            this.rdbWinConstant.Text = "Contstant";
+            this.rdbWinConstant.UseVisualStyleBackColor = true;
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(107, 82);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(32, 13);
+            this.label47.TabIndex = 98;
+            this.label47.Text = "After ";
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(63, 56);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(76, 13);
+            this.label54.TabIndex = 97;
+            this.label54.Text = "Max Multiplies:";
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.nudDevider);
+            this.groupBox9.Controls.Add(this.nudNbets);
+            this.groupBox9.Controls.Add(this.nudMaxMultiplies);
+            this.groupBox9.Controls.Add(this.nudMultiplier);
+            this.groupBox9.Controls.Add(this.rdbReduce);
+            this.groupBox9.Controls.Add(this.lblMultiplier);
+            this.groupBox9.Controls.Add(this.lblDevider);
+            this.groupBox9.Controls.Add(this.rdbMaxMultiplier);
+            this.groupBox9.Controls.Add(this.rdbDevider);
+            this.groupBox9.Controls.Add(this.lblAfter2);
+            this.groupBox9.Controls.Add(this.rdbConstant);
+            this.groupBox9.Controls.Add(this.lblAfter);
+            this.groupBox9.Controls.Add(this.lblMaxMultiplier);
+            this.groupBox9.Location = new System.Drawing.Point(19, 6);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(378, 159);
+            this.groupBox9.TabIndex = 2;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Multiplier on Loss";
+            // 
+            // nudDevider
+            // 
+            this.nudDevider.DecimalPlaces = 5;
+            this.nudDevider.Location = new System.Drawing.Point(122, 112);
+            this.nudDevider.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudDevider.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
+            this.nudDevider.Name = "nudDevider";
+            this.nudDevider.Size = new System.Drawing.Size(87, 20);
+            this.nudDevider.TabIndex = 92;
+            this.nudDevider.Value = new decimal(new int[] {
+            95,
+            0,
+            0,
+            131072});
+            // 
+            // nudNbets
+            // 
+            this.nudNbets.Location = new System.Drawing.Point(122, 81);
+            this.nudNbets.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudNbets.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudNbets.Name = "nudNbets";
+            this.nudNbets.Size = new System.Drawing.Size(53, 20);
+            this.nudNbets.TabIndex = 91;
+            this.nudNbets.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // nudMaxMultiplies
+            // 
+            this.nudMaxMultiplies.Location = new System.Drawing.Point(122, 55);
+            this.nudMaxMultiplies.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudMaxMultiplies.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMaxMultiplies.Name = "nudMaxMultiplies";
+            this.nudMaxMultiplies.Size = new System.Drawing.Size(87, 20);
+            this.nudMaxMultiplies.TabIndex = 90;
+            this.nudMaxMultiplies.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            // 
+            // nudMultiplier
+            // 
+            this.nudMultiplier.DecimalPlaces = 5;
+            this.nudMultiplier.Location = new System.Drawing.Point(122, 26);
+            this.nudMultiplier.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudMultiplier.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
+            this.nudMultiplier.Name = "nudMultiplier";
+            this.nudMultiplier.Size = new System.Drawing.Size(87, 20);
+            this.nudMultiplier.TabIndex = 89;
+            this.nudMultiplier.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // rdbReduce
+            // 
+            this.rdbReduce.AutoSize = true;
+            this.rdbReduce.Location = new System.Drawing.Point(223, 96);
+            this.rdbReduce.Name = "rdbReduce";
+            this.rdbReduce.Size = new System.Drawing.Size(91, 17);
+            this.rdbReduce.TabIndex = 88;
+            this.rdbReduce.Text = "Change Once";
+            this.rdbReduce.UseVisualStyleBackColor = true;
+            // 
+            // lblMultiplier
+            // 
+            this.lblMultiplier.AutoSize = true;
+            this.lblMultiplier.Location = new System.Drawing.Point(67, 28);
+            this.lblMultiplier.Name = "lblMultiplier";
+            this.lblMultiplier.Size = new System.Drawing.Size(51, 13);
+            this.lblMultiplier.TabIndex = 83;
+            this.lblMultiplier.Text = "Multiplier:";
+            // 
+            // lblDevider
+            // 
+            this.lblDevider.AutoSize = true;
+            this.lblDevider.Location = new System.Drawing.Point(22, 114);
+            this.lblDevider.Name = "lblDevider";
+            this.lblDevider.Size = new System.Drawing.Size(96, 13);
+            this.lblDevider.TabIndex = 87;
+            this.lblDevider.Text = "Times Multiplier by:";
+            // 
+            // rdbMaxMultiplier
+            // 
+            this.rdbMaxMultiplier.AutoSize = true;
+            this.rdbMaxMultiplier.Location = new System.Drawing.Point(223, 24);
+            this.rdbMaxMultiplier.Name = "rdbMaxMultiplier";
+            this.rdbMaxMultiplier.Size = new System.Drawing.Size(45, 17);
+            this.rdbMaxMultiplier.TabIndex = 80;
+            this.rdbMaxMultiplier.Text = "Max";
+            this.rdbMaxMultiplier.UseVisualStyleBackColor = true;
+            // 
+            // rdbDevider
+            // 
+            this.rdbDevider.AutoSize = true;
+            this.rdbDevider.Location = new System.Drawing.Point(223, 50);
+            this.rdbDevider.Name = "rdbDevider";
+            this.rdbDevider.Size = new System.Drawing.Size(63, 17);
+            this.rdbDevider.TabIndex = 81;
+            this.rdbDevider.Text = "Variable";
+            this.rdbDevider.UseVisualStyleBackColor = true;
+            // 
+            // lblAfter2
+            // 
+            this.lblAfter2.AutoSize = true;
+            this.lblAfter2.Location = new System.Drawing.Point(181, 83);
+            this.lblAfter2.Name = "lblAfter2";
+            this.lblAfter2.Size = new System.Drawing.Size(28, 13);
+            this.lblAfter2.TabIndex = 86;
+            this.lblAfter2.Text = "Bets";
+            // 
+            // rdbConstant
+            // 
+            this.rdbConstant.AutoSize = true;
+            this.rdbConstant.Checked = true;
+            this.rdbConstant.Location = new System.Drawing.Point(223, 73);
+            this.rdbConstant.Name = "rdbConstant";
+            this.rdbConstant.Size = new System.Drawing.Size(70, 17);
+            this.rdbConstant.TabIndex = 82;
+            this.rdbConstant.TabStop = true;
+            this.rdbConstant.Text = "Contstant";
+            this.rdbConstant.UseVisualStyleBackColor = true;
+            // 
+            // lblAfter
+            // 
+            this.lblAfter.AutoSize = true;
+            this.lblAfter.Location = new System.Drawing.Point(86, 83);
+            this.lblAfter.Name = "lblAfter";
+            this.lblAfter.Size = new System.Drawing.Size(32, 13);
+            this.lblAfter.TabIndex = 85;
+            this.lblAfter.Text = "After ";
+            // 
+            // lblMaxMultiplier
+            // 
+            this.lblMaxMultiplier.AutoSize = true;
+            this.lblMaxMultiplier.Location = new System.Drawing.Point(42, 57);
+            this.lblMaxMultiplier.Name = "lblMaxMultiplier";
+            this.lblMaxMultiplier.Size = new System.Drawing.Size(76, 13);
+            this.lblMaxMultiplier.TabIndex = 84;
+            this.lblMaxMultiplier.Text = "Max Multiplies:";
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(420, 326);
+            this.tabPage1.TabIndex = 13;
+            this.tabPage1.Text = "Fibonacci";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(420, 326);
+            this.tabPage5.TabIndex = 14;
+            this.tabPage5.Text = "d’Alembert";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(420, 326);
+            this.tabPage6.TabIndex = 15;
+            this.tabPage6.Text = "Preset List";
+            this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -5320,94 +4818,6 @@
             this.Resize += new System.EventHandler(this.cDiceBot_Resize);
             this.panel1.ResumeLayout(false);
             this.tcSettings.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
-            this.Settings.ResumeLayout(false);
-            this.Settings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChance)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMinBet)).EndInit();
-            this.tcBets.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.tbMartingale.ResumeLayout(false);
-            this.tbMartingale.PerformLayout();
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDevider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudNbets)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMultiplies)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).EndInit();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWinDevider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWinNBets)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWinMaxMultiplies)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier)).EndInit();
-            this.tbLabouchère.ResumeLayout(false);
-            this.tbLabouchère.PerformLayout();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFiboLeve)).EndInit();
-            this.groupBox11.ResumeLayout(false);
-            this.groupBox11.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFiboWinIncrement)).EndInit();
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFiboLossIncrement)).EndInit();
-            this.tabPage5.ResumeLayout(false);
-            this.tabPage5.PerformLayout();
-            this.tabPage6.ResumeLayout(false);
-            this.tabPage6.PerformLayout();
-            this.tbCustom.ResumeLayout(false);
-            this.gbCustom.ResumeLayout(false);
-            this.gbCustom.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMKDecrement)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMKIncrement)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMutawaWins)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudtrazelloseto)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudtrazelwinto)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTrazelMultiplier)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NudTrazelLose)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTrazelWin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMutawaMultiplier)).EndInit();
-            this.tabPage4.ResumeLayout(false);
-            this.gbLosses.ResumeLayout(false);
-            this.gbLosses.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreakTo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreak)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtc)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtcStreal)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossStreak)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudResetBetLoss)).EndInit();
-            this.gbWins.ResumeLayout(false);
-            this.gbWins.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinTo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinStreak)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreakTo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreak)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtc)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtcStreak)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinStreak)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).EndInit();
-            this.tbCharts.ResumeLayout(false);
-            this.tbCharts.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).EndInit();
-            this.tbSimulation.ResumeLayout(false);
-            this.tbSimulation.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSimBalance)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSimNumBets)).EndInit();
-            this.tbVerify.ResumeLayout(false);
-            this.tbVerify.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsAmount)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).EndInit();
-            this.tbZigZag.ResumeLayout(false);
-            this.tbZigZag.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).EndInit();
-            this.panel4.ResumeLayout(false);
             this.tabPage11.ResumeLayout(false);
             this.tabPage11.PerformLayout();
             this.pnlAdvancedAdvanced.ResumeLayout(false);
@@ -5456,16 +4866,77 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiPayout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).EndInit();
-            this.panel7.ResumeLayout(false);
-            this.panel7.PerformLayout();
-            this.groupBox12.ResumeLayout(false);
-            this.groupBox12.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAlembertStretchLoss)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAlembertIncrementLoss)).EndInit();
-            this.groupBox13.ResumeLayout(false);
-            this.groupBox13.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAlembertStretchWin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAlembertIncrementWin)).EndInit();
+            this.Settings.ResumeLayout(false);
+            this.Settings.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinBet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChance)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tbVerify.ResumeLayout(false);
+            this.tbVerify.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsAmount)).EndInit();
+            this.tbSimulation.ResumeLayout(false);
+            this.tbSimulation.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSimNumBets)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSimBalance)).EndInit();
+            this.tbCharts.ResumeLayout(false);
+            this.tbCharts.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tbLabouchère.ResumeLayout(false);
+            this.tbLabouchère.PerformLayout();
+            this.tcBets.ResumeLayout(false);
+            this.tbMartingale.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tbCustom.ResumeLayout(false);
+            this.tbCustom.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercentage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMKDecrement)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMKIncrement)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMutawaWins)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudtrazelloseto)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudtrazelwinto)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTrazelMultiplier)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NudTrazelLose)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTrazelWin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMutawaMultiplier)).EndInit();
+            this.gbWins.ResumeLayout(false);
+            this.gbWins.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinTo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinStreak)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreakTo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreak)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtc)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtcStreak)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopWinStreak)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).EndInit();
+            this.gbLosses.ResumeLayout(false);
+            this.gbLosses.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreakTo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreak)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtc)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtcStreal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStopLossStreak)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBetLoss)).EndInit();
+            this.tbZigZag.ResumeLayout(false);
+            this.tbZigZag.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).EndInit();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinDevider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinNBets)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMaxMultiplies)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier)).EndInit();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDevider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNbets)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMultiplies)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -5690,6 +5161,7 @@
         private System.Windows.Forms.Button btnBrowseLab;
         private System.Windows.Forms.RichTextBox rtbBets;
         private System.Windows.Forms.Label label87;
+        private System.Windows.Forms.CheckBox chkLabEnable;
         private System.Windows.Forms.CheckBox chkReverseLab;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TabPage tbCharts;
@@ -5746,6 +5218,30 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnStartHigh;
         private System.Windows.Forms.TabPage tbCustom;
+        private System.Windows.Forms.Label label81;
+        private System.Windows.Forms.NumericUpDown nudPercentage;
+        private System.Windows.Forms.CheckBox chkPercentage;
+        private System.Windows.Forms.NumericUpDown nudMKDecrement;
+        private System.Windows.Forms.NumericUpDown nudMKIncrement;
+        private System.Windows.Forms.Label label80;
+        private System.Windows.Forms.Label label79;
+        private System.Windows.Forms.CheckBox chkMK;
+        private System.Windows.Forms.NumericUpDown nudMutawaWins;
+        private System.Windows.Forms.Label label78;
+        private System.Windows.Forms.NumericUpDown nudtrazelloseto;
+        private System.Windows.Forms.NumericUpDown nudtrazelwinto;
+        private System.Windows.Forms.Label label77;
+        private System.Windows.Forms.Label label76;
+        private System.Windows.Forms.NumericUpDown nudTrazelMultiplier;
+        private System.Windows.Forms.Label label75;
+        private System.Windows.Forms.NumericUpDown NudTrazelLose;
+        private System.Windows.Forms.NumericUpDown nudTrazelWin;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.Label label73;
+        private System.Windows.Forms.CheckBox chkTrazel;
+        private System.Windows.Forms.Label label70;
+        private System.Windows.Forms.NumericUpDown nudMutawaMultiplier;
+        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.GroupBox gbLosses;
         private System.Windows.Forms.NumericUpDown nudChangeChanceLoseTo;
         private System.Windows.Forms.Label label67;
@@ -5816,9 +5312,6 @@
         private System.Windows.Forms.RadioButton rdbWinConstant;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label54;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TabPage tbZigZag;
         private System.Windows.Forms.RadioButton rdbReverseBets;
         private System.Windows.Forms.RadioButton rdbReverseLoss;
@@ -5826,70 +5319,9 @@
         private System.Windows.Forms.CheckBox chkReverse;
         private System.Windows.Forms.NumericUpDown NudReverse;
         private System.Windows.Forms.Label lblZigZag1;
-        private System.Windows.Forms.RadioButton rdbMartingale;
-        private System.Windows.Forms.RadioButton rdbLabEnable;
-        private System.Windows.Forms.RadioButton rdbFibonacci;
-        private System.Windows.Forms.RadioButton rdbAlembert;
-        private System.Windows.Forms.RadioButton rdbPreset;
-        private System.Windows.Forms.GroupBox gbCustom;
-        private System.Windows.Forms.Label label81;
-        private System.Windows.Forms.NumericUpDown nudPercentage;
-        private System.Windows.Forms.CheckBox chkPercentage;
-        private System.Windows.Forms.NumericUpDown nudMKDecrement;
-        private System.Windows.Forms.NumericUpDown nudMKIncrement;
-        private System.Windows.Forms.Label label80;
-        private System.Windows.Forms.Label label79;
-        private System.Windows.Forms.CheckBox chkMK;
-        private System.Windows.Forms.NumericUpDown nudMutawaWins;
-        private System.Windows.Forms.Label label78;
-        private System.Windows.Forms.NumericUpDown nudtrazelloseto;
-        private System.Windows.Forms.NumericUpDown nudtrazelwinto;
-        private System.Windows.Forms.Label label77;
-        private System.Windows.Forms.Label label76;
-        private System.Windows.Forms.NumericUpDown nudTrazelMultiplier;
-        private System.Windows.Forms.Label label75;
-        private System.Windows.Forms.NumericUpDown NudTrazelLose;
-        private System.Windows.Forms.NumericUpDown nudTrazelWin;
-        private System.Windows.Forms.Label label74;
-        private System.Windows.Forms.Label label73;
-        private System.Windows.Forms.CheckBox chkTrazel;
-        private System.Windows.Forms.Label label70;
-        private System.Windows.Forms.NumericUpDown nudMutawaMultiplier;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.ListBox lstFibonacci;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.RadioButton rdbFiboLevelReset;
-        private System.Windows.Forms.RadioButton rdbFiboLevelStop;
-        private System.Windows.Forms.CheckBox chkFiboLevel;
-        private System.Windows.Forms.Label label66;
-        private System.Windows.Forms.NumericUpDown nudFiboLeve;
-        private System.Windows.Forms.GroupBox groupBox11;
-        private System.Windows.Forms.RadioButton rdbFiboWinStop;
-        private System.Windows.Forms.RadioButton rdbFiboWinReset;
-        private System.Windows.Forms.RadioButton rdbFiboWinIncrement;
-        private System.Windows.Forms.Label label98;
-        private System.Windows.Forms.NumericUpDown nudFiboWinIncrement;
-        private System.Windows.Forms.GroupBox groupBox10;
-        private System.Windows.Forms.RadioButton rdbFiboLossStop;
-        private System.Windows.Forms.RadioButton rdbFiboLossReset;
-        private System.Windows.Forms.RadioButton rdbFiboLossIncrement;
-        private System.Windows.Forms.Label label99;
-        private System.Windows.Forms.NumericUpDown nudFiboLossIncrement;
-        private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.GroupBox groupBox13;
-        private System.Windows.Forms.NumericUpDown nudAlembertStretchWin;
-        private System.Windows.Forms.Label label103;
-        private System.Windows.Forms.Label label104;
-        private System.Windows.Forms.Label label105;
-        private System.Windows.Forms.NumericUpDown nudAlembertIncrementWin;
-        private System.Windows.Forms.Label label106;
-        private System.Windows.Forms.GroupBox groupBox12;
-        private System.Windows.Forms.NumericUpDown nudAlembertStretchLoss;
-        private System.Windows.Forms.Label label102;
-        private System.Windows.Forms.Label label101;
-        private System.Windows.Forms.Label label100;
-        private System.Windows.Forms.NumericUpDown nudAlembertIncrementLoss;
-        private System.Windows.Forms.Label label71;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage tabPage6;
 
     }
 }
