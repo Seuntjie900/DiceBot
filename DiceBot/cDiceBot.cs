@@ -137,9 +137,15 @@ namespace DiceBot
             }
         }
 
+        delegate void dDobet(bool Win, double Profit);
         public void GetBetResult(double Balance, bool win, double Profit)
         {
             PreviousBalance = (double)Balance;
+            if (InvokeRequired)
+            {
+                Invoke(new dDobet(DoBet),win, Profit);
+            }
+            else
             DoBet(win, (double)Profit);
             if (!RunningSimulation)
             {
@@ -1358,6 +1364,77 @@ namespace DiceBot
             if (Lastbet < MinBet)
                 Lastbet = MinBet;
         }
+
+        int presetLevel = 0;
+        void PresetList(bool Win)
+        {
+            if (Win)
+            {
+                if (rdbPresetWinStep.Checked)
+                {
+                    presetLevel += (int)nudPresetWinStep.Value;
+                }
+                else if (rdbPresetWinReset.Checked)
+                {
+                    presetLevel = 0;
+                }
+                else
+                {
+                    presetLevel = 0; 
+                    Stop();
+                }
+            }
+            else
+            {
+                if (rdbPresetLossStep.Checked)
+                {
+                    presetLevel += (int)nudPresetLossStep.Value;
+                }
+                else if (rdbPresetLossReset.Checked)
+                {
+                    presetLevel = 0;
+                }
+                else
+                {
+                    presetLevel = 0;
+                    Stop();
+                }
+            }
+            if (presetLevel < 0)
+                presetLevel = 0;
+            if (presetLevel > rtbPresetList.Lines.Length-1)
+            {
+                if (rdbPresetEndStop.Checked)
+                {
+                    Stop();
+                }
+                else if (rdbPresetEndStep.Checked)
+                {
+                    while (presetLevel > rtbPresetList.Lines.Length - 1)
+                    {
+                        presetLevel -= (int)nudPresetEndStep.Value;
+                    }
+                }
+                else
+                {
+                    presetLevel = 0;
+                }
+            }
+            double Betval = -1;
+            if (presetLevel < rtbPresetList.Lines.Length)
+            {
+                if (double.TryParse(rtbPresetList.Lines[presetLevel], out Betval))
+                {
+                    Lastbet = Betval;
+                }
+                else
+                {
+                    Stop();
+                    MessageBox.Show("Invalid bet in list. Please make sure there is only one bet per line and no other charachters or letters in the list.");
+                }
+            }
+        }
+
         public void DoBet(bool Win, double profit)
         {
             retriedbet = false;
@@ -1657,6 +1734,10 @@ namespace DiceBot
                 else if (rdbAlembert.Checked)
                 {
                     Alembert(Win);
+                }
+                else if (rdbPreset.Checked)
+                {
+                    PresetList(Win);
                 }
                 if (chkPercentage.Checked)
                 {
@@ -4280,6 +4361,41 @@ namespace DiceBot
             {
                 if (rdbPreset.Checked && tmp.Checked)
                     rdbPreset.Checked = false;
+            }
+        }
+
+        //Browse for preset list of bets
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofdLab = new OpenFileDialog();
+            if (ofdLab.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (File.Exists(ofdLab.FileName))
+                    try
+                    {
+                        string s = File.ReadAllText(ofdLab.FileName);
+                        string[] ss = s.Split('\n');
+                        foreach (string sss in ss)
+                        {
+                            dparse(sss, ref convert);
+                            if (!convert)
+                                break;
+                        }
+                        if (convert)
+                        {
+                            
+                            rtbPresetList.Text = s;
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Invalid bets file. Please make sure there are only bets in the file, 1 per line. NO other characters are permitted.");
+                        }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Invalid bets file. Please make sure there are only bets in the file, 1 per line. NO other characters are permitted.");
+                    }
             }
         }
 

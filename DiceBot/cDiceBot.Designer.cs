@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -440,6 +440,26 @@
             this.label105 = new System.Windows.Forms.Label();
             this.nudAlembertIncrementWin = new System.Windows.Forms.NumericUpDown();
             this.label106 = new System.Windows.Forms.Label();
+            this.rtbPresetList = new System.Windows.Forms.RichTextBox();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.nudPresetLossStep = new System.Windows.Forms.NumericUpDown();
+            this.label108 = new System.Windows.Forms.Label();
+            this.rdbPresetLossStep = new System.Windows.Forms.RadioButton();
+            this.rdbPresetLossStop = new System.Windows.Forms.RadioButton();
+            this.rdbPresetLossReset = new System.Windows.Forms.RadioButton();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.rdbPresetWinReset = new System.Windows.Forms.RadioButton();
+            this.rdbPresetWinStop = new System.Windows.Forms.RadioButton();
+            this.rdbPresetWinStep = new System.Windows.Forms.RadioButton();
+            this.label107 = new System.Windows.Forms.Label();
+            this.nudPresetWinStep = new System.Windows.Forms.NumericUpDown();
+            this.btnBrowsePresetList = new System.Windows.Forms.Button();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.rdbPresetEndStep = new System.Windows.Forms.RadioButton();
+            this.rdbPresetEndReset = new System.Windows.Forms.RadioButton();
+            this.rdbPresetEndStop = new System.Windows.Forms.RadioButton();
+            this.label109 = new System.Windows.Forms.Label();
+            this.nudPresetEndStep = new System.Windows.Forms.NumericUpDown();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -563,6 +583,12 @@
             this.groupBox13.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAlembertStretchWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAlembertIncrementWin)).BeginInit();
+            this.groupBox14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPresetLossStep)).BeginInit();
+            this.groupBox15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPresetWinStep)).BeginInit();
+            this.groupBox16.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPresetEndStep)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -731,6 +757,7 @@
             // rdbMartingale
             // 
             this.rdbMartingale.AutoSize = true;
+            this.rdbMartingale.Checked = true;
             this.rdbMartingale.Location = new System.Drawing.Point(8, 6);
             this.rdbMartingale.Name = "rdbMartingale";
             this.rdbMartingale.Size = new System.Drawing.Size(96, 17);
@@ -1201,7 +1228,7 @@
             // label85
             // 
             this.label85.AutoSize = true;
-            this.label85.Location = new System.Drawing.Point(226, 92);
+            this.label85.Location = new System.Drawing.Point(214, 92);
             this.label85.Name = "label85";
             this.label85.Size = new System.Drawing.Size(198, 13);
             this.label85.TabIndex = 10;
@@ -1209,7 +1236,7 @@
             // 
             // btnBrowseLab
             // 
-            this.btnBrowseLab.Location = new System.Drawing.Point(298, 66);
+            this.btnBrowseLab.Location = new System.Drawing.Point(217, 60);
             this.btnBrowseLab.Name = "btnBrowseLab";
             this.btnBrowseLab.Size = new System.Drawing.Size(75, 23);
             this.btnBrowseLab.TabIndex = 9;
@@ -1236,7 +1263,7 @@
             // chkReverseLab
             // 
             this.chkReverseLab.AutoSize = true;
-            this.chkReverseLab.Location = new System.Drawing.Point(298, 43);
+            this.chkReverseLab.Location = new System.Drawing.Point(217, 37);
             this.chkReverseLab.Name = "chkReverseLab";
             this.chkReverseLab.Size = new System.Drawing.Size(126, 17);
             this.chkReverseLab.TabIndex = 2;
@@ -1465,12 +1492,10 @@
             // rdbFibonacci
             // 
             this.rdbFibonacci.AutoSize = true;
-            this.rdbFibonacci.Checked = true;
             this.rdbFibonacci.Location = new System.Drawing.Point(8, 8);
             this.rdbFibonacci.Name = "rdbFibonacci";
             this.rdbFibonacci.Size = new System.Drawing.Size(93, 17);
             this.rdbFibonacci.TabIndex = 15;
-            this.rdbFibonacci.TabStop = true;
             this.rdbFibonacci.Text = "Use Fibonacci";
             this.rdbFibonacci.UseVisualStyleBackColor = true;
             this.rdbFibonacci.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
@@ -1491,18 +1516,21 @@
             // rdbAlembert
             // 
             this.rdbAlembert.AutoSize = true;
-            this.rdbAlembert.Checked = true;
             this.rdbAlembert.Location = new System.Drawing.Point(6, 6);
             this.rdbAlembert.Name = "rdbAlembert";
             this.rdbAlembert.Size = new System.Drawing.Size(96, 17);
             this.rdbAlembert.TabIndex = 15;
-            this.rdbAlembert.TabStop = true;
             this.rdbAlembert.Text = "Use d\'Alembert";
             this.rdbAlembert.UseVisualStyleBackColor = true;
             this.rdbAlembert.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.groupBox16);
+            this.tabPage6.Controls.Add(this.btnBrowsePresetList);
+            this.tabPage6.Controls.Add(this.groupBox15);
+            this.tabPage6.Controls.Add(this.groupBox14);
+            this.tabPage6.Controls.Add(this.rtbPresetList);
             this.tabPage6.Controls.Add(this.rdbPreset);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
@@ -1519,7 +1547,6 @@
             this.rdbPreset.Name = "rdbPreset";
             this.rdbPreset.Size = new System.Drawing.Size(96, 17);
             this.rdbPreset.TabIndex = 15;
-            this.rdbPreset.TabStop = true;
             this.rdbPreset.Text = "Use Preset List";
             this.rdbPreset.UseVisualStyleBackColor = true;
             this.rdbPreset.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
@@ -4580,18 +4607,18 @@
             // 
             // chrtEmbeddedLiveChart
             // 
-            chartArea3.Name = "ChartArea1";
-            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea3);
+            chartArea1.Name = "ChartArea1";
+            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Name = "Legend1";
-            this.chrtEmbeddedLiveChart.Legends.Add(legend3);
+            legend1.Name = "Legend1";
+            this.chrtEmbeddedLiveChart.Legends.Add(legend1);
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "Legend1";
-            series3.Name = "Profit";
-            this.chrtEmbeddedLiveChart.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Profit";
+            this.chrtEmbeddedLiveChart.Series.Add(series1);
             this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(1022, 347);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
@@ -5242,6 +5269,243 @@
             this.label106.TabIndex = 22;
             this.label106.Text = "Increment bet by";
             // 
+            // rtbPresetList
+            // 
+            this.rtbPresetList.Location = new System.Drawing.Point(8, 29);
+            this.rtbPresetList.Name = "rtbPresetList";
+            this.rtbPresetList.Size = new System.Drawing.Size(132, 262);
+            this.rtbPresetList.TabIndex = 16;
+            this.rtbPresetList.Text = "";
+            // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.rdbPresetLossReset);
+            this.groupBox14.Controls.Add(this.rdbPresetLossStop);
+            this.groupBox14.Controls.Add(this.rdbPresetLossStep);
+            this.groupBox14.Controls.Add(this.label108);
+            this.groupBox14.Controls.Add(this.nudPresetLossStep);
+            this.groupBox14.Location = new System.Drawing.Point(146, 100);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Size = new System.Drawing.Size(271, 107);
+            this.groupBox14.TabIndex = 17;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "On Loss";
+            // 
+            // nudPresetLossStep
+            // 
+            this.nudPresetLossStep.Location = new System.Drawing.Point(61, 27);
+            this.nudPresetLossStep.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.nudPresetLossStep.Name = "nudPresetLossStep";
+            this.nudPresetLossStep.Size = new System.Drawing.Size(49, 20);
+            this.nudPresetLossStep.TabIndex = 1;
+            this.nudPresetLossStep.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label108
+            // 
+            this.label108.AutoSize = true;
+            this.label108.Location = new System.Drawing.Point(121, 27);
+            this.label108.Name = "label108";
+            this.label108.Size = new System.Drawing.Size(70, 13);
+            this.label108.TabIndex = 2;
+            this.label108.Text = "Steps on loss";
+            // 
+            // rdbPresetLossStep
+            // 
+            this.rdbPresetLossStep.AutoSize = true;
+            this.rdbPresetLossStep.Location = new System.Drawing.Point(8, 27);
+            this.rdbPresetLossStep.Name = "rdbPresetLossStep";
+            this.rdbPresetLossStep.Size = new System.Drawing.Size(47, 17);
+            this.rdbPresetLossStep.TabIndex = 3;
+            this.rdbPresetLossStep.TabStop = true;
+            this.rdbPresetLossStep.Text = "Step";
+            this.rdbPresetLossStep.UseVisualStyleBackColor = true;
+            // 
+            // rdbPresetLossStop
+            // 
+            this.rdbPresetLossStop.AutoSize = true;
+            this.rdbPresetLossStop.Location = new System.Drawing.Point(8, 52);
+            this.rdbPresetLossStop.Name = "rdbPresetLossStop";
+            this.rdbPresetLossStop.Size = new System.Drawing.Size(85, 17);
+            this.rdbPresetLossStop.TabIndex = 4;
+            this.rdbPresetLossStop.TabStop = true;
+            this.rdbPresetLossStop.Text = "Stop On loss";
+            this.rdbPresetLossStop.UseVisualStyleBackColor = true;
+            // 
+            // rdbPresetLossReset
+            // 
+            this.rdbPresetLossReset.AutoSize = true;
+            this.rdbPresetLossReset.Location = new System.Drawing.Point(8, 77);
+            this.rdbPresetLossReset.Name = "rdbPresetLossReset";
+            this.rdbPresetLossReset.Size = new System.Drawing.Size(89, 17);
+            this.rdbPresetLossReset.TabIndex = 5;
+            this.rdbPresetLossReset.TabStop = true;
+            this.rdbPresetLossReset.Text = "Reset on loss";
+            this.rdbPresetLossReset.UseVisualStyleBackColor = true;
+            // 
+            // groupBox15
+            // 
+            this.groupBox15.Controls.Add(this.rdbPresetWinReset);
+            this.groupBox15.Controls.Add(this.rdbPresetWinStop);
+            this.groupBox15.Controls.Add(this.rdbPresetWinStep);
+            this.groupBox15.Controls.Add(this.label107);
+            this.groupBox15.Controls.Add(this.nudPresetWinStep);
+            this.groupBox15.Location = new System.Drawing.Point(146, 213);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.Size = new System.Drawing.Size(271, 107);
+            this.groupBox15.TabIndex = 18;
+            this.groupBox15.TabStop = false;
+            this.groupBox15.Text = "On Win";
+            // 
+            // rdbPresetWinReset
+            // 
+            this.rdbPresetWinReset.AutoSize = true;
+            this.rdbPresetWinReset.Location = new System.Drawing.Point(8, 77);
+            this.rdbPresetWinReset.Name = "rdbPresetWinReset";
+            this.rdbPresetWinReset.Size = new System.Drawing.Size(87, 17);
+            this.rdbPresetWinReset.TabIndex = 5;
+            this.rdbPresetWinReset.TabStop = true;
+            this.rdbPresetWinReset.Text = "Reset on win";
+            this.rdbPresetWinReset.UseVisualStyleBackColor = true;
+            // 
+            // rdbPresetWinStop
+            // 
+            this.rdbPresetWinStop.AutoSize = true;
+            this.rdbPresetWinStop.Location = new System.Drawing.Point(8, 52);
+            this.rdbPresetWinStop.Name = "rdbPresetWinStop";
+            this.rdbPresetWinStop.Size = new System.Drawing.Size(83, 17);
+            this.rdbPresetWinStop.TabIndex = 4;
+            this.rdbPresetWinStop.TabStop = true;
+            this.rdbPresetWinStop.Text = "Stop On win";
+            this.rdbPresetWinStop.UseVisualStyleBackColor = true;
+            // 
+            // rdbPresetWinStep
+            // 
+            this.rdbPresetWinStep.AutoSize = true;
+            this.rdbPresetWinStep.Location = new System.Drawing.Point(8, 27);
+            this.rdbPresetWinStep.Name = "rdbPresetWinStep";
+            this.rdbPresetWinStep.Size = new System.Drawing.Size(47, 17);
+            this.rdbPresetWinStep.TabIndex = 3;
+            this.rdbPresetWinStep.TabStop = true;
+            this.rdbPresetWinStep.Text = "Step";
+            this.rdbPresetWinStep.UseVisualStyleBackColor = true;
+            // 
+            // label107
+            // 
+            this.label107.AutoSize = true;
+            this.label107.Location = new System.Drawing.Point(121, 29);
+            this.label107.Name = "label107";
+            this.label107.Size = new System.Drawing.Size(68, 13);
+            this.label107.TabIndex = 2;
+            this.label107.Text = "Steps on win";
+            // 
+            // nudPresetWinStep
+            // 
+            this.nudPresetWinStep.Location = new System.Drawing.Point(61, 27);
+            this.nudPresetWinStep.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.nudPresetWinStep.Name = "nudPresetWinStep";
+            this.nudPresetWinStep.Size = new System.Drawing.Size(49, 20);
+            this.nudPresetWinStep.TabIndex = 1;
+            this.nudPresetWinStep.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            // 
+            // btnBrowsePresetList
+            // 
+            this.btnBrowsePresetList.Location = new System.Drawing.Point(8, 297);
+            this.btnBrowsePresetList.Name = "btnBrowsePresetList";
+            this.btnBrowsePresetList.Size = new System.Drawing.Size(132, 23);
+            this.btnBrowsePresetList.TabIndex = 19;
+            this.btnBrowsePresetList.Text = "Browse";
+            this.btnBrowsePresetList.UseVisualStyleBackColor = true;
+            this.btnBrowsePresetList.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
+            // groupBox16
+            // 
+            this.groupBox16.Controls.Add(this.nudPresetEndStep);
+            this.groupBox16.Controls.Add(this.label109);
+            this.groupBox16.Controls.Add(this.rdbPresetEndStep);
+            this.groupBox16.Controls.Add(this.rdbPresetEndReset);
+            this.groupBox16.Controls.Add(this.rdbPresetEndStop);
+            this.groupBox16.Location = new System.Drawing.Point(146, 3);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(268, 91);
+            this.groupBox16.TabIndex = 20;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "When end of list is reached";
+            // 
+            // rdbPresetEndStep
+            // 
+            this.rdbPresetEndStep.AutoSize = true;
+            this.rdbPresetEndStep.Location = new System.Drawing.Point(5, 61);
+            this.rdbPresetEndStep.Name = "rdbPresetEndStep";
+            this.rdbPresetEndStep.Size = new System.Drawing.Size(50, 17);
+            this.rdbPresetEndStep.TabIndex = 6;
+            this.rdbPresetEndStep.TabStop = true;
+            this.rdbPresetEndStep.Text = "Step ";
+            this.rdbPresetEndStep.UseVisualStyleBackColor = true;
+            // 
+            // rdbPresetEndReset
+            // 
+            this.rdbPresetEndReset.AutoSize = true;
+            this.rdbPresetEndReset.Location = new System.Drawing.Point(5, 38);
+            this.rdbPresetEndReset.Name = "rdbPresetEndReset";
+            this.rdbPresetEndReset.Size = new System.Drawing.Size(53, 17);
+            this.rdbPresetEndReset.TabIndex = 5;
+            this.rdbPresetEndReset.TabStop = true;
+            this.rdbPresetEndReset.Text = "Reset";
+            this.rdbPresetEndReset.UseVisualStyleBackColor = true;
+            // 
+            // rdbPresetEndStop
+            // 
+            this.rdbPresetEndStop.AutoSize = true;
+            this.rdbPresetEndStop.Location = new System.Drawing.Point(5, 15);
+            this.rdbPresetEndStop.Name = "rdbPresetEndStop";
+            this.rdbPresetEndStop.Size = new System.Drawing.Size(47, 17);
+            this.rdbPresetEndStop.TabIndex = 4;
+            this.rdbPresetEndStop.TabStop = true;
+            this.rdbPresetEndStop.Text = "Stop";
+            this.rdbPresetEndStop.UseVisualStyleBackColor = true;
+            // 
+            // label109
+            // 
+            this.label109.AutoSize = true;
+            this.label109.Location = new System.Drawing.Point(156, 63);
+            this.label109.Name = "label109";
+            this.label109.Size = new System.Drawing.Size(87, 13);
+            this.label109.TabIndex = 7;
+            this.label109.Text = "steps backwards";
+            // 
+            // nudPresetEndStep
+            // 
+            this.nudPresetEndStep.Location = new System.Drawing.Point(61, 59);
+            this.nudPresetEndStep.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudPresetEndStep.Name = "nudPresetEndStep";
+            this.nudPresetEndStep.Size = new System.Drawing.Size(89, 20);
+            this.nudPresetEndStep.TabIndex = 8;
+            this.nudPresetEndStep.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // idDataGridViewTextBoxColumn
             // 
             this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
@@ -5466,6 +5730,15 @@
             this.groupBox13.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAlembertStretchWin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAlembertIncrementWin)).EndInit();
+            this.groupBox14.ResumeLayout(false);
+            this.groupBox14.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPresetLossStep)).EndInit();
+            this.groupBox15.ResumeLayout(false);
+            this.groupBox15.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPresetWinStep)).EndInit();
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPresetEndStep)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -5890,6 +6163,26 @@
         private System.Windows.Forms.Label label100;
         private System.Windows.Forms.NumericUpDown nudAlembertIncrementLoss;
         private System.Windows.Forms.Label label71;
+        private System.Windows.Forms.GroupBox groupBox15;
+        private System.Windows.Forms.RadioButton rdbPresetWinReset;
+        private System.Windows.Forms.RadioButton rdbPresetWinStop;
+        private System.Windows.Forms.RadioButton rdbPresetWinStep;
+        private System.Windows.Forms.Label label107;
+        private System.Windows.Forms.NumericUpDown nudPresetWinStep;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.RadioButton rdbPresetLossReset;
+        private System.Windows.Forms.RadioButton rdbPresetLossStop;
+        private System.Windows.Forms.RadioButton rdbPresetLossStep;
+        private System.Windows.Forms.Label label108;
+        private System.Windows.Forms.NumericUpDown nudPresetLossStep;
+        private System.Windows.Forms.RichTextBox rtbPresetList;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private System.Windows.Forms.NumericUpDown nudPresetEndStep;
+        private System.Windows.Forms.Label label109;
+        private System.Windows.Forms.RadioButton rdbPresetEndStep;
+        private System.Windows.Forms.RadioButton rdbPresetEndReset;
+        private System.Windows.Forms.RadioButton rdbPresetEndStop;
+        private System.Windows.Forms.Button btnBrowsePresetList;
 
     }
 }
