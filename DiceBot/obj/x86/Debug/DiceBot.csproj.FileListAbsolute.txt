@@ -21,3 +21,4 @@ C:\Users\Eugene\Desktop\GitHub\DiceBot\DiceBot\bin\Debug\JDCAPI.pdb
 C:\Users\Eugene\Desktop\GitHub\DiceBot\DiceBot\bin\Debug\DiceBot.exe.config
 C:\Users\Eugene\Desktop\GitHub\DiceBot\DiceBot\bin\Debug\System.Data.SQLite.dll
 C:\Users\Eugene\Desktop\GitHub\DiceBot\DiceBot\bin\Debug\System.Data.SQLite.xml
+C:\Users\Eugene\Desktop\GitHub\DiceBot\DiceBot\obj\x86\Debug\DiceBot.BetHistory.resources

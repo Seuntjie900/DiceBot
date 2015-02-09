@@ -114,6 +114,18 @@ namespace DiceBot
         DiceSite CurrentSite;
         private double dPreviousBalance;
         
+        void populateFiboNacci()
+        {
+            decimal Previous = 0;
+            decimal Current = (decimal)MinBet ;
+            for (int i =0; i<100; i++)
+            {
+                lstFibonacci.Items.Add(string.Format("{0}. {1}", i, Current));
+                decimal tmp = Current;
+                Current += Previous;
+                Previous = tmp;
+            }
+        }
 
         public double PreviousBalance
         {
@@ -175,6 +187,7 @@ namespace DiceBot
                 
             }
             InitializeComponent();
+            
             ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow };
             EnableNotLoggedInControls(false);
             cmbSettingMode.SelectedIndex = 0;
@@ -290,6 +303,7 @@ namespace DiceBot
             }
             Thread tGetVers = new Thread(new ThreadStart(getversion));
             tGetVers.Start();
+            populateFiboNacci();
         }
 
         //check if the current version of the bot is the latest version available
@@ -836,8 +850,6 @@ namespace DiceBot
 
         void Start(bool Continue)
         {
-
-            
             if (!Continue)
             {
                 Winstreak = 0;
@@ -853,7 +865,7 @@ namespace DiceBot
             if (testInputs())
             {
                 stop = false;
-                if (chkLabEnable.Checked)
+                if (rdbLabEnable.Checked)
                 {
                     LabList = new List<double>();
                     string[] lines = GetLabList();
@@ -865,7 +877,7 @@ namespace DiceBot
                 if (!Continue)
                 {
                     Lastbet = MinBet;
-                    if (chkLabEnable.Checked)
+                    if (rdbLabEnable.Checked)
                     {
                         if (LabList.Count == 1)
                             Lastbet = LabList[0];
@@ -982,6 +994,370 @@ namespace DiceBot
         bool trazelmultiply = false;
         int trazelwin = 0;
         
+        void Labouchere(bool Win)
+        {
+            if (Win)
+            {
+                if (rdbLabEnable.Checked)
+                {
+                    if (chkReverseLab.Checked)
+                    {
+                        if (LabList.Count == 1)
+                            LabList.Add(LabList[0]);
+                        else
+                            LabList.Add(LabList[0] + LabList[LabList.Count - 1]);
+                    }
+                    else if (LabList.Count > 1)
+                    {
+                        LabList.RemoveAt(0);
+                        LabList.RemoveAt(LabList.Count - 1);
+                        if (LabList.Count == 0)
+                        {
+                            if (rdbLabStop.Checked)
+                                Stop();
+                            else
+                            {
+                                string[] ss = GetLabList();
+                                LabList = new List<double>();
+                                foreach (string s in ss)
+                                {
+                                    LabList.Add(dparse(s, ref convert));
+                                }
+                                if (LabList.Count == 1)
+                                    Lastbet = LabList[0];
+                                else if (LabList.Count > 1)
+                                    Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        if (rdbLabStop.Checked)
+                            Stop();
+                        else
+                        {
+                            string[] ss = GetLabList();
+                            LabList = new List<double>();
+                            foreach (string s in ss)
+                            {
+                                LabList.Add(dparse(s, ref convert));
+                            }
+                            if (LabList.Count == 1)
+                                Lastbet = LabList[0];
+                            else if (LabList.Count > 1)
+                                Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                        }
+                    }
+                }
+
+                
+            }
+            else
+            {
+                //do laboucghere logic
+                if (rdbLabEnable.Checked)
+                {
+                    if (!chkReverseLab.Checked)
+                    {
+                        if (LabList.Count == 1)
+                            LabList.Add(LabList[0]);
+                        else
+                            LabList.Add(LabList[0] + LabList[LabList.Count - 1]);
+                    }
+                    else
+                    {
+                        if (LabList.Count > 1)
+                        {
+                            LabList.RemoveAt(0);
+                            LabList.RemoveAt(LabList.Count - 1);
+                            if (LabList.Count == 0)
+                                Stop();
+                        }
+                        else
+                        {
+                            if (rdbLabStop.Checked)
+                                Stop();
+                            else
+                            {
+                                string[] ss = GetLabList();
+                                LabList = new List<double>();
+                                foreach (string s in ss)
+                                {
+                                    LabList.Add(dparse(s, ref convert));
+                                }
+                                if (LabList.Count == 1)
+                                    Lastbet = LabList[0];
+                                else if (LabList.Count > 1)
+                                    Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                            }
+                        }
+                    }
+                }
+
+
+                //end labouchere logic
+            }
+            
+                if (LabList.Count == 1)
+                    Lastbet = LabList[0];
+                else if (LabList.Count > 1)
+                    Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                else
+                {
+                    if (rdbLabStop.Checked)
+                        Stop();
+                    else
+                    {
+                        string[] ss = GetLabList();
+                        LabList = new List<double>();
+                        foreach (string s in ss)
+                        {
+                            LabList.Add(dparse(s, ref convert));
+                        }
+                        if (LabList.Count == 1)
+                            Lastbet = LabList[0];
+                        else if (LabList.Count > 1)
+                            Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                    }
+
+                
+            }
+
+        }
+
+        void martingale(bool Win)
+        {
+            if (Win)
+            {
+                if (rdbWinMaxMultiplier.Checked && Winstreak >= WinMaxMultiplies)
+                {
+                    WinMultiplier = 1;
+                }
+                else if (rdbWinDevider.Checked && Winstreak % WinDevidecounter == 1 && Winstreak > 0)
+                {
+                    WinMultiplier *= WinDevider;
+                }
+                else if (rdbWinReduce.Checked && Winstreak == WinDevidecounter && Winstreak > 0)
+                {
+                    WinMultiplier *= WinDevider;
+                }
+                Lastbet *= WinMultiplier;
+                if (Winstreak == 1)
+                {
+                    if (!chkMK.Checked)
+                    {
+                        Lastbet = MinBet;
+                    }
+                    try
+                    {
+                        Chance = (double)(nudChance.Value);
+                        if (!RunningSimulation)
+                            CurrentSite.SetChance(Chance.ToString().Replace(',', '.'));
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                if (chkTrazel.Checked)
+                {
+                    high = starthigh;
+                }
+                if (chkMK.Checked)
+                {
+                    if (double.Parse((Lastbet - (double)nudMKDecrement.Value).ToString("0.00000000"), System.Globalization.CultureInfo.InvariantCulture) > 0)
+                    {
+                        Lastbet -= (double)nudMKDecrement.Value;
+                    }
+                }
+                if (chkTrazel.Checked && trazelwin % (double)nudTrazelWin.Value == 0 && trazelwin != 0)
+                {
+                    Lastbet = (double)nudtrazelwinto.Value;
+                    trazelwin = -1;
+                    trazelmultiply = true;
+                    high = !starthigh;
+                }
+                else
+                {
+                    if (chkTrazel.Checked)
+                    {
+                        Lastbet = MinBet;
+                        trazelmultiply = false;
+                    }
+                }
+
+                if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
+                {
+                    Lastbet = MinBet;
+                }
+                if (chkChangeWinStreak.Checked && (Winstreak == nudChangeWinStreak.Value))
+                {
+                    Lastbet = (double)nudChangeWinStreakTo.Value;
+                }
+                if (checkBox1.Checked)
+                {
+                    if (Winstreak == nudMutawaWins.Value)
+                        Lastbet = mutawaprev *= (double)nudMutawaMultiplier.Value;
+                    if (Winstreak == nudMutawaWins.Value + 1)
+                    {
+                        Lastbet = MinBet;
+                        mutawaprev = (double)nudChangeWinStreakTo.Value / (double)nudMutawaMultiplier.Value;
+                    }
+
+                }
+                if (chkChangeChanceWin.Checked && (Winstreak == nudChangeChanceWinStreak.Value))
+                {
+                    try
+                    {
+                        Chance = (double)nudChangeChanceWinTo.Value;
+                        if (!RunningSimulation)
+                            CurrentSite.SetChance(nudChangeChanceWinTo.Value.ToString().Replace(',', '.'));
+
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                        
+
+            }
+            else
+            {
+                //stop multiplying if at max or if it goes below 1
+                if (rdbMaxMultiplier.Checked && Losestreak >= MaxMultiplies)
+                {
+                    Multiplier = 1;
+                }
+                else if (rdbDevider.Checked && Losestreak % Devidecounter == 0 && Losestreak > 0)
+                {
+                    Multiplier *= Devider;
+                    if (Multiplier < 1)
+                        Multiplier = 1;
+                }
+                //adjust multiplier according to devider
+                else if (rdbReduce.Checked && Losestreak == Devidecounter && Losestreak > 0)
+                {
+                    Multiplier *= Devider;
+                }
+                if (chkTrazel.Checked && trazelmultiply)
+                {
+                    Multiplier = (double)nudTrazelMultiplier.Value;
+                }
+                if (chkTrazel.Checked)
+                {
+                    high = starthigh;
+                }
+                if (chkTrazel.Checked && Losestreak + 1 >= (double)NudTrazelLose.Value && !trazelmultiply)
+                {
+                    Lastbet = (double)nudtrazelloseto.Value;
+                    trazelmultiply = true;
+                    high = !starthigh;
+                }
+                if (trazelmultiply)
+                {
+                    trazelwin = -1;
+
+                }
+                else
+                {
+                    trazelwin = 0;
+                }
+                //set new bet size
+                Lastbet *= Multiplier;
+                if (chkMK.Checked)
+                {
+                    Lastbet += (double)nudMKIncrement.Value;
+                }
+                if (checkBox1.Checked)
+                {
+                    Lastbet = MinBet;
+                }
+
+                //reset bet to minimum if applicable
+                if (chkResetBetLoss.Checked && Losestreak % nudResetBetLoss.Value == 0)
+                {
+                    Lastbet = MinBet;
+                }
+                //change bet after a certain losing streak
+                if (chkChangeLoseStreak.Checked && (Losestreak == nudChangeLoseStreak.Value))
+                {
+                    Lastbet = (double)nudChangeLoseStreakTo.Value;
+                }
+            }
+        }
+        int FibonacciLevel = 0;
+        void Fibonacci(bool Win)
+        {
+            if (Win)
+            {
+                if (rdbFiboWinIncrement.Checked)
+                {
+                    FibonacciLevel += (int)nudFiboWinIncrement.Value;
+                }
+                else if (rdbFiboWinReset.Checked)
+                {
+                    FibonacciLevel = 0;
+                }
+                else
+                {
+                    FibonacciLevel = 0;
+                    Stop();
+                }
+            }
+            else
+            {
+                if (rdbFiboLossIncrement.Checked)
+                {
+                    FibonacciLevel += (int)nudFiboLossIncrement.Value;
+                }
+                else if (rdbFiboLossReset.Checked)
+                {
+                    FibonacciLevel = 0;
+                }
+                else
+                {
+                    FibonacciLevel = 0;
+                    Stop();
+                }
+            }
+            if (FibonacciLevel < 0)
+                FibonacciLevel = 0;
+            
+            if (FibonacciLevel>= (int)nudFiboLeve.Value & chkFiboLevel.Checked)
+            {
+                if (rdbFiboLevelReset.Checked)
+                    FibonacciLevel = 0;
+                else
+                {
+                    FibonacciLevel = 0;
+                    Stop();
+                }
+            }
+            Lastbet = double.Parse(lstFibonacci.Items[FibonacciLevel].ToString().Substring(lstFibonacci.Items[FibonacciLevel].ToString().IndexOf(" ")+1));
+        }
+
+        void Alembert(bool Win)
+        {
+            if (Win)
+            {
+                
+                if ((Winstreak) % (nudAlembertStretchWin.Value +1) == 0)
+                {
+                    Lastbet += (double)nudAlembertIncrementWin.Value;
+                }
+            }
+            else
+            {
+                if ((Losestreak) % (nudAlembertStretchLoss.Value + 1) == 0)
+                {
+                    Lastbet += (double)nudAlembertIncrementLoss.Value;
+                }
+            }
+            if (Lastbet < MinBet)
+                Lastbet = MinBet;
+        }
         public void DoBet(bool Win, double profit)
         {
             retriedbet = false;
@@ -1006,168 +1382,22 @@ namespace DiceBot
                 if (Win && !(reset))
                 {
 
-                    //do laboucghere logic
-                    if (chkLabEnable.Checked)
-                    {
-                        if (chkReverseLab.Checked)
-                        {
-                            if (LabList.Count == 1)
-                                LabList.Add(LabList[0]);
-                            else
-                                LabList.Add(LabList[0] + LabList[LabList.Count - 1]);
-                        }
-                        else if (LabList.Count > 1)
-                        {
-                            LabList.RemoveAt(0);
-                            LabList.RemoveAt(LabList.Count - 1);
-                            if (LabList.Count == 0)
-                            {
-                                if (rdbLabStop.Checked)
-                                    Stop();
-                                else
-                                {
-                                    string[] ss = GetLabList();
-                                    LabList = new List<double>();
-                                    foreach (string s in ss)
-                                    {
-                                        LabList.Add(dparse(s, ref convert));
-                                    }
-                                    if (LabList.Count == 1)
-                                        Lastbet = LabList[0];
-                                    else if (LabList.Count > 1)
-                                        Lastbet = LabList[0] + LabList[LabList.Count - 1];
-                                }
-                            }
-
-                        }
-                        else
-                        {
-                            if (rdbLabStop.Checked)
-                                Stop();
-                            else
-                            {
-                                string[] ss = GetLabList();
-                                LabList = new List<double>();
-                                foreach (string s in ss)
-                                {
-                                    LabList.Add(dparse(s, ref convert));
-                                }
-                                if (LabList.Count == 1)
-                                    Lastbet = LabList[0];
-                                else if (LabList.Count > 1)
-                                    Lastbet = LabList[0] + LabList[LabList.Count - 1];
-                            }
-                        }
-                    }
-
-                    //end labouchere logic
-
-                    
                     if (PreviousBalance != 0)
                     {
-                        if (rdbWinMaxMultiplier.Checked && Winstreak >= WinMaxMultiplies)
-                        {
-                            WinMultiplier = 1;
-                        }
-                        else if (rdbWinDevider.Checked && Winstreak % WinDevidecounter == 0 && Winstreak > 0)
-                        {
-                            WinMultiplier *= WinDevider;
-                        }
-                        else if (rdbWinReduce.Checked && Winstreak == WinDevidecounter && Winstreak > 0)
-                        {
-                            WinMultiplier *= WinDevider;
-                        }
+                       
                         if (Winstreak == 0)
                         {
                             currentprofit = 0;
-                        }
-                        
+                        }                        
                         
                         currentprofit += (Lastbet*(99/Chance))-Lastbet;
-                        Lastbet *= WinMultiplier;
-                        if (Winstreak == 0)
-                        {
-                            if (!chkMK.Checked)
-                            {
-                                Lastbet = MinBet;
-                            }
-                            try
-                            {
-                                Chance = (double)(nudChance.Value);
-                                if (!RunningSimulation)
-                                CurrentSite.SetChance( Chance.ToString().Replace(',', '.'));
-                                
-                            }
-                            catch
-                            {
-
-                            }
-                        }
+                        
+                        
                         Wins++;
                         Winstreak++;
                         trazelwin++;
-                        
-                        if (chkTrazel.Checked)
-                        {
-                            high = starthigh;
-                        }
                         CalculateLuck(true);
-                        if (chkMK.Checked)
-                        {
-                            if (double.Parse((Lastbet - (double)nudMKDecrement.Value).ToString("0.00000000"), System.Globalization.CultureInfo.InvariantCulture) > 0)
-                            {
-                                Lastbet -= (double)nudMKDecrement.Value;
-                            }
-                        }
-                        if (chkTrazel.Checked && trazelwin % (double)nudTrazelWin.Value == 0 && trazelwin!=0)
-                        {
-                            Lastbet = (double)nudtrazelwinto.Value;
-                            trazelwin = -1;
-                            trazelmultiply = true;
-                            high = !starthigh;
-                        }
-                        else
-                        {
-                            if (chkTrazel.Checked)
-                            {
-                                Lastbet = MinBet;
-                                trazelmultiply = false;
-                            }
-                        }
-                        
-                        if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
-                        {
-                            Lastbet = MinBet;
-                        }
-                        if (chkChangeWinStreak.Checked && (Winstreak == nudChangeWinStreak.Value))
-                        {
-                            Lastbet = (double)nudChangeWinStreakTo.Value;
-                        }
-                        if (checkBox1.Checked)
-                        {
-                            if (Winstreak == nudMutawaWins.Value)
-                                Lastbet = mutawaprev *= (double)nudMutawaMultiplier.Value;
-                            if (Winstreak == nudMutawaWins.Value+1)
-                            {
-                                Lastbet = MinBet;
-                                mutawaprev = (double)nudChangeWinStreakTo.Value/(double)nudMutawaMultiplier.Value;
-                            }
 
-                        }
-                        if (chkChangeChanceWin.Checked && (Winstreak == nudChangeChanceWinStreak.Value))
-                        {
-                            try
-                            {
-                                Chance = (double)nudChangeChanceWinTo.Value;
-                                if (!RunningSimulation)
-                                CurrentSite.SetChance(nudChangeChanceWinTo.Value.ToString().Replace(',', '.'));
-                                
-                            }
-                            catch
-                            {
-
-                            }
-                        }
                         
                         if (Winstreak >= nudLastStreakWin.Value)
                             laststreakwin = Winstreak;
@@ -1210,19 +1440,14 @@ namespace DiceBot
                             }
                         }
                         Losestreak = 0;
-                        
-                        
-                        
                     }
                     
                     if (stoponwin)
                     {
                         Stop();
                     }
-                    iMultiplyCounter = 0;
-                    
+                    iMultiplyCounter = 0;                    
                     Multiplier = (double)(nudMultiplier.Value);
-
                     if (chkReverse.Checked)
                     {
                         if (rdbReverseWins.Checked && Winstreak % NudReverse.Value == 0)
@@ -1235,122 +1460,25 @@ namespace DiceBot
                     //if its a loss
                 else if (!Win && !(reset))
                 {
-
-                    //do laboucghere logic
-                    if (chkLabEnable.Checked)
-                    { 
-                        if (!chkReverseLab.Checked)
-                        {
-                            if (LabList.Count == 1)
-                                LabList.Add(LabList[0]);
-                            else
-                            LabList.Add(LabList[0] + LabList[LabList.Count - 1]);
-                        }
-                        else
-                        {
-                            if (LabList.Count > 1)
-                            {
-                                LabList.RemoveAt(0);
-                                LabList.RemoveAt(LabList.Count - 1);
-                                if (LabList.Count == 0)
-                                    Stop();
-                            }
-                            else
-                            {
-                                if (rdbLabStop.Checked)
-                                    Stop();
-                                else
-                                {
-                                    string[] ss = GetLabList();
-                                    LabList = new List<double>();
-                                    foreach (string s in ss)
-                                    {
-                                        LabList.Add(dparse(s, ref convert));
-                                    }
-                                    if (LabList.Count == 1)
-                                        Lastbet = LabList[0];
-                                    else if (LabList.Count > 1)
-                                        Lastbet = LabList[0] + LabList[LabList.Count - 1];
-                                }
-                            }
-                        }
-                    }
-
-
-                    //end labouchere logic
-
-
+                    
                     //do i use this line?
                     iMultiplyCounter++;
 
-                    //stop multiplying if at max or if it goes below 1
-                    if (rdbMaxMultiplier.Checked && Losestreak >= MaxMultiplies)
-                    {
-                        Multiplier = 1;
-                    }
-                    else if (rdbDevider.Checked && Losestreak % Devidecounter == 0 && Losestreak > 0)
-                    {
-                        Multiplier *= Devider;
-                        if (Multiplier < 1)
-                            Multiplier = 1;
-                    }
-                        //adjust multiplier according to devider
-                    else if (rdbReduce.Checked && Losestreak == Devidecounter && Losestreak > 0)
-                    {
-                        Multiplier *= Devider;
-                    }
                     //reset current profit when switching from a winning streak to a losing streak
                     if (Losestreak == 0)
                     {
                         currentprofit = 0;
                     }
-                    if (chkTrazel.Checked && trazelmultiply)
-                    {
-                        Multiplier = (double)nudTrazelMultiplier.Value;
-                    }
-                    if (chkTrazel.Checked)
-                    {
-                        high = starthigh;
-                    }
-                    if (chkTrazel.Checked && Losestreak+1 >= (double)NudTrazelLose.Value && !trazelmultiply)
-                    {
-                        Lastbet = (double)nudtrazelloseto.Value;
-                        trazelmultiply = true;
-                        high = !starthigh;
-                    }
-                    if (trazelmultiply)
-                    {
-                        trazelwin = -1;
-                        
-                    }
-                    else
-                    {
-                        trazelwin = 0;
-                    }
+                    
                     //adjust profit
                     currentprofit -= Lastbet;
-                    //set new bet size
-                    Lastbet *= Multiplier;
                     
                     //increase losses and losestreak
                     Losses++;
                     Losestreak++;
                     
                     CalculateLuck(false);
-                    if (chkMK.Checked)
-                    {
-                        Lastbet += (double)nudMKIncrement.Value;
-                    }
-                    if (checkBox1.Checked)
-                    {
-                        Lastbet = MinBet;
-                    }
-
-                    //reset bet to minimum if applicable
-                    if (chkResetBetLoss.Checked && Losestreak % nudResetBetLoss.Value == 0)
-                    {
-                        Lastbet = MinBet;
-                    }
+                    
                     //update last losing streak if it is above the specified value to show in the stats
                     if (Losestreak >= nudLastStreakLose.Value)
                         laststreaklose = Losestreak;
@@ -1364,11 +1492,7 @@ namespace DiceBot
                         }
                     }
 
-                    //change bet after a certain losing streak
-                    if (chkChangeLoseStreak.Checked && (Losestreak == nudChangeLoseStreak.Value))
-                    {
-                        Lastbet = (double)nudChangeLoseStreakTo.Value;
-                    }
+                   
 
                     /*if (chkTrazel.Checked && Lastbet > (double)NudTrazelLose.Value)
                     {
@@ -1518,37 +1642,27 @@ namespace DiceBot
                     }
                     
                 }
-
+                if (rdbMartingale.Checked)
+                {
+                    martingale(Win);
+                }
+                else if (rdbLabEnable.Checked)
+                {
+                    Labouchere(Win);
+                }
+                else if (rdbFibonacci.Checked)
+                {
+                    Fibonacci(Win);
+                }
+                else if (rdbAlembert.Checked)
+                {
+                    Alembert(Win);
+                }
                 if (chkPercentage.Checked)
                 {
                     Lastbet = (double)(nudPercentage.Value / (decimal)100.0) * dPreviousBalance;
                 }
-                if (chkLabEnable.Checked)
-                {
-                    if (LabList.Count == 1)
-                        Lastbet = LabList[0];
-                    else if (LabList.Count > 1)
-                        Lastbet = LabList[0] + LabList[LabList.Count - 1];
-                    else
-                    {
-                        if (rdbLabStop.Checked)
-                            Stop();
-                        else
-                        {
-                            string[] ss = GetLabList();
-                            LabList = new List<double>();
-                            foreach ( string s in ss)
-                            {
-                                LabList.Add(dparse(s, ref convert));
-                            }
-                            if (LabList.Count == 1)
-                                Lastbet = LabList[0];
-                            else if (LabList.Count > 1)
-                                Lastbet = LabList[0] + LabList[LabList.Count - 1];
-                        }
-
-                    }
-                }
+               
                 if (RunningSimulation && (Wins + Losses > nudSimNumBets.Value || Lastbet>PreviousBalance))
                 {
                     Stop();
@@ -1977,7 +2091,7 @@ namespace DiceBot
                     sw.WriteLine("MKDecrement|" + nudMKDecrement.Value.ToString());
                     sw.WriteLine("MKEnabled|" + (chkMK.Checked ? "1" : "0"));
 
-                    sw.WriteLine("LabEnabled|" + (chkLabEnable.Checked ? "1" : "0"));
+                    sw.WriteLine("LabEnabled|" + (rdbLabEnable.Checked ? "1" : "0"));
                     sw.WriteLine("LabReverse|" + (chkReverseLab.Checked ? "1" : "0"));
                     string labtmp = "";
                     foreach (string s in rtbBets.Lines)
@@ -2417,7 +2531,7 @@ namespace DiceBot
                         btnStratRefresh_Click(btnStratRefresh, new EventArgs() );
                     }
 
-                    chkLabEnable.Checked = ("1" == getvalue(saveditems, "LabEnabled"));
+                    rdbLabEnable.Checked = ("1" == getvalue(saveditems, "LabEnabled"));
                     chkReverseLab.Checked = ("1" == getvalue(saveditems, "LabReverse"));
 
                    string[] tmp =getvalue(saveditems, "LabValues").Split('?');
@@ -2975,6 +3089,7 @@ namespace DiceBot
 
         bool testInputs()
         {
+            populateFiboNacci();
             string sMessage = "";
             bool valid = true;
             //double d = double.Parse(txtLimit.Text.Replace('.',','));
@@ -4137,6 +4252,38 @@ namespace DiceBot
         {
             MessageBox.Show("This feature has not yet been implemented.");
         }
+
+        private void rdbPreset_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton tmp = sender as RadioButton;
+            if (tmp != rdbAlembert)
+            {
+                if (rdbAlembert.Checked && tmp.Checked)
+                    rdbAlembert.Checked = false;
+            }
+            if (tmp != rdbMartingale)
+            {
+                if (rdbMartingale.Checked && tmp.Checked)
+                    rdbMartingale.Checked = false;
+            }
+            if (tmp != rdbLabEnable)
+            {
+                if (rdbLabEnable.Checked && tmp.Checked)
+                    rdbLabEnable.Checked = false;
+            }
+            if (tmp !=rdbFibonacci)
+            {
+                if (rdbFibonacci.Checked && tmp.Checked)
+                    rdbFibonacci.Checked = false;
+            }
+            if (tmp != rdbPreset)
+            {
+                if (rdbPreset.Checked && tmp.Checked)
+                    rdbPreset.Checked = false;
+            }
+        }
+
+        
 
         
 
