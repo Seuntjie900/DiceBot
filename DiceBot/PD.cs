@@ -217,6 +217,7 @@ namespace DiceBot
                 pdbetresult tmp = json.JsonDeserialize<pdbetresult>(sEmitResponse);
                 tmp.bet.client = tmp.user.client;
                 tmp.bet.serverhash = tmp.user.server;
+                
                 Parent.updateBalance((decimal)(tmp.user.balance / 100000000.0));
                 Parent.updateBets(tmp.user.bets);
                 Parent.updateLosses(tmp.user.losses);
@@ -241,7 +242,7 @@ namespace DiceBot
                 }
                 if (e.Message.Contains("429"))
                 {
-                    Thread .Sleep(500);
+                    Thread .Sleep(200);
                     placebetthread();
                 }
                 
@@ -505,7 +506,7 @@ namespace DiceBot
 
                 HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                
+                accesstoken = "";
             }
             catch
             {
@@ -557,7 +558,7 @@ namespace DiceBot
                 nonce=nonce ,
                 serverhash = serverhash,
                 clientseed = client
-
+                
             };
             return tmp;
         }

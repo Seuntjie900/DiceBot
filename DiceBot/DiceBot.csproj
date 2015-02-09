@@ -133,6 +133,7 @@
     <Compile Include="PD.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SafeDice.cs" />
     <Compile Include="SavedItem.cs" />
     <Compile Include="Simulation.cs" />
     <Compile Include="sqlite_helper.cs" />

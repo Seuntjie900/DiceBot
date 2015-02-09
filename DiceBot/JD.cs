@@ -19,8 +19,26 @@ namespace DiceBot
             Instance.OnAddress += Instance_OnAddress;
             Instance.OnJDError += Instance_OnJDError;
             Instance.OnSecretHash += Instance_OnSecretHash;
+            Instance.OnClientSeed += Instance_OnClientSeed;
+            Instance.OnDetails += Instance_OnDetails;
+            Instance.OnNewClientSeed += Instance_OnNewClientSeed;
             this.Parent = Parent;
             Name = "JustDice";
+        }
+
+        void Instance_OnNewClientSeed(Various SeedInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        void Instance_OnDetails(Various Details)
+        {
+            throw new NotImplementedException();
+        }
+
+        void Instance_OnClientSeed(Various Seed)
+        {
+            throw new NotImplementedException();
         }
 
         void Instance_OnSecretHash(Various secretHash)

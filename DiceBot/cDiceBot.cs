@@ -1837,7 +1837,8 @@ namespace DiceBot
                 sw.WriteLine("ResetSeedMode|" + msg);
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
-                
+                sw.WriteLine("SettingsMode|" + cmbSettingMode.SelectedIndex);
+                sw.WriteLine("Site|" + cmbSite.SelectedIndex);
                 
             }
         }
@@ -2427,6 +2428,9 @@ namespace DiceBot
                     }
                     rdbLabRestart.Checked = ("1" == getvalue(saveditems, "LabComplete"));
                     rdbLabStop.Checked = ("2" == getvalue(saveditems, "LabComplete"));
+
+                    cmbSite.SelectedIndex = int.Parse(getvalue(saveditems, "Site"));
+                    cmbSettingMode.SelectedIndex = int.Parse(getvalue(saveditems, "SettingsMode"));
                 }
 
                 
@@ -4041,7 +4045,7 @@ namespace DiceBot
         List<TabPage> Tabs = new List<TabPage>();
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbSettingMode.SelectedIndex==0 && tcBetSettings.TabCount>3)
+           /* if (cmbSettingMode.SelectedIndex==0 && tcBetSettings.TabCount>3)
             {
                 Tabs.Add(tcBetSettings.TabPages[3]);
                 tcBetSettings.TabPages.RemoveAt(3);
@@ -4070,7 +4074,7 @@ namespace DiceBot
                     label82.Visible = true;
                     cmbStrat.Visible = true;
                 }
-            }
+            }*/
                 
         }
 

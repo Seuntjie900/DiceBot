@@ -1,23 +1,42 @@
 Todo:
-losing streak table redo
-Proxy Authentication.
-verify rolls
-extra strategies - Fibbonachi and d’Alembert
-programmer mode (access to variables, write code for own strategies)
+extra strategies - Fibbonachi and d’Alembert, preset list
 implement other sites (requires prc api)
-advanced zig zag
-login loader --might not do
-multilingual support
-finish tooltips
-clean up code
 finish sqlite implementation
 tip button
-get server seed on randomize
+get server seed on randomize (JD)
 Look for server seed of old bets
-Disconnect + logout on site change or close
 seperate stats and bet method from dobet() to easily switch between strategies
 Use radio buttons for different strategy modes (martingale, labouchere, fibbonachi etc)
-add settings mode, site to private settings file
+programmer mode (access to variables, write code for own strategies)
+
+
+fibonacci:
+  set base bet
+  set stop point.
+  set reset point
+
+d’Alembert:
+  base
+  increment by x on wins
+  decrement by y on loss
+  stretch losses by a
+  stretch wins by b
+
+
+
+preset list:
+  on loss, increment x (+/-)
+  on win, reset, increment x(+/-)
+  reaches end of list, reset, stop, decrement x
+
+
+Not essential:
+clean up code
+multilingual support
+finish tooltips
+losing streak table redo
+advanced zig zag
+Proxy Authentication.
 
 
 Done:
@@ -40,3 +59,5 @@ logout
 disable certain buttons untill logged in
 on closing kill all api threads
 view old bets table - stil needs work. Implement data pager instead of just a gridview
+Disconnect + logout on site change or close
+add settings mode, site to private settings file

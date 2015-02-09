@@ -41,7 +41,7 @@ namespace DiceBot
             try
             {
                 DateTime dotNetDate = new DateTime(1970, 1, 1);
-                dotNetDate = dotNetDate.AddMilliseconds(Convert.ToInt64(milliseconds));
+                dotNetDate = dotNetDate.AddMilliseconds(long.Parse(milliseconds));
                 return dotNetDate;
             }
             catch
