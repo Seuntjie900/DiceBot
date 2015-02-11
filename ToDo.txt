@@ -4,8 +4,6 @@ finish sqlite implementation
 get server seed on randomize (JD)
 Look for server seed of old bets (automatically? on button click?)
 programmer mode (access to variables, write code for own strategies)
-beginner mode (hide certain settings) -done
-advanced mode (show all settings) -done
 
 hopefully before release:
 losing streak table redo
@@ -44,3 +42,5 @@ Use radio buttons for different strategy modes (martingale, labouchere, fibbonac
 update save files
 disable embedded live chart + reset live chart
 tip button
+beginner mode (hide certain settings) -done
+advanced mode (show all settings) -done

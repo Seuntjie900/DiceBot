@@ -33,7 +33,7 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.Settings = new System.Windows.Forms.GroupBox();
@@ -463,6 +463,34 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
+            this.btnHideStats = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.btnShowStats = new System.Windows.Forms.Button();
+            this.pnlBasic = new System.Windows.Forms.Panel();
+            this.btnStartHigh2 = new System.Windows.Forms.Button();
+            this.btnStartLow2 = new System.Windows.Forms.Button();
+            this.btnStop2 = new System.Windows.Forms.Button();
+            this.btnStopOnWin2 = new System.Windows.Forms.Button();
+            this.groupBox17 = new System.Windows.Forms.GroupBox();
+            this.nudMutliplier2 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox18 = new System.Windows.Forms.GroupBox();
+            this.nudWinMultiplier2 = new System.Windows.Forms.NumericUpDown();
+            this.label110 = new System.Windows.Forms.Label();
+            this.lblProfit2 = new System.Windows.Forms.Label();
+            this.lblBets2 = new System.Windows.Forms.Label();
+            this.label113 = new System.Windows.Forms.Label();
+            this.label114 = new System.Windows.Forms.Label();
+            this.lblWins2 = new System.Windows.Forms.Label();
+            this.label116 = new System.Windows.Forms.Label();
+            this.lblLosses2 = new System.Windows.Forms.Label();
+            this.lblCustreak2 = new System.Windows.Forms.Label();
+            this.label112 = new System.Windows.Forms.Label();
+            this.label111 = new System.Windows.Forms.Label();
+            this.label115 = new System.Windows.Forms.Label();
+            this.label117 = new System.Windows.Forms.Label();
+            this.nudMinbet2 = new System.Windows.Forms.NumericUpDown();
+            this.label118 = new System.Windows.Forms.Label();
+            this.nudChance2 = new System.Windows.Forms.NumericUpDown();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -472,7 +500,7 @@
             this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.panel1.SuspendLayout();
+            this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.Settings.SuspendLayout();
@@ -592,19 +620,26 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiPayout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).BeginInit();
+            this.pnlBasic.SuspendLayout();
+            this.groupBox17.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMutliplier2)).BeginInit();
+            this.groupBox18.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinbet2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChance2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
-            // panel1
+            // pnlAdvanced
             // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.tcSettings);
-            this.panel1.Controls.Add(this.tcStats);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(1028, 42);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(456, 800);
-            this.panel1.TabIndex = 2;
+            this.pnlAdvanced.AutoScroll = true;
+            this.pnlAdvanced.Controls.Add(this.tcSettings);
+            this.pnlAdvanced.Controls.Add(this.tcStats);
+            this.pnlAdvanced.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnlAdvanced.Location = new System.Drawing.Point(1009, 42);
+            this.pnlAdvanced.Name = "pnlAdvanced";
+            this.pnlAdvanced.Size = new System.Drawing.Size(475, 800);
+            this.pnlAdvanced.TabIndex = 2;
             // 
             // tcSettings
             // 
@@ -616,15 +651,17 @@
             this.tcSettings.Location = new System.Drawing.Point(0, 0);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
-            this.tcSettings.Size = new System.Drawing.Size(456, 540);
+            this.tcSettings.Size = new System.Drawing.Size(475, 540);
             this.tcSettings.TabIndex = 13;
             // 
             // tabPage3
             // 
+            this.tabPage3.AutoScroll = true;
+            this.tabPage3.Controls.Add(this.btnShowStats);
             this.tabPage3.Controls.Add(this.Settings);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(448, 514);
+            this.tabPage3.Size = new System.Drawing.Size(467, 514);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Bet Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -639,10 +676,9 @@
             this.Settings.Controls.Add(this.btnExport);
             this.Settings.Controls.Add(this.btnImport);
             this.Settings.Controls.Add(this.panel4);
-            this.Settings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Settings.Location = new System.Drawing.Point(0, 0);
+            this.Settings.Location = new System.Drawing.Point(3, 3);
             this.Settings.Name = "Settings";
-            this.Settings.Size = new System.Drawing.Size(448, 514);
+            this.Settings.Size = new System.Drawing.Size(439, 508);
             this.Settings.TabIndex = 13;
             this.Settings.TabStop = false;
             this.Settings.Text = "Settings";
@@ -711,11 +747,11 @@
             this.tcBets.Controls.Add(this.tbCharts);
             this.tcBets.Controls.Add(this.tbVerify);
             this.tcBets.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tcBets.Location = new System.Drawing.Point(3, 43);
+            this.tcBets.Location = new System.Drawing.Point(3, 37);
             this.tcBets.Multiline = true;
             this.tcBets.Name = "tcBets";
             this.tcBets.SelectedIndex = 0;
-            this.tcBets.Size = new System.Drawing.Size(442, 434);
+            this.tcBets.Size = new System.Drawing.Size(433, 434);
             this.tcBets.TabIndex = 52;
             // 
             // tabPage2
@@ -724,7 +760,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(434, 408);
+            this.tabPage2.Size = new System.Drawing.Size(425, 408);
             this.tabPage2.TabIndex = 7;
             this.tabPage2.Text = "Strategy";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -741,7 +777,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(428, 402);
+            this.tabControl1.Size = new System.Drawing.Size(419, 402);
             this.tabControl1.TabIndex = 0;
             // 
             // tbMartingale
@@ -752,7 +788,7 @@
             this.tbMartingale.Location = new System.Drawing.Point(4, 22);
             this.tbMartingale.Name = "tbMartingale";
             this.tbMartingale.Padding = new System.Windows.Forms.Padding(3);
-            this.tbMartingale.Size = new System.Drawing.Size(420, 376);
+            this.tbMartingale.Size = new System.Drawing.Size(411, 376);
             this.tbMartingale.TabIndex = 10;
             this.tbMartingale.Text = "Martingale";
             this.tbMartingale.UseVisualStyleBackColor = true;
@@ -905,6 +941,7 @@
             0,
             0,
             131072});
+            this.nudDevider.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // nudNbets
             // 
@@ -927,6 +964,7 @@
             0,
             0,
             0});
+            this.nudNbets.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // nudMaxMultiplies
             // 
@@ -949,6 +987,7 @@
             0,
             0,
             0});
+            this.nudMaxMultiplies.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // nudMultiplier
             // 
@@ -972,6 +1011,7 @@
             0,
             0,
             0});
+            this.nudMultiplier.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // rdbReduce
             // 
@@ -982,6 +1022,7 @@
             this.rdbReduce.TabIndex = 88;
             this.rdbReduce.Text = "Change Once";
             this.rdbReduce.UseVisualStyleBackColor = true;
+            this.rdbReduce.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // lblMultiplier
             // 
@@ -1010,6 +1051,7 @@
             this.rdbMaxMultiplier.TabIndex = 80;
             this.rdbMaxMultiplier.Text = "Max";
             this.rdbMaxMultiplier.UseVisualStyleBackColor = true;
+            this.rdbMaxMultiplier.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // rdbDevider
             // 
@@ -1020,6 +1062,7 @@
             this.rdbDevider.TabIndex = 81;
             this.rdbDevider.Text = "Variable";
             this.rdbDevider.UseVisualStyleBackColor = true;
+            this.rdbDevider.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // lblAfter2
             // 
@@ -1041,6 +1084,7 @@
             this.rdbConstant.TabStop = true;
             this.rdbConstant.Text = "Contstant";
             this.rdbConstant.UseVisualStyleBackColor = true;
+            this.rdbConstant.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // lblAfter
             // 
@@ -1195,6 +1239,7 @@
             0,
             0,
             327680});
+            this.nudWinDevider.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // nudWinNBets
             // 
@@ -1217,6 +1262,7 @@
             0,
             0,
             0});
+            this.nudWinNBets.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // nudWinMaxMultiplies
             // 
@@ -1239,6 +1285,7 @@
             0,
             0,
             0});
+            this.nudWinMaxMultiplies.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // nudWinMultiplier
             // 
@@ -1262,6 +1309,7 @@
             0,
             0,
             0});
+            this.nudWinMultiplier.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
             // rdbWinReduce
             // 
@@ -1272,6 +1320,7 @@
             this.rdbWinReduce.TabIndex = 101;
             this.rdbWinReduce.Text = "Change Once";
             this.rdbWinReduce.UseVisualStyleBackColor = true;
+            this.rdbWinReduce.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // label44
             // 
@@ -1300,6 +1349,7 @@
             this.rdbWinMaxMultiplier.TabIndex = 93;
             this.rdbWinMaxMultiplier.Text = "Max";
             this.rdbWinMaxMultiplier.UseVisualStyleBackColor = true;
+            this.rdbWinMaxMultiplier.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // rdbWinDevider
             // 
@@ -1310,6 +1360,7 @@
             this.rdbWinDevider.TabIndex = 94;
             this.rdbWinDevider.Text = "Variable";
             this.rdbWinDevider.UseVisualStyleBackColor = true;
+            this.rdbWinDevider.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // label46
             // 
@@ -1331,6 +1382,7 @@
             this.rdbWinConstant.TabStop = true;
             this.rdbWinConstant.Text = "Contstant";
             this.rdbWinConstant.UseVisualStyleBackColor = true;
+            this.rdbWinConstant.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // label47
             // 
@@ -1362,7 +1414,7 @@
             this.tbLabouchère.Location = new System.Drawing.Point(4, 22);
             this.tbLabouchère.Name = "tbLabouchère";
             this.tbLabouchère.Padding = new System.Windows.Forms.Padding(3);
-            this.tbLabouchère.Size = new System.Drawing.Size(420, 376);
+            this.tbLabouchère.Size = new System.Drawing.Size(411, 376);
             this.tbLabouchère.TabIndex = 9;
             this.tbLabouchère.Text = "Labouchère";
             this.tbLabouchère.UseVisualStyleBackColor = true;
@@ -1437,6 +1489,7 @@
             this.btnBrowseLab.TabIndex = 9;
             this.btnBrowseLab.Text = "Browse";
             this.btnBrowseLab.UseVisualStyleBackColor = true;
+            this.btnBrowseLab.Click += new System.EventHandler(this.btnBrowseLab_Click);
             // 
             // rtbBets
             // 
@@ -1475,7 +1528,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(420, 376);
+            this.tabPage1.Size = new System.Drawing.Size(411, 376);
             this.tabPage1.TabIndex = 13;
             this.tabPage1.Text = "Fibonacci";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -1716,7 +1769,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(420, 376);
+            this.tabPage5.Size = new System.Drawing.Size(411, 376);
             this.tabPage5.TabIndex = 14;
             this.tabPage5.Text = "d’Alembert";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -1895,7 +1948,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(420, 376);
+            this.tabPage6.Size = new System.Drawing.Size(411, 376);
             this.tabPage6.TabIndex = 15;
             this.tabPage6.Text = "Preset List";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -2151,7 +2204,7 @@
             this.tbCustom.Location = new System.Drawing.Point(4, 22);
             this.tbCustom.Name = "tbCustom";
             this.tbCustom.Padding = new System.Windows.Forms.Padding(3);
-            this.tbCustom.Size = new System.Drawing.Size(420, 376);
+            this.tbCustom.Size = new System.Drawing.Size(411, 376);
             this.tbCustom.TabIndex = 11;
             this.tbCustom.Text = "Custom";
             this.tbCustom.UseVisualStyleBackColor = true;
@@ -2186,7 +2239,7 @@
             this.gbCustom.Enabled = false;
             this.gbCustom.Location = new System.Drawing.Point(3, 3);
             this.gbCustom.Name = "gbCustom";
-            this.gbCustom.Size = new System.Drawing.Size(414, 370);
+            this.gbCustom.Size = new System.Drawing.Size(405, 370);
             this.gbCustom.TabIndex = 0;
             this.gbCustom.TabStop = false;
             // 
@@ -2474,7 +2527,7 @@
             this.tbZigZag.Location = new System.Drawing.Point(4, 22);
             this.tbZigZag.Name = "tbZigZag";
             this.tbZigZag.Padding = new System.Windows.Forms.Padding(3);
-            this.tbZigZag.Size = new System.Drawing.Size(434, 408);
+            this.tbZigZag.Size = new System.Drawing.Size(425, 408);
             this.tbZigZag.TabIndex = 13;
             this.tbZigZag.Text = "Zig Zag";
             this.tbZigZag.UseVisualStyleBackColor = true;
@@ -2577,7 +2630,7 @@
             this.tbSimulation.Location = new System.Drawing.Point(4, 22);
             this.tbSimulation.Name = "tbSimulation";
             this.tbSimulation.Padding = new System.Windows.Forms.Padding(3);
-            this.tbSimulation.Size = new System.Drawing.Size(434, 408);
+            this.tbSimulation.Size = new System.Drawing.Size(425, 408);
             this.tbSimulation.TabIndex = 2;
             this.tbSimulation.Text = "Simulate";
             this.tbSimulation.UseVisualStyleBackColor = true;
@@ -2797,7 +2850,7 @@
             this.tbCharts.Location = new System.Drawing.Point(4, 22);
             this.tbCharts.Name = "tbCharts";
             this.tbCharts.Padding = new System.Windows.Forms.Padding(3);
-            this.tbCharts.Size = new System.Drawing.Size(434, 408);
+            this.tbCharts.Size = new System.Drawing.Size(425, 408);
             this.tbCharts.TabIndex = 4;
             this.tbCharts.Text = "Charts";
             this.tbCharts.UseVisualStyleBackColor = true;
@@ -2942,7 +2995,7 @@
             this.tbVerify.Location = new System.Drawing.Point(4, 22);
             this.tbVerify.Name = "tbVerify";
             this.tbVerify.Padding = new System.Windows.Forms.Padding(3);
-            this.tbVerify.Size = new System.Drawing.Size(434, 408);
+            this.tbVerify.Size = new System.Drawing.Size(425, 408);
             this.tbVerify.TabIndex = 3;
             this.tbVerify.Text = "Check  Bets";
             this.tbVerify.UseVisualStyleBackColor = true;
@@ -3084,9 +3137,9 @@
             this.panel4.Controls.Add(this.btnStop);
             this.panel4.Controls.Add(this.btnStartHigh);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(3, 477);
+            this.panel4.Location = new System.Drawing.Point(3, 471);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(442, 34);
+            this.panel4.Size = new System.Drawing.Size(433, 34);
             this.panel4.TabIndex = 49;
             // 
             // btnStopOnWin
@@ -3131,6 +3184,7 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.AutoScroll = true;
             this.tabPage4.Controls.Add(this.nudAmount);
             this.tabPage4.Controls.Add(this.nudLowerLimit);
             this.tabPage4.Controls.Add(this.nudLimit);
@@ -3148,7 +3202,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(448, 514);
+            this.tabPage4.Size = new System.Drawing.Size(467, 514);
             this.tabPage4.TabIndex = 9;
             this.tabPage4.Text = "Stop Conditions";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -3685,11 +3739,12 @@
             // 
             // tabPage11
             // 
+            this.tabPage11.AutoScroll = true;
             this.tabPage11.Controls.Add(this.pnlAdvancedAdvanced);
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(448, 514);
+            this.tabPage11.Size = new System.Drawing.Size(467, 514);
             this.tabPage11.TabIndex = 3;
             this.tabPage11.Text = "Advanced Bet Settings";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -3894,6 +3949,7 @@
             // 
             // tabPage9
             // 
+            this.tabPage9.AutoScroll = true;
             this.tabPage9.Controls.Add(this.groupBox4);
             this.tabPage9.Controls.Add(this.groupBox2);
             this.tabPage9.Controls.Add(this.groupBox1);
@@ -3904,7 +3960,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(448, 514);
+            this.tabPage9.Size = new System.Drawing.Size(467, 514);
             this.tabPage9.TabIndex = 2;
             this.tabPage9.Text = "DiceBot Settings";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -4250,11 +4306,12 @@
             this.tcStats.Location = new System.Drawing.Point(0, 540);
             this.tcStats.Name = "tcStats";
             this.tcStats.SelectedIndex = 0;
-            this.tcStats.Size = new System.Drawing.Size(456, 260);
+            this.tcStats.Size = new System.Drawing.Size(475, 260);
             this.tcStats.TabIndex = 14;
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.btnHideStats);
             this.tabPage7.Controls.Add(this.lblLuck);
             this.tabPage7.Controls.Add(this.label69);
             this.tabPage7.Controls.Add(this.btnResetStats);
@@ -4289,7 +4346,7 @@
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(448, 234);
+            this.tabPage7.Size = new System.Drawing.Size(467, 234);
             this.tabPage7.TabIndex = 0;
             this.tabPage7.Text = "Stats";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -4569,6 +4626,7 @@
             // 
             // tabPage8
             // 
+            this.tabPage8.Controls.Add(this.button2);
             this.tabPage8.Controls.Add(this.lblLargestLoss);
             this.tabPage8.Controls.Add(this.lblLargestWin);
             this.tabPage8.Controls.Add(this.lblLargestBet);
@@ -4596,7 +4654,7 @@
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(448, 234);
+            this.tabPage8.Size = new System.Drawing.Size(467, 234);
             this.tabPage8.TabIndex = 1;
             this.tabPage8.Text = "More Stats";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -4985,16 +5043,16 @@
             this.pnlApiInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlApiInfo.Location = new System.Drawing.Point(0, 42);
             this.pnlApiInfo.Name = "pnlApiInfo";
-            this.pnlApiInfo.Size = new System.Drawing.Size(1028, 800);
+            this.pnlApiInfo.Size = new System.Drawing.Size(860, 800);
             this.pnlApiInfo.TabIndex = 7;
             // 
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.splitContainer1);
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox6.Location = new System.Drawing.Point(0, 197);
+            this.groupBox6.Location = new System.Drawing.Point(0, 231);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(1028, 603);
+            this.groupBox6.Size = new System.Drawing.Size(860, 569);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Bets:";
@@ -5016,14 +5074,14 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer1.Size = new System.Drawing.Size(1022, 584);
-            this.splitContainer1.SplitterDistance = 347;
+            this.splitContainer1.Size = new System.Drawing.Size(854, 550);
+            this.splitContainer1.SplitterDistance = 326;
             this.splitContainer1.TabIndex = 0;
             // 
             // btnChartReset
             // 
             this.btnChartReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChartReset.Location = new System.Drawing.Point(944, 263);
+            this.btnChartReset.Location = new System.Drawing.Point(776, 242);
             this.btnChartReset.Name = "btnChartReset";
             this.btnChartReset.Size = new System.Drawing.Size(75, 23);
             this.btnChartReset.TabIndex = 3;
@@ -5034,7 +5092,7 @@
             // btnDisable
             // 
             this.btnDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDisable.Location = new System.Drawing.Point(944, 292);
+            this.btnDisable.Location = new System.Drawing.Point(776, 271);
             this.btnDisable.Name = "btnDisable";
             this.btnDisable.Size = new System.Drawing.Size(75, 23);
             this.btnDisable.TabIndex = 2;
@@ -5045,7 +5103,7 @@
             // btnHideLive
             // 
             this.btnHideLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHideLive.Location = new System.Drawing.Point(944, 321);
+            this.btnHideLive.Location = new System.Drawing.Point(776, 300);
             this.btnHideLive.Name = "btnHideLive";
             this.btnHideLive.Size = new System.Drawing.Size(75, 23);
             this.btnHideLive.TabIndex = 1;
@@ -5067,7 +5125,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Profit";
             this.chrtEmbeddedLiveChart.Series.Add(series1);
-            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(1022, 347);
+            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(854, 326);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
             // 
@@ -5088,18 +5146,19 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1022, 233);
+            this.dataGridView1.Size = new System.Drawing.Size(854, 220);
             this.dataGridView1.TabIndex = 1;
             // 
             // panel5
             // 
+            this.panel5.AutoScroll = true;
             this.panel5.Controls.Add(this.groupBox3);
             this.panel5.Controls.Add(this.groupBox7);
             this.panel5.Controls.Add(this.groupBox5);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1028, 197);
+            this.panel5.Size = new System.Drawing.Size(860, 231);
             this.panel5.TabIndex = 4;
             // 
             // groupBox3
@@ -5116,7 +5175,7 @@
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Location = new System.Drawing.Point(3, 3);
+            this.groupBox3.Location = new System.Drawing.Point(2, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(299, 194);
             this.groupBox3.TabIndex = 0;
@@ -5256,7 +5315,7 @@
             this.groupBox7.Controls.Add(this.label90);
             this.groupBox7.Controls.Add(this.label89);
             this.groupBox7.Controls.Add(this.label88);
-            this.groupBox7.Location = new System.Drawing.Point(760, 3);
+            this.groupBox7.Location = new System.Drawing.Point(759, 3);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(265, 194);
             this.groupBox7.TabIndex = 3;
@@ -5362,7 +5421,7 @@
             this.groupBox5.Controls.Add(this.label24);
             this.groupBox5.Controls.Add(this.label23);
             this.groupBox5.Controls.Add(this.label22);
-            this.groupBox5.Location = new System.Drawing.Point(308, 3);
+            this.groupBox5.Location = new System.Drawing.Point(307, 3);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(446, 194);
             this.groupBox5.TabIndex = 1;
@@ -5558,6 +5617,320 @@
             this.label22.TabIndex = 0;
             this.label22.Text = "Bet:";
             // 
+            // btnHideStats
+            // 
+            this.btnHideStats.Location = new System.Drawing.Point(367, 6);
+            this.btnHideStats.Name = "btnHideStats";
+            this.btnHideStats.Size = new System.Drawing.Size(75, 23);
+            this.btnHideStats.TabIndex = 31;
+            this.btnHideStats.Text = "Hide Stats";
+            this.btnHideStats.UseVisualStyleBackColor = true;
+            this.btnHideStats.Click += new System.EventHandler(this.btnHideStats_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(367, 6);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 53;
+            this.button2.Text = "Hide Stats";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.btnHideStats_Click);
+            // 
+            // btnShowStats
+            // 
+            this.btnShowStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnShowStats.Location = new System.Drawing.Point(389, 488);
+            this.btnShowStats.Name = "btnShowStats";
+            this.btnShowStats.Size = new System.Drawing.Size(75, 23);
+            this.btnShowStats.TabIndex = 14;
+            this.btnShowStats.Text = "Show Stats";
+            this.btnShowStats.UseVisualStyleBackColor = true;
+            this.btnShowStats.Visible = false;
+            this.btnShowStats.Click += new System.EventHandler(this.btnShowStats_Click);
+            // 
+            // pnlBasic
+            // 
+            this.pnlBasic.AutoScroll = true;
+            this.pnlBasic.Controls.Add(this.nudChance2);
+            this.pnlBasic.Controls.Add(this.label118);
+            this.pnlBasic.Controls.Add(this.nudMinbet2);
+            this.pnlBasic.Controls.Add(this.label117);
+            this.pnlBasic.Controls.Add(this.lblCustreak2);
+            this.pnlBasic.Controls.Add(this.label112);
+            this.pnlBasic.Controls.Add(this.label116);
+            this.pnlBasic.Controls.Add(this.lblLosses2);
+            this.pnlBasic.Controls.Add(this.label114);
+            this.pnlBasic.Controls.Add(this.lblWins2);
+            this.pnlBasic.Controls.Add(this.lblBets2);
+            this.pnlBasic.Controls.Add(this.label113);
+            this.pnlBasic.Controls.Add(this.label110);
+            this.pnlBasic.Controls.Add(this.lblProfit2);
+            this.pnlBasic.Controls.Add(this.groupBox18);
+            this.pnlBasic.Controls.Add(this.groupBox17);
+            this.pnlBasic.Controls.Add(this.btnStopOnWin2);
+            this.pnlBasic.Controls.Add(this.btnStop2);
+            this.pnlBasic.Controls.Add(this.btnStartLow2);
+            this.pnlBasic.Controls.Add(this.btnStartHigh2);
+            this.pnlBasic.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnlBasic.Location = new System.Drawing.Point(860, 42);
+            this.pnlBasic.Name = "pnlBasic";
+            this.pnlBasic.Size = new System.Drawing.Size(149, 800);
+            this.pnlBasic.TabIndex = 8;
+            this.pnlBasic.Paint += new System.Windows.Forms.PaintEventHandler(this.panel8_Paint);
+            // 
+            // btnStartHigh2
+            // 
+            this.btnStartHigh2.Location = new System.Drawing.Point(10, 263);
+            this.btnStartHigh2.Name = "btnStartHigh2";
+            this.btnStartHigh2.Size = new System.Drawing.Size(92, 23);
+            this.btnStartHigh2.TabIndex = 38;
+            this.btnStartHigh2.Text = "Start High";
+            this.btnStartHigh2.UseVisualStyleBackColor = true;
+            this.btnStartHigh2.Click += new System.EventHandler(this.btnStart_Click);
+            // 
+            // btnStartLow2
+            // 
+            this.btnStartLow2.Location = new System.Drawing.Point(10, 292);
+            this.btnStartLow2.Name = "btnStartLow2";
+            this.btnStartLow2.Size = new System.Drawing.Size(92, 23);
+            this.btnStartLow2.TabIndex = 42;
+            this.btnStartLow2.Text = "Start Low";
+            this.btnStartLow2.UseVisualStyleBackColor = true;
+            this.btnStartLow2.Click += new System.EventHandler(this.btnStart_Click);
+            // 
+            // btnStop2
+            // 
+            this.btnStop2.Location = new System.Drawing.Point(10, 322);
+            this.btnStop2.Name = "btnStop2";
+            this.btnStop2.Size = new System.Drawing.Size(92, 23);
+            this.btnStop2.TabIndex = 43;
+            this.btnStop2.Text = "Stop";
+            this.btnStop2.UseVisualStyleBackColor = true;
+            this.btnStop2.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // btnStopOnWin2
+            // 
+            this.btnStopOnWin2.Location = new System.Drawing.Point(10, 351);
+            this.btnStopOnWin2.Name = "btnStopOnWin2";
+            this.btnStopOnWin2.Size = new System.Drawing.Size(92, 23);
+            this.btnStopOnWin2.TabIndex = 44;
+            this.btnStopOnWin2.Text = "Stop On Win";
+            this.btnStopOnWin2.UseVisualStyleBackColor = true;
+            this.btnStopOnWin2.Click += new System.EventHandler(this.btnStopOnWin_Click);
+            // 
+            // groupBox17
+            // 
+            this.groupBox17.Controls.Add(this.label111);
+            this.groupBox17.Controls.Add(this.nudMutliplier2);
+            this.groupBox17.Location = new System.Drawing.Point(3, 86);
+            this.groupBox17.Name = "groupBox17";
+            this.groupBox17.Size = new System.Drawing.Size(107, 69);
+            this.groupBox17.TabIndex = 45;
+            this.groupBox17.TabStop = false;
+            this.groupBox17.Text = "On Loss:";
+            // 
+            // nudMutliplier2
+            // 
+            this.nudMutliplier2.DecimalPlaces = 5;
+            this.nudMutliplier2.Location = new System.Drawing.Point(19, 40);
+            this.nudMutliplier2.Name = "nudMutliplier2";
+            this.nudMutliplier2.Size = new System.Drawing.Size(82, 20);
+            this.nudMutliplier2.TabIndex = 2;
+            this.nudMutliplier2.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.nudMutliplier2.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
+            // groupBox18
+            // 
+            this.groupBox18.Controls.Add(this.label115);
+            this.groupBox18.Controls.Add(this.nudWinMultiplier2);
+            this.groupBox18.Location = new System.Drawing.Point(3, 180);
+            this.groupBox18.Name = "groupBox18";
+            this.groupBox18.Size = new System.Drawing.Size(107, 77);
+            this.groupBox18.TabIndex = 46;
+            this.groupBox18.TabStop = false;
+            this.groupBox18.Text = "On Win:";
+            // 
+            // nudWinMultiplier2
+            // 
+            this.nudWinMultiplier2.DecimalPlaces = 5;
+            this.nudWinMultiplier2.Location = new System.Drawing.Point(19, 37);
+            this.nudWinMultiplier2.Name = "nudWinMultiplier2";
+            this.nudWinMultiplier2.Size = new System.Drawing.Size(82, 20);
+            this.nudWinMultiplier2.TabIndex = 2;
+            this.nudWinMultiplier2.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudWinMultiplier2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
+            // 
+            // label110
+            // 
+            this.label110.AutoSize = true;
+            this.label110.Location = new System.Drawing.Point(16, 388);
+            this.label110.Name = "label110";
+            this.label110.Size = new System.Drawing.Size(34, 13);
+            this.label110.TabIndex = 47;
+            this.label110.Text = "Profit:";
+            // 
+            // lblProfit2
+            // 
+            this.lblProfit2.AutoSize = true;
+            this.lblProfit2.Location = new System.Drawing.Point(56, 388);
+            this.lblProfit2.Name = "lblProfit2";
+            this.lblProfit2.Size = new System.Drawing.Size(0, 13);
+            this.lblProfit2.TabIndex = 48;
+            // 
+            // lblBets2
+            // 
+            this.lblBets2.AutoSize = true;
+            this.lblBets2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblBets2.Location = new System.Drawing.Point(56, 416);
+            this.lblBets2.Name = "lblBets2";
+            this.lblBets2.Size = new System.Drawing.Size(0, 13);
+            this.lblBets2.TabIndex = 50;
+            // 
+            // label113
+            // 
+            this.label113.AutoSize = true;
+            this.label113.Location = new System.Drawing.Point(19, 416);
+            this.label113.Name = "label113";
+            this.label113.Size = new System.Drawing.Size(31, 13);
+            this.label113.TabIndex = 49;
+            this.label113.Text = "Bets:";
+            // 
+            // label114
+            // 
+            this.label114.AutoSize = true;
+            this.label114.Location = new System.Drawing.Point(16, 444);
+            this.label114.Name = "label114";
+            this.label114.Size = new System.Drawing.Size(34, 13);
+            this.label114.TabIndex = 51;
+            this.label114.Text = "Wins:";
+            // 
+            // lblWins2
+            // 
+            this.lblWins2.AutoSize = true;
+            this.lblWins2.ForeColor = System.Drawing.Color.Green;
+            this.lblWins2.Location = new System.Drawing.Point(56, 444);
+            this.lblWins2.Name = "lblWins2";
+            this.lblWins2.Size = new System.Drawing.Size(0, 13);
+            this.lblWins2.TabIndex = 52;
+            // 
+            // label116
+            // 
+            this.label116.AutoSize = true;
+            this.label116.Location = new System.Drawing.Point(7, 472);
+            this.label116.Name = "label116";
+            this.label116.Size = new System.Drawing.Size(43, 13);
+            this.label116.TabIndex = 53;
+            this.label116.Text = "Losses:";
+            // 
+            // lblLosses2
+            // 
+            this.lblLosses2.AutoSize = true;
+            this.lblLosses2.ForeColor = System.Drawing.Color.Red;
+            this.lblLosses2.Location = new System.Drawing.Point(56, 472);
+            this.lblLosses2.Name = "lblLosses2";
+            this.lblLosses2.Size = new System.Drawing.Size(0, 13);
+            this.lblLosses2.TabIndex = 54;
+            // 
+            // lblCustreak2
+            // 
+            this.lblCustreak2.AutoSize = true;
+            this.lblCustreak2.Location = new System.Drawing.Point(91, 497);
+            this.lblCustreak2.Name = "lblCustreak2";
+            this.lblCustreak2.Size = new System.Drawing.Size(0, 13);
+            this.lblCustreak2.TabIndex = 56;
+            // 
+            // label112
+            // 
+            this.label112.AutoSize = true;
+            this.label112.Location = new System.Drawing.Point(7, 497);
+            this.label112.Name = "label112";
+            this.label112.Size = new System.Drawing.Size(78, 13);
+            this.label112.TabIndex = 55;
+            this.label112.Text = "Current Streak:";
+            // 
+            // label111
+            // 
+            this.label111.AutoSize = true;
+            this.label111.Location = new System.Drawing.Point(10, 17);
+            this.label111.Name = "label111";
+            this.label111.Size = new System.Drawing.Size(70, 13);
+            this.label111.TabIndex = 3;
+            this.label111.Text = "Times bet by:";
+            // 
+            // label115
+            // 
+            this.label115.AutoSize = true;
+            this.label115.Location = new System.Drawing.Point(10, 20);
+            this.label115.Name = "label115";
+            this.label115.Size = new System.Drawing.Size(70, 13);
+            this.label115.TabIndex = 4;
+            this.label115.Text = "Times bet by:";
+            // 
+            // label117
+            // 
+            this.label117.AutoSize = true;
+            this.label117.Location = new System.Drawing.Point(7, 3);
+            this.label117.Name = "label117";
+            this.label117.Size = new System.Drawing.Size(65, 13);
+            this.label117.TabIndex = 64;
+            this.label117.Text = "Starting Bet:";
+            // 
+            // nudMinbet2
+            // 
+            this.nudMinbet2.DecimalPlaces = 8;
+            this.nudMinbet2.Location = new System.Drawing.Point(25, 19);
+            this.nudMinbet2.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudMinbet2.Name = "nudMinbet2";
+            this.nudMinbet2.Size = new System.Drawing.Size(85, 20);
+            this.nudMinbet2.TabIndex = 68;
+            this.nudMinbet2.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            393216});
+            this.nudMinbet2.ValueChanged += new System.EventHandler(this.nudMinbet2_ValueChanged);
+            // 
+            // label118
+            // 
+            this.label118.AutoSize = true;
+            this.label118.Location = new System.Drawing.Point(7, 43);
+            this.label118.Name = "label118";
+            this.label118.Size = new System.Drawing.Size(78, 13);
+            this.label118.TabIndex = 69;
+            this.label118.Text = "Chance to win:";
+            // 
+            // nudChance2
+            // 
+            this.nudChance2.DecimalPlaces = 4;
+            this.nudChance2.Location = new System.Drawing.Point(42, 59);
+            this.nudChance2.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            131072});
+            this.nudChance2.Name = "nudChance2";
+            this.nudChance2.Size = new System.Drawing.Size(68, 20);
+            this.nudChance2.TabIndex = 70;
+            this.nudChance2.Value = new decimal(new int[] {
+            495,
+            0,
+            0,
+            65536});
+            this.nudChance2.ValueChanged += new System.EventHandler(this.nudChance2_ValueChanged);
+            // 
             // idDataGridViewTextBoxColumn
             // 
             this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
@@ -5626,7 +5999,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1484, 842);
             this.Controls.Add(this.pnlApiInfo);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.pnlBasic);
+            this.Controls.Add(this.pnlAdvanced);
             this.Controls.Add(this.panel3);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "cDiceBot";
@@ -5634,7 +6008,7 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.cDiceBot_Resize);
-            this.panel1.ResumeLayout(false);
+            this.pnlAdvanced.ResumeLayout(false);
             this.tcSettings.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.Settings.ResumeLayout(false);
@@ -5791,6 +6165,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiPayout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).EndInit();
+            this.pnlBasic.ResumeLayout(false);
+            this.pnlBasic.PerformLayout();
+            this.groupBox17.ResumeLayout(false);
+            this.groupBox17.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMutliplier2)).EndInit();
+            this.groupBox18.ResumeLayout(false);
+            this.groupBox18.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinbet2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChance2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -5799,7 +6183,7 @@
         #endregion
 
         
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pnlAdvanced;
         private System.Windows.Forms.Label lblWins;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label lblProfit24;
@@ -6238,6 +6622,34 @@
         private System.Windows.Forms.Button btnDisable;
         private System.Windows.Forms.Button btnHideLive;
         private System.Windows.Forms.Button btnChartReset;
+        private System.Windows.Forms.Button btnHideStats;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnShowStats;
+        private System.Windows.Forms.Panel pnlBasic;
+        private System.Windows.Forms.Button btnStopOnWin2;
+        private System.Windows.Forms.Button btnStop2;
+        private System.Windows.Forms.Button btnStartLow2;
+        private System.Windows.Forms.Button btnStartHigh2;
+        private System.Windows.Forms.Label label116;
+        private System.Windows.Forms.Label lblLosses2;
+        private System.Windows.Forms.Label label114;
+        private System.Windows.Forms.Label lblWins2;
+        private System.Windows.Forms.Label lblBets2;
+        private System.Windows.Forms.Label label113;
+        private System.Windows.Forms.Label label110;
+        private System.Windows.Forms.Label lblProfit2;
+        private System.Windows.Forms.GroupBox groupBox18;
+        private System.Windows.Forms.NumericUpDown nudWinMultiplier2;
+        private System.Windows.Forms.GroupBox groupBox17;
+        private System.Windows.Forms.NumericUpDown nudMutliplier2;
+        private System.Windows.Forms.Label lblCustreak2;
+        private System.Windows.Forms.Label label112;
+        private System.Windows.Forms.Label label115;
+        private System.Windows.Forms.Label label111;
+        private System.Windows.Forms.NumericUpDown nudChance2;
+        private System.Windows.Forms.Label label118;
+        private System.Windows.Forms.NumericUpDown nudMinbet2;
+        private System.Windows.Forms.Label label117;
 
     }
 }

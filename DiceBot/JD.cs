@@ -165,6 +165,7 @@ namespace DiceBot
 
         public override void Disconnect()
         {
+            if (Instance.Connected)
             Instance.Disconnect();
         }
 

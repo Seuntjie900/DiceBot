@@ -18,6 +18,7 @@ using Microsoft.VisualBasic;
 using System.Security.Cryptography;
 
 using WMPLib;
+using System.Globalization;
 namespace DiceBot
 {
     
@@ -189,6 +190,8 @@ namespace DiceBot
 
         public cDiceBot()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture =  new CultureInfo("en-US");
             sqlite_helper.CheckDBS();
             if (!Directory.Exists("data"))
             {
@@ -197,7 +200,7 @@ namespace DiceBot
             }
             InitializeComponent();
             
-            ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow };
+            ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow, btnStartHigh2, btnStartLow2 };
             EnableNotLoggedInControls(false);
             cmbSettingMode.SelectedIndex = 0;
             chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
@@ -297,15 +300,15 @@ namespace DiceBot
             }
             
             tmStop.Enabled = true;
-            switch (cmbSite.SelectedIndex)
+            /*switch (cmbSite.SelectedIndex)
             {
                 case 0: CurrentSite = new JD(this); break;
-                case 1: CurrentSite = new PD(this)/*new PRC()*/; break;
-                case 2: CurrentSite = new PD(this)/*new D999()*/; break;
+                case 1: CurrentSite = new PD(this)/*new PRC(); break;
+                case 2: CurrentSite = new PD(this)/*new D999(); break;
                 //case 3: CurrentSite = new PRC2(); break;
-                case 3: CurrentSite = new PD(this)/*new SafeDice()*/; break;
+                case 3: CurrentSite = new PD(this)/*new SafeDice(); break;
                 case 4: CurrentSite = new PD(this); break;
-            }
+            }*/
             if (cmbSite.SelectedIndex==-1)
             {
                 cmbSite.SelectedIndex=4;
@@ -364,10 +367,10 @@ namespace DiceBot
             else
             {
                 lblLoseStreak.Text = WorstStreak.ToString();
-                lblLosses.Text = Losses.ToString();
+                lblLosses2.Text = lblLosses.Text = Losses.ToString();
 
-                
-                lblProfit.Text = profit.ToString("0.00000000");
+
+                lblProfit2.Text = lblProfit.Text = profit.ToString("0.00000000");
                 lblBalance.Text = PreviousBalance.ToString("0.00000000");
                 if ((PreviousBalance - StartBalance) < 0)
                 {
@@ -380,20 +383,20 @@ namespace DiceBot
                 }
                 if (Winstreak == 0)
                 {
-                    lblCustreak.Text = Losestreak.ToString();
-                    lblCustreak.ForeColor = Color.Red;
+                    lblCustreak2.Text= lblCustreak.Text = Losestreak.ToString();
+                    lblCustreak2.ForeColor =  lblCustreak.ForeColor = Color.Red;
                 }
                 else
                 {
-                    lblCustreak.Text = Winstreak.ToString();
-                    lblCustreak.ForeColor = Color.Green;
+                    lblCustreak2.Text = lblCustreak.Text = Winstreak.ToString();
+                    lblCustreak2.ForeColor = lblCustreak.ForeColor = Color.Green;
 
                 }
 
-                lblWins.Text = Wins.ToString();
+                lblWins2.Text = lblWins.Text = Wins.ToString();
                 lblWinStreak.Text = BestStreak.ToString();
                 TimeSpan curtime = DateTime.Now - dtStarted;
-                lblBets.Text = (Wins + Losses).ToString();
+                lblBets2.Text = lblBets.Text = (Wins + Losses).ToString();
 
                 decimal profpB = 0;
                 if (Wins + Losses > 0)
@@ -1893,6 +1896,7 @@ namespace DiceBot
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            Stop();
             if (CurrentSite != null)
             {
                 CurrentSite.Disconnect();
@@ -3192,6 +3196,27 @@ namespace DiceBot
 
         private void txtChance_Leave(object sender, EventArgs e)
         {
+            if ((sender as Control).Name == "nudMultiplier")
+            {
+                if ((sender as NumericUpDown).Value != nudMutliplier2.Value)
+                    nudMutliplier2.Value = (sender as NumericUpDown).Value;
+            }
+            if ((sender as Control).Name == "nudWinMultiplier")
+            {
+                if ((sender as NumericUpDown).Value != nudWinMultiplier2.Value)
+                    nudWinMultiplier2.Value = (sender as NumericUpDown).Value;
+            }
+            if ((sender as Control).Name == "nudMinBet")
+            {
+                if ((sender as NumericUpDown).Value != nudMinbet2.Value)
+                    nudMinbet2.Value = (sender as NumericUpDown).Value;
+            }
+            if ((sender as Control).Name == "nudChance")
+            {
+                if ((sender as NumericUpDown).Value != nudChance2.Value)
+                    nudChance2.Value = (sender as NumericUpDown).Value;
+            }
+
             testInputs();
             try
             {
@@ -4350,38 +4375,23 @@ namespace DiceBot
 
         //settings mode combobox
         List<TabPage> Tabs = new List<TabPage>();
+        bool ViewedAdvanced = false;
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-           /* if (cmbSettingMode.SelectedIndex==0 && tcBetSettings.TabCount>3)
+           if (cmbSettingMode.SelectedIndex==0 )
             {
-                Tabs.Add(tcBetSettings.TabPages[3]);
-                tcBetSettings.TabPages.RemoveAt(3);
-                Tabs.Add(tcBetSettings.TabPages[3]);
-                tcBetSettings.TabPages.RemoveAt(3);
-                Tabs.Add(tcBetSettings.TabPages[3]);
-                tcBetSettings.TabPages.RemoveAt(3);
-                Tabs.Add(tcBetSettings.TabPages[3]);
-                tcBetSettings.TabPages.RemoveAt(3);
-                pnlMartingaleLossAdvanced.Visible = false;
-                pnlMartingaleWinAdvanced.Visible = false;
-                pnlAdvancedAdvanced.Visible = false;
-                label82.Visible = false;
-                cmbStrat.Visible = false;
-                
+                pnlAdvanced.Visible = false;
+                pnlBasic.Visible = true;
+               if (ViewedAdvanced)
+                MessageBox.Show("Please note: Settings set in the advanced mode are still be active.");
             }
             else if (cmbSettingMode.SelectedIndex==1)
-            {
-                for (int i = 0; i < Tabs.Count; i++)
-                {
-                    tcBetSettings.TabPages.Add(Tabs[i]);
-                    Tabs.RemoveAt(i--);
-                    pnlMartingaleLossAdvanced.Visible = true;
-                    pnlMartingaleWinAdvanced.Visible = true;
-                    pnlAdvancedAdvanced.Visible = true;
-                    label82.Visible = true;
-                    cmbStrat.Visible = true;
-                }
-            }*/
+           {
+               ViewedAdvanced = true;
+                pnlAdvanced.Visible = true;
+                pnlBasic.Visible = false;
+                
+            }
                 
         }
 
@@ -4585,6 +4595,47 @@ namespace DiceBot
             {
                 btnLogIn_Click(btnLogIn, new EventArgs());
             }
+        }
+
+        private void btnHideStats_Click(object sender, EventArgs e)
+        {
+            tcStats.Visible = false;
+            btnShowStats.Visible = true;
+        }
+
+        private void btnShowStats_Click(object sender, EventArgs e)
+        {
+            tcStats.Visible = true;
+            btnShowStats.Visible = false;
+        }
+
+        private void panel8_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            if (nudMutliplier2.Value != nudMultiplier.Value)
+                nudMultiplier.Value = nudMutliplier2.Value;
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            if (nudWinMultiplier2.Value != nudWinMultiplier.Value)
+                nudWinMultiplier.Value = nudWinMultiplier2.Value;
+        }
+
+        private void nudChance2_ValueChanged(object sender, EventArgs e)
+        {
+            if (nudChance2.Value != nudChance.Value)
+                nudChance.Value = nudChance2.Value;
+        }
+
+        private void nudMinbet2_ValueChanged(object sender, EventArgs e)
+        {
+            if (nudMinBet.Value != nudMinbet2.Value)
+                nudMinBet.Value = nudMinbet2.Value;
         }
 
         
