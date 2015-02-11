@@ -142,6 +142,7 @@ namespace DiceBot
         public void GetBetResult(double Balance, bool win, double Profit)
         {
             PreviousBalance = (double)Balance;
+            profit += Profit;
             if (InvokeRequired)
             {
                 Invoke(new dDobet(DoBet),win, Profit);
@@ -163,6 +164,7 @@ namespace DiceBot
             }
             else
             {
+                if (chrtEmbeddedLiveChart.Enabled)
                 chrtEmbeddedLiveChart.Series[0].Points.AddY(profit + Profit);
             }
         }
@@ -364,15 +366,7 @@ namespace DiceBot
                 lblLoseStreak.Text = WorstStreak.ToString();
                 lblLosses.Text = Losses.ToString();
 
-                if (StartBalance != -1)
-                {
-                    profit = (PreviousBalance - StartBalance);
-
-                }
-                else
-                {
-
-                }
+                
                 lblProfit.Text = profit.ToString("0.00000000");
                 lblBalance.Text = PreviousBalance.ToString("0.00000000");
                 if ((PreviousBalance - StartBalance) < 0)
@@ -4277,9 +4271,23 @@ namespace DiceBot
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            if (CurrentSite.Register(txtApiUsername.Text, txtApiPassword.Text))
+            ConfirmPassword Conf = new ConfirmPassword();
+            bool Valid = false;
+            
+            if (Conf.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                EnableNotLoggedInControls(true);
+                Valid = Conf.Password == txtApiPassword.Text;
+            }
+            if (Valid)
+            {
+                if (CurrentSite.Register(txtApiUsername.Text, txtApiPassword.Text))
+                {
+                    EnableNotLoggedInControls(true);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Registration Failed.");
             }
         }
 
@@ -4434,7 +4442,30 @@ namespace DiceBot
 
         private void btnTip_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This feature has not yet been implemented.");
+            if (CurrentSite.Tip)
+            {
+                string User = Interaction.InputBox((CurrentSite.TipUsingName?"Username":"User ID")+" of user to tip:", "Tip", "",-1,-1 );
+                if (!CurrentSite.TipUsingName)
+                {
+                    int ID = 0;
+                    if (!int.TryParse(User, out ID))
+                    {
+                        updateStatus("Invalid UserID");
+                        return;
+                    }
+                }
+                string Amount = Interaction.InputBox("Amount to tip: ", "Tip", "0", -1,-1);
+                double tmpAmount = 0;
+                if (double.TryParse(Amount, out tmpAmount))
+                {
+                    CurrentSite.SendTip(User, tmpAmount);
+
+                }
+                else
+                {
+                    MessageBox.Show("Input not a valid number");
+                }
+            }
         }
 
         private void rdbPreset_CheckedChanged(object sender, EventArgs e)
@@ -4514,6 +4545,45 @@ namespace DiceBot
                     {
                         MessageBox.Show("Invalid bets file. Please make sure there are only bets in the file, 1 per line. NO other characters are permitted.");
                     }
+            }
+        }
+
+        private void btnDisable_Click(object sender, EventArgs e)
+        {
+            chrtEmbeddedLiveChart.Enabled = !chrtEmbeddedLiveChart.Enabled;
+            if (!chrtEmbeddedLiveChart.Enabled)
+                btnDisable.Text = "Start Chart";
+            else
+                btnDisable.Text = "Stop Chart";
+        }
+
+        private void btnChartReset_Click(object sender, EventArgs e)
+        {
+            chrtEmbeddedLiveChart.Series[0].Points.Clear();
+            chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
+            
+        }
+
+        private void btnHideLive_Click(object sender, EventArgs e)
+        {
+            chrtEmbeddedLiveChart.Visible = !chrtEmbeddedLiveChart.Visible;
+            if (chrtEmbeddedLiveChart.Visible)
+            {
+                btnHideLive.Text = "Hide Chart";
+                splitContainer1.SplitterDistance = 250;
+            }
+            else
+            {
+                btnHideLive.Text = "Show Chart";
+                splitContainer1.SplitterDistance = 25;
+            }
+        }
+
+        private void txtApiUsername_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnLogIn_Click(btnLogIn, new EventArgs());
             }
         }
 

@@ -186,20 +186,13 @@
             this.label70 = new System.Windows.Forms.Label();
             this.nudMutawaMultiplier = new System.Windows.Forms.NumericUpDown();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.tbCharts = new System.Windows.Forms.TabPage();
-            this.btnChartTimeRange = new System.Windows.Forms.Button();
-            this.btnChartBetID = new System.Windows.Forms.Button();
-            this.nudGraphStartBetID = new System.Windows.Forms.NumericUpDown();
-            this.dtpEnd = new System.Windows.Forms.DateTimePicker();
-            this.dtpStart = new System.Windows.Forms.DateTimePicker();
-            this.label96 = new System.Windows.Forms.Label();
-            this.label95 = new System.Windows.Forms.Label();
-            this.label94 = new System.Windows.Forms.Label();
-            this.btnChartAllTimeProfitTime = new System.Windows.Forms.Button();
-            this.btnChartAllTimeProfitBets = new System.Windows.Forms.Button();
-            this.btnGraphProfitTime = new System.Windows.Forms.Button();
-            this.btnGraphProfitBets = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.tbZigZag = new System.Windows.Forms.TabPage();
+            this.rdbReverseBets = new System.Windows.Forms.RadioButton();
+            this.rdbReverseLoss = new System.Windows.Forms.RadioButton();
+            this.rdbReverseWins = new System.Windows.Forms.RadioButton();
+            this.chkReverse = new System.Windows.Forms.CheckBox();
+            this.NudReverse = new System.Windows.Forms.NumericUpDown();
+            this.lblZigZag1 = new System.Windows.Forms.Label();
             this.tbSimulation = new System.Windows.Forms.TabPage();
             this.lblSimProgress = new System.Windows.Forms.Label();
             this.lblSimRun = new System.Windows.Forms.Label();
@@ -221,6 +214,20 @@
             this.lblSimStartingBalance = new System.Windows.Forms.Label();
             this.nudSimNumBets = new System.Windows.Forms.NumericUpDown();
             this.lblSimAmountBets = new System.Windows.Forms.Label();
+            this.tbCharts = new System.Windows.Forms.TabPage();
+            this.btnChartTimeRange = new System.Windows.Forms.Button();
+            this.btnChartBetID = new System.Windows.Forms.Button();
+            this.nudGraphStartBetID = new System.Windows.Forms.NumericUpDown();
+            this.dtpEnd = new System.Windows.Forms.DateTimePicker();
+            this.dtpStart = new System.Windows.Forms.DateTimePicker();
+            this.label96 = new System.Windows.Forms.Label();
+            this.label95 = new System.Windows.Forms.Label();
+            this.label94 = new System.Windows.Forms.Label();
+            this.btnChartAllTimeProfitTime = new System.Windows.Forms.Button();
+            this.btnChartAllTimeProfitBets = new System.Windows.Forms.Button();
+            this.btnGraphProfitTime = new System.Windows.Forms.Button();
+            this.btnGraphProfitBets = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.tbVerify = new System.Windows.Forms.TabPage();
             this.btnBetHistory = new System.Windows.Forms.Button();
             this.btnGenerateBets = new System.Windows.Forms.Button();
@@ -232,13 +239,6 @@
             this.txtServerSeed = new System.Windows.Forms.TextBox();
             this.label26 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
-            this.tbZigZag = new System.Windows.Forms.TabPage();
-            this.rdbReverseBets = new System.Windows.Forms.RadioButton();
-            this.rdbReverseLoss = new System.Windows.Forms.RadioButton();
-            this.rdbReverseWins = new System.Windows.Forms.RadioButton();
-            this.chkReverse = new System.Windows.Forms.CheckBox();
-            this.NudReverse = new System.Windows.Forms.NumericUpDown();
-            this.lblZigZag1 = new System.Windows.Forms.Label();
             this.btnExport = new System.Windows.Forms.Button();
             this.btnImport = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -418,17 +418,11 @@
             this.pnlApiInfo = new System.Windows.Forms.Panel();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.btnChartReset = new System.Windows.Forms.Button();
+            this.btnDisable = new System.Windows.Forms.Button();
+            this.btnHideLive = new System.Windows.Forms.Button();
             this.chrtEmbeddedLiveChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.highDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.chanceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rollDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel5 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lblApiWagered = new System.Windows.Forms.Label();
@@ -469,6 +463,15 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.highDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.chanceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rollDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel1.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -532,16 +535,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.NudTrazelLose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTrazelWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMutawaMultiplier)).BeginInit();
-            this.tbCharts.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).BeginInit();
+            this.tbZigZag.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).BeginInit();
             this.tbSimulation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSimBalance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSimNumBets)).BeginInit();
+            this.tbCharts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).BeginInit();
             this.tbVerify.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).BeginInit();
-            this.tbZigZag.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).BeginInit();
             this.panel4.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAmount)).BeginInit();
@@ -582,7 +585,6 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.panel5.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
@@ -590,6 +592,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiPayout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -2460,153 +2463,94 @@
             this.checkBox1.Text = "Use Mutawa";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // tbCharts
+            // tbZigZag
             // 
-            this.tbCharts.Controls.Add(this.btnChartTimeRange);
-            this.tbCharts.Controls.Add(this.btnChartBetID);
-            this.tbCharts.Controls.Add(this.nudGraphStartBetID);
-            this.tbCharts.Controls.Add(this.dtpEnd);
-            this.tbCharts.Controls.Add(this.dtpStart);
-            this.tbCharts.Controls.Add(this.label96);
-            this.tbCharts.Controls.Add(this.label95);
-            this.tbCharts.Controls.Add(this.label94);
-            this.tbCharts.Controls.Add(this.btnChartAllTimeProfitTime);
-            this.tbCharts.Controls.Add(this.btnChartAllTimeProfitBets);
-            this.tbCharts.Controls.Add(this.btnGraphProfitTime);
-            this.tbCharts.Controls.Add(this.btnGraphProfitBets);
-            this.tbCharts.Controls.Add(this.button1);
-            this.tbCharts.Location = new System.Drawing.Point(4, 22);
-            this.tbCharts.Name = "tbCharts";
-            this.tbCharts.Padding = new System.Windows.Forms.Padding(3);
-            this.tbCharts.Size = new System.Drawing.Size(434, 408);
-            this.tbCharts.TabIndex = 4;
-            this.tbCharts.Text = "Charts";
-            this.tbCharts.UseVisualStyleBackColor = true;
+            this.tbZigZag.Controls.Add(this.rdbReverseBets);
+            this.tbZigZag.Controls.Add(this.rdbReverseLoss);
+            this.tbZigZag.Controls.Add(this.rdbReverseWins);
+            this.tbZigZag.Controls.Add(this.chkReverse);
+            this.tbZigZag.Controls.Add(this.NudReverse);
+            this.tbZigZag.Controls.Add(this.lblZigZag1);
+            this.tbZigZag.Location = new System.Drawing.Point(4, 22);
+            this.tbZigZag.Name = "tbZigZag";
+            this.tbZigZag.Padding = new System.Windows.Forms.Padding(3);
+            this.tbZigZag.Size = new System.Drawing.Size(434, 408);
+            this.tbZigZag.TabIndex = 13;
+            this.tbZigZag.Text = "Zig Zag";
+            this.tbZigZag.UseVisualStyleBackColor = true;
             // 
-            // btnChartTimeRange
+            // rdbReverseBets
             // 
-            this.btnChartTimeRange.Location = new System.Drawing.Point(339, 212);
-            this.btnChartTimeRange.Name = "btnChartTimeRange";
-            this.btnChartTimeRange.Size = new System.Drawing.Size(75, 46);
-            this.btnChartTimeRange.TabIndex = 80;
-            this.btnChartTimeRange.Text = "Draw Chart";
-            this.btnChartTimeRange.UseVisualStyleBackColor = true;
-            this.btnChartTimeRange.Click += new System.EventHandler(this.btnChartTimeRange_Click);
+            this.rdbReverseBets.AutoSize = true;
+            this.rdbReverseBets.Checked = true;
+            this.rdbReverseBets.Location = new System.Drawing.Point(24, 100);
+            this.rdbReverseBets.Name = "rdbReverseBets";
+            this.rdbReverseBets.Size = new System.Drawing.Size(46, 17);
+            this.rdbReverseBets.TabIndex = 6;
+            this.rdbReverseBets.TabStop = true;
+            this.rdbReverseBets.Text = "Bets";
+            this.rdbReverseBets.UseVisualStyleBackColor = true;
             // 
-            // btnChartBetID
+            // rdbReverseLoss
             // 
-            this.btnChartBetID.Location = new System.Drawing.Point(269, 165);
-            this.btnChartBetID.Name = "btnChartBetID";
-            this.btnChartBetID.Size = new System.Drawing.Size(123, 23);
-            this.btnChartBetID.TabIndex = 79;
-            this.btnChartBetID.Text = "Draw Chart";
-            this.btnChartBetID.UseVisualStyleBackColor = true;
-            this.btnChartBetID.Click += new System.EventHandler(this.btnChartBetID_Click);
+            this.rdbReverseLoss.AutoSize = true;
+            this.rdbReverseLoss.Location = new System.Drawing.Point(24, 77);
+            this.rdbReverseLoss.Name = "rdbReverseLoss";
+            this.rdbReverseLoss.Size = new System.Drawing.Size(58, 17);
+            this.rdbReverseLoss.TabIndex = 5;
+            this.rdbReverseLoss.Text = "Losses";
+            this.rdbReverseLoss.UseVisualStyleBackColor = true;
             // 
-            // nudGraphStartBetID
+            // rdbReverseWins
             // 
-            this.nudGraphStartBetID.Location = new System.Drawing.Point(139, 168);
-            this.nudGraphStartBetID.Maximum = new decimal(new int[] {
-            276447232,
-            23283,
+            this.rdbReverseWins.AutoSize = true;
+            this.rdbReverseWins.Location = new System.Drawing.Point(24, 54);
+            this.rdbReverseWins.Name = "rdbReverseWins";
+            this.rdbReverseWins.Size = new System.Drawing.Size(49, 17);
+            this.rdbReverseWins.TabIndex = 4;
+            this.rdbReverseWins.Text = "Wins";
+            this.rdbReverseWins.UseVisualStyleBackColor = true;
+            // 
+            // chkReverse
+            // 
+            this.chkReverse.AutoSize = true;
+            this.chkReverse.Location = new System.Drawing.Point(24, 18);
+            this.chkReverse.Name = "chkReverse";
+            this.chkReverse.Size = new System.Drawing.Size(99, 17);
+            this.chkReverse.TabIndex = 3;
+            this.chkReverse.Text = "Enable Zig Zag";
+            this.chkReverse.UseVisualStyleBackColor = true;
+            // 
+            // NudReverse
+            // 
+            this.NudReverse.Location = new System.Drawing.Point(149, 36);
+            this.NudReverse.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
             0,
             0});
-            this.nudGraphStartBetID.Name = "nudGraphStartBetID";
-            this.nudGraphStartBetID.Size = new System.Drawing.Size(120, 20);
-            this.nudGraphStartBetID.TabIndex = 78;
+            this.NudReverse.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.NudReverse.Name = "NudReverse";
+            this.NudReverse.Size = new System.Drawing.Size(64, 20);
+            this.NudReverse.TabIndex = 2;
+            this.NudReverse.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // dtpEnd
+            // lblZigZag1
             // 
-            this.dtpEnd.Location = new System.Drawing.Point(124, 238);
-            this.dtpEnd.Name = "dtpEnd";
-            this.dtpEnd.Size = new System.Drawing.Size(200, 20);
-            this.dtpEnd.TabIndex = 77;
-            // 
-            // dtpStart
-            // 
-            this.dtpStart.Location = new System.Drawing.Point(124, 212);
-            this.dtpStart.Name = "dtpStart";
-            this.dtpStart.Size = new System.Drawing.Size(200, 20);
-            this.dtpStart.TabIndex = 76;
-            // 
-            // label96
-            // 
-            this.label96.AutoSize = true;
-            this.label96.Location = new System.Drawing.Point(89, 244);
-            this.label96.Name = "label96";
-            this.label96.Size = new System.Drawing.Size(29, 13);
-            this.label96.TabIndex = 75;
-            this.label96.Text = "And ";
-            // 
-            // label95
-            // 
-            this.label95.AutoSize = true;
-            this.label95.Location = new System.Drawing.Point(28, 218);
-            this.label95.Name = "label95";
-            this.label95.Size = new System.Drawing.Size(90, 13);
-            this.label95.TabIndex = 74;
-            this.label95.Text = "All Bets Between ";
-            // 
-            // label94
-            // 
-            this.label94.AutoSize = true;
-            this.label94.Location = new System.Drawing.Point(26, 170);
-            this.label94.Name = "label94";
-            this.label94.Size = new System.Drawing.Size(107, 13);
-            this.label94.TabIndex = 73;
-            this.label94.Text = "All bets Above bet id:";
-            // 
-            // btnChartAllTimeProfitTime
-            // 
-            this.btnChartAllTimeProfitTime.Location = new System.Drawing.Point(166, 95);
-            this.btnChartAllTimeProfitTime.Name = "btnChartAllTimeProfitTime";
-            this.btnChartAllTimeProfitTime.Size = new System.Drawing.Size(135, 55);
-            this.btnChartAllTimeProfitTime.TabIndex = 72;
-            this.btnChartAllTimeProfitTime.Text = "All Time Static Chart";
-            this.btnChartAllTimeProfitTime.UseVisualStyleBackColor = true;
-            this.btnChartAllTimeProfitTime.Click += new System.EventHandler(this.btnChartAllTimeProfitTime_Click);
-            // 
-            // btnChartAllTimeProfitBets
-            // 
-            this.btnChartAllTimeProfitBets.Location = new System.Drawing.Point(14, 95);
-            this.btnChartAllTimeProfitBets.Name = "btnChartAllTimeProfitBets";
-            this.btnChartAllTimeProfitBets.Size = new System.Drawing.Size(134, 55);
-            this.btnChartAllTimeProfitBets.TabIndex = 71;
-            this.btnChartAllTimeProfitBets.Text = "All Time Live Chart";
-            this.btnChartAllTimeProfitBets.UseVisualStyleBackColor = true;
-            this.btnChartAllTimeProfitBets.Click += new System.EventHandler(this.btnChartAllTimeProfitBets_Click);
-            // 
-            // btnGraphProfitTime
-            // 
-            this.btnGraphProfitTime.Location = new System.Drawing.Point(166, 34);
-            this.btnGraphProfitTime.Name = "btnGraphProfitTime";
-            this.btnGraphProfitTime.Size = new System.Drawing.Size(135, 55);
-            this.btnGraphProfitTime.TabIndex = 69;
-            this.btnGraphProfitTime.Text = "Static Session Chart";
-            this.btnGraphProfitTime.UseVisualStyleBackColor = true;
-            this.btnGraphProfitTime.Click += new System.EventHandler(this.btnGraphProfitTime_Click);
-            // 
-            // btnGraphProfitBets
-            // 
-            this.btnGraphProfitBets.Location = new System.Drawing.Point(13, 34);
-            this.btnGraphProfitBets.Name = "btnGraphProfitBets";
-            this.btnGraphProfitBets.Size = new System.Drawing.Size(135, 55);
-            this.btnGraphProfitBets.TabIndex = 68;
-            this.btnGraphProfitBets.Text = "Session Live Chart";
-            this.btnGraphProfitBets.UseVisualStyleBackColor = true;
-            this.btnGraphProfitBets.Click += new System.EventHandler(this.btnGraphProfitBets_Click);
-            // 
-            // button1
-            // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(350, 293);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 42);
-            this.button1.TabIndex = 67;
-            this.button1.Text = "Random Graph";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.lblZigZag1.AutoSize = true;
+            this.lblZigZag1.Location = new System.Drawing.Point(21, 38);
+            this.lblZigZag1.Name = "lblZigZag1";
+            this.lblZigZag1.Size = new System.Drawing.Size(121, 13);
+            this.lblZigZag1.TabIndex = 1;
+            this.lblZigZag1.Text = "Switch High/Low every ";
             // 
             // tbSimulation
             // 
@@ -2835,6 +2779,154 @@
             this.lblSimAmountBets.TabIndex = 0;
             this.lblSimAmountBets.Text = "Amount of bets:";
             // 
+            // tbCharts
+            // 
+            this.tbCharts.Controls.Add(this.btnChartTimeRange);
+            this.tbCharts.Controls.Add(this.btnChartBetID);
+            this.tbCharts.Controls.Add(this.nudGraphStartBetID);
+            this.tbCharts.Controls.Add(this.dtpEnd);
+            this.tbCharts.Controls.Add(this.dtpStart);
+            this.tbCharts.Controls.Add(this.label96);
+            this.tbCharts.Controls.Add(this.label95);
+            this.tbCharts.Controls.Add(this.label94);
+            this.tbCharts.Controls.Add(this.btnChartAllTimeProfitTime);
+            this.tbCharts.Controls.Add(this.btnChartAllTimeProfitBets);
+            this.tbCharts.Controls.Add(this.btnGraphProfitTime);
+            this.tbCharts.Controls.Add(this.btnGraphProfitBets);
+            this.tbCharts.Controls.Add(this.button1);
+            this.tbCharts.Location = new System.Drawing.Point(4, 22);
+            this.tbCharts.Name = "tbCharts";
+            this.tbCharts.Padding = new System.Windows.Forms.Padding(3);
+            this.tbCharts.Size = new System.Drawing.Size(434, 408);
+            this.tbCharts.TabIndex = 4;
+            this.tbCharts.Text = "Charts";
+            this.tbCharts.UseVisualStyleBackColor = true;
+            // 
+            // btnChartTimeRange
+            // 
+            this.btnChartTimeRange.Location = new System.Drawing.Point(339, 212);
+            this.btnChartTimeRange.Name = "btnChartTimeRange";
+            this.btnChartTimeRange.Size = new System.Drawing.Size(75, 46);
+            this.btnChartTimeRange.TabIndex = 80;
+            this.btnChartTimeRange.Text = "Draw Chart";
+            this.btnChartTimeRange.UseVisualStyleBackColor = true;
+            this.btnChartTimeRange.Click += new System.EventHandler(this.btnChartTimeRange_Click);
+            // 
+            // btnChartBetID
+            // 
+            this.btnChartBetID.Location = new System.Drawing.Point(269, 165);
+            this.btnChartBetID.Name = "btnChartBetID";
+            this.btnChartBetID.Size = new System.Drawing.Size(123, 23);
+            this.btnChartBetID.TabIndex = 79;
+            this.btnChartBetID.Text = "Draw Chart";
+            this.btnChartBetID.UseVisualStyleBackColor = true;
+            this.btnChartBetID.Click += new System.EventHandler(this.btnChartBetID_Click);
+            // 
+            // nudGraphStartBetID
+            // 
+            this.nudGraphStartBetID.Location = new System.Drawing.Point(139, 168);
+            this.nudGraphStartBetID.Maximum = new decimal(new int[] {
+            276447232,
+            23283,
+            0,
+            0});
+            this.nudGraphStartBetID.Name = "nudGraphStartBetID";
+            this.nudGraphStartBetID.Size = new System.Drawing.Size(120, 20);
+            this.nudGraphStartBetID.TabIndex = 78;
+            // 
+            // dtpEnd
+            // 
+            this.dtpEnd.Location = new System.Drawing.Point(124, 238);
+            this.dtpEnd.Name = "dtpEnd";
+            this.dtpEnd.Size = new System.Drawing.Size(200, 20);
+            this.dtpEnd.TabIndex = 77;
+            // 
+            // dtpStart
+            // 
+            this.dtpStart.Location = new System.Drawing.Point(124, 212);
+            this.dtpStart.Name = "dtpStart";
+            this.dtpStart.Size = new System.Drawing.Size(200, 20);
+            this.dtpStart.TabIndex = 76;
+            // 
+            // label96
+            // 
+            this.label96.AutoSize = true;
+            this.label96.Location = new System.Drawing.Point(89, 244);
+            this.label96.Name = "label96";
+            this.label96.Size = new System.Drawing.Size(29, 13);
+            this.label96.TabIndex = 75;
+            this.label96.Text = "And ";
+            // 
+            // label95
+            // 
+            this.label95.AutoSize = true;
+            this.label95.Location = new System.Drawing.Point(28, 218);
+            this.label95.Name = "label95";
+            this.label95.Size = new System.Drawing.Size(90, 13);
+            this.label95.TabIndex = 74;
+            this.label95.Text = "All Bets Between ";
+            // 
+            // label94
+            // 
+            this.label94.AutoSize = true;
+            this.label94.Location = new System.Drawing.Point(26, 170);
+            this.label94.Name = "label94";
+            this.label94.Size = new System.Drawing.Size(107, 13);
+            this.label94.TabIndex = 73;
+            this.label94.Text = "All bets Above bet id:";
+            // 
+            // btnChartAllTimeProfitTime
+            // 
+            this.btnChartAllTimeProfitTime.Location = new System.Drawing.Point(166, 95);
+            this.btnChartAllTimeProfitTime.Name = "btnChartAllTimeProfitTime";
+            this.btnChartAllTimeProfitTime.Size = new System.Drawing.Size(135, 55);
+            this.btnChartAllTimeProfitTime.TabIndex = 72;
+            this.btnChartAllTimeProfitTime.Text = "All Time Static Chart";
+            this.btnChartAllTimeProfitTime.UseVisualStyleBackColor = true;
+            this.btnChartAllTimeProfitTime.Click += new System.EventHandler(this.btnChartAllTimeProfitTime_Click);
+            // 
+            // btnChartAllTimeProfitBets
+            // 
+            this.btnChartAllTimeProfitBets.Location = new System.Drawing.Point(14, 95);
+            this.btnChartAllTimeProfitBets.Name = "btnChartAllTimeProfitBets";
+            this.btnChartAllTimeProfitBets.Size = new System.Drawing.Size(134, 55);
+            this.btnChartAllTimeProfitBets.TabIndex = 71;
+            this.btnChartAllTimeProfitBets.Text = "All Time Live Chart";
+            this.btnChartAllTimeProfitBets.UseVisualStyleBackColor = true;
+            this.btnChartAllTimeProfitBets.Click += new System.EventHandler(this.btnChartAllTimeProfitBets_Click);
+            // 
+            // btnGraphProfitTime
+            // 
+            this.btnGraphProfitTime.Location = new System.Drawing.Point(166, 34);
+            this.btnGraphProfitTime.Name = "btnGraphProfitTime";
+            this.btnGraphProfitTime.Size = new System.Drawing.Size(135, 55);
+            this.btnGraphProfitTime.TabIndex = 69;
+            this.btnGraphProfitTime.Text = "Static Session Chart";
+            this.btnGraphProfitTime.UseVisualStyleBackColor = true;
+            this.btnGraphProfitTime.Click += new System.EventHandler(this.btnGraphProfitTime_Click);
+            // 
+            // btnGraphProfitBets
+            // 
+            this.btnGraphProfitBets.Location = new System.Drawing.Point(13, 34);
+            this.btnGraphProfitBets.Name = "btnGraphProfitBets";
+            this.btnGraphProfitBets.Size = new System.Drawing.Size(135, 55);
+            this.btnGraphProfitBets.TabIndex = 68;
+            this.btnGraphProfitBets.Text = "Session Live Chart";
+            this.btnGraphProfitBets.UseVisualStyleBackColor = true;
+            this.btnGraphProfitBets.Click += new System.EventHandler(this.btnGraphProfitBets_Click);
+            // 
+            // button1
+            // 
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(350, 293);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 42);
+            this.button1.TabIndex = 67;
+            this.button1.Text = "Random Graph";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // tbVerify
             // 
             this.tbVerify.Controls.Add(this.btnBetHistory);
@@ -2965,98 +3057,9 @@
             this.label21.TabIndex = 0;
             this.label21.Text = "Server Seed:";
             // 
-            // tbZigZag
-            // 
-            this.tbZigZag.Controls.Add(this.rdbReverseBets);
-            this.tbZigZag.Controls.Add(this.rdbReverseLoss);
-            this.tbZigZag.Controls.Add(this.rdbReverseWins);
-            this.tbZigZag.Controls.Add(this.chkReverse);
-            this.tbZigZag.Controls.Add(this.NudReverse);
-            this.tbZigZag.Controls.Add(this.lblZigZag1);
-            this.tbZigZag.Location = new System.Drawing.Point(4, 22);
-            this.tbZigZag.Name = "tbZigZag";
-            this.tbZigZag.Padding = new System.Windows.Forms.Padding(3);
-            this.tbZigZag.Size = new System.Drawing.Size(434, 408);
-            this.tbZigZag.TabIndex = 13;
-            this.tbZigZag.Text = "Zig Zag";
-            this.tbZigZag.UseVisualStyleBackColor = true;
-            // 
-            // rdbReverseBets
-            // 
-            this.rdbReverseBets.AutoSize = true;
-            this.rdbReverseBets.Checked = true;
-            this.rdbReverseBets.Location = new System.Drawing.Point(24, 100);
-            this.rdbReverseBets.Name = "rdbReverseBets";
-            this.rdbReverseBets.Size = new System.Drawing.Size(46, 17);
-            this.rdbReverseBets.TabIndex = 6;
-            this.rdbReverseBets.TabStop = true;
-            this.rdbReverseBets.Text = "Bets";
-            this.rdbReverseBets.UseVisualStyleBackColor = true;
-            // 
-            // rdbReverseLoss
-            // 
-            this.rdbReverseLoss.AutoSize = true;
-            this.rdbReverseLoss.Location = new System.Drawing.Point(24, 77);
-            this.rdbReverseLoss.Name = "rdbReverseLoss";
-            this.rdbReverseLoss.Size = new System.Drawing.Size(58, 17);
-            this.rdbReverseLoss.TabIndex = 5;
-            this.rdbReverseLoss.Text = "Losses";
-            this.rdbReverseLoss.UseVisualStyleBackColor = true;
-            // 
-            // rdbReverseWins
-            // 
-            this.rdbReverseWins.AutoSize = true;
-            this.rdbReverseWins.Location = new System.Drawing.Point(24, 54);
-            this.rdbReverseWins.Name = "rdbReverseWins";
-            this.rdbReverseWins.Size = new System.Drawing.Size(49, 17);
-            this.rdbReverseWins.TabIndex = 4;
-            this.rdbReverseWins.Text = "Wins";
-            this.rdbReverseWins.UseVisualStyleBackColor = true;
-            // 
-            // chkReverse
-            // 
-            this.chkReverse.AutoSize = true;
-            this.chkReverse.Location = new System.Drawing.Point(24, 18);
-            this.chkReverse.Name = "chkReverse";
-            this.chkReverse.Size = new System.Drawing.Size(99, 17);
-            this.chkReverse.TabIndex = 3;
-            this.chkReverse.Text = "Enable Zig Zag";
-            this.chkReverse.UseVisualStyleBackColor = true;
-            // 
-            // NudReverse
-            // 
-            this.NudReverse.Location = new System.Drawing.Point(149, 36);
-            this.NudReverse.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.NudReverse.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.NudReverse.Name = "NudReverse";
-            this.NudReverse.Size = new System.Drawing.Size(64, 20);
-            this.NudReverse.TabIndex = 2;
-            this.NudReverse.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // lblZigZag1
-            // 
-            this.lblZigZag1.AutoSize = true;
-            this.lblZigZag1.Location = new System.Drawing.Point(21, 38);
-            this.lblZigZag1.Name = "lblZigZag1";
-            this.lblZigZag1.Size = new System.Drawing.Size(121, 13);
-            this.lblZigZag1.TabIndex = 1;
-            this.lblZigZag1.Text = "Switch High/Low every ";
-            // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(372, 17);
+            this.btnExport.Location = new System.Drawing.Point(370, 15);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(58, 23);
             this.btnExport.TabIndex = 51;
@@ -3066,7 +3069,7 @@
             // 
             // btnImport
             // 
-            this.btnImport.Location = new System.Drawing.Point(305, 17);
+            this.btnImport.Location = new System.Drawing.Point(306, 15);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(58, 23);
             this.btnImport.TabIndex = 50;
@@ -5005,6 +5008,9 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btnChartReset);
+            this.splitContainer1.Panel1.Controls.Add(this.btnDisable);
+            this.splitContainer1.Panel1.Controls.Add(this.btnHideLive);
             this.splitContainer1.Panel1.Controls.Add(this.chrtEmbeddedLiveChart);
             // 
             // splitContainer1.Panel2
@@ -5013,6 +5019,39 @@
             this.splitContainer1.Size = new System.Drawing.Size(1022, 584);
             this.splitContainer1.SplitterDistance = 347;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // btnChartReset
+            // 
+            this.btnChartReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnChartReset.Location = new System.Drawing.Point(944, 263);
+            this.btnChartReset.Name = "btnChartReset";
+            this.btnChartReset.Size = new System.Drawing.Size(75, 23);
+            this.btnChartReset.TabIndex = 3;
+            this.btnChartReset.Text = "Reset Chart";
+            this.btnChartReset.UseVisualStyleBackColor = true;
+            this.btnChartReset.Click += new System.EventHandler(this.btnChartReset_Click);
+            // 
+            // btnDisable
+            // 
+            this.btnDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDisable.Location = new System.Drawing.Point(944, 292);
+            this.btnDisable.Name = "btnDisable";
+            this.btnDisable.Size = new System.Drawing.Size(75, 23);
+            this.btnDisable.TabIndex = 2;
+            this.btnDisable.Text = "Stop Chart";
+            this.btnDisable.UseVisualStyleBackColor = true;
+            this.btnDisable.Click += new System.EventHandler(this.btnDisable_Click);
+            // 
+            // btnHideLive
+            // 
+            this.btnHideLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnHideLive.Location = new System.Drawing.Point(944, 321);
+            this.btnHideLive.Name = "btnHideLive";
+            this.btnHideLive.Size = new System.Drawing.Size(75, 23);
+            this.btnHideLive.TabIndex = 1;
+            this.btnHideLive.Text = "Hide Chart";
+            this.btnHideLive.UseVisualStyleBackColor = true;
+            this.btnHideLive.Click += new System.EventHandler(this.btnHideLive_Click);
             // 
             // chrtEmbeddedLiveChart
             // 
@@ -5051,68 +5090,6 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(1022, 233);
             this.dataGridView1.TabIndex = 1;
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.idDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // dateDataGridViewTextBoxColumn
-            // 
-            this.dateDataGridViewTextBoxColumn.DataPropertyName = "date";
-            this.dateDataGridViewTextBoxColumn.HeaderText = "date";
-            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
-            this.dateDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // amountDataGridViewTextBoxColumn
-            // 
-            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
-            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
-            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
-            this.amountDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // highDataGridViewCheckBoxColumn
-            // 
-            this.highDataGridViewCheckBoxColumn.DataPropertyName = "high";
-            this.highDataGridViewCheckBoxColumn.HeaderText = "high";
-            this.highDataGridViewCheckBoxColumn.Name = "highDataGridViewCheckBoxColumn";
-            this.highDataGridViewCheckBoxColumn.ReadOnly = true;
-            // 
-            // chanceDataGridViewTextBoxColumn
-            // 
-            this.chanceDataGridViewTextBoxColumn.DataPropertyName = "Chance";
-            this.chanceDataGridViewTextBoxColumn.HeaderText = "Chance";
-            this.chanceDataGridViewTextBoxColumn.Name = "chanceDataGridViewTextBoxColumn";
-            this.chanceDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // rollDataGridViewTextBoxColumn
-            // 
-            this.rollDataGridViewTextBoxColumn.DataPropertyName = "Roll";
-            this.rollDataGridViewTextBoxColumn.HeaderText = "Roll";
-            this.rollDataGridViewTextBoxColumn.Name = "rollDataGridViewTextBoxColumn";
-            this.rollDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // profitDataGridViewTextBoxColumn
-            // 
-            this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
-            this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
-            this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
-            this.profitDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // nonceDataGridViewTextBoxColumn
-            // 
-            this.nonceDataGridViewTextBoxColumn.DataPropertyName = "nonce";
-            this.nonceDataGridViewTextBoxColumn.HeaderText = "nonce";
-            this.nonceDataGridViewTextBoxColumn.Name = "nonceDataGridViewTextBoxColumn";
-            this.nonceDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // betBindingSource
-            // 
-            this.betBindingSource.DataSource = typeof(DiceBot.Bet);
             // 
             // panel5
             // 
@@ -5312,6 +5289,7 @@
             this.txtApi2fa.Name = "txtApi2fa";
             this.txtApi2fa.Size = new System.Drawing.Size(174, 20);
             this.txtApi2fa.TabIndex = 6;
+            this.txtApi2fa.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtApiUsername_KeyDown);
             // 
             // txtApiPassword
             // 
@@ -5320,6 +5298,7 @@
             this.txtApiPassword.PasswordChar = '*';
             this.txtApiPassword.Size = new System.Drawing.Size(174, 20);
             this.txtApiPassword.TabIndex = 5;
+            this.txtApiPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtApiUsername_KeyDown);
             // 
             // txtApiUsername
             // 
@@ -5327,6 +5306,7 @@
             this.txtApiUsername.Name = "txtApiUsername";
             this.txtApiUsername.Size = new System.Drawing.Size(174, 20);
             this.txtApiUsername.TabIndex = 4;
+            this.txtApiUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtApiUsername_KeyDown);
             // 
             // label91
             // 
@@ -5578,6 +5558,68 @@
             this.label22.TabIndex = 0;
             this.label22.Text = "Bet:";
             // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.idDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // dateDataGridViewTextBoxColumn
+            // 
+            this.dateDataGridViewTextBoxColumn.DataPropertyName = "date";
+            this.dateDataGridViewTextBoxColumn.HeaderText = "date";
+            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
+            this.dateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // amountDataGridViewTextBoxColumn
+            // 
+            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
+            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
+            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
+            this.amountDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // highDataGridViewCheckBoxColumn
+            // 
+            this.highDataGridViewCheckBoxColumn.DataPropertyName = "high";
+            this.highDataGridViewCheckBoxColumn.HeaderText = "high";
+            this.highDataGridViewCheckBoxColumn.Name = "highDataGridViewCheckBoxColumn";
+            this.highDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // chanceDataGridViewTextBoxColumn
+            // 
+            this.chanceDataGridViewTextBoxColumn.DataPropertyName = "Chance";
+            this.chanceDataGridViewTextBoxColumn.HeaderText = "Chance";
+            this.chanceDataGridViewTextBoxColumn.Name = "chanceDataGridViewTextBoxColumn";
+            this.chanceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // rollDataGridViewTextBoxColumn
+            // 
+            this.rollDataGridViewTextBoxColumn.DataPropertyName = "Roll";
+            this.rollDataGridViewTextBoxColumn.HeaderText = "Roll";
+            this.rollDataGridViewTextBoxColumn.Name = "rollDataGridViewTextBoxColumn";
+            this.rollDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // profitDataGridViewTextBoxColumn
+            // 
+            this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
+            this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
+            this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
+            this.profitDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // nonceDataGridViewTextBoxColumn
+            // 
+            this.nonceDataGridViewTextBoxColumn.DataPropertyName = "nonce";
+            this.nonceDataGridViewTextBoxColumn.HeaderText = "nonce";
+            this.nonceDataGridViewTextBoxColumn.Name = "nonceDataGridViewTextBoxColumn";
+            this.nonceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // betBindingSource
+            // 
+            this.betBindingSource.DataSource = typeof(DiceBot.Bet);
+            // 
             // cDiceBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -5673,20 +5715,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.NudTrazelLose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTrazelWin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMutawaMultiplier)).EndInit();
-            this.tbCharts.ResumeLayout(false);
-            this.tbCharts.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).EndInit();
+            this.tbZigZag.ResumeLayout(false);
+            this.tbZigZag.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).EndInit();
             this.tbSimulation.ResumeLayout(false);
             this.tbSimulation.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSimBalance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSimNumBets)).EndInit();
+            this.tbCharts.ResumeLayout(false);
+            this.tbCharts.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGraphStartBetID)).EndInit();
             this.tbVerify.ResumeLayout(false);
             this.tbVerify.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsAmount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGenBetsStart)).EndInit();
-            this.tbZigZag.ResumeLayout(false);
-            this.tbZigZag.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).EndInit();
             this.panel4.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
@@ -5739,7 +5781,6 @@
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.panel5.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -5750,6 +5791,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudApiPayout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiChance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudApiBet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -6193,6 +6235,9 @@
         private System.Windows.Forms.Label label72;
         private System.Windows.Forms.NumericUpDown nudChangeWinStreak;
         private System.Windows.Forms.CheckBox chkChangeWinStreak;
+        private System.Windows.Forms.Button btnDisable;
+        private System.Windows.Forms.Button btnHideLive;
+        private System.Windows.Forms.Button btnChartReset;
 
     }
 }

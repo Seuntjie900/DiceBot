@@ -8,6 +8,7 @@ namespace DiceBot
 {
     class JD: DiceSite
     {
+        
         jdInstance Instance = new jdInstance();
         public JD(cDiceBot Parent)
         {
@@ -16,44 +17,35 @@ namespace DiceBot
             ChangeSeed = true;
             BetURL = "https://just-dice.com/bets/";
             Instance.OnResult += Instance_OnResult;
-            Instance.OnAddress += Instance_OnAddress;
-            Instance.OnJDError += Instance_OnJDError;
-            Instance.OnSecretHash += Instance_OnSecretHash;
-            Instance.OnClientSeed += Instance_OnClientSeed;
-            Instance.OnDetails += Instance_OnDetails;
+            Instance.OnJDMessage += Instance_OnJDMessage;
             Instance.OnNewClientSeed += Instance_OnNewClientSeed;
+            Instance.logging = false;
             this.Parent = Parent;
             Name = "JustDice";
+            Tip = true;
+            TipUsingName = false;
         }
 
-        void Instance_OnNewClientSeed(Various SeedInfo)
+        void Instance_OnJDMessage(string Message)
         {
-            throw new NotImplementedException();
+            Parent.updateStatus(Message);
         }
 
-        void Instance_OnDetails(Various Details)
+        void Instance_OnNewClientSeed(SeedInfo SeedInfo)
         {
-            throw new NotImplementedException();
+            sqlite_helper.InsertSeed(SeedInfo.OldServerSeed.ToString(), SeedInfo.OldServerSeed.ToString());
         }
 
-        void Instance_OnClientSeed(Various Seed)
+        
+        
+        void Instance_OnJDError(string Error)
         {
-            throw new NotImplementedException();
+            Parent.updateStatus(Error);
         }
 
-        void Instance_OnSecretHash(Various secretHash)
+        void Instance_OnAddress(string Address)
         {
-            
-        }
-
-        void Instance_OnJDError(Various Error)
-        {
-            Parent.updateStatus(Error.args[0]);
-        }
-
-        void Instance_OnAddress(Various Address)
-        {
-            Parent.updateDeposit(Address.args[0]);
+            Parent.updateDeposit(Address);
         }
 
         void Instance_OnResult(Result result, bool IsMine)
@@ -158,20 +150,35 @@ namespace DiceBot
         {
             Bet tmp = new Bet();
             tmp.Amount = decimal.Parse(curBet.bet, System.Globalization.CultureInfo.InvariantCulture);
-            tmp.date = json.ToDateTime2( curBet.date.ToString());
+            tmp.date = jdInstance.ToDateTime2( curBet.date.ToString());
             tmp.Id = (long)curBet.betid;
             tmp.Profit = decimal.Parse(curBet.this_profit, System.Globalization.CultureInfo.InvariantCulture);
             tmp.Roll = (decimal)curBet.lucky/10000m;
             tmp.high = curBet.high;
             tmp.Chance = decimal.Parse(curBet.chance, System.Globalization.CultureInfo.InvariantCulture);
             tmp.nonce = curBet.nonce;
-            
+            tmp.serverhash = Instance.shash;
+            tmp.clientseed = Instance.seed;
+            tmp.uid = int.Parse(Instance.uid);
             return tmp;
         }
 
         public override void Disconnect()
         {
             Instance.Disconnect();
+        }
+
+        public override void SendTip(string Username, double Amount)
+        {
+            int uid = -1;
+            if (int.TryParse(Username, out uid))
+            {
+                Instance.Chat(string.Format("/tip {0} {1:0.00000000}", uid, Amount));
+            }
+            else
+            {
+                Parent.updateStatus("Invalid UserID");
+            }
         }
     }
 }

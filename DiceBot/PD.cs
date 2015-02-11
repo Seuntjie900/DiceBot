@@ -29,6 +29,8 @@ namespace DiceBot
             t.Start();
             this.Parent = Parent;
             Name = "PrimeDice";
+            Tip = true;
+            TipUsingName = true;
         }
         
 
@@ -222,6 +224,7 @@ namespace DiceBot
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
                 pdbetresult tmp = json.JsonDeserialize<pdbetresult>(sEmitResponse);
+                
                 tmp.bet.client = tmp.user.client;
                 tmp.bet.serverhash = tmp.user.server;
                 
@@ -520,6 +523,39 @@ namespace DiceBot
 
             }
         }
+
+        public override void SendTip(string User, double amount)
+        {
+            try
+            {
+                string post = "username=" + User+ "&amount=" + (amount * 100000000.0).ToString("");
+
+
+                HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/tip?access_token=" + accesstoken);
+                loginrequest.Method = "POST";
+
+                loginrequest.ContentLength = post.Length;
+                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                {
+
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+            }
+            catch (WebException e)
+            {
+                if (e.Response != null)
+                {
+
+                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                    Parent.updateStatus(sEmitResponse);
+                    
+                }
+            }
+        }
     }
 
     public class pdlogin
@@ -551,6 +587,7 @@ namespace DiceBot
         public string client { get; set; }
         public string serverhash { get; set; }
         public string server { get; set; }
+        public int player_id { get; set; }
         public Bet toBet()
         {
             Bet tmp = new Bet 
@@ -564,8 +601,8 @@ namespace DiceBot
                 Chance = condition == ">" ? 100m - (decimal)target : (decimal)target, 
                 nonce=nonce ,
                 serverhash = serverhash,
-                clientseed = client
-                
+                clientseed = client,
+                uid=player_id
             };
             return tmp;
         }

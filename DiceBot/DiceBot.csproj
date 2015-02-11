@@ -118,6 +118,12 @@
       <DependentUpon>cDiceBot.cs</DependentUpon>
     </Compile>
     <Compile Include="cBet.cs" />
+    <Compile Include="ConfirmPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfirmPassword.Designer.cs">
+      <DependentUpon>ConfirmPassword.cs</DependentUpon>
+    </Compile>
     <Compile Include="DiceSite.cs" />
     <Compile Include="Email.cs" />
     <Compile Include="Graph.cs">
@@ -152,6 +158,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="cDiceBot.resx">
       <DependentUpon>cDiceBot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfirmPassword.resx">
+      <DependentUpon>ConfirmPassword.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Graph.resx">
       <DependentUpon>Graph.cs</DependentUpon>

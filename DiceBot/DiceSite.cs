@@ -12,6 +12,8 @@ namespace DiceBot
 {
     public abstract class DiceSite
     {
+        
+
         protected cDiceBot Parent;
         public bool AutoWithdraw { get; set; }
         public bool AutoInvest { get; set; }
@@ -139,6 +141,12 @@ namespace DiceBot
             return 0;
         }
         public abstract void Disconnect();
+        public bool Tip { get; set; }
+        public bool TipUsingName { get; set; }
+        public virtual void SendTip(string User, double amount)
+        {
+            Parent.updateStatus("Tipping is not enabled for the current site.");
+        }
     }
 
     /*public class PRC_old : DiceSite
@@ -443,8 +451,7 @@ namespace DiceBot
     }
     */
 
-    //fuck primedice and their stupid ember shit!
-   
+       
     /*public class D999 : DiceSite
     {
         public D999()
