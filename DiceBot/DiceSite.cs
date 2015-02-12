@@ -143,6 +143,9 @@ namespace DiceBot
         public abstract void Disconnect();
         public bool Tip { get; set; }
         public bool TipUsingName { get; set; }
+        public bool GettingSeed { get; set; }
+        public abstract void GetSeed(long BetID);
+
         public virtual void SendTip(string User, double amount)
         {
             Parent.updateStatus("Tipping is not enabled for the current site.");

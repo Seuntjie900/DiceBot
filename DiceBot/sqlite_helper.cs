@@ -26,7 +26,7 @@ namespace DiceBot
             sqcon.Open();
 
             string seeds = "CREATE TABLE if not exists seed(	hash nvarchar(128) NOT NULL primary key,	server text NOT NULL) ";
-            string bets = "CREATE TABLE if not exists bet(betid bigint NOT NULL primary key,date datetime NULL,stake decimal(18, 8) NULL,profit decimal(18, 8) NULL,chance decimal(18, 8) NULL,	high smallint NULL,	lucky decimal(18, 8) NULL,	hash nvarchar(128) NULL,	nonce bigint NULL,	uid int NULL,	Client nvarchar(50) NULL, site nvarchar(20) )";
+            string bets = "CREATE TABLE if not exists bet(betid bigint NOT NULL ,date datetime NULL,stake decimal(18, 8) NULL,profit decimal(18, 8) NULL,chance decimal(18, 8) NULL,	high smallint NULL,	lucky decimal(18, 8) NULL,	hash nvarchar(128) NULL,	nonce bigint NULL,	uid int NULL,	Client nvarchar(50) NULL, site nvarchar(20), PRIMARY KEY(betid, site) )";
             
             //string[] sites = { "PRCDice", "JustDice", "PrimeDice","Dice999","SAfEDICE" };
             
@@ -186,72 +186,6 @@ namespace DiceBot
                 {
                     sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand("select betid, profit, stake from bet where date>='" + StartDate + "' and date <= '" + EndDate + "'", sqcon);
-                    if (site != "")
-                    {
-                        Command.CommandText += " and site = '" + site + "'";
-                    }
-                    SQLiteDataReader Reader = Command.ExecuteReader();
-                    List<Bet> Bets = new List<Bet>();
-                    while (Reader.Read())
-                    {
-                        Bets.Add(BetParser(Reader));
-                    }
-                    sqcon.Close();
-                    return Bets.ToArray();
-                }
-                catch
-                {
-                }
-                sqcon.Close();
-            }
-            return null;
-        }
-        
-        public static Bet[] GetBetForVerify(string site)
-        {
-            using (SQLiteConnection sqcon = GetConnection())
-            {
-
-                try
-                {
-                    sqcon.Open();
-                    SQLiteCommand Command = new SQLiteCommand("select bet.betid, bet.hash, bet.lucky, bet.nonce,bet.client,seed.server from bet, seed where bet.hash=seed.hash ", sqcon);
-                    if (site != "")
-                    {
-                        Command.CommandText += " and site = '" + site + "'";
-                    }
-                    SQLiteDataReader Reader = Command.ExecuteReader();
-                    List<Bet> Bets = new List<Bet>();
-                    while (Reader.Read())
-                    {
-                        Bets.Add(BetParser(Reader));
-                    }
-                    sqcon.Close();
-                    return Bets.ToArray();
-                }
-                catch
-                {
-                }
-                sqcon.Close();
-            }
-            return null;
-        }
-
-        public static Bet[] GetBetForVerify(string site, string seed)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public static Bet[] GetBetForVerify(string site, DateTime StartDate, DateTime EndDate)
-        {
-            using (SQLiteConnection sqcon = GetConnection())
-            {
-
-                try
-                {
-                    sqcon.Open(); 
-                    SQLiteCommand Command = new SQLiteCommand("select bet.betid, bet.hash, bet.lucky, bet.nonce,bet.client,seed.server from bet, seed where bet.hash=seed.hash and date>='" + StartDate + "' and date<='"+EndDate+"' ", sqcon);
                     if (site != "")
                     {
                         Command.CommandText += " and site = '" + site + "'";
@@ -584,6 +518,59 @@ namespace DiceBot
                 }
                 sqcon.Close();
                 
+            }
+            return null;
+        }
+
+
+        public static List<long> GetMissingSeedIDs(string site)
+        {
+            using (SQLiteConnection sqcon = GetConnection())
+            {
+
+                try
+                {
+                    sqcon.Open();
+                    SQLiteCommand Command = new SQLiteCommand("drop table if exists tmptable; create table tmptable(hash nvarchar(128)); insert into tmptable select seed.hash from seed, bet where seed.server like '' and bet.hash=seed.hash and bet.site='"+site+"' group by seed.hash; select MIN(betid) as betid from bet, tmptable where bet.hash=tmptable.hash group by bet.hash; drop table tmptable", sqcon);
+                    SQLiteDataReader Reader = Command.ExecuteReader();
+                    List<long> Bets = new List<long>();
+                    while (Reader.Read())
+                    {
+                        Bets.Add((long)Reader["betid"]);
+                    }
+                    sqcon.Close();
+                    return Bets;
+                }
+                catch
+                {
+                }
+                sqcon.Close();
+            }
+            return null;
+        }
+
+        public static string GetHashForBet(string site, long betid)
+        {
+            using (SQLiteConnection sqcon = GetConnection())
+            {
+
+                try
+                {
+                    sqcon.Open();
+                    SQLiteCommand Command = new SQLiteCommand("select hash from bet where betid="+betid+" and site='"+site+"'", sqcon);
+                    SQLiteDataReader Reader = Command.ExecuteReader();
+                    string hash = "";
+                    if (Reader.Read())
+                    {
+                        hash = (string)Reader["hash"];
+                    }
+                    sqcon.Close();
+                    return hash;
+                }
+                catch
+                {
+                }
+                sqcon.Close();
             }
             return null;
         }

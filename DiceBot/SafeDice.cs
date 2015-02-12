@@ -162,6 +162,11 @@ namespace DiceBot
         {
             throw new NotImplementedException();
         }
+
+        public override void GetSeed(long BetID)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class SafeDiceLogin

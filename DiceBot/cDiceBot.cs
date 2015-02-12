@@ -144,16 +144,19 @@ namespace DiceBot
         {
             PreviousBalance = (double)Balance;
             profit += Profit;
+            if (!RunningSimulation)
+            {
+                AddChartPoint(profit);
+            }
             if (InvokeRequired)
             {
                 Invoke(new dDobet(DoBet),win, Profit);
             }
             else
-            DoBet(win, (double)Profit);
-            if (!RunningSimulation)
-            {
-                AddChartPoint(profit);
-            }
+                DoBet(win, (double)Profit);
+            
+            
+            
         }
 
         delegate void dAddChartPoint(double Profit);
@@ -316,6 +319,16 @@ namespace DiceBot
             Thread tGetVers = new Thread(new ThreadStart(getversion));
             tGetVers.Start();
             populateFiboNacci();
+
+            if (chkJDAutoLogin.Checked)
+            {
+                if (CurrentSite.Login(txtJDUser.Text, txtJDPass.Text, txtApi2fa.Text))
+                {
+                    txtApiPassword.Text = "";
+                    EnableNotLoggedInControls(true);
+
+                }
+            }
         }
 
         //check if the current version of the bot is the latest version available
@@ -907,24 +920,16 @@ namespace DiceBot
 
         private void tmBetting_Tick(object sender, EventArgs e)
         {
-            bool valid = true;
-            if (chkBotSpeed.Checked)
-            {
-                if ((DateAndTime.Now - dtLastBet).Ticks < new TimeSpan(0, 0, 0, 0, (int)((decimal)1000.0 / nudBotSpeed.Value)).Ticks)
-                {
-                    valid = false;
-                }
-            }
+            
             if (!RunningSimulation)
             {
                 double dBalance = PreviousBalance;
 
-                if (valid)
-                {
-                    bool success = false;
-                    dBalance = Getbalance(out success);
 
-                }
+                bool success = false;
+                dBalance = Getbalance(out success);
+
+                
                 if ((dBalance != PreviousBalance && convert || withdrew) && dBalance > 0)
                 {
                     if (PreviousBalance == 0)
@@ -1816,14 +1821,24 @@ namespace DiceBot
         bool RunningSimulation = false;
         private void tmBet_Tick(object sender, EventArgs e)
         {
+
             try
             {
+                bool valid = true;
+                if (chkBotSpeed.Checked)
+                {
+                    if ((DateAndTime.Now - dtLastBet).Ticks < new TimeSpan(0, 0, 0, 0, (int)((decimal)1000.0 / nudBotSpeed.Value)).Ticks)
+                    {
+                        valid = false;
+                    }
+                }
+
                 if (RunningSimulation)
                 {
                     Simbet();
                 }
                 else
-                if (CurrentSite.ReadyToBet())
+                if (CurrentSite.ReadyToBet() && valid)
                 {
                     Thread.Sleep(100);
                     PlaceBet();
@@ -1881,8 +1896,6 @@ namespace DiceBot
                 lblTime.Text = (TotalTime + (DateTime.Now - dtStarted)).ToString(@"hh\:mm\:ss");
                 timecounter = 0;
             }
-            if (!loggedin)
-                Login();
             timecounter++;
             if (autostart && !running)
             {
@@ -1942,16 +1955,6 @@ namespace DiceBot
             Start(false);
         }
 
-        #region Login
-
-        void Login()
-        {
-            if (CurrentSite.AutoLogin)
-                loggedin = CurrentSite.Login(username, password);
-
-        }
-        
-        #endregion
 
 
 
@@ -1971,8 +1974,14 @@ namespace DiceBot
         }
 
         #region Save and load settings
+        delegate void dsave();
         void save()
         {
+            if (InvokeRequired)
+            {
+                Invoke( new  dsave(save));
+                return;
+            }
             save(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings");
             savepersonal();
         }
@@ -2033,12 +2042,19 @@ namespace DiceBot
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + cmbSettingMode.SelectedIndex);
                 sw.WriteLine("Site|" + cmbSite.SelectedIndex);
-                
+                sw.WriteLine("AutoGetSeed|"+(chkAutoSeeds.Checked ? "1" : "0"));
             }
         }
         
+        delegate void dSave(string file);
+
         void save(string file)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new dSave(save), file);
+                return;
+            }
             using (StreamWriter sw = new StreamWriter(file))
             {
                
@@ -2725,6 +2741,8 @@ namespace DiceBot
                     nudPresetEndStep.Value = decimal.Parse(getvalue(saveditems, "PresetEndStep"));
                     nudPresetLossStep.Value = decimal.Parse(getvalue(saveditems, "PresetLossStep"));
                     nudPresetWinStep.Value = decimal.Parse(getvalue(saveditems, "PresetWinStep"));
+
+                    chkAutoSeeds.Checked = getvalue(saveditems, "AutoGetSeed") != "0";
 
                 }
 
@@ -3765,6 +3783,7 @@ namespace DiceBot
             Wins = 0;
             Losses = 0;
             bool success = false;
+            profit = 0;
             double tmp = Getbalance(out success);
             if (success)
                 StartBalance = tmp;
@@ -4276,6 +4295,7 @@ namespace DiceBot
             {
                 if (CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text))
                 {
+                    txtApiPassword.Text = "";
                     EnableNotLoggedInControls(true);
 
                 }
@@ -4289,6 +4309,7 @@ namespace DiceBot
                     EnableNotLoggedInControls(false);
                 }
             }
+            txtApi2fa.Text = "";
         }
 
 
@@ -4638,6 +4659,34 @@ namespace DiceBot
                 nudMinBet.Value = nudMinbet2.Value;
         }
 
+        DateTime LastMissingCheck = DateTime.Now;
+        private void btnGetSeeds_Click(object sender, EventArgs e)
+        {
+            GetMissingSeeds();
+        }
+
+        void GetMissingSeeds()
+        {
+            LastMissingCheck = DateTime.Now;
+            BetIDs = sqlite_helper.GetMissingSeedIDs(CurrentSite.Name);
+        }
+        List<long> BetIDs = new List<long>();
+
+        private void tmrMissingSeeds_Tick(object sender, EventArgs e)
+        {
+            if (BetIDs.Count > 0 && !CurrentSite.GettingSeed)
+            {
+                long tmp = BetIDs[0];
+                BetIDs.RemoveAt(0);
+                CurrentSite.GetSeed(tmp);
+
+            }
+            if ((DateTime.Now - LastMissingCheck).TotalMinutes>20 && chkAutoSeeds.Checked)
+            {
+                GetMissingSeeds();
+            }
+        }
+        
         
 
         

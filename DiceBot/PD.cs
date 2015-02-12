@@ -556,6 +556,41 @@ namespace DiceBot
                 }
             }
         }
+
+        void GetRollThread(object _BetID)
+        {
+            
+            
+            try
+            {
+                long BetID = (long)_BetID;
+                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/bets/" + BetID);
+                betrequest.Method = "GET";
+
+                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+
+                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                pdbet tmp = json.JsonDeserialize<pdbet>(sEmitResponse);
+                if (tmp.bet.server !="")
+                {
+                    sqlite_helper.InsertSeed(tmp.bet.server, sqlite_helper.GetHashForBet(Name, long.Parse(tmp.bet.id)) );
+                }
+            }
+            catch
+            {
+
+            }
+            GettingSeed = false;
+        }
+
+        public override void GetSeed(long BetID)
+        {
+            GettingSeed = true;
+            Thread GetSeedThread = new Thread(new ParameterizedThreadStart(GetRollThread));
+            GetSeedThread.Start(BetID);
+        }
     }
 
     public class pdlogin
@@ -575,6 +610,7 @@ namespace DiceBot
         }
     public class pdbet
     {
+        public pdbet bet { get; set; }
         public string id { get; set; }
         public double profit { get; set; }
         public double amount { get; set; }

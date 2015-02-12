@@ -1,8 +1,5 @@
 Todo:
 implement other sites (requires prc api. Safedice API incomplete.)
-finish sqlite implementation
-get server seed on randomize (JD)
-Look for server seed of old bets (automatically? on button click?)
 programmer mode (access to variables, write code for own strategies)
 
 hopefully before release:
@@ -44,3 +41,6 @@ disable embedded live chart + reset live chart
 tip button
 beginner mode (hide certain settings) -done
 advanced mode (show all settings) -done
+get server seed on randomize (JD)
+finish sqlite implementation (i think it's done)
+Look for server seed of old bets (automatically? on button click? why not both!)

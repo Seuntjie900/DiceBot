@@ -15,15 +15,26 @@ namespace DiceBot
             AutoInvest = true;
             AutoWithdraw = true;
             ChangeSeed = true;
-            BetURL = "https://just-dice.com/bets/";
+            BetURL = "https://just-dice.com/roll/";
             Instance.OnResult += Instance_OnResult;
             Instance.OnJDMessage += Instance_OnJDMessage;
             Instance.OnNewClientSeed += Instance_OnNewClientSeed;
+            Instance.OnRoll += Instance_OnRoll;
             Instance.logging = false;
             this.Parent = Parent;
             Name = "JustDice";
             Tip = true;
             TipUsingName = false;
+        }
+
+        void Instance_OnRoll(Roll roll)
+        {
+            if (roll.server_seed != "")
+            {
+                sqlite_helper.InsertSeed(roll.hash, roll.server_seed);
+                
+                GettingSeed = false;
+            }
         }
 
         void Instance_OnJDMessage(string Message)
@@ -180,6 +191,12 @@ namespace DiceBot
             {
                 Parent.updateStatus("Invalid UserID");
             }
+        }
+
+        public override void GetSeed(long BetID)
+        {
+            GettingSeed = true;
+            Instance.Roll(BetID);
         }
     }
 }
