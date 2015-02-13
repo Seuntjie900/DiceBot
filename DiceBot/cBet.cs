@@ -43,6 +43,7 @@ namespace DiceBot
                 betdate = tmp;
             }
         }
+        public bool PlayerWin { get; set; }
         public DateTime date
         {
             get
@@ -85,7 +86,7 @@ namespace DiceBot
         }
 
         public bool Verified { get; set; }
-
+        public int UserAccountId { get { return uid; } set { uid = value; } }
     }
    
 }

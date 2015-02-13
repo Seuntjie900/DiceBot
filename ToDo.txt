@@ -1,7 +1,6 @@
 Todo:
 implement other sites (requires prc api. Safedice API incomplete.)
 programmer mode (access to variables, write code for own strategies)
-Look for server seed of old bets (automatically? on button click? why not both!)
 
 hopefully before release:
 losing streak table redo
@@ -44,4 +43,5 @@ beginner mode (hide certain settings) -done
 advanced mode (show all settings) -done
 get server seed on randomize (JD)
 finish sqlite implementation (i think it's done)
+Look for server seed of old bets (automatically? on button click? why not both!)
 

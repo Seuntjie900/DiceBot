@@ -169,7 +169,7 @@ namespace DiceBot
             else
             {
                 if (chrtEmbeddedLiveChart.Enabled)
-                chrtEmbeddedLiveChart.Series[0].Points.AddY(profit + Profit);
+                chrtEmbeddedLiveChart.Series[0].Points.AddY(Profit);
             }
         }
 
@@ -3969,10 +3969,10 @@ namespace DiceBot
             {
                 case 0: CurrentSite = new JD(this); break;
 
-                /*case 1: CurrentSite = new PRC(); if (!(url.StartsWith("pocketrocketscasino.eu") || url.StartsWith("pocketrocketscasino.eu"))) { gckBrowser.Navigate("https://pocketrocketscasino.eu/ref/357"); } pnlApiInfo.Visible = false; gckBrowser.Visible = true; gckBrowser.Dock = DockStyle.Fill; break;//############
+                case 1: CurrentSite = new PRC(this); break;//############
                     //############################################
                     //############################################
-                    */
+                    
                 case 2: CurrentSite = new dice999(this); break;
                     /*
                 //case 3: CurrentSite = new PRC2(); if (!(url.StartsWith("") )) { gckBrowser.Navigate(""); } break;

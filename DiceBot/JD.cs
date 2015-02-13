@@ -161,7 +161,7 @@ namespace DiceBot
                 Parent.updateProfit(Instance.Profit);
                 Parent.updateWagered(Instance.Wagered);
                 Parent.updateWins(Instance.Wins);
-            
+                
                 System.Windows.Forms.MessageBox.Show("Logged in!\n\nWelcome " + Username);
                 Parent.updateStatus("Logged in! Welcome " + Username);
             }

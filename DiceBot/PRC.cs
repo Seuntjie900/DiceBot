@@ -3,35 +3,109 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNet.SignalR.Client;
+using System.Net;
+using System.IO;
 
 namespace DiceBot
 {
     class PRC:DiceSite
     {
-        HubConnection con = new HubConnection("https://pocketrocketscasino.eu");
-        public PRC()
+        HubConnection con = new HubConnection("https://pocketrocketscasino.eu/SignalR/", "", false);
+        CookieContainer Cookies = new CookieContainer();
+        IHubProxy dicehub;
+        public PRC(cDiceBot Parent)
         {
-            con.Start();
+            AutoWithdraw = false;
+            AutoLogin = false;
+            ChangeSeed = true;
+            
+            this.Parent = Parent;
+            Name = "PRCDice";
+            BetURL = "https://pocketrocketscasino.eu/api/bets/GetBet?id=";
+            con.Received += con_Received;
+        }
+
+        void GotChatMessage(string message, string time, string user, string userid, string roomid, string ismod)
+        {
+            ReceivedChatMessage(string.Format( "{0:hh:mm:ss} ({1}) <{2}> {3}",json.ToDateTime2(time), userid, user, message ));
+        }
+
+
+        void con_Received(string obj)
+        {
+            
         }
 
         public override void PlaceBet(bool High)
         {
-            throw new NotImplementedException();
+            dicehub.Invoke("Bet", High?0:1, amount, chance);
+        }
+
+        private void BetResult(Bet tmp)
+        {
+            if (tmp.uid == UserID)
+            {
+                
+                tmp.serverhash = serverhash;
+
+                balance += (double)tmp.Profit;
+                bets++;
+                if (tmp.PlayerWin)
+                    wins++;
+                else
+                    losses++;
+                Wagered += tmp.Amount;
+
+                Parent.updateBalance((decimal)(balance));
+                Parent.updateBets(bets);
+                Parent.updateLosses(losses);
+                Parent.updateProfit(profit);
+                Parent.updateWagered(Wagered);
+                Parent.updateWins(wins);
+                Parent.AddBet(tmp);
+                Parent.GetBetResult(balance, tmp.PlayerWin, (double)tmp.Profit);
+            }
         }
 
         public override void SetChance(string Chance)
         {
-            throw new NotImplementedException();
+            chance = double.Parse(Chance);
         }
 
         public override void SetAmount(double Amount)
         {
-            throw new NotImplementedException();
+            amount = Amount;
         }
 
         public override void ResetSeed()
         {
-            throw new NotImplementedException();
+            
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GenerateNewServerSeed") as HttpWebRequest;
+            getHeaders.CookieContainer =Cookies;
+            
+            getHeaders.Method = "POST";
+            string post = string.Format("__RequestVerificationToken="+ s);
+            getHeaders.ContentType = "application/x-www-form-urlencoded";
+            getHeaders.ContentLength = post.Length;
+            using (var writer = new StreamWriter(getHeaders.GetRequestStream()))
+            {
+                string writestring = post as string;
+                writer.Write(writestring);
+            }
+            try
+            {
+
+                HttpWebResponse Response = (HttpWebResponse)getHeaders.GetResponse();
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                PRCResetSeed tmp = json.JsonDeserialize<PRCResetSeed>(s1);
+                sqlite_helper.InsertSeed(tmp.PreviousServerHash, tmp.PreviousServerSeed);
+                serverhash = tmp.CurrentServerHash;
+                client = tmp.CurrentClientSeed;
+            }
+            catch
+            {
+
+            }
         }
 
         public override void SetClientSeed(string Seed)
@@ -41,7 +115,7 @@ namespace DiceBot
 
         public override string GetbalanceValue()
         {
-            throw new NotImplementedException();
+            return balance.ToString("0.00000000");
         }
 
         public override string GetSiteProfitValue()
@@ -51,22 +125,24 @@ namespace DiceBot
 
         public override string GetTotalBets()
         {
-            throw new NotImplementedException();
+            return bets.ToString();
         }
 
         public override string GetMyProfit()
         {
-            throw new NotImplementedException();
+            return profit.ToString(); ;
         }
 
         public override bool ReadyToBet()
         {
-            throw new NotImplementedException();
+            return true;
         }
+        
 
         public override void Disconnect()
         {
-            throw new NotImplementedException();
+            
+            con.Stop();
         }
 
         public override void GetSeed(long BetID)
@@ -76,22 +152,301 @@ namespace DiceBot
 
         public override void SendChatMessage(string Message)
         {
-            throw new NotImplementedException();
+            dicehub.Invoke("Chat", Message, 1);
         }
 
         public override bool Withdraw(double Amount, string Address)
         {
-            throw new NotImplementedException();
+            dicehub.Invoke("Withdraw", Address, Amount, "");
+            return true;
         }
 
         public override bool Login(string Username, string Password)
         {
-            throw new NotImplementedException();
+            return Login(Username, Password, "");
         }
-
-        public override bool Register(string username, string password)
+        string s = "";
+        public override bool Login(string Username, string Password, string twofa)
         {
-            throw new NotImplementedException();
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu") as HttpWebRequest;
+            var cookies = new CookieContainer();
+            getHeaders.CookieContainer = cookies;
+            HttpWebResponse Response = null;
+            string rqtoken = "";
+            try
+            {
+
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                string tmp = s1.Substring(s1.IndexOf("__RequestVerificationToken")+"__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
+                s = rqtoken = tmp.Substring(0, tmp.IndexOf("\""));
+            }
+            catch (WebException e)
+            {
+                System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
+                return false;
+            }
+            
+            getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/login") as HttpWebRequest;
+            getHeaders.CookieContainer = new CookieContainer();
+            foreach (Cookie c in Response.Cookies)
+            {
+                
+                getHeaders.CookieContainer.Add(c);
+            }
+            getHeaders.Method = "POST";
+            string post = string.Format("userName={0}&password={1}&twoFactorCode={2}&__RequestVerificationToken={3}", Username, Password, "", rqtoken);
+            getHeaders.ContentType = "application/x-www-form-urlencoded";
+            getHeaders.ContentLength = post.Length;
+            using (var writer = new StreamWriter(getHeaders.GetRequestStream()))
+            {
+                string writestring = post as string;
+                writer.Write(writestring);
+            }
+            try
+            {
+
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                if (!s1.ToLower().Contains("success"))
+                {
+                    System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
+                    return false;
+                }
+                /*string tmp = s1.Substring(s1.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
+                rqtoken = tmp.Substring(0, tmp.IndexOf("\""));*/
+            }
+            catch (WebException e)
+            {
+                Response = (HttpWebResponse)e.Response;
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
+                return false;
+            }
+            
+            foreach (Cookie c in Response.Cookies)
+            {
+                if (c.Name == "__RequestVerificationToken")
+                    rqtoken = c.Value;
+                Cookies.Add(c);
+            }
+            con.CookieContainer = Cookies;
+            try
+            {
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu") as HttpWebRequest;
+                getHeaders.CookieContainer = Cookies;
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                string stmp = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                string sstmp = stmp.Substring(stmp.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
+                s = rqtoken = sstmp.Substring(0, sstmp.IndexOf("\""));
+                
+
+
+
+                dicehub = con.CreateHubProxy("diceHub");
+                con.Start().Wait();
+
+                dicehub.On<string, string, string, string, string, string>("receiveChatMessage", GotChatMessage);
+                dicehub.On<Bet>("diceResult", BetResult);
+                
+
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
+                getHeaders.CookieContainer = Cookies;
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
+                balance = (double)tmp.AvailableBalance;
+                profit = (double)tmp.Profit;
+                Wagered = tmp.Wagered;
+                bets = (int)tmp.NumBets;
+                wins = (int)tmp.Wins;
+                losses = (int)tmp.Losses;
+                UserID = tmp.Id;
+                Parent.updateBalance((decimal)(balance));
+                Parent.updateBets(tmp.NumBets);
+                Parent.updateLosses(tmp.Losses);
+                Parent.updateProfit(profit);
+                Parent.updateWagered(Wagered);
+                Parent.updateWins(tmp.Wins);
+                //Parent.updateDeposit(tmp.DepositAddress);
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetCurrentSeed") as HttpWebRequest;
+                getHeaders.CookieContainer = Cookies;
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
+                client = getseed.ClientSeed;
+                serverhash = getseed.ServerHash;
+                return true;
+            }
+            catch
+            {
+                System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
+                return false;
+            }
         }
+        decimal Wagered = 0;
+        int wins = 0, losses = 0;
+        string client = "", serverhash = "";
+        public override bool Register(string Username, string Passwrd)
+        {
+            System.Windows.Forms.MessageBox.Show("Registration temporarily disabled. Please Register with the site, then log in here.");
+            return false;
+
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/") as HttpWebRequest;
+            var cookies = new CookieContainer();
+            getHeaders.CookieContainer = cookies;
+            HttpWebResponse Response = null;
+            string rqtoken = "";
+            try
+            {
+
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                string tmp = s1.Substring(s1.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
+                rqtoken = tmp.Substring(0, tmp.IndexOf("\""));
+            }
+            catch (WebException e)
+            {
+                return false;
+            }
+            CookieContainer tmpContainer = getHeaders.CookieContainer;
+            getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/SaveUserNameAndPassword") as HttpWebRequest;
+            getHeaders.CookieContainer = tmpContainer;
+            foreach (Cookie c in Response.Cookies)
+            {
+
+                getHeaders.CookieContainer.Add(c);
+            }
+            getHeaders.Method = "POST";
+            string post = string.Format("userName={0}&password={1}&confirmPassword={1}&__RequestVerificationToken={2}", Username, Passwrd, rqtoken);
+            getHeaders.ContentType = "application/x-www-form-urlencoded";
+            getHeaders.ContentLength = post.Length;
+            using (var writer = new StreamWriter(getHeaders.GetRequestStream()))
+            {
+                string writestring = post as string;
+                writer.Write(writestring);
+            }
+            try
+            {
+
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                /*string tmp = s1.Substring(s1.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
+                rqtoken = tmp.Substring(0, tmp.IndexOf("\""));*/
+            }
+            catch (WebException e)
+            {
+                Response = (HttpWebResponse)e.Response;
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                return false;
+            }
+
+            foreach (Cookie c in Response.Cookies)
+            {
+                if (c.Name == "__RequestVerificationToken")
+                    rqtoken = c.Value;
+                Cookies.Add(c);
+            }
+            con.CookieContainer = Cookies;
+            try
+            {
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
+                getHeaders.CookieContainer = Cookies;
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                string stmp = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                string sstmp = stmp.Substring(stmp.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
+                s = rqtoken = sstmp.Substring(0, sstmp.IndexOf("\""));
+                
+
+                dicehub = con.CreateHubProxy("diceHub");
+                con.Start().Wait();
+
+                dicehub.On<string, string, string, string, string, string>("receiveChatMessage", GotChatMessage);
+                dicehub.On<Bet>("diceResult", BetResult);
+
+
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
+                getHeaders.CookieContainer = Cookies;
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
+                balance = (double)tmp.AvailableBalance;
+                profit = (double)tmp.Profit;
+                Wagered = tmp.Wagered;
+                bets = (int)tmp.NumBets;
+                wins = (int)tmp.Wins;
+                losses = (int)tmp.Losses;
+                UserID = tmp.Id;
+                Parent.updateBalance((decimal)(balance));
+                Parent.updateBets(tmp.NumBets);
+                Parent.updateLosses(tmp.Losses);
+                Parent.updateProfit(profit);
+                Parent.updateWagered(Wagered);
+                Parent.updateWins(tmp.Wins);
+                //Parent.updateDeposit(tmp.DepositAddress);
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetCurrentSeed") as HttpWebRequest;
+                getHeaders.CookieContainer = Cookies;
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
+                client = getseed.ClientSeed;
+                serverhash = getseed.ServerHash;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        int UserID = 0;
+    }
+
+    
+    public class PRCUser
+    {
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public int NumBets { get; set; }
+        public decimal Wagered { get; set; }
+        public long Wins { get; set; }
+        public long Losses { get; set; }
+        public decimal Profit { get; set; }
+        public decimal AvailableBalance { get; set; }
+    }
+
+    public class prcSeed
+    {
+        public string ServerHash { get; set; }
+        public string ClientSeed { get; set; }
+    }
+
+    public class prcDiceResult
+    {
+        
+        public long Id { get; set; }
+        public bool PlayerWin { get; set; }
+        public decimal Amount { get; set; }
+        public decimal Profit { get; set; }
+        public decimal Roll { get; set; }
+        public decimal Chance { get; set; }
+        public int BetType { get; set; }
+        public int Nonce { get; set; }
+        public int UserAccountId { get; set; }
+        public string BetDate { get; set; }
+        public string ClientSeed { get; set; }
+        public string ServerSeed { get; set; }
+        public string UserName { get; set; }
+    }
+
+    public class PRCResetSeed
+    {
+        public bool Success { get; set; }
+        public string CurrentServerHash { get; set; }
+        public string CurrentClientSeed { get; set; }
+        public int CurrentNonce { get; set; }
+        public string PreviousServerHash { get; set; }
+        public string PreviousServerSeed { get; set; }
+        public string PreviousClientSeed { get; set; }
+        public int PreviousNonce { get; set; }
     }
 }

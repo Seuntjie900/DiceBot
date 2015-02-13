@@ -16,6 +16,7 @@ namespace DiceBot
         public ConfirmPassword()
         {
             InitializeComponent();
+            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
         }
 
         private void btnConfirm_Click(object sender, EventArgs e)
@@ -27,7 +28,7 @@ namespace DiceBot
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            
         }
     }
 }

@@ -25,7 +25,7 @@ namespace DiceBot
             
             ChangeSeed = false;
             AutoLogin = false;
-            BetURL = "https://api.primedice.com/api/bets/";
+            BetURL = "https://www.999dice.com/Bets/?b=";
             /*Thread t = new Thread(GetBalanceThread);
             t.Start();*/
             this.Parent = Parent;
@@ -36,85 +36,115 @@ namespace DiceBot
             /*Thread tChat = new Thread(GetMessagesThread);
             tChat.Start();*/
         }
-        
+
+        int BetRetries = 0;
         void PlaceBetThread()
         {
-            Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
-
-
-            HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-            string post = string.Format("a=GetServerSeedHash&s={0}", sessionCookie);
-            loginrequest.Method = "POST";
-
-            loginrequest.ContentLength = post.Length;
-            loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-            using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+            try
             {
+                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
+                HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+                string post = string.Format("a=GetServerSeedHash&s={0}", sessionCookie);
+                loginrequest.Method = "POST";
 
-                writer.Write(post);
+                loginrequest.ContentLength = post.Length;
+                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                {
+
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                if (sEmitResponse.Contains("Error"))
+                {
+                    if (BetRetries++ < 3)
+                    {
+
+                        Thread.Sleep(200);
+                        PlaceBetThread();
+                        return;
+                    }
+                    else
+                        throw new Exception();
+                }
+                string Hash = json.JsonDeserialize<d999Hash>(sEmitResponse).Hash;
+
+                loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+                string ClientSeed = r.Next(0, int.MaxValue).ToString();
+                post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}", sessionCookie, amount, !High ? 0 : 999999 - (int)chance, !High ? (int)chance : 999999, ClientSeed, Currency);
+                loginrequest.Method = "POST";
+
+                loginrequest.ContentLength = post.Length;
+                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                {
+
+                    writer.Write(post);
+                }
+                EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                if (sEmitResponse.Contains("Error"))
+                {
+                    if (BetRetries++ < 3)
+                    {
+
+                        Thread.Sleep(200);
+                        PlaceBetThread();
+                        return;
+                    }
+                    else
+                        throw new Exception();
+                }
+                d999Bet tmpBet = json.JsonDeserialize<d999Bet>(sEmitResponse);
+                balance = (double)tmpBet.StartingBalance / 100000000.0 - (amount / 100000000.0) + ((double)tmpBet.PayOut / 100000000.0);
+
+                profit += -(amount / 100000000.0) + (double)(tmpBet.PayOut / 100000000m);
+                Bet tmp = new Bet();
+                tmp.Amount = (decimal)amount / 100000000m;
+                tmp.BetDate = DateTime.Now.ToString(); ;
+                tmp.Chance = ((decimal)chance * 100m) / 999999m;
+                tmp.clientseed = ClientSeed;
+                tmp.Currency = Currency;
+                tmp.high = High;
+                tmp.Id = tmpBet.BetId;
+                tmp.nonce = 0;
+                tmp.Profit = ((decimal)tmpBet.PayOut / 100000000m) - ((decimal)amount / 100000000m);
+                tmp.Roll = tmpBet.Secret / 10000m;
+                tmp.serverhash = Hash;
+                tmp.serverseed = tmpBet.ServerSeed;
+                tmp.uid = (int)uid;
+                tmp.UserName = "";
+
+                bool win = false;
+                if ((tmp.Roll > 99.99m - tmp.Chance && High) || (tmp.Roll < tmp.Chance && !High))
+                {
+                    win = true;
+                }
+                if (win)
+                    wins++;
+                else
+                    losses++;
+                Wagered += tmp.Amount;
+                bets++;
+                Parent.updateBalance((decimal)(balance));
+                Parent.updateBets(bets);
+                Parent.updateLosses(losses);
+                Parent.updateProfit(profit);
+                Parent.updateWagered(Wagered);
+                Parent.updateWins(wins);
+                BetRetries = 0;
+                Parent.AddBet(tmp);
+                sqlite_helper.InsertSeed(tmp.serverhash, tmp.serverseed);
+                Parent.GetBetResult((double)balance, win, (double)tmp.Profit);
+                
             }
-            HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-            string Hash = json.JsonDeserialize<d999Hash>(sEmitResponse).Hash;
-
-            loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-            string ClientSeed = r.Next(0, int.MaxValue).ToString();
-            post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}", sessionCookie, amount, !High ? 0 : 999999-(int)chance, !High ? (int)chance : 999999, ClientSeed, Currency);
-            loginrequest.Method = "POST";
-
-            loginrequest.ContentLength = post.Length;
-            loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-            using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+            catch
             {
-
-                writer.Write(post);
+                System.Windows.Forms.MessageBox.Show("Something went wrong! betting stopped.");
             }
-            EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-            sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-            d999Bet tmpBet = json.JsonDeserialize<d999Bet>(sEmitResponse);
-            balance = (double)tmpBet.StartingBalance/100000000.0 - (amount / 100000000.0) + ((double)tmpBet.PayOut / 100000000.0);
-
-            profit += -(amount / 100000000.0) + (double)(tmpBet.PayOut / 100000000m);
-            Bet tmp = new Bet();
-            tmp.Amount = (decimal)amount / 100000000m;
-            tmp.BetDate = DateTime.Now.ToString(); ;
-            tmp.Chance = ((decimal)chance * 100m) / 999999m;
-            tmp.clientseed = ClientSeed;
-            tmp.Currency = Currency;
-            tmp.high = High;
-            tmp.Id = tmpBet.BetId;
-            tmp.nonce = 0;
-            tmp.Profit = ((decimal)tmpBet.PayOut / 100000000m) - ((decimal)amount / 100000000m);
-            tmp.Roll = tmpBet.Secret / 10000m;
-            tmp.serverhash = Hash;
-            tmp.serverseed = tmpBet.ServerSeed;
-            tmp.uid = (int)uid;
-            tmp.UserName = "";
-
-            bool win = false;
-            if ((tmp.Roll > 99.99m - tmp.Chance && High) || (tmp.Roll < tmp.Chance && !High))
-            {
-                win = true;
-            }
-            if (win)
-                wins++;
-            else
-                losses++;
-            Wagered += tmp.Amount;
-            bets++;
-            Parent.updateBalance((decimal)(balance));
-            Parent.updateBets(bets);
-            Parent.updateLosses(losses);
-            Parent.updateProfit(profit);
-            Parent.updateWagered(Wagered );
-            Parent.updateWins(wins);
-
-            Parent.AddBet(tmp);
-            sqlite_helper.InsertSeed(tmp.serverhash, tmp.serverseed);
-            Parent.GetBetResult((double)balance, win, (double)tmp.Profit);
-
         }
 
         public override void PlaceBet(bool High)
@@ -188,7 +218,7 @@ namespace DiceBot
         public override bool Withdraw(double Amount, string Address)
         {
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-            string post = string.Format("a=Withdraw&Key=7a3ada10cb804ec695cda315db6b8789&s={0}&Amount={1}&Address={2}&currency={3}", sessionCookie, Amount, Address, Currency);
+            string post = string.Format("a=Withdraw&s={0}&Amount={1}&Address={2}&currency={3}", sessionCookie, Amount*100000000, Address, Currency);
             loginrequest.Method = "POST";
 
             loginrequest.ContentLength = post.Length;
