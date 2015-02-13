@@ -109,7 +109,7 @@ namespace DiceBot
                 {
                     case "JustDice": tmp.Verified = tmp.Roll == (decimal)DiceSite.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                     case "PrimeDice": tmp.Verified = tmp.Roll == (decimal)PD.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    //case "999Dice": tmp.Verified = tmp.Roll == (decimal)D999.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "999Dice": tmp.Verified = tmp.Roll== (decimal)dice999.sGetLucky(tmp.serverseed, (tmp.clientseed), (int)tmp.nonce, /*(long)(tmp.Roll*10000m),*/ tmp.serverhash); break;
                     //case "SafeDice": tmp.Verified = tmp.Roll == (decimal)SD.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                     //case "PRC": tmp.Verified = tmp.Roll == (decimal)PD.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                 }
@@ -530,13 +530,25 @@ namespace DiceBot
 
                 try
                 {
-                    sqcon.Open();
-                    SQLiteCommand Command = new SQLiteCommand("drop table if exists tmptable; create table tmptable(hash nvarchar(128)); insert into tmptable select seed.hash from seed, bet where seed.server like '' and bet.hash=seed.hash and bet.site='"+site+"' group by seed.hash; select MIN(betid) as betid from bet, tmptable where bet.hash=tmptable.hash group by bet.hash; drop table tmptable", sqcon);
-                    SQLiteDataReader Reader = Command.ExecuteReader();
                     List<long> Bets = new List<long>();
+                    sqcon.Open();
+                    SQLiteCommand Command = new SQLiteCommand("select hash from seed where server = ''", sqcon);
+                    SQLiteDataReader Reader = Command.ExecuteReader();
+
+                    List<string> hashes = new List<string>();
+
                     while (Reader.Read())
                     {
-                        Bets.Add((long)Reader["betid"]);
+                        hashes.Add((string)Reader["hash"]);
+                    }
+                    foreach (string s in hashes)
+                    {
+                        Command = new SQLiteCommand("select min(betid) as betid from bet where hash = '"+s+"' and site ='"+site+"'", sqcon);
+                    
+                        if (Reader.Read())
+                        {
+                            Bets.Add((long)Reader["betid"]);
+                        }
                     }
                     sqcon.Close();
                     return Bets;

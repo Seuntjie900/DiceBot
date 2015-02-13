@@ -20,11 +20,18 @@ namespace DiceBot
             Instance.OnJDMessage += Instance_OnJDMessage;
             Instance.OnNewClientSeed += Instance_OnNewClientSeed;
             Instance.OnRoll += Instance_OnRoll;
+            Instance.OnChat += Instance_OnChat;
+            
             Instance.logging = false;
             this.Parent = Parent;
             Name = "JustDice";
             Tip = true;
             TipUsingName = false;
+        }
+
+        void Instance_OnChat(Chat chat)
+        {
+            ReceivedChatMessage(chat.Date.ToShortTimeString() +" ("+chat.UID+") <"+chat.User+"> "+ chat.RawMessage);
         }
 
         void Instance_OnRoll(Roll roll)
@@ -146,14 +153,24 @@ namespace DiceBot
         public override bool Login(string Username, string Password, string twoFa)
         {
             bool tmp = Instance.Connect(false, Username, Password, twoFa);
-            Parent.updateBalance((decimal)Instance.Balance);
-            Parent.updateBets(Instance.Bets);
-            Parent.updateLosses(Instance.Losses);
-            Parent.updateProfit(Instance.Profit);
-            Parent.updateWagered(Instance.Wagered);
-            Parent.updateWins(Instance.Wins);
-            System.Windows.Forms.MessageBox.Show("Logged in!\n\nWelcome " + Username);
-            Parent.updateStatus("Logged in! Welcome " + Username);
+            if (Instance.Connected)
+            {
+                Parent.updateBalance((decimal)Instance.Balance);
+                Parent.updateBets(Instance.Bets);
+                Parent.updateLosses(Instance.Losses);
+                Parent.updateProfit(Instance.Profit);
+                Parent.updateWagered(Instance.Wagered);
+                Parent.updateWins(Instance.Wins);
+            
+                System.Windows.Forms.MessageBox.Show("Logged in!\n\nWelcome " + Username);
+                Parent.updateStatus("Logged in! Welcome " + Username);
+            }
+
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Failed to log in, Please check your username and password.");
+            }
+            
             return tmp;
         }
 
@@ -197,6 +214,21 @@ namespace DiceBot
         {
             GettingSeed = true;
             Instance.Roll(BetID);
+        }
+
+        public override void SendChatMessage(string Message)
+        {
+            Instance.Chat(Message);
+        }
+
+        public override bool Login(string Username, string Password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Register(string username, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

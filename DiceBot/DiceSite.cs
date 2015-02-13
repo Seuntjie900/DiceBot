@@ -38,24 +38,14 @@ namespace DiceBot
             return true;
 
         }
-        public virtual bool Withdraw(double Amount, string Address)
-        {
-            return true;
-        }
-        public virtual bool Login(string Username, string Password)
-        {
-            return true;
-
-        }
+        public abstract bool Withdraw(double Amount, string Address);
+        public abstract bool Login(string Username, string Password);
         public virtual bool Login(string Username, string Password, string twofa)
         {
             return true;
 
         }
-        public virtual bool Register(string username, string password)
-        {
-            return false;
-        }
+        public abstract bool Register(string username, string password);
         public abstract string GetbalanceValue();
         public abstract string GetSiteProfitValue();
         public abstract string GetTotalBets();
@@ -145,7 +135,11 @@ namespace DiceBot
         public bool TipUsingName { get; set; }
         public bool GettingSeed { get; set; }
         public abstract void GetSeed(long BetID);
-
+        public abstract void SendChatMessage(string Message);
+        protected void ReceivedChatMessage(string Message)
+        {
+            Parent.AddChat(Message);
+        }
         public virtual void SendTip(string User, double amount)
         {
             Parent.updateStatus("Tipping is not enabled for the current site.");

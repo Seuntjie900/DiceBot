@@ -31,7 +31,7 @@ namespace DiceBot
 
         public override bool Login(string Username, string Password)
         {
-            return base.Login(Username, Password);
+            return Login(Username, Password,"");
         }
         public override bool Login(string Username, string Password, string twofa)
         {
@@ -164,6 +164,21 @@ namespace DiceBot
         }
 
         public override void GetSeed(long BetID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SendChatMessage(string Message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Withdraw(double Amount, string Address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Register(string username, string password)
         {
             throw new NotImplementedException();
         }

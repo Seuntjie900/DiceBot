@@ -3590,10 +3590,10 @@ namespace DiceBot
                 betstring += number.ToString() + "," + Chance.ToString() + ",";
                 bool win = false;
                 if (high)
-                    betstring += ">" + (100 - Chance) + ",";
+                    betstring += ">" + (99.99 - Chance) + ",";
                 else
                     betstring += "<" + Chance + ",";
-                if (high && number > 100 - Chance)
+                if (high && number > 99.99 - Chance)
                 {
                     win = true;
                 }
@@ -3972,9 +3972,9 @@ namespace DiceBot
                 /*case 1: CurrentSite = new PRC(); if (!(url.StartsWith("pocketrocketscasino.eu") || url.StartsWith("pocketrocketscasino.eu"))) { gckBrowser.Navigate("https://pocketrocketscasino.eu/ref/357"); } pnlApiInfo.Visible = false; gckBrowser.Visible = true; gckBrowser.Dock = DockStyle.Fill; break;//############
                     //############################################
                     //############################################
-
-                case 2: CurrentSite = new D999(); if (!(url.StartsWith("999dice.com") || url.StartsWith("www.999dice.com"))) { gckBrowser.Navigate("www.999dice.com/?20073598"); } pnlApiInfo.Visible = false; gckBrowser.Visible = true; gckBrowser.Dock = DockStyle.Fill; break;
-
+                    */
+                case 2: CurrentSite = new dice999(this); break;
+                    /*
                 //case 3: CurrentSite = new PRC2(); if (!(url.StartsWith("") )) { gckBrowser.Navigate(""); } break;
                 case 3: CurrentSite = new SafeDice(); if (!(url.StartsWith("safedice.com"))) { gckBrowser.Navigate("safedice.com/?r=1050"); } pnlApiInfo.Visible = false; gckBrowser.Visible = true; gckBrowser.Dock = DockStyle.Fill; break;
                 */case 4: CurrentSite = new PD(this); break;
@@ -4249,6 +4249,30 @@ namespace DiceBot
                 lblStatus.Text = Status.ToString();
             }
         }
+
+        int undreadChatmessages = 0;
+        public void AddChat(object Message)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new dupdateControll(AddChat), Message);
+                
+            }
+            else
+            {
+                rtbChat.AppendText("\r\n" + Message);
+                if (tcStats.SelectedIndex!=2)
+                {
+                    undreadChatmessages++;
+                }
+                if (undreadChatmessages>0)
+                {
+                    tpChat.Text = "Chat*" + undreadChatmessages;
+                }
+            }
+        }
+
+
         List<Bet> BetsToShow = new List<Bet>();
 
         public void AddBet(object Bet)
@@ -4662,16 +4686,23 @@ namespace DiceBot
         DateTime LastMissingCheck = DateTime.Now;
         private void btnGetSeeds_Click(object sender, EventArgs e)
         {
-            GetMissingSeeds();
+            if (running)
+            {
+                MessageBox.Show("Please stop the bot before looking for missing seeds. This is an extremely expensive query to run and can cause other functions to stall or break.");
+            }
+            else
+            { 
+                GetMissingSeeds();
+            }
         }
-
+        
         void GetMissingSeeds()
         {
             LastMissingCheck = DateTime.Now;
             BetIDs = sqlite_helper.GetMissingSeedIDs(CurrentSite.Name);
         }
         List<long> BetIDs = new List<long>();
-
+        
         private void tmrMissingSeeds_Tick(object sender, EventArgs e)
         {
             if (BetIDs.Count > 0 && !CurrentSite.GettingSeed)
@@ -4681,12 +4712,36 @@ namespace DiceBot
                 CurrentSite.GetSeed(tmp);
 
             }
-            if ((DateTime.Now - LastMissingCheck).TotalMinutes>20 && chkAutoSeeds.Checked)
+            
+        }
+
+        private void txtChatMessage_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && txtChatMessage.Text!="")
             {
-                GetMissingSeeds();
+                CurrentSite.SendChatMessage(txtChatMessage.Text);
+                txtChatMessage.Text = "";
             }
         }
-        
+
+        private void btnChatSend_Click(object sender, EventArgs e)
+        {
+            if (txtChatMessage.Text!="")
+            {
+                CurrentSite.SendChatMessage(txtChatMessage.Text);
+                txtChatMessage.Text = "";
+            }
+        }
+
+        private void tcStats_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tcStats.SelectedIndex==2)
+            {
+                undreadChatmessages = 0;
+                tpChat.Text = "Chat";
+            }
+        }
+
         
 
         

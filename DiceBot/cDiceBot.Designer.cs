@@ -406,6 +406,10 @@
             this.label32 = new System.Windows.Forms.Label();
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
+            this.tpChat = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnChatSend = new System.Windows.Forms.Button();
+            this.txtChatMessage = new System.Windows.Forms.TextBox();
             this.btnSaveNotification = new System.Windows.Forms.Button();
             this.tmBetting = new System.Windows.Forms.Timer(this.components);
             this.tmStop = new System.Windows.Forms.Timer(this.components);
@@ -499,6 +503,7 @@
             this.btnStartLow2 = new System.Windows.Forms.Button();
             this.btnStartHigh2 = new System.Windows.Forms.Button();
             this.tmrMissingSeeds = new System.Windows.Forms.Timer(this.components);
+            this.rtbChat = new System.Windows.Forms.RichTextBox();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -613,6 +618,8 @@
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakLose)).BeginInit();
+            this.tpChat.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.pnlApiInfo.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -4395,12 +4402,14 @@
             // 
             this.tcStats.Controls.Add(this.tabPage7);
             this.tcStats.Controls.Add(this.tabPage8);
+            this.tcStats.Controls.Add(this.tpChat);
             this.tcStats.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tcStats.Location = new System.Drawing.Point(0, 540);
             this.tcStats.Name = "tcStats";
             this.tcStats.SelectedIndex = 0;
             this.tcStats.Size = new System.Drawing.Size(475, 260);
             this.tcStats.TabIndex = 14;
+            this.tcStats.SelectedIndexChanged += new System.EventHandler(this.tcStats_SelectedIndexChanged);
             // 
             // tabPage7
             // 
@@ -4991,6 +5000,46 @@
             this.label36.Size = new System.Drawing.Size(85, 13);
             this.label36.TabIndex = 28;
             this.label36.Text = "Avg Win Streak:";
+            // 
+            // tpChat
+            // 
+            this.tpChat.Controls.Add(this.rtbChat);
+            this.tpChat.Controls.Add(this.panel1);
+            this.tpChat.Location = new System.Drawing.Point(4, 22);
+            this.tpChat.Name = "tpChat";
+            this.tpChat.Padding = new System.Windows.Forms.Padding(3);
+            this.tpChat.Size = new System.Drawing.Size(467, 234);
+            this.tpChat.TabIndex = 2;
+            this.tpChat.Text = "Chat";
+            this.tpChat.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnChatSend);
+            this.panel1.Controls.Add(this.txtChatMessage);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(3, 204);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(461, 27);
+            this.panel1.TabIndex = 0;
+            // 
+            // btnChatSend
+            // 
+            this.btnChatSend.Location = new System.Drawing.Point(403, 2);
+            this.btnChatSend.Name = "btnChatSend";
+            this.btnChatSend.Size = new System.Drawing.Size(53, 23);
+            this.btnChatSend.TabIndex = 1;
+            this.btnChatSend.Text = "Send";
+            this.btnChatSend.UseVisualStyleBackColor = true;
+            this.btnChatSend.Click += new System.EventHandler(this.btnChatSend_Click);
+            // 
+            // txtChatMessage
+            // 
+            this.txtChatMessage.Location = new System.Drawing.Point(3, 4);
+            this.txtChatMessage.Name = "txtChatMessage";
+            this.txtChatMessage.Size = new System.Drawing.Size(394, 20);
+            this.txtChatMessage.TabIndex = 0;
+            this.txtChatMessage.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtChatMessage_KeyDown);
             // 
             // btnSaveNotification
             // 
@@ -6022,6 +6071,17 @@
             this.tmrMissingSeeds.Interval = 10000;
             this.tmrMissingSeeds.Tick += new System.EventHandler(this.tmrMissingSeeds_Tick);
             // 
+            // rtbChat
+            // 
+            this.rtbChat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbChat.HideSelection = false;
+            this.rtbChat.Location = new System.Drawing.Point(3, 3);
+            this.rtbChat.Name = "rtbChat";
+            this.rtbChat.ReadOnly = true;
+            this.rtbChat.Size = new System.Drawing.Size(461, 201);
+            this.rtbChat.TabIndex = 1;
+            this.rtbChat.Text = "";
+            // 
             // idDataGridViewTextBoxColumn
             // 
             this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
@@ -6238,6 +6298,9 @@
             this.tabPage8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakWin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakLose)).EndInit();
+            this.tpChat.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.pnlApiInfo.ResumeLayout(false);
@@ -6751,6 +6814,11 @@
         private System.Windows.Forms.Label lblSeedFound;
         private System.Windows.Forms.Label lblSeedProgress;
         private System.Windows.Forms.Timer tmrMissingSeeds;
+        private System.Windows.Forms.TabPage tpChat;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btnChatSend;
+        private System.Windows.Forms.TextBox txtChatMessage;
+        private System.Windows.Forms.RichTextBox rtbChat;
 
     }
 }

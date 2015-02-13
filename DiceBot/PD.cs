@@ -15,7 +15,8 @@ namespace DiceBot
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
         public bool ispd = true;
-        
+        string username = "";
+        long uid = 0;
         DateTime lastupdate = new DateTime();
 
         public PD(cDiceBot Parent)
@@ -31,6 +32,8 @@ namespace DiceBot
             Name = "PrimeDice";
             Tip = true;
             TipUsingName = true;
+            Thread tChat = new Thread(GetMessagesThread);
+            tChat.Start();
         }
         
 
@@ -163,6 +166,8 @@ namespace DiceBot
                     string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
 
                     pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
+                    this.username = tmpu.user.username;
+                    uid = tmpu.user.userid;
                     balance = tmpu.user.balance; //i assume
                     bets = tmpu.user.bets;
                     Parent.updateBalance((decimal)(balance / 100000000.0));
@@ -210,7 +215,7 @@ namespace DiceBot
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/bet?access_token=" + accesstoken);
                 betrequest.Method = "POST";
-                double tmpchance = High ? 100.0 - chance : chance;
+                double tmpchance = High ? 99.99 - chance : chance;
                 string post = string.Format("amount={0}&target={1}&condition={2}", (amount * 100000000).ToString(""), tmpchance.ToString("0.00"), High ? ">" : "<");
                 betrequest.ContentLength = post.Length;
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
@@ -559,8 +564,6 @@ namespace DiceBot
 
         void GetRollThread(object _BetID)
         {
-            
-            
             try
             {
                 long BetID = (long)_BetID;
@@ -583,6 +586,7 @@ namespace DiceBot
 
             }
             GettingSeed = false;
+            
         }
 
         public override void GetSeed(long BetID)
@@ -590,6 +594,89 @@ namespace DiceBot
             GettingSeed = true;
             Thread GetSeedThread = new Thread(new ParameterizedThreadStart(GetRollThread));
             GetSeedThread.Start(BetID);
+            //GetRollThread(BetID);
+        }
+
+        public override void SendChatMessage(string Message)
+        {
+            Thread send = new Thread(new ParameterizedThreadStart(Send));
+            send.Start(Message);
+        }
+
+        void Send(object _Message)
+        {
+            if (accesstoken != "")
+            {
+                try
+                {
+                    string Message = (string)_Message;
+                    string post = "";
+                    post += "username=" + username + "&userid=" + uid + "&room=en&message=" + Message + "&token=" + accesstoken;
+                    HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/send?access_token=" + accesstoken);
+                    loginrequest.Method = "POST";
+
+                    loginrequest.ContentLength = post.Length;
+                    loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+                    using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                    {
+
+                        writer.Write(post);
+                    }
+                    HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                    string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+
+                }
+                catch
+                {
+
+                }
+            }
+        }
+        DateTime lastchat = DateTime.UtcNow;
+        void GetMessagesThread()
+        {
+            while (ispd)
+            {
+                try
+                {
+                    if (accesstoken != "")
+                    {
+                        HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/messages?access_token=" + accesstoken/*+"&room=pvp"*/);
+                        loginrequest.Method = "GET";
+
+                        loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                        HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                        string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+
+                        chatmessages msgs = json.JsonDeserialize<chatmessages>(sEmitResponse);
+                        bool pastlast = false;
+                        for (int i = 0; i < msgs.messages.Length; i++)
+                        {
+
+                            //if (!pastlast)
+                            {
+                                pastlast = json.ToDateTime2(msgs.messages[i].timestamp).Ticks > lastchat.Ticks;
+                            }
+                            if (pastlast)
+                            {
+                                lastchat = json.ToDateTime2(msgs.messages[i].timestamp);
+                                ReceivedChatMessage(lastchat.ToShortTimeString() + "(" + msgs.messages[i].userid + ") <" + msgs.messages[i].username + "> " + msgs.messages[i].message);
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+            System.Threading.Thread.Sleep(1000);
+        }
+
+        public override bool Login(string Username, string Password)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -634,7 +721,7 @@ namespace DiceBot
                 Profit=(decimal)profit/100000000m, 
                 Roll=(decimal)roll, 
                 high=condition==">",
-                Chance = condition == ">" ? 100m - (decimal)target : (decimal)target, 
+                Chance = condition == ">" ? 99.99m - (decimal)target : (decimal)target, 
                 nonce=nonce ,
                 serverhash = serverhash,
                 clientseed = client,
@@ -655,6 +742,8 @@ namespace DiceBot
         public decimal profit { get; set; }
         public decimal wagered { get; set; }
         public string address { get; set; }
+        public long userid { get; set; }
+        public string username { get; set; }
     }
 
     public class PDseeds
@@ -667,5 +756,22 @@ namespace DiceBot
         public string previous_server_hashed { get; set; }
         public string next_seed { get; set; }
         public string server { get; set; }
+    }
+
+    public class chatmessages
+    {
+        public pdchat[] messages { get; set; }
+    }
+
+    public class pdchat
+    {
+        public string room { get; set; }
+        public long userid { get; set; }
+        public string username { get; set; }
+        public string message { get; set; }
+        public string timestamp { get; set; }
+        public string tousername { get; set; }
+        public long id { get; set; }
+       
     }
 }
