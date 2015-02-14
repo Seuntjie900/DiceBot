@@ -21,12 +21,23 @@ namespace DiceBot
             Instance.OnNewClientSeed += Instance_OnNewClientSeed;
             Instance.OnRoll += Instance_OnRoll;
             Instance.OnChat += Instance_OnChat;
-            
+            Instance.OnWins += Instance_OnWins;
+            Instance.OnLossess += Instance_OnLossess;
             Instance.logging = false;
             this.Parent = Parent;
             Name = "JustDice";
             Tip = true;
             TipUsingName = false;
+        }
+
+        void Instance_OnLossess(long Lossess)
+        {
+            Parent.updateLosses(Lossess);
+        }
+
+        void Instance_OnWins(long Wins)
+        {
+            Parent.updateWins(Wins);
         }
 
         void Instance_OnChat(Chat chat)
@@ -74,10 +85,10 @@ namespace DiceBot
                 bets = int.Parse(result.bets);
                 Parent.updateBalance(Instance.Balance);
                 Parent.updateBets(result.bets);
-                Parent.updateLosses(result.stats.losses);
+                
                 Parent.updateProfit(result.profit );
                 Parent.updateWagered(result.wagered );
-                Parent.updateWins(result.stats.wins);
+                
                 Parent.AddBet(ToBet(result));
                 Parent.GetBetResult(double.Parse(result.balance, System.Globalization.CultureInfo.InvariantCulture), result.win, (double.Parse(result.this_profit, System.Globalization.CultureInfo.InvariantCulture)));
             }
@@ -89,15 +100,7 @@ namespace DiceBot
             Instance.Bet(chance, amount, High);
         }
 
-        public override void SetChance(string Chance)
-        {
-            this.chance = double.Parse(Chance, System.Globalization.CultureInfo.InvariantCulture);
-        }
-
-        public override void SetAmount(double Amount)
-        {
-            this.amount = Amount;
-        }
+       
 
         public override void ResetSeed()
         {
@@ -173,7 +176,7 @@ namespace DiceBot
             
             return tmp;
         }
-
+        
         Bet ToBet(JDCAPI.Result curBet)
         {
             Bet tmp = new Bet();

@@ -12,8 +12,9 @@ namespace DiceBot
 {
     public abstract class DiceSite
     {
-        
 
+        public string[] Currencies = new string[] { "btc" };
+        public string Currency = "Btc";
         protected cDiceBot Parent;
         public bool AutoWithdraw { get; set; }
         public bool AutoInvest { get; set; }
@@ -22,15 +23,13 @@ namespace DiceBot
         public decimal edge = 1;
         public string Name { get; protected set; }
         public double chance = 0;
-        protected double amount = 0;
+        public double amount = 0;
         protected double balance = 0;
         protected int bets = 0;
         protected double profit = 0;
         protected double siteprofit = 0;
         protected bool High = false;
         public abstract void PlaceBet(bool High);
-        public abstract void SetChance(string Chance);
-        public abstract void SetAmount(double Amount);
         public abstract void ResetSeed();
         public abstract void SetClientSeed(string Seed);
         public virtual bool Invest(double Amount)

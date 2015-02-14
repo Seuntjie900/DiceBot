@@ -33,6 +33,7 @@ namespace DiceBot
             Tip = false;
             TipUsingName = true;
             Currency = "btc";
+            Currencies = new string[] { "btc","doge","ltc" };
             /*Thread tChat = new Thread(GetMessagesThread);
             tChat.Start();*/
         }
@@ -154,16 +155,6 @@ namespace DiceBot
             t.Start();
         }
 
-        public override void SetChance(string Chance)
-        {
-            chance = (999999.0*(double.Parse(Chance)/99.9));
-        }
-
-        public override void SetAmount(double Amount)
-        {
-            amount = Amount*100000000.0;
-        }
-
         public override void ResetSeed()
         {
             throw new NotImplementedException();
@@ -214,7 +205,7 @@ namespace DiceBot
             
         }
 
-        public string Currency { get; set; }
+        
         public override bool Withdraw(double Amount, string Address)
         {
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;

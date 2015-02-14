@@ -41,20 +41,21 @@ namespace DiceBot
             dicehub.Invoke("Bet", High?0:1, amount, chance);
         }
 
-        private void BetResult(Bet tmp)
+        private void BetResult( PRCMYstats tmp)
+        {
+            
+        }
+        private void BetResult(Bet tmp, PRCMYstats tmpStats)
         {
             if (tmp.uid == UserID)
             {
-                
-                tmp.serverhash = serverhash;
+                balance = (double)tmpStats.AvailableBalance;
+                wins = tmpStats.Wins;
+                losses = tmpStats.Losses;
+                Wagered = tmpStats.Wagered;
+                bets = tmpStats.NumBets;
+                profit = (double)tmpStats.Profit;
 
-                balance += (double)tmp.Profit;
-                bets++;
-                if (tmp.PlayerWin)
-                    wins++;
-                else
-                    losses++;
-                Wagered += tmp.Amount;
 
                 Parent.updateBalance((decimal)(balance));
                 Parent.updateBets(bets);
@@ -62,21 +63,14 @@ namespace DiceBot
                 Parent.updateProfit(profit);
                 Parent.updateWagered(Wagered);
                 Parent.updateWins(wins);
+                tmp.serverhash = serverhash;
                 Parent.AddBet(tmp);
                 Parent.GetBetResult(balance, tmp.PlayerWin, (double)tmp.Profit);
             }
         }
 
-        public override void SetChance(string Chance)
-        {
-            chance = double.Parse(Chance);
-        }
-
-        public override void SetAmount(double Amount)
-        {
-            amount = Amount;
-        }
-
+        
+      
         public override void ResetSeed()
         {
             
@@ -160,7 +154,14 @@ namespace DiceBot
             dicehub.Invoke("Withdraw", Address, Amount, "");
             return true;
         }
-
+        void ReceivedChat(string messages, string time, string user, int id, int room, bool ismod)
+        {
+            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> {3}", DateTime.Parse(time), user, id, messages));
+        }
+        void ReceivedChat(string messages, string time, string user, int from, bool ismod)
+        {
+            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> PM: {3}", DateTime.Parse(time), user, from, messages));
+        }
         public override bool Login(string Username, string Password)
         {
             return Login(Username, Password, "");
@@ -230,6 +231,7 @@ namespace DiceBot
                     rqtoken = c.Value;
                 Cookies.Add(c);
             }
+            Cookies.Add((new Cookie("PRC_Affiliate", "357", "/", "pocketrocketscasino.eu")));
             con.CookieContainer = Cookies;
             try
             {
@@ -246,9 +248,11 @@ namespace DiceBot
                 dicehub = con.CreateHubProxy("diceHub");
                 con.Start().Wait();
 
-                dicehub.On<string, string, string, string, string, string>("receiveChatMessage", GotChatMessage);
-                dicehub.On<Bet>("diceResult", BetResult);
-                
+                dicehub.Invoke("joinChatRoom", 1);
+                dicehub.On<Bet, PRCMYstats>("diceResult", BetResult);
+                //dicehub.On<PRCMYstats>("diceResult", BetResult);
+                dicehub.On<string, string, string, int, int, bool>("chat", ReceivedChat);
+                dicehub.On<string, string, string, int, bool>("receivePrivateMesssage", ReceivedChat);
 
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
                 getHeaders.CookieContainer = Cookies;
@@ -292,7 +296,7 @@ namespace DiceBot
             System.Windows.Forms.MessageBox.Show("Registration temporarily disabled. Please Register with the site, then log in here.");
             return false;
 
-            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/") as HttpWebRequest;
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/ref/357") as HttpWebRequest;
             var cookies = new CookieContainer();
             getHeaders.CookieContainer = cookies;
             HttpWebResponse Response = null;
@@ -310,13 +314,15 @@ namespace DiceBot
                 return false;
             }
             CookieContainer tmpContainer = getHeaders.CookieContainer;
-            getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/SaveUserNameAndPassword") as HttpWebRequest;
+            getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/") as HttpWebRequest;
             getHeaders.CookieContainer = tmpContainer;
             foreach (Cookie c in Response.Cookies)
             {
 
                 getHeaders.CookieContainer.Add(c);
             }
+            getHeaders.CookieContainer.Add(new Cookie("PRC_Affiliate", "357", "/", "pocketrocketscasino.eu"));
+            System.Threading.Thread.Sleep(5000);
             getHeaders.Method = "POST";
             string post = string.Format("userName={0}&password={1}&confirmPassword={1}&__RequestVerificationToken={2}", Username, Passwrd, rqtoken);
             getHeaders.ContentType = "application/x-www-form-urlencoded";
@@ -362,7 +368,7 @@ namespace DiceBot
                 con.Start().Wait();
 
                 dicehub.On<string, string, string, string, string, string>("receiveChatMessage", GotChatMessage);
-                dicehub.On<Bet>("diceResult", BetResult);
+                dicehub.On<Bet, PRCMYstats>("diceResult", BetResult);
 
 
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
@@ -448,5 +454,14 @@ namespace DiceBot
         public string PreviousServerSeed { get; set; }
         public string PreviousClientSeed { get; set; }
         public int PreviousNonce { get; set; }
+    }
+    public class PRCMYstats
+    {
+        public decimal AvailableBalance { get; set; }
+        public int NumBets { get; set; }
+        public decimal Wagered { get; set; }
+        public int Wins { get; set; }
+        public int Losses { get; set; }
+        public decimal Profit { get; set; }
     }
 }

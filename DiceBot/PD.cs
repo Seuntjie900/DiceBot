@@ -271,18 +271,7 @@ namespace DiceBot
             new Thread(placebetthread).Start();
         }
 
-        public override void SetChance(string Chance)
-        {
-            Parent.updateChance(decimal.Parse(Chance, System.Globalization.CultureInfo.InvariantCulture));
-            chance = double.Parse(Chance, System.Globalization.CultureInfo.InvariantCulture);
-        }
-
-        public override void SetAmount(double Amount)
-        {
-            amount = Amount;
-            Parent.updateBet((decimal)Amount);
-        }
-
+       
         public override void ResetSeed()
         {
             if ((DateTime.Now - LastSeedReset).TotalSeconds>90)

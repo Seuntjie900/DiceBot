@@ -407,6 +407,7 @@
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.tpChat = new System.Windows.Forms.TabPage();
+            this.rtbChat = new System.Windows.Forms.RichTextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnChatSend = new System.Windows.Forms.Button();
             this.txtChatMessage = new System.Windows.Forms.TextBox();
@@ -503,7 +504,7 @@
             this.btnStartLow2 = new System.Windows.Forms.Button();
             this.btnStartHigh2 = new System.Windows.Forms.Button();
             this.tmrMissingSeeds = new System.Windows.Forms.Timer(this.components);
-            this.rtbChat = new System.Windows.Forms.RichTextBox();
+            this.cmbCurrency = new System.Windows.Forms.ComboBox();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -5013,6 +5014,17 @@
             this.tpChat.Text = "Chat";
             this.tpChat.UseVisualStyleBackColor = true;
             // 
+            // rtbChat
+            // 
+            this.rtbChat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbChat.HideSelection = false;
+            this.rtbChat.Location = new System.Drawing.Point(3, 3);
+            this.rtbChat.Name = "rtbChat";
+            this.rtbChat.ReadOnly = true;
+            this.rtbChat.Size = new System.Drawing.Size(461, 201);
+            this.rtbChat.TabIndex = 1;
+            this.rtbChat.Text = "";
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.btnChatSend);
@@ -5062,6 +5074,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.cmbCurrency);
             this.panel3.Controls.Add(this.label97);
             this.panel3.Controls.Add(this.cmbSettingMode);
             this.panel3.Controls.Add(this.lblStatus);
@@ -6071,16 +6084,19 @@
             this.tmrMissingSeeds.Interval = 10000;
             this.tmrMissingSeeds.Tick += new System.EventHandler(this.tmrMissingSeeds_Tick);
             // 
-            // rtbChat
+            // cmbCurrency
             // 
-            this.rtbChat.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbChat.HideSelection = false;
-            this.rtbChat.Location = new System.Drawing.Point(3, 3);
-            this.rtbChat.Name = "rtbChat";
-            this.rtbChat.ReadOnly = true;
-            this.rtbChat.Size = new System.Drawing.Size(461, 201);
-            this.rtbChat.TabIndex = 1;
-            this.rtbChat.Text = "";
+            this.cmbCurrency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCurrency.FormattingEnabled = true;
+            this.cmbCurrency.Items.AddRange(new object[] {
+            "btc",
+            "doge",
+            "ltc"});
+            this.cmbCurrency.Location = new System.Drawing.Point(195, 8);
+            this.cmbCurrency.Name = "cmbCurrency";
+            this.cmbCurrency.Size = new System.Drawing.Size(39, 21);
+            this.cmbCurrency.TabIndex = 13;
+            this.cmbCurrency.SelectedIndexChanged += new System.EventHandler(this.cmbCurrency_SelectedIndexChanged);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -6819,6 +6835,7 @@
         private System.Windows.Forms.Button btnChatSend;
         private System.Windows.Forms.TextBox txtChatMessage;
         private System.Windows.Forms.RichTextBox rtbChat;
+        private System.Windows.Forms.ComboBox cmbCurrency;
 
     }
 }

@@ -743,7 +743,7 @@ namespace DiceBot
                     SafeDiceCounter++;
                 if (!(CurrentSite is SafeDice) || SafeDiceCounter == 1)*/
                 {
-                    CurrentSite.SetAmount(Lastbet);
+                    CurrentSite.amount=(Lastbet);
                 }
                 if (!CurrentSite.ReadyToBet())
                     return;
@@ -875,7 +875,7 @@ namespace DiceBot
 
                 stoponwin = false;
                 Chance = (double)nudChance.Value;
-                CurrentSite.SetChance(Chance.ToString("0.00000000"));
+                CurrentSite.chance =(Chance);
 
                 dtStarted = DateTime.Now;
             }
@@ -1162,7 +1162,7 @@ namespace DiceBot
                     {
                         Chance = (double)(nudChance.Value);
                         if (!RunningSimulation)
-                            CurrentSite.SetChance(Chance.ToString().Replace(',', '.'));
+                            CurrentSite.chance =(Chance);
                     }
                     catch
                     {
@@ -1221,7 +1221,7 @@ namespace DiceBot
                     {
                         Chance = (double)nudChangeChanceWinTo.Value;
                         if (!RunningSimulation)
-                            CurrentSite.SetChance(nudChangeChanceWinTo.Value.ToString().Replace(',', '.'));
+                            CurrentSite.chance = ((double)nudChangeChanceWinTo.Value);
 
                     }
                     catch
@@ -1585,7 +1585,7 @@ namespace DiceBot
                         {
                             Chance = (double)nudChangeChanceLoseTo.Value;
                             if (!RunningSimulation)
-                                CurrentSite.SetChance(nudChangeChanceLoseTo.Value.ToString().Replace(',', '.'));
+                                CurrentSite.chance = (double)(nudChangeChanceLoseTo.Value);
                             
                             
                         }
@@ -3238,7 +3238,7 @@ namespace DiceBot
             testInputs();
             try
             {
-                CurrentSite.SetChance(Chance.ToString().Replace(",", "."));
+                CurrentSite.chance =  (Chance);
                                 
             }
             catch
@@ -3986,7 +3986,12 @@ namespace DiceBot
             rdbWithdraw.Enabled = CurrentSite.AutoWithdraw;
             if (!rdbWithdraw.Enabled)
                 rdbWithdraw.Checked = false;
-            
+            cmbCurrency.Items.Clear();
+            foreach (string s in CurrentSite.Currencies)
+            {
+                cmbCurrency.Items.Add(s);
+            }
+            cmbCurrency.SelectedIndex = 0;
         }
 
         private void btnBrowseStratFolder_Click(object sender, EventArgs e)
@@ -4378,8 +4383,8 @@ namespace DiceBot
         /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
-            CurrentSite.SetAmount((double)nudApiBet.Value);
-            CurrentSite.SetChance(nudApiChance.Value.ToString("0.00000000"));
+            CurrentSite.amount = ((double)nudApiBet.Value);
+            CurrentSite.chance = (double)(nudApiChance.Value);
             CurrentSite.PlaceBet(true);
         }
 
@@ -4390,8 +4395,8 @@ namespace DiceBot
         /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
-            CurrentSite.SetAmount((double)nudApiBet.Value);
-            CurrentSite.SetChance(nudApiChance.Value.ToString("0.00000000"));
+            CurrentSite.amount =((double)nudApiBet.Value);
+            CurrentSite.chance = (double)(nudApiChance.Value);
             CurrentSite.PlaceBet(false);
         }
 
@@ -4740,6 +4745,12 @@ namespace DiceBot
                 undreadChatmessages = 0;
                 tpChat.Text = "Chat";
             }
+        }
+
+        private void cmbCurrency_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbCurrency.SelectedIndex!=-1)
+            CurrentSite.Currency = cmbCurrency.SelectedItem.ToString();
         }
 
         

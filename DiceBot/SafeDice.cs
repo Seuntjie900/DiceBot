@@ -113,16 +113,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override void SetChance(string Chance)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetAmount(double Amount)
-        {
-            throw new NotImplementedException();
-        }
-
+       
         public override void ResetSeed()
         {
             throw new NotImplementedException();
