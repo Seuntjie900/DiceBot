@@ -190,7 +190,7 @@ namespace DiceBot
                 btnLogIn.Text = "Log In";
             }
         }
-
+        
         public cDiceBot()
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
