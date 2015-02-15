@@ -43,7 +43,8 @@ namespace DiceBot
         {
             try
             {
-                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
+                double chance = (999999.0)*(this.chance/100.0);
+                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, this.chance, High ? "High" : "Low"));
                 HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
                 string post = string.Format("a=GetServerSeedHash&s={0}", sessionCookie);
                 loginrequest.Method = "POST";
@@ -58,7 +59,7 @@ namespace DiceBot
                 }
                 HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                if (sEmitResponse.Contains("Error"))
+                if (sEmitResponse.Contains("error"))
                 {
                     if (BetRetries++ < 3)
                     {
@@ -74,7 +75,7 @@ namespace DiceBot
 
                 loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
                 string ClientSeed = r.Next(0, int.MaxValue).ToString();
-                post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}", sessionCookie, amount, !High ? 0 : 999999 - (int)chance, !High ? (int)chance : 999999, ClientSeed, Currency);
+                post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}", sessionCookie, amount*100000000, High ? 999999 - (int)chance : 0, High ? 999999 : (int)chance, ClientSeed, Currency);
                 loginrequest.Method = "POST";
 
                 loginrequest.ContentLength = post.Length;
@@ -87,7 +88,7 @@ namespace DiceBot
                 }
                 EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                 sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                if (sEmitResponse.Contains("Error"))
+                if (sEmitResponse.Contains("error"))
                 {
                     if (BetRetries++ < 3)
                     {
