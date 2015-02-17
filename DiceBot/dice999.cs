@@ -42,6 +42,7 @@ namespace DiceBot
         string next = "";
         void PlaceBetThread()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             try
             {
                 HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
@@ -218,6 +219,7 @@ namespace DiceBot
         
         public override bool Withdraw(double Amount, string Address)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
             string post = string.Format("a=Withdraw&s={0}&Amount={1}&Address={2}&currency={3}", sessionCookie, Amount*100000000, Address, Currency);
             loginrequest.Method = "POST";
@@ -242,6 +244,7 @@ namespace DiceBot
         decimal Wagered = 0;
         public override bool Login(string Username, string Password, string twofa)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
             string post = "a=Login&Key=7a3ada10cb804ec695cda315db6b8789&Username=" + Username + "&Password=" + Password + (twofa != "" ? "&Totp=" + twofa : "");
             loginrequest.Method = "POST";
@@ -257,7 +260,7 @@ namespace DiceBot
             HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
             string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
             d999Login tmpU = json.JsonDeserialize<d999Login>(sEmitResponse);
-            if (tmpU.SessionCookie!="")
+            if (tmpU.SessionCookie!="" && tmpU.SessionCookie!=null)
             { 
                 sessionCookie = tmpU.SessionCookie;
                 balance = (double)tmpU.Balance/100000000.0;
@@ -272,9 +275,20 @@ namespace DiceBot
                 Parent.updateProfit(profit);
                 Parent.updateWagered(Wagered);
                 Parent.updateWins(tmpU.BetWinCount);
-                Parent.updateDeposit(tmpU.DepositAddress);
+                try
+                {
+                    Parent.updateDeposit(tmpU.DepositAddress);
+                }
+                catch
+                {
+
+                }
                 uid = tmpU.Accountid;
-            }      
+            }   
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Error loggin in. Please check username and password.");
+            }
             return sessionCookie != "";
         }
         public override bool Register(string username, string password)
@@ -317,7 +331,14 @@ namespace DiceBot
                  Parent.updateProfit(0m);
                  Parent.updateWagered(0m);
                  Parent.updateWins(0);
-                 Parent.updateDeposit(tmp.DepositAddress);
+                 try
+                 {
+                     Parent.updateDeposit(tmp.DepositAddress);
+                 }
+                catch
+                 {
+
+                 }
                  uid = tmp.Accountid;
             }
             return sessionCookie != "";

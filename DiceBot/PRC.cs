@@ -156,11 +156,11 @@ namespace DiceBot
         }
         void ReceivedChat(string messages, string time, string user, int id, int room, bool ismod)
         {
-            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> {3}", DateTime.Parse(time), user, id, messages));
+            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> {3}", DateTime.Parse(time, System.Globalization.CultureInfo.InvariantCulture), user, id, messages));
         }
         void ReceivedChat(string messages, string time, string user, int from, bool ismod)
         {
-            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> PM: {3}", DateTime.Parse(time), user, from, messages));
+            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> PM: {3}", DateTime.Parse(time, System.Globalization.CultureInfo.InvariantCulture), user, from, messages));
         }
         public override bool Login(string Username, string Password)
         {
