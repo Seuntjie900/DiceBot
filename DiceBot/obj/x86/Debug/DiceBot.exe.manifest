@@ -43,50 +43,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="701440">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="602112">
       <assemblyIdentity name="DiceBot" version="2.5.5.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>O4t2ssSa/CpaFThWYa/G3Xoox4U=</dsig:DigestValue>
+        <dsig:DigestValue>oMnLYp5ZIIGozrf4FJQUCC2yKYU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="JDCAPI.dll" size="69120">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="JDCAPI.dll" size="59904">
       <assemblyIdentity name="JDCAPI" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>N3N1922RfQzOPSGnbDXYUHLValg=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.AspNet.SignalR.Client.dll" size="130736">
-      <assemblyIdentity name="Microsoft.AspNet.SignalR.Client" version="2.2.0.0" publicKeyToken="31BF3856AD364E35" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>IbsckKBtcZo4nYD6yljf6ClSoQk=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Newtonsoft.Json.dll" size="493056">
-      <assemblyIdentity name="Newtonsoft.Json" version="6.0.0.0" publicKeyToken="30AD4FE6B2A6AEED" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>O3bvpnU3spn7GbrvuVQ9+Mrazbs=</dsig:DigestValue>
+        <dsig:DigestValue>rEZnp7jggOPIJWFq+b8JydcSUjk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

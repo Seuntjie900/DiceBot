@@ -30,7 +30,7 @@ namespace DiceBot
         }
         public static string ToDateString(DateTime Value)
         {
-            TimeSpan dt = Value - DateTime.Parse("1970/01/01 00:00:00", System.Globalization.CultureInfo.InvariantCulture);
+            TimeSpan dt = Value - DateTime.Parse("1970/01/01 00:00:00");
             double mili = dt.TotalMilliseconds;
             return ((long)mili).ToString();
 
@@ -47,7 +47,7 @@ namespace DiceBot
             catch
             {
                 string s = milliseconds.ToLower().Replace("z", " ").Replace("t", " ");
-                DateTime dotNetDate = DateTime.Parse(s, System.Globalization.CultureInfo.InvariantCulture);
+                DateTime dotNetDate = DateTime.Parse(s);
                 return dotNetDate;
             }
         }

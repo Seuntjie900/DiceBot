@@ -31,7 +31,7 @@ namespace DiceBot
             if (cmbView.SelectedIndex<=3)
             {
                 label2.Visible= label3.Visible = dtpFrom.Visible = dtpUntill.Visible = btnView.Visible = false;
-                GetBets(GetDate(cmbView.SelectedIndex), DateTime.Parse(DateTime.Now.ToShortDateString(), System.Globalization.CultureInfo.InvariantCulture).AddDays(1));
+                GetBets(GetDate(cmbView.SelectedIndex), DateTime.Parse(DateTime.Now.ToShortDateString()).AddDays(1));
                 pnlSearch.Visible = false;
             }
             else if (cmbView.SelectedIndex==4)
@@ -58,13 +58,13 @@ namespace DiceBot
             //get start date for Day.
             if (Type == 0)
             {
-                return DateTime.Parse(DateTime.Now.ToShortDateString(), System.Globalization.CultureInfo.InvariantCulture);
+                return DateTime.Parse(DateTime.Now.ToShortDateString());
             }
 
             //get start date for week.
             if (Type==1)
             {
-                return DateTime.Parse(DateTime.Now.ToShortDateString(), System.Globalization.CultureInfo.InvariantCulture).AddDays(-(int)DateTime.Now.DayOfWeek);
+                return DateTime.Parse(DateTime.Now.ToShortDateString()).AddDays(-(int)DateTime.Now.DayOfWeek);
             }
 
             //get start date for Month.
