@@ -205,7 +205,7 @@ namespace DiceBot
             
             ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow, btnStartHigh2, btnStartLow2 };
             EnableNotLoggedInControls(false);
-            cmbSettingMode.SelectedIndex = 0;
+            basicToolStripMenuItem.Checked = true;
             chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
             chrtEmbeddedLiveChart.ChartAreas[0].AxisX.Minimum = 0;
             #region tooltip Texts
@@ -312,10 +312,7 @@ namespace DiceBot
                 case 3: CurrentSite = new PD(this)/*new SafeDice(); break;
                 case 4: CurrentSite = new PD(this); break;
             }*/
-            if (cmbSite.SelectedIndex==-1)
-            {
-                cmbSite.SelectedIndex=4;
-            }
+            
             Thread tGetVers = new Thread(new ThreadStart(getversion));
             tGetVers.Start();
             populateFiboNacci();
@@ -673,8 +670,8 @@ namespace DiceBot
         private void Stop()
         {
             //tmBetting.Enabled = false;
-            bool success = false;
-            double dBalance = Getbalance( out success);
+            
+            double dBalance = CurrentSite.GetbalanceValue();
             stop = true;
             TotalTime += (DateTime.Now - dtStarted);
             if (RunningSimulation)
@@ -702,33 +699,7 @@ namespace DiceBot
             }
         }
 
-        double Getbalance(out bool success)
-        {
-            try
-            {
-                string sBalance = "";
-                //JD
-                sBalance = CurrentSite.GetbalanceValue();
-               
-                double dBalance = dparse(sBalance, ref convert);
-                if (convert)
-                {
-                    success = true;
-                    return dBalance;
-                }
-                else
-                {
-                    success = false;
-                    return -1;
-                }
-            }
-            catch
-            {
-                success = false;
-                return -1;
-            }
-        }
-
+      
         
         void PlaceBet()
         {
@@ -846,8 +817,8 @@ namespace DiceBot
                     }
                     
                     //withdrew = true;
-                    bool success = false;
-                    Emails.SendInvest(Amount, Getbalance(out success), dparse("-0", ref convert));
+                    
+                    Emails.SendInvest(Amount, CurrentSite.GetbalanceValue(), dparse("-0", ref convert));
                     StartBalance -= Amount;
                     //Start(true);
                 }
@@ -924,12 +895,7 @@ namespace DiceBot
             if (!RunningSimulation)
             {
                 double dBalance = PreviousBalance;
-
-
-                bool success = false;
-                dBalance = Getbalance(out success);
-
-                
+                dBalance = CurrentSite.GetbalanceValue();
                 if ((dBalance != PreviousBalance && convert || withdrew) && dBalance > 0)
                 {
                     if (PreviousBalance == 0)
@@ -1295,6 +1261,10 @@ namespace DiceBot
                     Lastbet = (double)nudChangeLoseStreakTo.Value;
                 }
             }
+            if (chkPercentage.Checked)
+            {
+                Lastbet = (double)(nudPercentage.Value / (decimal)100.0) * dPreviousBalance;
+            }
         }
         int FibonacciLevel = 0;
         void Fibonacci(bool Win)
@@ -1482,7 +1452,7 @@ namespace DiceBot
                         if (Winstreak >= nudLastStreakWin.Value)
                             laststreakwin = Winstreak;
 
-                        if (currentprofit > ((double)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
+                        if (currentprofit >= ((double)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
                         {
                             Stop();
                         }
@@ -1676,7 +1646,7 @@ namespace DiceBot
                     }
                 }
                 if (!RunningSimulation)
-                if (dPreviousBalance > Limit && chkLimit.Checked)
+                if (dPreviousBalance >= Limit && chkLimit.Checked)
                 {
 
                     if (rdbStop.Checked)
@@ -1695,7 +1665,7 @@ namespace DiceBot
                     }
                 }
                 if (!RunningSimulation)
-                if (dPreviousBalance - Lastbet < LowerLimit && chkLowerLimit.Checked)
+                if (dPreviousBalance - Lastbet <= LowerLimit && chkLowerLimit.Checked)
                 {
                     TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
                     TrayIcon.ShowBalloonTip(1000);
@@ -1722,31 +1692,16 @@ namespace DiceBot
                     }
                     
                 }
-                if (rdbMartingale.Checked)
+
+                try
                 {
-                    martingale(Win);
+                    //if (!RunningSimulation)
+                    UpdateStats();
                 }
-                else if (rdbLabEnable.Checked)
+                catch
                 {
-                    Labouchere(Win);
+
                 }
-                else if (rdbFibonacci.Checked)
-                {
-                    Fibonacci(Win);
-                }
-                else if (rdbAlembert.Checked)
-                {
-                    Alembert(Win);
-                }
-                else if (rdbPreset.Checked)
-                {
-                    PresetList(Win);
-                }
-                if (chkPercentage.Checked)
-                {
-                    Lastbet = (double)(nudPercentage.Value / (decimal)100.0) * dPreviousBalance;
-                }
-               
                 if (RunningSimulation && (Wins + Losses > nudSimNumBets.Value || Lastbet>PreviousBalance))
                 {
                     Stop();
@@ -1754,17 +1709,37 @@ namespace DiceBot
                 
                 if (!(stop ||reset || withdraw ||invest))
                 {
-                    //tmBet.Enabled = true;
+                    if (programmerToolStripMenuItem.Checked)
+                    {
+                        parseScript();
+                    }
+                    else
+                    {
+                        //tmBet.Enabled = true;
+                        if (rdbMartingale.Checked)
+                        {
+                            martingale(Win);
+                        }
+                        else if (rdbLabEnable.Checked)
+                        {
+                            Labouchere(Win);
+                        }
+                        else if (rdbFibonacci.Checked)
+                        {
+                            Fibonacci(Win);
+                        }
+                        else if (rdbAlembert.Checked)
+                        {
+                            Alembert(Win);
+                        }
+                        else if (rdbPreset.Checked)
+                        {
+                            PresetList(Win);
+                        }
+                    }
+                    
                     EnableTimer(tmBet, true);
-                    try
-                    {
-                        //if (!RunningSimulation)
-                        UpdateStats();
-                    }
-                    catch
-                    {
-
-                    }
+                    
                     withdrew = false;
                 }
 
@@ -1773,6 +1748,12 @@ namespace DiceBot
             if (RunningSimulation && stop)
                 RunningSimulation = false;
 
+        }
+
+        System.Collections.ArrayList Vars = new System.Collections.ArrayList();
+        private void parseScript()
+        {
+            throw new NotImplementedException();
         }
 
     delegate void dEnableTimer(System.Windows.Forms.Timer tmr, bool enabled);
@@ -1960,10 +1941,7 @@ namespace DiceBot
 
         private void rdbInvest_CheckedChanged(object sender, EventArgs e)
         {
-            if (rdbInvest.Checked)
-            {
-                MessageBox.Show("Please select the Invest page, otherwise invest will fail");
-            }
+
         }
 
         //stop button pressed
@@ -2040,8 +2018,8 @@ namespace DiceBot
                 sw.WriteLine("ResetSeedMode|" + msg);
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
-                sw.WriteLine("SettingsMode|" + cmbSettingMode.SelectedIndex);
-                sw.WriteLine("Site|" + cmbSite.SelectedIndex);
+                sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
+                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":"1"));
                 sw.WriteLine("AutoGetSeed|"+(chkAutoSeeds.Checked ? "1" : "0"));
             }
         }
@@ -2677,8 +2655,19 @@ namespace DiceBot
                     rdbLabRestart.Checked = ("1" == getvalue(saveditems, "LabComplete"));
                     rdbLabStop.Checked = ("2" == getvalue(saveditems, "LabComplete"));
 
-                    cmbSite.SelectedIndex = int.Parse(getvalue(saveditems, "Site"));
-                    cmbSettingMode.SelectedIndex = int.Parse(getvalue(saveditems, "SettingsMode"));
+                    int tmpI = int.Parse(getvalue(saveditems, "Site"));
+                    justDiceToolStripMenuItem.Checked = tmpI == 0;
+                    primeDiceToolStripMenuItem.Checked = tmpI == 1;
+                    pocketRocketsCasinoToolStripMenuItem.Checked = tmpI == 2;
+                    diceToolStripMenuItem.Checked = tmpI == 3;
+                    if (tmpI>3)
+                    {
+                        justDiceToolStripMenuItem.Checked = true; ;
+                    }
+                    tmpI = int.Parse(getvalue(saveditems, "SettingsMode"));
+                    basicToolStripMenuItem.Checked = tmpI == 0;
+                    advancedToolStripMenuItem.Checked = tmpI == 1;
+                    programmerToolStripMenuItem.Checked = tmpI == 2;
 
 
                     int Strat = int.Parse(getvalue(saveditems, "Strategy"));
@@ -3784,7 +3773,7 @@ namespace DiceBot
             Losses = 0;
             bool success = false;
             profit = 0;
-            double tmp = Getbalance(out success);
+            double tmp = CurrentSite.GetbalanceValue();
             if (success)
                 StartBalance = tmp;
             Winstreak = Losestreak = BestStreak = laststreaklose = laststreakwin = WorstStreak = BestStreak2 = WorstStreak3 = BestStreak3 = WorstStreak3 = numstreaks = numwinstreasks = numlosesreaks = 0;
@@ -3837,13 +3826,7 @@ namespace DiceBot
 
        
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start("https://bitcointalk.org/index.php?topic=391870");
-        }
-
-
-        
+       
 
         #region charts
         //button for generating random charts - for testing purposes
@@ -3956,42 +3939,8 @@ namespace DiceBot
 
         private void cmbSite_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EnableNotLoggedInControls(false);
-            if (CurrentSite!=null)
-            {
-                CurrentSite.Disconnect();
-            }
-            if (CurrentSite is PD)
-            {
-                (CurrentSite as PD).ispd = false;
-            }
-            switch (cmbSite.SelectedIndex)
-            {
-                case 0: CurrentSite = new JD(this); break;
-
-                case 1: CurrentSite = new PRC(this); break;//############
-                    //############################################
-                    //############################################
-                    
-                case 2: CurrentSite = new dice999(this); break;
-                    /*
-                //case 3: CurrentSite = new PRC2(); if (!(url.StartsWith("") )) { gckBrowser.Navigate(""); } break;
-                case 3: CurrentSite = new SafeDice(); if (!(url.StartsWith("safedice.com"))) { gckBrowser.Navigate("safedice.com/?r=1050"); } pnlApiInfo.Visible = false; gckBrowser.Visible = true; gckBrowser.Dock = DockStyle.Fill; break;
-                */case 4: CurrentSite = new PD(this); break;
-                
-            }
-            rdbInvest.Enabled = CurrentSite.AutoInvest;
-            if (!rdbInvest.Enabled)
-                rdbInvest.Checked = false;
-            rdbWithdraw.Enabled = CurrentSite.AutoWithdraw;
-            if (!rdbWithdraw.Enabled)
-                rdbWithdraw.Checked = false;
-            cmbCurrency.Items.Clear();
-            foreach (string s in CurrentSite.Currencies)
-            {
-                cmbCurrency.Items.Add(s);
-            }
-            cmbCurrency.SelectedIndex = 0;
+            
+            
         }
 
         private void btnBrowseStratFolder_Click(object sender, EventArgs e)
@@ -4428,21 +4377,32 @@ namespace DiceBot
         bool ViewedAdvanced = false;
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-           if (cmbSettingMode.SelectedIndex==0 )
+            if ((sender as ToolStripMenuItem).Checked)
             {
-                pnlAdvanced.Visible = false;
-                pnlBasic.Visible = true;
-               if (ViewedAdvanced)
-                MessageBox.Show("Please note: Settings set in the advanced mode are still be active.");
+                if ((sender as ToolStripMenuItem).Name == "basicToolStripMenuItem")
+                {
+                    pnlProgrammer.Visible = pnlAdvanced.Visible = false;
+                    pnlBasic.Visible = true;
+                    scMain.SplitterDistance = (scMain.Width - pnlBasic.Width) - 3;
+                    if (ViewedAdvanced)
+                        MessageBox.Show("Please note: Settings set in the advanced mode are still be active.");
+                }
+                else if ((sender as ToolStripMenuItem).Name == "advancedToolStripMenuItem")
+                {
+                    ViewedAdvanced = true;
+                    pnlAdvanced.Visible = true;
+                    pnlProgrammer.Visible = pnlBasic.Visible = false;
+                    scMain.SplitterDistance = (scMain.Width - pnlAdvanced.Width) - 3;
+                }
+                else if ((sender as ToolStripMenuItem).Name == "programmerToolStripMenuItem")
+                {
+                    ViewedAdvanced = true;
+                    pnlProgrammer.Visible = true;
+                    pnlAdvanced.Visible = pnlBasic.Visible = false;
+                    scMain.SplitterDistance = (scMain.Width - pnlProgrammer.Width) - 3;
+
+                }
             }
-            else if (cmbSettingMode.SelectedIndex==1)
-           {
-               ViewedAdvanced = true;
-                pnlAdvanced.Visible = true;
-                pnlBasic.Visible = false;
-                
-            }
-                
         }
 
         private void btnBetHistory_Click(object sender, EventArgs e)
@@ -4627,6 +4587,8 @@ namespace DiceBot
         private void btnHideLive_Click(object sender, EventArgs e)
         {
             chrtEmbeddedLiveChart.Visible = !chrtEmbeddedLiveChart.Visible;
+            if (chartToolStripMenuItem.Checked != chrtEmbeddedLiveChart.Visible)
+                chartToolStripMenuItem.Checked = chrtEmbeddedLiveChart.Visible;
             if (chrtEmbeddedLiveChart.Visible)
             {
                 btnHideLive.Text = "Hide Chart";
@@ -4651,12 +4613,16 @@ namespace DiceBot
         {
             tcStats.Visible = false;
             btnShowStats.Visible = true;
+            if (tcStats.Visible != statsToolStripMenuItem.Checked)
+                statsToolStripMenuItem.Checked = tcStats.Visible;
         }
 
         private void btnShowStats_Click(object sender, EventArgs e)
         {
             tcStats.Visible = true;
             btnShowStats.Visible = false;
+            if (tcStats.Visible != statsToolStripMenuItem.Checked)
+                statsToolStripMenuItem.Checked = tcStats.Visible;
         }
 
         private void panel8_Paint(object sender, PaintEventArgs e)
@@ -4747,19 +4713,195 @@ namespace DiceBot
             }
         }
 
-        private void cmbCurrency_SelectedIndexChanged(object sender, EventArgs e)
+        
+
+        private void tabPage4_Click(object sender, EventArgs e)
         {
-            if (cmbCurrency.SelectedIndex!=-1)
-            CurrentSite.Currency = cmbCurrency.SelectedItem.ToString();
+
+        }
+
+        private void splitContainer2_Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        Dictionary<string, object> scriptVariables = new Dictionary<string, object>();
+        private void richTextBox1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string LastMessage = rtbConsole.Lines[rtbConsole.Lines.Length - 2];
+                //check if is method
+                
+                //if is method, strip params into array
+
+                //if is method, call method
+                if (LastMessage.StartsWith("withdraw"))
+                {
+                    
+                }
+                if (LastMessage.StartsWith("invest"))
+                {
+
+                }
+                if (LastMessage.StartsWith("tip"))
+                {
+
+                }
+                if (LastMessage.StartsWith("stop"))
+                {
+                    Stop();
+                }
+                if (LastMessage.StartsWith("resetseed"))
+                {
+                    if (CurrentSite.ChangeSeed)
+                    {
+                        CurrentSite.ResetSeed();
+                    }
+                }
+                if (LastMessage.StartsWith("bet"))
+                {
+
+                }
+                if (LastMessage.StartsWith("start"))
+                {
+                    Start(false);
+                }
+
+                //else if not method
+                //if variable creation, add object to variable list
+
+                //if variable assignment, assign value to variable
+
+            }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chartToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chartToolStripMenuItem.Checked != chrtEmbeddedLiveChart.Visible)
+                btnHideLive_Click(btnHideLive, new EventArgs());
+            
+        }
+
+        private void viewToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void loginPanelToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            gbLogin.Visible = loginPanelToolStripMenuItem.Checked;
+            
+        }
+
+        private void manualBettingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+                gbManualBet.Visible = manualBettingToolStripMenuItem.Checked;
+            
+        }
+
+        private void statsToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            tcStats.Visible = statsToolStripMenuItem.Checked;
+            btnShowStats.Visible = !statsToolStripMenuItem.Checked;
+            
         }
 
         
 
-        
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
 
-        
+        private void beginnersGuidToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://bitcointalk.org/index.php?topic=391870");
+        }
 
-        
+        private void justDiceToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            EnableNotLoggedInControls(false);
+            if (CurrentSite != null)
+            {
+                CurrentSite.Disconnect();
+            }
+            if (CurrentSite is PD)
+            {
+                (CurrentSite as PD).ispd = false;
+            }
+            if ((sender as ToolStripMenuItem).Checked)
+            {
+                switch ((sender as ToolStripMenuItem).Name)
+                {
+                    case "justDiceToolStripMenuItem": CurrentSite = new JD(this); break;
+
+                    case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new PRC(this); break;//############
+                    //############################################
+                    //############################################
+
+                    case "diceToolStripMenuItem": CurrentSite = new dice999(this); break;
+                    /*
+                //case 3: CurrentSite = new PRC2(); if (!(url.StartsWith("") )) { gckBrowser.Navigate(""); } break;
+                case 3: CurrentSite = new SafeDice(); if (!(url.StartsWith("safedice.com"))) { gckBrowser.Navigate("safedice.com/?r=1050"); } pnlApiInfo.Visible = false; gckBrowser.Visible = true; gckBrowser.Dock = DockStyle.Fill; break;
+                */
+                    case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); break;
+
+                }
+                rdbInvest.Enabled = CurrentSite.AutoInvest;
+                if (!rdbInvest.Enabled)
+                    rdbInvest.Checked = false;
+                rdbWithdraw.Enabled = CurrentSite.AutoWithdraw;
+                if (!rdbWithdraw.Enabled)
+                    rdbWithdraw.Checked = false;
+            }
+        }
+
+        private void justDiceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripMenuItem t in siteToolStripMenuItem.DropDownItems)
+            {
+                if (t == sender as ToolStripMenuItem)
+                {
+                    t.Checked = true;
+                }
+                else
+                {
+                    t.Checked = false;
+                }
+            }
+        }
+
+        private void basicToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripMenuItem t in settingsModeToolStripMenuItem.DropDownItems)
+            {
+                t.Checked = t == sender as ToolStripMenuItem;
+                
+            }
+        }
+
+        private void btcToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripMenuItem t in diceToolStripMenuItem.DropDownItems)
+            {
+                t.Checked = t == sender as ToolStripMenuItem;
+            }
+        }
+
+        private void btcToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as ToolStripMenuItem).Checked)
+            {
+                CurrentSite.Currency = (sender as ToolStripMenuItem).Text.ToLower();
+            }
+        }
+
+          
 
     }
 

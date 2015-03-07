@@ -114,10 +114,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override string GetbalanceValue()
-        {
-            return Instance.Balance.ToString("0.00000000");
-        }
+       
 
         public override string GetSiteProfitValue()
         {

@@ -107,10 +107,6 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override string GetbalanceValue()
-        {
-            return balance.ToString("0.00000000");
-        }
 
         public override string GetSiteProfitValue()
         {
@@ -169,7 +165,7 @@ namespace DiceBot
         string s = "";
         public override bool Login(string Username, string Password, string twofa)
         {
-            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu") as HttpWebRequest;
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/play/#dice") as HttpWebRequest;
             var cookies = new CookieContainer();
             getHeaders.CookieContainer = cookies;
             HttpWebResponse Response = null;
@@ -235,7 +231,7 @@ namespace DiceBot
             con.CookieContainer = Cookies;
             try
             {
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu") as HttpWebRequest;
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/play/#dice") as HttpWebRequest;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 string stmp = new StreamReader(Response.GetResponseStream()).ReadToEnd();

@@ -124,11 +124,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override string GetbalanceValue()
-        {
-            throw new NotImplementedException();
-        }
-
+       
         public override string GetSiteProfitValue()
         {
             throw new NotImplementedException();

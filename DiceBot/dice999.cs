@@ -17,6 +17,8 @@ namespace DiceBot
         Random r = new Random();
         long uid = 0;
         int wins=0, losses =0;
+        bool isD999 = true;
+        DateTime LastBaalance = DateTime.Now;
         public dice999(cDiceBot Parent)
         {
             this.Parent = Parent;
@@ -26,8 +28,8 @@ namespace DiceBot
             ChangeSeed = false;
             AutoLogin = false;
             BetURL = "https://www.999dice.com/Bets/?b=";
-            /*Thread t = new Thread(GetBalanceThread);
-            t.Start();*/
+            //Thread t = new Thread(GetBalanceThread);
+            //t.Start();
             this.Parent = Parent;
             Name = "999Dice";
             Tip = false;
@@ -38,6 +40,49 @@ namespace DiceBot
             tChat.Start();*/
         }
 
+        protected override void CurrencyChanged()
+        {
+            GetBalance();
+            
+        }
+
+        void GetBalanceThread()
+        {
+            while (isD999)
+            {
+                if (sessionCookie!="" && sessionCookie!=null && (DateTime.Now-LastBaalance).TotalSeconds>=60)
+                {
+                     GetBalance();
+
+                }
+                Thread.Sleep(1000);
+            }
+        }
+
+        void GetBalance()
+        {
+            if (sessionCookie != "" && sessionCookie != null)
+            {
+                LastBaalance = DateTime.Now;
+                HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+                string post = string.Format("a=GetBalance&s={0}&Currency={1}", sessionCookie, Currency);
+                loginrequest.Method = "POST";
+
+                loginrequest.ContentLength = post.Length;
+                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                {
+
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+
+                balance = (double)json.JsonDeserialize<d999Login>(sEmitResponse).Balance / 100000000.0;
+                Parent.updateBalance(balance);
+            }
+        }
         int BetRetries = 0;
         string next = "";
         void PlaceBetThread()
@@ -49,10 +94,11 @@ namespace DiceBot
                 string sEmitResponse = "";
                 double chance = (999999.0) * (this.chance / 100.0);
                 HttpWebResponse EmitResponse;
-                if (next == "")
+                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, this.chance, High ? "High" : "Low"));
+                if (next == "" && next!=null)
                 {
                     
-                    Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, this.chance, High ? "High" : "Low"));
+                    
                     loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
                     post = string.Format("a=GetServerSeedHash&s={0}", sessionCookie);
                     loginrequest.Method = "POST";
@@ -83,7 +129,7 @@ namespace DiceBot
                 }
                 loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
                 string ClientSeed = r.Next(0, int.MaxValue).ToString();
-                 post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}", sessionCookie, amount * 100000000, High ? 999999 - (int)chance : 0, High ? 999999 : (int)chance, ClientSeed, Currency);
+                post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}&ProtocolVersion=2", sessionCookie, (int)(amount * 100000000), High ? 999999 - (int)chance : 0, High ? 999999 : (int)chance, ClientSeed, Currency);
                 loginrequest.Method = "POST";
 
                 loginrequest.ContentLength = post.Length;
@@ -109,11 +155,11 @@ namespace DiceBot
                         throw new Exception();
                 }
                 d999Bet tmpBet = json.JsonDeserialize<d999Bet>(sEmitResponse);
-                balance = (double)tmpBet.StartingBalance / 100000000.0 - (amount / 100000000.0) + ((double)tmpBet.PayOut / 100000000.0);
+                balance = (double)tmpBet.StartingBalance / 100000000.0 - (amount) + ((double)tmpBet.PayOut / 100000000.0);
 
                 profit += -(amount ) + (double)(tmpBet.PayOut / 100000000m);
                 Bet tmp = new Bet();
-                tmp.Amount = (decimal)amount / 100000000m;
+                tmp.Amount = (decimal)amount;
                 tmp.BetDate = DateTime.Now.ToString(); ;
                 tmp.Chance = ((decimal)chance * 100m) / 999999m;
                 tmp.clientseed = ClientSeed;
@@ -175,11 +221,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override string GetbalanceValue()
-        {
-            return balance.ToString("0.00000000");
-        }
-
+       
         public override string GetSiteProfitValue()
         {
             throw new NotImplementedException();
@@ -257,24 +299,33 @@ namespace DiceBot
             HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
             string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
             d999Login tmpU = json.JsonDeserialize<d999Login>(sEmitResponse);
-            if (tmpU.SessionCookie!="")
+            if (tmpU.SessionCookie!="" && tmpU.SessionCookie!=null)
             { 
                 sessionCookie = tmpU.SessionCookie;
-                balance = (double)tmpU.Balance/100000000.0;
+                
                 profit= (double)tmpU.Profit/100000000.0;
                 Wagered = tmpU.Wagered/100000000m;
                 bets = (int)tmpU.BetCount;
                 wins = (int)tmpU.BetWinCount;
                 losses = (int)tmpU.BetLoseCount;
+                GetBalance();
                 Parent.updateBalance((decimal)(balance));
                 Parent.updateBets(tmpU.BetCount);
                 Parent.updateLosses(tmpU.BetLoseCount);
                 Parent.updateProfit(profit);
                 Parent.updateWagered(Wagered);
                 Parent.updateWins(tmpU.BetWinCount);
-                Parent.updateDeposit(tmpU.DepositAddress);
+                try
+                {
+                    Parent.updateDeposit(tmpU.DepositAddress);
+                }
+                catch { }
                 uid = tmpU.Accountid;
             }      
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Could not log in. Please check your username and password"); ;
+            }
             return sessionCookie != "";
         }
         public override bool Register(string username, string password)
@@ -294,7 +345,7 @@ namespace DiceBot
             HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
             string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
             d999Register tmp = json.JsonDeserialize<d999Register>(sEmitResponse);
-            if (tmp.SessionCookie!="")
+            if (tmp.SessionCookie!="" && tmp.SessionCookie!=null)
             {
                 sessionCookie = tmp.SessionCookie;
                 loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
@@ -320,7 +371,11 @@ namespace DiceBot
                  Parent.updateDeposit(tmp.DepositAddress);
                  uid = tmp.Accountid;
             }
-            return sessionCookie != "";
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Could not register. Please try again.");
+            }
+            return sessionCookie != "" && sessionCookie != null;
         }
 
         public override double GetLucky(string serverSeed, string clientSeed, int nonce)
@@ -430,4 +485,5 @@ namespace DiceBot
         public string ServerSeed { get; set; }
         public string Next { get; set; }
     }
+    
 }

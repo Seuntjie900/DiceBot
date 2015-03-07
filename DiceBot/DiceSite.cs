@@ -14,7 +14,15 @@ namespace DiceBot
     {
 
         public string[] Currencies = new string[] { "btc" };
-        public string Currency = "Btc";
+        string currency = "Btc";
+        public string Currency
+        {
+            get { return currency; }
+            set { currency= value; CurrencyChanged();}}
+            
+        
+        protected virtual void CurrencyChanged(){}
+
         protected cDiceBot Parent;
         public bool AutoWithdraw { get; set; }
         public bool AutoInvest { get; set; }
@@ -45,7 +53,11 @@ namespace DiceBot
 
         }
         public abstract bool Register(string username, string password);
-        public abstract string GetbalanceValue();
+        public double GetbalanceValue()
+        {
+            return balance;
+
+        }
         public abstract string GetSiteProfitValue();
         public abstract string GetTotalBets();
         public abstract string GetMyProfit();

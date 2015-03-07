@@ -42,6 +42,7 @@ namespace DiceBot
             try
             {
                 while (ispd)
+                {
                     if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
                     {
                         HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
@@ -59,8 +60,10 @@ namespace DiceBot
                         Parent.updateWagered(tmpu.user.wagered / 100000000m);
                         Parent.updateWins(tmpu.user.wins);
                         lastupdate = DateTime.Now;
-                        Thread.Sleep(1000);
+                        
                     }
+                    Thread.Sleep(1000);
+                }
             }
             catch
             {
@@ -324,10 +327,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override string GetbalanceValue()
-        {
-            return (balance/100000000.0).ToString("0.00000000");            
-        }
+      
 
         public override string GetSiteProfitValue()
         {
@@ -600,7 +600,7 @@ namespace DiceBot
                 {
                     string Message = (string)_Message;
                     string post = "";
-                    post += "username=" + username + "&userid=" + uid + "&room=en&message=" + Message + "&token=" + accesstoken;
+                    post += "username=" + username + "&userid=" + uid + "&room=English&message=" + Message + "&token=" + accesstoken;
                     HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/send?access_token=" + accesstoken);
                     loginrequest.Method = "POST";
 
@@ -631,7 +631,7 @@ namespace DiceBot
                 {
                     if (accesstoken != "")
                     {
-                        HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/messages?access_token=" + accesstoken/*+"&room=pvp"*/);
+                        HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/messages?access_token=" + accesstoken+"&room=English");
                         loginrequest.Method = "GET";
 
                         loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
@@ -659,8 +659,9 @@ namespace DiceBot
                 {
 
                 }
+                System.Threading.Thread.Sleep(1000);
             }
-            System.Threading.Thread.Sleep(1000);
+            
         }
 
         public override bool Login(string Username, string Password)
