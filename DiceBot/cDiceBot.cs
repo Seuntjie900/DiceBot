@@ -330,13 +330,17 @@ namespace DiceBot
             Lua.reg("stop", new dStop(Stop));
             Lua.reg("resetseed", new dResetSeed(luaResetSeed));
             Lua.reg("print", new dWriteConsole(WriteConsole));
+            
             Lua.reg("runsim", new dRunsim(runsim));
         }
         delegate void dRunsim(double startingabalance, int bets);
         void runsim(double startingbalance, int bets)
         {
-            if (!stop)
+            if (stop)
             {
+                Lua.inject(richTextBox3.Text);
+                nudSimBalance.Value = (decimal)startingbalance;
+                nudSimNumBets.Value = (decimal)bets;
                WriteConsole("Running " + bets + " bets Simulation with starting balance of " + startingbalance);
                 btnSim_Click(btnSim, new EventArgs());
             }
@@ -737,6 +741,8 @@ namespace DiceBot
             TotalTime += (DateTime.Now - dtStarted);
             if (RunningSimulation)
             {
+                WriteConsole(string.Format("Simulation finished. Bets:{0} Wins:{1} Losses:{2} Balance:{3} Profit:{4} Worst Streak:{5} Best Streak:{6}", 
+                    Losses+Wins, Wins, Losses, PreviousBalance, profit, WorstStreak, BestStreak ));
                 Updatetext(lblSimLosses, Losses.ToString());
                 Updatetext(lblSimProfit, profit.ToString("0.00000000"));
                 Updatetext(lblSimWins, Wins.ToString());
@@ -1513,18 +1519,20 @@ namespace DiceBot
                         
                         if (Winstreak >= nudLastStreakWin.Value)
                             laststreakwin = Winstreak;
-
-                        if (currentprofit >= ((double)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
+                        if (!programmerToolStripMenuItem.Checked)
                         {
-                            Stop();
-                        }
-                        if (Winstreak >= nudStopWinStreak.Value && chkStopWinStreak.Checked)
-                        {
-                            Stop();
-                        }
-                        if (profit >= (double)nudStopWinBtc.Value && chkStopWinBtc.Checked)
-                        {
-                            Stop();
+                            if (currentprofit >= ((double)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
+                            {
+                                Stop();
+                            }
+                            if (Winstreak >= nudStopWinStreak.Value && chkStopWinStreak.Checked)
+                            {
+                                Stop();
+                            }
+                            if (profit >= (double)nudStopWinBtc.Value && chkStopWinBtc.Checked)
+                            {
+                                Stop();
+                            }
                         }
                         if (Losestreak != 0)
                         {
@@ -1560,7 +1568,7 @@ namespace DiceBot
                     }
                     iMultiplyCounter = 0;                    
                     Multiplier = (double)(nudMultiplier.Value);
-                    if (chkReverse.Checked)
+                    if (chkReverse.Checked && (!programmerToolStripMenuItem.Checked))
                     {
                         if (rdbReverseWins.Checked && Winstreak % NudReverse.Value == 0)
                         {
@@ -1596,7 +1604,7 @@ namespace DiceBot
                         laststreaklose = Losestreak;
 
                     //switch high low if applied in the zig zag tab
-                    if (chkReverse.Checked)
+                    if (chkReverse.Checked && (!programmerToolStripMenuItem.Checked))
                     {
                         if (rdbReverseLoss.Checked && Losestreak % NudReverse.Value == 0)
                         {
@@ -1626,27 +1634,28 @@ namespace DiceBot
 
                         }
                     }
-                    
-                    
-                    //stop conditions:
-                    //stop if lose streak is higher than specified
-                    if (Losestreak >= nudStopLossStreak.Value && chkStopLossStreak.Checked)
-                    {
-                        Stop();
-                    }
 
-                    //stop if current profit drops below specified value/ loss is larger than specified value
-                    if (currentprofit <= (0.0 - (double)nudStopLossBtcStreal.Value) && chkStopLossBtcStreak.Checked)
+                    if (!programmerToolStripMenuItem.Checked)
                     {
-                        Stop();
-                    }
+                        //stop conditions:
+                        //stop if lose streak is higher than specified
+                        if (Losestreak >= nudStopLossStreak.Value && chkStopLossStreak.Checked)
+                        {
+                            Stop();
+                        }
 
-                    // stop if total profit/total loss is below/above certain value
-                    if (profit <= 0.0-(double)nudStopLossBtc.Value && chkStopLossBtc.Checked)
-                    {
-                        Stop();
-                    }
+                        //stop if current profit drops below specified value/ loss is larger than specified value
+                        if (currentprofit <= (0.0 - (double)nudStopLossBtcStreal.Value) && chkStopLossBtcStreak.Checked)
+                        {
+                            Stop();
+                        }
 
+                        // stop if total profit/total loss is below/above certain value
+                        if (profit <= 0.0 - (double)nudStopLossBtc.Value && chkStopLossBtc.Checked)
+                        {
+                            Stop();
+                        }
+                    }
                     //when switching from win streak to lose streak, calculate some stats
                     if (Winstreak != 0)
                     {
@@ -1708,7 +1717,7 @@ namespace DiceBot
                     }
                 }
                 if (!RunningSimulation)
-                if (dPreviousBalance >= Limit && chkLimit.Checked)
+                if (dPreviousBalance >= Limit && chkLimit.Checked && (!programmerToolStripMenuItem.Checked))
                 {
 
                     if (rdbStop.Checked)
@@ -1727,7 +1736,7 @@ namespace DiceBot
                     }
                 }
                 if (!RunningSimulation)
-                if (dPreviousBalance - Lastbet <= LowerLimit && chkLowerLimit.Checked)
+                if (dPreviousBalance - Lastbet <= LowerLimit && chkLowerLimit.Checked &&(!programmerToolStripMenuItem.Checked))
                 {
                     TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
                     TrayIcon.ShowBalloonTip(1000);
@@ -1742,7 +1751,7 @@ namespace DiceBot
 
 
                 if (!RunningSimulation)
-                if ( Wins!=0 && Losses!=0 && chkResetSeed.Checked)
+                if ( Wins!=0 && Losses!=0 && chkResetSeed.Checked && (!programmerToolStripMenuItem.Checked))
                 {
                     if ( ((rdbResetSeedBets.Checked && (Wins+Losses) % nudResetSeed.Value == 0) ||
                        (rdbResetSeedWins.Checked && Wins % nudResetSeed.Value == 0 && Losestreak==0)||
@@ -1811,28 +1820,32 @@ namespace DiceBot
 
             }
             if (RunningSimulation && stop)
+            {
                 RunningSimulation = false;
+            }
 
         }
 
         System.Collections.ArrayList Vars = new System.Collections.ArrayList();
         private void parseScript(bool Win, double Profit)
         {
-            Lua.set("balance", PreviousBalance);
-            Lua.set("win", Win);
-            Lua.set("profit", this.profit);
-            Lua.set("currentprofit", Profit);
-            Lua.set("currentstreak", (Winstreak>=0)?Winstreak:-Losestreak);
-            Lua.set("previousbet", Lastbet);
-            Lua.set("nextbet", Lastbet);
-            Lua.set("chance", Chance);
-            Lua.set("bethigh", high);
-            Lua.set("bets", Wins+Losses);
-            Lua.set("wins", Wins);
-            Lua.set("losses", Losses);
+            
             try
             {
-                Lua.inject(richTextBox3.Text);
+                Lua.clear();
+                Lua.set("balance", ((double)((int)PreviousBalance*100000000))/100000000.0);
+                Lua.set("win", Win);
+                Lua.set("profit", ((double)((int)this.profit*100000000))/100000000.0);
+                Lua.set("currentprofit", ((double)((int)Profit * 100000000)) / 100000000.0);
+                Lua.set("currentstreak", (Winstreak >= 0) ? Winstreak : -Losestreak);
+                Lua.set("previousbet", Lastbet);
+                Lua.set("nextbet", Lastbet);
+                Lua.set("chance", Chance);
+                Lua.set("bethigh", high);
+                Lua.set("bets", Wins + Losses);
+                Lua.set("wins", Wins);
+                Lua.set("losses", Losses);
+                Lua.exec("dobet");
                 Lua.get("nextbet", out Lastbet);
                 Lua.get("chance", out Chance);
                 Lua.get("bethigh", out high);
@@ -4974,6 +4987,7 @@ namespace DiceBot
                 WriteConsole(txtConsoleIn.Text);
                 if (txtConsoleIn.Text.ToLower() == "start()")
                 {
+                    Lua.inject(richTextBox3.Text);
                     Start(false);
                 }
                 
@@ -5022,6 +5036,21 @@ namespace DiceBot
             {
                 txtConsoleIn.Text = "";
             }
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            Process.Start("http://bot.seuntjie.com/ProgrammerMode.html");
+        }
+
+        private void sourceCodeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://github.com/seuntie900/DiceBot");
+        }
+
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
         }
 
           

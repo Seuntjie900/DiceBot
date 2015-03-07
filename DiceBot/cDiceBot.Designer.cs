@@ -503,6 +503,7 @@
             this.label121 = new System.Windows.Forms.Label();
             this.tpConsole = new System.Windows.Forms.TabPage();
             this.rtbConsole = new System.Windows.Forms.RichTextBox();
+            this.txtConsoleIn = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -542,7 +543,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.txtConsoleIn = new System.Windows.Forms.TextBox();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -734,7 +734,7 @@
             // btnShowStats
             // 
             this.btnShowStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowStats.Location = new System.Drawing.Point(270, 536);
+            this.btnShowStats.Location = new System.Drawing.Point(236, 542);
             this.btnShowStats.Name = "btnShowStats";
             this.btnShowStats.Size = new System.Drawing.Size(75, 23);
             this.btnShowStats.TabIndex = 14;
@@ -6043,6 +6043,7 @@
             this.button3.TabIndex = 8;
             this.button3.Text = "Help!";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // listBox1
             // 
@@ -6075,7 +6076,7 @@
             this.richTextBox3.Name = "richTextBox3";
             this.richTextBox3.Size = new System.Drawing.Size(261, 437);
             this.richTextBox3.TabIndex = 5;
-            this.richTextBox3.Text = "";
+            this.richTextBox3.Text = "function dobet()\n\nend";
             // 
             // label123
             // 
@@ -6140,6 +6141,17 @@
             this.rtbConsole.TabIndex = 0;
             this.rtbConsole.Text = "";
             this.rtbConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox1_KeyDown);
+            // 
+            // txtConsoleIn
+            // 
+            this.txtConsoleIn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.txtConsoleIn.Location = new System.Drawing.Point(3, 698);
+            this.txtConsoleIn.Multiline = true;
+            this.txtConsoleIn.Name = "txtConsoleIn";
+            this.txtConsoleIn.Size = new System.Drawing.Size(274, 69);
+            this.txtConsoleIn.TabIndex = 1;
+            this.txtConsoleIn.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.txtConsoleIn.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtConsoleIn_KeyUp);
             // 
             // menuStrip1
             // 
@@ -6429,6 +6441,7 @@
             this.sourceCodeToolStripMenuItem.Name = "sourceCodeToolStripMenuItem";
             this.sourceCodeToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.sourceCodeToolStripMenuItem.Text = "Source Code";
+            this.sourceCodeToolStripMenuItem.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -6440,6 +6453,8 @@
             this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
             this.donateToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.donateToolStripMenuItem.Text = "Donate";
+            this.donateToolStripMenuItem.Visible = false;
+            this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -6469,17 +6484,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
-            // 
-            // txtConsoleIn
-            // 
-            this.txtConsoleIn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtConsoleIn.Location = new System.Drawing.Point(3, 698);
-            this.txtConsoleIn.Multiline = true;
-            this.txtConsoleIn.Name = "txtConsoleIn";
-            this.txtConsoleIn.Size = new System.Drawing.Size(274, 69);
-            this.txtConsoleIn.TabIndex = 1;
-            this.txtConsoleIn.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
-            this.txtConsoleIn.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtConsoleIn_KeyUp);
             // 
             // idDataGridViewTextBoxColumn
             // 

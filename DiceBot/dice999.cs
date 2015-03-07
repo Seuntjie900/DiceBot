@@ -28,8 +28,8 @@ namespace DiceBot
             ChangeSeed = false;
             AutoLogin = false;
             BetURL = "https://www.999dice.com/Bets/?b=";
-            //Thread t = new Thread(GetBalanceThread);
-            //t.Start();
+            Thread t = new Thread(GetBalanceThread);
+            t.Start();
             this.Parent = Parent;
             Name = "999Dice";
             Tip = false;
@@ -80,7 +80,7 @@ namespace DiceBot
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
                 balance = (double)json.JsonDeserialize<d999Login>(sEmitResponse).Balance / 100000000.0;
-                Parent.updateBalance(balance);
+                Parent.updateBalance((decimal)balance);
             }
         }
         int BetRetries = 0;
