@@ -16,7 +16,7 @@ using System.Net;
 using System.Media;
 using Microsoft.VisualBasic;
 using System.Security.Cryptography;
-
+using vJine.Lua;
 using WMPLib;
 using System.Globalization;
 namespace DiceBot
@@ -202,7 +202,9 @@ namespace DiceBot
                 
             }
             InitializeComponent();
+
             
+
             ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow, btnStartHigh2, btnStartLow2 };
             EnableNotLoggedInControls(false);
             basicToolStripMenuItem.Checked = true;
@@ -316,17 +318,76 @@ namespace DiceBot
             Thread tGetVers = new Thread(new ThreadStart(getversion));
             tGetVers.Start();
             populateFiboNacci();
-
+            CurrentSite.FinishedLogin+=CurrentSite_FinishedLogin;
             if (chkJDAutoLogin.Checked)
             {
-                if (CurrentSite.Login(txtJDUser.Text, txtJDPass.Text, txtApi2fa.Text))
+                CurrentSite.Login(txtJDUser.Text, txtJDPass.Text, txtApi2fa.Text);
+                
+            }
+            Lua.reg("withdraw", new dWithdraw(luaWithdraw));
+            Lua.reg("invest", new dInvest(luainvest));
+            Lua.reg("tip", new dtip(luatip));
+            Lua.reg("stop", new dStop(Stop));
+            Lua.reg("resetseed", new dResetSeed(luaResetSeed));
+            Lua.reg("print", new dWriteConsole(WriteConsole));
+            Lua.reg("runsim", new dRunsim(runsim));
+        }
+        delegate void dRunsim(double startingabalance, int bets);
+        void runsim(double startingbalance, int bets)
+        {
+            if (!stop)
+            {
+               WriteConsole("Running " + bets + " bets Simulation with starting balance of " + startingbalance);
+                btnSim_Click(btnSim, new EventArgs());
+            }
+            else
+            {
+                WriteConsole("Bot currently betting. Please stop betting before running simulation.");
+            }
+        }
+
+        void luaResetSeed()
+        {
+            WriteConsole("Resetting Seed!");
+            if (CurrentSite.ChangeSeed)
+                CurrentSite.ResetSeed();
+        }
+        void luaWithdraw(double amount, string address)
+        {
+            WriteConsole("Withdrawing " +amount + " to " + address);
+            if (CurrentSite.AutoWithdraw)
+                CurrentSite.Withdraw(amount, address);
+        }
+
+        void luainvest(double amount)
+        {
+            WriteConsole("investing " + amount);
+            if (CurrentSite.AutoInvest)
+                CurrentSite.Invest(amount);
+        }
+        void luatip(string username, double amount)
+        {
+            WriteConsole("Tipping "+ amount + " to "+username);
+            if (CurrentSite.Tip)
+                CurrentSite.SendTip(username, amount);
+        }
+        void CurrentSite_FinishedLogin(bool LoggedIn)
+        {
+            if (InvokeRequired)
+                Invoke(new DiceSite.dFinishedLogin(CurrentSite_FinishedLogin), LoggedIn);
+            else
+            {
+                if (LoggedIn)
                 {
                     txtApiPassword.Text = "";
                     EnableNotLoggedInControls(true);
 
                 }
+
             }
         }
+
+        
 
         //check if the current version of the bot is the latest version available
         void getversion()
@@ -670,7 +731,7 @@ namespace DiceBot
         private void Stop()
         {
             //tmBetting.Enabled = false;
-            
+            WriteConsole("Betting Stopped!");
             double dBalance = CurrentSite.GetbalanceValue();
             stop = true;
             TotalTime += (DateTime.Now - dtStarted);
@@ -737,6 +798,7 @@ namespace DiceBot
 
         void Withdraw()
         {
+            
             if (CurrentSite.AutoWithdraw)
                 if (CurrentSite.Withdraw((double)(nudAmount.Value), txtTo.Text))
                 {
@@ -1711,7 +1773,7 @@ namespace DiceBot
                 {
                     if (programmerToolStripMenuItem.Checked)
                     {
-                        parseScript();
+                        parseScript(Win, profit);
                     }
                     else
                     {
@@ -1737,10 +1799,13 @@ namespace DiceBot
                             PresetList(Win);
                         }
                     }
-                    
-                    EnableTimer(tmBet, true);
-                    
-                    withdrew = false;
+                    if (!stop)
+                    {
+                        WriteConsole("Betting " + Lastbet + " at " + Chance +"% chance to win, "+ (high?"high":"low"));
+                        EnableTimer(tmBet, true);
+
+                        withdrew = false;
+                    }
                 }
 
 
@@ -1751,11 +1816,47 @@ namespace DiceBot
         }
 
         System.Collections.ArrayList Vars = new System.Collections.ArrayList();
-        private void parseScript()
+        private void parseScript(bool Win, double Profit)
         {
-            throw new NotImplementedException();
+            Lua.set("balance", PreviousBalance);
+            Lua.set("win", Win);
+            Lua.set("profit", this.profit);
+            Lua.set("currentprofit", Profit);
+            Lua.set("currentstreak", (Winstreak>=0)?Winstreak:-Losestreak);
+            Lua.set("previousbet", Lastbet);
+            Lua.set("nextbet", Lastbet);
+            Lua.set("chance", Chance);
+            Lua.set("bethigh", high);
+            Lua.set("bets", Wins+Losses);
+            Lua.set("wins", Wins);
+            Lua.set("losses", Losses);
+            try
+            {
+                Lua.inject(richTextBox3.Text);
+                Lua.get("nextbet", out Lastbet);
+                Lua.get("chance", out Chance);
+                Lua.get("bethigh", out high);
+            }
+            catch (Exception e)
+            {
+                Stop();
+                WriteConsole("LUA ERROR!!");
+                WriteConsole(e.Message);
+            }
+
+            
         }
 
+        void WriteConsole(string Message)
+        {
+            rtbConsole.AppendText(Message+"\r\n");
+        }
+        delegate void dWriteConsole(string Message);
+        delegate void dWithdraw(double Amount, string Address);
+        delegate void dInvest(double Amount);
+        delegate void dtip(string username, double amount);
+        delegate void dStop();
+        delegate void dResetSeed();
     delegate void dEnableTimer(System.Windows.Forms.Timer tmr, bool enabled);
     void EnableTimer(System.Windows.Forms.Timer tmr, bool enabled)
     {
@@ -4271,12 +4372,10 @@ namespace DiceBot
         {
             if ((sender as Button).Text == "Log In")
             {
-                if (CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text))
-                {
-                    txtApiPassword.Text = "";
-                    EnableNotLoggedInControls(true);
-
-                }
+                CurrentSite.FinishedLogin+=CurrentSite_FinishedLogin;
+                
+                CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text);
+                
             }
             else
             {
@@ -4724,57 +4823,14 @@ namespace DiceBot
         {
 
         }
-        Dictionary<string, object> scriptVariables = new Dictionary<string, object>();
+
+        LuaContext Lua = new LuaContext();
         private void richTextBox1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                string LastMessage = rtbConsole.Lines[rtbConsole.Lines.Length - 2];
-                //check if is method
-                
-                //if is method, strip params into array
-
-                //if is method, call method
-                if (LastMessage.StartsWith("withdraw"))
-                {
-                    
-                }
-                if (LastMessage.StartsWith("invest"))
-                {
-
-                }
-                if (LastMessage.StartsWith("tip"))
-                {
-
-                }
-                if (LastMessage.StartsWith("stop"))
-                {
-                    Stop();
-                }
-                if (LastMessage.StartsWith("resetseed"))
-                {
-                    if (CurrentSite.ChangeSeed)
-                    {
-                        CurrentSite.ResetSeed();
-                    }
-                }
-                if (LastMessage.StartsWith("bet"))
-                {
-
-                }
-                if (LastMessage.StartsWith("start"))
-                {
-                    Start(false);
-                }
-
-                //else if not method
-                //if variable creation, add object to variable list
-
-                //if variable assignment, assign value to variable
-
-            }
+            
+            
         }
-
+        
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -4838,18 +4894,18 @@ namespace DiceBot
             {
                 switch ((sender as ToolStripMenuItem).Name)
                 {
-                    case "justDiceToolStripMenuItem": CurrentSite = new JD(this); break;
+                    case "justDiceToolStripMenuItem": CurrentSite = new JD(this); siteToolStripMenuItem.Text = "Site " + "(JD)"; break;
 
-                    case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new PRC(this); break;//############
+                    case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new PRC(this); siteToolStripMenuItem.Text = "Site " + "(PRC)"; break;//############
                     //############################################
                     //############################################
 
-                    case "diceToolStripMenuItem": CurrentSite = new dice999(this); break;
+                    case "diceToolStripMenuItem": CurrentSite = new dice999(this); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     /*
                 //case 3: CurrentSite = new PRC2(); if (!(url.StartsWith("") )) { gckBrowser.Navigate(""); } break;
                 case 3: CurrentSite = new SafeDice(); if (!(url.StartsWith("safedice.com"))) { gckBrowser.Navigate("safedice.com/?r=1050"); } pnlApiInfo.Visible = false; gckBrowser.Visible = true; gckBrowser.Dock = DockStyle.Fill; break;
                 */
-                    case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); break;
+                    case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
 
                 }
                 rdbInvest.Enabled = CurrentSite.AutoInvest;
@@ -4898,6 +4954,73 @@ namespace DiceBot
             if ((sender as ToolStripMenuItem).Checked)
             {
                 CurrentSite.Currency = (sender as ToolStripMenuItem).Text.ToLower();
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        int LCindex = 0;
+        private void textBox1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                LCindex = 0;
+                LastCommands.Add(txtConsoleIn.Text);
+                if (LastCommands.Count>26)
+                { LastCommands.RemoveAt(0); }
+                WriteConsole(txtConsoleIn.Text);
+                if (txtConsoleIn.Text.ToLower() == "start()")
+                {
+                    Start(false);
+                }
+                
+                else
+                {
+                    try
+                    {
+                        Lua.inject(txtConsoleIn.Text);
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteConsole("LUA ERROR!!");
+                        WriteConsole(ex.Message);
+                    }
+                }
+                
+                txtConsoleIn.Text = "";
+
+            }
+            if (e.KeyCode == Keys.Up)
+            {
+                if (LCindex < LastCommands.Count)
+                    LCindex++;
+                if (LastCommands.Count>0)
+                txtConsoleIn.Text = LastCommands[LastCommands.Count - LCindex];
+
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                if (LCindex >0)
+                    LCindex--;
+                if (LCindex <=0)
+                {
+                    txtConsoleIn.Text = "";
+                }
+                else if (LastCommands.Count > 0)
+                txtConsoleIn.Text = LastCommands[LastCommands.Count - LCindex];
+                
+
+            }
+        }
+        List<string> LastCommands = new List<string>();
+        private void txtConsoleIn_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                txtConsoleIn.Text = "";
             }
         }
 

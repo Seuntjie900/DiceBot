@@ -499,9 +499,7 @@
             this.label124 = new System.Windows.Forms.Label();
             this.richTextBox3 = new System.Windows.Forms.RichTextBox();
             this.label123 = new System.Windows.Forms.Label();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.lbVariables = new System.Windows.Forms.ListBox();
-            this.label122 = new System.Windows.Forms.Label();
             this.label121 = new System.Windows.Forms.Label();
             this.tpConsole = new System.Windows.Forms.TabPage();
             this.rtbConsole = new System.Windows.Forms.RichTextBox();
@@ -544,6 +542,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.txtConsoleIn = new System.Windows.Forms.TextBox();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -704,7 +703,7 @@
             this.pnlAdvanced.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlAdvanced.Location = new System.Drawing.Point(442, 0);
             this.pnlAdvanced.Name = "pnlAdvanced";
-            this.pnlAdvanced.Size = new System.Drawing.Size(475, 818);
+            this.pnlAdvanced.Size = new System.Drawing.Size(475, 796);
             this.pnlAdvanced.TabIndex = 2;
             // 
             // tcSettings
@@ -717,7 +716,7 @@
             this.tcSettings.Location = new System.Drawing.Point(0, 0);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
-            this.tcSettings.Size = new System.Drawing.Size(475, 524);
+            this.tcSettings.Size = new System.Drawing.Size(475, 502);
             this.tcSettings.TabIndex = 13;
             // 
             // tabPage3
@@ -727,7 +726,7 @@
             this.tabPage3.Controls.Add(this.Settings);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(467, 498);
+            this.tabPage3.Size = new System.Drawing.Size(467, 476);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Bet Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -735,7 +734,7 @@
             // btnShowStats
             // 
             this.btnShowStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowStats.Location = new System.Drawing.Point(321, 549);
+            this.btnShowStats.Location = new System.Drawing.Point(270, 536);
             this.btnShowStats.Name = "btnShowStats";
             this.btnShowStats.Size = new System.Drawing.Size(75, 23);
             this.btnShowStats.TabIndex = 14;
@@ -3206,7 +3205,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(467, 498);
+            this.tabPage4.Size = new System.Drawing.Size(467, 476);
             this.tabPage4.TabIndex = 9;
             this.tabPage4.Text = "Stop Conditions";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -3749,7 +3748,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(467, 498);
+            this.tabPage11.Size = new System.Drawing.Size(467, 476);
             this.tabPage11.TabIndex = 3;
             this.tabPage11.Text = "Advanced Bet Settings";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -3802,6 +3801,7 @@
             this.btnStratRefresh.TabIndex = 92;
             this.btnStratRefresh.Text = "Refresh";
             this.btnStratRefresh.UseVisualStyleBackColor = true;
+            this.btnStratRefresh.Click += new System.EventHandler(this.btnStratRefresh_Click);
             // 
             // btnBrowseStratFolder
             // 
@@ -3811,6 +3811,7 @@
             this.btnBrowseStratFolder.TabIndex = 91;
             this.btnBrowseStratFolder.Text = "Browse";
             this.btnBrowseStratFolder.UseVisualStyleBackColor = true;
+            this.btnBrowseStratFolder.Click += new System.EventHandler(this.btnBrowseStratFolder_Click);
             // 
             // txtQuickSwitch
             // 
@@ -3967,7 +3968,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(467, 498);
+            this.tabPage9.Size = new System.Drawing.Size(467, 476);
             this.tabPage9.TabIndex = 2;
             this.tabPage9.Text = "DiceBot Settings";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -4381,7 +4382,7 @@
             this.panel4.Controls.Add(this.btnStop);
             this.panel4.Controls.Add(this.btnStartHigh);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(0, 524);
+            this.panel4.Location = new System.Drawing.Point(0, 502);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(475, 34);
             this.panel4.TabIndex = 50;
@@ -4432,7 +4433,7 @@
             this.tcStats.Controls.Add(this.tabPage8);
             this.tcStats.Controls.Add(this.tpChat);
             this.tcStats.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tcStats.Location = new System.Drawing.Point(0, 558);
+            this.tcStats.Location = new System.Drawing.Point(0, 536);
             this.tcStats.Name = "tcStats";
             this.tcStats.SelectedIndex = 0;
             this.tcStats.Size = new System.Drawing.Size(475, 260);
@@ -5105,7 +5106,7 @@
             this.pnlApiInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlApiInfo.Location = new System.Drawing.Point(0, 231);
             this.pnlApiInfo.Name = "pnlApiInfo";
-            this.pnlApiInfo.Size = new System.Drawing.Size(563, 587);
+            this.pnlApiInfo.Size = new System.Drawing.Size(563, 565);
             this.pnlApiInfo.TabIndex = 7;
             // 
             // groupBox6
@@ -5114,7 +5115,7 @@
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(0, 0);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(563, 587);
+            this.groupBox6.Size = new System.Drawing.Size(563, 565);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Bets:";
@@ -5136,14 +5137,14 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer1.Size = new System.Drawing.Size(557, 568);
-            this.splitContainer1.SplitterDistance = 335;
+            this.splitContainer1.Size = new System.Drawing.Size(557, 546);
+            this.splitContainer1.SplitterDistance = 322;
             this.splitContainer1.TabIndex = 0;
             // 
             // btnChartReset
             // 
             this.btnChartReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChartReset.Location = new System.Drawing.Point(479, 251);
+            this.btnChartReset.Location = new System.Drawing.Point(479, 238);
             this.btnChartReset.Name = "btnChartReset";
             this.btnChartReset.Size = new System.Drawing.Size(75, 23);
             this.btnChartReset.TabIndex = 3;
@@ -5154,7 +5155,7 @@
             // btnDisable
             // 
             this.btnDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDisable.Location = new System.Drawing.Point(479, 280);
+            this.btnDisable.Location = new System.Drawing.Point(479, 267);
             this.btnDisable.Name = "btnDisable";
             this.btnDisable.Size = new System.Drawing.Size(75, 23);
             this.btnDisable.TabIndex = 2;
@@ -5165,7 +5166,7 @@
             // btnHideLive
             // 
             this.btnHideLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHideLive.Location = new System.Drawing.Point(479, 309);
+            this.btnHideLive.Location = new System.Drawing.Point(479, 296);
             this.btnHideLive.Name = "btnHideLive";
             this.btnHideLive.Size = new System.Drawing.Size(75, 23);
             this.btnHideLive.TabIndex = 1;
@@ -5187,7 +5188,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Profit";
             this.chrtEmbeddedLiveChart.Series.Add(series1);
-            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(557, 335);
+            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(557, 322);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
             // 
@@ -5211,9 +5212,10 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(557, 229);
+            this.dataGridView1.Size = new System.Drawing.Size(557, 220);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // panel5
             // 
@@ -5712,7 +5714,7 @@
             this.pnlBasic.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlBasic.Location = new System.Drawing.Point(293, 0);
             this.pnlBasic.Name = "pnlBasic";
-            this.pnlBasic.Size = new System.Drawing.Size(149, 818);
+            this.pnlBasic.Size = new System.Drawing.Size(149, 796);
             this.pnlBasic.TabIndex = 8;
             this.pnlBasic.Paint += new System.Windows.Forms.PaintEventHandler(this.panel8_Paint);
             // 
@@ -5992,7 +5994,7 @@
             this.scMain.Panel2.Controls.Add(this.pnlBasic);
             this.scMain.Panel2.Controls.Add(this.pnlAdvanced);
             this.scMain.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint);
-            this.scMain.Size = new System.Drawing.Size(1484, 818);
+            this.scMain.Size = new System.Drawing.Size(1484, 796);
             this.scMain.SplitterDistance = 563;
             this.scMain.TabIndex = 9;
             // 
@@ -6002,7 +6004,7 @@
             this.pnlProgrammer.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlProgrammer.Location = new System.Drawing.Point(2, 0);
             this.pnlProgrammer.Name = "pnlProgrammer";
-            this.pnlProgrammer.Size = new System.Drawing.Size(291, 818);
+            this.pnlProgrammer.Size = new System.Drawing.Size(291, 796);
             this.pnlProgrammer.TabIndex = 9;
             // 
             // tabControl2
@@ -6023,9 +6025,7 @@
             this.tabPage10.Controls.Add(this.label124);
             this.tabPage10.Controls.Add(this.richTextBox3);
             this.tabPage10.Controls.Add(this.label123);
-            this.tabPage10.Controls.Add(this.richTextBox2);
             this.tabPage10.Controls.Add(this.lbVariables);
-            this.tabPage10.Controls.Add(this.label122);
             this.tabPage10.Controls.Add(this.label121);
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
@@ -6037,7 +6037,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(196, 306);
+            this.button3.Location = new System.Drawing.Point(192, 293);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 8;
@@ -6052,8 +6052,9 @@
             "invest(amount:double)",
             "tip(username/userid:string, amount:double)",
             "stop()",
-            "resetseed();"});
-            this.listBox1.Location = new System.Drawing.Point(10, 219);
+            "resetseed();",
+            "print(messagetoprint:string)"});
+            this.listBox1.Location = new System.Drawing.Point(6, 205);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(261, 82);
             this.listBox1.TabIndex = 7;
@@ -6061,7 +6062,7 @@
             // label124
             // 
             this.label124.AutoSize = true;
-            this.label124.Location = new System.Drawing.Point(7, 197);
+            this.label124.Location = new System.Drawing.Point(7, 189);
             this.label124.Name = "label124";
             this.label124.Size = new System.Drawing.Size(96, 13);
             this.label124.TabIndex = 6;
@@ -6070,54 +6071,41 @@
             // richTextBox3
             // 
             this.richTextBox3.AcceptsTab = true;
-            this.richTextBox3.Location = new System.Drawing.Point(10, 335);
+            this.richTextBox3.Location = new System.Drawing.Point(10, 325);
             this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(261, 427);
+            this.richTextBox3.Size = new System.Drawing.Size(261, 437);
             this.richTextBox3.TabIndex = 5;
             this.richTextBox3.Text = "";
             // 
             // label123
             // 
             this.label123.AutoSize = true;
-            this.label123.Location = new System.Drawing.Point(7, 316);
+            this.label123.Location = new System.Drawing.Point(7, 298);
             this.label123.Name = "label123";
             this.label123.Size = new System.Drawing.Size(64, 13);
             this.label123.TabIndex = 4;
             this.label123.Text = "Code/Script";
             // 
-            // richTextBox2
-            // 
-            this.richTextBox2.Location = new System.Drawing.Point(154, 21);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(120, 173);
-            this.richTextBox2.TabIndex = 3;
-            this.richTextBox2.Text = "";
-            // 
             // lbVariables
             // 
             this.lbVariables.FormattingEnabled = true;
             this.lbVariables.Items.AddRange(new object[] {
+            "balance:double, RO",
             "win:bool, RO",
             "profit:double, RO",
             "currentprofit:double, RO",
             "currentstreak:double, RO",
             "previousbet:double, RO",
+            "bets:int, RO",
+            "wins:int, RO",
+            "losses:int, RO",
             "nextbet:double, RW",
             "chance:double, RW",
             "bethigh:bool, RW"});
             this.lbVariables.Location = new System.Drawing.Point(9, 21);
             this.lbVariables.Name = "lbVariables";
-            this.lbVariables.Size = new System.Drawing.Size(138, 173);
+            this.lbVariables.Size = new System.Drawing.Size(262, 160);
             this.lbVariables.TabIndex = 2;
-            // 
-            // label122
-            // 
-            this.label122.AutoSize = true;
-            this.label122.Location = new System.Drawing.Point(180, 6);
-            this.label122.Name = "label122";
-            this.label122.Size = new System.Drawing.Size(91, 13);
-            this.label122.TabIndex = 1;
-            this.label122.Text = "Custom Variables:";
             // 
             // label121
             // 
@@ -6132,6 +6120,7 @@
             // 
             this.tpConsole.AutoScroll = true;
             this.tpConsole.Controls.Add(this.rtbConsole);
+            this.tpConsole.Controls.Add(this.txtConsoleIn);
             this.tpConsole.Location = new System.Drawing.Point(4, 22);
             this.tpConsole.Name = "tpConsole";
             this.tpConsole.Padding = new System.Windows.Forms.Padding(3);
@@ -6143,9 +6132,11 @@
             // rtbConsole
             // 
             this.rtbConsole.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbConsole.HideSelection = false;
             this.rtbConsole.Location = new System.Drawing.Point(3, 3);
             this.rtbConsole.Name = "rtbConsole";
-            this.rtbConsole.Size = new System.Drawing.Size(274, 764);
+            this.rtbConsole.ReadOnly = true;
+            this.rtbConsole.Size = new System.Drawing.Size(274, 695);
             this.rtbConsole.TabIndex = 0;
             this.rtbConsole.Text = "";
             this.rtbConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox1_KeyDown);
@@ -6274,6 +6265,7 @@
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Visible = false;
             // 
             // siteToolStripMenuItem
             // 
@@ -6330,7 +6322,7 @@
             this.btcToolStripMenuItem.Checked = true;
             this.btcToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.btcToolStripMenuItem.Name = "btcToolStripMenuItem";
-            this.btcToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.btcToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.btcToolStripMenuItem.Text = "Btc";
             this.btcToolStripMenuItem.CheckedChanged += new System.EventHandler(this.btcToolStripMenuItem_CheckedChanged);
             this.btcToolStripMenuItem.Click += new System.EventHandler(this.btcToolStripMenuItem_Click);
@@ -6338,7 +6330,7 @@
             // dogeToolStripMenuItem
             // 
             this.dogeToolStripMenuItem.Name = "dogeToolStripMenuItem";
-            this.dogeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dogeToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.dogeToolStripMenuItem.Text = "Doge";
             this.dogeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.btcToolStripMenuItem_CheckedChanged);
             this.dogeToolStripMenuItem.Click += new System.EventHandler(this.btcToolStripMenuItem_Click);
@@ -6346,7 +6338,7 @@
             // ltcToolStripMenuItem
             // 
             this.ltcToolStripMenuItem.Name = "ltcToolStripMenuItem";
-            this.ltcToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ltcToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.ltcToolStripMenuItem.Text = "Ltc";
             this.ltcToolStripMenuItem.CheckedChanged += new System.EventHandler(this.btcToolStripMenuItem_CheckedChanged);
             this.ltcToolStripMenuItem.Click += new System.EventHandler(this.btcToolStripMenuItem_Click);
@@ -6364,7 +6356,7 @@
             // basicToolStripMenuItem
             // 
             this.basicToolStripMenuItem.Name = "basicToolStripMenuItem";
-            this.basicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.basicToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.basicToolStripMenuItem.Text = "Basic";
             this.basicToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.basicToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6372,16 +6364,15 @@
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.advancedToolStripMenuItem.Text = "Advanced";
             this.advancedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.advancedToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
             // 
             // programmerToolStripMenuItem
             // 
-            this.programmerToolStripMenuItem.Enabled = false;
             this.programmerToolStripMenuItem.Name = "programmerToolStripMenuItem";
-            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.programmerToolStripMenuItem.Text = "Programmer";
             this.programmerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.programmerToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6396,6 +6387,7 @@
             // 
             // cmbStrat
             // 
+            this.cmbStrat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbStrat.Name = "cmbStrat";
             this.cmbStrat.Size = new System.Drawing.Size(121, 23);
             this.cmbStrat.SelectedIndexChanged += new System.EventHandler(this.cmbStrat_SelectedIndexChanged);
@@ -6478,6 +6470,17 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
+            // txtConsoleIn
+            // 
+            this.txtConsoleIn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.txtConsoleIn.Location = new System.Drawing.Point(3, 698);
+            this.txtConsoleIn.Multiline = true;
+            this.txtConsoleIn.Name = "txtConsoleIn";
+            this.txtConsoleIn.Size = new System.Drawing.Size(274, 69);
+            this.txtConsoleIn.TabIndex = 1;
+            this.txtConsoleIn.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.txtConsoleIn.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtConsoleIn_KeyUp);
+            // 
             // idDataGridViewTextBoxColumn
             // 
             this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
@@ -6545,9 +6548,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1484, 842);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "cDiceBot";
@@ -6734,6 +6737,7 @@
             this.tabPage10.ResumeLayout(false);
             this.tabPage10.PerformLayout();
             this.tpConsole.ResumeLayout(false);
+            this.tpConsole.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -7221,9 +7225,7 @@
         private System.Windows.Forms.RichTextBox rtbConsole;
         private System.Windows.Forms.RichTextBox richTextBox3;
         private System.Windows.Forms.Label label123;
-        private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.ListBox lbVariables;
-        private System.Windows.Forms.Label label122;
         private System.Windows.Forms.Label label121;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label label124;
@@ -7267,6 +7269,7 @@
         private System.Windows.Forms.ToolStripMenuItem basicToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem programmerToolStripMenuItem;
+        private System.Windows.Forms.TextBox txtConsoleIn;
 
     }
 }

@@ -158,12 +158,12 @@ namespace DiceBot
         {
             ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> PM: {3}", DateTime.Parse(time), user, from, messages));
         }
-        public override bool Login(string Username, string Password)
+        public override void Login(string Username, string Password)
         {
-            return Login(Username, Password, "");
+             Login(Username, Password, "");
         }
         string s = "";
-        public override bool Login(string Username, string Password, string twofa)
+        public override void Login(string Username, string Password, string twofa)
         {
             HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/play/#dice") as HttpWebRequest;
             var cookies = new CookieContainer();
@@ -181,7 +181,7 @@ namespace DiceBot
             catch (WebException e)
             {
                 System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
-                return false;
+                finishedlogin(false);
             }
             
             getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/login") as HttpWebRequest;
@@ -208,7 +208,7 @@ namespace DiceBot
                 if (!s1.ToLower().Contains("success"))
                 {
                     System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
-                    return false;
+                    finishedlogin(false);
                 }
                 /*string tmp = s1.Substring(s1.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
                 rqtoken = tmp.Substring(0, tmp.IndexOf("\""));*/
@@ -218,7 +218,7 @@ namespace DiceBot
                 Response = (HttpWebResponse)e.Response;
                 string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
-                return false;
+                finishedlogin(false);
             }
             
             foreach (Cookie c in Response.Cookies)
@@ -276,12 +276,12 @@ namespace DiceBot
                 prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
                 client = getseed.ClientSeed;
                 serverhash = getseed.ServerHash;
-                return true;
+                finishedlogin(true);
             }
             catch
             {
                 System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
-                return false;
+                finishedlogin(false);
             }
         }
         decimal Wagered = 0;

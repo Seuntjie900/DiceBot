@@ -138,9 +138,9 @@ namespace DiceBot
             }
 
             return false;
-        }        
+        }
 
-        public override bool Login(string Username, string Password, string otp)
+        public override void Login(string Username, string Password, string otp)
         {
             try
             {
@@ -160,7 +160,7 @@ namespace DiceBot
                 pdlogin tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
                 accesstoken = tmp.access_token;
                 if (accesstoken == "")
-                    return false;
+                    finishedlogin(false);
                 else
                 {
                     HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
@@ -191,7 +191,7 @@ namespace DiceBot
                     lastupdate = DateTime.Now;
                     System.Windows.Forms.MessageBox.Show("Logged in!\n\nWelcome "+Username);
                     Parent.updateStatus("Logged in! Welcome "+Username);
-                    return true;
+                    finishedlogin(true);
                 }
             }
             catch (WebException e)
@@ -207,7 +207,7 @@ namespace DiceBot
                     }
                     
                 }
-                return false;
+                finishedlogin(false);
             }
         }
 
@@ -664,7 +664,7 @@ namespace DiceBot
             
         }
 
-        public override bool Login(string Username, string Password)
+        public override void Login(string Username, string Password)
         {
             throw new NotImplementedException();
         }

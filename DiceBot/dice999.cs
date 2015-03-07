@@ -142,19 +142,13 @@ namespace DiceBot
                 }
                 EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                  sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                if (sEmitResponse.Contains("error"))
-                {
-                    if (BetRetries++ < 3)
-                    {
-
-                        Thread.Sleep(200);
-                        PlaceBetThread();
-                        return;
-                    }
-                    else
-                        throw new Exception();
-                }
+                
                 d999Bet tmpBet = json.JsonDeserialize<d999Bet>(sEmitResponse);
+
+                if (tmpBet.ChanceTooHigh==1 || tmpBet.ChanceTooLow==1| tmpBet.InsufficientFunds == 1|| tmpBet.MaxPayoutExceeded==1|| tmpBet.NoPossibleProfit==1)
+                {
+                    throw new Exception();
+                }
                 balance = (double)tmpBet.StartingBalance / 100000000.0 - (amount) + ((double)tmpBet.PayOut / 100000000.0);
 
                 profit += -(amount ) + (double)(tmpBet.PayOut / 100000000m);
@@ -277,12 +271,12 @@ namespace DiceBot
             return true;
         }
 
-        public override bool Login(string Username, string Password)
+        public override void Login(string Username, string Password)
         {
-            return Login(Username, Password, "");
+            Login(Username, Password, "");
         }
         decimal Wagered = 0;
-        public override bool Login(string Username, string Password, string twofa)
+        public override void Login(string Username, string Password, string twofa)
         {
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
             string post = "a=Login&Key=7a3ada10cb804ec695cda315db6b8789&Username=" + Username + "&Password=" + Password + (twofa != "" ? "&Totp=" + twofa : "");
@@ -326,7 +320,7 @@ namespace DiceBot
             {
                 System.Windows.Forms.MessageBox.Show("Could not log in. Please check your username and password"); ;
             }
-            return sessionCookie != "";
+            finishedlogin(sessionCookie != "");
         }
         public override bool Register(string username, string password)
         {
@@ -484,6 +478,14 @@ namespace DiceBot
         public decimal StartingBalance { get; set; }
         public string ServerSeed { get; set; }
         public string Next { get; set; }
+
+        public int ChanceTooHigh { get; set; }
+        public int ChanceTooLow { get; set; }
+        public int InsufficientFunds { get; set; }
+        public int NoPossibleProfit { get; set; }
+        public int MaxPayoutExceeded { get; set; }
     }
+
+    
     
 }

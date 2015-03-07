@@ -29,11 +29,11 @@ namespace DiceBot
 
         }
 
-        public override bool Login(string Username, string Password)
+        public override void Login(string Username, string Password)
         {
-            return Login(Username, Password,"");
+            Login(Username, Password,"");
         }
-        public override bool Login(string Username, string Password, string twofa)
+        public override void Login(string Username, string Password, string twofa)
         {
             try
             {
@@ -53,37 +53,37 @@ namespace DiceBot
                 pdlogin tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
                 accesstoken = tmp.access_token;
                 if (accesstoken == "")
-                    return false;
-                else
-                {
-                    /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
-                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                    HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                    string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                        finishedlogin(false);
+                    else
+                    {
+                        /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
+                        betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                        HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
+                        string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
 
-                    pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
-                    balance = tmpu.user.balance; //i assume
-                    bets = tmpu.user.bets;
-                    Parent.updateBalance((decimal)(balance / 100000000.0));
-                    Parent.updateBets(tmpu.user.bets);
-                    Parent.updateLosses(tmpu.user.losses);
-                    Parent.updateProfit(tmpu.user.profit / 100000000m);
-                    Parent.updateWagered(tmpu.user.wagered / 100000000m);
-                    string s = tmpu.user.address;
-                    if (s == null)
-                    {
-                        s = getDepositAddress();
+                        pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
+                        balance = tmpu.user.balance; //i assume
+                        bets = tmpu.user.bets;
+                        Parent.updateBalance((decimal)(balance / 100000000.0));
+                        Parent.updateBets(tmpu.user.bets);
+                        Parent.updateLosses(tmpu.user.losses);
+                        Parent.updateProfit(tmpu.user.profit / 100000000m);
+                        Parent.updateWagered(tmpu.user.wagered / 100000000m);
+                        string s = tmpu.user.address;
+                        if (s == null)
+                        {
+                            s = getDepositAddress();
+                        }
+                        if (s != null)
+                        {
+                            Parent.updateDeposit(s);
+                        }
+                        Parent.updateWins(tmpu.user.wins);
+                        lastupdate = DateTime.Now;
+                        System.Windows.Forms.MessageBox.Show("Logged in!\n\nWelcome " + Username);
+                        Parent.updateStatus("Logged in! Welcome " + Username);*/
+                        finishedlogin(true); ;
                     }
-                    if (s != null)
-                    {
-                        Parent.updateDeposit(s);
-                    }
-                    Parent.updateWins(tmpu.user.wins);
-                    lastupdate = DateTime.Now;
-                    System.Windows.Forms.MessageBox.Show("Logged in!\n\nWelcome " + Username);
-                    Parent.updateStatus("Logged in! Welcome " + Username);*/
-                    return true;
-                }
                 
             }
             catch (WebException e)
@@ -99,7 +99,7 @@ namespace DiceBot
                     }
 
                 }
-                return false;
+                finishedlogin(false);
             }
         }
 

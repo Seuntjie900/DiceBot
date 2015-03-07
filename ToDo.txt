@@ -1,21 +1,18 @@
 Todo:
 implement other sites (Safedice API incomplete.)
-programmer mode (access to variables, write code for own strategies)
-999dice - log in issues, betting randomly stops.  check for european regions.
-popout chat
-async login
 PRC Register
 
 hopefully before release:
 losing streak table redo
 Proxy Authentication.
 
+
 Not essential:
-clean up code
+clean up + organize code
 multilingual support
 finish tooltips (don't want to do without the multi lingual support finnished)
 advanced zig zag
-
+popout chat
 
 Done:
 v3:
@@ -51,6 +48,8 @@ Look for server seed of old bets (automatically? on button click? why not both!)
 999Dice currencies
 PD chat fix.
 primedice CPU intensive
-999dice - Incorrect seed hash (possibly), rolls not verifying,
+999dice - Incorrect seed hash (possibly), rolls not verifying,betting randomly stops. 
 999dice initital balance for currency[]
+999dice - log in issues,  check for european regions.
 PRC Login
+programmer mode (access to variables, write code for own strategies)

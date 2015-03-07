@@ -54,6 +54,7 @@ namespace DiceBot
                 }
                 catch
                 {
+                    
 
                 }
                 Command.CommandText = string.Format("insert into bet(betid, date,stake,profit,chance,high,lucky,hash,nonce,uid,client,site) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{0}')",

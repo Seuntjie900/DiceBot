@@ -150,7 +150,7 @@ namespace DiceBot
             System.Threading.Thread.Sleep(1500);
             return true;
         }
-        public override bool Login(string Username, string Password, string twoFa)
+        public override void Login(string Username, string Password, string twoFa)
         {
             bool tmp = Instance.Connect(false, Username, Password, twoFa);
             if (Instance.Connected)
@@ -170,8 +170,8 @@ namespace DiceBot
             {
                 System.Windows.Forms.MessageBox.Show("Failed to log in, Please check your username and password.");
             }
-            
-            return tmp;
+
+            finishedlogin(tmp);
         }
         
         Bet ToBet(JDCAPI.Result curBet)
@@ -221,7 +221,7 @@ namespace DiceBot
             Instance.Chat(Message);
         }
 
-        public override bool Login(string Username, string Password)
+        public override void Login(string Username, string Password)
         {
             throw new NotImplementedException();
         }

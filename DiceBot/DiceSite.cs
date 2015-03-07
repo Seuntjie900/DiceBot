@@ -46,10 +46,10 @@ namespace DiceBot
 
         }
         public abstract bool Withdraw(double Amount, string Address);
-        public abstract bool Login(string Username, string Password);
-        public virtual bool Login(string Username, string Password, string twofa)
+        public abstract void Login(string Username, string Password);
+        public virtual void Login(string Username, string Password, string twofa)
         {
-            return true;
+            finishedlogin(false);
 
         }
         public abstract bool Register(string username, string password);
@@ -154,7 +154,18 @@ namespace DiceBot
         public virtual void SendTip(string User, double amount)
         {
             Parent.updateStatus("Tipping is not enabled for the current site.");
+            
         }
+        protected void finishedlogin(bool Success)
+        {
+            if (FinishedLogin!=null)
+            FinishedLogin(Success);
+        }
+
+        public delegate void dFinishedLogin(bool LoggedIn);
+        public event dFinishedLogin FinishedLogin;
+        
+
     }
 
     /*public class PRC_old : DiceSite
