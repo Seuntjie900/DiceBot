@@ -424,6 +424,15 @@
             this.btnHideLive = new System.Windows.Forms.Button();
             this.chrtEmbeddedLiveChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.highDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.chanceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rollDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbLogin = new System.Windows.Forms.GroupBox();
             this.btnRegister = new System.Windows.Forms.Button();
@@ -526,6 +535,7 @@
             this.btcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dogeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ltcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.safediceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -543,15 +553,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.highDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.chanceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rollDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -667,6 +668,7 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.panel5.SuspendLayout();
             this.gbLogin.SuspendLayout();
             this.gbManualBet.SuspendLayout();
@@ -691,7 +693,6 @@
             this.tpConsole.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlAdvanced
@@ -734,7 +735,7 @@
             // btnShowStats
             // 
             this.btnShowStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowStats.Location = new System.Drawing.Point(236, 542);
+            this.btnShowStats.Location = new System.Drawing.Point(168, 554);
             this.btnShowStats.Name = "btnShowStats";
             this.btnShowStats.Size = new System.Drawing.Size(75, 23);
             this.btnShowStats.TabIndex = 14;
@@ -5217,6 +5218,68 @@
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.idDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // dateDataGridViewTextBoxColumn
+            // 
+            this.dateDataGridViewTextBoxColumn.DataPropertyName = "date";
+            this.dateDataGridViewTextBoxColumn.HeaderText = "date";
+            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
+            this.dateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // amountDataGridViewTextBoxColumn
+            // 
+            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
+            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
+            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
+            this.amountDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // highDataGridViewCheckBoxColumn
+            // 
+            this.highDataGridViewCheckBoxColumn.DataPropertyName = "high";
+            this.highDataGridViewCheckBoxColumn.HeaderText = "high";
+            this.highDataGridViewCheckBoxColumn.Name = "highDataGridViewCheckBoxColumn";
+            this.highDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // chanceDataGridViewTextBoxColumn
+            // 
+            this.chanceDataGridViewTextBoxColumn.DataPropertyName = "Chance";
+            this.chanceDataGridViewTextBoxColumn.HeaderText = "Chance";
+            this.chanceDataGridViewTextBoxColumn.Name = "chanceDataGridViewTextBoxColumn";
+            this.chanceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // rollDataGridViewTextBoxColumn
+            // 
+            this.rollDataGridViewTextBoxColumn.DataPropertyName = "Roll";
+            this.rollDataGridViewTextBoxColumn.HeaderText = "Roll";
+            this.rollDataGridViewTextBoxColumn.Name = "rollDataGridViewTextBoxColumn";
+            this.rollDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // profitDataGridViewTextBoxColumn
+            // 
+            this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
+            this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
+            this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
+            this.profitDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // nonceDataGridViewTextBoxColumn
+            // 
+            this.nonceDataGridViewTextBoxColumn.DataPropertyName = "nonce";
+            this.nonceDataGridViewTextBoxColumn.HeaderText = "nonce";
+            this.nonceDataGridViewTextBoxColumn.Name = "nonceDataGridViewTextBoxColumn";
+            this.nonceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // betBindingSource
+            // 
+            this.betBindingSource.DataSource = typeof(DiceBot.Bet);
+            // 
             // panel5
             // 
             this.panel5.AutoScroll = true;
@@ -6000,6 +6063,7 @@
             // 
             // pnlProgrammer
             // 
+            this.pnlProgrammer.AutoScroll = true;
             this.pnlProgrammer.Controls.Add(this.tabControl2);
             this.pnlProgrammer.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlProgrammer.Location = new System.Drawing.Point(2, 0);
@@ -6285,7 +6349,8 @@
             this.justDiceToolStripMenuItem,
             this.primeDiceToolStripMenuItem,
             this.pocketRocketsCasinoToolStripMenuItem,
-            this.diceToolStripMenuItem});
+            this.diceToolStripMenuItem,
+            this.safediceToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -6354,6 +6419,15 @@
             this.ltcToolStripMenuItem.Text = "Ltc";
             this.ltcToolStripMenuItem.CheckedChanged += new System.EventHandler(this.btcToolStripMenuItem_CheckedChanged);
             this.ltcToolStripMenuItem.Click += new System.EventHandler(this.btcToolStripMenuItem_Click);
+            // 
+            // safediceToolStripMenuItem
+            // 
+            this.safediceToolStripMenuItem.Enabled = false;
+            this.safediceToolStripMenuItem.Name = "safediceToolStripMenuItem";
+            this.safediceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.safediceToolStripMenuItem.Text = "SafeDice";
+            this.safediceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.safediceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // settingsModeToolStripMenuItem
             // 
@@ -6484,68 +6558,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.idDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // dateDataGridViewTextBoxColumn
-            // 
-            this.dateDataGridViewTextBoxColumn.DataPropertyName = "date";
-            this.dateDataGridViewTextBoxColumn.HeaderText = "date";
-            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
-            this.dateDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // amountDataGridViewTextBoxColumn
-            // 
-            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
-            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
-            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
-            this.amountDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // highDataGridViewCheckBoxColumn
-            // 
-            this.highDataGridViewCheckBoxColumn.DataPropertyName = "high";
-            this.highDataGridViewCheckBoxColumn.HeaderText = "high";
-            this.highDataGridViewCheckBoxColumn.Name = "highDataGridViewCheckBoxColumn";
-            this.highDataGridViewCheckBoxColumn.ReadOnly = true;
-            // 
-            // chanceDataGridViewTextBoxColumn
-            // 
-            this.chanceDataGridViewTextBoxColumn.DataPropertyName = "Chance";
-            this.chanceDataGridViewTextBoxColumn.HeaderText = "Chance";
-            this.chanceDataGridViewTextBoxColumn.Name = "chanceDataGridViewTextBoxColumn";
-            this.chanceDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // rollDataGridViewTextBoxColumn
-            // 
-            this.rollDataGridViewTextBoxColumn.DataPropertyName = "Roll";
-            this.rollDataGridViewTextBoxColumn.HeaderText = "Roll";
-            this.rollDataGridViewTextBoxColumn.Name = "rollDataGridViewTextBoxColumn";
-            this.rollDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // profitDataGridViewTextBoxColumn
-            // 
-            this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
-            this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
-            this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
-            this.profitDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // nonceDataGridViewTextBoxColumn
-            // 
-            this.nonceDataGridViewTextBoxColumn.DataPropertyName = "nonce";
-            this.nonceDataGridViewTextBoxColumn.HeaderText = "nonce";
-            this.nonceDataGridViewTextBoxColumn.Name = "nonceDataGridViewTextBoxColumn";
-            this.nonceDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // betBindingSource
-            // 
-            this.betBindingSource.DataSource = typeof(DiceBot.Bet);
             // 
             // cDiceBot
             // 
@@ -6712,6 +6724,7 @@
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.panel5.ResumeLayout(false);
             this.gbLogin.ResumeLayout(false);
             this.gbLogin.PerformLayout();
@@ -6746,7 +6759,6 @@
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -7274,6 +7286,7 @@
         private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem programmerToolStripMenuItem;
         private System.Windows.Forms.TextBox txtConsoleIn;
+        private System.Windows.Forms.ToolStripMenuItem safediceToolStripMenuItem;
 
     }
 }

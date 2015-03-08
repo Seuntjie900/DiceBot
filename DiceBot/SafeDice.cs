@@ -11,6 +11,7 @@ namespace DiceBot
     {
         string accesstoken = "";
 
+        bool ispd = true;
         public SafeDice(cDiceBot Parent)
         {
             AutoInvest = false;
@@ -42,7 +43,7 @@ namespace DiceBot
                 string post = "username=" + Username + "&password=" + Password + "&code=" + twofa;
                 loginrequest.ContentLength = post.Length;
                 loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
+                
                 using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
                 {
 
@@ -50,40 +51,32 @@ namespace DiceBot
                 }
                 HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                pdlogin tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
-                accesstoken = tmp.access_token;
+                SafeDiceLogin tmp = json.JsonDeserialize<SafeDiceLogin>(sEmitResponse);
+                accesstoken = tmp.token;
                 if (accesstoken == "")
                         finishedlogin(false);
-                    else
-                    {
-                        /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
-                        betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                        HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                        string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                else
+                {
+                    loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/me?token=" + accesstoken);
+                    
+                    loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
-                        pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
-                        balance = tmpu.user.balance; //i assume
-                        bets = tmpu.user.bets;
-                        Parent.updateBalance((decimal)(balance / 100000000.0));
-                        Parent.updateBets(tmpu.user.bets);
-                        Parent.updateLosses(tmpu.user.losses);
-                        Parent.updateProfit(tmpu.user.profit / 100000000m);
-                        Parent.updateWagered(tmpu.user.wagered / 100000000m);
-                        string s = tmpu.user.address;
-                        if (s == null)
-                        {
-                            s = getDepositAddress();
-                        }
-                        if (s != null)
-                        {
-                            Parent.updateDeposit(s);
-                        }
-                        Parent.updateWins(tmpu.user.wins);
-                        lastupdate = DateTime.Now;
-                        System.Windows.Forms.MessageBox.Show("Logged in!\n\nWelcome " + Username);
-                        Parent.updateStatus("Logged in! Welcome " + Username);*/
-                        finishedlogin(true); ;
-                    }
+                    loginrequest.CookieContainer = new CookieContainer();
+                    loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
+
+                    EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                    sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                    SafeDicegetUserInfo tmp1 = json.JsonDeserialize<SafeDicegetUserInfo>(sEmitResponse);
+                    loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + tmp1.id + "/sites/1/me");
+                    loginrequest.CookieContainer = new CookieContainer();
+                    loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "", "safedice.com"));
+                    EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                    sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                    SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
+
+
+
+                }
                 
             }
             catch (WebException e)
@@ -100,12 +93,38 @@ namespace DiceBot
 
                 }
                 finishedlogin(false);
+
             }
         }
 
         void PlaceBetThread(bool High)
         {
+            HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/auth/local");
+            loginrequest.Method = "POST";
+            SafeDiceBet tmpBet = new SafeDiceBet { siteId=1,
+                amount=(int)(amount*100000000),
+                payout= 99.5/chance,
+                isFixedPayout = true,
+                isRollLow = !High};
+            string post = json.JsonSerializer<SafeDiceBet>(tmpBet);
+            loginrequest.ContentLength = post.Length;
+            loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
+            using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+            {
+
+                writer.Write(post);
+            }
+            HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+            SafeDiceBetResult tmpResult = json.JsonDeserialize<SafeDiceBetResult>(sEmitResponse);
+            Bet bet = new Bet();
+
+
+            /*
+             * normal bet result stuffies
+             * update balance and stats stuffies
+             * */
         }
 
         public override void PlaceBet(bool High)
@@ -147,7 +166,7 @@ namespace DiceBot
 
         public override void Disconnect()
         {
-            throw new NotImplementedException();
+            ispd = false;
         }
 
         public override void GetSeed(long BetID)
@@ -174,5 +193,54 @@ namespace DiceBot
     public class SafeDiceLogin
     {
         public string token { get; set; }
+    }
+
+
+    public class SafeDicegetUserInfo
+    {
+        public int id { get; set; }
+        public string username { get; set; }
+        public string authHashLink { get; set; }
+        public int referralId { get; set; }
+        public string accountSeed { get; set; }
+        public string serverSeedHash { get; set; }
+        public int nonce { get; set; }
+        public int role { get; set; }
+        public bool isInvestmentEnabled { get; set; }
+
+    }
+
+    public class SafeDiceWalletInfo
+    {
+        public int balance { get; set; }
+        public double shares { get; set; }
+        public double kelly { get; set; }
+        public int win { get; set; }
+        public int lose { get; set; }
+        public int amountLose { get; set; }
+        public int amountWin { get; set; }
+        public int amountWagered { get; set; }
+        
+    }
+     public class SafeDiceBet
+     {
+         public int siteId { get; set; }
+         public int amount { get; set; }
+         public int target { get; set; }
+         public double payout { get; set; }
+         public bool isFixedPayout { get; set; }
+         public bool isRollLow { get; set; }
+     }
+    public class SafeDiceBetResult
+    {
+        public int id { get; set; }
+        public int accountId { get; set; }
+        public DateTime processTime { get; set; }
+        public int amount { get; set; }
+        public int profit { get; set; }
+        public int roll { get; set; }
+        public int target { get; set; }
+        public bool isRollLow { get; set; }
+        public double payout { get; set; }
     }
 }

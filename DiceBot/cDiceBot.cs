@@ -16,7 +16,7 @@ using System.Net;
 using System.Media;
 using Microsoft.VisualBasic;
 using System.Security.Cryptography;
-using vJine.Lua;
+using SharpLua;
 using WMPLib;
 using System.Globalization;
 namespace DiceBot
@@ -196,11 +196,6 @@ namespace DiceBot
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture =  new CultureInfo("en-US");
             sqlite_helper.CheckDBS();
-            if (!Directory.Exists("data"))
-            {
-                Directory.CreateDirectory("data");
-                
-            }
             InitializeComponent();
 
             
@@ -314,7 +309,7 @@ namespace DiceBot
                 case 3: CurrentSite = new PD(this)/*new SafeDice(); break;
                 case 4: CurrentSite = new PD(this); break;
             }*/
-            
+            primeDiceToolStripMenuItem.Checked = true;
             Thread tGetVers = new Thread(new ThreadStart(getversion));
             tGetVers.Start();
             populateFiboNacci();
@@ -324,21 +319,22 @@ namespace DiceBot
                 CurrentSite.Login(txtJDUser.Text, txtJDPass.Text, txtApi2fa.Text);
                 
             }
-            Lua.reg("withdraw", new dWithdraw(luaWithdraw));
-            Lua.reg("invest", new dInvest(luainvest));
-            Lua.reg("tip", new dtip(luatip));
-            Lua.reg("stop", new dStop(Stop));
-            Lua.reg("resetseed", new dResetSeed(luaResetSeed));
-            Lua.reg("print", new dWriteConsole(WriteConsole));
-            
-            Lua.reg("runsim", new dRunsim(runsim));
+            Lua.RegisterFunction("withdraw",this, new dWithdraw(luaWithdraw).Method);
+            Lua.RegisterFunction("invest", this, new dInvest(luainvest).Method);
+            Lua.RegisterFunction("tip", this, new dtip(luatip).Method);
+            Lua.RegisterFunction("stop", this, new dStop(Stop).Method);
+            Lua.RegisterFunction("resetseed", this, new dResetSeed(luaResetSeed).Method);
+            Lua.RegisterFunction("print", this, new dWriteConsole(WriteConsole).Method);
+
+            Lua.RegisterFunction("runsim",this, new dRunsim(runsim).Method);
         }
         delegate void dRunsim(double startingabalance, int bets);
         void runsim(double startingbalance, int bets)
         {
             if (stop)
             {
-                Lua.inject(richTextBox3.Text);
+                LuaRuntime.SetLua(Lua);
+                LuaRuntime.Run(richTextBox3.Text);
                 nudSimBalance.Value = (decimal)startingbalance;
                 nudSimNumBets.Value = (decimal)bets;
                WriteConsole("Running " + bets + " bets Simulation with starting balance of " + startingbalance);
@@ -963,6 +959,7 @@ namespace DiceBot
             if (!RunningSimulation)
             {
                 double dBalance = PreviousBalance;
+                if (CurrentSite != null)
                 dBalance = CurrentSite.GetbalanceValue();
                 if ((dBalance != PreviousBalance && convert || withdrew) && dBalance > 0)
                 {
@@ -1832,23 +1829,24 @@ namespace DiceBot
             
             try
             {
-                Lua.clear();
-                Lua.set("balance", ((double)((int)PreviousBalance*100000000))/100000000.0);
-                Lua.set("win", Win);
-                Lua.set("profit", ((double)((int)this.profit*100000000))/100000000.0);
-                Lua.set("currentprofit", ((double)((int)Profit * 100000000)) / 100000000.0);
-                Lua.set("currentstreak", (Winstreak >= 0) ? Winstreak : -Losestreak);
-                Lua.set("previousbet", Lastbet);
-                Lua.set("nextbet", Lastbet);
-                Lua.set("chance", Chance);
-                Lua.set("bethigh", high);
-                Lua.set("bets", Wins + Losses);
-                Lua.set("wins", Wins);
-                Lua.set("losses", Losses);
-                Lua.exec("dobet");
-                Lua.get("nextbet", out Lastbet);
-                Lua.get("chance", out Chance);
-                Lua.get("bethigh", out high);
+                //Lua.clear();
+                Lua["balance"]= ((double)((int)PreviousBalance*100000000))/100000000.0;
+                Lua["win"]= Win;
+                Lua["profit"] =  ((double)((int)this.profit*100000000))/100000000.0;
+                Lua["currentprofit"] =  ((double)((int)Profit * 100000000)) / 100000000.0;
+                Lua["currentstreak"] =  (Winstreak >= 0) ? Winstreak : -Losestreak;
+                Lua["previousbet"] =  Lastbet;
+                Lua["nextbet"] =  Lastbet;
+                Lua["chance"] =  Chance;
+                Lua["bethigh"] =  high;
+                Lua["bets"] =  Wins + Losses;
+                Lua["wins"] =  Wins;
+                Lua["losses"] =  Losses;
+                LuaRuntime.SetLua(Lua);
+                LuaRuntime.Run("dobet()");
+                Lastbet = (double)Lua["nextbet"];
+                Chance= (double)Lua["chance"];
+                high = (bool)Lua["bethigh"];
             }
             catch (Exception e)
             {
@@ -2133,7 +2131,7 @@ namespace DiceBot
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
-                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":"1"));
+                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":"1"));
                 sw.WriteLine("AutoGetSeed|"+(chkAutoSeeds.Checked ? "1" : "0"));
             }
         }
@@ -2774,7 +2772,8 @@ namespace DiceBot
                     primeDiceToolStripMenuItem.Checked = tmpI == 1;
                     pocketRocketsCasinoToolStripMenuItem.Checked = tmpI == 2;
                     diceToolStripMenuItem.Checked = tmpI == 3;
-                    if (tmpI>3)
+                    safediceToolStripMenuItem.Checked = tmpI == 4;
+                    if (tmpI>4)
                     {
                         justDiceToolStripMenuItem.Checked = true; ;
                     }
@@ -4836,8 +4835,8 @@ namespace DiceBot
         {
 
         }
-
-        LuaContext Lua = new LuaContext();
+        LuaInterface Lua = LuaRuntime.GetLua();
+        //LuaContext Lua = new LuaContext();
         private void richTextBox1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             
@@ -4919,6 +4918,7 @@ namespace DiceBot
                 case 3: CurrentSite = new SafeDice(); if (!(url.StartsWith("safedice.com"))) { gckBrowser.Navigate("safedice.com/?r=1050"); } pnlApiInfo.Visible = false; gckBrowser.Visible = true; gckBrowser.Dock = DockStyle.Fill; break;
                 */
                     case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
+                    case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
 
                 }
                 rdbInvest.Enabled = CurrentSite.AutoInvest;
@@ -4978,6 +4978,7 @@ namespace DiceBot
         int LCindex = 0;
         private void textBox1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
+
             if (e.KeyCode == Keys.Enter)
             {
                 LCindex = 0;
@@ -4987,15 +4988,26 @@ namespace DiceBot
                 WriteConsole(txtConsoleIn.Text);
                 if (txtConsoleIn.Text.ToLower() == "start()")
                 {
-                    Lua.inject(richTextBox3.Text);
-                    Start(false);
+                    LuaRuntime.SetLua(Lua);
+                    try
+                    {
+                        LuaRuntime.Run(richTextBox3.Text);
+                        Start(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteConsole("LUA ERROR!!");
+                        WriteConsole(ex.Message);
+                    }
+                    
                 }
                 
                 else
                 {
                     try
                     {
-                        Lua.inject(txtConsoleIn.Text);
+                        LuaRuntime.SetLua(Lua);
+                        LuaRuntime.Run(txtConsoleIn.Text);
                     }
                     catch (Exception ex)
                     {
