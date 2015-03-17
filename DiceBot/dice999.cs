@@ -65,6 +65,8 @@ namespace DiceBot
             {
                 LastBaalance = DateTime.Now;
                 HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+                if (Prox != null)
+                    loginrequest.Proxy = Prox;
                 string post = string.Format("a=GetBalance&s={0}&Currency={1}", sessionCookie, Currency);
                 loginrequest.Method = "POST";
 
@@ -90,6 +92,8 @@ namespace DiceBot
             try
             {
                 HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+                if (Prox != null)
+                    loginrequest.Proxy = Prox;
                 string post = string.Format("a=GetServerSeedHash&s={0}", sessionCookie);
                 string sEmitResponse = "";
                 double chance = (999999.0) * (this.chance / 100.0);
@@ -100,6 +104,8 @@ namespace DiceBot
                     
                     
                     loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+                    if (Prox != null)
+                        loginrequest.Proxy = Prox;
                     post = string.Format("a=GetServerSeedHash&s={0}", sessionCookie);
                     loginrequest.Method = "POST";
 
@@ -128,8 +134,12 @@ namespace DiceBot
                     string Hash = next =  json.JsonDeserialize<d999Hash>(sEmitResponse).Hash;
                 }
                 loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+                if (Prox != null)
+                    loginrequest.Proxy = Prox;
                 string ClientSeed = r.Next(0, int.MaxValue).ToString();
-                post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}&ProtocolVersion=2", sessionCookie, (int)(amount * 100000000), High ? 999999 - (int)chance : 0, High ? 999999 : (int)chance, ClientSeed, Currency);
+
+
+                post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}&ProtocolVersion=2", sessionCookie, (int)Math.Ceiling(amount * 100000000.0), High ? 999999 - (int)chance : 0, High ? 999999 : (int)chance, ClientSeed, Currency);
                 loginrequest.Method = "POST";
 
                 loginrequest.ContentLength = post.Length;
@@ -255,6 +265,8 @@ namespace DiceBot
         public override bool Withdraw(double Amount, string Address)
         {
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+            if (Prox != null)
+                loginrequest.Proxy = Prox;
             string post = string.Format("a=Withdraw&s={0}&Amount={1}&Address={2}&currency={3}", sessionCookie, Amount*100000000, Address, Currency);
             loginrequest.Method = "POST";
 
@@ -279,6 +291,8 @@ namespace DiceBot
         public override void Login(string Username, string Password, string twofa)
         {
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+            if (Prox != null)
+                loginrequest.Proxy = Prox;
             string post = "a=Login&Key=7a3ada10cb804ec695cda315db6b8789&Username=" + Username + "&Password=" + Password + (twofa != "" ? "&Totp=" + twofa : "");
             loginrequest.Method = "POST";
 
@@ -325,6 +339,8 @@ namespace DiceBot
         public override bool Register(string username, string password)
         {
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+            if (Prox != null)
+                loginrequest.Proxy = Prox;
             string post = "a=CreateAccount&Key=7a3ada10cb804ec695cda315db6b8789";
             loginrequest.Method = "POST";
 
@@ -343,6 +359,8 @@ namespace DiceBot
             {
                 sessionCookie = tmp.SessionCookie;
                 loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+                if (Prox != null)
+                    loginrequest.Proxy = Prox;
                 post = "a=CreateUser&Key=7a3ada10cb804ec695cda315db6b8789&s=" + sessionCookie + "&Username="+username+"&Password="+password;
                 loginrequest.Method = "POST";
 

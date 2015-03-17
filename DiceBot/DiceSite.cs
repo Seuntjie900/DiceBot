@@ -12,7 +12,11 @@ namespace DiceBot
 {
     public abstract class DiceSite
     {
-
+        protected string prox_host = "";
+        protected int prox_port = 3128;
+        protected string prox_username = "";
+        protected string prox_pass = "";
+        protected WebProxy Prox;
         public string[] Currencies = new string[] { "btc" };
         string currency = "Btc";
         public string Currency
@@ -165,7 +169,21 @@ namespace DiceBot
         public delegate void dFinishedLogin(bool LoggedIn);
         public event dFinishedLogin FinishedLogin;
         
-
+        public virtual void SetProxy(string host, int port)
+        {
+            prox_host = host;
+            prox_port = port;
+            Prox = new WebProxy(prox_host, prox_port);
+        }
+        public virtual void SetProxy(string host, int port, string username, string password)
+        {
+            SetProxy(host, port);
+            prox_username = username;
+            prox_pass = password;
+            Prox = new WebProxy(prox_host, prox_port);
+            Prox.Credentials = new NetworkCredential(prox_username, prox_pass);
+        }
+        
     }
 
     /*public class PRC_old : DiceSite

@@ -25,6 +25,17 @@ namespace DiceBot
             con.Received += con_Received;
         }
 
+        public override void SetProxy(string host, int port)
+        {
+            base.SetProxy(host, port);
+            con.Proxy = Prox;
+        }
+        public override void SetProxy(string host, int port, string username, string password)
+        {
+            base.SetProxy(host, port, username, password);
+            con.Proxy = Prox;
+        }
+
         void GotChatMessage(string message, string time, string user, string userid, string roomid, string ismod)
         {
             ReceivedChatMessage(string.Format( "{0:hh:mm:ss} ({1}) <{2}> {3}",json.ToDateTime2(time), userid, user, message ));
@@ -75,6 +86,8 @@ namespace DiceBot
         {
             
             HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GenerateNewServerSeed") as HttpWebRequest;
+            if (Prox != null)
+                getHeaders.Proxy = Prox;
             getHeaders.CookieContainer =Cookies;
             
             getHeaders.Method = "POST";
@@ -166,6 +179,8 @@ namespace DiceBot
         public override void Login(string Username, string Password, string twofa)
         {
             HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/play/#dice") as HttpWebRequest;
+            if (Prox != null)
+                getHeaders.Proxy = Prox;
             var cookies = new CookieContainer();
             getHeaders.CookieContainer = cookies;
             HttpWebResponse Response = null;
@@ -185,6 +200,8 @@ namespace DiceBot
             }
             
             getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/login") as HttpWebRequest;
+            if (Prox != null)
+                getHeaders.Proxy = Prox;
             getHeaders.CookieContainer = new CookieContainer();
             foreach (Cookie c in Response.Cookies)
             {
@@ -232,6 +249,8 @@ namespace DiceBot
             try
             {
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/play/#dice") as HttpWebRequest;
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 string stmp = new StreamReader(Response.GetResponseStream()).ReadToEnd();
@@ -251,6 +270,8 @@ namespace DiceBot
                 dicehub.On<string, string, string, int, bool>("receivePrivateMesssage", ReceivedChat);
 
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
@@ -270,6 +291,8 @@ namespace DiceBot
                 Parent.updateWins(tmp.Wins);
                 //Parent.updateDeposit(tmp.DepositAddress);
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetCurrentSeed") as HttpWebRequest;
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
@@ -293,6 +316,8 @@ namespace DiceBot
             return false;
 
             HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/ref/357") as HttpWebRequest;
+            if (Prox != null)
+                getHeaders.Proxy = Prox;
             var cookies = new CookieContainer();
             getHeaders.CookieContainer = cookies;
             HttpWebResponse Response = null;
@@ -311,6 +336,8 @@ namespace DiceBot
             }
             CookieContainer tmpContainer = getHeaders.CookieContainer;
             getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/") as HttpWebRequest;
+            if (Prox != null)
+                getHeaders.Proxy = Prox;
             getHeaders.CookieContainer = tmpContainer;
             foreach (Cookie c in Response.Cookies)
             {
@@ -353,6 +380,8 @@ namespace DiceBot
             try
             {
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 string stmp = new StreamReader(Response.GetResponseStream()).ReadToEnd();
@@ -368,6 +397,8 @@ namespace DiceBot
 
 
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
@@ -387,6 +418,8 @@ namespace DiceBot
                 Parent.updateWins(tmp.Wins);
                 //Parent.updateDeposit(tmp.DepositAddress);
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetCurrentSeed") as HttpWebRequest;
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();

@@ -18,7 +18,7 @@ namespace DiceBot
         string username = "";
         long uid = 0;
         DateTime lastupdate = new DateTime();
-
+        
         public PD(cDiceBot Parent)
         {
             AutoInvest = false;
@@ -35,8 +35,8 @@ namespace DiceBot
             Thread tChat = new Thread(GetMessagesThread);
             tChat.Start();
         }
-        
 
+        
         void GetBalanceThread()
         {
             try
@@ -46,6 +46,8 @@ namespace DiceBot
                     if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
                     {
                         HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
+                        if (Prox != null)
+                            betrequest.Proxy = Prox;
                         betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
                         HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
                         string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
@@ -77,6 +79,8 @@ namespace DiceBot
             {
                 HttpWebRequest RegRequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/register");
                 RegRequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                if (Prox != null)
+                    RegRequest.Proxy = Prox;
                 RegRequest.Method = "POST";
                 string post = "username=" + Username+"&affiliate=seuntjie";
                 RegRequest.ContentLength = post.Length;
@@ -94,6 +98,8 @@ namespace DiceBot
                 else
                 {
                     HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
+                    if (Prox != null)
+                        betrequest.Proxy = Prox;
                     betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
                     HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
                     string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
@@ -112,6 +118,8 @@ namespace DiceBot
                     bets = tmpu.user.bets;
                     Thread.Sleep(500);
                     HttpWebRequest PWRequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/password?access_token=" + accesstoken);
+                    if (Prox != null)
+                        PWRequest.Proxy = Prox;
                     PWRequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
                     PWRequest.Method = "POST";
                     post = "password=" + Password; ;
@@ -145,6 +153,8 @@ namespace DiceBot
             try
             {
                 HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/login");
+                if (Prox != null)
+                    loginrequest.Proxy = Prox;
                 loginrequest.Method = "POST";
                 string post = "username=" + Username + "&password=" + Password + (!string.IsNullOrWhiteSpace(otp) ? "&otp=" + otp : "");
                 loginrequest.ContentLength = post.Length;
@@ -156,6 +166,7 @@ namespace DiceBot
                     writer.Write(post);
                 }
                 HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 pdlogin tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
                 accesstoken = tmp.access_token;
@@ -164,6 +175,8 @@ namespace DiceBot
                 else
                 {
                     HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/users/1?access_token=" + accesstoken);
+                    if (Prox != null)
+                        betrequest.Proxy = Prox;
                     betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
                     HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
                     string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
@@ -217,6 +230,8 @@ namespace DiceBot
             {
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/bet?access_token=" + accesstoken);
+                if (Prox != null)
+                    betrequest.Proxy = Prox;
                 betrequest.Method = "POST";
                 double tmpchance = High ? 99.99 - chance : chance;
                 string post = string.Format("amount={0}&target={1}&condition={2}", (amount * 100000000).ToString(""), tmpchance.ToString("0.00"), High ? ">" : "<");
@@ -258,7 +273,7 @@ namespace DiceBot
                     string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
                     Parent.updateStatus(sEmitResponse);
                 }
-                if (e.Message.Contains("429"))
+                if (e.Message.Contains("429") || e.Message.Contains("502"))
                 {
                     Thread .Sleep(200);
                     placebetthread();
@@ -284,6 +299,8 @@ namespace DiceBot
                     LastSeedReset = DateTime.Now;
                     Parent.updateStatus("Resetting Seed");
                     HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/seed?access_token=" + accesstoken);
+                    if (Prox != null)
+                        betrequest.Proxy = Prox;
                     betrequest.Method = "POST";
                     string post = string.Format("seed={0}", Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20));
                     betrequest.ContentLength = post.Length;
@@ -357,6 +374,8 @@ namespace DiceBot
                 Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
                 Thread.Sleep(500);
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/withdraw?access_token=" + accesstoken);
+                if (Prox != null)
+                    betrequest.Proxy = Prox;
                 betrequest.Method = "POST";
                 string post = string.Format("amount={0}&address={1}", (Amount * 100000000).ToString(""), Address);
                 betrequest.ContentLength = post.Length;
@@ -467,6 +486,8 @@ namespace DiceBot
             try
             {
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/deposit?access_token=" + accesstoken);
+                if (Prox != null)
+                    betrequest.Proxy = Prox;
                 betrequest.Method = "GET";
                 string post = string.Format("seed={0}", Guid.NewGuid().ToString().Replace("-","").Substring(0,20));
            
@@ -503,6 +524,8 @@ namespace DiceBot
             try
             {
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/logout?access_token=" + accesstoken);
+                if (Prox != null)
+                    betrequest.Proxy = Prox;
                 betrequest.Method = "GET";
                 
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
@@ -526,6 +549,8 @@ namespace DiceBot
 
 
                 HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/tip?access_token=" + accesstoken);
+                if (Prox != null)
+                    loginrequest.Proxy = Prox;
                 loginrequest.Method = "POST";
 
                 loginrequest.ContentLength = post.Length;
@@ -557,6 +582,8 @@ namespace DiceBot
             {
                 long BetID = (long)_BetID;
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/bets/" + BetID);
+                if (Prox != null)
+                    betrequest.Proxy = Prox;
                 betrequest.Method = "GET";
 
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
@@ -603,7 +630,8 @@ namespace DiceBot
                     post += "username=" + username + "&userid=" + uid + "&room=English&message=" + Message + "&token=" + accesstoken;
                     HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/send?access_token=" + accesstoken);
                     loginrequest.Method = "POST";
-
+                    if (Prox != null)
+                        loginrequest.Proxy = Prox;
                     loginrequest.ContentLength = post.Length;
                     loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
@@ -633,7 +661,8 @@ namespace DiceBot
                     {
                         HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/messages?access_token=" + accesstoken+"&room=English");
                         loginrequest.Method = "GET";
-
+                        if (Prox != null)
+                            loginrequest.Proxy = Prox;
                         loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
                         HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                         string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();

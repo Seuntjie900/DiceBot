@@ -1,6 +1,7 @@
 Todo:
 implement other sites (Safedice API incomplete.)
 PRC Register
+fibonacci error
 
 hopefully before release:
 losing streak table redo

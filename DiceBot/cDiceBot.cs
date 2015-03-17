@@ -198,8 +198,8 @@ namespace DiceBot
             sqlite_helper.CheckDBS();
             InitializeComponent();
 
-            
 
+            
             ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow, btnStartHigh2, btnStartLow2 };
             EnableNotLoggedInControls(false);
             basicToolStripMenuItem.Checked = true;
@@ -269,7 +269,7 @@ namespace DiceBot
 
 
             #endregion
-
+                primeDiceToolStripMenuItem.Checked = true;
            
             
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
@@ -309,7 +309,7 @@ namespace DiceBot
                 case 3: CurrentSite = new PD(this)/*new SafeDice(); break;
                 case 4: CurrentSite = new PD(this); break;
             }*/
-            primeDiceToolStripMenuItem.Checked = true;
+
             Thread tGetVers = new Thread(new ThreadStart(getversion));
             tGetVers.Start();
             populateFiboNacci();
@@ -1830,10 +1830,10 @@ namespace DiceBot
             try
             {
                 //Lua.clear();
-                Lua["balance"]= ((double)((int)PreviousBalance*100000000))/100000000.0;
+                Lua["balance"] = (double)((int)(PreviousBalance * 100000000)) / 100000000.0;
                 Lua["win"]= Win;
-                Lua["profit"] =  ((double)((int)this.profit*100000000))/100000000.0;
-                Lua["currentprofit"] =  ((double)((int)Profit * 100000000)) / 100000000.0;
+                Lua["profit"] =  ((double)(this.profit*100000000))/100000000.0;
+                Lua["currentprofit"] =  ((double)(Profit * 100000000)) / 100000000.0;
                 Lua["currentstreak"] =  (Winstreak >= 0) ? Winstreak : -Losestreak;
                 Lua["previousbet"] =  Lastbet;
                 Lua["nextbet"] =  Lastbet;
@@ -4539,7 +4539,7 @@ namespace DiceBot
                     if (valid)
                     {
 
-                        CurrentSite.Withdraw(tmpAmount, "");
+                        CurrentSite.Withdraw(tmpAmount, Address);
                     }
                     else
 
@@ -4904,6 +4904,17 @@ namespace DiceBot
             }
             if ((sender as ToolStripMenuItem).Checked)
             {
+                foreach (ToolStripMenuItem t in siteToolStripMenuItem.DropDownItems)
+                {
+                    if (t == sender as ToolStripMenuItem)
+                    {
+                        t.Checked = true;
+                    }
+                    else
+                    {
+                        t.Checked = false;
+                    }
+                }
                 switch ((sender as ToolStripMenuItem).Name)
                 {
                     case "justDiceToolStripMenuItem": CurrentSite = new JD(this); siteToolStripMenuItem.Text = "Site " + "(JD)"; break;
@@ -4928,6 +4939,7 @@ namespace DiceBot
                 if (!rdbWithdraw.Enabled)
                     rdbWithdraw.Checked = false;
             }
+            
         }
 
         private void justDiceToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4938,10 +4950,10 @@ namespace DiceBot
                 {
                     t.Checked = true;
                 }
-                else
+                /*else
                 {
                     t.Checked = false;
-                }
+                }*/
             }
         }
 

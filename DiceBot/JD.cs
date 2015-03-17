@@ -30,6 +30,17 @@ namespace DiceBot
             TipUsingName = false;
         }
 
+        public override void SetProxy(string host, int port)
+        {
+            base.SetProxy(host, port);
+            Instance.SetProxy(prox_host, prox_port);
+        }
+        public override void SetProxy(string host, int port, string username, string password)
+        {
+            base.SetProxy(host, port, username, password);
+            Instance.SetProxy(prox_host, prox_port, prox_username, prox_pass);
+        }
+
         void Instance_OnLossess(long Lossess)
         {
             Parent.updateLosses(Lossess);
