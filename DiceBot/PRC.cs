@@ -105,14 +105,28 @@ namespace DiceBot
                 HttpWebResponse Response = (HttpWebResponse)getHeaders.GetResponse();
                 string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 PRCResetSeed tmp = json.JsonDeserialize<PRCResetSeed>(s1);
-                sqlite_helper.InsertSeed(tmp.PreviousServerHash, tmp.PreviousServerSeed);
-                serverhash = tmp.CurrentServerHash;
-                client = tmp.CurrentClientSeed;
+                if (tmp.Success)
+                {
+                    sqlite_helper.InsertSeed(tmp.PreviousServerHash, tmp.PreviousServerSeed);
+                    serverhash = tmp.CurrentServerHash;
+                    client = tmp.CurrentClientSeed;
+                }
+                else
+                {
+                    Parent.updateStatus("Failed to reset seed, too soon.");
+                }
+
             }
             catch
             {
 
             }
+        }
+
+        public override void SendTip(string User, double amount)
+        {
+            if (dicehub != null)
+                dicehub.Invoke("tip", User, amount, "");
         }
 
         public override void SetClientSeed(string Seed)

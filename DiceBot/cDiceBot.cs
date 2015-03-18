@@ -19,6 +19,7 @@ using System.Security.Cryptography;
 using SharpLua;
 using WMPLib;
 using System.Globalization;
+using System.Reflection;
 namespace DiceBot
 {
     
@@ -193,6 +194,7 @@ namespace DiceBot
         
         public cDiceBot()
         {
+
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture =  new CultureInfo("en-US");
             sqlite_helper.CheckDBS();
@@ -314,9 +316,9 @@ namespace DiceBot
             tGetVers.Start();
             populateFiboNacci();
             CurrentSite.FinishedLogin+=CurrentSite_FinishedLogin;
-            if (chkJDAutoLogin.Checked)
+            if (autologin)
             {
-                CurrentSite.Login(txtJDUser.Text, txtJDPass.Text, txtApi2fa.Text);
+                CurrentSite.Login(username, password , txtApi2fa.Text);
                 
             }
             Lua.RegisterFunction("withdraw",this, new dWithdraw(luaWithdraw).Method);
@@ -443,7 +445,7 @@ namespace DiceBot
 
                 lblProfit2.Text = lblProfit.Text = profit.ToString("0.00000000");
                 lblBalance.Text = PreviousBalance.ToString("0.00000000");
-                if ((PreviousBalance - StartBalance) < 0)
+                if (profit < 0)
                 {
                     lblProfit.ForeColor = Color.Red;
 
@@ -510,7 +512,7 @@ namespace DiceBot
                     lblAvgStreak.ForeColor = Color.Green;
                 else lblAvgStreak.ForeColor = Color.Red;
                 lbl3Best.Text = BestStreak.ToString() + "\n" + BestStreak2.ToString() + "\n" + BestStreak3.ToString();
-                lbl3Worst.Text = WorstStreak.ToString() + "\n" + WorstStreak2.ToString() + "\n" + WorstStreak2.ToString();
+                lbl3Worst.Text = WorstStreak.ToString() + "\n" + WorstStreak2.ToString() + "\n" + WorstStreak3.ToString();
                 lblLastStreakLose.Text = laststreaklose.ToString();
                 lblLastStreakWin.Text = laststreakwin.ToString();
                 lblLargestBet.Text = LargestBet.ToString("0.00000000");
@@ -931,10 +933,19 @@ namespace DiceBot
                     Lastbet = MinBet;
                     if (rdbLabEnable.Checked)
                     {
-                        if (LabList.Count == 1)
-                            Lastbet = LabList[0];
+                        if (LabList.Count > 0)
+                        {
+                            if (LabList.Count == 1)
+                                Lastbet = LabList[0];
+                            else
+                                Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                        }
                         else
-                            Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                        {
+                            MessageBox.Show("Please enter a list of bets into the bet box on the labouchere tab, 1 bet per line.");
+                            Stop();
+                            return;
+                        }
                     }
                     mutawaprev = (double)nudChangeWinStreakTo.Value / (double)nudMutawaMultiplier.Value;
                 }
@@ -1484,10 +1495,10 @@ namespace DiceBot
                     if (LargestWin < profit)
                         LargestWin = profit;
                 }
-                else if (Win)
+                else
                 {
-                    if (LargestLoss < profit)
-                        LargestLoss = profit;
+                    if (LargestLoss < -profit)
+                        LargestLoss = -profit;
                 }
 
                 if (LargestBet < Lastbet)
@@ -2132,7 +2143,7 @@ namespace DiceBot
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
                 sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":"1"));
-                sw.WriteLine("AutoGetSeed|"+(chkAutoSeeds.Checked ? "1" : "0"));
+                //sw.WriteLine("AutoGetSeed|"+(chkAutoSeeds.Checked ? "1" : "0"));
             }
         }
         
@@ -2844,7 +2855,7 @@ namespace DiceBot
                     nudPresetLossStep.Value = decimal.Parse(getvalue(saveditems, "PresetLossStep"));
                     nudPresetWinStep.Value = decimal.Parse(getvalue(saveditems, "PresetWinStep"));
 
-                    chkAutoSeeds.Checked = getvalue(saveditems, "AutoGetSeed") != "0";
+                    //chkAutoSeeds.Checked = getvalue(saveditems, "AutoGetSeed") != "0";
 
                 }
 
@@ -3065,27 +3076,29 @@ namespace DiceBot
                         Emails.SMTP = getvalue(saveditems, "SMTP");
 
                         SoundWithdraw = ("1" ==getvalue(saveditems, "CoinEnabled"));
-                        ching= txtPathChing.Text = getvalue(saveditems, "CoinPath");
+                        ching= getvalue(saveditems, "CoinPath");
                         Sound = ("1"==getvalue(saveditems, "AlarmEnabled"));
                         SoundLow = ("1" == getvalue(saveditems, "AlarmLowEnabled"));
                         SoundStreak = ("1" == getvalue(saveditems, "AlarmStreakEnabled"));
                         SoundStreakCount =iparse(getvalue(saveditems, "AlarmStreakValue"));
-                        salarm= txtPathAlarm.Text = getvalue(saveditems, "AlarmPath");
-                        nudEmailStreak.Value = (decimal)Emails.StreakSize;
-                        nudSoundStreak.Value = SoundStreakCount;
+                        salarm= getvalue(saveditems, "AlarmPath");
+                        Emails.StreakSize = (int)Emails.StreakSize;
+                        
+                        //nudSoundStreak.Value = SoundStreakCount;
                         
 
                     }
 
                 }
 
-                chkAlarm.Checked = Sound;
+                
+                /*chkAlarm.Checked = Sound;
                 chkEmail.Checked = Emails.Enable;
                 chkEmailLowLimit.Checked = Emails.Lower;
                 chkEmailStreak.Checked = Emails.Streak;
                 chkEmailWithdraw.Checked = Emails.Withdraw;
-                chkJDAutoLogin.Checked = autologin;
-                chkJDAutoStart.Checked = autostart;
+                
+                
                 
                 chkSoundLowLimit.Checked = SoundLow;
                 chkSoundStreak.Checked = SoundStreak;
@@ -3095,7 +3108,7 @@ namespace DiceBot
                 txtEmail.Text = Emails.emailaddress;
                 txtJDPass.Text = password;
                 txtJDUser.Text = username;
-                
+                */
                 
             }
 
@@ -3105,18 +3118,18 @@ namespace DiceBot
             }
         }
 
-        void writesettings()
+        void writesettings(Settings TmpSet)
         {
             using (StreamWriter sw = new StreamWriter(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\Psettings"))
             {
                 sw.WriteLine("new");
                 //sw.WriteLine("User|" + txtJDUser.Text);
                 //sw.WriteLine("Seed|"+txtJDPass.Text);
-                string temp2 = txtJDUser.Text + "," + txtJDPass.Text + ",";
-                if (chkJDAutoLogin.Checked)
+                string temp2 = TmpSet.txtJDUser.Text + "," + TmpSet.txtJDPass.Text + ",";
+                if (TmpSet.chkJDAutoLogin.Checked)
                     temp2 += "1,";
                 else temp2 += "0";
-                if (chkJDAutoStart.Checked)
+                if (TmpSet.chkJDAutoStart.Checked)
                     temp2 += "1,";
                 else temp2 += "0";
                 string jdline = "";
@@ -3129,36 +3142,36 @@ namespace DiceBot
 
                 ////tray,botname,enableemail,emailaddress,emailwithdraw,emailinvest,emaillow,emailstreak,emailstreakval
                 string msg = "";
-                msg = (chkTray.Checked) ? "1" : "0";                
+                msg = (TmpSet.chkTray.Checked) ? "1" : "0";                
                 sw.WriteLine("tray|"+msg);
-                sw.WriteLine("botname|"+txtBot.Text);
-                msg = (chkEmail.Checked) ? "1" : "0";  
+                sw.WriteLine("botname|" + TmpSet.txtBot.Text);
+                msg = (TmpSet.chkEmail.Checked) ? "1" : "0";  
                 sw.WriteLine("enableemail|"+msg);
-                sw.WriteLine("emailaddress|"+txtEmail.Text);
-                msg = (chkEmailWithdraw.Checked) ? "1" : "0";  
+                sw.WriteLine("emailaddress|" + TmpSet.txtEmail.Text);
+                msg = (TmpSet.chkEmailWithdraw.Checked) ? "1" : "0";  
                 sw.WriteLine("emailwithdraw|"+msg);
-                msg = (chkEmailLowLimit.Checked) ? "1" : "0";  
+                msg = (TmpSet.chkEmailLowLimit.Checked) ? "1" : "0";  
                 sw.WriteLine("emaillow|"+msg);
-                msg = (chkEmailStreak.Checked) ? "1" : "0";  
+                msg = (TmpSet.chkEmailStreak.Checked) ? "1" : "0";  
                 sw.WriteLine("emailstreak|"+msg);
-                sw.WriteLine("emailstreakval|"+nudEmailStreak.Value.ToString());
+                sw.WriteLine("emailstreakval|" + TmpSet.nudEmailStreak.Value.ToString());
                 sw.WriteLine("SMTP|" + Emails.SMTP);
                 
 
                 ////soundcoin,soundalarm,soundlower,soundstrea,soundstreakvalue
-               
-                msg = (chkSoundWithdraw.Checked) ? "1" : "0";
+
+                msg = (TmpSet.chkSoundWithdraw.Checked) ? "1" : "0";
                 sw.WriteLine("CoinEnabled|" + msg);
-                sw.WriteLine("CoinPath|" + txtPathChing.Text);
-                msg = (chkAlarm.Checked) ? "1" : "0";
+                sw.WriteLine("CoinPath|" + TmpSet.txtPathChing.Text);
+                msg = (TmpSet.chkAlarm.Checked) ? "1" : "0";
                 sw.WriteLine("AlarmEnabled|" + msg);
-                msg = (chkSoundLowLimit.Checked) ? "1" : "0";
+                msg = (TmpSet.chkSoundLowLimit.Checked) ? "1" : "0";
                 sw.WriteLine("AlarmLowEnabled|" + msg);
-                msg = (chkSoundStreak.Checked) ? "1" : "0";
+                msg = (TmpSet.chkSoundStreak.Checked) ? "1" : "0";
                 sw.WriteLine("AlarmStreakEnabled|" + msg);
 
-                sw.WriteLine("AlarmStreakValue|" + nudSoundStreak.Value.ToString());
-                sw.WriteLine("AlarmPath|" + txtPathAlarm.Text);
+                sw.WriteLine("AlarmStreakValue|" + TmpSet.nudSoundStreak.Value.ToString());
+                sw.WriteLine("AlarmPath|" + TmpSet.txtPathAlarm.Text);
                 
 
 
@@ -3896,8 +3909,12 @@ namespace DiceBot
 
         private void btnSaveUser_Click(object sender, EventArgs e)
         {
-            writesettings();
-            loadsettings();
+            Settings tmpSet = new DiceBot.Settings();
+            if (tmpSet.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                writesettings( tmpSet );
+                loadsettings();
+            }
         }
 
         
@@ -3916,26 +3933,7 @@ namespace DiceBot
             
         }
 
-        private void btnBrowseChing_Click(object sender, EventArgs e)
-        {
-            bool ching = ((sender as Button).Name == "btnBrowseChing");
-            OpenFileDialog ofdSound = new OpenFileDialog();
-            ofdSound.CheckFileExists = true;
-            ofdSound.Filter = "MP3|*.mp3|Wave Files|*.wav";
-            if (ofdSound.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                if (ching)
-                {
-                    this.ching = ofdSound.FileName;
-                    txtPathChing.Text = this.ching;
-                }
-                else
-                {
-                    salarm = ofdSound.FileName;
-                    txtPathAlarm.Text = salarm;
-                }
-            }
-        }
+        
 
        
 
@@ -4317,6 +4315,7 @@ namespace DiceBot
             }
         }
 
+        fChat PopoutChat;
         int undreadChatmessages = 0;
         public void AddChat(object Message)
         {
@@ -4327,6 +4326,13 @@ namespace DiceBot
             }
             else
             {
+                if (PopoutChat!=null)
+                {
+                    if (!PopoutChat.IsDisposed)
+                    {
+                        PopoutChat.GotMessage((string)Message);
+                    }
+                }
                 rtbChat.AppendText("\r\n" + Message);
                 if (tcStats.SelectedIndex!=2)
                 {
@@ -5075,6 +5081,32 @@ namespace DiceBot
         private void donateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
+        }
+
+        TabPage tbChat;
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            PopoutChat = new fChat(rtbChat.Text);
+            
+            PopoutChat.FormClosing+=PopoutChat_FormClosing;
+            PopoutChat.SendMessage += PopoutChat_SendMessage;
+            if (tcStats.TabPages.Count>2)
+            {
+                tbChat = tcStats.TabPages[2];
+                tcStats.TabPages.RemoveAt(2);
+            }
+            PopoutChat.Show();
+        }
+
+        void PopoutChat_SendMessage(string Message)
+        {
+            txtChatMessage.Text = Message;
+            btnChatSend_Click(btnChatSend, new EventArgs());
+        }
+
+        void PopoutChat_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            tcStats.TabPages.Add(tbChat);
         }
 
           

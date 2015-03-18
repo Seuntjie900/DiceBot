@@ -139,7 +139,7 @@ namespace DiceBot
                 string ClientSeed = r.Next(0, int.MaxValue).ToString();
 
 
-                post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}&ProtocolVersion=2", sessionCookie, (int)Math.Ceiling(amount * 100000000.0), High ? 999999 - (int)chance : 0, High ? 999999 : (int)chance, ClientSeed, Currency);
+                post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}&ProtocolVersion=2", sessionCookie, (long)Math.Ceiling(amount * 100000000.0), High ? 999999 - (int)chance : 0, High ? 999999 : (int)chance, ClientSeed, Currency);
                 loginrequest.Method = "POST";
 
                 loginrequest.ContentLength = post.Length;
@@ -154,7 +154,10 @@ namespace DiceBot
                  sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 
                 d999Bet tmpBet = json.JsonDeserialize<d999Bet>(sEmitResponse);
+                if (amount>=21)
+                {
 
+                }
                 if (tmpBet.ChanceTooHigh==1 || tmpBet.ChanceTooLow==1| tmpBet.InsufficientFunds == 1|| tmpBet.MaxPayoutExceeded==1|| tmpBet.NoPossibleProfit==1)
                 {
                     throw new Exception();

@@ -1,7 +1,8 @@
 Todo:
-implement other sites (Safedice API incomplete.)
+implement other sites (Safedice API incomplete, bitdice API incomplete)
 PRC Register
-fibonacci error
+fix settings window and load
+
 
 hopefully before release:
 losing streak table redo
@@ -13,7 +14,6 @@ clean up + organize code
 multilingual support
 finish tooltips (don't want to do without the multi lingual support finnished)
 advanced zig zag
-popout chat
 
 Done:
 v3:
@@ -54,3 +54,5 @@ primedice CPU intensive
 999dice - log in issues,  check for european regions.
 PRC Login
 programmer mode (access to variables, write code for own strategies)
+popout chat
+fibonacci error

@@ -300,45 +300,6 @@
             this.label55 = new System.Windows.Forms.Label();
             this.nudBotSpeed = new System.Windows.Forms.NumericUpDown();
             this.chkBotSpeed = new System.Windows.Forms.CheckBox();
-            this.tabPage9 = new System.Windows.Forms.TabPage();
-            this.groupBox19 = new System.Windows.Forms.GroupBox();
-            this.lblSeedFound = new System.Windows.Forms.Label();
-            this.lblSeedProgress = new System.Windows.Forms.Label();
-            this.btnGetSeeds = new System.Windows.Forms.Button();
-            this.chkAutoSeeds = new System.Windows.Forms.CheckBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label120 = new System.Windows.Forms.Label();
-            this.label119 = new System.Windows.Forms.Label();
-            this.btnBrowseAlarm = new System.Windows.Forms.Button();
-            this.txtPathAlarm = new System.Windows.Forms.TextBox();
-            this.btnBrowseChing = new System.Windows.Forms.Button();
-            this.txtPathChing = new System.Windows.Forms.TextBox();
-            this.nudSoundStreak = new System.Windows.Forms.NumericUpDown();
-            this.chkSoundStreak = new System.Windows.Forms.CheckBox();
-            this.chkSoundLowLimit = new System.Windows.Forms.CheckBox();
-            this.chkAlarm = new System.Windows.Forms.CheckBox();
-            this.chkSoundWithdraw = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnSMTP = new System.Windows.Forms.Button();
-            this.nudEmailStreak = new System.Windows.Forms.NumericUpDown();
-            this.chkEmailStreak = new System.Windows.Forms.CheckBox();
-            this.chkEmailLowLimit = new System.Windows.Forms.CheckBox();
-            this.label48 = new System.Windows.Forms.Label();
-            this.chkEmailWithdraw = new System.Windows.Forms.CheckBox();
-            this.txtEmail = new System.Windows.Forms.TextBox();
-            this.label49 = new System.Windows.Forms.Label();
-            this.chkEmail = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label43 = new System.Windows.Forms.Label();
-            this.txtJDUser = new System.Windows.Forms.TextBox();
-            this.txtJDPass = new System.Windows.Forms.TextBox();
-            this.chkJDAutoLogin = new System.Windows.Forms.CheckBox();
-            this.chkJDAutoStart = new System.Windows.Forms.CheckBox();
-            this.label40 = new System.Windows.Forms.Label();
-            this.txtBot = new System.Windows.Forms.TextBox();
-            this.label50 = new System.Windows.Forms.Label();
-            this.chkTray = new System.Windows.Forms.CheckBox();
-            this.btnSaveUser = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnStopOnWin = new System.Windows.Forms.Button();
             this.btnStartLow = new System.Windows.Forms.Button();
@@ -424,6 +385,15 @@
             this.btnHideLive = new System.Windows.Forms.Button();
             this.chrtEmbeddedLiveChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.highDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.chanceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rollDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbLogin = new System.Windows.Forms.GroupBox();
             this.btnRegister = new System.Windows.Forms.Button();
@@ -544,15 +514,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.highDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.chanceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rollDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.btnPopChat = new System.Windows.Forms.Button();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -645,13 +607,6 @@
             this.pnlAdvancedAdvanced.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBotSpeed)).BeginInit();
-            this.tabPage9.SuspendLayout();
-            this.groupBox19.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSoundStreak)).BeginInit();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.tcStats.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -668,6 +623,7 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.panel5.SuspendLayout();
             this.gbLogin.SuspendLayout();
             this.gbManualBet.SuspendLayout();
@@ -692,7 +648,6 @@
             this.tpConsole.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlAdvanced
@@ -712,7 +667,6 @@
             this.tcSettings.Controls.Add(this.tabPage3);
             this.tcSettings.Controls.Add(this.tabPage4);
             this.tcSettings.Controls.Add(this.tabPage11);
-            this.tcSettings.Controls.Add(this.tabPage9);
             this.tcSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcSettings.Location = new System.Drawing.Point(0, 0);
             this.tcSettings.Name = "tcSettings";
@@ -735,7 +689,7 @@
             // btnShowStats
             // 
             this.btnShowStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowStats.Location = new System.Drawing.Point(151, 557);
+            this.btnShowStats.Location = new System.Drawing.Point(100, 566);
             this.btnShowStats.Name = "btnShowStats";
             this.btnShowStats.Size = new System.Drawing.Size(75, 23);
             this.btnShowStats.TabIndex = 14;
@@ -3955,427 +3909,6 @@
             this.chkBotSpeed.Text = "Bot Speed:";
             this.chkBotSpeed.UseVisualStyleBackColor = true;
             // 
-            // tabPage9
-            // 
-            this.tabPage9.AutoScroll = true;
-            this.tabPage9.Controls.Add(this.groupBox19);
-            this.tabPage9.Controls.Add(this.groupBox4);
-            this.tabPage9.Controls.Add(this.groupBox2);
-            this.tabPage9.Controls.Add(this.groupBox1);
-            this.tabPage9.Controls.Add(this.txtBot);
-            this.tabPage9.Controls.Add(this.label50);
-            this.tabPage9.Controls.Add(this.chkTray);
-            this.tabPage9.Controls.Add(this.btnSaveUser);
-            this.tabPage9.Location = new System.Drawing.Point(4, 22);
-            this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(467, 476);
-            this.tabPage9.TabIndex = 2;
-            this.tabPage9.Text = "DiceBot Settings";
-            this.tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // groupBox19
-            // 
-            this.groupBox19.Controls.Add(this.lblSeedFound);
-            this.groupBox19.Controls.Add(this.lblSeedProgress);
-            this.groupBox19.Controls.Add(this.btnGetSeeds);
-            this.groupBox19.Controls.Add(this.chkAutoSeeds);
-            this.groupBox19.Location = new System.Drawing.Point(21, 441);
-            this.groupBox19.Name = "groupBox19";
-            this.groupBox19.Size = new System.Drawing.Size(421, 67);
-            this.groupBox19.TabIndex = 54;
-            this.groupBox19.TabStop = false;
-            this.groupBox19.Text = "Bets";
-            // 
-            // lblSeedFound
-            // 
-            this.lblSeedFound.AutoSize = true;
-            this.lblSeedFound.Location = new System.Drawing.Point(101, 51);
-            this.lblSeedFound.Name = "lblSeedFound";
-            this.lblSeedFound.Size = new System.Drawing.Size(0, 13);
-            this.lblSeedFound.TabIndex = 3;
-            // 
-            // lblSeedProgress
-            // 
-            this.lblSeedProgress.AutoSize = true;
-            this.lblSeedProgress.Location = new System.Drawing.Point(278, 51);
-            this.lblSeedProgress.Name = "lblSeedProgress";
-            this.lblSeedProgress.Size = new System.Drawing.Size(0, 13);
-            this.lblSeedProgress.TabIndex = 2;
-            // 
-            // btnGetSeeds
-            // 
-            this.btnGetSeeds.Location = new System.Drawing.Point(281, 15);
-            this.btnGetSeeds.Name = "btnGetSeeds";
-            this.btnGetSeeds.Size = new System.Drawing.Size(130, 23);
-            this.btnGetSeeds.TabIndex = 1;
-            this.btnGetSeeds.Text = "Look for seeds now";
-            this.btnGetSeeds.UseVisualStyleBackColor = true;
-            this.btnGetSeeds.Click += new System.EventHandler(this.btnGetSeeds_Click);
-            // 
-            // chkAutoSeeds
-            // 
-            this.chkAutoSeeds.AutoSize = true;
-            this.chkAutoSeeds.Location = new System.Drawing.Point(4, 19);
-            this.chkAutoSeeds.Name = "chkAutoSeeds";
-            this.chkAutoSeeds.Size = new System.Drawing.Size(242, 17);
-            this.chkAutoSeeds.TabIndex = 0;
-            this.chkAutoSeeds.Text = "Automatically try to get server seed of old bets";
-            this.chkAutoSeeds.UseVisualStyleBackColor = true;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.label120);
-            this.groupBox4.Controls.Add(this.label119);
-            this.groupBox4.Controls.Add(this.btnBrowseAlarm);
-            this.groupBox4.Controls.Add(this.txtPathAlarm);
-            this.groupBox4.Controls.Add(this.btnBrowseChing);
-            this.groupBox4.Controls.Add(this.txtPathChing);
-            this.groupBox4.Controls.Add(this.nudSoundStreak);
-            this.groupBox4.Controls.Add(this.chkSoundStreak);
-            this.groupBox4.Controls.Add(this.chkSoundLowLimit);
-            this.groupBox4.Controls.Add(this.chkAlarm);
-            this.groupBox4.Controls.Add(this.chkSoundWithdraw);
-            this.groupBox4.Location = new System.Drawing.Point(19, 278);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(423, 157);
-            this.groupBox4.TabIndex = 53;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Sounds";
-            // 
-            // label120
-            // 
-            this.label120.AutoSize = true;
-            this.label120.Location = new System.Drawing.Point(33, 123);
-            this.label120.Name = "label120";
-            this.label120.Size = new System.Drawing.Size(55, 13);
-            this.label120.TabIndex = 14;
-            this.label120.Text = "Alarm File:";
-            // 
-            // label119
-            // 
-            this.label119.AutoSize = true;
-            this.label119.Location = new System.Drawing.Point(20, 46);
-            this.label119.Name = "label119";
-            this.label119.Size = new System.Drawing.Size(68, 13);
-            this.label119.TabIndex = 13;
-            this.label119.Text = "Kachink File:";
-            // 
-            // btnBrowseAlarm
-            // 
-            this.btnBrowseAlarm.Location = new System.Drawing.Point(283, 118);
-            this.btnBrowseAlarm.Name = "btnBrowseAlarm";
-            this.btnBrowseAlarm.Size = new System.Drawing.Size(75, 23);
-            this.btnBrowseAlarm.TabIndex = 12;
-            this.btnBrowseAlarm.Text = "Browse";
-            this.btnBrowseAlarm.UseVisualStyleBackColor = true;
-            this.btnBrowseAlarm.Click += new System.EventHandler(this.btnBrowseChing_Click);
-            // 
-            // txtPathAlarm
-            // 
-            this.txtPathAlarm.Location = new System.Drawing.Point(94, 120);
-            this.txtPathAlarm.Name = "txtPathAlarm";
-            this.txtPathAlarm.Size = new System.Drawing.Size(183, 20);
-            this.txtPathAlarm.TabIndex = 11;
-            // 
-            // btnBrowseChing
-            // 
-            this.btnBrowseChing.Location = new System.Drawing.Point(283, 41);
-            this.btnBrowseChing.Name = "btnBrowseChing";
-            this.btnBrowseChing.Size = new System.Drawing.Size(75, 23);
-            this.btnBrowseChing.TabIndex = 10;
-            this.btnBrowseChing.Text = "Browse";
-            this.btnBrowseChing.UseVisualStyleBackColor = true;
-            this.btnBrowseChing.Click += new System.EventHandler(this.btnBrowseChing_Click);
-            // 
-            // txtPathChing
-            // 
-            this.txtPathChing.Location = new System.Drawing.Point(94, 43);
-            this.txtPathChing.Name = "txtPathChing";
-            this.txtPathChing.Size = new System.Drawing.Size(183, 20);
-            this.txtPathChing.TabIndex = 9;
-            // 
-            // nudSoundStreak
-            // 
-            this.nudSoundStreak.Location = new System.Drawing.Point(329, 94);
-            this.nudSoundStreak.Maximum = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            this.nudSoundStreak.Minimum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.nudSoundStreak.Name = "nudSoundStreak";
-            this.nudSoundStreak.Size = new System.Drawing.Size(35, 20);
-            this.nudSoundStreak.TabIndex = 8;
-            this.nudSoundStreak.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            // 
-            // chkSoundStreak
-            // 
-            this.chkSoundStreak.AutoSize = true;
-            this.chkSoundStreak.Location = new System.Drawing.Point(202, 97);
-            this.chkSoundStreak.Name = "chkSoundStreak";
-            this.chkSoundStreak.Size = new System.Drawing.Size(127, 17);
-            this.chkSoundStreak.TabIndex = 3;
-            this.chkSoundStreak.Text = "Losing Streak above:";
-            this.chkSoundStreak.UseVisualStyleBackColor = true;
-            // 
-            // chkSoundLowLimit
-            // 
-            this.chkSoundLowLimit.AutoSize = true;
-            this.chkSoundLowLimit.Location = new System.Drawing.Point(29, 97);
-            this.chkSoundLowLimit.Name = "chkSoundLowLimit";
-            this.chkSoundLowLimit.Size = new System.Drawing.Size(121, 17);
-            this.chkSoundLowLimit.TabIndex = 2;
-            this.chkSoundLowLimit.Text = "Lower Limit reached";
-            this.chkSoundLowLimit.UseVisualStyleBackColor = true;
-            // 
-            // chkAlarm
-            // 
-            this.chkAlarm.AutoSize = true;
-            this.chkAlarm.Location = new System.Drawing.Point(6, 74);
-            this.chkAlarm.Name = "chkAlarm";
-            this.chkAlarm.Size = new System.Drawing.Size(103, 17);
-            this.chkAlarm.TabIndex = 1;
-            this.chkAlarm.Text = "Sound alarm for:";
-            this.chkAlarm.UseVisualStyleBackColor = true;
-            // 
-            // chkSoundWithdraw
-            // 
-            this.chkSoundWithdraw.AutoSize = true;
-            this.chkSoundWithdraw.Location = new System.Drawing.Point(7, 20);
-            this.chkSoundWithdraw.Name = "chkSoundWithdraw";
-            this.chkSoundWithdraw.Size = new System.Drawing.Size(189, 17);
-            this.chkSoundWithdraw.TabIndex = 0;
-            this.chkSoundWithdraw.Text = "Play KACHINK on withdraw/invest";
-            this.chkSoundWithdraw.UseVisualStyleBackColor = true;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnSMTP);
-            this.groupBox2.Controls.Add(this.nudEmailStreak);
-            this.groupBox2.Controls.Add(this.chkEmailStreak);
-            this.groupBox2.Controls.Add(this.chkEmailLowLimit);
-            this.groupBox2.Controls.Add(this.label48);
-            this.groupBox2.Controls.Add(this.chkEmailWithdraw);
-            this.groupBox2.Controls.Add(this.txtEmail);
-            this.groupBox2.Controls.Add(this.label49);
-            this.groupBox2.Controls.Add(this.chkEmail);
-            this.groupBox2.Location = new System.Drawing.Point(19, 134);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(423, 138);
-            this.groupBox2.TabIndex = 52;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Email Notifications";
-            // 
-            // btnSMTP
-            // 
-            this.btnSMTP.Location = new System.Drawing.Point(210, 12);
-            this.btnSMTP.Name = "btnSMTP";
-            this.btnSMTP.Size = new System.Drawing.Size(75, 23);
-            this.btnSMTP.TabIndex = 8;
-            this.btnSMTP.Text = "Edit SMTP";
-            this.btnSMTP.UseVisualStyleBackColor = true;
-            this.btnSMTP.Click += new System.EventHandler(this.btnSMTP_Click_1);
-            // 
-            // nudEmailStreak
-            // 
-            this.nudEmailStreak.Location = new System.Drawing.Point(141, 109);
-            this.nudEmailStreak.Maximum = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            this.nudEmailStreak.Minimum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.nudEmailStreak.Name = "nudEmailStreak";
-            this.nudEmailStreak.Size = new System.Drawing.Size(35, 20);
-            this.nudEmailStreak.TabIndex = 7;
-            this.nudEmailStreak.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            // 
-            // chkEmailStreak
-            // 
-            this.chkEmailStreak.AutoSize = true;
-            this.chkEmailStreak.Location = new System.Drawing.Point(6, 110);
-            this.chkEmailStreak.Name = "chkEmailStreak";
-            this.chkEmailStreak.Size = new System.Drawing.Size(128, 17);
-            this.chkEmailStreak.TabIndex = 6;
-            this.chkEmailStreak.Text = "Losing Streak Above:";
-            this.chkEmailStreak.UseVisualStyleBackColor = true;
-            // 
-            // chkEmailLowLimit
-            // 
-            this.chkEmailLowLimit.AutoSize = true;
-            this.chkEmailLowLimit.Location = new System.Drawing.Point(141, 87);
-            this.chkEmailLowLimit.Name = "chkEmailLowLimit";
-            this.chkEmailLowLimit.Size = new System.Drawing.Size(117, 17);
-            this.chkEmailLowLimit.TabIndex = 5;
-            this.chkEmailLowLimit.Text = "Low Limit Reached";
-            this.chkEmailLowLimit.UseVisualStyleBackColor = true;
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(6, 68);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(126, 13);
-            this.label48.TabIndex = 4;
-            this.label48.Text = "Receive Notifications for:";
-            // 
-            // chkEmailWithdraw
-            // 
-            this.chkEmailWithdraw.AutoSize = true;
-            this.chkEmailWithdraw.Location = new System.Drawing.Point(6, 87);
-            this.chkEmailWithdraw.Name = "chkEmailWithdraw";
-            this.chkEmailWithdraw.Size = new System.Drawing.Size(105, 17);
-            this.chkEmailWithdraw.TabIndex = 3;
-            this.chkEmailWithdraw.Text = "Withdraw/Invest";
-            this.chkEmailWithdraw.UseVisualStyleBackColor = true;
-            // 
-            // txtEmail
-            // 
-            this.txtEmail.Location = new System.Drawing.Point(48, 41);
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(237, 20);
-            this.txtEmail.TabIndex = 2;
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(6, 44);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(35, 13);
-            this.label49.TabIndex = 1;
-            this.label49.Text = "Email:";
-            // 
-            // chkEmail
-            // 
-            this.chkEmail.AutoSize = true;
-            this.chkEmail.Location = new System.Drawing.Point(6, 20);
-            this.chkEmail.Name = "chkEmail";
-            this.chkEmail.Size = new System.Drawing.Size(65, 17);
-            this.chkEmail.TabIndex = 0;
-            this.chkEmail.Text = "Enabled";
-            this.chkEmail.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label43);
-            this.groupBox1.Controls.Add(this.txtJDUser);
-            this.groupBox1.Controls.Add(this.txtJDPass);
-            this.groupBox1.Controls.Add(this.chkJDAutoLogin);
-            this.groupBox1.Controls.Add(this.chkJDAutoStart);
-            this.groupBox1.Controls.Add(this.label40);
-            this.groupBox1.Location = new System.Drawing.Point(18, 42);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(424, 86);
-            this.groupBox1.TabIndex = 51;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Just-Dice Settings";
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(6, 28);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(58, 13);
-            this.label43.TabIndex = 28;
-            this.label43.Text = "Username:";
-            // 
-            // txtJDUser
-            // 
-            this.txtJDUser.Location = new System.Drawing.Point(78, 22);
-            this.txtJDUser.Name = "txtJDUser";
-            this.txtJDUser.Size = new System.Drawing.Size(107, 20);
-            this.txtJDUser.TabIndex = 19;
-            // 
-            // txtJDPass
-            // 
-            this.txtJDPass.Location = new System.Drawing.Point(78, 48);
-            this.txtJDPass.Name = "txtJDPass";
-            this.txtJDPass.PasswordChar = '*';
-            this.txtJDPass.Size = new System.Drawing.Size(107, 20);
-            this.txtJDPass.TabIndex = 20;
-            // 
-            // chkJDAutoLogin
-            // 
-            this.chkJDAutoLogin.AutoSize = true;
-            this.chkJDAutoLogin.Location = new System.Drawing.Point(213, 24);
-            this.chkJDAutoLogin.Name = "chkJDAutoLogin";
-            this.chkJDAutoLogin.Size = new System.Drawing.Size(77, 17);
-            this.chkJDAutoLogin.TabIndex = 24;
-            this.chkJDAutoLogin.Text = "Auto Login";
-            this.chkJDAutoLogin.UseVisualStyleBackColor = true;
-            // 
-            // chkJDAutoStart
-            // 
-            this.chkJDAutoStart.AutoSize = true;
-            this.chkJDAutoStart.Location = new System.Drawing.Point(213, 50);
-            this.chkJDAutoStart.Name = "chkJDAutoStart";
-            this.chkJDAutoStart.Size = new System.Drawing.Size(73, 17);
-            this.chkJDAutoStart.TabIndex = 25;
-            this.chkJDAutoStart.Text = "Auto Start";
-            this.chkJDAutoStart.UseVisualStyleBackColor = true;
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(6, 51);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(56, 13);
-            this.label40.TabIndex = 29;
-            this.label40.Text = "Password:";
-            // 
-            // txtBot
-            // 
-            this.txtBot.Location = new System.Drawing.Point(209, 7);
-            this.txtBot.Name = "txtBot";
-            this.txtBot.Size = new System.Drawing.Size(120, 20);
-            this.txtBot.TabIndex = 50;
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(146, 10);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(57, 13);
-            this.label50.TabIndex = 49;
-            this.label50.Text = "Bot Name:";
-            // 
-            // chkTray
-            // 
-            this.chkTray.AutoSize = true;
-            this.chkTray.Location = new System.Drawing.Point(18, 10);
-            this.chkTray.Name = "chkTray";
-            this.chkTray.Size = new System.Drawing.Size(98, 17);
-            this.chkTray.TabIndex = 48;
-            this.chkTray.Text = "Minimize to tray";
-            this.chkTray.UseVisualStyleBackColor = true;
-            // 
-            // btnSaveUser
-            // 
-            this.btnSaveUser.Location = new System.Drawing.Point(338, 6);
-            this.btnSaveUser.Name = "btnSaveUser";
-            this.btnSaveUser.Size = new System.Drawing.Size(104, 23);
-            this.btnSaveUser.TabIndex = 47;
-            this.btnSaveUser.Text = "Save Settings";
-            this.btnSaveUser.UseVisualStyleBackColor = true;
-            this.btnSaveUser.Click += new System.EventHandler(this.btnSaveUser_Click);
-            // 
             // panel4
             // 
             this.panel4.Controls.Add(this.btnStopOnWin);
@@ -5011,6 +4544,7 @@
             // 
             // tpChat
             // 
+            this.tpChat.Controls.Add(this.btnPopChat);
             this.tpChat.Controls.Add(this.rtbChat);
             this.tpChat.Controls.Add(this.panel1);
             this.tpChat.Location = new System.Drawing.Point(4, 22);
@@ -5217,6 +4751,68 @@
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.idDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // dateDataGridViewTextBoxColumn
+            // 
+            this.dateDataGridViewTextBoxColumn.DataPropertyName = "date";
+            this.dateDataGridViewTextBoxColumn.HeaderText = "date";
+            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
+            this.dateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // amountDataGridViewTextBoxColumn
+            // 
+            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
+            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
+            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
+            this.amountDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // highDataGridViewCheckBoxColumn
+            // 
+            this.highDataGridViewCheckBoxColumn.DataPropertyName = "high";
+            this.highDataGridViewCheckBoxColumn.HeaderText = "high";
+            this.highDataGridViewCheckBoxColumn.Name = "highDataGridViewCheckBoxColumn";
+            this.highDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // chanceDataGridViewTextBoxColumn
+            // 
+            this.chanceDataGridViewTextBoxColumn.DataPropertyName = "Chance";
+            this.chanceDataGridViewTextBoxColumn.HeaderText = "Chance";
+            this.chanceDataGridViewTextBoxColumn.Name = "chanceDataGridViewTextBoxColumn";
+            this.chanceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // rollDataGridViewTextBoxColumn
+            // 
+            this.rollDataGridViewTextBoxColumn.DataPropertyName = "Roll";
+            this.rollDataGridViewTextBoxColumn.HeaderText = "Roll";
+            this.rollDataGridViewTextBoxColumn.Name = "rollDataGridViewTextBoxColumn";
+            this.rollDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // profitDataGridViewTextBoxColumn
+            // 
+            this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
+            this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
+            this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
+            this.profitDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // nonceDataGridViewTextBoxColumn
+            // 
+            this.nonceDataGridViewTextBoxColumn.DataPropertyName = "nonce";
+            this.nonceDataGridViewTextBoxColumn.HeaderText = "nonce";
+            this.nonceDataGridViewTextBoxColumn.Name = "nonceDataGridViewTextBoxColumn";
+            this.nonceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // betBindingSource
+            // 
+            this.betBindingSource.DataSource = typeof(DiceBot.Bet);
             // 
             // panel5
             // 
@@ -6280,6 +5876,7 @@
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
             // siteToolStripMenuItem
             // 
@@ -6496,67 +6093,15 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
-            // idDataGridViewTextBoxColumn
+            // btnPopChat
             // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.idDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // dateDataGridViewTextBoxColumn
-            // 
-            this.dateDataGridViewTextBoxColumn.DataPropertyName = "date";
-            this.dateDataGridViewTextBoxColumn.HeaderText = "date";
-            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
-            this.dateDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // amountDataGridViewTextBoxColumn
-            // 
-            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
-            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
-            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
-            this.amountDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // highDataGridViewCheckBoxColumn
-            // 
-            this.highDataGridViewCheckBoxColumn.DataPropertyName = "high";
-            this.highDataGridViewCheckBoxColumn.HeaderText = "high";
-            this.highDataGridViewCheckBoxColumn.Name = "highDataGridViewCheckBoxColumn";
-            this.highDataGridViewCheckBoxColumn.ReadOnly = true;
-            // 
-            // chanceDataGridViewTextBoxColumn
-            // 
-            this.chanceDataGridViewTextBoxColumn.DataPropertyName = "Chance";
-            this.chanceDataGridViewTextBoxColumn.HeaderText = "Chance";
-            this.chanceDataGridViewTextBoxColumn.Name = "chanceDataGridViewTextBoxColumn";
-            this.chanceDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // rollDataGridViewTextBoxColumn
-            // 
-            this.rollDataGridViewTextBoxColumn.DataPropertyName = "Roll";
-            this.rollDataGridViewTextBoxColumn.HeaderText = "Roll";
-            this.rollDataGridViewTextBoxColumn.Name = "rollDataGridViewTextBoxColumn";
-            this.rollDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // profitDataGridViewTextBoxColumn
-            // 
-            this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
-            this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
-            this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
-            this.profitDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // nonceDataGridViewTextBoxColumn
-            // 
-            this.nonceDataGridViewTextBoxColumn.DataPropertyName = "nonce";
-            this.nonceDataGridViewTextBoxColumn.HeaderText = "nonce";
-            this.nonceDataGridViewTextBoxColumn.Name = "nonceDataGridViewTextBoxColumn";
-            this.nonceDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // betBindingSource
-            // 
-            this.betBindingSource.DataSource = typeof(DiceBot.Bet);
+            this.btnPopChat.Location = new System.Drawing.Point(406, 6);
+            this.btnPopChat.Name = "btnPopChat";
+            this.btnPopChat.Size = new System.Drawing.Size(53, 23);
+            this.btnPopChat.TabIndex = 2;
+            this.btnPopChat.Text = "Pop";
+            this.btnPopChat.UseVisualStyleBackColor = true;
+            this.btnPopChat.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // cDiceBot
             // 
@@ -6692,18 +6237,6 @@
             this.pnlAdvancedAdvanced.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetSeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBotSpeed)).EndInit();
-            this.tabPage9.ResumeLayout(false);
-            this.tabPage9.PerformLayout();
-            this.groupBox19.ResumeLayout(false);
-            this.groupBox19.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSoundStreak)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.tcStats.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
@@ -6723,6 +6256,7 @@
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.panel5.ResumeLayout(false);
             this.gbLogin.ResumeLayout(false);
             this.gbLogin.PerformLayout();
@@ -6757,7 +6291,6 @@
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6832,40 +6365,6 @@
         private System.Windows.Forms.Label lblLuck;
         private System.Windows.Forms.Label label69;
         private System.Windows.Forms.Timer tmBet;
-        private System.Windows.Forms.TabControl tcSettings;
-        private System.Windows.Forms.TabPage tabPage11;
-        private System.Windows.Forms.TabPage tabPage9;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button btnBrowseAlarm;
-        private System.Windows.Forms.TextBox txtPathAlarm;
-        private System.Windows.Forms.Button btnBrowseChing;
-        private System.Windows.Forms.TextBox txtPathChing;
-        private System.Windows.Forms.NumericUpDown nudSoundStreak;
-        private System.Windows.Forms.CheckBox chkSoundStreak;
-        private System.Windows.Forms.CheckBox chkSoundLowLimit;
-        private System.Windows.Forms.CheckBox chkAlarm;
-        private System.Windows.Forms.CheckBox chkSoundWithdraw;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button btnSMTP;
-        private System.Windows.Forms.NumericUpDown nudEmailStreak;
-        private System.Windows.Forms.CheckBox chkEmailStreak;
-        private System.Windows.Forms.CheckBox chkEmailLowLimit;
-        private System.Windows.Forms.Label label48;
-        private System.Windows.Forms.CheckBox chkEmailWithdraw;
-        private System.Windows.Forms.TextBox txtEmail;
-        private System.Windows.Forms.Label label49;
-        private System.Windows.Forms.CheckBox chkEmail;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label43;
-        private System.Windows.Forms.TextBox txtJDUser;
-        private System.Windows.Forms.TextBox txtJDPass;
-        private System.Windows.Forms.CheckBox chkJDAutoLogin;
-        private System.Windows.Forms.CheckBox chkJDAutoStart;
-        private System.Windows.Forms.Label label40;
-        private System.Windows.Forms.TextBox txtBot;
-        private System.Windows.Forms.Label label50;
-        private System.Windows.Forms.CheckBox chkTray;
-        private System.Windows.Forms.Button btnSaveUser;
         private System.Windows.Forms.Panel pnlApiInfo;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox gbManualBet;
@@ -6917,278 +6416,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn rollDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn profitDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nonceDataGridViewTextBoxColumn;
-        private System.Windows.Forms.Panel pnlAdvancedAdvanced;
-        private System.Windows.Forms.Label label84;
-        private System.Windows.Forms.ListBox lsbStrats;
-        private System.Windows.Forms.Button btnStratRefresh;
-        private System.Windows.Forms.Button btnBrowseStratFolder;
-        private System.Windows.Forms.TextBox txtQuickSwitch;
-        private System.Windows.Forms.Label label83;
-        private System.Windows.Forms.Label lblTimeBetween;
-        private System.Windows.Forms.Label label56;
-        private System.Windows.Forms.RadioButton rdbResetSeedLosses;
-        private System.Windows.Forms.RadioButton rdbResetSeedWins;
-        private System.Windows.Forms.RadioButton rdbResetSeedBets;
-        private System.Windows.Forms.NumericUpDown nudResetSeed;
-        private System.Windows.Forms.CheckBox chkResetSeed;
-        private System.Windows.Forms.Label label55;
-        private System.Windows.Forms.NumericUpDown nudBotSpeed;
-        private System.Windows.Forms.CheckBox chkBotSpeed;
         private System.Windows.Forms.Button btnTip;
         private System.Windows.Forms.Button btnInvest;
         private System.Windows.Forms.Button btnWithdraw;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.GroupBox Settings;
-        private System.Windows.Forms.NumericUpDown nudChance;
-        private System.Windows.Forms.NumericUpDown nudMinBet;
-        private System.Windows.Forms.Label lblChance;
-        private System.Windows.Forms.Label lblMinBet;
-        private System.Windows.Forms.TabControl tcBets;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tbMartingale;
-        private System.Windows.Forms.TabPage tbLabouchère;
-        private System.Windows.Forms.RadioButton rdbLabRestart;
-        private System.Windows.Forms.RadioButton rdbLabStop;
-        private System.Windows.Forms.Label label86;
-        private System.Windows.Forms.Label label85;
-        private System.Windows.Forms.Button btnBrowseLab;
-        private System.Windows.Forms.RichTextBox rtbBets;
-        private System.Windows.Forms.Label label87;
-        private System.Windows.Forms.CheckBox chkReverseLab;
-        private System.Windows.Forms.TabPage tbCharts;
-        private System.Windows.Forms.Button btnChartTimeRange;
-        private System.Windows.Forms.Button btnChartBetID;
-        private System.Windows.Forms.NumericUpDown nudGraphStartBetID;
-        private System.Windows.Forms.DateTimePicker dtpEnd;
-        private System.Windows.Forms.DateTimePicker dtpStart;
-        private System.Windows.Forms.Label label96;
-        private System.Windows.Forms.Label label95;
-        private System.Windows.Forms.Label label94;
-        private System.Windows.Forms.Button btnChartAllTimeProfitTime;
-        private System.Windows.Forms.Button btnChartAllTimeProfitBets;
-        private System.Windows.Forms.Button btnGraphProfitTime;
-        private System.Windows.Forms.Button btnGraphProfitBets;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TabPage tbSimulation;
-        private System.Windows.Forms.Label lblSimProgress;
-        private System.Windows.Forms.Label lblSimRun;
-        private System.Windows.Forms.Label lblSimLoseStreak;
-        private System.Windows.Forms.Label lblSimWinStreak;
-        private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.Label lblSimEndBalance;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Button btnExportSim;
-        private System.Windows.Forms.Label lblSimLosses;
-        private System.Windows.Forms.Label lblSimWins;
-        private System.Windows.Forms.Label lblSimLOssesLabel;
-        private System.Windows.Forms.Label lblSimWinsLabel;
-        private System.Windows.Forms.Label lblSimProfit;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.Button btnSim;
-        private System.Windows.Forms.NumericUpDown nudSimBalance;
-        private System.Windows.Forms.Label lblSimStartingBalance;
-        private System.Windows.Forms.NumericUpDown nudSimNumBets;
-        private System.Windows.Forms.Label lblSimAmountBets;
-        private System.Windows.Forms.TabPage tbVerify;
-        private System.Windows.Forms.Button btnBetHistory;
-        private System.Windows.Forms.Button btnGenerateBets;
-        private System.Windows.Forms.NumericUpDown nudGenBetsAmount;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.NumericUpDown nudGenBetsStart;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.TextBox txtClientSeed;
-        private System.Windows.Forms.TextBox txtServerSeed;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TabPage tbCustom;
-        private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.NumericUpDown nudDevider;
-        private System.Windows.Forms.NumericUpDown nudNbets;
-        private System.Windows.Forms.NumericUpDown nudMaxMultiplies;
-        private System.Windows.Forms.NumericUpDown nudMultiplier;
-        private System.Windows.Forms.RadioButton rdbReduce;
-        private System.Windows.Forms.Label lblMultiplier;
-        private System.Windows.Forms.Label lblDevider;
-        private System.Windows.Forms.RadioButton rdbMaxMultiplier;
-        private System.Windows.Forms.RadioButton rdbDevider;
-        private System.Windows.Forms.Label lblAfter2;
-        private System.Windows.Forms.RadioButton rdbConstant;
-        private System.Windows.Forms.Label lblAfter;
-        private System.Windows.Forms.Label lblMaxMultiplier;
-        private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.NumericUpDown nudWinDevider;
-        private System.Windows.Forms.NumericUpDown nudWinNBets;
-        private System.Windows.Forms.NumericUpDown nudWinMaxMultiplies;
-        private System.Windows.Forms.NumericUpDown nudWinMultiplier;
-        private System.Windows.Forms.RadioButton rdbWinReduce;
-        private System.Windows.Forms.Label label44;
-        private System.Windows.Forms.Label label45;
-        private System.Windows.Forms.RadioButton rdbWinMaxMultiplier;
-        private System.Windows.Forms.RadioButton rdbWinDevider;
-        private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.RadioButton rdbWinConstant;
-        private System.Windows.Forms.Label label47;
-        private System.Windows.Forms.Label label54;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.TabPage tbZigZag;
-        private System.Windows.Forms.RadioButton rdbReverseBets;
-        private System.Windows.Forms.RadioButton rdbReverseLoss;
-        private System.Windows.Forms.RadioButton rdbReverseWins;
-        private System.Windows.Forms.CheckBox chkReverse;
-        private System.Windows.Forms.NumericUpDown NudReverse;
-        private System.Windows.Forms.Label lblZigZag1;
-        private System.Windows.Forms.RadioButton rdbMartingale;
-        private System.Windows.Forms.RadioButton rdbLabEnable;
-        private System.Windows.Forms.RadioButton rdbFibonacci;
-        private System.Windows.Forms.RadioButton rdbAlembert;
-        private System.Windows.Forms.RadioButton rdbPreset;
-        private System.Windows.Forms.GroupBox gbCustom;
-        private System.Windows.Forms.Label label81;
-        private System.Windows.Forms.NumericUpDown nudPercentage;
-        private System.Windows.Forms.CheckBox chkPercentage;
-        private System.Windows.Forms.NumericUpDown nudMKDecrement;
-        private System.Windows.Forms.NumericUpDown nudMKIncrement;
-        private System.Windows.Forms.Label label80;
-        private System.Windows.Forms.Label label79;
-        private System.Windows.Forms.CheckBox chkMK;
-        private System.Windows.Forms.NumericUpDown nudMutawaWins;
-        private System.Windows.Forms.Label label78;
-        private System.Windows.Forms.NumericUpDown nudtrazelloseto;
-        private System.Windows.Forms.NumericUpDown nudtrazelwinto;
-        private System.Windows.Forms.Label label77;
-        private System.Windows.Forms.Label label76;
-        private System.Windows.Forms.NumericUpDown nudTrazelMultiplier;
-        private System.Windows.Forms.Label label75;
-        private System.Windows.Forms.NumericUpDown NudTrazelLose;
-        private System.Windows.Forms.NumericUpDown nudTrazelWin;
-        private System.Windows.Forms.Label label74;
-        private System.Windows.Forms.Label label73;
-        private System.Windows.Forms.CheckBox chkTrazel;
-        private System.Windows.Forms.Label label70;
-        private System.Windows.Forms.NumericUpDown nudMutawaMultiplier;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.ListBox lstFibonacci;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.RadioButton rdbFiboLevelReset;
-        private System.Windows.Forms.RadioButton rdbFiboLevelStop;
-        private System.Windows.Forms.CheckBox chkFiboLevel;
-        private System.Windows.Forms.Label label66;
-        private System.Windows.Forms.NumericUpDown nudFiboLeve;
-        private System.Windows.Forms.GroupBox groupBox11;
-        private System.Windows.Forms.RadioButton rdbFiboWinStop;
-        private System.Windows.Forms.RadioButton rdbFiboWinReset;
-        private System.Windows.Forms.RadioButton rdbFiboWinIncrement;
-        private System.Windows.Forms.Label label98;
-        private System.Windows.Forms.NumericUpDown nudFiboWinIncrement;
-        private System.Windows.Forms.GroupBox groupBox10;
-        private System.Windows.Forms.RadioButton rdbFiboLossStop;
-        private System.Windows.Forms.RadioButton rdbFiboLossReset;
-        private System.Windows.Forms.RadioButton rdbFiboLossIncrement;
-        private System.Windows.Forms.Label label99;
-        private System.Windows.Forms.NumericUpDown nudFiboLossIncrement;
-        private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.GroupBox groupBox13;
-        private System.Windows.Forms.NumericUpDown nudAlembertStretchWin;
-        private System.Windows.Forms.Label label103;
-        private System.Windows.Forms.Label label104;
-        private System.Windows.Forms.Label label105;
-        private System.Windows.Forms.NumericUpDown nudAlembertIncrementWin;
-        private System.Windows.Forms.Label label106;
-        private System.Windows.Forms.GroupBox groupBox12;
-        private System.Windows.Forms.NumericUpDown nudAlembertStretchLoss;
-        private System.Windows.Forms.Label label102;
-        private System.Windows.Forms.Label label101;
-        private System.Windows.Forms.Label label100;
-        private System.Windows.Forms.NumericUpDown nudAlembertIncrementLoss;
-        private System.Windows.Forms.Label label71;
-        private System.Windows.Forms.GroupBox groupBox15;
-        private System.Windows.Forms.RadioButton rdbPresetWinReset;
-        private System.Windows.Forms.RadioButton rdbPresetWinStop;
-        private System.Windows.Forms.RadioButton rdbPresetWinStep;
-        private System.Windows.Forms.Label label107;
-        private System.Windows.Forms.NumericUpDown nudPresetWinStep;
-        private System.Windows.Forms.GroupBox groupBox14;
-        private System.Windows.Forms.RadioButton rdbPresetLossReset;
-        private System.Windows.Forms.RadioButton rdbPresetLossStop;
-        private System.Windows.Forms.RadioButton rdbPresetLossStep;
-        private System.Windows.Forms.Label label108;
-        private System.Windows.Forms.NumericUpDown nudPresetLossStep;
-        private System.Windows.Forms.RichTextBox rtbPresetList;
-        private System.Windows.Forms.GroupBox groupBox16;
-        private System.Windows.Forms.NumericUpDown nudPresetEndStep;
-        private System.Windows.Forms.Label label109;
-        private System.Windows.Forms.RadioButton rdbPresetEndStep;
-        private System.Windows.Forms.RadioButton rdbPresetEndReset;
-        private System.Windows.Forms.RadioButton rdbPresetEndStop;
-        private System.Windows.Forms.Button btnBrowsePresetList;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.GroupBox gbLosses;
-        private System.Windows.Forms.Label label63;
-        private System.Windows.Forms.NumericUpDown nudStopLossBtc;
-        private System.Windows.Forms.CheckBox chkStopLossBtc;
-        private System.Windows.Forms.Label label60;
-        private System.Windows.Forms.NumericUpDown nudStopLossBtcStreal;
-        private System.Windows.Forms.CheckBox chkStopLossBtcStreak;
-        private System.Windows.Forms.Label label59;
-        private System.Windows.Forms.NumericUpDown nudStopLossStreak;
-        private System.Windows.Forms.CheckBox chkStopLossStreak;
-        private System.Windows.Forms.Label label57;
-        private System.Windows.Forms.NumericUpDown nudResetBetLoss;
-        private System.Windows.Forms.CheckBox chkResetBetLoss;
-        private System.Windows.Forms.GroupBox gbWins;
-        private System.Windows.Forms.Label label64;
-        private System.Windows.Forms.NumericUpDown nudStopWinBtc;
-        private System.Windows.Forms.CheckBox chkStopWinBtc;
-        private System.Windows.Forms.Label label61;
-        private System.Windows.Forms.NumericUpDown nudStopWinBtcStreak;
-        private System.Windows.Forms.CheckBox chkStopWinBtcStreak;
-        private System.Windows.Forms.Label label62;
-        private System.Windows.Forms.NumericUpDown nudStopWinStreak;
-        private System.Windows.Forms.CheckBox chkStopWinStreak;
-        private System.Windows.Forms.Label label58;
-        private System.Windows.Forms.NumericUpDown nudResetWins;
-        private System.Windows.Forms.CheckBox chkResetBetWins;
-        private System.Windows.Forms.NumericUpDown nudAmount;
-        private System.Windows.Forms.NumericUpDown nudLowerLimit;
-        private System.Windows.Forms.NumericUpDown nudLimit;
-        private System.Windows.Forms.TextBox txtTo;
-        private System.Windows.Forms.CheckBox chkLowerLimit;
-        private System.Windows.Forms.Label lblLowLimit;
-        private System.Windows.Forms.CheckBox chkLimit;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.RadioButton rdbInvest;
-        private System.Windows.Forms.RadioButton rdbStop;
-        private System.Windows.Forms.RadioButton rdbWithdraw;
-        private System.Windows.Forms.Label lblAction;
-        private System.Windows.Forms.Label lblAddress;
-        private System.Windows.Forms.Label lblAmount;
-        private System.Windows.Forms.Label lblLimit;
-        private System.Windows.Forms.NumericUpDown nudChangeChanceLoseTo;
-        private System.Windows.Forms.Label label67;
-        private System.Windows.Forms.NumericUpDown nudChangeChanceLoseStreak;
-        private System.Windows.Forms.CheckBox chkChangeChanceLose;
-        private System.Windows.Forms.NumericUpDown nudChangeLoseStreakTo;
-        private System.Windows.Forms.Label label65;
-        private System.Windows.Forms.NumericUpDown nudChangeLoseStreak;
-        private System.Windows.Forms.CheckBox chkChangeLoseStreak;
-        private System.Windows.Forms.NumericUpDown nudChangeChanceWinTo;
-        private System.Windows.Forms.Label label68;
-        private System.Windows.Forms.NumericUpDown nudChangeChanceWinStreak;
-        private System.Windows.Forms.CheckBox chkChangeChanceWin;
-        private System.Windows.Forms.NumericUpDown nudChangeWinStreakTo;
-        private System.Windows.Forms.Label label72;
-        private System.Windows.Forms.NumericUpDown nudChangeWinStreak;
-        private System.Windows.Forms.CheckBox chkChangeWinStreak;
         private System.Windows.Forms.Button btnDisable;
         private System.Windows.Forms.Button btnHideLive;
         private System.Windows.Forms.Button btnChartReset;
         private System.Windows.Forms.Button btnHideStats;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button btnShowStats;
         private System.Windows.Forms.Panel pnlBasic;
         private System.Windows.Forms.Button btnStopOnWin2;
         private System.Windows.Forms.Button btnStop2;
@@ -7214,13 +6449,6 @@
         private System.Windows.Forms.Label label118;
         private System.Windows.Forms.NumericUpDown nudMinbet2;
         private System.Windows.Forms.Label label117;
-        private System.Windows.Forms.GroupBox groupBox19;
-        private System.Windows.Forms.Button btnGetSeeds;
-        private System.Windows.Forms.CheckBox chkAutoSeeds;
-        private System.Windows.Forms.Label label120;
-        private System.Windows.Forms.Label label119;
-        private System.Windows.Forms.Label lblSeedFound;
-        private System.Windows.Forms.Label lblSeedProgress;
         private System.Windows.Forms.Timer tmrMissingSeeds;
         private System.Windows.Forms.TabPage tpChat;
         private System.Windows.Forms.Panel panel1;
@@ -7286,6 +6514,273 @@
         private System.Windows.Forms.ToolStripMenuItem programmerToolStripMenuItem;
         private System.Windows.Forms.TextBox txtConsoleIn;
         private System.Windows.Forms.ToolStripMenuItem safediceToolStripMenuItem;
+        private System.Windows.Forms.TabControl tcSettings;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Button btnShowStats;
+        private System.Windows.Forms.GroupBox Settings;
+        private System.Windows.Forms.NumericUpDown nudChance;
+        private System.Windows.Forms.NumericUpDown nudMinBet;
+        private System.Windows.Forms.Label lblChance;
+        private System.Windows.Forms.Label lblMinBet;
+        private System.Windows.Forms.TabControl tcBets;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tbMartingale;
+        private System.Windows.Forms.RadioButton rdbMartingale;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.NumericUpDown nudChangeChanceLoseTo;
+        private System.Windows.Forms.Label label67;
+        private System.Windows.Forms.NumericUpDown nudChangeChanceLoseStreak;
+        private System.Windows.Forms.CheckBox chkChangeChanceLose;
+        private System.Windows.Forms.NumericUpDown nudChangeLoseStreakTo;
+        private System.Windows.Forms.Label label65;
+        private System.Windows.Forms.NumericUpDown nudChangeLoseStreak;
+        private System.Windows.Forms.CheckBox chkChangeLoseStreak;
+        private System.Windows.Forms.NumericUpDown nudDevider;
+        private System.Windows.Forms.NumericUpDown nudNbets;
+        private System.Windows.Forms.NumericUpDown nudMaxMultiplies;
+        private System.Windows.Forms.NumericUpDown nudMultiplier;
+        private System.Windows.Forms.RadioButton rdbReduce;
+        private System.Windows.Forms.Label lblMultiplier;
+        private System.Windows.Forms.Label lblDevider;
+        private System.Windows.Forms.RadioButton rdbMaxMultiplier;
+        private System.Windows.Forms.RadioButton rdbDevider;
+        private System.Windows.Forms.Label lblAfter2;
+        private System.Windows.Forms.RadioButton rdbConstant;
+        private System.Windows.Forms.Label lblAfter;
+        private System.Windows.Forms.Label lblMaxMultiplier;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.NumericUpDown nudChangeChanceWinTo;
+        private System.Windows.Forms.Label label68;
+        private System.Windows.Forms.NumericUpDown nudChangeChanceWinStreak;
+        private System.Windows.Forms.CheckBox chkChangeChanceWin;
+        private System.Windows.Forms.NumericUpDown nudChangeWinStreakTo;
+        private System.Windows.Forms.Label label72;
+        private System.Windows.Forms.NumericUpDown nudChangeWinStreak;
+        private System.Windows.Forms.CheckBox chkChangeWinStreak;
+        private System.Windows.Forms.NumericUpDown nudWinDevider;
+        private System.Windows.Forms.NumericUpDown nudWinNBets;
+        private System.Windows.Forms.NumericUpDown nudWinMaxMultiplies;
+        private System.Windows.Forms.NumericUpDown nudWinMultiplier;
+        private System.Windows.Forms.RadioButton rdbWinReduce;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.RadioButton rdbWinMaxMultiplier;
+        private System.Windows.Forms.RadioButton rdbWinDevider;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.RadioButton rdbWinConstant;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.TabPage tbLabouchère;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.RadioButton rdbLabRestart;
+        private System.Windows.Forms.RadioButton rdbLabStop;
+        private System.Windows.Forms.Label label86;
+        private System.Windows.Forms.RadioButton rdbLabEnable;
+        private System.Windows.Forms.Label label85;
+        private System.Windows.Forms.Button btnBrowseLab;
+        private System.Windows.Forms.RichTextBox rtbBets;
+        private System.Windows.Forms.Label label87;
+        private System.Windows.Forms.CheckBox chkReverseLab;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.RadioButton rdbFiboLevelReset;
+        private System.Windows.Forms.RadioButton rdbFiboLevelStop;
+        private System.Windows.Forms.CheckBox chkFiboLevel;
+        private System.Windows.Forms.Label label66;
+        private System.Windows.Forms.NumericUpDown nudFiboLeve;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.RadioButton rdbFiboWinStop;
+        private System.Windows.Forms.RadioButton rdbFiboWinReset;
+        private System.Windows.Forms.RadioButton rdbFiboWinIncrement;
+        private System.Windows.Forms.Label label98;
+        private System.Windows.Forms.NumericUpDown nudFiboWinIncrement;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.RadioButton rdbFiboLossStop;
+        private System.Windows.Forms.RadioButton rdbFiboLossReset;
+        private System.Windows.Forms.RadioButton rdbFiboLossIncrement;
+        private System.Windows.Forms.Label label99;
+        private System.Windows.Forms.NumericUpDown nudFiboLossIncrement;
+        private System.Windows.Forms.ListBox lstFibonacci;
+        private System.Windows.Forms.RadioButton rdbFibonacci;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.NumericUpDown nudAlembertStretchWin;
+        private System.Windows.Forms.Label label103;
+        private System.Windows.Forms.Label label104;
+        private System.Windows.Forms.Label label105;
+        private System.Windows.Forms.NumericUpDown nudAlembertIncrementWin;
+        private System.Windows.Forms.Label label106;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.NumericUpDown nudAlembertStretchLoss;
+        private System.Windows.Forms.Label label102;
+        private System.Windows.Forms.Label label101;
+        private System.Windows.Forms.Label label100;
+        private System.Windows.Forms.NumericUpDown nudAlembertIncrementLoss;
+        private System.Windows.Forms.Label label71;
+        private System.Windows.Forms.RadioButton rdbAlembert;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private System.Windows.Forms.NumericUpDown nudPresetEndStep;
+        private System.Windows.Forms.Label label109;
+        private System.Windows.Forms.RadioButton rdbPresetEndStep;
+        private System.Windows.Forms.RadioButton rdbPresetEndReset;
+        private System.Windows.Forms.RadioButton rdbPresetEndStop;
+        private System.Windows.Forms.Button btnBrowsePresetList;
+        private System.Windows.Forms.GroupBox groupBox15;
+        private System.Windows.Forms.RadioButton rdbPresetWinReset;
+        private System.Windows.Forms.RadioButton rdbPresetWinStop;
+        private System.Windows.Forms.RadioButton rdbPresetWinStep;
+        private System.Windows.Forms.Label label107;
+        private System.Windows.Forms.NumericUpDown nudPresetWinStep;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.RadioButton rdbPresetLossReset;
+        private System.Windows.Forms.RadioButton rdbPresetLossStop;
+        private System.Windows.Forms.RadioButton rdbPresetLossStep;
+        private System.Windows.Forms.Label label108;
+        private System.Windows.Forms.NumericUpDown nudPresetLossStep;
+        private System.Windows.Forms.RichTextBox rtbPresetList;
+        private System.Windows.Forms.RadioButton rdbPreset;
+        private System.Windows.Forms.TabPage tbCustom;
+        private System.Windows.Forms.GroupBox gbCustom;
+        private System.Windows.Forms.Label label81;
+        private System.Windows.Forms.NumericUpDown nudPercentage;
+        private System.Windows.Forms.CheckBox chkPercentage;
+        private System.Windows.Forms.NumericUpDown nudMKDecrement;
+        private System.Windows.Forms.NumericUpDown nudMKIncrement;
+        private System.Windows.Forms.Label label80;
+        private System.Windows.Forms.Label label79;
+        private System.Windows.Forms.CheckBox chkMK;
+        private System.Windows.Forms.NumericUpDown nudMutawaWins;
+        private System.Windows.Forms.Label label78;
+        private System.Windows.Forms.NumericUpDown nudtrazelloseto;
+        private System.Windows.Forms.NumericUpDown nudtrazelwinto;
+        private System.Windows.Forms.Label label77;
+        private System.Windows.Forms.Label label76;
+        private System.Windows.Forms.NumericUpDown nudTrazelMultiplier;
+        private System.Windows.Forms.Label label75;
+        private System.Windows.Forms.NumericUpDown NudTrazelLose;
+        private System.Windows.Forms.NumericUpDown nudTrazelWin;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.Label label73;
+        private System.Windows.Forms.CheckBox chkTrazel;
+        private System.Windows.Forms.Label label70;
+        private System.Windows.Forms.NumericUpDown nudMutawaMultiplier;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TabPage tbZigZag;
+        private System.Windows.Forms.RadioButton rdbReverseBets;
+        private System.Windows.Forms.RadioButton rdbReverseLoss;
+        private System.Windows.Forms.RadioButton rdbReverseWins;
+        private System.Windows.Forms.CheckBox chkReverse;
+        private System.Windows.Forms.NumericUpDown NudReverse;
+        private System.Windows.Forms.Label lblZigZag1;
+        private System.Windows.Forms.TabPage tbSimulation;
+        private System.Windows.Forms.Label lblSimProgress;
+        private System.Windows.Forms.Label lblSimRun;
+        private System.Windows.Forms.Label lblSimLoseStreak;
+        private System.Windows.Forms.Label lblSimWinStreak;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label lblSimEndBalance;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Button btnExportSim;
+        private System.Windows.Forms.Label lblSimLosses;
+        private System.Windows.Forms.Label lblSimWins;
+        private System.Windows.Forms.Label lblSimLOssesLabel;
+        private System.Windows.Forms.Label lblSimWinsLabel;
+        private System.Windows.Forms.Label lblSimProfit;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Button btnSim;
+        private System.Windows.Forms.NumericUpDown nudSimBalance;
+        private System.Windows.Forms.Label lblSimStartingBalance;
+        private System.Windows.Forms.NumericUpDown nudSimNumBets;
+        private System.Windows.Forms.Label lblSimAmountBets;
+        private System.Windows.Forms.TabPage tbCharts;
+        private System.Windows.Forms.Button btnChartTimeRange;
+        private System.Windows.Forms.Button btnChartBetID;
+        private System.Windows.Forms.NumericUpDown nudGraphStartBetID;
+        private System.Windows.Forms.DateTimePicker dtpEnd;
+        private System.Windows.Forms.DateTimePicker dtpStart;
+        private System.Windows.Forms.Label label96;
+        private System.Windows.Forms.Label label95;
+        private System.Windows.Forms.Label label94;
+        private System.Windows.Forms.Button btnChartAllTimeProfitTime;
+        private System.Windows.Forms.Button btnChartAllTimeProfitBets;
+        private System.Windows.Forms.Button btnGraphProfitTime;
+        private System.Windows.Forms.Button btnGraphProfitBets;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TabPage tbVerify;
+        private System.Windows.Forms.Button btnBetHistory;
+        private System.Windows.Forms.Button btnGenerateBets;
+        private System.Windows.Forms.NumericUpDown nudGenBetsAmount;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.NumericUpDown nudGenBetsStart;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox txtClientSeed;
+        private System.Windows.Forms.TextBox txtServerSeed;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.NumericUpDown nudAmount;
+        private System.Windows.Forms.NumericUpDown nudLowerLimit;
+        private System.Windows.Forms.NumericUpDown nudLimit;
+        private System.Windows.Forms.TextBox txtTo;
+        private System.Windows.Forms.CheckBox chkLowerLimit;
+        private System.Windows.Forms.Label lblLowLimit;
+        private System.Windows.Forms.CheckBox chkLimit;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.RadioButton rdbInvest;
+        private System.Windows.Forms.RadioButton rdbStop;
+        private System.Windows.Forms.RadioButton rdbWithdraw;
+        private System.Windows.Forms.Label lblAction;
+        private System.Windows.Forms.Label lblAddress;
+        private System.Windows.Forms.Label lblAmount;
+        private System.Windows.Forms.Label lblLimit;
+        private System.Windows.Forms.GroupBox gbLosses;
+        private System.Windows.Forms.Label label63;
+        private System.Windows.Forms.NumericUpDown nudStopLossBtc;
+        private System.Windows.Forms.CheckBox chkStopLossBtc;
+        private System.Windows.Forms.Label label60;
+        private System.Windows.Forms.NumericUpDown nudStopLossBtcStreal;
+        private System.Windows.Forms.CheckBox chkStopLossBtcStreak;
+        private System.Windows.Forms.Label label59;
+        private System.Windows.Forms.NumericUpDown nudStopLossStreak;
+        private System.Windows.Forms.CheckBox chkStopLossStreak;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.NumericUpDown nudResetBetLoss;
+        private System.Windows.Forms.CheckBox chkResetBetLoss;
+        private System.Windows.Forms.GroupBox gbWins;
+        private System.Windows.Forms.Label label64;
+        private System.Windows.Forms.NumericUpDown nudStopWinBtc;
+        private System.Windows.Forms.CheckBox chkStopWinBtc;
+        private System.Windows.Forms.Label label61;
+        private System.Windows.Forms.NumericUpDown nudStopWinBtcStreak;
+        private System.Windows.Forms.CheckBox chkStopWinBtcStreak;
+        private System.Windows.Forms.Label label62;
+        private System.Windows.Forms.NumericUpDown nudStopWinStreak;
+        private System.Windows.Forms.CheckBox chkStopWinStreak;
+        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.NumericUpDown nudResetWins;
+        private System.Windows.Forms.CheckBox chkResetBetWins;
+        private System.Windows.Forms.TabPage tabPage11;
+        private System.Windows.Forms.Panel pnlAdvancedAdvanced;
+        private System.Windows.Forms.Label label84;
+        private System.Windows.Forms.ListBox lsbStrats;
+        private System.Windows.Forms.Button btnStratRefresh;
+        private System.Windows.Forms.Button btnBrowseStratFolder;
+        private System.Windows.Forms.TextBox txtQuickSwitch;
+        private System.Windows.Forms.Label label83;
+        private System.Windows.Forms.Label lblTimeBetween;
+        private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.RadioButton rdbResetSeedLosses;
+        private System.Windows.Forms.RadioButton rdbResetSeedWins;
+        private System.Windows.Forms.RadioButton rdbResetSeedBets;
+        private System.Windows.Forms.NumericUpDown nudResetSeed;
+        private System.Windows.Forms.CheckBox chkResetSeed;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.NumericUpDown nudBotSpeed;
+        private System.Windows.Forms.CheckBox chkBotSpeed;
+        private System.Windows.Forms.Button btnPopChat;
 
     }
 }
