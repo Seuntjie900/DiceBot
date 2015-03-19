@@ -3667,7 +3667,11 @@ namespace DiceBot
             
             
             
-            string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
+            string chars = "0123456789abcdef";
+            if (! (CurrentSite is dice999))
+            {
+                chars += "ghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
+            }
             server = "";
 
             for (int i = 0; i < 64; i++)
@@ -3675,6 +3679,11 @@ namespace DiceBot
                 server += (chars[rand.Next(0, chars.Length)]);
             }
             client = "";
+            if (CurrentSite is dice999)
+            {
+                client = rand.Next(0, int.MaxValue).ToString();
+            }
+            else
             for (int i = 0; i < 24; i++)
             {
                 client += rand.Next(0, 10).ToString();

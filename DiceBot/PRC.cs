@@ -326,10 +326,9 @@ namespace DiceBot
         string client = "", serverhash = "";
         public override bool Register(string Username, string Passwrd)
         {
-            System.Windows.Forms.MessageBox.Show("Registration temporarily disabled. Please Register with the site, then log in here.");
-            return false;
 
-            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/ref/357") as HttpWebRequest;
+
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/play/#account") as HttpWebRequest;
             if (Prox != null)
                 getHeaders.Proxy = Prox;
             var cookies = new CookieContainer();
@@ -349,7 +348,7 @@ namespace DiceBot
                 return false;
             }
             CookieContainer tmpContainer = getHeaders.CookieContainer;
-            getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/") as HttpWebRequest;
+            getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/SaveUserNameAndPassword") as HttpWebRequest;
             if (Prox != null)
                 getHeaders.Proxy = Prox;
             getHeaders.CookieContainer = tmpContainer;

@@ -251,7 +251,7 @@ namespace DiceBot
 
         public override void Disconnect()
         {
-            
+            isD999 = false;
         }
 
         public override void GetSeed(long BetID)
