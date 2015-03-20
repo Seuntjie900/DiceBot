@@ -8,11 +8,12 @@ using System.Net;
 using System.Security.Cryptography;
 namespace DiceBot
 {
-    class SafeDice: DiceSite
+    class SafeDice : DiceSite
     {
         string accesstoken = "";
 
         bool ispd = true;
+        DateTime LastBalance = DateTime.Now;
         public SafeDice(cDiceBot Parent)
         {
             AutoInvest = false;
@@ -29,12 +30,41 @@ namespace DiceBot
 
         public void GetBalanceThread()
         {
+            while (ispd)
+            {
+                if ((DateTime.Now - LastBalance).TotalMinutes>1 && accesstoken!="" && accesstoken!=null)
+                {
+                    //get balance logic
+                }
 
+                if (accesstoken != "" && accesstoken != null)
+                {
+                    HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/chats/en_US");
+                    //loginrequest.Accept = "application/json, text/plain, */*";
+                    loginrequest.ContentType = " application/json;charset=utf-8";
+                    loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
+                    loginrequest.CookieContainer = new CookieContainer();
+                    loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
+                    HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                    string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                    SDChat[] sdchat = json.JsonDeserialize<SDChat[]>(sEmitResponse);
+
+                    foreach (SDChat chat in sdchat)
+                    {
+                        if (chat.id > lastchat)
+                        {
+                            lastchat = chat.id;
+                            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> {3}", chat.Time, chat.username, chat.accountId, chat.message));
+                        }
+                    }
+                }
+                Thread.Sleep(1500);
+            }
         }
 
         public override void Login(string Username, string Password)
         {
-            Login(Username, Password,"");
+            Login(Username, Password, "");
         }
         string serverhash = "";
         string client = "";
@@ -65,7 +95,7 @@ namespace DiceBot
                 SafeDiceLogin tmp = json.JsonDeserialize<SafeDiceLogin>(sEmitResponse);
                 accesstoken = tmp.token;
                 if (accesstoken == "")
-                        finishedlogin(false);
+                    finishedlogin(false);
                 else
                 {
                     loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/me?token=" + accesstoken);
@@ -90,11 +120,11 @@ namespace DiceBot
                     SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
                     Parent.updateBalance(tmp2.balance / 100000000m);
                     balance = tmp2.balance / 100000000.0;
-                    
-                    Parent.updateBets(tmp2.win + tmp2.lose);                    
+
+                    Parent.updateBets(tmp2.win + tmp2.lose);
                     Parent.updateLosses(tmp2.lose);
                     wins = tmp2.win;
-                    losses=tmp2.lose;
+                    losses = tmp2.lose;
                     Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / 100000000.0);
                     Parent.updateWagered(tmp2.wagered / 100000000.0);
                     wagered = tmp2.wagered / 100000000.0;
@@ -106,7 +136,7 @@ namespace DiceBot
                     UID = tmp1.id;
                     finishedlogin(true);
                 }
-                
+
             }
             catch (WebException e)
             {
@@ -144,7 +174,7 @@ namespace DiceBot
                     target = ((bool)High) ? (999999 - ((int)(chance * 10000))).ToString() : ((int)(chance * 10000)).ToString()
                 };
                 string post = json.JsonSerializer<SafeDiceBet>(tmpBet);
-                
+
                 betrequest.ContentLength = post.Length;
                 betrequest.ContentType = " application/json;charset=utf-8";
                 betrequest.Headers.Add("authorization", "Bearer " + accesstoken);
@@ -163,13 +193,13 @@ namespace DiceBot
                 Bet bet = new Bet();
                 bet.Amount = (decimal)tmpResult.amount / 100000000m;
                 bet.date = json.ToDateTime2(tmpResult.processTime);
-                bet.Chance = (!tmpResult.isRollLow ? 100m - (decimal)tmpResult.target / 1000000m * 100m : (decimal)tmpResult.target / 1000000m * 100m); 
+                bet.Chance = (!tmpResult.isRollLow ? 100m - (decimal)tmpResult.target / 1000000m * 100m : (decimal)tmpResult.target / 1000000m * 100m);
                 bet.high = !tmpResult.isRollLow;
                 bet.clientseed = client;
                 bet.Id = tmpResult.id;
                 bet.nonce = nonce++;
                 bet.Profit = tmpResult.profit / 100000000m;
-                bet.Roll = tmpResult.roll/10000;
+                bet.Roll = tmpResult.roll / 10000;
                 bet.serverhash = serverhash;
                 bet.uid = tmpResult.accountId;
                 balance += (double)bet.Profit;
@@ -188,7 +218,7 @@ namespace DiceBot
                 Parent.updateProfit(profit += (double)bet.Profit);
                 Parent.AddBet(bet);
                 Parent.GetBetResult(balance, win, (double)bet.Profit);
-                
+
             }
             catch (WebException e)
             {
@@ -215,7 +245,7 @@ namespace DiceBot
 
         }
 
-       
+
         public override void ResetSeed()
         {
             try
@@ -242,14 +272,14 @@ namespace DiceBot
             {
 
             }
-            
+
         }
 
         public override void SetClientSeed(string Seed)
         {
             throw new NotImplementedException();
         }
-       
+
         public override string GetSiteProfitValue()
         {
             throw new NotImplementedException();
@@ -279,8 +309,7 @@ namespace DiceBot
         {
             throw new NotImplementedException();
         }
-
-        public override void SendChatMessage(string Message)
+        void sendChatThread(object Message)
         {
             if (accesstoken != "" && accesstoken != null)
             {
@@ -297,7 +326,7 @@ namespace DiceBot
                     loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
                     loginrequest.CookieContainer = new CookieContainer();
                     loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
-                    string post = "{\"messages\":\"" + Message + "\"}";
+                    string post = json.JsonSerializer<SDSendChat>(new SDSendChat { message = (string)Message });
 
                     using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
                     {
@@ -314,6 +343,12 @@ namespace DiceBot
 
                 }
             }
+        }
+
+        public override void SendChatMessage(string Message)
+        {
+            Thread t = new Thread(new ParameterizedThreadStart(sendChatThread));
+            t.Start(Message);
 
         }
 
@@ -321,7 +356,7 @@ namespace DiceBot
         {
             try
             {
-                HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/"+ UID +"/sites/1/withdraw");
+                HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/1/withdraw");
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
 
@@ -334,7 +369,7 @@ namespace DiceBot
                 loginrequest.CookieContainer = new CookieContainer();
                 loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
                 string post = json.JsonSerializer<SDSendWIthdraw>(new SDSendWIthdraw { amount = (int)(Amount * 100000000), address = Address });
-                
+
                 using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
                 {
 
@@ -344,7 +379,7 @@ namespace DiceBot
                 }
                 HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                
+
                 SDRandomize tmp = json.JsonDeserialize<SDRandomize>(sEmitResponse);
                 balance -= Amount;
                 Parent.updateBalance(balance);
@@ -381,15 +416,15 @@ namespace DiceBot
                     finishedlogin(false);
                 else
                 {
-                    loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/userpass" + accesstoken);
+                    loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/userpass");
                     if (Prox != null)
                         loginrequest.Proxy = Prox;
                     loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                    loginrequest.Method = "POST";
+                    loginrequest.Method = "PUT";
                     loginrequest.CookieContainer = new CookieContainer();
                     loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
                     loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
-                    post = "{\"username\":\""+username+"\",\"passord\":\""+password+"\"}";
+                    post = json.JsonSerializer<SDSetPw>(new SDSetPw { username=username, password=password });
                     loginrequest.ContentLength = post.Length;
                     using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
                     {
@@ -398,7 +433,7 @@ namespace DiceBot
                     }
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                    
+
 
 
                     loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/me?token=" + accesstoken);
@@ -465,10 +500,10 @@ namespace DiceBot
             string comb = nonce + ":" + client + server + ":" + nonce;
 
             SHA512 betgenerator = SHA512.Create();
-            
+
 
             int charstouse = 5;
-            
+
             List<byte> buffer = new List<byte>();
 
             foreach (char c in comb)
@@ -509,7 +544,9 @@ namespace DiceBot
             }
             return 0;
         }
-        
+
+
+
         public static double sGetLucky(string server, string client, int nonce)
         {
             string comb = nonce + ":" + client + server + ":" + nonce;
@@ -559,6 +596,24 @@ namespace DiceBot
             }
             return 0;
         }
+
+        int lastchat = 0;
+
+    }
+
+    public class SDChat
+    {
+        public int id { get; set; }
+        public string target_id { get; set; }
+        public string room { get; set; }
+        public string target_username { get; set; }
+        public string username { get; set; }
+        public int role { get; set; }
+        public string time { get; set; }
+        public DateTime Time { get; set; }
+        public string message { get; set; }
+        public int accountId { get; set; }
+        public string targetUsername { get; set; }
     }
 
     public class SafeDiceLogin
@@ -624,7 +679,10 @@ namespace DiceBot
         public int amount { get; set; }
         public string address { get; set; }
     }
-
+    public class SDSendChat
+    {
+        public string message { get; set; }
+    }
     public class SDDiceBetCookie
     {
         public bool isRollLow { get; set; }
@@ -633,5 +691,10 @@ namespace DiceBot
         public bool isFixedPayout { get; set; }
         public bool showAutoRoll { get; set; }
         public double autoRollLossMultiplier { get; set; }
+    }
+    public class SDSetPw
+    {
+        public string username { get; set; }
+        public string password { get; set; }
     }
 }

@@ -348,50 +348,18 @@ namespace DiceBot
                 return false;
             }
             CookieContainer tmpContainer = getHeaders.CookieContainer;
-            getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/SaveUserNameAndPassword") as HttpWebRequest;
-            if (Prox != null)
-                getHeaders.Proxy = Prox;
-            getHeaders.CookieContainer = tmpContainer;
-            foreach (Cookie c in Response.Cookies)
-            {
-
-                getHeaders.CookieContainer.Add(c);
-            }
-            getHeaders.CookieContainer.Add(new Cookie("PRC_Affiliate", "357", "/", "pocketrocketscasino.eu"));
-            System.Threading.Thread.Sleep(5000);
-            getHeaders.Method = "POST";
-            string post = string.Format("userName={0}&password={1}&confirmPassword={1}&__RequestVerificationToken={2}", Username, Passwrd, rqtoken);
-            getHeaders.ContentType = "application/x-www-form-urlencoded";
-            getHeaders.ContentLength = post.Length;
-            using (var writer = new StreamWriter(getHeaders.GetRequestStream()))
-            {
-                string writestring = post as string;
-                writer.Write(writestring);
-            }
-            try
-            {
-
-                Response = (HttpWebResponse)getHeaders.GetResponse();
-                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                /*string tmp = s1.Substring(s1.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
-                rqtoken = tmp.Substring(0, tmp.IndexOf("\""));*/
-            }
-            catch (WebException e)
-            {
-                Response = (HttpWebResponse)e.Response;
-                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                return false;
-            }
+            
 
             foreach (Cookie c in Response.Cookies)
             {
-                if (c.Name == "__RequestVerificationToken")
-                    rqtoken = c.Value;
+                /*if (c.Name == "__RequestVerificationToken")
+                    rqtoken = c.Value;*/
                 Cookies.Add(c);
             }
             con.CookieContainer = Cookies;
             try
             {
+                string s1 = "";
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
@@ -399,11 +367,45 @@ namespace DiceBot
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 string stmp = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 string sstmp = stmp.Substring(stmp.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
-                s = rqtoken = sstmp.Substring(0, sstmp.IndexOf("\""));
+                //s = rqtoken = sstmp.Substring(0, sstmp.IndexOf("\""));
                 
 
                 dicehub = con.CreateHubProxy("diceHub");
                 con.Start().Wait();
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/SaveUserNameAndPassword") as HttpWebRequest;
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
+                getHeaders.CookieContainer = tmpContainer;
+                foreach (Cookie c in Response.Cookies)
+                {
+
+                    getHeaders.CookieContainer.Add(c);
+                }
+                getHeaders.CookieContainer.Add(new Cookie("PRC_Affiliate", "357", "/", "pocketrocketscasino.eu"));
+                System.Threading.Thread.Sleep(5000);
+                getHeaders.Method = "POST";
+                string post = string.Format("userName={0}&password={1}&confirmPassword={1}&__RequestVerificationToken={2}", Username, Passwrd, rqtoken);
+                getHeaders.ContentType = "application/x-www-form-urlencoded";
+                getHeaders.ContentLength = post.Length;
+                using (var writer = new StreamWriter(getHeaders.GetRequestStream()))
+                {
+                    string writestring = post as string;
+                    writer.Write(writestring);
+                }
+                try
+                {
+
+                    Response = (HttpWebResponse)getHeaders.GetResponse();
+                    s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                    /*string tmp = s1.Substring(s1.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
+                    rqtoken = tmp.Substring(0, tmp.IndexOf("\""));*/
+                }
+                catch (WebException e)
+                {
+                    Response = (HttpWebResponse)e.Response;
+                    s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                    return false;
+                }
 
                 dicehub.On<string, string, string, string, string, string>("receiveChatMessage", GotChatMessage);
                 dicehub.On<Bet, PRCMYstats>("diceResult", BetResult);
@@ -414,7 +416,7 @@ namespace DiceBot
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
-                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
                 balance = (double)tmp.AvailableBalance;
                 profit = (double)tmp.Profit;

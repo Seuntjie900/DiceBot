@@ -130,6 +130,12 @@
       <DependentUpon>cDiceBot.cs</DependentUpon>
     </Compile>
     <Compile Include="cBet.cs" />
+    <Compile Include="Donate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Donate.Designer.cs">
+      <DependentUpon>Donate.cs</DependentUpon>
+    </Compile>
     <Compile Include="fChat.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="cDiceBot.resx">
       <DependentUpon>cDiceBot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Donate.resx">
+      <DependentUpon>Donate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="fChat.resx">
       <DependentUpon>fChat.cs</DependentUpon>

@@ -453,6 +453,12 @@ namespace DiceBot
                 else
                 {
                     lblProfit.ForeColor = Color.Green;
+
+                }
+                if (profit>0.001)
+                {
+                    donateToolStripMenuItem.ForeColor = Color.Green;
+                    donateToolStripMenuItem.BackColor = Color.LightBlue;
                 }
                 if (Winstreak == 0)
                 {
@@ -5116,6 +5122,12 @@ namespace DiceBot
         void PopoutChat_FormClosing(object sender, FormClosingEventArgs e)
         {
             tcStats.TabPages.Add(tbChat);
+        }
+
+        private void donateToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            Donate tmp = new Donate(CurrentSite.Name);
+            tmp.Show();
         }
 
           
