@@ -509,11 +509,12 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.proxySettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -688,7 +689,7 @@
             // btnShowStats
             // 
             this.btnShowStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowStats.Location = new System.Drawing.Point(83, 569);
+            this.btnShowStats.Location = new System.Drawing.Point(66, 572);
             this.btnShowStats.Name = "btnShowStats";
             this.btnShowStats.Size = new System.Drawing.Size(75, 23);
             this.btnShowStats.TabIndex = 14;
@@ -5822,7 +5823,8 @@
             this.statsToolStripMenuItem,
             this.toolStripSeparator1,
             this.badStreakTableToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.proxySettingsToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
@@ -5985,7 +5987,7 @@
             // basicToolStripMenuItem
             // 
             this.basicToolStripMenuItem.Name = "basicToolStripMenuItem";
-            this.basicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.basicToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.basicToolStripMenuItem.Text = "Basic";
             this.basicToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.basicToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -5993,7 +5995,7 @@
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.advancedToolStripMenuItem.Text = "Advanced";
             this.advancedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.advancedToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6001,7 +6003,7 @@
             // programmerToolStripMenuItem
             // 
             this.programmerToolStripMenuItem.Name = "programmerToolStripMenuItem";
-            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.programmerToolStripMenuItem.Text = "Programmer";
             this.programmerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.programmerToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6058,6 +6060,13 @@
             this.sourceCodeToolStripMenuItem.Text = "Source Code";
             this.sourceCodeToolStripMenuItem.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem_Click);
             // 
+            // donateToolStripMenuItem
+            // 
+            this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
+            this.donateToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.donateToolStripMenuItem.Text = "Donate";
+            this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click_1);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -6087,12 +6096,12 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
-            // donateToolStripMenuItem
+            // proxySettingsToolStripMenuItem
             // 
-            this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
-            this.donateToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
-            this.donateToolStripMenuItem.Text = "Donate";
-            this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click_1);
+            this.proxySettingsToolStripMenuItem.Name = "proxySettingsToolStripMenuItem";
+            this.proxySettingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.proxySettingsToolStripMenuItem.Text = "Proxy settings";
+            this.proxySettingsToolStripMenuItem.Click += new System.EventHandler(this.proxySettingsToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 
@@ -6771,6 +6780,7 @@
         private System.Windows.Forms.CheckBox chkBotSpeed;
         private System.Windows.Forms.Button btnPopChat;
         private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem proxySettingsToolStripMenuItem;
 
     }
 }

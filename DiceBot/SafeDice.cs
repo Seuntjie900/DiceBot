@@ -393,6 +393,8 @@ namespace DiceBot
 
         public override bool Register(string username, string password)
         {
+            System.Windows.Forms.MessageBox.Show("Registration is temporarily disabled for Safe Dice. Please use the site https://safedice.com to register and then log in using the bot.");
+            return false;
             try
             {
                 HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts");

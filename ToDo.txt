@@ -1,8 +1,6 @@
 Todo:
-implement other sites (Safedice API incomplete, bitdice API incomplete)
-PRC Register
-fix settings window and load
-
+implement other sites (bitdice API incomplete)
+safedice register
 
 hopefully before release:
 losing streak table redo
@@ -56,3 +54,5 @@ PRC Login
 programmer mode (access to variables, write code for own strategies)
 popout chat
 fibonacci error
+PRC Register
+fix settings window and load (finished but not completely tested)

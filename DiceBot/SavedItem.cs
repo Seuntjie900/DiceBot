@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DiceBot
 {
-    class SavedItem
+    public class SavedItem
     {
         public string Name { get; set; }
         public string Value { get; set; }

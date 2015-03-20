@@ -38,13 +38,15 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.nudPort = new System.Windows.Forms.NumericUpDown();
+            this.chkProxy = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(13, 39);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 0;
@@ -53,7 +55,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 35);
+            this.label2.Location = new System.Drawing.Point(16, 65);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(58, 13);
             this.label2.TabIndex = 1;
@@ -62,7 +64,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 61);
+            this.label3.Location = new System.Drawing.Point(16, 91);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(58, 13);
             this.label3.TabIndex = 2;
@@ -71,7 +73,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(17, 87);
+            this.label4.Location = new System.Drawing.Point(18, 117);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(56, 13);
             this.label4.TabIndex = 3;
@@ -79,21 +81,21 @@
             // 
             // txtHost
             // 
-            this.txtHost.Location = new System.Drawing.Point(79, 6);
+            this.txtHost.Location = new System.Drawing.Point(80, 36);
             this.txtHost.Name = "txtHost";
             this.txtHost.Size = new System.Drawing.Size(225, 20);
             this.txtHost.TabIndex = 5;
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(79, 58);
+            this.txtUsername.Location = new System.Drawing.Point(80, 88);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(225, 20);
             this.txtUsername.TabIndex = 7;
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(79, 84);
+            this.txtPassword.Location = new System.Drawing.Point(80, 114);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(225, 20);
@@ -101,34 +103,57 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(148, 110);
+            this.btnCancel.Location = new System.Drawing.Point(148, 191);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(229, 110);
+            this.btnSave.Location = new System.Drawing.Point(229, 191);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 10;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // nudPort
             // 
-            this.nudPort.Location = new System.Drawing.Point(79, 33);
+            this.nudPort.Location = new System.Drawing.Point(80, 63);
             this.nudPort.Name = "nudPort";
             this.nudPort.Size = new System.Drawing.Size(225, 20);
             this.nudPort.TabIndex = 11;
+            // 
+            // chkProxy
+            // 
+            this.chkProxy.AutoSize = true;
+            this.chkProxy.Location = new System.Drawing.Point(16, 12);
+            this.chkProxy.Name = "chkProxy";
+            this.chkProxy.Size = new System.Drawing.Size(96, 17);
+            this.chkProxy.TabIndex = 12;
+            this.chkProxy.Text = "Requires proxy";
+            this.chkProxy.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(13, 147);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(292, 41);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Please note that proxy settings are NOT stored. You need to enter these settings " +
+    "every time you run the bot.";
             // 
             // Proxy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(316, 150);
+            this.ClientSize = new System.Drawing.Size(316, 226);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.chkProxy);
             this.Controls.Add(this.nudPort);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
@@ -153,11 +178,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtHost;
-        private System.Windows.Forms.TextBox txtUsername;
-        private System.Windows.Forms.TextBox txtPassword;
+        public System.Windows.Forms.TextBox txtHost;
+        public System.Windows.Forms.TextBox txtUsername;
+        public System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.NumericUpDown nudPort;
+        public System.Windows.Forms.NumericUpDown nudPort;
+        public System.Windows.Forms.CheckBox chkProxy;
+        private System.Windows.Forms.Label label5;
     }
 }

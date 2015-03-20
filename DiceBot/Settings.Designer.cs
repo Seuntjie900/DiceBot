@@ -280,6 +280,7 @@
             this.btnSMTP.TabIndex = 8;
             this.btnSMTP.Text = "Edit SMTP";
             this.btnSMTP.UseVisualStyleBackColor = true;
+            
             // 
             // nudEmailStreak
             // 

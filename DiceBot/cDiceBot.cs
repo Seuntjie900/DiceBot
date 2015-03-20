@@ -2611,7 +2611,7 @@ namespace DiceBot
             return true;
         }
 
-        string getvalue(List<SavedItem> list, string item)
+        public string getvalue(List<SavedItem> list, string item)
         {
             foreach (SavedItem cur in list)
             {
@@ -2749,19 +2749,6 @@ namespace DiceBot
                     chkChangeChanceWin.Checked = ("1" == getvalue(saveditems, "ChangeChanceAfterWinStreakEnabled"));
                     nudChangeChanceWinStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterWinStreakSize"), ref convert);
                     nudChangeChanceWinTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterWinStreakValue"), ref convert);
-                    /*
-                    nudMutawaMultiplier.Value = (decimal)dparse(getvalue(saveditems, "MutawaMultiplier"), ref convert);
-                    nudMutawaWins.Value = (decimal)dparse(getvalue(saveditems, "MutawaWins"), ref convert);
-                    checkBox1.Checked = ("1" == getvalue(saveditems, "MutawaEnabled"));*/
-                    
-                    /*nudTrazelWin.Value = (decimal)dparse(getvalue(saveditems, "TrazalWin"), ref convert);
-                    nudtrazelwinto.Value = (decimal)dparse(getvalue(saveditems, "TrazalWinTo"), ref convert);
-                    NudTrazelLose.Value = (decimal)dparse(getvalue(saveditems, "TrazalLose"), ref convert);
-                    nudtrazelloseto.Value = (decimal)dparse(getvalue(saveditems, "TrazalLoseTo"), ref convert);
-                    nudTrazelMultiplier.Value = (decimal)dparse(getvalue(saveditems, "TrazelMultiPlier"), ref convert);
-                    chkTrazel.Checked = ("1" == getvalue(saveditems, "TrazelEnabled"));*/
-
-                  
 
                     nudMKIncrement.Value = (decimal)dparse(getvalue(saveditems, "MKIncrement"), ref convert);
                     nudMKDecrement.Value = (decimal)dparse(getvalue(saveditems, "MKDecrement"), ref convert);
@@ -2861,7 +2848,7 @@ namespace DiceBot
                     nudPresetLossStep.Value = decimal.Parse(getvalue(saveditems, "PresetLossStep"));
                     nudPresetWinStep.Value = decimal.Parse(getvalue(saveditems, "PresetWinStep"));
 
-                    //chkAutoSeeds.Checked = getvalue(saveditems, "AutoGetSeed") != "0";
+                    
 
                 }
 
@@ -2992,6 +2979,7 @@ namespace DiceBot
             return true;
         }
 
+        bool autoseeds = true;
         public void loadsettings()
         {
             try
@@ -3089,10 +3077,7 @@ namespace DiceBot
                         SoundStreakCount =iparse(getvalue(saveditems, "AlarmStreakValue"));
                         salarm= getvalue(saveditems, "AlarmPath");
                         Emails.StreakSize = (int)Emails.StreakSize;
-                        
-                        //nudSoundStreak.Value = SoundStreakCount;
-                        
-
+                        autoseeds = getvalue(saveditems, "AutoGetSeed") != "0";
                     }
 
                 }
@@ -3178,8 +3163,8 @@ namespace DiceBot
 
                 sw.WriteLine("AlarmStreakValue|" + TmpSet.nudSoundStreak.Value.ToString());
                 sw.WriteLine("AlarmPath|" + TmpSet.txtPathAlarm.Text);
-                
 
+                sw.WriteLine("AutoGetSeed|"+ (autoseeds?"1":"0"));
 
 
                 #region old Save
@@ -3413,7 +3398,7 @@ namespace DiceBot
             success = true;
             return number;
         }
-        int iparse(string text)
+        public int iparse(string text)
         {
             int number = -1;
             if (!int.TryParse(text, out number))
@@ -3924,7 +3909,7 @@ namespace DiceBot
 
         private void btnSaveUser_Click(object sender, EventArgs e)
         {
-            Settings tmpSet = new DiceBot.Settings();
+            Settings tmpSet = new DiceBot.Settings(this);
             if (tmpSet.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 writesettings( tmpSet );
@@ -3941,12 +3926,7 @@ namespace DiceBot
             }
         }
 
-        private void btnSMTP_Click_1(object sender, EventArgs e)
-        {
-            string smtp = Interaction.InputBox("Enter new smtp server address", "SMTP", "smtp.secrueserver.net");
-            Emails.SMTP = smtp;
-            
-        }
+
 
         
 
@@ -4808,6 +4788,10 @@ namespace DiceBot
         
         private void tmrMissingSeeds_Tick(object sender, EventArgs e)
         {
+            if ((DateTime.Now - LastMissingCheck).TotalMinutes>5)
+            {
+                GetMissingSeeds();
+            }
             if (BetIDs.Count > 0 && !CurrentSite.GettingSeed)
             {
                 long tmp = BetIDs[0];
@@ -4959,6 +4943,8 @@ namespace DiceBot
                 rdbWithdraw.Enabled = CurrentSite.AutoWithdraw;
                 if (!rdbWithdraw.Enabled)
                     rdbWithdraw.Checked = false;
+                if (UseProxy)
+                    CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
             }
             
         }
@@ -5128,6 +5114,24 @@ namespace DiceBot
         {
             Donate tmp = new Donate(CurrentSite.Name);
             tmp.Show();
+        }
+
+        string proxUser = "", proxPass = "", proxHost ="";
+        int proxport = 0;
+        bool UseProxy = false;
+        private void proxySettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DiceBot.Proxy Prox = new Proxy();
+            if (Prox.ShowDialog() == DialogResult.OK)
+            {
+                UseProxy = Prox.chkProxy.Checked;
+                proxUser = Prox.txtUsername.Text;
+                proxPass = Prox.txtPassword.Text;
+                proxHost = Prox.txtHost.Text;
+                proxport = (int)Prox.nudPort.Value;
+                if (UseProxy)
+                    CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
+            }
         }
 
           
