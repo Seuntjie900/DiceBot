@@ -13,12 +13,16 @@ namespace DiceBot
         HubConnection con = new HubConnection("https://pocketrocketscasino.eu/SignalR/", "", false);
         CookieContainer Cookies = new CookieContainer();
         IHubProxy dicehub;
+        int withdraw = 0;
+        DateTime withdrawTime = DateTime.Now;
+        double wdAmount = 0;
+        string wdAddress = "";
         public PRC(cDiceBot Parent)
         {
-            AutoWithdraw = false;
-            AutoLogin = false;
+            AutoWithdraw = true;
+            AutoLogin = true;
             ChangeSeed = true;
-            
+            AutoInvest = true;
             this.Parent = Parent;
             Name = "PRCDice";
             BetURL = "https://pocketrocketscasino.eu/api/bets/GetBet?id=";
@@ -80,7 +84,16 @@ namespace DiceBot
             }
         }
 
-        
+        public override bool Invest(double Amount)
+        {
+            withdraw = 2;
+            withdrawTime = DateTime.Now;
+            wdAmount = Amount;
+            return true;
+
+            dicehub.Invoke("invest", Amount, 0.5m);
+            return true;
+        }
       
         public override void ResetSeed()
         {
@@ -152,6 +165,25 @@ namespace DiceBot
 
         public override bool ReadyToBet()
         {
+            if (withdraw!=0)            
+            {
+                if ( (DateTime.Now - withdrawTime).TotalSeconds>31)
+                {
+                    if (withdraw ==1)
+                    {
+                        dicehub.Invoke("withdraw", wdAmount, wdAddress, "");
+                    }
+                    else
+                    {
+                        dicehub.Invoke("invest", wdAmount, 0.5m);
+                    }
+                    withdraw = 0;
+                }
+                else
+                {
+                    return false;
+                }
+            }
             return true;
         }
         
@@ -174,6 +206,11 @@ namespace DiceBot
 
         public override bool Withdraw(double Amount, string Address)
         {
+            withdraw = 1;
+            withdrawTime = DateTime.Now;
+            wdAddress = Address;
+            wdAmount = Amount;
+            return true;
             dicehub.Invoke("Withdraw", Address, Amount, "");
             return true;
         }
