@@ -130,6 +130,12 @@
       <DependentUpon>cDiceBot.cs</DependentUpon>
     </Compile>
     <Compile Include="cBet.cs" />
+    <Compile Include="Custom Chart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Custom Chart.Designer.cs">
+      <DependentUpon>Custom Chart.cs</DependentUpon>
+    </Compile>
     <Compile Include="Donate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,8 +185,20 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Simulate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Simulate.Designer.cs">
+      <DependentUpon>Simulate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Simulation.cs" />
     <Compile Include="sqlite_helper.cs" />
+    <Compile Include="Stats.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Stats.Designer.cs">
+      <DependentUpon>Stats.cs</DependentUpon>
+    </Compile>
     <Compile Include="StreakTable.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -188,6 +206,12 @@
       <DependentUpon>StreakTable.cs</DependentUpon>
     </Compile>
     <Compile Include="textValues_en.cs" />
+    <Compile Include="Verify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Verify.Designer.cs">
+      <DependentUpon>Verify.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
@@ -196,6 +220,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="cDiceBot.resx">
       <DependentUpon>cDiceBot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Custom Chart.resx">
+      <DependentUpon>Custom Chart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Donate.resx">
       <DependentUpon>Donate.cs</DependentUpon>
@@ -225,8 +252,17 @@
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Simulate.resx">
+      <DependentUpon>Simulate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stats.resx">
+      <DependentUpon>Stats.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StreakTable.resx">
       <DependentUpon>StreakTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Verify.resx">
+      <DependentUpon>Verify.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="DiceBot_TemporaryKey.pfx" />

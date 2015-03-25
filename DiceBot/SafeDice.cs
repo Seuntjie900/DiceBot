@@ -34,7 +34,15 @@ namespace DiceBot
             {
                 if ((DateTime.Now - LastBalance).TotalMinutes>1 && accesstoken!="" && accesstoken!=null)
                 {
-                    //get balance logic
+                    HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/1101/sites/1/me");
+                    loginrequest.CookieContainer = new CookieContainer();
+                    loginrequest.CookieContainer.Add(new System.Net.Cookie("token", accesstoken, "", "safedice.com"));
+                    loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
+                    HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                    string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                    SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
+                    balance = tmp2.balance;
+                    Parent.updateBalance((decimal)balance);
                 }
 
                 if (accesstoken != "" && accesstoken != null)

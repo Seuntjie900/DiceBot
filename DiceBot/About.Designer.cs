@@ -58,6 +58,7 @@
             this.ClientSize = new System.Drawing.Size(541, 351);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.rtbAbout);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "About";
             this.Text = "About";
             this.ResumeLayout(false);

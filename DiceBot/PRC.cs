@@ -171,7 +171,7 @@ namespace DiceBot
                 {
                     if (withdraw ==1)
                     {
-                        dicehub.Invoke("withdraw", wdAmount, wdAddress, "");
+                        dicehub.Invoke("withdraw", wdAddress, wdAmount ,"");
                     }
                     else
                     {

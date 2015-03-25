@@ -280,7 +280,6 @@
             this.btnSMTP.TabIndex = 8;
             this.btnSMTP.Text = "Edit SMTP";
             this.btnSMTP.UseVisualStyleBackColor = true;
-            
             // 
             // nudEmailStreak
             // 
@@ -486,6 +485,7 @@
             this.Controls.Add(this.label50);
             this.Controls.Add(this.chkTray);
             this.Controls.Add(this.btnSaveUser);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "Settings";
             this.Text = "Settings";
             this.groupBox19.ResumeLayout(false);

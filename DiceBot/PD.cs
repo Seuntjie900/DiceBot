@@ -113,7 +113,7 @@ namespace DiceBot
                     {
                         Parent.updateDeposit(s);
                     }
-                    Parent.updateDeposit(tmpu.user.address);
+                    //Parent.updateDeposit(tmpu.user.address);
                     balance = tmpu.user.balance; //i assume
                     bets = tmpu.user.bets;
                     Thread.Sleep(500);
@@ -156,6 +156,7 @@ namespace DiceBot
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
                 loginrequest.Method = "POST";
+                //loginrequest.TransferEncoding = "UTF-8";
                 string post = "username=" + Username + "&password=" + Password + (!string.IsNullOrWhiteSpace(otp) ? "&otp=" + otp : "");
                 loginrequest.ContentLength = post.Length;
                 loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";

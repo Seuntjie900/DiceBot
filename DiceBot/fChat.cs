@@ -16,6 +16,12 @@ namespace DiceBot
             InitializeComponent();
             rtbChat.Text = messages;
         }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            this.Hide();
+            e.Cancel = true;
+            base.OnClosing(e);
+        }
         public void GotMessage(string Message)
         {
             rtbChat.AppendText(Message+"\r\n");

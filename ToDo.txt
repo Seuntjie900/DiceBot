@@ -1,10 +1,11 @@
 Todo:
 implement other sites (bitdice API incomplete)
 safedice register
+PD login encoding
+468x60 banner
 
 hopefully before release:
 losing streak table redo
-Proxy Authentication.
 
 
 Not essential:
@@ -56,3 +57,5 @@ popout chat
 fibonacci error
 PRC Register
 fix settings window and load (finished but not completely tested)
+Proxy Authentication.
+PD register

@@ -69,6 +69,7 @@
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "ConfirmPassword";
             this.Text = "Confirm Password";
             this.ResumeLayout(false);
