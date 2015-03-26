@@ -213,7 +213,7 @@ namespace DiceBot
             chrtEmbeddedLiveChart.ChartAreas[0].AxisX.Minimum = 0;
             #region tooltip Texts
             ToolTip tt = new ToolTip();
-            tt.SetToolTip(lblZigZag1, "After every n bets/wins/losses \n(as specified to the right), \nthe bot will switch from \nbetting high to low or vica verca");
+            tt.SetToolTip(gbZigZag , "After every n bets/wins/losses \n(as specified to the right), \nthe bot will switch from \nbetting high to low or vica verca");
             tt.SetToolTip(lblLowLimit,
                 "When your balance goes below this\n" +
                 "value, the bot will stop playing.\n" +
@@ -816,7 +816,8 @@ namespace DiceBot
                 }
                 if (!CurrentSite.ReadyToBet())
                     return;
-                
+
+                CurrentSite.chance = Chance;
                 //if (!(CurrentSite is SafeDice) || SafeDiceCounter >= 2)
                 {
                     CurrentSite.PlaceBet(high);
@@ -1613,9 +1614,15 @@ namespace DiceBot
                     }
                     iMultiplyCounter = 0;                    
                     Multiplier = (double)(nudMultiplier.Value);
-                    if (chkReverse.Checked && (!programmerToolStripMenuItem.Checked))
+                    if ((!programmerToolStripMenuItem.Checked))
                     {
-                        if (rdbReverseWins.Checked && Winstreak % NudReverse.Value == 0)
+                        if (chkZigZagWins.Checked && Wins% (int)nudZigZagWins.Value==0 && Wins!=0)
+                        {
+                             
+                                high = !high;
+                            
+                        }
+                        if (chkZigZagWinsStreak.Checked && Winstreak % (int)nudZigZagWinsStreak.Value ==0 && Winstreak!=0)
                         {
                             high = !high;
                         }
@@ -1651,9 +1658,15 @@ namespace DiceBot
                                 laststreaklose = Losestreak;
 
                     //switch high low if applied in the zig zag tab
-                    if (chkReverse.Checked && (!programmerToolStripMenuItem.Checked))
+                    if ((!programmerToolStripMenuItem.Checked))
                     {
-                        if (rdbReverseLoss.Checked && Losestreak % NudReverse.Value == 0)
+                        if (chkZigZagLoss.Checked && Losses % (int)nudZigZagLoss.Value == 0 && Losses != 0)
+                        {
+
+                            high = !high;
+
+                        }
+                        if (chkZigZagLossStreak.Checked && Losestreak % (int)nudZigZagLossStreak.Value == 0 && Losestreak != 0)
                         {
                             high = !high;
                         }
@@ -1756,9 +1769,9 @@ namespace DiceBot
                     WinMultiplier = (double)(nudWinMultiplier.Value);
 
                 }
-                if (chkReverse.Checked)
+                if (chkZigZagBets.Checked && !programmerToolStripMenuItem.Checked)
                 {
-                    if (rdbReverseBets.Checked && (Wins+Losses) % NudReverse.Value == 0 )
+                    if ((Wins+Losses) % (int)nudZigZagBets.Value == 0 && (Wins+Losses)!=0 )
                     {
                         high = !high;
                     }
@@ -2215,18 +2228,7 @@ namespace DiceBot
                         sw.WriteLine("2");
                     else sw.WriteLine("3");
                     sw.Write("ReverseEnabled|");
-                    if (chkReverse.Checked)
-                        sw.WriteLine("1");
-                    else sw.WriteLine("0");
-                    sw.Write("ReverseMode|");
-                    if (rdbReverseBets.Checked)
-                        sw.WriteLine("0");
-                    else if (rdbReverseLoss.Checked)
-                        sw.WriteLine("1");
-                    else if (rdbReverseWins.Checked)
-                        sw.WriteLine("2");
-                    sw.WriteLine("ReverseOn|"+NudReverse.Value.ToString("00"));
-                    sw.Write("ResetBetLossEnabled|");
+                   sw.Write("ResetBetLossEnabled|");
                     if (chkResetBetLoss.Checked)
                     {
                         sw.WriteLine("1");
@@ -2379,6 +2381,20 @@ namespace DiceBot
                     sw.WriteLine("PresetLossStep|" + nudPresetLossStep.Value);
                     sw.WriteLine("PresetWin|" + (rdbPresetWinReset.Checked ? 0 : rdbPresetWinStep.Checked ? 1 : 2));
                     sw.WriteLine("PresetWinStep|" + nudPresetWinStep.Value);
+
+                    sw.WriteLine("ReverseWin|" + (chkZigZagWins.Checked ? "1" : "0"));
+                    sw.WriteLine("ReverseWinStreak|" + (chkZigZagWinsStreak.Checked ? "1" : "0"));
+                    sw.WriteLine("ReverseLoss|" + (chkZigZagLoss.Checked ? "1" : "0"));
+                    sw.WriteLine("ReverseLossStreak|" + (chkZigZagLossStreak.Checked ? "1" : "0"));
+                    sw.WriteLine("ReverseBet|" + (chkZigZagBets.Checked ? "1" : "0"));
+
+                    sw.WriteLine("ReverseWinValue|"+nudZigZagWins.Value);
+                    sw.WriteLine("ReverseWinStreakValue|" + nudZigZagWinsStreak.Value);
+                    sw.WriteLine("ReverseLossValue|" + nudZigZagLoss.Value);
+                    sw.WriteLine("ReverseLossStreakValue|" + nudZigZagLossStreak.Value);
+                    sw.WriteLine("ReverseBetValue|" + nudZigZagBets.Value);
+
+
                     #region old save, Not applicable
                     /*string msg = "";
                     msg += txtAmount.Text + ";";
@@ -2574,17 +2590,20 @@ namespace DiceBot
                             values = msg.Split(';');
                         i = 0;                        
                         if (values[i++] == "1")
-                            chkReverse.Checked = true;
+                        {}
+                            //chkReverse.Checked = true;
                         else
-                            chkReverse.Checked = false;                        
+                        { }
+                            //chkReverse.Checked = false;                        
                         string cur = values[i++];
                         if (cur == "0")
-                            rdbReverseBets.Checked = true;
+                        {}
+                            //rdbReverseBets.Checked = true;
                         else if (cur == "1")
-                            rdbReverseLoss.Checked = true;
+                        {}//rdbReverseLoss.Checked = true;
                         else if (cur == "2")
-                            rdbReverseWins.Checked = true;
-                        NudReverse.Value = (decimal)dparse(values[i++], ref convert);
+                        { }// rdbReverseWins.Checked = true;
+                        decimal tmpval = (decimal)dparse(values[i++], ref convert);
                         if (values.Length > i)
                         {
                             StatsWindows.nudLastStreakWin.Value = (decimal)dparse(values[i++], ref convert);
@@ -2721,12 +2740,7 @@ namespace DiceBot
                     rdbDevider.Checked = (temp == "1");
                     rdbConstant.Checked = (temp == "2");
                     rdbReduce.Checked = (temp=="3");
-                    chkReverse.Checked = ("1"==getvalue(saveditems, "ReverseEnabled"));
-                    temp = getvalue(saveditems, "ReverseMode");
-                    rdbReverseBets.Checked = (temp == "0");
-                    rdbReverseLoss.Checked = (temp == "1");
-                    rdbReverseWins.Checked = (temp == "2");
-                    NudReverse.Value = (decimal)dparse(getvalue(saveditems, "ReverseOn"), ref convert);
+                    
                     StatsWindows.nudLastStreakWin.Value = (decimal)dparse(getvalue(saveditems, "LastStreakWin"), ref convert);
                     StatsWindows.nudLastStreakLose.Value = (decimal)dparse(getvalue(saveditems, "LastStreakLose"), ref convert);
                     chkResetBetLoss.Checked = ("1"==getvalue(saveditems, "ResetBetLossEnabled"));
@@ -2880,7 +2894,31 @@ namespace DiceBot
                     nudPresetLossStep.Value = decimal.Parse(getvalue(saveditems, "PresetLossStep"));
                     nudPresetWinStep.Value = decimal.Parse(getvalue(saveditems, "PresetWinStep"));
 
-                    
+
+                    /*
+                    sw.WriteLine("ReverseWinStreak|" + (chkZigZagWinsStreak.Checked ? "1" : "0"));
+                    sw.WriteLine("ReverseLoss|" + (chkZigZagLoss.Checked ? "1" : "0"));
+                    sw.WriteLine("ReverseLossStreak|" + (chkZigZagLossStreak.Checked ? "1" : "0"));
+                    sw.WriteLine("ReverseBet|" + (chkZigZagBets.Checked ? "1" : "0"));
+
+                    sw.WriteLine("ReverseWinValue|"+nudZigZagWins.Value);
+                    sw.WriteLine("ReverseWinStreakValue|" + nudZigZagWinsStreak.Value);
+                    sw.WriteLine("ReverseLossValue|" + nudZigZagLoss.Value);
+                    sw.WriteLine("ReverseLossStreakValue|" + nudZigZagLossStreak.Value);
+                    sw.WriteLine("ReverseBetValue|" + nudZigZagBets.Value);
+                     * */
+
+                    chkZigZagWins.Checked = getvalue(saveditems, "ReverseWin") == "1";
+                    chkZigZagWinsStreak.Checked = getvalue(saveditems, "ReversWinStreak") == "1";
+                    chkZigZagLoss.Checked = getvalue(saveditems, "ReverseLoss") == "1";
+                    chkZigZagLossStreak.Checked = getvalue(saveditems, "ReverseLossStreak") == "1";
+                    chkZigZagBets.Checked = getvalue(saveditems, "ReverseBets") == "1";
+
+                    nudZigZagWins.Value = decimal.Parse(getvalue(saveditems, "ReverseWinValue"));
+                    nudZigZagWinsStreak.Value = decimal.Parse(getvalue(saveditems, "ReverseWinStreakValue"));
+                    nudZigZagLoss.Value = decimal.Parse(getvalue(saveditems, "ReverseLossValue"));
+                    nudZigZagLossStreak.Value = decimal.Parse(getvalue(saveditems, "ReverseLossStreakValue"));
+                    nudZigZagBets.Value = decimal.Parse(getvalue(saveditems, "ReverseBetValue"));
 
                 }
 
@@ -4560,7 +4598,7 @@ namespace DiceBot
         {
             if (CurrentSite.AutoWithdraw)
             {
-                string Response = Interaction.InputBox("Amount to withdraw: ", "Withdraw", "0", -1, -1);
+                string Response = Interaction.InputBox("Amount to withdraw: ", "Withdraw", "0.00000000", -1, -1);
                 double tmpAmount = 0;
                 if (double.TryParse(Response, out tmpAmount))
                 {
@@ -4591,7 +4629,7 @@ namespace DiceBot
         {
             if (CurrentSite.AutoInvest)
             {
-                string Response = Interaction.InputBox("Amount to invest: ", "Invest", "0", -1, -1);
+                string Response = Interaction.InputBox("Amount to invest: ", "Invest", "0.00000000", -1, -1);
                 double tmpAmount = 0;
                 if (double.TryParse(Response, out tmpAmount))
                 {
@@ -4619,7 +4657,7 @@ namespace DiceBot
                         return;
                     }
                 }
-                string Amount = Interaction.InputBox("Amount to tip: ", "Tip", "0", -1,-1);
+                string Amount = Interaction.InputBox("Amount to tip: ", "Tip", "0.00000000", -1,-1);
                 double tmpAmount = 0;
                 if (double.TryParse(Amount, out tmpAmount))
                 {
@@ -5164,7 +5202,10 @@ namespace DiceBot
             SimWindow.Show();
         }
 
-          
+        private void pnlAdvancedAdvanced_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
 
     }
 

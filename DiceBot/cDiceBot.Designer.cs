@@ -181,10 +181,11 @@
             this.label70 = new System.Windows.Forms.Label();
             this.nudMutawaMultiplier = new System.Windows.Forms.NumericUpDown();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lblMinBet = new System.Windows.Forms.Label();
+            this.lblChance = new System.Windows.Forms.Label();
             this.nudChance = new System.Windows.Forms.NumericUpDown();
             this.nudMinBet = new System.Windows.Forms.NumericUpDown();
-            this.lblChance = new System.Windows.Forms.Label();
-            this.lblMinBet = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.nudAmount = new System.Windows.Forms.NumericUpDown();
             this.nudLowerLimit = new System.Windows.Forms.NumericUpDown();
@@ -229,6 +230,22 @@
             this.chkResetBetWins = new System.Windows.Forms.CheckBox();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.pnlAdvancedAdvanced = new System.Windows.Forms.Panel();
+            this.gbZigZag = new System.Windows.Forms.GroupBox();
+            this.chkZigZagWins = new System.Windows.Forms.CheckBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.chkZigZagLoss = new System.Windows.Forms.CheckBox();
+            this.nudZigZagWinsStreak = new System.Windows.Forms.NumericUpDown();
+            this.chkZigZagBets = new System.Windows.Forms.CheckBox();
+            this.chkZigZagWinsStreak = new System.Windows.Forms.CheckBox();
+            this.nudZigZagWins = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.nudZigZagBets = new System.Windows.Forms.NumericUpDown();
+            this.nudZigZagLossStreak = new System.Windows.Forms.NumericUpDown();
+            this.nudZigZagLoss = new System.Windows.Forms.NumericUpDown();
+            this.chkZigZagLossStreak = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.label84 = new System.Windows.Forms.Label();
             this.lsbStrats = new System.Windows.Forms.ListBox();
             this.btnStratRefresh = new System.Windows.Forms.Button();
@@ -245,13 +262,6 @@
             this.label55 = new System.Windows.Forms.Label();
             this.nudBotSpeed = new System.Windows.Forms.NumericUpDown();
             this.chkBotSpeed = new System.Windows.Forms.CheckBox();
-            this.tbZigZag = new System.Windows.Forms.TabPage();
-            this.rdbReverseBets = new System.Windows.Forms.RadioButton();
-            this.rdbReverseLoss = new System.Windows.Forms.RadioButton();
-            this.rdbReverseWins = new System.Windows.Forms.RadioButton();
-            this.chkReverse = new System.Windows.Forms.CheckBox();
-            this.NudReverse = new System.Windows.Forms.NumericUpDown();
-            this.lblZigZag1 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnStopOnWin = new System.Windows.Forms.Button();
             this.btnStartLow = new System.Windows.Forms.Button();
@@ -364,14 +374,15 @@
             this.chartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loginPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualBettingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.statsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sessionLiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sessionStaticToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allTimeLiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allTimeStaticToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.betHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.badStreakTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -403,8 +414,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.chatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -473,6 +482,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NudTrazelLose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTrazelWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMutawaMultiplier)).BeginInit();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinBet)).BeginInit();
             this.tabPage4.SuspendLayout();
@@ -492,10 +502,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).BeginInit();
             this.tabPage11.SuspendLayout();
             this.pnlAdvancedAdvanced.SuspendLayout();
+            this.gbZigZag.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagWinsStreak)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagWins)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagBets)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagLossStreak)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagLoss)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBotSpeed)).BeginInit();
-            this.tbZigZag.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).BeginInit();
             this.panel4.SuspendLayout();
             this.pnlApiInfo.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -529,7 +543,6 @@
             this.tpConsole.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -549,7 +562,6 @@
             this.tcSettings.Controls.Add(this.tabPage3);
             this.tcSettings.Controls.Add(this.tabPage4);
             this.tcSettings.Controls.Add(this.tabPage11);
-            this.tcSettings.Controls.Add(this.tbZigZag);
             this.tcSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcSettings.Location = new System.Drawing.Point(0, 0);
             this.tcSettings.Name = "tcSettings";
@@ -2343,6 +2355,36 @@
             this.checkBox1.Text = "Use Mutawa";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.lblMinBet);
+            this.panel1.Controls.Add(this.lblChance);
+            this.panel1.Controls.Add(this.nudChance);
+            this.panel1.Controls.Add(this.nudMinBet);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(3, 16);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(461, 30);
+            this.panel1.TabIndex = 69;
+            // 
+            // lblMinBet
+            // 
+            this.lblMinBet.AutoSize = true;
+            this.lblMinBet.Location = new System.Drawing.Point(5, 7);
+            this.lblMinBet.Name = "lblMinBet";
+            this.lblMinBet.Size = new System.Drawing.Size(65, 13);
+            this.lblMinBet.TabIndex = 63;
+            this.lblMinBet.Text = "Starting Bet:";
+            // 
+            // lblChance
+            // 
+            this.lblChance.AutoSize = true;
+            this.lblChance.Location = new System.Drawing.Point(170, 7);
+            this.lblChance.Name = "lblChance";
+            this.lblChance.Size = new System.Drawing.Size(47, 13);
+            this.lblChance.TabIndex = 65;
+            this.lblChance.Text = "Chance:";
+            // 
             // nudChance
             // 
             this.nudChance.DecimalPlaces = 4;
@@ -2380,24 +2422,6 @@
             0,
             393216});
             this.nudMinBet.ValueChanged += new System.EventHandler(this.txtChance_Leave);
-            // 
-            // lblChance
-            // 
-            this.lblChance.AutoSize = true;
-            this.lblChance.Location = new System.Drawing.Point(170, 7);
-            this.lblChance.Name = "lblChance";
-            this.lblChance.Size = new System.Drawing.Size(47, 13);
-            this.lblChance.TabIndex = 65;
-            this.lblChance.Text = "Chance:";
-            // 
-            // lblMinBet
-            // 
-            this.lblMinBet.AutoSize = true;
-            this.lblMinBet.Location = new System.Drawing.Point(5, 7);
-            this.lblMinBet.Name = "lblMinBet";
-            this.lblMinBet.Size = new System.Drawing.Size(65, 13);
-            this.lblMinBet.TabIndex = 63;
-            this.lblMinBet.Text = "Starting Bet:";
             // 
             // tabPage4
             // 
@@ -2969,6 +2993,7 @@
             // 
             // pnlAdvancedAdvanced
             // 
+            this.pnlAdvancedAdvanced.Controls.Add(this.gbZigZag);
             this.pnlAdvancedAdvanced.Controls.Add(this.label84);
             this.pnlAdvancedAdvanced.Controls.Add(this.lsbStrats);
             this.pnlAdvancedAdvanced.Controls.Add(this.btnStratRefresh);
@@ -2987,13 +3012,243 @@
             this.pnlAdvancedAdvanced.Controls.Add(this.chkBotSpeed);
             this.pnlAdvancedAdvanced.Location = new System.Drawing.Point(12, 6);
             this.pnlAdvancedAdvanced.Name = "pnlAdvancedAdvanced";
-            this.pnlAdvancedAdvanced.Size = new System.Drawing.Size(406, 280);
+            this.pnlAdvancedAdvanced.Size = new System.Drawing.Size(406, 457);
             this.pnlAdvancedAdvanced.TabIndex = 82;
+            this.pnlAdvancedAdvanced.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlAdvancedAdvanced_Paint);
+            // 
+            // gbZigZag
+            // 
+            this.gbZigZag.Controls.Add(this.chkZigZagWins);
+            this.gbZigZag.Controls.Add(this.label10);
+            this.gbZigZag.Controls.Add(this.chkZigZagLoss);
+            this.gbZigZag.Controls.Add(this.nudZigZagWinsStreak);
+            this.gbZigZag.Controls.Add(this.chkZigZagBets);
+            this.gbZigZag.Controls.Add(this.chkZigZagWinsStreak);
+            this.gbZigZag.Controls.Add(this.nudZigZagWins);
+            this.gbZigZag.Controls.Add(this.label9);
+            this.gbZigZag.Controls.Add(this.nudZigZagBets);
+            this.gbZigZag.Controls.Add(this.nudZigZagLossStreak);
+            this.gbZigZag.Controls.Add(this.nudZigZagLoss);
+            this.gbZigZag.Controls.Add(this.chkZigZagLossStreak);
+            this.gbZigZag.Controls.Add(this.label1);
+            this.gbZigZag.Controls.Add(this.label8);
+            this.gbZigZag.Controls.Add(this.label7);
+            this.gbZigZag.Location = new System.Drawing.Point(12, 139);
+            this.gbZigZag.Name = "gbZigZag";
+            this.gbZigZag.Size = new System.Drawing.Size(330, 161);
+            this.gbZigZag.TabIndex = 110;
+            this.gbZigZag.TabStop = false;
+            this.gbZigZag.Text = "Zig Zag";
+            // 
+            // chkZigZagWins
+            // 
+            this.chkZigZagWins.AutoSize = true;
+            this.chkZigZagWins.Location = new System.Drawing.Point(11, 23);
+            this.chkZigZagWins.Name = "chkZigZagWins";
+            this.chkZigZagWins.Size = new System.Drawing.Size(82, 17);
+            this.chkZigZagWins.TabIndex = 95;
+            this.chkZigZagWins.Text = "Switch after";
+            this.chkZigZagWins.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(192, 51);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(71, 13);
+            this.label10.TabIndex = 109;
+            this.label10.Text = "Wins in a row";
+            // 
+            // chkZigZagLoss
+            // 
+            this.chkZigZagLoss.AutoSize = true;
+            this.chkZigZagLoss.Location = new System.Drawing.Point(11, 77);
+            this.chkZigZagLoss.Name = "chkZigZagLoss";
+            this.chkZigZagLoss.Size = new System.Drawing.Size(82, 17);
+            this.chkZigZagLoss.TabIndex = 96;
+            this.chkZigZagLoss.Text = "Switch after";
+            this.chkZigZagLoss.UseVisualStyleBackColor = true;
+            // 
+            // nudZigZagWinsStreak
+            // 
+            this.nudZigZagWinsStreak.Location = new System.Drawing.Point(99, 48);
+            this.nudZigZagWinsStreak.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudZigZagWinsStreak.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudZigZagWinsStreak.Name = "nudZigZagWinsStreak";
+            this.nudZigZagWinsStreak.Size = new System.Drawing.Size(87, 20);
+            this.nudZigZagWinsStreak.TabIndex = 108;
+            this.nudZigZagWinsStreak.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkZigZagBets
+            // 
+            this.chkZigZagBets.AutoSize = true;
+            this.chkZigZagBets.Location = new System.Drawing.Point(11, 129);
+            this.chkZigZagBets.Name = "chkZigZagBets";
+            this.chkZigZagBets.Size = new System.Drawing.Size(82, 17);
+            this.chkZigZagBets.TabIndex = 97;
+            this.chkZigZagBets.Text = "Switch after";
+            this.chkZigZagBets.UseVisualStyleBackColor = true;
+            // 
+            // chkZigZagWinsStreak
+            // 
+            this.chkZigZagWinsStreak.AutoSize = true;
+            this.chkZigZagWinsStreak.Location = new System.Drawing.Point(11, 49);
+            this.chkZigZagWinsStreak.Name = "chkZigZagWinsStreak";
+            this.chkZigZagWinsStreak.Size = new System.Drawing.Size(82, 17);
+            this.chkZigZagWinsStreak.TabIndex = 107;
+            this.chkZigZagWinsStreak.Text = "Switch after";
+            this.chkZigZagWinsStreak.UseVisualStyleBackColor = true;
+            // 
+            // nudZigZagWins
+            // 
+            this.nudZigZagWins.Location = new System.Drawing.Point(99, 22);
+            this.nudZigZagWins.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudZigZagWins.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudZigZagWins.Name = "nudZigZagWins";
+            this.nudZigZagWins.Size = new System.Drawing.Size(87, 20);
+            this.nudZigZagWins.TabIndex = 98;
+            this.nudZigZagWins.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(192, 105);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(80, 13);
+            this.label9.TabIndex = 106;
+            this.label9.Text = "Losses in a row";
+            // 
+            // nudZigZagBets
+            // 
+            this.nudZigZagBets.Location = new System.Drawing.Point(99, 128);
+            this.nudZigZagBets.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudZigZagBets.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudZigZagBets.Name = "nudZigZagBets";
+            this.nudZigZagBets.Size = new System.Drawing.Size(87, 20);
+            this.nudZigZagBets.TabIndex = 99;
+            this.nudZigZagBets.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // nudZigZagLossStreak
+            // 
+            this.nudZigZagLossStreak.Location = new System.Drawing.Point(99, 102);
+            this.nudZigZagLossStreak.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudZigZagLossStreak.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudZigZagLossStreak.Name = "nudZigZagLossStreak";
+            this.nudZigZagLossStreak.Size = new System.Drawing.Size(87, 20);
+            this.nudZigZagLossStreak.TabIndex = 105;
+            this.nudZigZagLossStreak.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // nudZigZagLoss
+            // 
+            this.nudZigZagLoss.Location = new System.Drawing.Point(99, 76);
+            this.nudZigZagLoss.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudZigZagLoss.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudZigZagLoss.Name = "nudZigZagLoss";
+            this.nudZigZagLoss.Size = new System.Drawing.Size(87, 20);
+            this.nudZigZagLoss.TabIndex = 100;
+            this.nudZigZagLoss.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkZigZagLossStreak
+            // 
+            this.chkZigZagLossStreak.AutoSize = true;
+            this.chkZigZagLossStreak.Location = new System.Drawing.Point(11, 103);
+            this.chkZigZagLossStreak.Name = "chkZigZagLossStreak";
+            this.chkZigZagLossStreak.Size = new System.Drawing.Size(82, 17);
+            this.chkZigZagLossStreak.TabIndex = 104;
+            this.chkZigZagLossStreak.Text = "Switch after";
+            this.chkZigZagLossStreak.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(192, 131);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(28, 13);
+            this.label1.TabIndex = 101;
+            this.label1.Text = "Bets";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(192, 25);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(31, 13);
+            this.label8.TabIndex = 103;
+            this.label8.Text = "Wins";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(192, 79);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(40, 13);
+            this.label7.TabIndex = 102;
+            this.label7.Text = "Losses";
             // 
             // label84
             // 
             this.label84.AutoSize = true;
-            this.label84.Location = new System.Drawing.Point(5, 202);
+            this.label84.Location = new System.Drawing.Point(16, 378);
             this.label84.Name = "label84";
             this.label84.Size = new System.Drawing.Size(103, 13);
             this.label84.TabIndex = 94;
@@ -3002,14 +3257,14 @@
             // lsbStrats
             // 
             this.lsbStrats.FormattingEnabled = true;
-            this.lsbStrats.Location = new System.Drawing.Point(114, 202);
+            this.lsbStrats.Location = new System.Drawing.Point(125, 378);
             this.lsbStrats.Name = "lsbStrats";
             this.lsbStrats.Size = new System.Drawing.Size(217, 69);
             this.lsbStrats.TabIndex = 93;
             // 
             // btnStratRefresh
             // 
-            this.btnStratRefresh.Location = new System.Drawing.Point(176, 173);
+            this.btnStratRefresh.Location = new System.Drawing.Point(187, 349);
             this.btnStratRefresh.Name = "btnStratRefresh";
             this.btnStratRefresh.Size = new System.Drawing.Size(75, 23);
             this.btnStratRefresh.TabIndex = 92;
@@ -3019,7 +3274,7 @@
             // 
             // btnBrowseStratFolder
             // 
-            this.btnBrowseStratFolder.Location = new System.Drawing.Point(256, 173);
+            this.btnBrowseStratFolder.Location = new System.Drawing.Point(267, 349);
             this.btnBrowseStratFolder.Name = "btnBrowseStratFolder";
             this.btnBrowseStratFolder.Size = new System.Drawing.Size(75, 23);
             this.btnBrowseStratFolder.TabIndex = 91;
@@ -3029,7 +3284,7 @@
             // 
             // txtQuickSwitch
             // 
-            this.txtQuickSwitch.Location = new System.Drawing.Point(114, 147);
+            this.txtQuickSwitch.Location = new System.Drawing.Point(125, 323);
             this.txtQuickSwitch.Name = "txtQuickSwitch";
             this.txtQuickSwitch.Size = new System.Drawing.Size(217, 20);
             this.txtQuickSwitch.TabIndex = 90;
@@ -3037,7 +3292,7 @@
             // label83
             // 
             this.label83.AutoSize = true;
-            this.label83.Location = new System.Drawing.Point(9, 150);
+            this.label83.Location = new System.Drawing.Point(20, 326);
             this.label83.Name = "label83";
             this.label83.Size = new System.Drawing.Size(105, 13);
             this.label83.TabIndex = 89;
@@ -3167,95 +3422,6 @@
             this.chkBotSpeed.TabIndex = 79;
             this.chkBotSpeed.Text = "Bot Speed:";
             this.chkBotSpeed.UseVisualStyleBackColor = true;
-            // 
-            // tbZigZag
-            // 
-            this.tbZigZag.Controls.Add(this.rdbReverseBets);
-            this.tbZigZag.Controls.Add(this.rdbReverseLoss);
-            this.tbZigZag.Controls.Add(this.rdbReverseWins);
-            this.tbZigZag.Controls.Add(this.chkReverse);
-            this.tbZigZag.Controls.Add(this.NudReverse);
-            this.tbZigZag.Controls.Add(this.lblZigZag1);
-            this.tbZigZag.Location = new System.Drawing.Point(4, 22);
-            this.tbZigZag.Name = "tbZigZag";
-            this.tbZigZag.Padding = new System.Windows.Forms.Padding(3);
-            this.tbZigZag.Size = new System.Drawing.Size(467, 734);
-            this.tbZigZag.TabIndex = 14;
-            this.tbZigZag.Text = "Zig Zag";
-            this.tbZigZag.UseVisualStyleBackColor = true;
-            // 
-            // rdbReverseBets
-            // 
-            this.rdbReverseBets.AutoSize = true;
-            this.rdbReverseBets.Checked = true;
-            this.rdbReverseBets.Location = new System.Drawing.Point(24, 100);
-            this.rdbReverseBets.Name = "rdbReverseBets";
-            this.rdbReverseBets.Size = new System.Drawing.Size(46, 17);
-            this.rdbReverseBets.TabIndex = 6;
-            this.rdbReverseBets.TabStop = true;
-            this.rdbReverseBets.Text = "Bets";
-            this.rdbReverseBets.UseVisualStyleBackColor = true;
-            // 
-            // rdbReverseLoss
-            // 
-            this.rdbReverseLoss.AutoSize = true;
-            this.rdbReverseLoss.Location = new System.Drawing.Point(24, 77);
-            this.rdbReverseLoss.Name = "rdbReverseLoss";
-            this.rdbReverseLoss.Size = new System.Drawing.Size(58, 17);
-            this.rdbReverseLoss.TabIndex = 5;
-            this.rdbReverseLoss.Text = "Losses";
-            this.rdbReverseLoss.UseVisualStyleBackColor = true;
-            // 
-            // rdbReverseWins
-            // 
-            this.rdbReverseWins.AutoSize = true;
-            this.rdbReverseWins.Location = new System.Drawing.Point(24, 54);
-            this.rdbReverseWins.Name = "rdbReverseWins";
-            this.rdbReverseWins.Size = new System.Drawing.Size(49, 17);
-            this.rdbReverseWins.TabIndex = 4;
-            this.rdbReverseWins.Text = "Wins";
-            this.rdbReverseWins.UseVisualStyleBackColor = true;
-            // 
-            // chkReverse
-            // 
-            this.chkReverse.AutoSize = true;
-            this.chkReverse.Location = new System.Drawing.Point(24, 18);
-            this.chkReverse.Name = "chkReverse";
-            this.chkReverse.Size = new System.Drawing.Size(99, 17);
-            this.chkReverse.TabIndex = 3;
-            this.chkReverse.Text = "Enable Zig Zag";
-            this.chkReverse.UseVisualStyleBackColor = true;
-            // 
-            // NudReverse
-            // 
-            this.NudReverse.Location = new System.Drawing.Point(149, 36);
-            this.NudReverse.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.NudReverse.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.NudReverse.Name = "NudReverse";
-            this.NudReverse.Size = new System.Drawing.Size(64, 20);
-            this.NudReverse.TabIndex = 2;
-            this.NudReverse.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // lblZigZag1
-            // 
-            this.lblZigZag1.AutoSize = true;
-            this.lblZigZag1.Location = new System.Drawing.Point(21, 38);
-            this.lblZigZag1.Name = "lblZigZag1";
-            this.lblZigZag1.Size = new System.Drawing.Size(121, 13);
-            this.lblZigZag1.TabIndex = 1;
-            this.lblZigZag1.Text = "Switch High/Low every ";
             // 
             // panel4
             // 
@@ -4248,7 +4414,6 @@
             this.scMain.Size = new System.Drawing.Size(1484, 796);
             this.scMain.SplitterDistance = 563;
             this.scMain.TabIndex = 9;
-            
             // 
             // pnlProgrammer
             // 
@@ -4510,6 +4675,11 @@
             this.manualBettingToolStripMenuItem.Text = "Manual Betting";
             this.manualBettingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.manualBettingToolStripMenuItem_CheckedChanged);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+            // 
             // statsToolStripMenuItem
             // 
             this.statsToolStripMenuItem.Name = "statsToolStripMenuItem";
@@ -4517,11 +4687,6 @@
             this.statsToolStripMenuItem.Text = "Stats";
             this.statsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.statsToolStripMenuItem_CheckedChanged);
             this.statsToolStripMenuItem.Click += new System.EventHandler(this.statsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
             // 
             // chartsToolStripMenuItem
             // 
@@ -4569,6 +4734,13 @@
             this.customToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.customToolStripMenuItem.Text = "Custom";
             this.customToolStripMenuItem.Click += new System.EventHandler(this.btnChartBetID_Click);
+            // 
+            // chatToolStripMenuItem
+            // 
+            this.chatToolStripMenuItem.Name = "chatToolStripMenuItem";
+            this.chatToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.chatToolStripMenuItem.Text = "Chat";
+            this.chatToolStripMenuItem.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // simulationToolStripMenuItem
             // 
@@ -4819,25 +4991,6 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
-            // chatToolStripMenuItem
-            // 
-            this.chatToolStripMenuItem.Name = "chatToolStripMenuItem";
-            this.chatToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.chatToolStripMenuItem.Text = "Chat";
-            this.chatToolStripMenuItem.Click += new System.EventHandler(this.button4_Click_1);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.lblMinBet);
-            this.panel1.Controls.Add(this.lblChance);
-            this.panel1.Controls.Add(this.nudChance);
-            this.panel1.Controls.Add(this.nudMinBet);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(3, 16);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(461, 30);
-            this.panel1.TabIndex = 69;
-            // 
             // idDataGridViewTextBoxColumn
             // 
             this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
@@ -4991,6 +5144,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.NudTrazelLose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTrazelWin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMutawaMultiplier)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudChance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinBet)).EndInit();
             this.tabPage4.ResumeLayout(false);
@@ -5015,11 +5170,15 @@
             this.tabPage11.ResumeLayout(false);
             this.pnlAdvancedAdvanced.ResumeLayout(false);
             this.pnlAdvancedAdvanced.PerformLayout();
+            this.gbZigZag.ResumeLayout(false);
+            this.gbZigZag.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagWinsStreak)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagWins)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagBets)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagLossStreak)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudZigZagLoss)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetSeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBotSpeed)).EndInit();
-            this.tbZigZag.ResumeLayout(false);
-            this.tbZigZag.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NudReverse)).EndInit();
             this.panel4.ResumeLayout(false);
             this.pnlApiInfo.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
@@ -5063,8 +5222,6 @@
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -5446,15 +5603,24 @@
         private System.Windows.Forms.Label label70;
         private System.Windows.Forms.NumericUpDown nudMutawaMultiplier;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.TabPage tbZigZag;
-        private System.Windows.Forms.RadioButton rdbReverseBets;
-        private System.Windows.Forms.RadioButton rdbReverseLoss;
-        private System.Windows.Forms.RadioButton rdbReverseWins;
-        private System.Windows.Forms.CheckBox chkReverse;
-        private System.Windows.Forms.NumericUpDown NudReverse;
-        private System.Windows.Forms.Label lblZigZag1;
         private System.Windows.Forms.ToolStripMenuItem chatToolStripMenuItem;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.NumericUpDown nudZigZagWinsStreak;
+        private System.Windows.Forms.CheckBox chkZigZagWinsStreak;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown nudZigZagLossStreak;
+        private System.Windows.Forms.CheckBox chkZigZagLossStreak;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown nudZigZagLoss;
+        private System.Windows.Forms.NumericUpDown nudZigZagBets;
+        private System.Windows.Forms.NumericUpDown nudZigZagWins;
+        private System.Windows.Forms.CheckBox chkZigZagBets;
+        private System.Windows.Forms.CheckBox chkZigZagLoss;
+        private System.Windows.Forms.CheckBox chkZigZagWins;
+        private System.Windows.Forms.GroupBox gbZigZag;
 
     }
 }

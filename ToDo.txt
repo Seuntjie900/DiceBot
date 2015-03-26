@@ -1,18 +1,17 @@
 Todo:
-implement other sites (bitdice API incomplete)
-safedice register
 PD login encoding
-468x60 banner
+999dice betting bug (date format, not set to instance, Both at Datagridview)
 
 hopefully before release:
 losing streak table redo
+468x60 banner
 
 
 Not essential:
+implement other sites (bitdice API incomplete, dadice api incomplete)
 clean up + organize code
 multilingual support
 finish tooltips (don't want to do without the multi lingual support finnished)
-advanced zig zag
 
 Done:
 v3:
@@ -59,3 +58,5 @@ PRC Register
 fix settings window and load (finished but not completely tested)
 Proxy Authentication.
 PD register
+safedice register
+advanced zig zag
