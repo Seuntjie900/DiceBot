@@ -163,7 +163,7 @@ namespace DiceBot
         protected void finishedlogin(bool Success)
         {
             if (FinishedLogin!=null)
-            FinishedLogin(Success);
+                FinishedLogin(Success);
         }
 
         public delegate void dFinishedLogin(bool LoggedIn);

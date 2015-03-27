@@ -164,7 +164,7 @@ namespace DiceBot
                     Parent.updateStatus(sEmitResponse);
                     if (e.Message.Contains("401"))
                     {
-                        System.Windows.Forms.MessageBox.Show("Could not log in. Please ensure the username, passowrd and 2fa code are all correct.");
+                        //System.Windows.Forms.MessageBox.Show("Could not log in. Please ensure the username, passowrd and 2fa code are all correct.");
                     }
 
                 }
@@ -177,6 +177,7 @@ namespace DiceBot
         {
             try
             {
+                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, (bool)High ? "High" : "Low"));
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/dicebets");
                 if (Prox != null)
                     betrequest.Proxy = Prox;
@@ -373,6 +374,7 @@ namespace DiceBot
         {
             try
             {
+                Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
                 HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/1/withdraw");
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
@@ -397,7 +399,7 @@ namespace DiceBot
                 HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
-                SDRandomize tmp = json.JsonDeserialize<SDRandomize>(sEmitResponse);
+                
                 balance -= Amount;
                 Parent.updateBalance(balance);
                 return true;
@@ -498,9 +500,6 @@ namespace DiceBot
                     nonce = tmp1.nonce;
                     UID = tmp1.id;
                     Parent.updateDeposit(GetDepositAddress());
-
-
-
                     finishedlogin(true);
                 }
 
@@ -511,10 +510,10 @@ namespace DiceBot
                 {
 
                     string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                    Parent.updateStatus(sEmitResponse);
+                    //Parent.updateStatus(sEmitResponse);
                     if (e.Message.Contains("401"))
                     {
-                        System.Windows.Forms.MessageBox.Show("Could not log in. Please ensure the username, passowrd and 2fa code are all correct.");
+                        //System.Windows.Forms.MessageBox.Show("Could not log in. Please ensure the username, passowrd and 2fa code are all correct.");
                     }
 
                 }
@@ -574,7 +573,45 @@ namespace DiceBot
             return 0;
         }
 
+        public override bool Invest(double Amount)
+        {
+            try
+            {
+                Parent.updateStatus(string.Format("Investing {0:0.00000000}", Amount));
+                HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/1/invest");
+                if (Prox != null)
+                    loginrequest.Proxy = Prox;
 
+                loginrequest.Method = "POST";
+
+                loginrequest.Accept = "application/json, text/plain, */*";
+
+                loginrequest.ContentType = " application/json;charset=utf-8";
+                loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
+                loginrequest.CookieContainer = new CookieContainer();
+                loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
+                string post = json.JsonSerializer<SDSendInvest>(new SDSendInvest { amount = (int)(Amount * 100000000) });
+
+                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                {
+
+                    writer.Write(post);
+                    writer.Flush();
+                    writer.Close();
+                }
+                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+
+                
+                balance -= Amount;
+                Parent.updateBalance(balance);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         public static double sGetLucky(string server, string client, int nonce)
         {
@@ -646,7 +683,10 @@ namespace DiceBot
         int lastchat = 0;
 
     }
-
+    public class SDSendInvest
+    {
+        public double amount { get; set; }
+    }
     public class SDChat
     {
         public int id { get; set; }

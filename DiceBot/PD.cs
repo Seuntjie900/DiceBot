@@ -132,8 +132,6 @@ namespace DiceBot
                     HttpWebResponse EmitResponse3 = (HttpWebResponse)PWRequest.GetResponse();
                     string sEmitResponse3 = new StreamReader(EmitResponse3.GetResponseStream()).ReadToEnd();
                     lastupdate = DateTime.Now;
-                    System.Windows.Forms.MessageBox.Show("Successfully registered " + Username + ". To to update profile settings or enable 2fa, please log into the site.");
-                    Parent.updateStatus("Registered! Pleaes deposit some funds to start playing.");
                     return true;
 
 
@@ -142,7 +140,7 @@ namespace DiceBot
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Failed to register account! Please make sure your username isn't already in use.");
+                
             }
 
             return false;
@@ -203,8 +201,6 @@ namespace DiceBot
                     }
                     Parent.updateWins(tmpu.user.wins);
                     lastupdate = DateTime.Now;
-                    System.Windows.Forms.MessageBox.Show("Logged in!\n\nWelcome "+Username);
-                    Parent.updateStatus("Logged in! Welcome "+Username);
                     finishedlogin(true);
                 }
             }
@@ -213,12 +209,7 @@ namespace DiceBot
                 if (e.Response != null)
                 {
 
-                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                    Parent.updateStatus(sEmitResponse);
-                    if (e.Message.Contains("401"))
-                    {
-                        System.Windows.Forms.MessageBox.Show("Could not log in. Please ensure the username, passowrd and 2fa code are all correct.");
-                    }
+                    
                     
                 }
                 finishedlogin(false);

@@ -107,7 +107,7 @@ namespace DiceBot
 
         public override void PlaceBet(bool High)
         {
-            Parent.updateStatus("Betting " + amount + " at " + chance + " " + (High?"High":"Low"));
+            Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
             Instance.Bet(chance, amount, High);
         }
 
@@ -173,13 +173,12 @@ namespace DiceBot
                 Parent.updateWagered(Instance.Wagered);
                 Parent.updateWins(Instance.Wins);
                 
-                System.Windows.Forms.MessageBox.Show("Logged in!\n\nWelcome " + Username);
-                Parent.updateStatus("Logged in! Welcome " + Username);
+                
             }
 
             else
             {
-                System.Windows.Forms.MessageBox.Show("Failed to log in, Please check your username and password.");
+                
             }
 
             finishedlogin(tmp);
@@ -234,12 +233,33 @@ namespace DiceBot
 
         public override void Login(string Username, string Password)
         {
-            throw new NotImplementedException();
+            Login(Username, Password, "");
         }
 
         public override bool Register(string username, string password)
         {
-            throw new NotImplementedException();
+            bool tmp = Instance.Connect(false);
+            if (Instance.Connected)
+            {
+                Instance.SetupAccount(username, password);
+                Parent.updateBalance((decimal)Instance.Balance);
+                Parent.updateBets(Instance.Bets);
+                Parent.updateLosses(Instance.Losses);
+                Parent.updateProfit(Instance.Profit);
+                Parent.updateWagered(Instance.Wagered);
+                Parent.updateWins(Instance.Wins);
+
+
+            }
+
+            else
+            {
+
+            }
+
+            finishedlogin(tmp);
+            return tmp;
+
         }
     }
 }

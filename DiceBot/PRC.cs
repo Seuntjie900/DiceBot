@@ -53,6 +53,7 @@ namespace DiceBot
 
         public override void PlaceBet(bool High)
         {
+            Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
             dicehub.Invoke("Bet", High?0:1, amount, chance);
         }
 
@@ -206,6 +207,7 @@ namespace DiceBot
 
         public override bool Withdraw(double Amount, string Address)
         {
+            Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
             withdraw = 1;
             withdrawTime = DateTime.Now;
             wdAddress = Address;
@@ -354,8 +356,7 @@ namespace DiceBot
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
-                finishedlogin(false);
+                
             }
         }
         decimal Wagered = 0;
@@ -478,10 +479,12 @@ namespace DiceBot
                 prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
                 client = getseed.ClientSeed;
                 serverhash = getseed.ServerHash;
+                finishedlogin(true);
                 return true;
             }
             catch
             {
+                finishedlogin(false);
                 return false;
             }
         }

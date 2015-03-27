@@ -2,6 +2,8 @@
 using System.Runtime.Serialization.Json;
 using System.IO;
 using System;
+using System.Threading;
+using System.Globalization;
 
 namespace DiceBot
 {
@@ -30,6 +32,8 @@ namespace DiceBot
         }
         public static string ToDateString(DateTime Value)
         {
+            
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             TimeSpan dt = Value - DateTime.Parse("1970/01/01 00:00:00");
             double mili = dt.TotalMilliseconds;
             return ((long)mili).ToString();
@@ -38,6 +42,7 @@ namespace DiceBot
 
         public static DateTime ToDateTime2(string milliseconds)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             try
             {
                 DateTime dotNetDate = new DateTime(1970, 1, 1);

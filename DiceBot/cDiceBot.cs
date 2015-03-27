@@ -387,7 +387,13 @@ namespace DiceBot
                 {
                     txtApiPassword.Text = "";
                     EnableNotLoggedInControls(true);
-
+                    MessageBox.Show("Successfully Logged in or registered.");
+                    updateStatus("Logged in.");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to log in or register new account!", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    updateStatus("Disconnected");
                 }
 
             }
@@ -1889,8 +1895,22 @@ namespace DiceBot
         System.Collections.ArrayList Vars = new System.Collections.ArrayList();
         private void parseScript(bool Win, double Profit)
         {
-            
+
             try
+            {
+                SetLuaVars();
+                Lua["win"] = Win;
+                Lua["currentprofit"] = ((double)(Profit * 100000000)) / 100000000.0;
+
+                LuaRuntime.SetLua(Lua);
+                LuaRuntime.Run("dobet()");
+                GetLuaVars();
+            }
+            catch
+            {
+
+            }
+            /*try
             {
                 //Lua.clear();
                 Lua["balance"] = (double)((int)(PreviousBalance * 100000000)) / 100000000.0;
@@ -1916,7 +1936,7 @@ namespace DiceBot
                 Stop();
                 WriteConsole("LUA ERROR!!");
                 WriteConsole(e.Message);
-            }
+            }*/
 
             
         }
@@ -5018,6 +5038,10 @@ namespace DiceBot
 
         private void btcToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!diceToolStripMenuItem.Checked)
+            {
+                diceToolStripMenuItem.Checked = true;
+            }
             foreach (ToolStripMenuItem t in diceToolStripMenuItem.DropDownItems)
             {
                 t.Checked = t == sender as ToolStripMenuItem;
@@ -5037,12 +5061,56 @@ namespace DiceBot
 
         }
 
+
+        void SetLuaVars()
+        {
+            try
+            {
+                //Lua.clear();
+                Lua["balance"] = (double)((int)(PreviousBalance * 100000000)) / 100000000.0;
+                
+                Lua["profit"] = ((double)(this.profit * 100000000)) / 100000000.0;
+                Lua["currentstreak"] = (Winstreak >= 0) ? Winstreak : -Losestreak;
+                Lua["previousbet"] = Lastbet;
+                Lua["nextbet"] = Lastbet;
+                Lua["chance"] = Chance;
+                Lua["bethigh"] = high;
+                Lua["bets"] = Wins + Losses;
+                Lua["wins"] = Wins;
+                Lua["losses"] = Losses;
+                
+            }
+            catch (Exception e)
+            {
+                Stop();
+                WriteConsole("LUA ERROR!!");
+                WriteConsole(e.Message);
+            }
+        }
+        void GetLuaVars()
+        {
+
+            try
+            {
+                Lastbet = (double)Lua["nextbet"];
+                Chance = (double)Lua["chance"];
+                high = (bool)Lua["bethigh"];
+                CurrentSite.amount = Lastbet;
+                CurrentSite.chance = Chance;
+            }
+            catch
+            {
+
+            }
+        }
         int LCindex = 0;
         private void textBox1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
 
             if (e.KeyCode == Keys.Enter)
             {
+
+                SetLuaVars();
                 LCindex = 0;
                 LastCommands.Add(txtConsoleIn.Text);
                 if (LastCommands.Count>26)
@@ -5079,7 +5147,7 @@ namespace DiceBot
                 }
                 
                 txtConsoleIn.Text = "";
-
+                GetLuaVars();
             }
             if (e.KeyCode == Keys.Up)
             {

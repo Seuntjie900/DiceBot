@@ -1,6 +1,7 @@
 Todo:
 PD login encoding
 999dice betting bug (date format, not set to instance, Both at Datagridview)
+strategy help buttons and pages
 
 hopefully before release:
 losing streak table redo

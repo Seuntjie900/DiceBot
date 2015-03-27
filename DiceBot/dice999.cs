@@ -91,6 +91,7 @@ namespace DiceBot
         {
             try
             {
+                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, this.chance, High ? "High" : "Low"));
                 HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
@@ -98,7 +99,7 @@ namespace DiceBot
                 string sEmitResponse = "";
                 double chance = (999999.0) * (this.chance / 100.0);
                 HttpWebResponse EmitResponse;
-                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, this.chance, High ? "High" : "Low"));
+                
                 if (next == "" && next!=null)
                 {
                     
@@ -267,6 +268,7 @@ namespace DiceBot
         
         public override bool Withdraw(double Amount, string Address)
         {
+            Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
             if (Prox != null)
                 loginrequest.Proxy = Prox;
@@ -335,7 +337,7 @@ namespace DiceBot
             }      
             else
             {
-                System.Windows.Forms.MessageBox.Show("Could not log in. Please check your username and password"); ;
+                
             }
             finishedlogin(sessionCookie != "");
         }
@@ -388,7 +390,7 @@ namespace DiceBot
             }
             else
             {
-                System.Windows.Forms.MessageBox.Show("Could not register. Please try again.");
+                
             }
             return sessionCookie != "" && sessionCookie != null;
         }
