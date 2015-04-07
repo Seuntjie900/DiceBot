@@ -101,7 +101,7 @@ namespace DiceBot
                 Parent.updateWagered(result.wagered );
                 
                 Parent.AddBet(ToBet(result));
-                Parent.GetBetResult(double.Parse(result.balance, System.Globalization.CultureInfo.InvariantCulture), result.win, (double.Parse(result.this_profit, System.Globalization.CultureInfo.InvariantCulture)));
+                Parent.GetBetResult(double.Parse(result.balance, System.Globalization.CultureInfo.InvariantCulture), ToBet(result));
             }
         }
 

@@ -2,6 +2,9 @@ Todo:
 PD login encoding
 999dice betting bug (date format, not set to instance, Both at Datagridview)
 strategy help buttons and pages
+d'Alembert stop/reset on win
+reset on streak profit
+reset on profit (sal kyk)
 
 hopefully before release:
 losing streak table redo
@@ -61,3 +64,4 @@ Proxy Authentication.
 PD register
 safedice register
 advanced zig zag
+Send bet object to form.

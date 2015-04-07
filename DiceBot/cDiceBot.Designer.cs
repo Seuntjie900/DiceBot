@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -42,6 +42,7 @@
             this.tbMartingale = new System.Windows.Forms.TabPage();
             this.rdbMartingale = new System.Windows.Forms.RadioButton();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.chkFirstResetLoss = new System.Windows.Forms.CheckBox();
             this.nudChangeChanceLoseTo = new System.Windows.Forms.NumericUpDown();
             this.label67 = new System.Windows.Forms.Label();
             this.nudChangeChanceLoseStreak = new System.Windows.Forms.NumericUpDown();
@@ -64,6 +65,7 @@
             this.lblAfter = new System.Windows.Forms.Label();
             this.lblMaxMultiplier = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.chkFirstResetWin = new System.Windows.Forms.CheckBox();
             this.nudChangeChanceWinTo = new System.Windows.Forms.NumericUpDown();
             this.label68 = new System.Windows.Forms.Label();
             this.nudChangeChanceWinStreak = new System.Windows.Forms.NumericUpDown();
@@ -647,6 +649,7 @@
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.chkFirstResetLoss);
             this.groupBox9.Controls.Add(this.nudChangeChanceLoseTo);
             this.groupBox9.Controls.Add(this.label67);
             this.groupBox9.Controls.Add(this.nudChangeChanceLoseStreak);
@@ -670,10 +673,20 @@
             this.groupBox9.Controls.Add(this.lblMaxMultiplier);
             this.groupBox9.Location = new System.Drawing.Point(8, 27);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(406, 163);
+            this.groupBox9.Size = new System.Drawing.Size(406, 188);
             this.groupBox9.TabIndex = 2;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Multiplier on Loss";
+            // 
+            // chkFirstResetLoss
+            // 
+            this.chkFirstResetLoss.AutoSize = true;
+            this.chkFirstResetLoss.Location = new System.Drawing.Point(10, 155);
+            this.chkFirstResetLoss.Name = "chkFirstResetLoss";
+            this.chkFirstResetLoss.Size = new System.Drawing.Size(174, 17);
+            this.chkFirstResetLoss.TabIndex = 126;
+            this.chkFirstResetLoss.Text = "Reset to base bet after first loss";
+            this.chkFirstResetLoss.UseVisualStyleBackColor = true;
             // 
             // nudChangeChanceLoseTo
             // 
@@ -945,6 +958,7 @@
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.chkFirstResetWin);
             this.groupBox8.Controls.Add(this.nudChangeChanceWinTo);
             this.groupBox8.Controls.Add(this.label68);
             this.groupBox8.Controls.Add(this.nudChangeChanceWinStreak);
@@ -966,12 +980,24 @@
             this.groupBox8.Controls.Add(this.rdbWinConstant);
             this.groupBox8.Controls.Add(this.label47);
             this.groupBox8.Controls.Add(this.label54);
-            this.groupBox8.Location = new System.Drawing.Point(8, 207);
+            this.groupBox8.Location = new System.Drawing.Point(11, 234);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(406, 163);
+            this.groupBox8.Size = new System.Drawing.Size(406, 188);
             this.groupBox8.TabIndex = 1;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Multiplier on Win";
+            // 
+            // chkFirstResetWin
+            // 
+            this.chkFirstResetWin.AutoSize = true;
+            this.chkFirstResetWin.Checked = true;
+            this.chkFirstResetWin.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkFirstResetWin.Location = new System.Drawing.Point(10, 154);
+            this.chkFirstResetWin.Name = "chkFirstResetWin";
+            this.chkFirstResetWin.Size = new System.Drawing.Size(172, 17);
+            this.chkFirstResetWin.TabIndex = 139;
+            this.chkFirstResetWin.Text = "Reset to base bet after first win";
+            this.chkFirstResetWin.UseVisualStyleBackColor = true;
             // 
             // nudChangeChanceWinTo
             // 
@@ -3592,18 +3618,18 @@
             // 
             // chrtEmbeddedLiveChart
             // 
-            chartArea6.Name = "ChartArea1";
-            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea6);
+            chartArea1.Name = "ChartArea1";
+            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend6.Name = "Legend1";
-            this.chrtEmbeddedLiveChart.Legends.Add(legend6);
+            legend1.Name = "Legend1";
+            this.chrtEmbeddedLiveChart.Legends.Add(legend1);
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.Legend = "Legend1";
-            series6.Name = "Profit";
-            this.chrtEmbeddedLiveChart.Series.Add(series6);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Profit";
+            this.chrtEmbeddedLiveChart.Series.Add(series1);
             this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(555, 320);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
@@ -4582,7 +4608,8 @@
             "losses:int, RO",
             "nextbet:double, RW",
             "chance:double, RW",
-            "bethigh:bool, RW"});
+            "bethigh:bool, RW",
+            "lastBet:Bet, RO"});
             this.lbVariables.Location = new System.Drawing.Point(9, 21);
             this.lbVariables.Name = "lbVariables";
             this.lbVariables.Size = new System.Drawing.Size(262, 160);
@@ -5621,6 +5648,8 @@
         private System.Windows.Forms.CheckBox chkZigZagLoss;
         private System.Windows.Forms.CheckBox chkZigZagWins;
         private System.Windows.Forms.GroupBox gbZigZag;
+        private System.Windows.Forms.CheckBox chkFirstResetLoss;
+        private System.Windows.Forms.CheckBox chkFirstResetWin;
 
     }
 }

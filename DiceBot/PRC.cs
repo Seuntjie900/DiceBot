@@ -81,7 +81,7 @@ namespace DiceBot
                 Parent.updateWins(wins);
                 tmp.serverhash = serverhash;
                 Parent.AddBet(tmp);
-                Parent.GetBetResult(balance, tmp.PlayerWin, (double)tmp.Profit);
+                Parent.GetBetResult(balance, tmp);
             }
         }
 

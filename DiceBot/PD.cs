@@ -255,7 +255,7 @@ namespace DiceBot
                 balance = tmp.user.balance/ 100000000.0; //i assume
                 bets = tmp.user.bets;
                 Parent.AddBet(tmp.bet.toBet());
-                Parent.GetBetResult(tmp.user.balance / 100000000.0, tmp.bet.win, tmp.bet.profit/100000000.0);
+                Parent.GetBetResult(tmp.user.balance / 100000000.0, tmp.bet.toBet());
                 
             }
             catch (WebException e)

@@ -37,7 +37,7 @@ namespace DiceBot
         Random rand = new Random();
         bool retriedbet = false;
         double StartBalance = 0;        
-        double Lastbet = 0;
+        double Lastbet = -1;
         double MinBet = 0;
         double Multiplier = 0;
         double WinMultiplier = 0;
@@ -143,21 +143,21 @@ namespace DiceBot
             }
         }
 
-        delegate void dDobet(bool Win, double Profit);
-        public void GetBetResult(double Balance, bool win, double Profit)
+        delegate void dDobet(Bet bet);
+        public void GetBetResult(double Balance, Bet bet)
         {
             PreviousBalance = (double)Balance;
-            profit += Profit;
+            profit += (double)bet.Profit;
             if (!RunningSimulation)
             {
                 AddChartPoint(profit);
             }
             if (InvokeRequired)
             {
-                Invoke(new dDobet(DoBet),win, Profit);
+                Invoke(new dDobet(DoBet),bet);
             }
             else
-                DoBet(win, (double)Profit);
+                DoBet(bet);
             
             
             
@@ -803,7 +803,52 @@ namespace DiceBot
             }
         }
 
-      
+      private void Reset()
+        {
+          if (rdbMartingale.Checked)
+          {
+              Lastbet = MinBet;
+          }
+          else if (rdbLabEnable.Checked)
+          {
+              string[] ss = GetLabList();
+              LabList = new List<double>();
+              foreach (string s in ss)
+              {
+                  LabList.Add(dparse(s, ref convert));
+              }
+              if (LabList.Count == 1)
+                  Lastbet = LabList[0];
+              else if (LabList.Count > 1)
+                  Lastbet = LabList[0] + LabList[LabList.Count - 1];
+          }
+          else if (rdbFibonacci.Checked)
+          {
+              FibonacciLevel = 0;
+              Lastbet = double.Parse(lstFibonacci.Items[FibonacciLevel].ToString().Substring(lstFibonacci.Items[FibonacciLevel].ToString().IndexOf(" ") + 1));
+          }
+          else if (rdbAlembert.Checked)
+          {
+              Lastbet = MinBet;
+          }
+          else if (rdbPreset.Checked)
+          {
+              presetLevel = 0;
+              double Betval = -1;
+              if (presetLevel < rtbPresetList.Lines.Length)
+              {
+                  if (double.TryParse(rtbPresetList.Lines[presetLevel], out Betval))
+                  {
+                      Lastbet = Betval;
+                  }
+                  else
+                  {
+                      Stop();
+                      MessageBox.Show("Invalid bet in list. Please make sure there is only one bet per line and no other charachters or letters in the list.");
+                  }
+              }
+          }
+        }
         
         void PlaceBet()
         {
@@ -970,7 +1015,23 @@ namespace DiceBot
                 }
                 if (!Continue)
                 {
-                    Lastbet = MinBet;
+                    if (!programmerToolStripMenuItem.Checked)
+                    {
+                        Lastbet = MinBet;
+                        Chance = (double)nudChance.Value;
+                    }
+                    else
+                    {
+                        if (Lastbet <0)
+                        {
+                            WriteConsole("Please set starting bet using nextbet = x.xxxxxxxx");
+                        }
+                        if (Chance==0)
+                        {
+
+                            WriteConsole("Please set starting chance using chance = yy.yyyy");
+                        }
+                    }
                     if (rdbLabEnable.Checked)
                     {
                         if (LabList.Count > 0)
@@ -1108,16 +1169,7 @@ namespace DiceBot
                                 Stop();
                             else
                             {
-                                string[] ss = GetLabList();
-                                LabList = new List<double>();
-                                foreach (string s in ss)
-                                {
-                                    LabList.Add(dparse(s, ref convert));
-                                }
-                                if (LabList.Count == 1)
-                                    Lastbet = LabList[0];
-                                else if (LabList.Count > 1)
-                                    Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                                Reset();
                             }
                         }
 
@@ -1236,7 +1288,7 @@ namespace DiceBot
                 Lastbet *= WinMultiplier;
                 if (Winstreak == 1)
                 {
-                    if (!chkMK.Checked)
+                    if(chkFirstResetWin.Checked && !chkMK.Checked)
                     {
                         Lastbet = MinBet;
                     }
@@ -1357,6 +1409,13 @@ namespace DiceBot
                 }
                 //set new bet size
                 Lastbet *= Multiplier;
+                if (Losestreak == 1)
+                {
+                    if (chkFirstResetLoss.Checked)
+                    {
+                        Lastbet = MinBet;
+                    }
+                }
                 if (chkMK.Checked)
                 {
                     Lastbet += (double)nudMKIncrement.Value;
@@ -1524,8 +1583,10 @@ namespace DiceBot
             }
         }
 
-        public void DoBet(bool Win, double profit)
+        public void DoBet(Bet bet)
         {
+            bool Win = !(((bool)bet.high ? (decimal)bet.Roll< 100m - (decimal)(bet.Chance) : (decimal)bet.Roll > (decimal)(bet.Chance)));
+            double profit = (Double)bet.Profit;
             retriedbet = false;
             if (!stop && !reset)
             {
@@ -1848,7 +1909,7 @@ namespace DiceBot
                 {
                     if (programmerToolStripMenuItem.Checked)
                     {
-                        parseScript(Win, profit);
+                        parseScript(bet);
                     }
                     else
                     {
@@ -1893,15 +1954,16 @@ namespace DiceBot
         }
 
         System.Collections.ArrayList Vars = new System.Collections.ArrayList();
-        private void parseScript(bool Win, double Profit)
+        private void parseScript(Bet bet)
         {
 
             try
             {
+                bool Win = !(((bool)bet.high ? (decimal)bet.Roll < 100m - (decimal)(bet.Chance) : (decimal)bet.Roll > (decimal)(bet.Chance)));
                 SetLuaVars();
                 Lua["win"] = Win;
-                Lua["currentprofit"] = ((double)(Profit * 100000000)) / 100000000.0;
-
+                Lua["currentprofit"] = ((double)(bet.Profit * 100000000)) / 100000000.0;
+                Lua["lastBet"] = bet;
                 LuaRuntime.SetLua(Lua);
                 LuaRuntime.Run("dobet()");
                 GetLuaVars();
@@ -1944,6 +2006,15 @@ namespace DiceBot
         void WriteConsole(string Message)
         {
             rtbConsole.AppendText(Message+"\r\n");
+            if (rtbConsole.Lines.Length>500)
+            {
+                List<string> lines = new List<string>(rtbConsole.Lines);
+                while (lines.Count>450)
+                {
+                    lines.RemoveAt(0);
+                }
+                rtbConsole.Lines = lines.ToArray();
+            }
         }
         delegate void dWriteConsole(string Message);
         delegate void dWithdraw(double Amount, string Address);
@@ -2016,7 +2087,7 @@ namespace DiceBot
                 else
                 if (CurrentSite.ReadyToBet() && valid)
                 {
-                    Thread.Sleep(100);
+                    
                     PlaceBet();
                 }
                
@@ -3788,10 +3859,17 @@ namespace DiceBot
         {
             dtLastBet = DateTime.Now;
             EnableTimer(tmBet, false);
+            Bet tmp = new Bet();
             if (Wins + Losses <= SimWindow.nudSimNumBets.Value)
             {
                 string betstring = (Wins + Losses).ToString() + ",";
                 double number = CurrentSite.GetLucky(server, client, Wins + Losses);
+                tmp.Roll = (decimal)number;
+                tmp.Chance = (decimal)Chance;
+                tmp.Amount = (decimal)Lastbet;
+                tmp.high = high;
+                tmp.date = DateTime.Now;
+                
                 betstring += number.ToString() + "," + Chance.ToString() + ",";
                 bool win = false;
                 if (high)
@@ -3813,7 +3891,7 @@ namespace DiceBot
                     betstring += Lastbet + ",";
                     betProfit = (Lastbet * 99 / Chance) - Lastbet;
                     betstring += betProfit  + ",";
-                    
+                    tmp.Profit = (decimal)betProfit;    
 
                 }
                 else
@@ -3823,7 +3901,7 @@ namespace DiceBot
                     betstring += Lastbet + ",";
                     betProfit = -Lastbet ;
                     betstring +=  betProfit +",";
-                    
+                    tmp.Profit = (decimal)betProfit;
                 }
                 this.PreviousBalance = dPreviousBalance + betProfit;
                 betstring += PreviousBalance + ",";
@@ -3847,7 +3925,7 @@ namespace DiceBot
                     tempsim.bets.Clear();
                 }
 
-                GetBetResult(PreviousBalance, win, betProfit);
+                GetBetResult(PreviousBalance, tmp);
             }
             else
                 Stop();
@@ -5070,7 +5148,7 @@ namespace DiceBot
                 Lua["balance"] = (double)((int)(PreviousBalance * 100000000)) / 100000000.0;
                 
                 Lua["profit"] = ((double)(this.profit * 100000000)) / 100000000.0;
-                Lua["currentstreak"] = (Winstreak >= 0) ? Winstreak : -Losestreak;
+                Lua["currentstreak"] = (Winstreak > 0) ? Winstreak : -Losestreak;
                 Lua["previousbet"] = Lastbet;
                 Lua["nextbet"] = Lastbet;
                 Lua["chance"] = Chance;

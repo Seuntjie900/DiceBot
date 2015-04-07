@@ -203,7 +203,7 @@ namespace DiceBot
                 Parent.AddBet(tmp);
                 sqlite_helper.InsertSeed(tmp.serverhash, tmp.serverseed);
                 next = tmpBet.Next;
-                Parent.GetBetResult((double)balance, win, (double)tmp.Profit);
+                Parent.GetBetResult((double)balance, tmp);
                 
             }
             catch

@@ -142,6 +142,7 @@ namespace DiceBot
                     wins = tmp2.win;
                     losses = tmp2.lose;
                     Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / 100000000.0);
+                    profit = (tmp2.amountWin - tmp2.amountLose) / 100000000.0;
                     Parent.updateWagered(tmp2.wagered / 100000000.0);
                     wagered = tmp2.wagered / 100000000.0;
                     Parent.updateWins(tmp2.win);
@@ -235,7 +236,7 @@ namespace DiceBot
                     Parent.updateLosses(++losses);
                 Parent.updateProfit(profit += (double)bet.Profit);
                 Parent.AddBet(bet);
-                Parent.GetBetResult(balance, win, (double)bet.Profit);
+                Parent.GetBetResult(balance, bet);
 
             }
             catch (WebException e)
@@ -491,6 +492,7 @@ namespace DiceBot
                     wins = tmp2.win;
                     losses = tmp2.lose;
                     Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / 100000000.0);
+                    profit = (tmp2.amountWin - tmp2.amountLose) / 100000000.0;
                     Parent.updateWagered(tmp2.wagered / 100000000.0);
                     wagered = tmp2.wagered / 100000000.0;
                     Parent.updateWins(tmp2.win);
