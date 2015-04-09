@@ -340,6 +340,7 @@ namespace DiceBot
             if (stop)
             {
                 LuaRuntime.SetLua(Lua);
+                GetLuaVars();
                 LuaRuntime.Run(richTextBox3.Text);
                 SimWindow.nudSimBalance.Value = (decimal)startingbalance;
                 SimWindow.nudSimNumBets.Value = (decimal)bets;
@@ -996,6 +997,7 @@ namespace DiceBot
                 save();
 
                 stoponwin = false;
+                if (!programmerToolStripMenuItem.Checked)
                 Chance = (double)nudChance.Value;
                 CurrentSite.chance =(Chance);
 
@@ -1018,6 +1020,7 @@ namespace DiceBot
                     if (!programmerToolStripMenuItem.Checked)
                     {
                         Lastbet = MinBet;
+                        if (!programmerToolStripMenuItem.Checked)
                         Chance = (double)nudChance.Value;
                     }
                     else
@@ -1048,7 +1051,10 @@ namespace DiceBot
                             return;
                         }
                     }
-                    mutawaprev = (double)nudChangeWinStreakTo.Value / (double)nudMutawaMultiplier.Value;
+                    if (nudMutawaMultiplier.Value != 0)
+                    {
+                        mutawaprev = (double)nudChangeWinStreakTo.Value / (double)nudMutawaMultiplier.Value;
+                    }
                 }
                 if (RunningSimulation)
                 {
@@ -1057,7 +1063,7 @@ namespace DiceBot
                 }
                 else
                 {
-                    setInterval(tmBet, 100);
+                    setInterval(tmBet, 10);
                     //PlaceBet();
                     EnableTimer(tmBet, true);
                 }
@@ -1332,7 +1338,7 @@ namespace DiceBot
 
                 if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
                 {
-                    Lastbet = MinBet;
+                    Reset();
                 }
                 if (chkChangeWinStreak.Checked && (Winstreak == nudChangeWinStreak.Value))
                 {
@@ -1428,7 +1434,7 @@ namespace DiceBot
                 //reset bet to minimum if applicable
                 if (chkResetBetLoss.Checked && Losestreak % nudResetBetLoss.Value == 0)
                 {
-                    Lastbet = MinBet;
+                    Reset();
                 }
                 //change bet after a certain losing streak
                 if (chkChangeLoseStreak.Checked && (Losestreak == nudChangeLoseStreak.Value))
@@ -1583,6 +1589,11 @@ namespace DiceBot
             }
         }
 
+        double ProfitSinceLastReset = 0;
+        double StreakProfitSinceLastReset = 0;
+        double StreakLossSinceLastReset = 0;
+        
+
         public void DoBet(Bet bet)
         {
             bool Win = !(((bool)bet.high ? (decimal)bet.Roll< 100m - (decimal)(bet.Chance) : (decimal)bet.Roll > (decimal)(bet.Chance)));
@@ -1615,10 +1626,15 @@ namespace DiceBot
                         if (Winstreak == 0)
                         {
                             currentprofit = 0;
+                            StreakProfitSinceLastReset = 0;
+                            StreakLossSinceLastReset = 0;
                         }                        
                         
                         currentprofit += (Lastbet*(99/Chance))-Lastbet;
+                        ProfitSinceLastReset += (Lastbet*(99/Chance))-Lastbet;
+                        StreakProfitSinceLastReset += (Lastbet * (99 / Chance)) - Lastbet;
                         
+                       
                         
                         Wins++;
                         Winstreak++;
@@ -1645,6 +1661,16 @@ namespace DiceBot
                             if (profit >= (double)nudStopWinBtc.Value && chkStopWinBtc.Checked)
                             {
                                 Stop();
+                            }
+                            if (StreakProfitSinceLastReset >= (double)nudResetBtcStreakProfit.Value && chkResetBtcStreakProfit.Checked)
+                            {
+                                Reset();
+                                StreakProfitSinceLastReset -= (double)nudResetBtcStreakProfit.Value;
+                            }
+                            if (ProfitSinceLastReset> (double)nudResetBtcProfit.Value && chkResetBtcProfit.Checked)
+                            {
+                                Reset();
+                                ProfitSinceLastReset -= (double)nudResetBtcProfit.Value;
                             }
                         }
                         if (Losestreak != 0)
@@ -1707,11 +1733,15 @@ namespace DiceBot
                     if (Losestreak == 0)
                     {
                         currentprofit = 0;
+                        StreakProfitSinceLastReset = 0;
+                        StreakLossSinceLastReset = 0;
                     }
                     
                     //adjust profit
                     currentprofit -= Lastbet;
+                    ProfitSinceLastReset -= Lastbet;
                     
+                    StreakLossSinceLastReset -= Lastbet;
                     //increase losses and losestreak
                     Losses++;
                     Losestreak++;
@@ -1781,6 +1811,16 @@ namespace DiceBot
                         if (profit <= 0.0 - (double)nudStopLossBtc.Value && chkStopLossBtc.Checked)
                         {
                             Stop();
+                        }
+                        if (StreakLossSinceLastReset <= -(double)nudResetBtcStreakLoss.Value && chkResetBtcStreakLoss.Checked)
+                        {
+                            Reset();
+                            StreakLossSinceLastReset += (double)nudResetBtcStreakLoss.Value;
+                        }
+                        if (ProfitSinceLastReset < -(double)nudResetBtcLoss.Value && chkResetBtcLoss.Checked)
+                        {
+                            Reset();
+                            ProfitSinceLastReset += (double)nudResetBtcLoss.Value;
                         }
                     }
                     //when switching from win streak to lose streak, calculate some stats
@@ -2285,6 +2325,8 @@ namespace DiceBot
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
                 sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":"1"));
+
+                
                 //sw.WriteLine("AutoGetSeed|"+(chkAutoSeeds.Checked ? "1" : "0"));
             }
         }
@@ -2485,7 +2527,18 @@ namespace DiceBot
                     sw.WriteLine("ReverseLossStreakValue|" + nudZigZagLossStreak.Value);
                     sw.WriteLine("ReverseBetValue|" + nudZigZagBets.Value);
 
+                    sw.WriteLine("ResetBtcStreakLoss|"+(chkResetBtcStreakLoss.Checked?"1":"0"));
+                    sw.WriteLine("ResetBtcStreakLossValue|"+nudResetBtcStreakLoss.Value.ToString());
+                    sw.WriteLine("ResetBtcLoss|"+(chkResetBtcLoss.Checked?"1":"0"));
+                    sw.WriteLine("ResetBtcLossValue|" + nudResetBtcLoss.Value.ToString());
 
+                    sw.WriteLine("ResetBtcStreakProfit|" + (chkResetBtcStreakProfit.Checked ? "1" : "0"));
+                    sw.WriteLine("ResetBtcStreakProfitValue|" + nudResetBtcStreakProfit.Value.ToString());
+                    sw.WriteLine("ResetBtcProfit|" + (chkResetBtcProfit.Checked ? "1" : "0"));
+                    sw.WriteLine("ResetBtcProfitValue|" + nudResetBtcProfit.Value.ToString());
+
+                    sw.WriteLine("FirstResetLoss|" + (chkFirstResetLoss.Checked ? "1" : "0"));
+                    sw.WriteLine("FirstResetWin|" + (chkFirstResetWin.Checked ? "1" : "0"));
                     #region old save, Not applicable
                     /*string msg = "";
                     msg += txtAmount.Text + ";";
@@ -2986,19 +3039,6 @@ namespace DiceBot
                     nudPresetWinStep.Value = decimal.Parse(getvalue(saveditems, "PresetWinStep"));
 
 
-                    /*
-                    sw.WriteLine("ReverseWinStreak|" + (chkZigZagWinsStreak.Checked ? "1" : "0"));
-                    sw.WriteLine("ReverseLoss|" + (chkZigZagLoss.Checked ? "1" : "0"));
-                    sw.WriteLine("ReverseLossStreak|" + (chkZigZagLossStreak.Checked ? "1" : "0"));
-                    sw.WriteLine("ReverseBet|" + (chkZigZagBets.Checked ? "1" : "0"));
-
-                    sw.WriteLine("ReverseWinValue|"+nudZigZagWins.Value);
-                    sw.WriteLine("ReverseWinStreakValue|" + nudZigZagWinsStreak.Value);
-                    sw.WriteLine("ReverseLossValue|" + nudZigZagLoss.Value);
-                    sw.WriteLine("ReverseLossStreakValue|" + nudZigZagLossStreak.Value);
-                    sw.WriteLine("ReverseBetValue|" + nudZigZagBets.Value);
-                     * */
-
                     chkZigZagWins.Checked = getvalue(saveditems, "ReverseWin") == "1";
                     chkZigZagWinsStreak.Checked = getvalue(saveditems, "ReversWinStreak") == "1";
                     chkZigZagLoss.Checked = getvalue(saveditems, "ReverseLoss") == "1";
@@ -3011,6 +3051,19 @@ namespace DiceBot
                     nudZigZagLossStreak.Value = decimal.Parse(getvalue(saveditems, "ReverseLossStreakValue"));
                     nudZigZagBets.Value = decimal.Parse(getvalue(saveditems, "ReverseBetValue"));
 
+
+                    chkResetBtcStreakLoss.Checked = getvalue(saveditems, "ResetBtcStreakLoss") == "1";
+                    nudResetBtcStreakLoss.Value = (decimal)dparse(getvalue(saveditems, "ResetBtcStreakLossValue"), ref convert); 
+                    chkResetBtcLoss.Checked = getvalue(saveditems, "ResetBtcLoss") == "1";
+                    nudResetBtcLoss.Value = (decimal)dparse(getvalue(saveditems, "ResetBtcLossValue"), ref convert);
+
+                    chkResetBtcStreakProfit.Checked = getvalue(saveditems, "ResetBtcStreakProfit") == "1";
+                    nudResetBtcStreakProfit.Value = (decimal)dparse(getvalue(saveditems, "ResetBtcStreakProfitValue"), ref convert);
+                    chkResetBtcProfit.Checked = getvalue(saveditems, "ResetBtcProfit") == "1";
+                    nudResetBtcProfit.Value = (decimal)dparse(getvalue(saveditems, "ResetBtcProfitValue"), ref convert);
+
+                    chkFirstResetLoss.Checked = getvalue(saveditems, "FirstResetLoss") == "1";
+                    chkFirstResetWin.Checked = getvalue(saveditems, "FirstResetWin") == "1";
                 }
 
                 
@@ -3614,6 +3667,7 @@ namespace DiceBot
                 valid = false;
                 sMessage += "Please enter a valid number in the Minimum Bet Field\n";
             }
+            if (!programmerToolStripMenuItem.Checked)
             Chance = (double)(nudChance.Value);
             if (Chance == -1)
             {

@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -40,6 +40,7 @@
             this.Settings = new System.Windows.Forms.GroupBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tbMartingale = new System.Windows.Forms.TabPage();
+            this.btnHelpMartingale = new System.Windows.Forms.Button();
             this.rdbMartingale = new System.Windows.Forms.RadioButton();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.chkFirstResetLoss = new System.Windows.Forms.CheckBox();
@@ -88,6 +89,7 @@
             this.label47 = new System.Windows.Forms.Label();
             this.label54 = new System.Windows.Forms.Label();
             this.tbLabouchère = new System.Windows.Forms.TabPage();
+            this.btnHelpLabouchere = new System.Windows.Forms.Button();
             this.panel7 = new System.Windows.Forms.Panel();
             this.rdbLabRestart = new System.Windows.Forms.RadioButton();
             this.rdbLabStop = new System.Windows.Forms.RadioButton();
@@ -99,6 +101,7 @@
             this.label87 = new System.Windows.Forms.Label();
             this.chkReverseLab = new System.Windows.Forms.CheckBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnHelpFibonacci = new System.Windows.Forms.Button();
             this.panel6 = new System.Windows.Forms.Panel();
             this.rdbFiboLevelReset = new System.Windows.Forms.RadioButton();
             this.rdbFiboLevelStop = new System.Windows.Forms.RadioButton();
@@ -120,6 +123,7 @@
             this.lstFibonacci = new System.Windows.Forms.ListBox();
             this.rdbFibonacci = new System.Windows.Forms.RadioButton();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.btnHelpAlembert = new System.Windows.Forms.Button();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.nudAlembertStretchWin = new System.Windows.Forms.NumericUpDown();
             this.label103 = new System.Windows.Forms.Label();
@@ -136,6 +140,7 @@
             this.label71 = new System.Windows.Forms.Label();
             this.rdbAlembert = new System.Windows.Forms.RadioButton();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.btnHelpPreset = new System.Windows.Forms.Button();
             this.groupBox16 = new System.Windows.Forms.GroupBox();
             this.nudPresetEndStep = new System.Windows.Forms.NumericUpDown();
             this.label109 = new System.Windows.Forms.Label();
@@ -205,6 +210,12 @@
             this.lblAmount = new System.Windows.Forms.Label();
             this.lblLimit = new System.Windows.Forms.Label();
             this.gbLosses = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.nudResetBtcLoss = new System.Windows.Forms.NumericUpDown();
+            this.nudResetBtcStreakLoss = new System.Windows.Forms.NumericUpDown();
+            this.chkResetBtcLoss = new System.Windows.Forms.CheckBox();
+            this.chkResetBtcStreakLoss = new System.Windows.Forms.CheckBox();
             this.label63 = new System.Windows.Forms.Label();
             this.nudStopLossBtc = new System.Windows.Forms.NumericUpDown();
             this.chkStopLossBtc = new System.Windows.Forms.CheckBox();
@@ -218,10 +229,16 @@
             this.nudResetBetLoss = new System.Windows.Forms.NumericUpDown();
             this.chkResetBetLoss = new System.Windows.Forms.CheckBox();
             this.gbWins = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.label64 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.nudStopWinBtc = new System.Windows.Forms.NumericUpDown();
+            this.nudResetBtcProfit = new System.Windows.Forms.NumericUpDown();
+            this.nudResetBtcStreakProfit = new System.Windows.Forms.NumericUpDown();
             this.chkStopWinBtc = new System.Windows.Forms.CheckBox();
+            this.chkResetBtcProfit = new System.Windows.Forms.CheckBox();
             this.label61 = new System.Windows.Forms.Label();
+            this.chkResetBtcStreakProfit = new System.Windows.Forms.CheckBox();
             this.nudStopWinBtcStreak = new System.Windows.Forms.NumericUpDown();
             this.chkStopWinBtcStreak = new System.Windows.Forms.CheckBox();
             this.label62 = new System.Windows.Forms.Label();
@@ -286,15 +303,6 @@
             this.btnHideLive = new System.Windows.Forms.Button();
             this.chrtEmbeddedLiveChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.highDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.chanceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rollDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbLogin = new System.Windows.Forms.GroupBox();
             this.btnRegister = new System.Windows.Forms.Button();
@@ -425,6 +433,15 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.highDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.chanceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rollDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nonceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -493,12 +510,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLimit)).BeginInit();
             this.panel2.SuspendLayout();
             this.gbLosses.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBtcLoss)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBtcStreakLoss)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtcStreal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopLossStreak)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetBetLoss)).BeginInit();
             this.gbWins.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtc)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBtcProfit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBtcStreakProfit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtcStreak)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopWinStreak)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).BeginInit();
@@ -521,7 +542,6 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.panel5.SuspendLayout();
             this.gbLogin.SuspendLayout();
             this.gbManualBet.SuspendLayout();
@@ -546,6 +566,7 @@
             this.tpConsole.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlAdvanced
@@ -623,6 +644,7 @@
             // 
             // tbMartingale
             // 
+            this.tbMartingale.Controls.Add(this.btnHelpMartingale);
             this.tbMartingale.Controls.Add(this.rdbMartingale);
             this.tbMartingale.Controls.Add(this.groupBox9);
             this.tbMartingale.Controls.Add(this.groupBox8);
@@ -633,6 +655,15 @@
             this.tbMartingale.TabIndex = 10;
             this.tbMartingale.Text = "Martingale";
             this.tbMartingale.UseVisualStyleBackColor = true;
+            // 
+            // btnHelpMartingale
+            // 
+            this.btnHelpMartingale.Location = new System.Drawing.Point(309, 3);
+            this.btnHelpMartingale.Name = "btnHelpMartingale";
+            this.btnHelpMartingale.Size = new System.Drawing.Size(141, 23);
+            this.btnHelpMartingale.TabIndex = 4;
+            this.btnHelpMartingale.Text = "What Is martingale?";
+            this.btnHelpMartingale.UseVisualStyleBackColor = true;
             // 
             // rdbMartingale
             // 
@@ -730,6 +761,11 @@
             // nudChangeLoseStreakTo
             // 
             this.nudChangeLoseStreakTo.DecimalPlaces = 8;
+            this.nudChangeLoseStreakTo.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudChangeLoseStreakTo.Location = new System.Drawing.Point(262, 105);
             this.nudChangeLoseStreakTo.Maximum = new decimal(new int[] {
             1000000000,
@@ -1041,6 +1077,11 @@
             // nudChangeWinStreakTo
             // 
             this.nudChangeWinStreakTo.DecimalPlaces = 8;
+            this.nudChangeWinStreakTo.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudChangeWinStreakTo.Location = new System.Drawing.Point(253, 105);
             this.nudChangeWinStreakTo.Maximum = new decimal(new int[] {
             1000000000,
@@ -1269,6 +1310,7 @@
             // 
             // tbLabouchère
             // 
+            this.tbLabouchère.Controls.Add(this.btnHelpLabouchere);
             this.tbLabouchère.Controls.Add(this.panel7);
             this.tbLabouchère.Controls.Add(this.rdbLabEnable);
             this.tbLabouchère.Controls.Add(this.label85);
@@ -1283,6 +1325,15 @@
             this.tbLabouchère.TabIndex = 9;
             this.tbLabouchère.Text = "Labouchère";
             this.tbLabouchère.UseVisualStyleBackColor = true;
+            // 
+            // btnHelpLabouchere
+            // 
+            this.btnHelpLabouchere.Location = new System.Drawing.Point(309, 3);
+            this.btnHelpLabouchere.Name = "btnHelpLabouchere";
+            this.btnHelpLabouchere.Size = new System.Drawing.Size(141, 23);
+            this.btnHelpLabouchere.TabIndex = 16;
+            this.btnHelpLabouchere.Text = "What is Labouchere?";
+            this.btnHelpLabouchere.UseVisualStyleBackColor = true;
             // 
             // panel7
             // 
@@ -1385,6 +1436,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnHelpFibonacci);
             this.tabPage1.Controls.Add(this.panel6);
             this.tabPage1.Controls.Add(this.groupBox11);
             this.tabPage1.Controls.Add(this.groupBox10);
@@ -1398,6 +1450,15 @@
             this.tabPage1.Text = "Fibonacci";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // btnHelpFibonacci
+            // 
+            this.btnHelpFibonacci.Location = new System.Drawing.Point(309, 3);
+            this.btnHelpFibonacci.Name = "btnHelpFibonacci";
+            this.btnHelpFibonacci.Size = new System.Drawing.Size(141, 23);
+            this.btnHelpFibonacci.TabIndex = 37;
+            this.btnHelpFibonacci.Text = "What is Fibonacci?";
+            this.btnHelpFibonacci.UseVisualStyleBackColor = true;
+            // 
             // panel6
             // 
             this.panel6.Controls.Add(this.rdbFiboLevelReset);
@@ -1405,9 +1466,9 @@
             this.panel6.Controls.Add(this.chkFiboLevel);
             this.panel6.Controls.Add(this.label66);
             this.panel6.Controls.Add(this.nudFiboLeve);
-            this.panel6.Location = new System.Drawing.Point(195, 208);
+            this.panel6.Location = new System.Drawing.Point(199, 231);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(214, 112);
+            this.panel6.Size = new System.Drawing.Size(219, 90);
             this.panel6.TabIndex = 36;
             // 
             // rdbFiboLevelReset
@@ -1470,7 +1531,7 @@
             this.groupBox11.Controls.Add(this.rdbFiboWinIncrement);
             this.groupBox11.Controls.Add(this.label98);
             this.groupBox11.Controls.Add(this.nudFiboWinIncrement);
-            this.groupBox11.Location = new System.Drawing.Point(195, 108);
+            this.groupBox11.Location = new System.Drawing.Point(199, 131);
             this.groupBox11.Name = "groupBox11";
             this.groupBox11.Size = new System.Drawing.Size(219, 94);
             this.groupBox11.TabIndex = 30;
@@ -1542,7 +1603,7 @@
             this.groupBox10.Controls.Add(this.rdbFiboLossIncrement);
             this.groupBox10.Controls.Add(this.label99);
             this.groupBox10.Controls.Add(this.nudFiboLossIncrement);
-            this.groupBox10.Location = new System.Drawing.Point(195, 8);
+            this.groupBox10.Location = new System.Drawing.Point(199, 31);
             this.groupBox10.Name = "groupBox10";
             this.groupBox10.Size = new System.Drawing.Size(219, 94);
             this.groupBox10.TabIndex = 29;
@@ -1628,6 +1689,7 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.btnHelpAlembert);
             this.tabPage5.Controls.Add(this.groupBox13);
             this.tabPage5.Controls.Add(this.groupBox12);
             this.tabPage5.Controls.Add(this.rdbAlembert);
@@ -1638,6 +1700,15 @@
             this.tabPage5.TabIndex = 14;
             this.tabPage5.Text = "d’Alembert";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // btnHelpAlembert
+            // 
+            this.btnHelpAlembert.Location = new System.Drawing.Point(309, 3);
+            this.btnHelpAlembert.Name = "btnHelpAlembert";
+            this.btnHelpAlembert.Size = new System.Drawing.Size(141, 23);
+            this.btnHelpAlembert.TabIndex = 18;
+            this.btnHelpAlembert.Text = "What is d\'Alembert?";
+            this.btnHelpAlembert.UseVisualStyleBackColor = true;
             // 
             // groupBox13
             // 
@@ -1691,6 +1762,11 @@
             // nudAlembertIncrementWin
             // 
             this.nudAlembertIncrementWin.DecimalPlaces = 8;
+            this.nudAlembertIncrementWin.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudAlembertIncrementWin.Location = new System.Drawing.Point(102, 21);
             this.nudAlembertIncrementWin.Minimum = new decimal(new int[] {
             100,
@@ -1767,6 +1843,11 @@
             // nudAlembertIncrementLoss
             // 
             this.nudAlembertIncrementLoss.DecimalPlaces = 8;
+            this.nudAlembertIncrementLoss.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudAlembertIncrementLoss.Location = new System.Drawing.Point(102, 21);
             this.nudAlembertIncrementLoss.Minimum = new decimal(new int[] {
             100,
@@ -1804,6 +1885,7 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.btnHelpPreset);
             this.tabPage6.Controls.Add(this.groupBox16);
             this.tabPage6.Controls.Add(this.btnBrowsePresetList);
             this.tabPage6.Controls.Add(this.groupBox15);
@@ -1818,6 +1900,15 @@
             this.tabPage6.Text = "Preset List";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // btnHelpPreset
+            // 
+            this.btnHelpPreset.Location = new System.Drawing.Point(309, 3);
+            this.btnHelpPreset.Name = "btnHelpPreset";
+            this.btnHelpPreset.Size = new System.Drawing.Size(141, 23);
+            this.btnHelpPreset.TabIndex = 21;
+            this.btnHelpPreset.Text = "What is Preset List?";
+            this.btnHelpPreset.UseVisualStyleBackColor = true;
+            // 
             // groupBox16
             // 
             this.groupBox16.Controls.Add(this.nudPresetEndStep);
@@ -1825,7 +1916,7 @@
             this.groupBox16.Controls.Add(this.rdbPresetEndStep);
             this.groupBox16.Controls.Add(this.rdbPresetEndReset);
             this.groupBox16.Controls.Add(this.rdbPresetEndStop);
-            this.groupBox16.Location = new System.Drawing.Point(146, 3);
+            this.groupBox16.Location = new System.Drawing.Point(149, 29);
             this.groupBox16.Name = "groupBox16";
             this.groupBox16.Size = new System.Drawing.Size(268, 91);
             this.groupBox16.TabIndex = 20;
@@ -1892,7 +1983,7 @@
             // 
             // btnBrowsePresetList
             // 
-            this.btnBrowsePresetList.Location = new System.Drawing.Point(8, 297);
+            this.btnBrowsePresetList.Location = new System.Drawing.Point(8, 321);
             this.btnBrowsePresetList.Name = "btnBrowsePresetList";
             this.btnBrowsePresetList.Size = new System.Drawing.Size(132, 23);
             this.btnBrowsePresetList.TabIndex = 19;
@@ -1907,7 +1998,7 @@
             this.groupBox15.Controls.Add(this.rdbPresetWinStep);
             this.groupBox15.Controls.Add(this.label107);
             this.groupBox15.Controls.Add(this.nudPresetWinStep);
-            this.groupBox15.Location = new System.Drawing.Point(146, 213);
+            this.groupBox15.Location = new System.Drawing.Point(149, 239);
             this.groupBox15.Name = "groupBox15";
             this.groupBox15.Size = new System.Drawing.Size(271, 107);
             this.groupBox15.TabIndex = 18;
@@ -1979,7 +2070,7 @@
             this.groupBox14.Controls.Add(this.rdbPresetLossStep);
             this.groupBox14.Controls.Add(this.label108);
             this.groupBox14.Controls.Add(this.nudPresetLossStep);
-            this.groupBox14.Location = new System.Drawing.Point(146, 100);
+            this.groupBox14.Location = new System.Drawing.Point(149, 126);
             this.groupBox14.Name = "groupBox14";
             this.groupBox14.Size = new System.Drawing.Size(271, 107);
             this.groupBox14.TabIndex = 17;
@@ -2048,7 +2139,7 @@
             // 
             this.rtbPresetList.Location = new System.Drawing.Point(8, 29);
             this.rtbPresetList.Name = "rtbPresetList";
-            this.rtbPresetList.Size = new System.Drawing.Size(132, 262);
+            this.rtbPresetList.Size = new System.Drawing.Size(132, 286);
             this.rtbPresetList.TabIndex = 16;
             this.rtbPresetList.Text = "";
             // 
@@ -2433,6 +2524,11 @@
             // nudMinBet
             // 
             this.nudMinBet.DecimalPlaces = 8;
+            this.nudMinBet.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudMinBet.Location = new System.Drawing.Point(76, 4);
             this.nudMinBet.Maximum = new decimal(new int[] {
             1410065408,
@@ -2478,6 +2574,11 @@
             // nudAmount
             // 
             this.nudAmount.DecimalPlaces = 8;
+            this.nudAmount.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudAmount.Location = new System.Drawing.Point(131, 88);
             this.nudAmount.Maximum = new decimal(new int[] {
             10000000,
@@ -2491,6 +2592,11 @@
             // nudLowerLimit
             // 
             this.nudLowerLimit.DecimalPlaces = 8;
+            this.nudLowerLimit.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudLowerLimit.Location = new System.Drawing.Point(131, 35);
             this.nudLowerLimit.Maximum = new decimal(new int[] {
             100000000,
@@ -2504,6 +2610,11 @@
             // nudLimit
             // 
             this.nudLimit.DecimalPlaces = 8;
+            this.nudLimit.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudLimit.Location = new System.Drawing.Point(131, 6);
             this.nudLimit.Maximum = new decimal(new int[] {
             100000000,
@@ -2633,6 +2744,12 @@
             // 
             // gbLosses
             // 
+            this.gbLosses.Controls.Add(this.label12);
+            this.gbLosses.Controls.Add(this.label11);
+            this.gbLosses.Controls.Add(this.nudResetBtcLoss);
+            this.gbLosses.Controls.Add(this.nudResetBtcStreakLoss);
+            this.gbLosses.Controls.Add(this.chkResetBtcLoss);
+            this.gbLosses.Controls.Add(this.chkResetBtcStreakLoss);
             this.gbLosses.Controls.Add(this.label63);
             this.gbLosses.Controls.Add(this.nudStopLossBtc);
             this.gbLosses.Controls.Add(this.chkStopLossBtc);
@@ -2647,10 +2764,104 @@
             this.gbLosses.Controls.Add(this.chkResetBetLoss);
             this.gbLosses.Location = new System.Drawing.Point(12, 163);
             this.gbLosses.Name = "gbLosses";
-            this.gbLosses.Size = new System.Drawing.Size(413, 133);
+            this.gbLosses.Size = new System.Drawing.Size(413, 189);
             this.gbLosses.TabIndex = 1;
             this.gbLosses.TabStop = false;
             this.gbLosses.Text = "stop/reset conditions on losses";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(209, 147);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(48, 13);
+            this.label12.TabIndex = 114;
+            this.label12.Text = "Btc Loss";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(209, 121);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(82, 13);
+            this.label11.TabIndex = 113;
+            this.label11.Text = "Btc Streak Loss";
+            // 
+            // nudResetBtcLoss
+            // 
+            this.nudResetBtcLoss.DecimalPlaces = 8;
+            this.nudResetBtcLoss.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
+            this.nudResetBtcLoss.Location = new System.Drawing.Point(119, 145);
+            this.nudResetBtcLoss.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudResetBtcLoss.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            524288});
+            this.nudResetBtcLoss.Name = "nudResetBtcLoss";
+            this.nudResetBtcLoss.Size = new System.Drawing.Size(84, 20);
+            this.nudResetBtcLoss.TabIndex = 112;
+            this.nudResetBtcLoss.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            524288});
+            // 
+            // nudResetBtcStreakLoss
+            // 
+            this.nudResetBtcStreakLoss.DecimalPlaces = 8;
+            this.nudResetBtcStreakLoss.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
+            this.nudResetBtcStreakLoss.Location = new System.Drawing.Point(119, 119);
+            this.nudResetBtcStreakLoss.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudResetBtcStreakLoss.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            524288});
+            this.nudResetBtcStreakLoss.Name = "nudResetBtcStreakLoss";
+            this.nudResetBtcStreakLoss.Size = new System.Drawing.Size(84, 20);
+            this.nudResetBtcStreakLoss.TabIndex = 111;
+            this.nudResetBtcStreakLoss.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            524288});
+            // 
+            // chkResetBtcLoss
+            // 
+            this.chkResetBtcLoss.AutoSize = true;
+            this.chkResetBtcLoss.Location = new System.Drawing.Point(33, 146);
+            this.chkResetBtcLoss.Name = "chkResetBtcLoss";
+            this.chkResetBtcLoss.Size = new System.Drawing.Size(78, 17);
+            this.chkResetBtcLoss.TabIndex = 110;
+            this.chkResetBtcLoss.Text = "Reset after";
+            this.chkResetBtcLoss.UseVisualStyleBackColor = true;
+            // 
+            // chkResetBtcStreakLoss
+            // 
+            this.chkResetBtcStreakLoss.AutoSize = true;
+            this.chkResetBtcStreakLoss.Location = new System.Drawing.Point(33, 120);
+            this.chkResetBtcStreakLoss.Name = "chkResetBtcStreakLoss";
+            this.chkResetBtcStreakLoss.Size = new System.Drawing.Size(78, 17);
+            this.chkResetBtcStreakLoss.TabIndex = 109;
+            this.chkResetBtcStreakLoss.Text = "Reset after";
+            this.chkResetBtcStreakLoss.UseVisualStyleBackColor = true;
             // 
             // label63
             // 
@@ -2664,6 +2875,11 @@
             // nudStopLossBtc
             // 
             this.nudStopLossBtc.DecimalPlaces = 8;
+            this.nudStopLossBtc.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudStopLossBtc.Location = new System.Drawing.Point(119, 93);
             this.nudStopLossBtc.Maximum = new decimal(new int[] {
             1000000000,
@@ -2706,6 +2922,11 @@
             // nudStopLossBtcStreal
             // 
             this.nudStopLossBtcStreal.DecimalPlaces = 8;
+            this.nudStopLossBtcStreal.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudStopLossBtcStreal.Location = new System.Drawing.Point(119, 67);
             this.nudStopLossBtcStreal.Maximum = new decimal(new int[] {
             1000000000,
@@ -2820,10 +3041,16 @@
             // 
             // gbWins
             // 
+            this.gbWins.Controls.Add(this.label13);
             this.gbWins.Controls.Add(this.label64);
+            this.gbWins.Controls.Add(this.label14);
             this.gbWins.Controls.Add(this.nudStopWinBtc);
+            this.gbWins.Controls.Add(this.nudResetBtcProfit);
+            this.gbWins.Controls.Add(this.nudResetBtcStreakProfit);
             this.gbWins.Controls.Add(this.chkStopWinBtc);
+            this.gbWins.Controls.Add(this.chkResetBtcProfit);
             this.gbWins.Controls.Add(this.label61);
+            this.gbWins.Controls.Add(this.chkResetBtcStreakProfit);
             this.gbWins.Controls.Add(this.nudStopWinBtcStreak);
             this.gbWins.Controls.Add(this.chkStopWinBtcStreak);
             this.gbWins.Controls.Add(this.label62);
@@ -2832,12 +3059,21 @@
             this.gbWins.Controls.Add(this.label58);
             this.gbWins.Controls.Add(this.nudResetWins);
             this.gbWins.Controls.Add(this.chkResetBetWins);
-            this.gbWins.Location = new System.Drawing.Point(12, 302);
+            this.gbWins.Location = new System.Drawing.Point(12, 366);
             this.gbWins.Name = "gbWins";
-            this.gbWins.Size = new System.Drawing.Size(413, 133);
+            this.gbWins.Size = new System.Drawing.Size(413, 179);
             this.gbWins.TabIndex = 0;
             this.gbWins.TabStop = false;
             this.gbWins.Text = "stop/reset conditions on wins";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(205, 148);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(50, 13);
+            this.label13.TabIndex = 120;
+            this.label13.Text = "Btc Profit";
             // 
             // label64
             // 
@@ -2848,9 +3084,23 @@
             this.label64.TabIndex = 121;
             this.label64.Text = "Profit";
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(205, 122);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(84, 13);
+            this.label14.TabIndex = 119;
+            this.label14.Text = "Btc Streak Profit";
+            // 
             // nudStopWinBtc
             // 
             this.nudStopWinBtc.DecimalPlaces = 8;
+            this.nudStopWinBtc.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudStopWinBtc.Location = new System.Drawing.Point(115, 94);
             this.nudStopWinBtc.Maximum = new decimal(new int[] {
             1000000000,
@@ -2871,6 +3121,62 @@
             0,
             458752});
             // 
+            // nudResetBtcProfit
+            // 
+            this.nudResetBtcProfit.DecimalPlaces = 8;
+            this.nudResetBtcProfit.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
+            this.nudResetBtcProfit.Location = new System.Drawing.Point(115, 146);
+            this.nudResetBtcProfit.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudResetBtcProfit.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            524288});
+            this.nudResetBtcProfit.Name = "nudResetBtcProfit";
+            this.nudResetBtcProfit.Size = new System.Drawing.Size(84, 20);
+            this.nudResetBtcProfit.TabIndex = 118;
+            this.nudResetBtcProfit.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            524288});
+            // 
+            // nudResetBtcStreakProfit
+            // 
+            this.nudResetBtcStreakProfit.DecimalPlaces = 8;
+            this.nudResetBtcStreakProfit.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
+            this.nudResetBtcStreakProfit.Location = new System.Drawing.Point(115, 120);
+            this.nudResetBtcStreakProfit.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudResetBtcStreakProfit.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            524288});
+            this.nudResetBtcStreakProfit.Name = "nudResetBtcStreakProfit";
+            this.nudResetBtcStreakProfit.Size = new System.Drawing.Size(84, 20);
+            this.nudResetBtcStreakProfit.TabIndex = 117;
+            this.nudResetBtcStreakProfit.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            524288});
+            // 
             // chkStopWinBtc
             // 
             this.chkStopWinBtc.AutoSize = true;
@@ -2881,6 +3187,16 @@
             this.chkStopWinBtc.Text = "Stop After";
             this.chkStopWinBtc.UseVisualStyleBackColor = true;
             // 
+            // chkResetBtcProfit
+            // 
+            this.chkResetBtcProfit.AutoSize = true;
+            this.chkResetBtcProfit.Location = new System.Drawing.Point(29, 147);
+            this.chkResetBtcProfit.Name = "chkResetBtcProfit";
+            this.chkResetBtcProfit.Size = new System.Drawing.Size(78, 17);
+            this.chkResetBtcProfit.TabIndex = 116;
+            this.chkResetBtcProfit.Text = "Reset after";
+            this.chkResetBtcProfit.UseVisualStyleBackColor = true;
+            // 
             // label61
             // 
             this.label61.AutoSize = true;
@@ -2890,9 +3206,24 @@
             this.label61.TabIndex = 118;
             this.label61.Text = "Streak Winnings";
             // 
+            // chkResetBtcStreakProfit
+            // 
+            this.chkResetBtcStreakProfit.AutoSize = true;
+            this.chkResetBtcStreakProfit.Location = new System.Drawing.Point(29, 121);
+            this.chkResetBtcStreakProfit.Name = "chkResetBtcStreakProfit";
+            this.chkResetBtcStreakProfit.Size = new System.Drawing.Size(78, 17);
+            this.chkResetBtcStreakProfit.TabIndex = 115;
+            this.chkResetBtcStreakProfit.Text = "Reset after";
+            this.chkResetBtcStreakProfit.UseVisualStyleBackColor = true;
+            // 
             // nudStopWinBtcStreak
             // 
             this.nudStopWinBtcStreak.DecimalPlaces = 8;
+            this.nudStopWinBtcStreak.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudStopWinBtcStreak.Location = new System.Drawing.Point(115, 68);
             this.nudStopWinBtcStreak.Maximum = new decimal(new int[] {
             1000000000,
@@ -3540,6 +3871,7 @@
             // 
             // tmBet
             // 
+            this.tmBet.Interval = 10;
             this.tmBet.Tick += new System.EventHandler(this.tmBet_Tick);
             // 
             // pnlApiInfo
@@ -3618,18 +3950,18 @@
             // 
             // chrtEmbeddedLiveChart
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
+            chartArea2.Name = "ChartArea1";
+            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea2);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chrtEmbeddedLiveChart.Legends.Add(legend1);
+            legend2.Name = "Legend1";
+            this.chrtEmbeddedLiveChart.Legends.Add(legend2);
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Profit";
-            this.chrtEmbeddedLiveChart.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Profit";
+            this.chrtEmbeddedLiveChart.Series.Add(series2);
             this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(555, 320);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
@@ -3658,68 +3990,6 @@
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.idDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // dateDataGridViewTextBoxColumn
-            // 
-            this.dateDataGridViewTextBoxColumn.DataPropertyName = "date";
-            this.dateDataGridViewTextBoxColumn.HeaderText = "date";
-            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
-            this.dateDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // amountDataGridViewTextBoxColumn
-            // 
-            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
-            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
-            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
-            this.amountDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // highDataGridViewCheckBoxColumn
-            // 
-            this.highDataGridViewCheckBoxColumn.DataPropertyName = "high";
-            this.highDataGridViewCheckBoxColumn.HeaderText = "high";
-            this.highDataGridViewCheckBoxColumn.Name = "highDataGridViewCheckBoxColumn";
-            this.highDataGridViewCheckBoxColumn.ReadOnly = true;
-            // 
-            // chanceDataGridViewTextBoxColumn
-            // 
-            this.chanceDataGridViewTextBoxColumn.DataPropertyName = "Chance";
-            this.chanceDataGridViewTextBoxColumn.HeaderText = "Chance";
-            this.chanceDataGridViewTextBoxColumn.Name = "chanceDataGridViewTextBoxColumn";
-            this.chanceDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // rollDataGridViewTextBoxColumn
-            // 
-            this.rollDataGridViewTextBoxColumn.DataPropertyName = "Roll";
-            this.rollDataGridViewTextBoxColumn.HeaderText = "Roll";
-            this.rollDataGridViewTextBoxColumn.Name = "rollDataGridViewTextBoxColumn";
-            this.rollDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // profitDataGridViewTextBoxColumn
-            // 
-            this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
-            this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
-            this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
-            this.profitDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // nonceDataGridViewTextBoxColumn
-            // 
-            this.nonceDataGridViewTextBoxColumn.DataPropertyName = "nonce";
-            this.nonceDataGridViewTextBoxColumn.HeaderText = "nonce";
-            this.nonceDataGridViewTextBoxColumn.Name = "nonceDataGridViewTextBoxColumn";
-            this.nonceDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // betBindingSource
-            // 
-            this.betBindingSource.DataSource = typeof(DiceBot.Bet);
             // 
             // panel5
             // 
@@ -5080,6 +5350,68 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.idDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // dateDataGridViewTextBoxColumn
+            // 
+            this.dateDataGridViewTextBoxColumn.DataPropertyName = "date";
+            this.dateDataGridViewTextBoxColumn.HeaderText = "date";
+            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
+            this.dateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // amountDataGridViewTextBoxColumn
+            // 
+            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
+            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
+            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
+            this.amountDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // highDataGridViewCheckBoxColumn
+            // 
+            this.highDataGridViewCheckBoxColumn.DataPropertyName = "high";
+            this.highDataGridViewCheckBoxColumn.HeaderText = "high";
+            this.highDataGridViewCheckBoxColumn.Name = "highDataGridViewCheckBoxColumn";
+            this.highDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // chanceDataGridViewTextBoxColumn
+            // 
+            this.chanceDataGridViewTextBoxColumn.DataPropertyName = "Chance";
+            this.chanceDataGridViewTextBoxColumn.HeaderText = "Chance";
+            this.chanceDataGridViewTextBoxColumn.Name = "chanceDataGridViewTextBoxColumn";
+            this.chanceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // rollDataGridViewTextBoxColumn
+            // 
+            this.rollDataGridViewTextBoxColumn.DataPropertyName = "Roll";
+            this.rollDataGridViewTextBoxColumn.HeaderText = "Roll";
+            this.rollDataGridViewTextBoxColumn.Name = "rollDataGridViewTextBoxColumn";
+            this.rollDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // profitDataGridViewTextBoxColumn
+            // 
+            this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
+            this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
+            this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
+            this.profitDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // nonceDataGridViewTextBoxColumn
+            // 
+            this.nonceDataGridViewTextBoxColumn.DataPropertyName = "nonce";
+            this.nonceDataGridViewTextBoxColumn.HeaderText = "nonce";
+            this.nonceDataGridViewTextBoxColumn.Name = "nonceDataGridViewTextBoxColumn";
+            this.nonceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // betBindingSource
+            // 
+            this.betBindingSource.DataSource = typeof(DiceBot.Bet);
+            // 
             // cDiceBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -5184,6 +5516,8 @@
             this.panel2.PerformLayout();
             this.gbLosses.ResumeLayout(false);
             this.gbLosses.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBtcLoss)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBtcStreakLoss)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopLossBtcStreal)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopLossStreak)).EndInit();
@@ -5191,6 +5525,8 @@
             this.gbWins.ResumeLayout(false);
             this.gbWins.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtc)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBtcProfit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudResetBtcStreakProfit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopWinBtcStreak)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStopWinStreak)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).EndInit();
@@ -5215,7 +5551,6 @@
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chrtEmbeddedLiveChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.panel5.ResumeLayout(false);
             this.gbLogin.ResumeLayout(false);
             this.gbLogin.PerformLayout();
@@ -5250,6 +5585,7 @@
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5650,6 +5986,23 @@
         private System.Windows.Forms.GroupBox gbZigZag;
         private System.Windows.Forms.CheckBox chkFirstResetLoss;
         private System.Windows.Forms.CheckBox chkFirstResetWin;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown nudResetBtcLoss;
+        private System.Windows.Forms.NumericUpDown nudResetBtcStreakLoss;
+        private System.Windows.Forms.CheckBox chkResetBtcLoss;
+        private System.Windows.Forms.CheckBox chkResetBtcStreakLoss;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.NumericUpDown nudResetBtcProfit;
+        private System.Windows.Forms.NumericUpDown nudResetBtcStreakProfit;
+        private System.Windows.Forms.CheckBox chkResetBtcProfit;
+        private System.Windows.Forms.CheckBox chkResetBtcStreakProfit;
+        private System.Windows.Forms.Button btnHelpMartingale;
+        private System.Windows.Forms.Button btnHelpLabouchere;
+        private System.Windows.Forms.Button btnHelpFibonacci;
+        private System.Windows.Forms.Button btnHelpAlembert;
+        private System.Windows.Forms.Button btnHelpPreset;
 
     }
 }

@@ -284,10 +284,10 @@
             this.serverhashDataGridViewTextBoxColumn});
             this.dgvBets.DataSource = this.betBindingSource;
             this.dgvBets.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvBets.Location = new System.Drawing.Point(0, 156);
+            this.dgvBets.Location = new System.Drawing.Point(0, 235);
             this.dgvBets.Name = "dgvBets";
             this.dgvBets.ReadOnly = true;
-            this.dgvBets.Size = new System.Drawing.Size(1438, 257);
+            this.dgvBets.Size = new System.Drawing.Size(1438, 178);
             this.dgvBets.TabIndex = 1;
             // 
             // pnlSearch
@@ -310,7 +310,7 @@
             this.pnlSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlSearch.Location = new System.Drawing.Point(0, 56);
             this.pnlSearch.Name = "pnlSearch";
-            this.pnlSearch.Size = new System.Drawing.Size(1438, 100);
+            this.pnlSearch.Size = new System.Drawing.Size(1438, 179);
             this.pnlSearch.TabIndex = 2;
             this.pnlSearch.TabStop = false;
             this.pnlSearch.Text = "Search";
@@ -323,7 +323,7 @@
             this.groupBox3.Controls.Add(this.dtpSearchFrom);
             this.groupBox3.Controls.Add(this.rdbDateRange);
             this.groupBox3.Controls.Add(this.rdbDateAll);
-            this.groupBox3.Location = new System.Drawing.Point(1051, 18);
+            this.groupBox3.Location = new System.Drawing.Point(850, 18);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(380, 65);
             this.groupBox3.TabIndex = 31;
@@ -420,9 +420,9 @@
             this.groupBox2.Controls.Add(this.rdbVerifiedAll);
             this.groupBox2.Controls.Add(this.rdbNotVerified);
             this.groupBox2.Controls.Add(this.rdbVerified);
-            this.groupBox2.Location = new System.Drawing.Point(883, 18);
+            this.groupBox2.Location = new System.Drawing.Point(680, 91);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(160, 65);
+            this.groupBox2.Size = new System.Drawing.Size(157, 65);
             this.groupBox2.TabIndex = 27;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Verified";
@@ -466,7 +466,7 @@
             this.groupBox4.Controls.Add(this.rdbHigh);
             this.groupBox4.Location = new System.Drawing.Point(680, 18);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(197, 65);
+            this.groupBox4.Size = new System.Drawing.Size(157, 65);
             this.groupBox4.TabIndex = 26;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "High";
