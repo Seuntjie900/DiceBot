@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -373,13 +373,13 @@
             this.pnlProgrammer = new System.Windows.Forms.Panel();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.label121 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
+            this.lbVariables = new System.Windows.Forms.ListBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.label124 = new System.Windows.Forms.Label();
             this.richTextBox3 = new System.Windows.Forms.RichTextBox();
-            this.label123 = new System.Windows.Forms.Label();
-            this.lbVariables = new System.Windows.Forms.ListBox();
-            this.label121 = new System.Windows.Forms.Label();
             this.tpConsole = new System.Windows.Forms.TabPage();
             this.rtbConsole = new System.Windows.Forms.RichTextBox();
             this.txtConsoleIn = new System.Windows.Forms.TextBox();
@@ -433,6 +433,8 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnOpenCode = new System.Windows.Forms.Button();
+            this.btnCodeSave = new System.Windows.Forms.Button();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -563,6 +565,10 @@
             this.pnlProgrammer.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.tpConsole.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -575,7 +581,7 @@
             this.pnlAdvanced.Controls.Add(this.tcSettings);
             this.pnlAdvanced.Controls.Add(this.panel4);
             this.pnlAdvanced.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlAdvanced.Location = new System.Drawing.Point(440, 0);
+            this.pnlAdvanced.Location = new System.Drawing.Point(563, 0);
             this.pnlAdvanced.Name = "pnlAdvanced";
             this.pnlAdvanced.Size = new System.Drawing.Size(475, 794);
             this.pnlAdvanced.TabIndex = 2;
@@ -664,6 +670,7 @@
             this.btnHelpMartingale.TabIndex = 4;
             this.btnHelpMartingale.Text = "What Is martingale?";
             this.btnHelpMartingale.UseVisualStyleBackColor = true;
+            this.btnHelpMartingale.Click += new System.EventHandler(this.btnHelpMartingale_Click);
             // 
             // rdbMartingale
             // 
@@ -1334,6 +1341,7 @@
             this.btnHelpLabouchere.TabIndex = 16;
             this.btnHelpLabouchere.Text = "What is Labouchere?";
             this.btnHelpLabouchere.UseVisualStyleBackColor = true;
+            this.btnHelpLabouchere.Click += new System.EventHandler(this.btnHelpLabouchere_Click);
             // 
             // panel7
             // 
@@ -1458,6 +1466,7 @@
             this.btnHelpFibonacci.TabIndex = 37;
             this.btnHelpFibonacci.Text = "What is Fibonacci?";
             this.btnHelpFibonacci.UseVisualStyleBackColor = true;
+            this.btnHelpFibonacci.Click += new System.EventHandler(this.btnHelpFibonacci_Click);
             // 
             // panel6
             // 
@@ -1709,6 +1718,7 @@
             this.btnHelpAlembert.TabIndex = 18;
             this.btnHelpAlembert.Text = "What is d\'Alembert?";
             this.btnHelpAlembert.UseVisualStyleBackColor = true;
+            this.btnHelpAlembert.Click += new System.EventHandler(this.btnHelpAlembert_Click);
             // 
             // groupBox13
             // 
@@ -1908,6 +1918,7 @@
             this.btnHelpPreset.TabIndex = 21;
             this.btnHelpPreset.Text = "What is Preset List?";
             this.btnHelpPreset.UseVisualStyleBackColor = true;
+            this.btnHelpPreset.Click += new System.EventHandler(this.btnHelpPreset_Click);
             // 
             // groupBox16
             // 
@@ -3880,7 +3891,7 @@
             this.pnlApiInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlApiInfo.Location = new System.Drawing.Point(0, 231);
             this.pnlApiInfo.Name = "pnlApiInfo";
-            this.pnlApiInfo.Size = new System.Drawing.Size(561, 563);
+            this.pnlApiInfo.Size = new System.Drawing.Size(438, 563);
             this.pnlApiInfo.TabIndex = 7;
             // 
             // groupBox6
@@ -3889,7 +3900,7 @@
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(0, 0);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(561, 563);
+            this.groupBox6.Size = new System.Drawing.Size(438, 563);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Bets:";
@@ -3911,14 +3922,14 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer1.Size = new System.Drawing.Size(555, 544);
+            this.splitContainer1.Size = new System.Drawing.Size(432, 544);
             this.splitContainer1.SplitterDistance = 320;
             this.splitContainer1.TabIndex = 0;
             // 
             // btnChartReset
             // 
             this.btnChartReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChartReset.Location = new System.Drawing.Point(477, 236);
+            this.btnChartReset.Location = new System.Drawing.Point(354, 236);
             this.btnChartReset.Name = "btnChartReset";
             this.btnChartReset.Size = new System.Drawing.Size(75, 23);
             this.btnChartReset.TabIndex = 3;
@@ -3929,7 +3940,7 @@
             // btnDisable
             // 
             this.btnDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDisable.Location = new System.Drawing.Point(477, 265);
+            this.btnDisable.Location = new System.Drawing.Point(354, 265);
             this.btnDisable.Name = "btnDisable";
             this.btnDisable.Size = new System.Drawing.Size(75, 23);
             this.btnDisable.TabIndex = 2;
@@ -3940,7 +3951,7 @@
             // btnHideLive
             // 
             this.btnHideLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHideLive.Location = new System.Drawing.Point(477, 294);
+            this.btnHideLive.Location = new System.Drawing.Point(354, 294);
             this.btnHideLive.Name = "btnHideLive";
             this.btnHideLive.Size = new System.Drawing.Size(75, 23);
             this.btnHideLive.TabIndex = 1;
@@ -3950,19 +3961,19 @@
             // 
             // chrtEmbeddedLiveChart
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea2);
+            chartArea1.Name = "ChartArea1";
+            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend2.Name = "Legend1";
-            this.chrtEmbeddedLiveChart.Legends.Add(legend2);
+            legend1.Name = "Legend1";
+            this.chrtEmbeddedLiveChart.Legends.Add(legend1);
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Profit";
-            this.chrtEmbeddedLiveChart.Series.Add(series2);
-            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(555, 320);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Profit";
+            this.chrtEmbeddedLiveChart.Series.Add(series1);
+            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(432, 320);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
             // 
@@ -3986,7 +3997,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(555, 220);
+            this.dataGridView1.Size = new System.Drawing.Size(432, 220);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
@@ -4000,7 +4011,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(561, 231);
+            this.panel5.Size = new System.Drawing.Size(438, 231);
             this.panel5.TabIndex = 4;
             // 
             // gbLogin
@@ -4272,6 +4283,11 @@
             // 
             this.nudApiBet.DecimalPlaces = 8;
             this.nudApiBet.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudApiBet.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            327680});
             this.nudApiBet.Location = new System.Drawing.Point(117, 17);
             this.nudApiBet.Maximum = new decimal(new int[] {
             1410065407,
@@ -4486,7 +4502,7 @@
             this.pnlBasic.Controls.Add(this.btnStartLow2);
             this.pnlBasic.Controls.Add(this.btnStartHigh2);
             this.pnlBasic.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlBasic.Location = new System.Drawing.Point(291, 0);
+            this.pnlBasic.Location = new System.Drawing.Point(414, 0);
             this.pnlBasic.Name = "pnlBasic";
             this.pnlBasic.Size = new System.Drawing.Size(149, 794);
             this.pnlBasic.TabIndex = 8;
@@ -4770,7 +4786,7 @@
             this.scMain.Panel2.Controls.Add(this.pnlAdvanced);
             this.scMain.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint);
             this.scMain.Size = new System.Drawing.Size(1484, 796);
-            this.scMain.SplitterDistance = 563;
+            this.scMain.SplitterDistance = 440;
             this.scMain.TabIndex = 9;
             // 
             // pnlProgrammer
@@ -4778,90 +4794,78 @@
             this.pnlProgrammer.AutoScroll = true;
             this.pnlProgrammer.Controls.Add(this.tabControl2);
             this.pnlProgrammer.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlProgrammer.Location = new System.Drawing.Point(0, 0);
+            this.pnlProgrammer.Location = new System.Drawing.Point(50, 0);
             this.pnlProgrammer.Name = "pnlProgrammer";
-            this.pnlProgrammer.Size = new System.Drawing.Size(291, 794);
+            this.pnlProgrammer.Size = new System.Drawing.Size(364, 794);
             this.pnlProgrammer.TabIndex = 9;
             // 
             // tabControl2
             // 
             this.tabControl2.Controls.Add(this.tabPage10);
             this.tabControl2.Controls.Add(this.tpConsole);
-            this.tabControl2.Location = new System.Drawing.Point(3, 4);
+            this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl2.Location = new System.Drawing.Point(0, 0);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(286, 787);
+            this.tabControl2.Size = new System.Drawing.Size(364, 794);
             this.tabControl2.TabIndex = 0;
             // 
             // tabPage10
             // 
             this.tabPage10.AutoScroll = true;
-            this.tabPage10.Controls.Add(this.button3);
-            this.tabPage10.Controls.Add(this.listBox1);
-            this.tabPage10.Controls.Add(this.label124);
-            this.tabPage10.Controls.Add(this.richTextBox3);
-            this.tabPage10.Controls.Add(this.label123);
-            this.tabPage10.Controls.Add(this.lbVariables);
-            this.tabPage10.Controls.Add(this.label121);
+            this.tabPage10.Controls.Add(this.splitContainer2);
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(278, 761);
+            this.tabPage10.Size = new System.Drawing.Size(356, 768);
             this.tabPage10.TabIndex = 0;
             this.tabPage10.Text = "Code";
             this.tabPage10.UseVisualStyleBackColor = true;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.AutoScroll = true;
+            this.splitContainer2.Panel1.Controls.Add(this.btnCodeSave);
+            this.splitContainer2.Panel1.Controls.Add(this.btnOpenCode);
+            this.splitContainer2.Panel1.Controls.Add(this.label121);
+            this.splitContainer2.Panel1.Controls.Add(this.button3);
+            this.splitContainer2.Panel1.Controls.Add(this.lbVariables);
+            this.splitContainer2.Panel1.Controls.Add(this.listBox1);
+            this.splitContainer2.Panel1.Controls.Add(this.label124);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.richTextBox3);
+            this.splitContainer2.Size = new System.Drawing.Size(350, 762);
+            this.splitContainer2.SplitterDistance = 381;
+            this.splitContainer2.TabIndex = 9;
+            // 
+            // label121
+            // 
+            this.label121.AutoSize = true;
+            this.label121.Location = new System.Drawing.Point(9, 7);
+            this.label121.Name = "label121";
+            this.label121.Size = new System.Drawing.Size(99, 13);
+            this.label121.TabIndex = 0;
+            this.label121.Text = "Available Variables:";
+            // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(192, 293);
+            this.button3.Location = new System.Drawing.Point(197, 308);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 8;
             this.button3.Text = "Help!";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click_1);
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "withdraw(bitcoinaddress:string, amount:double)",
-            "invest(amount:double)",
-            "tip(username/userid:string, amount:double)",
-            "stop()",
-            "resetseed();",
-            "print(messagetoprint:string)"});
-            this.listBox1.Location = new System.Drawing.Point(6, 205);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(261, 82);
-            this.listBox1.TabIndex = 7;
-            // 
-            // label124
-            // 
-            this.label124.AutoSize = true;
-            this.label124.Location = new System.Drawing.Point(7, 189);
-            this.label124.Name = "label124";
-            this.label124.Size = new System.Drawing.Size(96, 13);
-            this.label124.TabIndex = 6;
-            this.label124.Text = "Methods/functions";
-            // 
-            // richTextBox3
-            // 
-            this.richTextBox3.AcceptsTab = true;
-            this.richTextBox3.Location = new System.Drawing.Point(10, 325);
-            this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(261, 430);
-            this.richTextBox3.TabIndex = 5;
-            this.richTextBox3.Text = "function dobet()\n\nend";
-            // 
-            // label123
-            // 
-            this.label123.AutoSize = true;
-            this.label123.Location = new System.Drawing.Point(7, 298);
-            this.label123.Name = "label123";
-            this.label123.Size = new System.Drawing.Size(64, 13);
-            this.label123.TabIndex = 4;
-            this.label123.Text = "Code/Script";
             // 
             // lbVariables
             // 
@@ -4880,19 +4884,44 @@
             "chance:double, RW",
             "bethigh:bool, RW",
             "lastBet:Bet, RO"});
-            this.lbVariables.Location = new System.Drawing.Point(9, 21);
+            this.lbVariables.Location = new System.Drawing.Point(12, 22);
             this.lbVariables.Name = "lbVariables";
-            this.lbVariables.Size = new System.Drawing.Size(262, 160);
+            this.lbVariables.Size = new System.Drawing.Size(262, 173);
             this.lbVariables.TabIndex = 2;
             // 
-            // label121
+            // listBox1
             // 
-            this.label121.AutoSize = true;
-            this.label121.Location = new System.Drawing.Point(6, 6);
-            this.label121.Name = "label121";
-            this.label121.Size = new System.Drawing.Size(99, 13);
-            this.label121.TabIndex = 0;
-            this.label121.Text = "Available Variables:";
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Items.AddRange(new object[] {
+            "withdraw(bitcoinaddress:string, amount:double)",
+            "invest(amount:double)",
+            "tip(username/userid:string, amount:double)",
+            "stop()",
+            "resetseed();",
+            "print(messagetoprint:string)"});
+            this.listBox1.Location = new System.Drawing.Point(11, 222);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(261, 82);
+            this.listBox1.TabIndex = 7;
+            // 
+            // label124
+            // 
+            this.label124.AutoSize = true;
+            this.label124.Location = new System.Drawing.Point(12, 206);
+            this.label124.Name = "label124";
+            this.label124.Size = new System.Drawing.Size(96, 13);
+            this.label124.TabIndex = 6;
+            this.label124.Text = "Methods/functions";
+            // 
+            // richTextBox3
+            // 
+            this.richTextBox3.AcceptsTab = true;
+            this.richTextBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox3.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.Size = new System.Drawing.Size(348, 375);
+            this.richTextBox3.TabIndex = 5;
+            this.richTextBox3.Text = "function dobet()\n\nend";
             // 
             // tpConsole
             // 
@@ -4902,7 +4931,7 @@
             this.tpConsole.Location = new System.Drawing.Point(4, 22);
             this.tpConsole.Name = "tpConsole";
             this.tpConsole.Padding = new System.Windows.Forms.Padding(3);
-            this.tpConsole.Size = new System.Drawing.Size(278, 761);
+            this.tpConsole.Size = new System.Drawing.Size(356, 768);
             this.tpConsole.TabIndex = 1;
             this.tpConsole.Text = "Console";
             this.tpConsole.UseVisualStyleBackColor = true;
@@ -4914,7 +4943,7 @@
             this.rtbConsole.Location = new System.Drawing.Point(3, 3);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
-            this.rtbConsole.Size = new System.Drawing.Size(272, 686);
+            this.rtbConsole.Size = new System.Drawing.Size(350, 693);
             this.rtbConsole.TabIndex = 0;
             this.rtbConsole.Text = "";
             this.rtbConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox1_KeyDown);
@@ -4922,10 +4951,10 @@
             // txtConsoleIn
             // 
             this.txtConsoleIn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtConsoleIn.Location = new System.Drawing.Point(3, 689);
+            this.txtConsoleIn.Location = new System.Drawing.Point(3, 696);
             this.txtConsoleIn.Multiline = true;
             this.txtConsoleIn.Name = "txtConsoleIn";
-            this.txtConsoleIn.Size = new System.Drawing.Size(272, 69);
+            this.txtConsoleIn.Size = new System.Drawing.Size(350, 69);
             this.txtConsoleIn.TabIndex = 1;
             this.txtConsoleIn.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             this.txtConsoleIn.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtConsoleIn_KeyUp);
@@ -5350,6 +5379,26 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
+            // btnOpenCode
+            // 
+            this.btnOpenCode.Location = new System.Drawing.Point(11, 310);
+            this.btnOpenCode.Name = "btnOpenCode";
+            this.btnOpenCode.Size = new System.Drawing.Size(75, 23);
+            this.btnOpenCode.TabIndex = 9;
+            this.btnOpenCode.Text = "Open";
+            this.btnOpenCode.UseVisualStyleBackColor = true;
+            this.btnOpenCode.Click += new System.EventHandler(this.btnOpenCode_Click);
+            // 
+            // btnCodeSave
+            // 
+            this.btnCodeSave.Location = new System.Drawing.Point(92, 310);
+            this.btnCodeSave.Name = "btnCodeSave";
+            this.btnCodeSave.Size = new System.Drawing.Size(75, 23);
+            this.btnCodeSave.TabIndex = 10;
+            this.btnCodeSave.Text = "Save";
+            this.btnCodeSave.UseVisualStyleBackColor = true;
+            this.btnCodeSave.Click += new System.EventHandler(this.btnCodeSave_Click);
+            // 
             // idDataGridViewTextBoxColumn
             // 
             this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
@@ -5578,7 +5627,11 @@
             this.pnlProgrammer.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage10.ResumeLayout(false);
-            this.tabPage10.PerformLayout();
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel1.PerformLayout();
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.tpConsole.ResumeLayout(false);
             this.tpConsole.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -5699,7 +5752,6 @@
         private System.Windows.Forms.TabPage tpConsole;
         private System.Windows.Forms.RichTextBox rtbConsole;
         private System.Windows.Forms.RichTextBox richTextBox3;
-        private System.Windows.Forms.Label label123;
         private System.Windows.Forms.ListBox lbVariables;
         private System.Windows.Forms.Label label121;
         private System.Windows.Forms.ListBox listBox1;
@@ -6003,6 +6055,9 @@
         private System.Windows.Forms.Button btnHelpFibonacci;
         private System.Windows.Forms.Button btnHelpAlembert;
         private System.Windows.Forms.Button btnHelpPreset;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.Button btnCodeSave;
+        private System.Windows.Forms.Button btnOpenCode;
 
     }
 }

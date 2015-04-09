@@ -319,7 +319,7 @@ namespace DiceBot
             Thread tGetVers = new Thread(new ThreadStart(getversion));
             tGetVers.Start();
             populateFiboNacci();
-            CurrentSite.FinishedLogin+=CurrentSite_FinishedLogin;
+            //CurrentSite.FinishedLogin+=CurrentSite_FinishedLogin;
             if (autologin)
             {
                 CurrentSite.Login(username, password , txtApi2fa.Text);
@@ -1336,10 +1336,7 @@ namespace DiceBot
                     }
                 }
 
-                if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
-                {
-                    Reset();
-                }
+                
                 if (chkChangeWinStreak.Checked && (Winstreak == nudChangeWinStreak.Value))
                 {
                     Lastbet = (double)nudChangeWinStreakTo.Value;
@@ -1431,11 +1428,7 @@ namespace DiceBot
                     Lastbet = MinBet;
                 }
 
-                //reset bet to minimum if applicable
-                if (chkResetBetLoss.Checked && Losestreak % nudResetBetLoss.Value == 0)
-                {
-                    Reset();
-                }
+               
                 //change bet after a certain losing streak
                 if (chkChangeLoseStreak.Checked && (Losestreak == nudChangeLoseStreak.Value))
                 {
@@ -1650,6 +1643,10 @@ namespace DiceBot
                         
                         if (!programmerToolStripMenuItem.Checked)
                         {
+                            if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
+                            {
+                                Reset();
+                            }
                             if (currentprofit >= ((double)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
                             {
                                 Stop();
@@ -1794,6 +1791,10 @@ namespace DiceBot
 
                     if (!programmerToolStripMenuItem.Checked)
                     {
+                        if (chkResetBetLoss.Checked && Losestreak %nudResetBetLoss.Value == 0)
+                        {
+                            Reset();
+                        }
                         //stop conditions:
                         //stop if lose streak is higher than specified
                         if (Losestreak >= nudStopLossStreak.Value && chkStopLossStreak.Checked)
@@ -2266,6 +2267,17 @@ namespace DiceBot
                 return;
             }
             save(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings");
+            if (programmerToolStripMenuItem.Checked)
+            {
+                try
+                {
+                    File.WriteAllText("TempCodeBackup.txt", richTextBox3.Text);
+                }
+                catch
+                {
+
+                }
+            }
             savepersonal();
         }
 
@@ -2539,113 +2551,8 @@ namespace DiceBot
 
                     sw.WriteLine("FirstResetLoss|" + (chkFirstResetLoss.Checked ? "1" : "0"));
                     sw.WriteLine("FirstResetWin|" + (chkFirstResetWin.Checked ? "1" : "0"));
-                    #region old save, Not applicable
-                    /*string msg = "";
-                    msg += txtAmount.Text + ";";
-                    msg += txtLimit.Text + ";";
-                    if (chkLimit.Checked)
-                        msg += "1;";
-                    else
-                        msg += "0;";
-                    msg += txtLowerLimit.Text + ";";
-                    if (chkLowerLimit.Checked)
-                        msg += "1;";
-                    else
-                        msg += "0;";
-                    msg += txtMinBet.Text + ";";
-                    msg += txtMultiplier.Text + ";";
-                    msg += txtSecretURL.Text + ";";
-                    msg += txtTo.Text + ";";
-                    if (rdbInvest.Checked)
-                    {
-                        msg += "0;";
-                    }
-                    else if (rdbStop.Checked)
-                    {
-                        msg += "1;";
-                    }
-                    else
-                    {
-                        msg += "2;";
-                    }
+                    
 
-
-                    if (chkOnWin.Checked)
-                        msg += "1;";
-                    else
-                        msg += "0;";
-                    sw.WriteLine(msg);
-                    msg = "";
-                    msg += txtChance.Text + ";";
-                    msg += txtMaxMultiply.Text + ";";
-                    msg += txtNBets.Text + ";";
-                    msg += txtDevider.Text + ";";
-                    if (rdbMaxMultiplier.Checked)
-                        msg += "0;";
-                    else if (rdbDevider.Checked)
-                        msg += "1";
-                    else if (rdbConstant.Checked)
-                        msg += "2";
-                    else msg += "3";
-                    sw.WriteLine(msg);
-                    msg = "";
-                    if (chkReverse.Checked)
-                        msg += 1 + ";";
-                    else msg += 0 + ";";
-                    if (rdbReverseBets.Checked)
-                        msg += "0";
-                    else if (rdbReverseLoss.Checked)
-                        msg += "1";
-                    else if (rdbReverseWins.Checked)
-                        msg += "2";
-                    msg += ";";
-                    msg += NudReverse.Value.ToString("00");
-                    msg += ";";
-                    msg += nudLastStreakWin.Value.ToString("00") + ";" + nudLastStreakLose.Value.ToString("00");
-                    sw.WriteLine(msg);
-                    msg = "";
-                    if (chkResetBetLoss.Checked)
-                    {
-                        msg += "1;";
-                    }
-                    else
-                    {
-                        msg+="0;";
-                    }
-                    msg += nudResetBetLoss.Value.ToString()+";";
-                    if (chkResetBetWins.Checked)
-                        msg += "1;";
-                    else
-                        msg += "0;";
-                    msg += nudResetWins.Value.ToString() + ";";
-                    msg += txtWinMultiplier.Text + ";"+txtWinMaxMultiplies.Text+";"+txtWinNBets.Text+";"+txtWinDevider.Text+";";
-                    if (rdbWinConstant.Checked)
-                        msg+="0";
-                    else if (rdbWinDevider.Checked)
-                        msg+="1";
-                    else if (rdbWinMaxMultiplier.Checked)
-                        msg+="2";
-                    else if (rdbWinReduce.Checked)
-                        msg+="3";
-                    msg+=";";
-                    if (chkBotSpeed.Checked)
-                        msg += "1";
-                    else msg += "0";
-                    msg += ";";
-                    if (chkResetSeed.Checked)
-                        msg += "1";
-                    else msg += "0";
-                    msg += ";";
-                    if (rdbResetSeedBets.Checked)
-                        msg += "0";
-                    else if (rdbResetSeedWins.Checked)
-                        msg += "1";
-                    else if (rdbResetSeedLosses.Checked)
-                        msg += "2";
-                    msg += ";";
-                        msg+= nudResetSeed.Value.ToString();
-                    sw.WriteLine(msg);*/
-                    #endregion
                 }
                 catch
                 {
@@ -4608,7 +4515,8 @@ namespace DiceBot
         {
             if ((sender as Button).Text == "Log In")
             {
-                CurrentSite.FinishedLogin+=CurrentSite_FinishedLogin;
+                CurrentSite.FinishedLogin -= CurrentSite_FinishedLogin;
+                CurrentSite.FinishedLogin +=CurrentSite_FinishedLogin;
                 
                 CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text);
                 
@@ -5404,7 +5312,69 @@ namespace DiceBot
 
         private void pnlAdvancedAdvanced_Paint(object sender, PaintEventArgs e)
         {
+            
+        }
 
+        private void btnHelpMartingale_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://bot.seuntjie.com/martingale.html");
+        }
+
+        private void btnHelpLabouchere_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://bot.seuntjie.com/labouchere.html");
+        }
+
+        private void btnHelpFibonacci_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://bot.seuntjie.com/fibonacci.html");
+        }
+
+        private void btnHelpAlembert_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://bot.seuntjie.com/alembert.html");
+        }
+
+        private void btnHelpPreset_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://bot.seuntjie.com/presetlist.html");
+        }
+
+        private void btnOpenCode_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofdtmp = new OpenFileDialog();
+            if (ofdtmp.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamReader sr = new StreamReader(ofdtmp.FileName))
+                    {
+                        string tmp = sr.ReadToEnd();
+                        richTextBox3.Text = tmp;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Invalid file!");
+                }
+            }
+        }
+
+        private void btnCodeSave_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog svdtmp = new SaveFileDialog();
+            if (svdtmp.ShowDialog() == System.Windows.Forms.DialogResult.OK )
+            {
+                try
+                {
+                    File.WriteAllText(svdtmp.FileName, richTextBox3.Text);
+                    MessageBox.Show("Saved!");
+                }
+                catch
+                {
+                    MessageBox.Show("Could not save code to file.");
+                }
+            }
         }
 
     }

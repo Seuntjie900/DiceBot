@@ -51,9 +51,16 @@ namespace DiceBot
             }
             catch
             {
-                string s = milliseconds.ToLower().Replace("z", " ").Replace("t", " ");
-                DateTime dotNetDate = DateTime.Parse(s);
-                return dotNetDate;
+                try
+                {
+                    string s = milliseconds.ToLower().Replace("z", " ").Replace("t", " ");
+                    DateTime dotNetDate = DateTime.Parse(s);
+                    return dotNetDate;
+                }
+                catch
+                {
+                    return new DateTime();
+                }
             }
         }
 
