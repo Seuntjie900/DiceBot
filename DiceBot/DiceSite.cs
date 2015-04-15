@@ -18,6 +18,7 @@ namespace DiceBot
         protected string prox_pass = "";
         protected WebProxy Prox;
         public string[] Currencies = new string[] { "btc" };
+        
         string currency = "Btc";
         public string Currency
         {

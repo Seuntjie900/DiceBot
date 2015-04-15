@@ -19,6 +19,7 @@ namespace DiceBot
         int wins=0, losses =0;
         bool isD999 = true;
         DateTime LastBaalance = DateTime.Now;
+        public static string[] cCurrencies =new string[] { "btc","doge","ltc" };
         public dice999(cDiceBot Parent)
         {
             this.Parent = Parent;
@@ -35,7 +36,7 @@ namespace DiceBot
             Tip = false;
             TipUsingName = true;
             Currency = "btc";
-            Currencies = new string[] { "btc","doge","ltc" };
+            Currencies = cCurrencies;
             /*Thread tChat = new Thread(GetMessagesThread);
             tChat.Start();*/
         }

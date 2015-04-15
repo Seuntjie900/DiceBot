@@ -262,7 +262,7 @@ namespace DiceBot
                 getHeaders.CookieContainer.Add(c);
             }
             getHeaders.Method = "POST";
-            string post = string.Format("userName={0}&password={1}&twoFactorCode={2}&__RequestVerificationToken={3}", Username, Password, "", rqtoken);
+            string post = string.Format("userName={0}&password={1}&twoFactorCode={2}&__RequestVerificationToken={3}", Username, Password, twofa, rqtoken);
             getHeaders.ContentType = "application/x-www-form-urlencoded";
             getHeaders.ContentLength = post.Length;
             using (var writer = new StreamWriter(getHeaders.GetRequestStream()))
