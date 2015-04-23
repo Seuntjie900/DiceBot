@@ -66,23 +66,28 @@
             this.label50 = new System.Windows.Forms.Label();
             this.chkTray = new System.Windows.Forms.CheckBox();
             this.btnSaveUser = new System.Windows.Forms.Button();
+            this.nudLiveBetsNum = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox19.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSoundStreak)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLiveBetsNum)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox19
             // 
+            this.groupBox19.Controls.Add(this.label1);
+            this.groupBox19.Controls.Add(this.nudLiveBetsNum);
             this.groupBox19.Controls.Add(this.lblSeedFound);
             this.groupBox19.Controls.Add(this.lblSeedProgress);
             this.groupBox19.Controls.Add(this.btnGetSeeds);
             this.groupBox19.Controls.Add(this.chkAutoSeeds);
             this.groupBox19.Location = new System.Drawing.Point(15, 443);
             this.groupBox19.Name = "groupBox19";
-            this.groupBox19.Size = new System.Drawing.Size(421, 67);
+            this.groupBox19.Size = new System.Drawing.Size(421, 87);
             this.groupBox19.TabIndex = 62;
             this.groupBox19.TabStop = false;
             this.groupBox19.Text = "Bets";
@@ -381,7 +386,7 @@
             this.groupBox1.Size = new System.Drawing.Size(424, 86);
             this.groupBox1.TabIndex = 59;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Just-Dice Settings";
+            this.groupBox1.Text = "Startup Settings";
             // 
             // label43
             // 
@@ -464,7 +469,7 @@
             // 
             // btnSaveUser
             // 
-            this.btnSaveUser.Location = new System.Drawing.Point(332, 516);
+            this.btnSaveUser.Location = new System.Drawing.Point(332, 536);
             this.btnSaveUser.Name = "btnSaveUser";
             this.btnSaveUser.Size = new System.Drawing.Size(104, 23);
             this.btnSaveUser.TabIndex = 55;
@@ -472,11 +477,43 @@
             this.btnSaveUser.UseVisualStyleBackColor = true;
             this.btnSaveUser.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
+            // nudLiveBetsNum
+            // 
+            this.nudLiveBetsNum.Location = new System.Drawing.Point(229, 42);
+            this.nudLiveBetsNum.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nudLiveBetsNum.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLiveBetsNum.Name = "nudLiveBetsNum";
+            this.nudLiveBetsNum.Size = new System.Drawing.Size(54, 20);
+            this.nudLiveBetsNum.TabIndex = 4;
+            this.nudLiveBetsNum.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudLiveBetsNum.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 44);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(217, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Number of bets to show in the live bet panel:";
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 555);
+            this.ClientSize = new System.Drawing.Size(444, 571);
             this.Controls.Add(this.groupBox19);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -498,6 +535,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLiveBetsNum)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -543,5 +581,7 @@
         private System.Windows.Forms.Label label50;
         public System.Windows.Forms.CheckBox chkTray;
         private System.Windows.Forms.Button btnSaveUser;
+        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.NumericUpDown nudLiveBetsNum;
     }
 }

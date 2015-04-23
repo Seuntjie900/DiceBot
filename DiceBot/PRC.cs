@@ -23,6 +23,7 @@ namespace DiceBot
             AutoLogin = true;
             ChangeSeed = true;
             AutoInvest = true;
+            Tip = true;
             this.Parent = Parent;
             Name = "PRCDice";
             BetURL = "https://pocketrocketscasino.eu/api/bets/GetBet?id=";
@@ -87,12 +88,13 @@ namespace DiceBot
 
         public override bool Invest(double Amount)
         {
-            withdraw = 2;
+            /*withdraw = 2;
             withdrawTime = DateTime.Now;
             wdAmount = Amount;
-            return true;
-
+            return true;*/
+            System.Threading.Thread.Sleep(3200);
             dicehub.Invoke("invest", Amount, 0.5m);
+            System.Threading.Thread.Sleep(120);
             return true;
         }
       
@@ -139,8 +141,15 @@ namespace DiceBot
 
         public override void SendTip(string User, double amount)
         {
-            if (dicehub != null)
-                dicehub.Invoke("tip", User, amount, "");
+            
+            int uid = -1;
+            if (int.TryParse(User, out uid))
+            {
+                System.Threading.Thread.Sleep(3200);
+                if (dicehub != null)
+                    dicehub.Invoke("tip", uid, amount, "");
+                System.Threading.Thread.Sleep(120);
+            }
         }
 
         public override void SetClientSeed(string Seed)
@@ -166,9 +175,9 @@ namespace DiceBot
 
         public override bool ReadyToBet()
         {
-            if (withdraw!=0)            
+            /*if (withdraw!=0)            
             {
-                if ( (DateTime.Now - withdrawTime).TotalSeconds>31)
+                if ( (DateTime.Now - withdrawTime).TotalSeconds>3)
                 {
                     if (withdraw ==1)
                     {
@@ -184,7 +193,7 @@ namespace DiceBot
                 {
                     return false;
                 }
-            }
+            }*/
             return true;
         }
         
@@ -207,13 +216,15 @@ namespace DiceBot
 
         public override bool Withdraw(double Amount, string Address)
         {
-            Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
+            /*Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
             withdraw = 1;
             withdrawTime = DateTime.Now;
             wdAddress = Address;
             wdAmount = Amount;
-            return true;
+            return true;*/
+            System.Threading.Thread.Sleep(1200);
             dicehub.Invoke("Withdraw", Address, Amount, "");
+            System.Threading.Thread.Sleep(120);
             return true;
         }
         void ReceivedChat(string messages, string time, string user, int id, int room, bool ismod)

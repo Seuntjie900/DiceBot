@@ -148,6 +148,7 @@ namespace DiceBot
                         txtPathAlarm.Text = Parent.getvalue(saveditems, "AlarmPath");
                         //Emails.StreakSize = (int)Emails.StreakSize;
                         chkAutoSeeds.Checked = Parent.getvalue(saveditems, "AutoGetSeed") != "0";
+                        nudLiveBetsNum.Value = (decimal)Parent.iparse(Parent.getvalue(saveditems, "NumLiveBets"));   
                     }
 
                 }
@@ -184,6 +185,14 @@ namespace DiceBot
             string smtp = Interaction.InputBox("Enter new smtp server address", "SMTP", "smtp.secrueserver.net");
             Parent.Emails.SMTP = smtp;
 
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            if (nudLiveBetsNum.Value>500)
+            {
+                MessageBox.Show("Warning! Bot may become slow and unresponsive if too many bets are displayed.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
     }

@@ -1,9 +1,7 @@
 Todo:
 PD login encoding
-999dice betting bug (date format, not set to instance, Both at Datagridview)
-strategy help buttons and pages
-d'Alembert stop/reset on win
-programmer mode save and load
+999dice betting bug (date format, not set to instance, Both at Datagridview)(??fixed??. no reproduce so far)
+strategy help pages
 
 hopefully before release:
 losing streak table redo
@@ -66,4 +64,11 @@ advanced zig zag
 Send bet object to form.
 programmer mode, simulation chance 
 reset on streak profit
+stats reset button
 reset on profit (sal kyk)
+d'Alembert stop/reset on win
+strategy help buttons and 
+programmer mode save and load
+Dynamic currencies for sites
+adjustable number of bets shown in live bets view
+optimize live bet view

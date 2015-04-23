@@ -118,9 +118,16 @@ namespace DiceBot
 
         DiceSite CurrentSite;
         private double dPreviousBalance;
-        
+        delegate void dpopFibonacci();
         void populateFiboNacci()
         {
+            if (InvokeRequired)
+            {
+                Invoke(new dpopFibonacci(populateFiboNacci));
+                return;
+            }
+            else
+            {
             decimal Previous = 0;
             decimal Current = (decimal)MinBet ;
             lstFibonacci.Items.Clear();
@@ -130,6 +137,7 @@ namespace DiceBot
                 decimal tmp = Current;
                 Current += Previous;
                 Previous = tmp;
+            }
             }
         }
 
@@ -3092,6 +3100,7 @@ namespace DiceBot
                         salarm= getvalue(saveditems, "AlarmPath");
                         Emails.StreakSize = (int)Emails.StreakSize;
                         autoseeds = getvalue(saveditems, "AutoGetSeed") != "0";
+                        maxRows = iparse(getvalue(saveditems, "NumLiveBets"));
                     }
 
                 }
@@ -3160,6 +3169,7 @@ namespace DiceBot
                 sw.WriteLine("AlarmPath|" + TmpSet.txtPathAlarm.Text);
 
                 sw.WriteLine("AutoGetSeed|"+ (autoseeds?"1":"0"));
+                sw.WriteLine("NumLiveBets|" + TmpSet.nudLiveBetsNum.Value);
 
             }
         }
@@ -4250,7 +4260,7 @@ namespace DiceBot
         }
 
 
-        List<Bet> BetsToShow = new List<Bet>();
+        //List<Bet> BetsToShow = new List<Bet>();
         int maxRows = 100;
         public void AddBet(object Bet)
         {
@@ -4264,28 +4274,27 @@ namespace DiceBot
                     if (!LiveGraph.IsDisposed)
                         LiveGraph.AddBet(Bet as Bet);
                 sqlite_helper.AddBet(Bet as Bet, CurrentSite.Name);
-                BetsToShow.Insert(0, (Bet)Bet);
-                if (BetsToShow.Count>maxRows)
+                dataGridView1.DataBindings.Clear();
+                Bet _Bet = (Bet as Bet);
+                dataGridView1.Rows.Insert(0, _Bet.Id, _Bet.date, _Bet.Amount, _Bet.high, _Bet.Chance, _Bet.Roll,_Bet.Profit,_Bet.nonce );
+                if ( dataGridView1.Rows.Count >0 )
                 {
-                    BetsToShow.RemoveAt(BetsToShow.Count - 1);
-                }
-                BindingSource bs = new BindingSource();
-                bs.DataSource = BetsToShow;
-                dataGridView1.DataSource = bs;
-                
-                foreach (DataGridViewRow Myrow in dataGridView1.Rows)
-                {           
-                    if (Myrow.Cells[6].Value != null)
+                    
+                    if (dataGridView1.Rows[0].Cells[6].Value != null)
                     {
-                        if (((bool)Myrow.Cells[3].Value ? (decimal)Myrow.Cells[5].Value < 100m - (decimal)(Myrow.Cells[4].Value) : (decimal)Myrow.Cells[5].Value > (decimal)(Myrow.Cells[4].Value)))
+                        if (((bool)dataGridView1.Rows[0].Cells[3].Value ? (decimal)dataGridView1.Rows[0].Cells[5].Value < 100m - (decimal)(dataGridView1.Rows[0].Cells[4].Value) : (decimal)dataGridView1.Rows[0].Cells[5].Value > (decimal)(dataGridView1.Rows[0].Cells[4].Value)))
                         {
-                            Myrow.DefaultCellStyle.BackColor = Color.Pink;
+                            dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.Pink;
                         }
                         else
                         {
-                            Myrow.DefaultCellStyle.BackColor = Color.LightGreen;
+                            dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightGreen;
                         }
                     }
+                }
+                while (dataGridView1.Rows.Count > maxRows)
+                {
+                    dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 1);
                 }
                 
             }
