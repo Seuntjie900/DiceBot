@@ -208,6 +208,7 @@ namespace DiceBot
             return null;
         }
 
+        
         public static Bet[] GetBetHistory(string site)
         {
             using (SQLiteConnection sqcon = GetConnection())
@@ -523,6 +524,32 @@ namespace DiceBot
             return null;
         }
 
+        public static Bet[] GetHistoryByQuery(string Query)
+        {
+            using (SQLiteConnection sqcon = GetConnection())
+            {
+                try
+                {
+                    sqcon.Open();
+                    SQLiteCommand Command = new SQLiteCommand(Query, sqcon);
+                    
+                    SQLiteDataReader Reader = Command.ExecuteReader();
+                    List<Bet> Bets = new List<Bet>();
+                    while (Reader.Read())
+                    {
+                        Bets.Add(BetParser(Reader));
+                    }
+                    sqcon.Close();
+                    
+                    return Bets.ToArray();
+                }
+                catch
+                {
+                }
+                sqcon.Close();
+            }
+            return null;
+        }
 
         public static List<long> GetMissingSeedIDs(string site)
         {

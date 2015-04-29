@@ -303,6 +303,14 @@
             this.btnHideLive = new System.Windows.Forms.Button();
             this.chrtEmbeddedLiveChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Id = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.amoun = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hig = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbLogin = new System.Windows.Forms.GroupBox();
             this.btnRegister = new System.Windows.Forms.Button();
@@ -433,14 +441,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.Id = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.amoun = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hig = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -3997,6 +3997,54 @@
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
+            // Id
+            // 
+            this.Id.HeaderText = "Bet ID";
+            this.Id.Name = "Id";
+            this.Id.ReadOnly = true;
+            // 
+            // date
+            // 
+            this.date.HeaderText = "Time";
+            this.date.Name = "date";
+            this.date.ReadOnly = true;
+            // 
+            // amoun
+            // 
+            this.amoun.HeaderText = "Amount";
+            this.amoun.Name = "amoun";
+            this.amoun.ReadOnly = true;
+            // 
+            // hig
+            // 
+            this.hig.HeaderText = "High";
+            this.hig.Name = "hig";
+            this.hig.ReadOnly = true;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Chance";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Roll";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Profit";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Nonce";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            // 
             // panel5
             // 
             this.panel5.AutoScroll = true;
@@ -4908,12 +4956,16 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Items.AddRange(new object[] {
-            "withdraw(bitcoinaddress:string, amount:double)",
+            "withdraw(amount:double, bitcoinaddress:string)",
             "invest(amount:double)",
             "tip(username/userid:string, amount:double)",
             "stop()",
             "resetseed();",
-            "print(messagetoprint:string)"});
+            "print(messagetoprint:string)",
+            "getHistory()",
+            "getHistoryByDate(FromDateTime:string (inclusive), UntillDateTime:string (exclusiv" +
+                "e))",
+            "getHistoryByQuery(SQLiteQuery:string)"});
             this.listBox1.Location = new System.Drawing.Point(11, 222);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(261, 82);
@@ -5367,54 +5419,6 @@
             // betBindingSource
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
-            // 
-            // Id
-            // 
-            this.Id.HeaderText = "Bet ID";
-            this.Id.Name = "Id";
-            this.Id.ReadOnly = true;
-            // 
-            // date
-            // 
-            this.date.HeaderText = "Time";
-            this.date.Name = "date";
-            this.date.ReadOnly = true;
-            // 
-            // amoun
-            // 
-            this.amoun.HeaderText = "Amount";
-            this.amoun.Name = "amoun";
-            this.amoun.ReadOnly = true;
-            // 
-            // hig
-            // 
-            this.hig.HeaderText = "High";
-            this.hig.Name = "hig";
-            this.hig.ReadOnly = true;
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Chance";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Roll";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Profit";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "Nonce";
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
             // 
             // cDiceBot
             // 

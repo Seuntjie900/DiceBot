@@ -346,9 +346,19 @@ namespace DiceBot
             Lua.RegisterFunction("stop", this, new dStop(Stop).Method);
             Lua.RegisterFunction("resetseed", this, new dResetSeed(luaResetSeed).Method);
             Lua.RegisterFunction("print", this, new dWriteConsole(WriteConsole).Method);
-
+            Lua.RegisterFunction("getHistory", this, new dluagethistory(luagethistory).Method);
+            Lua.RegisterFunction("getHistoryByDate", this, new dluagethistory2(luagethistory).Method);
+            Lua.RegisterFunction("getHistoryByQuery", this, new dQueryHistory(QueryHistory).Method);
             Lua.RegisterFunction("runsim",this, new dRunsim(runsim).Method);
+            
         }
+        
+        delegate Bet[] dQueryHistory(string Query);
+        Bet[] QueryHistory(string Query)
+        {
+            return sqlite_helper.GetHistoryByQuery(Query);
+        }
+
         delegate void dRunsim(double startingabalance, int bets);
         void runsim(double startingbalance, int bets)
         {
@@ -392,6 +402,26 @@ namespace DiceBot
             WriteConsole("Tipping "+ amount + " to "+username);
             if (CurrentSite.Tip)
                 CurrentSite.SendTip(username, amount);
+        }
+
+        delegate Bet[] dluagethistory();
+        Bet[] luagethistory()
+        {
+            return sqlite_helper.GetBetHistory(CurrentSite.Name);
+        }
+        delegate Bet[] dluagethistory2(string From, string untill);
+        Bet[] luagethistory(string From, string untill)
+        {
+            try
+            {
+                return sqlite_helper.GetBetHistory(CurrentSite.Name, DateTime.Parse(From), DateTime.Parse(untill));
+            }
+            catch (Exception e)
+            {
+                WriteConsole(e.Message);
+                Stop();
+                return null;
+            }
         }
         void CurrentSite_FinishedLogin(bool LoggedIn)
         {
@@ -1964,16 +1994,17 @@ namespace DiceBot
 
         void WriteConsole(string Message)
         {
-            rtbConsole.AppendText(Message+"\r\n");
-            if (rtbConsole.Lines.Length>500)
+            
+            if (rtbConsole.Lines.Length>1000)
             {
                 List<string> lines = new List<string>(rtbConsole.Lines);
-                while (lines.Count>450)
+                while (lines.Count>950)
                 {
                     lines.RemoveAt(0);
                 }
                 rtbConsole.Lines = lines.ToArray();
             }
+            rtbConsole.AppendText(Message + "\r\n");
         }
         delegate void dWriteConsole(string Message);
         delegate void dWithdraw(double Amount, string Address);
@@ -4888,9 +4919,8 @@ namespace DiceBot
             try
             {
                 //Lua.clear();
-                Lua["balance"] = (double)((int)(PreviousBalance * 100000000)) / 100000000.0;
-                
-                Lua["profit"] = ((double)(this.profit * 100000000)) / 100000000.0;
+                Lua["balance"] = PreviousBalance ;                
+                Lua["profit"] = this.profit;
                 Lua["currentstreak"] = (Winstreak > 0) ? Winstreak : -Losestreak;
                 Lua["previousbet"] = Lastbet;
                 Lua["nextbet"] = Lastbet;

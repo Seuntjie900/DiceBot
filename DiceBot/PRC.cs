@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNet.SignalR.Client;
 using System.Net;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace DiceBot
 {
@@ -52,10 +53,44 @@ namespace DiceBot
             
         }
 
-        public override void PlaceBet(bool High)
+        public override async void PlaceBet(bool High)
         {
-            Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
-            dicehub.Invoke("Bet", High?0:1, amount, chance);
+            int retries =0;
+            while (retries < 2)
+            {
+                retries++;
+                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
+                try
+                {
+                    var tmpStats = await dicehub.Invoke<PRCMYstats>("Bet", High ? 0 : 1, amount, chance);
+
+                    Bet tmp = tmpStats.DiceBet;
+                    if (tmp.uid == UserID)
+                    {
+                        balance = (double)tmpStats.AvailableBalance;
+                        wins = tmpStats.Wins;
+                        losses = tmpStats.Losses;
+                        Wagered = tmpStats.Wagered;
+                        bets = tmpStats.NumBets;
+                        profit = (double)tmpStats.Profit;
+
+                        Parent.updateBalance((decimal)(balance));
+                        Parent.updateBets(bets);
+                        Parent.updateLosses(losses);
+                        Parent.updateProfit(profit);
+                        Parent.updateWagered(Wagered);
+                        Parent.updateWins(wins);
+                        tmp.serverhash = serverhash;
+                        Parent.AddBet(tmp);
+                        Parent.GetBetResult(balance, tmp);
+                        retries = 5;
+                    }
+                }
+                catch
+                {
+
+                }
+            }
         }
 
         private void BetResult( PRCMYstats tmp)
@@ -64,26 +99,7 @@ namespace DiceBot
         }
         private void BetResult(Bet tmp, PRCMYstats tmpStats)
         {
-            if (tmp.uid == UserID)
-            {
-                balance = (double)tmpStats.AvailableBalance;
-                wins = tmpStats.Wins;
-                losses = tmpStats.Losses;
-                Wagered = tmpStats.Wagered;
-                bets = tmpStats.NumBets;
-                profit = (double)tmpStats.Profit;
-
-
-                Parent.updateBalance((decimal)(balance));
-                Parent.updateBets(bets);
-                Parent.updateLosses(losses);
-                Parent.updateProfit(profit);
-                Parent.updateWagered(Wagered);
-                Parent.updateWins(wins);
-                tmp.serverhash = serverhash;
-                Parent.AddBet(tmp);
-                Parent.GetBetResult(balance, tmp);
-            }
+            
         }
 
         public override bool Invest(double Amount)
@@ -552,6 +568,7 @@ namespace DiceBot
     }
     public class PRCMYstats
     {
+        public Bet DiceBet { get; set; }
         public decimal AvailableBalance { get; set; }
         public int NumBets { get; set; }
         public decimal Wagered { get; set; }
