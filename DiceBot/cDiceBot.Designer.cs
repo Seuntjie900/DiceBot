@@ -4962,10 +4962,10 @@
             "stop()",
             "resetseed();",
             "print(messagetoprint:string)",
-            "getHistory()",
+            "getHistory(): Bet[]",
             "getHistoryByDate(FromDateTime:string (inclusive), UntillDateTime:string (exclusiv" +
-                "e))",
-            "getHistoryByQuery(SQLiteQuery:string)"});
+                "e)): Bet[]",
+            "getHistoryByQuery(SQLiteQuery:string): Bet[]"});
             this.listBox1.Location = new System.Drawing.Point(11, 222);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(261, 82);

@@ -88,20 +88,12 @@ namespace DiceBot
                 }
                 catch
                 {
-
+                    Parent.updateStatus(string.Format("Failed to place bets after 3 retries, stopping. Please check network and bot settings."));
                 }
             }
         }
 
-        private void BetResult( PRCMYstats tmp)
-        {
-            
-        }
-        private void BetResult(Bet tmp, PRCMYstats tmpStats)
-        {
-            
-        }
-
+      
         public override bool Invest(double Amount)
         {
             /*withdraw = 2;
@@ -344,8 +336,6 @@ namespace DiceBot
                 con.Start().Wait();
 
                 dicehub.Invoke("joinChatRoom", 1);
-                dicehub.On<Bet, PRCMYstats>("diceResult", BetResult);
-                //dicehub.On<PRCMYstats>("diceResult", BetResult);
                 dicehub.On<string, string, string, int, int, bool>("chat", ReceivedChat);
                 dicehub.On<string, string, string, int, bool>("receivePrivateMesssage", ReceivedChat);
 
@@ -473,9 +463,7 @@ namespace DiceBot
                 }
 
                 dicehub.On<string, string, string, string, string, string>("receiveChatMessage", GotChatMessage);
-                dicehub.On<Bet, PRCMYstats>("diceResult", BetResult);
-
-
+                
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
