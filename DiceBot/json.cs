@@ -47,6 +47,11 @@ namespace DiceBot
             {
                 DateTime dotNetDate = new DateTime(1970, 1, 1);
                 dotNetDate = dotNetDate.AddMilliseconds(long.Parse(milliseconds));
+                if (dotNetDate.Year < 1972)
+                {
+                    dotNetDate = new DateTime(1970, 1, 1);
+                    dotNetDate = dotNetDate.AddSeconds(long.Parse(milliseconds));
+                }
                 return dotNetDate;
             }
             catch

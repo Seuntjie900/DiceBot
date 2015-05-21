@@ -345,7 +345,7 @@ namespace DiceBot
                     loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
                     loginrequest.CookieContainer = new CookieContainer();
                     loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
-                    string post = json.JsonSerializer<SDSendChat>(new SDSendChat { message = (string)Message });
+                    string post = json.JsonSerializer<SDSendChat>(new SDSendChat { _message = (string)Message, room="en_US"});
 
                     using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
                     {
@@ -769,7 +769,8 @@ namespace DiceBot
     }
     public class SDSendChat
     {
-        public string message { get; set; }
+        public string _message { get; set; }
+        public string room { get; set; }
     }
     public class SDDiceBetCookie
     {

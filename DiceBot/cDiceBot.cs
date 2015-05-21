@@ -2285,7 +2285,7 @@ namespace DiceBot
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
-                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":"1"));
+                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":daDiceToolStripMenuItem.Checked?"5":"1"));
             }
         }
         
@@ -2806,7 +2806,8 @@ namespace DiceBot
                     pocketRocketsCasinoToolStripMenuItem.Checked = tmpI == 2;
                     diceToolStripMenuItem.Checked = tmpI == 3;
                     safediceToolStripMenuItem.Checked = tmpI == 4;
-                    if (tmpI>4)
+                    daDiceToolStripMenuItem.Checked = tmpI == 5;
+                    if (tmpI>5)
                     {
                         justDiceToolStripMenuItem.Checked = true; ;
                     }
@@ -4100,13 +4101,16 @@ namespace DiceBot
 
         public void updateBalance(object Balance)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            
             if (InvokeRequired)
             {
                 Invoke(new dupdateControll(updateBalance), Balance);
             }
             else
             {
-                lblApiBalance.Text = decimal.Parse(Balance.ToString(), System.Globalization.CultureInfo.InvariantCulture).ToString("0.00000000");
+                
+                lblApiBalance.Text = (Balance is decimal?(decimal)(Balance):(decimal)(double)Balance).ToString("0.00000000");
             }
         }
 
@@ -4850,7 +4854,15 @@ namespace DiceBot
                     case "diceToolStripMenuItem": CurrentSite = new dice999(this); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
                     case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
-
+                    case "daDiceToolStripMenuItem": CurrentSite = new dadice(this); siteToolStripMenuItem.Text = "Site (DAD)"; break;
+                }
+                if (CurrentSite is dadice)
+                {
+                    lblPass.Text = "API key:";
+                }
+                else
+                {
+                    lblPass.Text = "Password:";
                 }
                 rdbInvest.Enabled = CurrentSite.AutoInvest;
                 if (!rdbInvest.Enabled)
@@ -4894,7 +4906,8 @@ namespace DiceBot
             {
                 diceToolStripMenuItem.Checked = true;
             }
-            foreach (ToolStripMenuItem t in  (sender as ToolStripMenuItem).DropDownItems)
+            ToolStripMenuItem tmp = (sender as ToolStripMenuItem);
+            foreach (ToolStripMenuItem t in  (tmp.Owner ).Items)
             {
                 t.Checked = t == sender as ToolStripMenuItem;
             }

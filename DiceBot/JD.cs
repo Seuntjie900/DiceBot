@@ -23,13 +23,15 @@ namespace DiceBot
             Instance.OnChat += Instance_OnChat;
             Instance.OnWins += Instance_OnWins;
             Instance.OnLossess += Instance_OnLossess;
-            Instance.logging = false;
+            Instance.logging = true;
+            
             this.Parent = Parent;
             Name = "JustDice";
             Tip = true;
             TipUsingName = false;
         }
 
+      
         public override void SetProxy(string host, int port)
         {
             base.SetProxy(host, port);
@@ -149,8 +151,9 @@ namespace DiceBot
 
         public override bool Invest(double Amount)
         {
+            
             Parent.updateStatus(string.Format("Investing {0:0.00000000}", Amount));
-            Instance.Invest(Amount,0);
+            Instance.Invest(Amount,"");
             System.Threading.Thread.Sleep(1500);
             return true;
         }

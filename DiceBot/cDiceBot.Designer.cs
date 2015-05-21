@@ -320,7 +320,7 @@
             this.txtApiUsername = new System.Windows.Forms.TextBox();
             this.label91 = new System.Windows.Forms.Label();
             this.label90 = new System.Windows.Forms.Label();
-            this.label89 = new System.Windows.Forms.Label();
+            this.lblPass = new System.Windows.Forms.Label();
             this.label88 = new System.Windows.Forms.Label();
             this.gbManualBet = new System.Windows.Forms.GroupBox();
             this.btnTip = new System.Windows.Forms.Button();
@@ -440,6 +440,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.daDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
@@ -4066,7 +4067,7 @@
             this.gbLogin.Controls.Add(this.txtApiUsername);
             this.gbLogin.Controls.Add(this.label91);
             this.gbLogin.Controls.Add(this.label90);
-            this.gbLogin.Controls.Add(this.label89);
+            this.gbLogin.Controls.Add(this.lblPass);
             this.gbLogin.Controls.Add(this.label88);
             this.gbLogin.Dock = System.Windows.Forms.DockStyle.Left;
             this.gbLogin.Location = new System.Drawing.Point(745, 0);
@@ -4140,14 +4141,14 @@
             this.label90.TabIndex = 2;
             this.label90.Text = "2fa Code:";
             // 
-            // label89
+            // lblPass
             // 
-            this.label89.AutoSize = true;
-            this.label89.Location = new System.Drawing.Point(15, 59);
-            this.label89.Name = "label89";
-            this.label89.Size = new System.Drawing.Size(56, 13);
-            this.label89.TabIndex = 1;
-            this.label89.Text = "Password:";
+            this.lblPass.AutoSize = true;
+            this.lblPass.Location = new System.Drawing.Point(15, 59);
+            this.lblPass.Name = "lblPass";
+            this.lblPass.Size = new System.Drawing.Size(56, 13);
+            this.lblPass.TabIndex = 1;
+            this.lblPass.Text = "Password:";
             // 
             // label88
             // 
@@ -5246,7 +5247,8 @@
             this.primeDiceToolStripMenuItem,
             this.pocketRocketsCasinoToolStripMenuItem,
             this.diceToolStripMenuItem,
-            this.safediceToolStripMenuItem});
+            this.safediceToolStripMenuItem,
+            this.daDiceToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -5415,6 +5417,14 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
+            // 
+            // daDiceToolStripMenuItem
+            // 
+            this.daDiceToolStripMenuItem.Name = "daDiceToolStripMenuItem";
+            this.daDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.daDiceToolStripMenuItem.Text = "DaDice";
+            this.daDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.daDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // betBindingSource
             // 
@@ -5644,7 +5654,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.BindingSource betBindingSource;
         private System.Windows.Forms.GroupBox gbLogin;
-        private System.Windows.Forms.Label label89;
+        private System.Windows.Forms.Label lblPass;
         private System.Windows.Forms.Label label88;
         private System.Windows.Forms.Button btnRegister;
         private System.Windows.Forms.Button btnLogIn;
@@ -6014,6 +6024,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.ToolStripMenuItem daDiceToolStripMenuItem;
 
     }
 }

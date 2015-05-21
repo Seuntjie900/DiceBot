@@ -137,6 +137,7 @@
     <Compile Include="Custom Chart.Designer.cs">
       <DependentUpon>Custom Chart.cs</DependentUpon>
     </Compile>
+    <Compile Include="dadice.cs" />
     <Compile Include="Donate.cs">
       <SubType>Form</SubType>
     </Compile>
