@@ -11,7 +11,7 @@ namespace DiceBot
 {
     public partial class Verify : Form
     {
-        cDiceBot Parent;
+        new cDiceBot Parent;
         public Verify(cDiceBot Parent)
         {
             InitializeComponent();

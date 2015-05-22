@@ -615,7 +615,7 @@ namespace DiceBot
             }
         }
 
-        public static double sGetLucky(string server, string client, int nonce)
+        new public static double sGetLucky(string server, string client, int nonce)
         {
             string comb = nonce + ":" + client + server + ":" + nonce;
 
@@ -726,20 +726,20 @@ namespace DiceBot
 
     public class SafeDiceWalletInfo
     {
-        public int balance { get; set; }
+        public long balance { get; set; }
         public double shares { get; set; }
         public double kelly { get; set; }
         public int win { get; set; }
         public int lose { get; set; }
-        public int amountLose { get; set; }
-        public int amountWin { get; set; }
-        public int wagered { get; set; }
+        public long amountLose { get; set; }
+        public long amountWin { get; set; }
+        public long wagered { get; set; }
         
     }
      public class SafeDiceBet
      {
          public int siteId { get; set; }
-         public int amount { get; set; }
+         public long amount { get; set; }
          public string target { get; set; }
          public double payout { get; set; }
          public bool isFixedPayout { get; set; }
@@ -750,12 +750,12 @@ namespace DiceBot
         public int id { get; set; }
         public int accountId { get; set; }
         public string processTime { get; set; }
-        public int amount { get; set; }
-        public int profit { get; set; }
-        public int roll { get; set; }
-        public int target { get; set; }
+        public long amount { get; set; }
+        public long profit { get; set; }
+        public long roll { get; set; }
+        public long target { get; set; }
         public bool isRollLow { get; set; }
-        public double payout { get; set; }
+        public decimal payout { get; set; }
     }
 
     public class SDRandomize

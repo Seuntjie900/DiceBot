@@ -11,7 +11,7 @@ namespace DiceBot
 {
     public partial class Simulate : Form
     {
-        cDiceBot Parent;
+        new cDiceBot Parent;
         public Simulate(cDiceBot Parent)
         {
             InitializeComponent();

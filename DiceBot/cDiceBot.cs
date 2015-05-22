@@ -83,14 +83,14 @@ namespace DiceBot
         
         int laststreaklose = 0;
         int laststreakwin = 0;
-        int Currency = 0;
+        
         bool stop = true;
         bool withdraw = false;
         bool invest = false;
         bool reset = false;
         bool running = false;
         bool stoponwin = false;
-        bool loggedin = false;
+        
         public bool tray = false;
         public bool Sound = true;
         public bool SoundWithdraw=true;
@@ -350,9 +350,61 @@ namespace DiceBot
             Lua.RegisterFunction("getHistoryByDate", this, new dluagethistory2(luagethistory).Method);
             Lua.RegisterFunction("getHistoryByQuery", this, new dQueryHistory(QueryHistory).Method);
             Lua.RegisterFunction("runsim",this, new dRunsim(runsim).Method);
-            
+            Lua.RegisterFunction("martingale", this, new dStrat(LuaMartingale).Method);
+            Lua.RegisterFunction("labouchere", this, new dStrat(LuaLabouchere).Method);
+            Lua.RegisterFunction("fibonacci", this, new dStrat(LuaFibonacci).Method);
+            Lua.RegisterFunction("dalembert", this, new dStrat(LuaDAlember).Method);
+            Lua.RegisterFunction("presetlist", this, new dStrat(LuaPreset).Method);
         }
-        
+
+        delegate double dStrat(bool Win);
+        double LuaMartingale(bool Win)
+        {
+            double tmpNext = Lastbet;
+            martingale(Win);
+            double tmpval = Lastbet;
+            Lastbet = tmpNext;
+            return tmpval;
+        }
+
+        double LuaFibonacci(bool Win)
+        {
+            double tmpNext = Lastbet;
+            Fibonacci(Win);
+            double tmpval = Lastbet;
+            Lastbet = tmpNext;
+            return tmpval;
+        }
+
+        double LuaLabouchere(bool Win)
+        {
+            double tmpNext = Lastbet;
+            Labouchere(Win);
+            double tmpval = Lastbet;
+            Lastbet = tmpNext;
+            return tmpval;
+        }
+
+        double LuaDAlember(bool Win)
+        {
+            double tmpNext = Lastbet;
+            Alembert(Win);
+            double tmpval = Lastbet;
+            Lastbet = tmpNext;
+            return tmpval;
+        }
+
+        double LuaPreset(bool Win)
+        {
+            double tmpNext = Lastbet;
+            PresetList(Win);
+            double tmpval = Lastbet;
+            Lastbet = tmpNext;
+            return tmpval;
+        }
+
+
+
         delegate Bet[] dQueryHistory(string Query);
         Bet[] QueryHistory(string Query)
         {
@@ -4942,7 +4994,8 @@ namespace DiceBot
                 Lua["bets"] = Wins + Losses;
                 Lua["wins"] = Wins;
                 Lua["losses"] = Losses;
-                
+                Lua["currencies"] = CurrentSite.Currencies;
+                Lua["currency"] = CurrentSite.Currency;
             }
             catch (Exception e)
             {
@@ -4961,6 +5014,7 @@ namespace DiceBot
                 high = (bool)Lua["bethigh"];
                 CurrentSite.amount = Lastbet;
                 CurrentSite.chance = Chance;
+                CurrentSite.Currency = (string)Lua["currency"];
             }
             catch
             {

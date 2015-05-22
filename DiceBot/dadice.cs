@@ -27,6 +27,9 @@ namespace DiceBot
             Thread t = new Thread(new ThreadStart(GetBalanceThread));
             t.Start();
             Name = "dadice";
+            Tip = true;
+            TipUsingName = true;
+            
         }
 
 
@@ -54,10 +57,10 @@ namespace DiceBot
                 balance += (double)tmp.roll.payout;
                 Parent.updateBalance((decimal)(balance));
                 Parent.updateBets(++bets);
-                Parent.updateLosses( tmp.roll.status_message.ToLower()=="won"?losses:++losses);
+                Parent.updateLosses( tmp.roll.status.ToLower()=="won"?losses:++losses);
                 Parent.updateProfit(profit+=(double)tmp.roll.payout);
                 Parent.updateWagered(wagered +=tmp.roll.amount);
-                Parent.updateWins(tmp.roll.status_message.ToLower() == "won" ? ++wins : wins);
+                Parent.updateWins(tmp.roll.status.ToLower() == "won" ? ++wins : wins);
                 LastBalance = DateTime.Now;
                 Parent.AddBet(tmp.roll.ToBet());
                 Parent.GetBetResult(balance, tmp.roll.ToBet());
@@ -308,34 +311,29 @@ namespace DiceBot
     {
         public string status { get; set; }
         public long id { get; set; }
-        public string flag { get; set; }
-        public string status_message { get; set; }
-        public string seed { get; set; }
+        
+        
         public int nonce { get; set; }
-        public string user_a { get; set; }
-        public decimal roll_chance { get; set; }
-        public string roll_bet { get; set; }
-        public decimal roll_result { get; set; }
+        
+        public decimal chance { get; set; }
+        public string bet { get; set; }
+        public decimal result { get; set; }
         public decimal amount { get; set; }
         public decimal payout { get; set; }
-        public long unix_stamp { get; set; }
-        public decimal profit { get; set; }
-        public string username { get; set; }
-        public string roll_chance_payout { get; set; }
-        public string hms_stamp { get; set; }
-        public decimal roll_bet_number { get; set; }
+        public long timestamp { get; set; }
+        
 
         public Bet ToBet()
         {
             Bet tmp = new Bet 
             {
                 Amount = amount,
-                date = json.ToDateTime2(unix_stamp.ToString()),
+                date = json.ToDateTime2(timestamp.ToString()),
                 Id=id,
                 Profit = payout,
-                Roll = roll_result,
-                high = roll_bet.ToLower()=="over",
-                Chance = roll_chance,
+                Roll = result,
+                high = bet.ToLower().StartsWith("over"),
+                Chance = chance,
                 nonce=nonce,
                 serverhash="",
                 clientseed="",

@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -424,6 +424,7 @@
             this.pocketRocketsCasinoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.safediceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.daDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -440,7 +441,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.daDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
@@ -3959,18 +3959,18 @@
             // 
             // chrtEmbeddedLiveChart
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
+            chartArea2.Name = "ChartArea1";
+            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea2);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chrtEmbeddedLiveChart.Legends.Add(legend1);
+            legend2.Name = "Legend1";
+            this.chrtEmbeddedLiveChart.Legends.Add(legend2);
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Profit";
-            this.chrtEmbeddedLiveChart.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Profit";
+            this.chrtEmbeddedLiveChart.Series.Add(series2);
             this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(432, 320);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
@@ -4947,7 +4947,9 @@
             "nextbet:double, RW",
             "chance:double, RW",
             "bethigh:bool, RW",
-            "lastBet:Bet, RO"});
+            "lastBet:Bet, RO",
+            "currencies:string[], RO. List of currencies available at current site",
+            "currency:string, RW. Current betting currency"});
             this.lbVariables.Location = new System.Drawing.Point(12, 22);
             this.lbVariables.Name = "lbVariables";
             this.lbVariables.Size = new System.Drawing.Size(262, 173);
@@ -4966,7 +4968,12 @@
             "getHistory(): Bet[]",
             "getHistoryByDate(FromDateTime:string (inclusive), UntillDateTime:string (exclusiv" +
                 "e)): Bet[]",
-            "getHistoryByQuery(SQLiteQuery:string): Bet[]"});
+            "getHistoryByQuery(SQLiteQuery:string): Bet[]",
+            "martingale(win:boolean):double",
+            "labouchere(win:boolean):double",
+            "fibonacci(win:bool):double",
+            "dalembert(win:bool):double",
+            "presetlist(win:bool):double"});
             this.listBox1.Location = new System.Drawing.Point(11, 222);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(261, 82);
@@ -5296,6 +5303,14 @@
             this.safediceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.safediceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
+            // daDiceToolStripMenuItem
+            // 
+            this.daDiceToolStripMenuItem.Name = "daDiceToolStripMenuItem";
+            this.daDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.daDiceToolStripMenuItem.Text = "DaDice";
+            this.daDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.daDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
             // settingsModeToolStripMenuItem
             // 
             this.settingsModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -5417,14 +5432,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
-            // 
-            // daDiceToolStripMenuItem
-            // 
-            this.daDiceToolStripMenuItem.Name = "daDiceToolStripMenuItem";
-            this.daDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.daDiceToolStripMenuItem.Text = "DaDice";
-            this.daDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.daDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // betBindingSource
             // 

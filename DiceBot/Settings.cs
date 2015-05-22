@@ -13,7 +13,7 @@ namespace DiceBot
 {
     public partial class Settings : Form
     {
-        cDiceBot Parent;
+        new cDiceBot Parent;
         public Settings(cDiceBot Parent)
         {
             InitializeComponent();

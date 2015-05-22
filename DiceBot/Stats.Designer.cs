@@ -136,6 +136,7 @@
             this.button2.TabIndex = 53;
             this.button2.Text = "Hide Stats";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.btnHideStats_Click_1);
             // 
             // lblLargestLoss
             // 

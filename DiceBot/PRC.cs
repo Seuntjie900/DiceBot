@@ -14,10 +14,8 @@ namespace DiceBot
         HubConnection con = new HubConnection("https://pocketrocketscasino.eu/SignalR/", "", false);
         CookieContainer Cookies = new CookieContainer();
         IHubProxy dicehub;
-        int withdraw = 0;
-        DateTime withdrawTime = DateTime.Now;
-        double wdAmount = 0;
-        string wdAddress = "";
+        
+        
         public PRC(cDiceBot Parent)
         {
             AutoWithdraw = true;
