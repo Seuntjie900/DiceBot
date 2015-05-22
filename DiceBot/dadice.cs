@@ -89,7 +89,7 @@ namespace DiceBot
 
         public override bool Withdraw(double Amount, string Address)
         {
-            //https://dadice.com/api/withdraw?username=seuntjie2&key=f4b9c611306ebe32ad9ae27e887e0148f5e2631fb6812b3db39e8936f684ee71&coin=btc&payee=BTC-ADDRESS&amount=0.001
+            
             HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/withdraw");
             betrequest.Method = "POST";
             string post = string.Format("username={0}&key={1}&coin=btc&payee={2}&amount={3}", username, key, Address, Amount);
