@@ -2,7 +2,7 @@ Todo:
 PD login encoding
 999dice betting bug (date format, not set to instance, Both at Datagridview)(??fixed??. no reproduce so far)
 strategy help pages
-programmer mode swithc currencies
+
 
 hopefully before release:
 losing streak table redo
@@ -73,3 +73,4 @@ programmer mode save and load
 Dynamic currencies for sites
 adjustable number of bets shown in live bets view
 optimize live bet view
+programmer mode swithc currencies

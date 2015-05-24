@@ -310,11 +310,8 @@ namespace DiceBot
     public class DADICERoll
     {
         public string status { get; set; }
-        public long id { get; set; }
-        
-        
-        public int nonce { get; set; }
-        
+        public long id { get; set; }        
+        public int nonce { get; set; }        
         public decimal chance { get; set; }
         public string bet { get; set; }
         public decimal result { get; set; }

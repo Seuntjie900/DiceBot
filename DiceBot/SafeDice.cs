@@ -334,7 +334,7 @@ namespace DiceBot
             {
                 try
                 {
-                    HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/chats/en_US/create");
+                    HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/chats/en_US");
                     if (Prox != null)
                         loginrequest.Proxy = Prox;
                     loginrequest.Method = "POST";
