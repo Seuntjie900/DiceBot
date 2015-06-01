@@ -338,21 +338,7 @@ namespace DiceBot
 
       
 
-        public override string GetSiteProfitValue()
-        {
-            return "0";
-        }
-
-        public override string GetTotalBets()
-        {
-            return bets.ToString() ;
-        }
-
-        public override string GetMyProfit()
-        {
-            return (profit/100000000.0).ToString();
-        }
-
+       
         public override bool ReadyToBet()
         {
             return true;

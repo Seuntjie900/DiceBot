@@ -23,7 +23,7 @@ namespace DiceBot
             Instance.OnChat += Instance_OnChat;
             Instance.OnWins += Instance_OnWins;
             Instance.OnLossess += Instance_OnLossess;
-            Instance.logging = true;
+            Instance.logging = false;
             
             this.Parent = Parent;
             Name = "JustDice";
@@ -129,20 +129,7 @@ namespace DiceBot
 
        
 
-        public override string GetSiteProfitValue()
-        {
-            return Instance.Stats.profit.ToString("0.00000000"); 
-        }
-
-        public override string GetTotalBets()
-        {
-            return Instance.Bets.ToString("0.00000000");
-        }
-
-        public override string GetMyProfit()
-        {
-            return Instance.Profit.ToString("0.00000000");
-        }
+       
 
         public override bool ReadyToBet()
         {

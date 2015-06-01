@@ -63,9 +63,6 @@ namespace DiceBot
             return balance;
 
         }
-        public abstract string GetSiteProfitValue();
-        public abstract string GetTotalBets();
-        public abstract string GetMyProfit();
         public abstract bool ReadyToBet();
         public string BetURL = "";
         public virtual double GetLucky(string server, string client, int nonce)

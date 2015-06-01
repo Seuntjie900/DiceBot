@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Net;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace DiceBot
 {
@@ -32,43 +33,50 @@ namespace DiceBot
             
         }
 
-
+        int betcount = 0;
         void PlaceBetThread(object _High)
         {
-            bool High = (bool)_High;
-            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/roll");
-            betrequest.Method = "POST";
-            string post = string.Format("username={0}&key={1}&amount={2}&chance={3:00.0}&bet={4}", username, key, amount, chance,High?"over":"under");
-            betrequest.ContentLength = post.Length;
-            if (Prox != null)
-                betrequest.Proxy = Prox;
-            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-            using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+            try
             {
+                bool High = (bool)_High;
+                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/roll");
+                betrequest.Method = "POST";
+                string post = string.Format("username={0}&key={1}&amount={2:0.00000000}&chance={3:00.0}&bet={4}", username, key, amount, chance, High ? "over" : "under");
+                betrequest.ContentLength = post.Length;
+                if (Prox != null)
+                    betrequest.Proxy = Prox;
+                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                {
 
-                writer.Write(post);
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
+                string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                DADICERollBase tmp = json.JsonDeserialize<DADICERollBase>(sEmitResponse2);
+                if (tmp.status)
+                {
+
+                    balance += (double)tmp.roll.profit;
+                    Parent.updateBalance((decimal)(balance));
+                    Parent.updateBets(++bets);
+                    Parent.updateLosses(tmp.roll.status.ToLower() == "won" ? losses : ++losses);
+                    Parent.updateProfit(profit += (double)tmp.roll.profit);
+                    Parent.updateWagered(wagered += tmp.roll.amount);
+                    Parent.updateWins(tmp.roll.status.ToLower() == "won" ? ++wins : wins);
+                    LastBalance = DateTime.Now;
+                    Parent.AddBet(tmp.roll.ToBet());
+                    Parent.GetBetResult(balance, tmp.roll.ToBet());
+
+                }
+                else
+                {
+                    Parent.updateStatus("Bet Failed: " + tmp.error);
+                }
             }
-            HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-            string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-            DADICERollBase tmp = json.JsonDeserialize<DADICERollBase>(sEmitResponse2);
-            if (tmp.status)
+            catch (Exception E)
             {
-                
-                balance += (double)tmp.roll.payout;
-                Parent.updateBalance((decimal)(balance));
-                Parent.updateBets(++bets);
-                Parent.updateLosses( tmp.roll.status.ToLower()=="won"?losses:++losses);
-                Parent.updateProfit(profit+=(double)tmp.roll.payout);
-                Parent.updateWagered(wagered +=tmp.roll.amount);
-                Parent.updateWins(tmp.roll.status.ToLower() == "won" ? ++wins : wins);
-                LastBalance = DateTime.Now;
-                Parent.AddBet(tmp.roll.ToBet());
-                Parent.GetBetResult(balance, tmp.roll.ToBet());
-                
-            }
-            else
-            {
-                //failed to roll, retry, error messages etc
+                Parent.updateStatus(E.Message);
             }
         }
 
@@ -92,23 +100,30 @@ namespace DiceBot
 
         public override bool Withdraw(double Amount, string Address)
         {
-            
-            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/withdraw");
-            betrequest.Method = "POST";
-            string post = string.Format("username={0}&key={1}&coin=btc&payee={2}&amount={3}", username, key, Address, Amount);
-            betrequest.ContentLength = post.Length;
-            if (Prox != null)
-                betrequest.Proxy = Prox;
-            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-            using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+            try
             {
+                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/withdraw");
+                betrequest.Method = "POST";
+                string post = string.Format("username={0}&key={1}&coin=btc&payee={2}&amount={3:0.00000000}", username, key, Address, Amount);
+                betrequest.ContentLength = post.Length;
+                if (Prox != null)
+                    betrequest.Proxy = Prox;
+                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                {
 
-                writer.Write(post);
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
+                string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                DADICEBlance tmp = json.JsonDeserialize<DADICEBlance>(sEmitResponse2);
+                return tmp.status;
             }
-            HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-            string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-            DADICEBlance tmp = json.JsonDeserialize<DADICEBlance>(sEmitResponse2);
-            return tmp.status;
+            catch (Exception E)
+            {
+                Parent.updateStatus(E.Message);
+            }
+            return false;
         }
 
         public override void Login(string Username, string Password)
@@ -199,10 +214,7 @@ namespace DiceBot
             return false;
         }
 
-        public override string GetSiteProfitValue()
-        {
-            throw new NotImplementedException();
-        }
+      
 
         bool isdd = true;
         DateTime LastBalance = DateTime.Now;
@@ -212,39 +224,40 @@ namespace DiceBot
             {
                 if (username != "" && key != "" && (DateTime.Now - LastBalance).TotalSeconds>15)
                 {
-                    HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/balance");
-                    betrequest.Method = "POST";
-                    string post = string.Format("username={0}&key={1}",username,key);
-                    betrequest.ContentLength = post.Length;
-                    if (Prox != null)
-                        betrequest.Proxy = Prox;
-                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                    using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                    try
                     {
 
-                        writer.Write(post);
+
+                        HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/balance");
+                        betrequest.Method = "POST";
+                        string post = string.Format("username={0}&key={1}", username, key);
+                        betrequest.ContentLength = post.Length;
+                        if (Prox != null)
+                            betrequest.Proxy = Prox;
+                        betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                        using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                        {
+
+                            writer.Write(post);
+                        }
+                        HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
+                        string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                        DADICEBlance tmp = json.JsonDeserialize<DADICEBlance>(sEmitResponse2);
+                        if (tmp.status)
+                            balance = (double)tmp.balance;
+                        Parent.updateBalance(balance);
                     }
-                    HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                    string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-                    DADICEBlance tmp = json.JsonDeserialize<DADICEBlance>(sEmitResponse2);
-                    if (tmp.status)
-                        balance = (double)tmp.balance;
-                    Parent.updateBalance(balance);
+                    catch (Exception E)
+                    {
+                        Parent.updateStatus(E.Message);
+                    }
                     LastBalance = DateTime.Now;
                 }
                 Thread.Sleep(100);
             }
         }
 
-        public override string GetTotalBets()
-        {
-            return bets.ToString();
-        }
-
-        public override string GetMyProfit()
-        {
-            return profit.ToString();
-        }
+       
 
         public override bool ReadyToBet()
         {
@@ -268,21 +281,27 @@ namespace DiceBot
 
         void SendTipThread(object args)
         {
-            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/tip");
-            betrequest.Method = "POST";
-            string post = string.Format("username={0}&key={1}&payee={2}&amount={3}", username, key, (args as string[])[0], (args as string[])[1]);
-            betrequest.ContentLength = post.Length;
-            if (Prox != null)
-                betrequest.Proxy = Prox;
-            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-            using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+            try
             {
+                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/tip");
+                betrequest.Method = "POST";
+                string post = string.Format("username={0}&key={1}&payee={2}&amount={30:00000000}", username, key, (args as string[])[0], (args as string[])[1]);
+                betrequest.ContentLength = post.Length;
+                if (Prox != null)
+                    betrequest.Proxy = Prox;
+                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                {
 
-                writer.Write(post);
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
+                string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
             }
-            HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-            string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-                    
+            catch (Exception E)
+            {
+                Parent.updateStatus(E.Message);
+            }
         }
 
         
@@ -291,6 +310,86 @@ namespace DiceBot
         {
             Thread t = new Thread(new ParameterizedThreadStart(SendTipThread));
             t.Start(new string[]{User, amount.ToString("0.00000000")});
+        }
+
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = /*nonce.ToString() + ":" + */client + "-" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return (lucky%10000) / 100;
+            }
+            return 0;
+        }
+
+        new public static double sGetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = /*nonce.ToString() + ":" + */client + "-" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return (lucky % 10000) / 100;
+            }
+            return 0;
         }
     }
 
@@ -306,6 +405,7 @@ namespace DiceBot
     {
         public bool status { get; set; }
         public DADICERoll roll { get; set; }
+        public string error { get; set; }
     }
     public class DADICERoll
     {
@@ -318,7 +418,13 @@ namespace DiceBot
         public decimal amount { get; set; }
         public decimal payout { get; set; }
         public long timestamp { get; set; }
-        
+        public decimal profit 
+        { 
+            get 
+            {
+                return payout>0?payout - amount:payout;
+            } 
+        }
 
         public Bet ToBet()
         {
@@ -327,7 +433,7 @@ namespace DiceBot
                 Amount = amount,
                 date = json.ToDateTime2(timestamp.ToString()),
                 Id=id,
-                Profit = payout,
+                Profit = profit,
                 Roll = result,
                 high = bet.ToLower().StartsWith("over"),
                 Chance = chance,
@@ -344,6 +450,7 @@ namespace DiceBot
     {
         public bool status { get; set; }
         public DADICEStats user { get; set; }
+        public string error { get; set; }
     }
     public class DADICEStats
     {

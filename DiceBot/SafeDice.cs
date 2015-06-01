@@ -11,9 +11,10 @@ namespace DiceBot
     class SafeDice : DiceSite
     {
         string accesstoken = "";
-
+        
         bool ispd = true;
         DateTime LastBalance = DateTime.Now;
+        public static string[] cCurrencies = new string[] { "Btc", "XMR"};
         public SafeDice(cDiceBot Parent)
         {
             AutoInvest = false;
@@ -26,6 +27,46 @@ namespace DiceBot
             this.Parent = Parent;
             Name = "SafeDice";
             edge = 0.5m;
+            Currencies = new string[]{"Btc", "XMR"};
+            Currency = "Btc";
+        }
+        int curen = 1;
+        protected override void CurrencyChanged()
+        {
+            curen = Currency.ToLower() == "btc" ? 1 : 2;
+            try
+            {
+                if (accesstoken != "" && accesstoken != null)
+                {
+                    HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/" + curen + "/me");
+                    loginrequest.CookieContainer = new CookieContainer();
+                    loginrequest.CookieContainer.Add(new System.Net.Cookie("token", accesstoken, "", "safedice.com"));
+                    loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
+                    HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                    string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                    SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
+                    balance = tmp2.balance;
+                    Parent.updateBalance((decimal)balance);
+                    balance = tmp2.balance / 100000000.0;
+
+                    Parent.updateBets(tmp2.win + tmp2.lose);
+                    Parent.updateLosses(tmp2.lose);
+                    wins = tmp2.win;
+                    losses = tmp2.lose;
+                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / 100000000.0);
+                    profit = (tmp2.amountWin - tmp2.amountLose) / 100000000.0;
+                    Parent.updateWagered(tmp2.wagered / 100000000.0);
+                    wagered = tmp2.wagered / 100000000.0;
+                    Parent.updateWins(tmp2.win);
+                    
+                    Parent.updateDeposit(GetDepositAddress());
+                }
+
+            }
+            catch
+            {
+
+            }
         }
 
         public void GetBalanceThread()
@@ -36,7 +77,7 @@ namespace DiceBot
                 {
                     if ((DateTime.Now - LastBalance).TotalMinutes > 1 && accesstoken != "" && accesstoken != null)
                     {
-                        HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/1101/sites/1/me");
+                        HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/" + curen + "/me");
                         loginrequest.CookieContainer = new CookieContainer();
                         loginrequest.CookieContainer.Add(new System.Net.Cookie("token", accesstoken, "", "safedice.com"));
                         loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
@@ -125,7 +166,8 @@ namespace DiceBot
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     SafeDicegetUserInfo tmp1 = json.JsonDeserialize<SafeDicegetUserInfo>(sEmitResponse);
-                    loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + tmp1.id + "/sites/1/me");
+                    
+                    loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + tmp1.id + "/sites/" + curen + "/me");
                     if (Prox != null)
                         loginrequest.Proxy = Prox;
                     loginrequest.CookieContainer = new CookieContainer();
@@ -185,7 +227,7 @@ namespace DiceBot
                 betrequest.Method = "POST";
                 SafeDiceBet tmpBet = new SafeDiceBet
                 {
-                    siteId = 1,
+                    siteId = curen,
                     amount = (int)(amount * 100000000),
                     payout = (double)(((int)((99.5 / chance) * 100000000)) / 100000000.0),
                     isFixedPayout = false,
@@ -299,21 +341,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override string GetSiteProfitValue()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetTotalBets()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetMyProfit()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public override bool ReadyToBet()
         {
             return true;
@@ -453,7 +481,8 @@ namespace DiceBot
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     SafeDicegetUserInfo tmp1 = json.JsonDeserialize<SafeDicegetUserInfo>(sEmitResponse);
-                    loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + tmp1.id + "/sites/1/me");
+                    
+                    loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + tmp1.id + "/sites/" + curen + "/me");
                     if (Prox != null)
                         loginrequest.Proxy = Prox;
                     loginrequest.CookieContainer = new CookieContainer();

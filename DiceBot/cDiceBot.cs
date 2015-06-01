@@ -302,6 +302,24 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
                 
             }
+
+            foreach (string s in SafeDice.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                safediceToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
+
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -1125,24 +1143,6 @@ namespace DiceBot
                     if (PreviousBalance == 0)
                         StartBalance = dBalance;
                     PreviousBalance = dBalance;
-
-                    try
-                    {
-                        string bets = "";
-                        double dbets = 0;
-                        string myprofit = "";
-                        double dprof = 0;
-                        bets = CurrentSite.GetTotalBets().Replace(",", "");
-                        dbets = dparse(bets, ref convert);
-                        myprofit = CurrentSite.GetMyProfit().Replace(",", "");
-                        dprof = dparse(myprofit, ref convert);
-
-                      
-                    }
-                    catch
-                    {
-
-                    }
 
                 }
                 else if (dBalance == PreviousBalance && convert || withdrew)
@@ -2935,7 +2935,7 @@ namespace DiceBot
                     chkZigZagWinsStreak.Checked = getvalue(saveditems, "ReversWinStreak") == "1";
                     chkZigZagLoss.Checked = getvalue(saveditems, "ReverseLoss") == "1";
                     chkZigZagLossStreak.Checked = getvalue(saveditems, "ReverseLossStreak") == "1";
-                    chkZigZagBets.Checked = getvalue(saveditems, "ReverseBets") == "1";
+                    chkZigZagBets.Checked = getvalue(saveditems, "ReverseBet") == "1";
 
                     nudZigZagWins.Value = decimal.Parse(getvalue(saveditems, "ReverseWinValue"));
                     nudZigZagWinsStreak.Value = decimal.Parse(getvalue(saveditems, "ReverseWinStreakValue"));
@@ -4907,6 +4907,7 @@ namespace DiceBot
                     case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
                     case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
                     case "daDiceToolStripMenuItem": CurrentSite = new dadice(this); siteToolStripMenuItem.Text = "Site (DAD)"; break;
+                    //case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
                 }
                 if (CurrentSite is dadice)
                 {
@@ -4954,11 +4955,12 @@ namespace DiceBot
 
         private void btcToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!diceToolStripMenuItem.Checked)
-            {
-                diceToolStripMenuItem.Checked = true;
-            }
             ToolStripMenuItem tmp = (sender as ToolStripMenuItem);
+            if (!((ToolStripMenuItem)tmp.OwnerItem).Checked)
+            {
+                ((ToolStripMenuItem)tmp.OwnerItem).Checked = true;
+            }
+            
             foreach (ToolStripMenuItem t in  (tmp.Owner ).Items)
             {
                 t.Checked = t == sender as ToolStripMenuItem;
