@@ -68,7 +68,7 @@ namespace DiceBot
                     betrequest.Proxy = Prox;
                 betrequest.Method = "POST";
                 double tmpchance = High ? 99.99 - chance : chance;
-                string post = string.Format("bet_amount={0}&bet_number={1}&prediction={2}", (amount * 1000).ToString(""), tmpchance.ToString("0.00"), High ? "bigger" : "smaller");
+                string post = string.Format("bet_amount={0}&bet_number={1}&prediction={2}", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo), tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo), High ? "bigger" : "smaller");
                 betrequest.ContentLength = post.Length;
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
@@ -151,7 +151,7 @@ namespace DiceBot
                 betrequest.Headers.Add("X-CSRF-Token", Token);
                 betrequest.Method = "POST";
                 double tmpchance = High ? 99.99 - chance : chance;
-                string post = string.Format("address={0}&amount={1}", Address, (Amount * 1000).ToString("0.00000"));
+                string post = string.Format("address={0}&amount={1}", Address, (Amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo));
                 betrequest.ContentLength = post.Length;
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
@@ -198,7 +198,7 @@ namespace DiceBot
                 betrequest.Headers.Add("X-CSRF-Token", Token);
                 betrequest.Method = "POST";
                 double tmpchance = High ? 99.99 - chance : chance;
-                string post = string.Format("username={0}&amount={1}&private=0", User, (amount * 1000).ToString("0.00000"));
+                string post = string.Format("username={0}&amount={1}&private=0", User, (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo));
                 betrequest.ContentLength = post.Length;
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
