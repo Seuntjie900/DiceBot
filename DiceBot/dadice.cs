@@ -34,14 +34,16 @@ namespace DiceBot
         }
 
         int betcount = 0;
+        DateTime Lastbet = DateTime.Now;
         void PlaceBetThread(object _High)
         {
             try
             {
+                Lastbet = DateTime.Now;
                 bool High = (bool)_High;
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/roll");
                 betrequest.Method = "POST";
-                string post = string.Format("username={0}&key={1}&amount={2:0.00000000}&chance={3:00.0}&bet={4}", username, key, amount, chance, High ? "over" : "under");
+                string post = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}&amount={2:0.00000000}&chance={3:00.0}&bet={4}", username, key, amount, chance, High ? "over" : "under");
                 betrequest.ContentLength = post.Length;
                 if (Prox != null)
                     betrequest.Proxy = Prox;
@@ -67,7 +69,7 @@ namespace DiceBot
                     LastBalance = DateTime.Now;
                     Parent.AddBet(tmp.roll.ToBet());
                     Parent.GetBetResult(balance, tmp.roll.ToBet());
-
+                    betcount = 0;
                 }
                 else
                 {
@@ -76,7 +78,16 @@ namespace DiceBot
             }
             catch (Exception E)
             {
-                Parent.updateStatus(E.Message);
+                if (betcount++<3)
+                {
+                    PlaceBetThread(_High);
+                }
+                else
+                {
+                    
+                    Parent.updateStatus(E.Message);
+                }
+                
             }
         }
 
@@ -104,7 +115,7 @@ namespace DiceBot
             {
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/withdraw");
                 betrequest.Method = "POST";
-                string post = string.Format("username={0}&key={1}&coin=btc&payee={2}&amount={3:0.00000000}", username, key, Address, Amount);
+                string post = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}&coin=btc&payee={2}&amount={3:0.00000000}", username, key, Address, Amount);
                 betrequest.ContentLength = post.Length;
                 if (Prox != null)
                     betrequest.Proxy = Prox;
@@ -137,7 +148,7 @@ namespace DiceBot
 
             HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/balance");
             betrequest.Method = "POST";
-            string post = string.Format("username={0}&key={1}", username, key);
+            string post = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}", username, key);
             betrequest.ContentLength = post.Length;
             if (Prox != null)
                 betrequest.Proxy = Prox;
@@ -154,7 +165,7 @@ namespace DiceBot
             {
                 HttpWebRequest betrequest2 = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/deposit");
                 betrequest2.Method = "POST";
-                string post2 = string.Format("username={0}&key={1}&coin=btc", username, key);
+                string post2 = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}&coin=btc", username, key);
                 betrequest2.ContentLength = post.Length;
                 if (Prox != null)
                     betrequest.Proxy = Prox;
@@ -230,7 +241,7 @@ namespace DiceBot
 
                         HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/balance");
                         betrequest.Method = "POST";
-                        string post = string.Format("username={0}&key={1}", username, key);
+                        string post = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}", username, key);
                         betrequest.ContentLength = post.Length;
                         if (Prox != null)
                             betrequest.Proxy = Prox;
@@ -261,7 +272,7 @@ namespace DiceBot
 
         public override bool ReadyToBet()
         {
-            return true;
+            return (DateTime.Now-Lastbet).TotalMilliseconds>700;
         }
 
         public override void Disconnect()
@@ -285,7 +296,7 @@ namespace DiceBot
             {
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/tip");
                 betrequest.Method = "POST";
-                string post = string.Format("username={0}&key={1}&payee={2}&amount={30:00000000}", username, key, (args as string[])[0], (args as string[])[1]);
+                string post = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}&payee={2}&amount={30:00000000}", username, key, (args as string[])[0], (args as string[])[1]);
                 betrequest.ContentLength = post.Length;
                 if (Prox != null)
                     betrequest.Proxy = Prox;

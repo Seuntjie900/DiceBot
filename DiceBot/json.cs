@@ -15,6 +15,7 @@ namespace DiceBot
     {
         public static T JsonDeserialize<T>(string jsonString)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
             MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
             T obj = (T)ser.ReadObject(ms);
@@ -23,6 +24,7 @@ namespace DiceBot
 
         public static string JsonSerializer<T>(T t)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
             MemoryStream ms = new MemoryStream();
             ser.WriteObject(ms, t);

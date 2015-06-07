@@ -880,6 +880,7 @@ namespace DiceBot
 
       private void Reset()
         {
+            reset = true;
           if (rdbMartingale.Checked)
           {
               Lastbet = MinBet;
@@ -1822,7 +1823,7 @@ namespace DiceBot
                         }
                     }
 
-                    if (!programmerToolStripMenuItem.Checked)
+                    if (!programmerToolStripMenuItem.Checked )
                     {
                         if (chkResetBetLoss.Checked && Losestreak %nudResetBetLoss.Value == 0)
                         {
@@ -1975,13 +1976,13 @@ namespace DiceBot
                     Stop();
                 }
                 
-                if (!(stop ||reset || withdraw ||invest))
+                if (!(stop || withdraw ||invest))
                 {
                     if (programmerToolStripMenuItem.Checked)
                     {
                         parseScript(bet);
                     }
-                    else
+                    else if (!reset)
                     {
                         if (rdbMartingale.Checked)
                         {
@@ -2006,6 +2007,7 @@ namespace DiceBot
                     }
                     if (!stop)
                     {
+                        
                         WriteConsole("Betting " + Lastbet + " at " + Chance +"% chance to win, "+ (high?"high":"low"));
                         EnableTimer(tmBet, true);
 
@@ -2019,7 +2021,7 @@ namespace DiceBot
             {
                 RunningSimulation = false;
             }
-
+            reset = false;
         }
 
         System.Collections.ArrayList Vars = new System.Collections.ArrayList();
@@ -2337,7 +2339,7 @@ namespace DiceBot
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
-                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":daDiceToolStripMenuItem.Checked?"5":"1"));
+                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":daDiceToolStripMenuItem.Checked?"5":rollinIOToolStripMenuItem.Checked?"6":"1"));
             }
         }
         
@@ -2859,7 +2861,8 @@ namespace DiceBot
                     diceToolStripMenuItem.Checked = tmpI == 3;
                     safediceToolStripMenuItem.Checked = tmpI == 4;
                     daDiceToolStripMenuItem.Checked = tmpI == 5;
-                    if (tmpI>5)
+                    rollinIOToolStripMenuItem.Checked = tmpI == 6;
+                    if (tmpI>6)
                     {
                         justDiceToolStripMenuItem.Checked = true; ;
                     }
@@ -4907,7 +4910,7 @@ namespace DiceBot
                     case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
                     case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
                     case "daDiceToolStripMenuItem": CurrentSite = new dadice(this); siteToolStripMenuItem.Text = "Site (DAD)"; break;
-                    //case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
+                    case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
                 }
                 if (CurrentSite is dadice)
                 {

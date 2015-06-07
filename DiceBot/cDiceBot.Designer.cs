@@ -443,6 +443,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.label15 = new System.Windows.Forms.Label();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -3360,6 +3361,7 @@
             // 
             // pnlAdvancedAdvanced
             // 
+            this.pnlAdvancedAdvanced.Controls.Add(this.label15);
             this.pnlAdvancedAdvanced.Controls.Add(this.gbZigZag);
             this.pnlAdvancedAdvanced.Controls.Add(this.label84);
             this.pnlAdvancedAdvanced.Controls.Add(this.lsbStrats);
@@ -5318,7 +5320,6 @@
             this.rollinIOToolStripMenuItem.Name = "rollinIOToolStripMenuItem";
             this.rollinIOToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.rollinIOToolStripMenuItem.Text = "Rollin.IO";
-            this.rollinIOToolStripMenuItem.Visible = false;
             this.rollinIOToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.rollinIOToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
@@ -5447,6 +5448,16 @@
             // betBindingSource
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
+            // 
+            // label15
+            // 
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(241, 4);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(162, 61);
+            this.label15.TabIndex = 111;
+            this.label15.Text = "Please Note: The bot speed can only slow the bot down, not make it faster. If bot" +
+    " speed is disabled, it bets as fast as the site and your internet allows it.";
             // 
             // cDiceBot
             // 
@@ -6044,6 +6055,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.ToolStripMenuItem daDiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rollinIOToolStripMenuItem;
+        private System.Windows.Forms.Label label15;
 
     }
 }

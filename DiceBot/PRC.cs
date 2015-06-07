@@ -53,6 +53,7 @@ namespace DiceBot
 
         public override async void PlaceBet(bool High)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             int retries =0;
             while (retries < 2)
             {
