@@ -124,6 +124,7 @@
     <Compile Include="BetHistory.Designer.cs">
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="bitdice.cs" />
     <Compile Include="cDiceBot.cs">
       <SubType>Form</SubType>
     </Compile>

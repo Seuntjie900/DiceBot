@@ -320,6 +320,23 @@ namespace DiceBot
 
             }
 
+            foreach (string s in bitdice.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                bitDiceToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
+
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -484,7 +501,7 @@ namespace DiceBot
         {
             try
             {
-                return sqlite_helper.GetBetHistory(CurrentSite.Name, DateTime.Parse(From), DateTime.Parse(untill));
+                return sqlite_helper.GetBetHistory(CurrentSite.Name, DateTime.Parse(From, System.Globalization.DateTimeFormatInfo.InvariantInfo), DateTime.Parse(untill, System.Globalization.DateTimeFormatInfo.InvariantInfo));
             }
             catch (Exception e)
             {
@@ -848,7 +865,7 @@ namespace DiceBot
         {
             //tmBetting.Enabled = false;
             WriteConsole("Betting Stopped!");
-            double dBalance = CurrentSite.GetbalanceValue();
+            double dBalance = CurrentSite.balance;
             stop = true;
             TotalTime += (DateTime.Now - dtStarted);
             if (RunningSimulation)
@@ -1031,7 +1048,7 @@ namespace DiceBot
                         MessageBox.Show("Failed to play CHING, pelase make sure file exists");
                     }
                     
-                    Emails.SendInvest(Amount, CurrentSite.GetbalanceValue(), dparse("-0", ref convert));
+                    Emails.SendInvest(Amount, CurrentSite.balance, dparse("-0", ref convert));
                     StartBalance -= Amount;
                     
                 }
@@ -1138,7 +1155,7 @@ namespace DiceBot
             {
                 double dBalance = PreviousBalance;
                 if (CurrentSite != null)
-                dBalance = CurrentSite.GetbalanceValue();
+                dBalance = CurrentSite.balance;
                 if ((dBalance != PreviousBalance && convert || withdrew) && dBalance > 0)
                 {
                     if (PreviousBalance == 0)
@@ -1630,7 +1647,7 @@ namespace DiceBot
 
         public void DoBet(Bet bet)
         {
-            bool Win = !(((bool)bet.high ? (decimal)bet.Roll< 100m - (decimal)(bet.Chance) : (decimal)bet.Roll > (decimal)(bet.Chance)));
+            bool Win = (((bool)bet.high ? (decimal)bet.Roll> (decimal)CurrentSite.maxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
             double profit = (Double)bet.Profit;
             retriedbet = false;
             if (!stop && !reset)
@@ -1666,8 +1683,6 @@ namespace DiceBot
                         currentprofit += (Lastbet*(99/Chance))-Lastbet;
                         ProfitSinceLastReset += (Lastbet*(99/Chance))-Lastbet;
                         StreakProfitSinceLastReset += (Lastbet * (99 / Chance)) - Lastbet;
-                        
-                       
                         
                         Wins++;
                         Winstreak++;
@@ -3717,10 +3732,10 @@ namespace DiceBot
                 betstring += number.ToString() + "," + Chance.ToString() + ",";
                 bool win = false;
                 if (high)
-                    betstring += ">" + (99.99 - Chance) + ",";
+                    betstring += ">" + (CurrentSite.maxRoll - Chance) + ",";
                 else
                     betstring += "<" + Chance + ",";
-                if (high && number > 99.99 - Chance)
+                if (high && number > CurrentSite.maxRoll - Chance)
                 {
                     win = true;
                 }
@@ -3904,7 +3919,7 @@ namespace DiceBot
             Losses = 0;
             bool success = false;
             profit = 0;
-            double tmp = CurrentSite.GetbalanceValue();
+            double tmp = CurrentSite.balance;
             if (success)
                 StartBalance = tmp;
             Winstreak = Losestreak = BestStreak = laststreaklose = laststreakwin = WorstStreak = BestStreak2 = WorstStreak3 = BestStreak3 = WorstStreak3 = numstreaks = numwinstreasks = numlosesreaks = 0;
@@ -4372,7 +4387,7 @@ namespace DiceBot
                     
                     if (dataGridView1.Rows[0].Cells[6].Value != null)
                     {
-                        if (((bool)dataGridView1.Rows[0].Cells[3].Value ? (decimal)dataGridView1.Rows[0].Cells[5].Value < 100m - (decimal)(dataGridView1.Rows[0].Cells[4].Value) : (decimal)dataGridView1.Rows[0].Cells[5].Value > (decimal)(dataGridView1.Rows[0].Cells[4].Value)))
+                        if (((bool)dataGridView1.Rows[0].Cells[3].Value ? (decimal)dataGridView1.Rows[0].Cells[5].Value < (decimal)CurrentSite.maxRoll - (decimal)(dataGridView1.Rows[0].Cells[4].Value) : (decimal)dataGridView1.Rows[0].Cells[5].Value > (decimal)(dataGridView1.Rows[0].Cells[4].Value)))
                         {
                             dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.Pink;
                         }
@@ -4911,6 +4926,7 @@ namespace DiceBot
                     case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
                     case "daDiceToolStripMenuItem": CurrentSite = new dadice(this); siteToolStripMenuItem.Text = "Site (DAD)"; break;
                     case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
+                    case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
                 }
                 if (CurrentSite is dadice)
                 {

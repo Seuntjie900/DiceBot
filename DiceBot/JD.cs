@@ -12,6 +12,7 @@ namespace DiceBot
         jdInstance Instance = new jdInstance();
         public JD(cDiceBot Parent)
         {
+            maxRoll = 99.9999;
             AutoInvest = true;
             AutoWithdraw = true;
             ChangeSeed = true;
@@ -95,19 +96,20 @@ namespace DiceBot
             if (IsMine)
             {
                 
-                bets = int.Parse(result.bets);
-                Parent.updateBalance(Instance.Balance);
-                Parent.updateBets(result.bets);
                 
-                Parent.updateProfit(result.profit );
-                Parent.updateWagered(result.wagered );
-                
-                Parent.AddBet(ToBet(result));
-                Parent.GetBetResult(double.Parse(result.balance, System.Globalization.CultureInfo.InvariantCulture), ToBet(result));
+                balance = (Instance.Balance);
+                bets=(int)Instance.Bets;
+                losses = (int)Instance.Losses;
+                wins = (int)Instance.Wins;
+
+                profit = (double)Instance.Profit;
+                wagered = (double)Instance.Wagered;
+
+                FinishedBet(ToBet(result));
             }
         }
 
-        public override void PlaceBet(bool High)
+        protected override void internalPlaceBet(bool High)
         {
             Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
             Instance.Bet(chance, amount, High);
@@ -144,9 +146,9 @@ namespace DiceBot
             System.Threading.Thread.Sleep(1500);
             return true;
         }
-        public override bool Withdraw(double Amount, string Address)
+        protected override bool internalWithdraw(double Amount, string Address)
         {
-            Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
+            
             Instance.Withdraw(Address, Amount ,"");
             System.Threading.Thread.Sleep(1500);
             return true;
@@ -221,10 +223,7 @@ namespace DiceBot
             Instance.Chat(Message);
         }
 
-        public override void Login(string Username, string Password)
-        {
-            Login(Username, Password, "");
-        }
+        
 
         public override bool Register(string username, string password)
         {

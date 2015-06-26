@@ -21,6 +21,7 @@ namespace DiceBot
         
         public PD(cDiceBot Parent)
         {
+            maxRoll = 99.99;
             AutoInvest = false;
             AutoWithdraw = true;
             ChangeSeed = true;
@@ -220,7 +221,7 @@ namespace DiceBot
         {
             try
             {
-                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
+                
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/bet?access_token=" + accesstoken);
                 if (Prox != null)
                     betrequest.Proxy = Prox;
@@ -242,21 +243,14 @@ namespace DiceBot
                 
                 tmp.bet.client = tmp.user.client;
                 tmp.bet.serverhash = tmp.user.server;
-                
-                Parent.updateBalance((decimal)(tmp.user.balance / 100000000.0));
-                Parent.updateBets(tmp.user.bets);
-                Parent.updateLosses(tmp.user.losses);
-                Parent.updateProfit(tmp.user.profit / 100000000m);
-                Parent.updateWagered(tmp.user.wagered / 100000000m);
-                Parent.updateWins(tmp.user.wins);
-                
                 lastupdate = DateTime.Now;
-
                 balance = tmp.user.balance/ 100000000.0; //i assume
                 bets = tmp.user.bets;
-                Parent.AddBet(tmp.bet.toBet());
-                Parent.GetBetResult(tmp.user.balance / 100000000.0, tmp.bet.toBet());
-                
+                wins = tmp.user.wins;
+                losses = tmp.user.losses;
+                wagered = (double)(tmp.user.wagered / 100000000m);
+                profit = (double)(tmp.user.profit / 100000000m);
+                FinishedBet(tmp.bet.toBet());
             }
             catch (WebException e)
             {
@@ -275,7 +269,7 @@ namespace DiceBot
             }
         }
 
-        public override void PlaceBet(bool High)
+        protected override void internalPlaceBet(bool High)
         {
             this.High = High;
             new Thread(placebetthread).Start();
@@ -344,12 +338,11 @@ namespace DiceBot
             return true;
         }
 
-        public override bool Withdraw(double Amount, string Address)
+        protected override bool internalWithdraw(double Amount, string Address)
         {
             try
             {
                 
-                Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
                 Thread.Sleep(500);
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.primedice.com/api/withdraw?access_token=" + accesstoken);
                 if (Prox != null)
@@ -671,10 +664,7 @@ namespace DiceBot
             
         }
 
-        public override void Login(string Username, string Password)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 
     public class pdlogin

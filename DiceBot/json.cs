@@ -15,11 +15,18 @@ namespace DiceBot
     {
         public static T JsonDeserialize<T>(string jsonString)
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
-            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
-            T obj = (T)ser.ReadObject(ms);
-            return obj;
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
+                MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
+                T obj = (T)ser.ReadObject(ms);
+                return obj;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public static string JsonSerializer<T>(T t)
@@ -36,7 +43,7 @@ namespace DiceBot
         {
             
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-            TimeSpan dt = Value - DateTime.Parse("1970/01/01 00:00:00");
+            TimeSpan dt = Value - DateTime.Parse("1970/01/01 00:00:00", System.Globalization.DateTimeFormatInfo.InvariantInfo);
             double mili = dt.TotalMilliseconds;
             return ((long)mili).ToString();
 
@@ -61,7 +68,7 @@ namespace DiceBot
                 try
                 {
                     string s = milliseconds.ToLower().Replace("z", " ").Replace("t", " ");
-                    DateTime dotNetDate = DateTime.Parse(s);
+                    DateTime dotNetDate = DateTime.Parse(s, System.Globalization.DateTimeFormatInfo.InvariantInfo);
                     return dotNetDate;
                 }
                 catch

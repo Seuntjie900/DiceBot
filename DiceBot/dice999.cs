@@ -16,12 +16,13 @@ namespace DiceBot
         string sessionCookie = "";
         Random r = new Random();
         long uid = 0;
-        int wins=0, losses =0;
+        
         bool isD999 = true;
         DateTime LastBaalance = DateTime.Now;
         public static string[] cCurrencies =new string[] { "btc","doge","ltc" };
         public dice999(cDiceBot Parent)
         {
+            maxRoll = 99.9999;
             this.Parent = Parent;
             AutoInvest = false;
             AutoWithdraw = true;
@@ -194,17 +195,11 @@ namespace DiceBot
                     losses++;
                 Wagered += tmp.Amount;
                 bets++;
-                Parent.updateBalance((decimal)(balance));
-                Parent.updateBets(bets);
-                Parent.updateLosses(losses);
-                Parent.updateProfit(profit);
-                Parent.updateWagered(Wagered);
-                Parent.updateWins(wins);
                 BetRetries = 0;
-                Parent.AddBet(tmp);
+                
                 sqlite_helper.InsertSeed(tmp.serverhash, tmp.serverseed);
                 next = tmpBet.Next;
-                Parent.GetBetResult((double)balance, tmp);
+                FinishedBet(tmp);
                 
             }
             catch
@@ -213,7 +208,7 @@ namespace DiceBot
             }
         }
 
-        public override void PlaceBet(bool High)
+        protected override void internalPlaceBet(bool High)
         {
             this.High = High;
             Thread t = new Thread(PlaceBetThread);
@@ -253,10 +248,10 @@ namespace DiceBot
             
         }
 
-        
-        public override bool Withdraw(double Amount, string Address)
+
+        protected override bool internalWithdraw(double Amount, string Address)
         {
-            Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
+            
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
             if (Prox != null)
                 loginrequest.Proxy = Prox;
@@ -276,10 +271,7 @@ namespace DiceBot
             return true;
         }
 
-        public override void Login(string Username, string Password)
-        {
-            Login(Username, Password, "");
-        }
+        
         decimal Wagered = 0;
         public override void Login(string Username, string Password, string twofa)
         {

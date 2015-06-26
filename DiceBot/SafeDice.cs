@@ -17,6 +17,7 @@ namespace DiceBot
         public static string[] cCurrencies = new string[] { "Btc", "XMR"};
         public SafeDice(cDiceBot Parent)
         {
+            maxRoll = 99.9999;
             AutoInvest = false;
             AutoWithdraw = true;
             ChangeSeed = true;
@@ -30,7 +31,7 @@ namespace DiceBot
             Currencies = new string[]{"Btc", "XMR"};
             Currency = "Btc";
         }
-        int curen = 1;
+        long curen = 1;
         protected override void CurrencyChanged()
         {
             curen = Currency.ToLower() == "btc" ? 1 : 2;
@@ -47,16 +48,16 @@ namespace DiceBot
                     SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
                     balance = tmp2.balance;
                     Parent.updateBalance((decimal)balance);
-                    balance = tmp2.balance / 100000000.0;
+                    balance = tmp2.balance / (Currency != "2" ? 100000000.0 : 1000000000000.0);
 
                     Parent.updateBets(tmp2.win + tmp2.lose);
                     Parent.updateLosses(tmp2.lose);
-                    wins = tmp2.win;
-                    losses = tmp2.lose;
-                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / 100000000.0);
-                    profit = (tmp2.amountWin - tmp2.amountLose) / 100000000.0;
-                    Parent.updateWagered(tmp2.wagered / 100000000.0);
-                    wagered = tmp2.wagered / 100000000.0;
+                    wins = (int)tmp2.win;
+                    losses = (int)tmp2.lose;
+                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0));
+                    profit = (tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0);
+                    Parent.updateWagered(tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0));
+                    wagered = tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0);
                     Parent.updateWins(tmp2.win);
                     
                     Parent.updateDeposit(GetDepositAddress());
@@ -119,17 +120,12 @@ namespace DiceBot
         }
 
         
-        public override void Login(string Username, string Password)
-        {
-            Login(Username, Password, "");
-        }
+        
         string serverhash = "";
         string client = "";
-        int wins = 0;
-        int losses = 0;
-        double wagered = 0;
-        int nonce = 0;
-        int UID = 0;
+        
+        long nonce = 0;
+        long UID = 0;
         public override void Login(string Username, string Password, string twofa)
         {
             try
@@ -176,17 +172,17 @@ namespace DiceBot
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
-                    Parent.updateBalance(tmp2.balance / 100000000m);
-                    balance = tmp2.balance / 100000000.0;
+                    Parent.updateBalance(tmp2.balance / (Currency != "2" ? 100000000m : 1000000000000m));
+                    balance = tmp2.balance / (Currency != "2" ? 100000000.0 : 1000000000000.0);
 
                     Parent.updateBets(tmp2.win + tmp2.lose);
                     Parent.updateLosses(tmp2.lose);
-                    wins = tmp2.win;
-                    losses = tmp2.lose;
-                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / 100000000.0);
-                    profit = (tmp2.amountWin - tmp2.amountLose) / 100000000.0;
-                    Parent.updateWagered(tmp2.wagered / 100000000.0);
-                    wagered = tmp2.wagered / 100000000.0;
+                    wins = (int)tmp2.win;
+                    losses = (int)tmp2.lose;
+                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0));
+                    profit = (tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0);
+                    Parent.updateWagered(tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0));
+                    wagered = tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0);
                     Parent.updateWins(tmp2.win);
                     Parent.updateStatus("Logged in");
                     serverhash = tmp1.serverSeedHash;
@@ -228,11 +224,11 @@ namespace DiceBot
                 SafeDiceBet tmpBet = new SafeDiceBet
                 {
                     siteId = curen,
-                    amount = (int)(amount * 100000000),
-                    payout = (double)(((int)((99.5 / chance) * 100000000)) / 100000000.0),
+                    amount = (long)(amount * ( Currency!="2"? 100000000: 1000000000000)),
+                    payout = (double)(((long)((99.5 / chance) * (Currency != "2" ? 100000000 : 1000000000000))) / (Currency != "2" ? 100000000.0 : 1000000000000.0)),
                     isFixedPayout = false,
                     isRollLow = !(bool)High,
-                    target = ((bool)High) ? (999999 - ((int)(chance * 10000))).ToString() : ((int)(chance * 10000)).ToString()
+                    target = ((bool)High) ? (999999 - ((long)(chance * 10000))).ToString() : ((long)(chance * 10000)).ToString()
                 };
                 string post = json.JsonSerializer<SafeDiceBet>(tmpBet);
 
@@ -252,34 +248,32 @@ namespace DiceBot
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 SafeDiceBetResult tmpResult = json.JsonDeserialize<SafeDiceBetResult>(sEmitResponse);
                 Bet bet = new Bet();
-                bet.Amount = (decimal)tmpResult.amount / 100000000m;
+                bet.Amount = (decimal)tmpResult.amount / (Currency != "2" ? 100000000m : 1000000000000m);
                 bet.date = json.ToDateTime2(tmpResult.processTime);
                 bet.Chance = (!tmpResult.isRollLow ? 100m - (decimal)tmpResult.target / 1000000m * 100m : (decimal)tmpResult.target / 1000000m * 100m);
                 bet.high = !tmpResult.isRollLow;
                 bet.clientseed = client;
                 bet.Id = tmpResult.id;
                 bet.nonce = nonce++;
-                bet.Profit = tmpResult.profit / 100000000m;
+                bet.Profit = tmpResult.profit / (Currency != "2" ? 100000000m : 1000000000000m);
                 bet.Roll = tmpResult.roll / 10000;
                 bet.serverhash = serverhash;
-                bet.uid = tmpResult.accountId;
+                bet.uid = (int)tmpResult.accountId;
                 balance += (double)bet.Profit;
-                Parent.updateBalance((decimal)balance);
-                Parent.updateBets(++bets);
-                Parent.updateWagered(wagered += (double)bet.Amount);
+                
+                ++bets;
+                wagered += (double)bet.Amount;
                 bool win = false;
                 if (tmpResult.isRollLow && tmpResult.roll < tmpResult.target)
                     win = true;
                 else if (!tmpResult.isRollLow && tmpResult.roll > tmpResult.target)
                     win = true;
                 if (win)
-                    Parent.updateWins(++wins);
+                    ++wins;
                 else
-                    Parent.updateLosses(++losses);
-                Parent.updateProfit(profit += (double)bet.Profit);
-                Parent.AddBet(bet);
-                Parent.GetBetResult(balance, bet);
-
+                    ++losses;
+                profit += (double)bet.Profit;
+                FinishedBet(bet);
             }
             catch (WebException e)
             {
@@ -299,7 +293,7 @@ namespace DiceBot
 
         }
 
-        public override void PlaceBet(bool High)
+        protected override void internalPlaceBet(bool High)
         {
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
             t.Start(High);
@@ -399,7 +393,7 @@ namespace DiceBot
 
         }
 
-        public override bool Withdraw(double Amount, string Address)
+        protected override bool internalWithdraw(double Amount, string Address)
         {
             try
             {
@@ -416,7 +410,7 @@ namespace DiceBot
                 loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
                 loginrequest.CookieContainer = new CookieContainer();
                 loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
-                string post = json.JsonSerializer<SDSendWIthdraw>(new SDSendWIthdraw { amount = (int)(Amount * 100000000), address = Address });
+                string post = json.JsonSerializer<SDSendWIthdraw>(new SDSendWIthdraw { amount = (long)(Amount * 100000000), address = Address });
 
                 using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
                 {
@@ -513,17 +507,17 @@ namespace DiceBot
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
 
-                    Parent.updateBalance(tmp2.balance / 100000000m);
-                    balance = tmp2.balance / 100000000.0;
+                    Parent.updateBalance(tmp2.balance / (Currency != "2" ? 100000000m : 1000000000000m));
+                    balance = tmp2.balance / (Currency != "2" ? 100000000.0 : 1000000000000.0);
                     
                     Parent.updateBets(tmp2.win + tmp2.lose);
                     Parent.updateLosses(tmp2.lose);
-                    wins = tmp2.win;
-                    losses = tmp2.lose;
-                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / 100000000.0);
-                    profit = (tmp2.amountWin - tmp2.amountLose) / 100000000.0;
-                    Parent.updateWagered(tmp2.wagered / 100000000.0);
-                    wagered = tmp2.wagered / 100000000.0;
+                    wins = (int)tmp2.win;
+                    losses = (int)tmp2.lose;
+                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0));
+                    profit = (tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0);
+                    Parent.updateWagered(tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0));
+                    wagered = tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0);
                     Parent.updateWins(tmp2.win);
                     Parent.updateStatus("Logged in");
                     serverhash = tmp1.serverSeedHash;
@@ -597,7 +591,7 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                double lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
             }
@@ -621,7 +615,7 @@ namespace DiceBot
                 loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
                 loginrequest.CookieContainer = new CookieContainer();
                 loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
-                string post = json.JsonSerializer<SDSendInvest>(new SDSendInvest { amount = (int)(Amount * 100000000) });
+                string post = json.JsonSerializer<SDSendInvest>(new SDSendInvest { amount = (long)(Amount * 100000000) });
 
                 using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
                 {
@@ -644,7 +638,7 @@ namespace DiceBot
             }
         }
 
-        new public static double sGetLucky(string server, string client, int nonce)
+        new public static double sGetLucky(string server, string client, long nonce)
         {
             string comb = nonce + ":" + client + server + ":" + nonce;
 
@@ -687,7 +681,7 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                double lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
             }
@@ -711,7 +705,7 @@ namespace DiceBot
             return json.JsonDeserialize<SDDEpost>(sEmitResponse).address;
         }
 
-        int lastchat = 0;
+        long lastchat = 0;
 
     }
     public class SDSendInvest
@@ -720,16 +714,16 @@ namespace DiceBot
     }
     public class SDChat
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string target_id { get; set; }
         public string room { get; set; }
         public string target_username { get; set; }
         public string username { get; set; }
-        public int role { get; set; }
+        public long role { get; set; }
         public string time { get; set; }
         public DateTime Time { get; set; }
         public string message { get; set; }
-        public int accountId { get; set; }
+        public long accountId { get; set; }
         public string targetUsername { get; set; }
     }
 
@@ -741,14 +735,14 @@ namespace DiceBot
 
     public class SafeDicegetUserInfo
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string username { get; set; }
         public string authHashLink { get; set; }
-        //public int referralId { get; set; }
+        //public long referralId { get; set; }
         public string accountSeed { get; set; }
         public string serverSeedHash { get; set; }
-        public int nonce { get; set; }
-        public int role { get; set; }
+        public long nonce { get; set; }
+        public long role { get; set; }
         public bool isInvestmentEnabled { get; set; }
 
     }
@@ -758,8 +752,8 @@ namespace DiceBot
         public long balance { get; set; }
         public double shares { get; set; }
         public double kelly { get; set; }
-        public int win { get; set; }
-        public int lose { get; set; }
+        public long win { get; set; }
+        public long lose { get; set; }
         public long amountLose { get; set; }
         public long amountWin { get; set; }
         public long wagered { get; set; }
@@ -767,7 +761,7 @@ namespace DiceBot
     }
      public class SafeDiceBet
      {
-         public int siteId { get; set; }
+         public long siteId { get; set; }
          public long amount { get; set; }
          public string target { get; set; }
          public double payout { get; set; }
@@ -776,8 +770,8 @@ namespace DiceBot
      }
     public class SafeDiceBetResult
     {
-        public int id { get; set; }
-        public int accountId { get; set; }
+        public long id { get; set; }
+        public long accountId { get; set; }
         public string processTime { get; set; }
         public long amount { get; set; }
         public long profit { get; set; }
@@ -793,7 +787,7 @@ namespace DiceBot
     }
     public class SDSendWIthdraw
     {
-        public int amount { get; set; }
+        public long amount { get; set; }
         public string address { get; set; }
     }
     public class SDSendChat

@@ -17,6 +17,7 @@ namespace DiceBot
         string username = "";
         public rollin(cDiceBot Parent)
         {
+            maxRoll = 99;
             this.Parent = Parent;
             AutoWithdraw = true;
             AutoInvest = false;
@@ -91,15 +92,14 @@ namespace DiceBot
                     server_hash = tmp.customer.server_hash;
                     balance = double.Parse(tmp.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0;
                     bets = tmp.statistics.bets;
-                    Parent.updateBalance((decimal)(balance));
-                    Parent.updateBets(tmp.statistics.bets);
-                    Parent.updateLosses(tmp.statistics.losses);
-                    Parent.updateProfit(decimal.Parse(tmp.statistics.profit, System.Globalization.CultureInfo.InvariantCulture) / 1000m);
-                    Parent.updateWagered(decimal.Parse(tmp.statistics.wagered, System.Globalization.CultureInfo.InvariantCulture) / 1000m);
-                    Parent.updateWins(tmp.statistics.wins);
+                    
+                    losses = tmp.statistics.losses;
+                    profit = double.Parse(tmp.statistics.profit, System.Globalization.CultureInfo.InvariantCulture) / 1000.0;
+                    
+                    wagered = double.Parse(tmp.statistics.wagered, System.Globalization.CultureInfo.InvariantCulture) / 1000.0;
+                    wins = (tmp.statistics.wins);
                     LastBalance = DateTime.Now;
-                    Parent.AddBet(tmp2);
-                    Parent.GetBetResult(balance, tmp2);
+                    FinishedBet(tmp2);
                 }
 
             }
@@ -109,7 +109,7 @@ namespace DiceBot
             }
 
         }
-        public override void PlaceBet(bool High)
+        protected override void internalPlaceBet(bool High)
         {
             Thread T = new Thread(new ParameterizedThreadStart(PlaceBetThread));
             T.Start(High);
@@ -140,7 +140,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override bool Withdraw(double Amount, string Address)
+        protected override bool internalWithdraw(double Amount, string Address)
         {
             try
             {
@@ -217,10 +217,7 @@ namespace DiceBot
             }
         }
 
-        public override void Login(string Username, string Password)
-        {
-            Login(Username, Password, "");
-        }
+        
         CookieContainer Cookies = new CookieContainer();
         string Token = "";
         public override void Login(string Username, string Password, string twofa)
@@ -411,6 +408,7 @@ namespace DiceBot
        
         public override bool ReadyToBet()
         {
+            //return true;
             if (amount == 0)
                 return (DateTime.Now - lastbet).TotalSeconds >= 10;
             else if (amount < 0.00000010)
@@ -517,7 +515,7 @@ namespace DiceBot
         public RollinGame game { get; set; }
         public RollinCustomer customer { get; set; }
         public RollinStats statistics { get; set; }
-        public int fee { get; set; }
+        public double fee { get; set; }
         public string[] errors { get; set; }
         public Bet ToBet()
         {
@@ -535,13 +533,13 @@ namespace DiceBot
 
             };
             decimal Profit = decimal.Parse(game.profit, System.Globalization.CultureInfo.InvariantCulture) / 1000m;
-            if ((tmp.high && tmp.Roll>=(100-fee-tmp.Chance)) || (!tmp.high && tmp.Roll <= tmp.Chance))
+            if ((tmp.high && tmp.Roll>(99-tmp.Chance)) || (!tmp.high && tmp.Roll < tmp.Chance))
             {
                 tmp.Profit = Profit;
             }
             else
             {
-                tmp.Profit = -Profit;
+                tmp.Profit = -decimal.Parse(game.bet_amount, System.Globalization.CultureInfo.InvariantCulture) / 1000m;
             }
             return tmp;
         }

@@ -2,6 +2,11 @@ Todo:
 PD login encoding
 999dice betting bug (date format, not set to instance, Both at Datagridview)(??fixed??. no reproduce so far)
 strategy help pages
+stop and reset on win errors
+chance + max roll calculations
+bitdice
+sd xmr balance
+custom clickable when open
 
 
 hopefully before release:

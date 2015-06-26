@@ -18,6 +18,7 @@ namespace DiceBot
         
         public PRC(cDiceBot Parent)
         {
+            maxRoll = 99.9999;
             AutoWithdraw = true;
             AutoLogin = true;
             ChangeSeed = true;
@@ -51,7 +52,7 @@ namespace DiceBot
             
         }
 
-        public override async void PlaceBet(bool High)
+        protected override async void internalPlaceBet(bool High)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             int retries =0;
@@ -69,20 +70,13 @@ namespace DiceBot
                         balance = (double)tmpStats.AvailableBalance;
                         wins = tmpStats.Wins;
                         losses = tmpStats.Losses;
-                        Wagered = tmpStats.Wagered;
+                        wagered = (double)tmpStats.Wagered;
                         bets = tmpStats.NumBets;
                         profit = (double)tmpStats.Profit;
 
-                        Parent.updateBalance((decimal)(balance));
-                        Parent.updateBets(bets);
-                        Parent.updateLosses(losses);
-                        Parent.updateProfit(profit);
-                        Parent.updateWagered(Wagered);
-                        Parent.updateWins(wins);
                         tmp.serverhash = serverhash;
-                        Parent.AddBet(tmp);
-                        Parent.GetBetResult(balance, tmp);
                         retries = 5;
+                        FinishedBet(tmp);
                     }
                 }
                 catch
@@ -169,25 +163,7 @@ namespace DiceBot
 
         public override bool ReadyToBet()
         {
-            /*if (withdraw!=0)            
-            {
-                if ( (DateTime.Now - withdrawTime).TotalSeconds>3)
-                {
-                    if (withdraw ==1)
-                    {
-                        dicehub.Invoke("withdraw", wdAddress, wdAmount ,"");
-                    }
-                    else
-                    {
-                        dicehub.Invoke("invest", wdAmount, 0.5m);
-                    }
-                    withdraw = 0;
-                }
-                else
-                {
-                    return false;
-                }
-            }*/
+
             return true;
         }
         
@@ -208,14 +184,8 @@ namespace DiceBot
             dicehub.Invoke("Chat", Message, 1);
         }
 
-        public override bool Withdraw(double Amount, string Address)
+        protected override bool internalWithdraw(double Amount, string Address)
         {
-            /*Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
-            withdraw = 1;
-            withdrawTime = DateTime.Now;
-            wdAddress = Address;
-            wdAmount = Amount;
-            return true;*/
             System.Threading.Thread.Sleep(1200);
             dicehub.Invoke("Withdraw", Address, Amount, "");
             System.Threading.Thread.Sleep(120);
@@ -223,16 +193,13 @@ namespace DiceBot
         }
         void ReceivedChat(string messages, string time, string user, int id, int room, bool ismod)
         {
-            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> {3}", DateTime.Parse(time), user, id, messages));
+            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> {3}", DateTime.Parse(time, System.Globalization.DateTimeFormatInfo.InvariantInfo), user, id, messages));
         }
         void ReceivedChat(string messages, string time, string user, int from, bool ismod)
         {
-            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> PM: {3}", DateTime.Parse(time), user, from, messages));
+            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> PM: {3}", DateTime.Parse(time, System.Globalization.DateTimeFormatInfo.InvariantInfo), user, from, messages));
         }
-        public override void Login(string Username, string Password)
-        {
-             Login(Username, Password, "");
-        }
+        
         string s = "";
         public override void Login(string Username, string Password, string twofa)
         {
@@ -334,7 +301,7 @@ namespace DiceBot
                 PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
                 balance = (double)tmp.AvailableBalance;
                 profit = (double)tmp.Profit;
-                Wagered = tmp.Wagered;
+                wagered = (double)tmp.Wagered;
                 bets = (int)tmp.NumBets;
                 wins = (int)tmp.Wins;
                 losses = (int)tmp.Losses;
@@ -343,7 +310,7 @@ namespace DiceBot
                 Parent.updateBets(tmp.NumBets);
                 Parent.updateLosses(tmp.Losses);
                 Parent.updateProfit(profit);
-                Parent.updateWagered(Wagered);
+                Parent.updateWagered(wagered);
                 Parent.updateWins(tmp.Wins);
                 //Parent.updateDeposit(tmp.DepositAddress);
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetCurrentSeed") as HttpWebRequest;
@@ -362,8 +329,8 @@ namespace DiceBot
                 
             }
         }
-        decimal Wagered = 0;
-        int wins = 0, losses = 0;
+        
+        
         string client = "", serverhash = "";
         public override bool Register(string Username, string Passwrd)
         {
@@ -459,7 +426,7 @@ namespace DiceBot
                 PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
                 balance = (double)tmp.AvailableBalance;
                 profit = (double)tmp.Profit;
-                Wagered = tmp.Wagered;
+                wagered =(double) tmp.Wagered;
                 bets = (int)tmp.NumBets;
                 wins = (int)tmp.Wins;
                 losses = (int)tmp.Losses;
@@ -468,7 +435,7 @@ namespace DiceBot
                 Parent.updateBets(tmp.NumBets);
                 Parent.updateLosses(tmp.Losses);
                 Parent.updateProfit(profit);
-                Parent.updateWagered(Wagered);
+                Parent.updateWagered(wagered);
                 Parent.updateWins(tmp.Wins);
                 //Parent.updateDeposit(tmp.DepositAddress);
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetCurrentSeed") as HttpWebRequest;

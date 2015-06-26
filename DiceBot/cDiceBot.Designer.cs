@@ -249,6 +249,7 @@
             this.chkResetBetWins = new System.Windows.Forms.CheckBox();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.pnlAdvancedAdvanced = new System.Windows.Forms.Panel();
+            this.label15 = new System.Windows.Forms.Label();
             this.gbZigZag = new System.Windows.Forms.GroupBox();
             this.chkZigZagWins = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -442,8 +443,8 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.bitDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.label15 = new System.Windows.Forms.Label();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -3385,6 +3386,16 @@
             this.pnlAdvancedAdvanced.TabIndex = 82;
             this.pnlAdvancedAdvanced.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlAdvancedAdvanced_Paint);
             // 
+            // label15
+            // 
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(241, 4);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(162, 61);
+            this.label15.TabIndex = 111;
+            this.label15.Text = "Please Note: The bot speed can only slow the bot down, not make it faster. If bot" +
+    " speed is disabled, it bets as fast as the site and your internet allows it.";
+            // 
             // gbZigZag
             // 
             this.gbZigZag.Controls.Add(this.chkZigZagWins);
@@ -5259,7 +5270,8 @@
             this.diceToolStripMenuItem,
             this.safediceToolStripMenuItem,
             this.daDiceToolStripMenuItem,
-            this.rollinIOToolStripMenuItem});
+            this.rollinIOToolStripMenuItem,
+            this.bitDiceToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -5445,19 +5457,17 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
+            // bitDiceToolStripMenuItem
+            // 
+            this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
+            this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.bitDiceToolStripMenuItem.Text = "BitDice";
+            this.bitDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.bitDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
             // betBindingSource
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
-            // 
-            // label15
-            // 
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(241, 4);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(162, 61);
-            this.label15.TabIndex = 111;
-            this.label15.Text = "Please Note: The bot speed can only slow the bot down, not make it faster. If bot" +
-    " speed is disabled, it bets as fast as the site and your internet allows it.";
             // 
             // cDiceBot
             // 
@@ -6056,6 +6066,7 @@
         private System.Windows.Forms.ToolStripMenuItem daDiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rollinIOToolStripMenuItem;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.ToolStripMenuItem bitDiceToolStripMenuItem;
 
     }
 }

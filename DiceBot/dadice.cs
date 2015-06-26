@@ -14,11 +14,9 @@ namespace DiceBot
     {
         string key = "";
         string username = "";
-        int wins = 0;
-        int losses = 0;
-        decimal wagered = 0;
         public dadice(cDiceBot Parent)
         {
+            maxRoll = 99.99;
             this.Parent = Parent;
             AutoInvest = false;
             AutoLogin = true;
@@ -43,7 +41,7 @@ namespace DiceBot
                 bool High = (bool)_High;
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/roll");
                 betrequest.Method = "POST";
-                string post = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}&amount={2:0.00000000}&chance={3:00.0}&bet={4}", username, key, amount, chance, High ? "over" : "under");
+                string post = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}&amount={2:0.00000000}&chance={3:00.00}&bet={4}", username, key, amount, chance, High ? "over" : "under");
                 betrequest.ContentLength = post.Length;
                 if (Prox != null)
                     betrequest.Proxy = Prox;
@@ -60,16 +58,15 @@ namespace DiceBot
                 {
 
                     balance += (double)tmp.roll.profit;
-                    Parent.updateBalance((decimal)(balance));
-                    Parent.updateBets(++bets);
-                    Parent.updateLosses(tmp.roll.status.ToLower() == "won" ? losses : ++losses);
-                    Parent.updateProfit(profit += (double)tmp.roll.profit);
-                    Parent.updateWagered(wagered += tmp.roll.amount);
-                    Parent.updateWins(tmp.roll.status.ToLower() == "won" ? ++wins : wins);
+                    
+                    ++bets;
+                    ++losses;
+                    profit += (double)tmp.roll.profit;
+                    wagered += (double)tmp.roll.amount;
+                    ++wins;
                     LastBalance = DateTime.Now;
-                    Parent.AddBet(tmp.roll.ToBet());
-                    Parent.GetBetResult(balance, tmp.roll.ToBet());
                     betcount = 0;
+                    FinishedBet(tmp.roll.ToBet());
                 }
                 else
                 {
@@ -93,7 +90,7 @@ namespace DiceBot
 
 
 
-        public override void PlaceBet(bool High)
+        protected override void internalPlaceBet(bool High)
         {
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
             t.Start(High);
@@ -109,7 +106,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override bool Withdraw(double Amount, string Address)
+        protected override bool internalWithdraw(double Amount, string Address)
         {
             try
             {
@@ -137,10 +134,7 @@ namespace DiceBot
             return false;
         }
 
-        public override void Login(string Username, string Password)
-        {
-            Login(username, Password, "");
-        }
+        
         public override void Login(string Username, string Password, string twofa)
         {
             username = Username;
@@ -194,7 +188,7 @@ namespace DiceBot
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 LastBalance = DateTime.Now.AddSeconds(-20);
                 DADICEStatsBase tmp2 = json.JsonDeserialize<DADICEStatsBase>(sEmitResponse);
-                this.wagered = decimal.Parse(tmp2.user.stats.wagered);
+                this.wagered = double.Parse(tmp2.user.stats.wagered, System.Globalization.NumberFormatInfo.InvariantInfo);
                 this.bets = tmp2.user.stats.bets;
                 this.wins = tmp2.user.stats.won;
                 this.losses = tmp2.user.stats.lost;
@@ -267,12 +261,12 @@ namespace DiceBot
                 Thread.Sleep(100);
             }
         }
-
+        
        
 
         public override bool ReadyToBet()
         {
-            return (DateTime.Now-Lastbet).TotalMilliseconds>700;
+            return (DateTime.Now-Lastbet).TotalMilliseconds>300;
         }
 
         public override void Disconnect()
