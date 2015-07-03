@@ -2358,7 +2358,7 @@ namespace DiceBot
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
-                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":daDiceToolStripMenuItem.Checked?"5":rollinIOToolStripMenuItem.Checked?"6":"1"));
+                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":daDiceToolStripMenuItem.Checked?"5":rollinIOToolStripMenuItem.Checked?"6":bitDiceToolStripMenuItem.Checked?"7":"1"));
             }
         }
         
@@ -2881,7 +2881,8 @@ namespace DiceBot
                     safediceToolStripMenuItem.Checked = tmpI == 4;
                     daDiceToolStripMenuItem.Checked = tmpI == 5;
                     rollinIOToolStripMenuItem.Checked = tmpI == 6;
-                    if (tmpI>6)
+                    bitDiceToolStripMenuItem.Checked = tmpI == 7;
+                    if (tmpI>7)
                     {
                         justDiceToolStripMenuItem.Checked = true; ;
                     }
@@ -4931,6 +4932,7 @@ namespace DiceBot
                     case "daDiceToolStripMenuItem": CurrentSite = new dadice(this); siteToolStripMenuItem.Text = "Site (DAD)"; break;
                     case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
                     case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
+                       
                 }
                 if (CurrentSite is dadice)
                 {
