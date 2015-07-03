@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.WebSockets;
+
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WebSocket4Net;
 
 namespace DiceBot
 {
@@ -14,6 +15,7 @@ namespace DiceBot
     {
 
         public static string[] cCurrencies = new string[] { "btc", "doge", "ltc", "redd", "clam", "dash" };
+        WebSocket Client;// = new WebSocket("");
         public bitdice(cDiceBot Parent)
         {
             maxRoll = 99.9999;
@@ -25,9 +27,45 @@ namespace DiceBot
             ChangeSeed = true;
             Name = "BitDice";
             this.Parent = Parent;
-            Client.BetResult += Client_BetResult;
-            Client.UserStats += Client_UserStats;
+            /*Client = new WebSocket("");
+            Client.Opened += Client_Opened;
+            Client.Error += Client_Error;
+            Client.Closed += Client_Closed;
+            Client.MessageReceived += Client_MessageReceived;*/
+            
             Currencies = new string[] { "btc", "doge","ltc","redd","clam","dash"};
+        }
+
+        void Client_MessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            socketbase tmp = json.JsonDeserialize<socketbase>(e.Message);
+            if (!string.IsNullOrEmpty(tmp.method))
+            {
+                switch (tmp.method)
+                {
+                    case "chat:new": Client_ChatReceived(json.JsonDeserialize<bitchatSocket>(e.Message.Replace("params", "_params"))._params); break;
+                    case "stat.global": break;
+                    case "stat.user": Client_UserStats(json.JsonDeserialize<bitstatsusersocket>(e.Message.Replace("params", "_params"))._params); break;
+                    case "stat.bets": Client_BetResult(json.JsonDeserialize<bitstatsbetsocket>(e.Message.Replace("params", "_params").Replace("\\", "").Replace("\"{", "{").Replace("}\"", "}"))._params); break;
+                }
+            }
+        }
+
+        void Client_Closed(object sender, EventArgs e)
+        {
+            
+        }
+
+        void Client_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        {
+            
+        }
+
+        bool loggedin = false;
+        void Client_Opened(object sender, EventArgs e)
+        {
+            if (!loggedin)
+                finishedlogin(true);
         }
 
         
@@ -58,7 +96,7 @@ namespace DiceBot
         }
 
         int id = 1;
-        BitDiceClient Client = new BitDiceClient();
+        //BitDiceClient Client = new BitDiceClient();
         protected override void internalPlaceBet(bool High)
         {
             string s = string.Format("{{\"jsonrpc\":\"2.0\",\"method\":\"bets:make\",\"params\":{{\"amount\":\"{0:0.00000000}\",\"chance\":\"{1:0.000000}\",\"type\":\"{2}\"}},\"id\":{3}}}", amount, chance, High?"high":"low",id++);
@@ -147,18 +185,24 @@ namespace DiceBot
 
             getcsrf(sEmitResponse);
             getstream(sEmitResponse);
-            Client.disconnect();
-            Client = new BitDiceClient();
-            Client.BetResult += Client_BetResult;
-            Client.UserStats += Client_UserStats;
-            Client.ChatReceived += Client_ChatReceived;
-            Client.prox = Prox;
-            Client.Connect("wss://www.bitdice.me/stream/" + stream, cookie);
+            if (Client!=null)
+                Client.Close();
+            List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
+            headers.Add(new KeyValuePair<string,string>("Cookie","_csn_session="+cookie));
+            Client = new WebSocket("wss://www.bitdice.me/stream/" + stream,"", null, headers, "dicebot","http://bitdice.me",WebSocketVersion.Rfc6455);
+            
+            Client.Opened += Client_Opened;
+            Client.Error += Client_Error;
+            Client.Closed += Client_Closed;
+            Client.MessageReceived += Client_MessageReceived; 
+            Client.Open();
             while (Client.State == WebSocketState.Connecting)
             {
                 Thread.Sleep(100);
             }
             finishedlogin(Client.State == WebSocketState.Open);
+            loggedin = true;
+            CurrencyChanged();
         }
 
         void Client_ChatReceived(bitChatReceived Chat)
@@ -222,13 +266,17 @@ namespace DiceBot
 
             getcsrf(sEmitResponse);
             getstream(sEmitResponse);
-            Client.disconnect();
-            Client = new BitDiceClient();
-            Client.BetResult += Client_BetResult;
-            Client.UserStats += Client_UserStats;
-            Client.ChatReceived += Client_ChatReceived;
-            Client.prox = Prox;
-            Client.Connect("wss://www.bitdice.me/stream/" + stream, cookie);
+            if (Client != null)
+                Client.Close();
+            List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
+            headers.Add(new KeyValuePair<string, string>("Cookie", "_csn_session=" + cookie));
+            Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", null, headers, "dicebot", "http://bitdice.me", WebSocketVersion.Rfc6455);
+
+            Client.Opened += Client_Opened;
+            Client.Error += Client_Error;
+            Client.Closed += Client_Closed;
+            Client.MessageReceived += Client_MessageReceived;
+            Client.Open();
             while (Client.State == WebSocketState.Connecting)
             {
                 Thread.Sleep(100);
@@ -243,7 +291,8 @@ namespace DiceBot
 
         public override void Disconnect()
         {
-            Client.disconnect();
+            loggedin = false;
+            Client.Close();
         }
 
         public override void GetSeed(long BetID)
@@ -308,14 +357,18 @@ namespace DiceBot
                 sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 getcsrf(sEmitResponse);
                 getstream(sEmitResponse);
-                Client.disconnect();
-                Client = new BitDiceClient();
-                Client.BetResult += Client_BetResult;
-                Client.UserStats += Client_UserStats;
-                Client.ChatReceived += Client_ChatReceived;
-                Client.prox = Prox;
-                Client.Connect("wss://www.bitdice.me/stream/"+stream, cookie);
-                
+                if (Client != null)
+                    Client.Close();
+                List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
+                headers.Add(new KeyValuePair<string, string>("Cookie", "_csn_session=" + cookie));
+                Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", null, headers, "dicebot", "http://bitdice.me", WebSocketVersion.Rfc6455);
+
+                Client.Opened += Client_Opened;
+                Client.Error += Client_Error;
+                Client.Closed += Client_Closed;
+                Client.MessageReceived += Client_MessageReceived;
+                Client.Open();
+
             }
         }
 
@@ -358,19 +411,19 @@ namespace DiceBot
         public override void SetProxy(string host, int port)
         {
             base.SetProxy(host, port);
-            Client.prox = Prox;
+           // Client.prox = Prox;
         }
         public override void SetProxy(string host, int port, string username, string password)
         {
             base.SetProxy(host, port, username, password);
-            Client.prox = Prox;
+            //Client.prox = Prox;
         }
         public override double GetLucky(string server, string client, int nonce)
         {
             return base.GetLucky(server, client, nonce);
         }
     }
-
+    /*
     class BitDiceClient
     {
         private static object consoleLock = new object();
@@ -385,7 +438,7 @@ namespace DiceBot
             Connect("ws://ws.blockchain.info:8335/inv").Wait();
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
-        }*/
+        }
         public void disconnect()
         {
             try
@@ -405,23 +458,46 @@ namespace DiceBot
         ClientWebSocket webSocket = null;
         public async Task Connect(string uri, string cookie)
         {
-            
 
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             try
             {
+                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
+                {
+                    sw.WriteLine("begin connect");
+                }
                 webSocket = new ClientWebSocket();
+                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
+                {
+                    sw.WriteLine("created socket");
+                }
                 if (prox!= null)
                 {
                     webSocket.Options.Proxy = prox;
                 }
+                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
+                {
+                    sw.WriteLine("done proxy");
+                }
                 webSocket.Options.Cookies = new System.Net.CookieContainer();
                 webSocket.Options.Cookies.Add(new System.Net.Cookie("_csn_session", cookie, "/", "bitdice.me"));
+                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
+                {
+                    sw.WriteLine("added cookie\nconnecting");
+                }
                 await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
+                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
+                {
+                    sw.WriteLine("connected\nstarting send+receive");
+                }
                 await Task.WhenAll(Receive(webSocket), Send(webSocket));
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception: {0}", ex);
+                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
+                {
+                    sw.WriteLine(ex.Message);
+                }
             }
             finally
             {
@@ -434,6 +510,10 @@ namespace DiceBot
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("WebSocket closed.");
                     Console.ResetColor();
+                    using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
+                    {
+                        sw.WriteLine("socket closed");
+                    }
                 }
             }
         }
@@ -520,7 +600,7 @@ namespace DiceBot
 
         
     }
-
+*/
     public class socketbase
     {
         public string jsonrpc { get; set; }

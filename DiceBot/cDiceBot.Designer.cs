@@ -427,6 +427,7 @@
             this.safediceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.daDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rollinIOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bitDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -443,7 +444,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.bitDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
@@ -5335,6 +5335,14 @@
             this.rollinIOToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.rollinIOToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
+            // bitDiceToolStripMenuItem
+            // 
+            this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
+            this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.bitDiceToolStripMenuItem.Text = "BitDice";
+            this.bitDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.bitDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
             // settingsModeToolStripMenuItem
             // 
             this.settingsModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -5456,14 +5464,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
-            // 
-            // bitDiceToolStripMenuItem
-            // 
-            this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
-            this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.bitDiceToolStripMenuItem.Text = "BitDice";
-            this.bitDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.bitDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // betBindingSource
             // 

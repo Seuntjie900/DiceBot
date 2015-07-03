@@ -2020,6 +2020,10 @@ namespace DiceBot
                             PresetList(Win);
                         }
                     }
+                    if (RunningSimulation && Lastbet > dPreviousBalance)
+                    {
+                        Stop();
+                    }
                     if (!stop)
                     {
                         

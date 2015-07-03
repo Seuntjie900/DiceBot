@@ -18,7 +18,7 @@ namespace DiceBot
         long uid = 0;
         
         bool isD999 = true;
-        DateTime LastBaalance = DateTime.Now;
+        
         public static string[] cCurrencies =new string[] { "btc","doge","ltc" };
         public dice999(cDiceBot Parent)
         {
@@ -47,25 +47,25 @@ namespace DiceBot
             GetBalance();
             
         }
-
+        DateTime Lastbalance = DateTime.Now;
         void GetBalanceThread()
         {
             while (isD999)
             {
-                if (sessionCookie!="" && sessionCookie!=null && (DateTime.Now-LastBaalance).TotalSeconds>=60)
+                if (sessionCookie!="" && sessionCookie!=null && (DateTime.Now-Lastbalance).TotalSeconds>=60)
                 {
                      GetBalance();
 
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(1100);
             }
         }
 
         void GetBalance()
         {
-            if (sessionCookie != "" && sessionCookie != null)
+            if (sessionCookie != "" && sessionCookie != null && (DateTime.Now - Lastbalance).TotalSeconds>60)
             {
-                LastBaalance = DateTime.Now;
+                Lastbalance = DateTime.Now;
                 HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
@@ -84,6 +84,10 @@ namespace DiceBot
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
                 balance = (double)json.JsonDeserialize<d999Login>(sEmitResponse).Balance / 100000000.0;
+                if (balance == 0)
+                {
+
+                }
                 Parent.updateBalance((decimal)balance);
             }
         }
@@ -164,6 +168,10 @@ namespace DiceBot
                 if (tmpBet.ChanceTooHigh==1 || tmpBet.ChanceTooLow==1| tmpBet.InsufficientFunds == 1|| tmpBet.MaxPayoutExceeded==1|| tmpBet.NoPossibleProfit==1)
                 {
                     throw new Exception();
+                }
+                if (tmpBet.BetId==0)
+                {
+
                 }
                 balance = (double)tmpBet.StartingBalance / 100000000.0 - (amount) + ((double)tmpBet.PayOut / 100000000.0);
 
