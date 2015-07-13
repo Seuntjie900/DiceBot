@@ -46,18 +46,18 @@ namespace DiceBot
                     HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
-                    balance = tmp2.balance;
+                    balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0);
                     Parent.updateBalance((decimal)balance);
-                    balance = tmp2.balance / (Currency != "2" ? 100000000.0 : 1000000000000.0);
+                    
 
                     Parent.updateBets(tmp2.win + tmp2.lose);
                     Parent.updateLosses(tmp2.lose);
                     wins = (int)tmp2.win;
                     losses = (int)tmp2.lose;
-                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0));
-                    profit = (tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0);
-                    Parent.updateWagered(tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0));
-                    wagered = tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0);
+                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (curen != 2 ? 100000000.0 : 1000000000000.0));
+                    profit = (tmp2.amountWin - tmp2.amountLose) / (curen != 2 ? 100000000.0 : 1000000000000.0);
+                    Parent.updateWagered(tmp2.wagered / (curen != 2 ? 100000000.0 : 1000000000000.0));
+                    wagered = tmp2.wagered / (curen != 2 ? 100000000.0 : 1000000000000.0);
                     Parent.updateWins(tmp2.win);
                     
                     Parent.updateDeposit(GetDepositAddress());
@@ -76,7 +76,7 @@ namespace DiceBot
             {
                 try
                 {
-                    if ((DateTime.Now - LastBalance).TotalMinutes > 1 && accesstoken != "" && accesstoken != null)
+                    if ((DateTime.Now - LastBalance).TotalSeconds > 60 && accesstoken != "" && accesstoken != null)
                     {
                         HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/" + curen + "/me");
                         loginrequest.CookieContainer = new CookieContainer();
@@ -85,7 +85,7 @@ namespace DiceBot
                         HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                         string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                         SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
-                        balance = tmp2.balance;
+                        balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0); ;
                         Parent.updateBalance((decimal)balance);
                     }
 
@@ -172,17 +172,17 @@ namespace DiceBot
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
-                    Parent.updateBalance(tmp2.balance / (Currency != "2" ? 100000000m : 1000000000000m));
-                    balance = tmp2.balance / (Currency != "2" ? 100000000.0 : 1000000000000.0);
+                    Parent.updateBalance(tmp2.balance / (curen != 2 ? 100000000m : 1000000000000m));
+                    balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0);
 
                     Parent.updateBets(tmp2.win + tmp2.lose);
                     Parent.updateLosses(tmp2.lose);
                     wins = (int)tmp2.win;
                     losses = (int)tmp2.lose;
-                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0));
-                    profit = (tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0);
-                    Parent.updateWagered(tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0));
-                    wagered = tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0);
+                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (curen != 2 ? 100000000.0 : 1000000000000.0));
+                    profit = (tmp2.amountWin - tmp2.amountLose) / (curen != 2 ? 100000000.0 : 1000000000000.0);
+                    Parent.updateWagered(tmp2.wagered / (curen != 2 ? 100000000.0 : 1000000000000.0));
+                    wagered = tmp2.wagered / (curen != 2 ? 100000000.0 : 1000000000000.0);
                     Parent.updateWins(tmp2.win);
                     Parent.updateStatus("Logged in");
                     serverhash = tmp1.serverSeedHash;
@@ -225,7 +225,7 @@ namespace DiceBot
                 {
                     siteId = curen,
                     amount = (long)(amount * ( Currency!="2"? 100000000: 1000000000000)),
-                    payout = (double)(((long)((99.5 / chance) * (Currency != "2" ? 100000000 : 1000000000000))) / (Currency != "2" ? 100000000.0 : 1000000000000.0)),
+                    payout = (double)(((long)((99.5 / chance) * (curen != 2 ? 100000000 : 1000000000000))) / (curen != 2 ? 100000000.0 : 1000000000000.0)),
                     isFixedPayout = false,
                     isRollLow = !(bool)High,
                     target = ((bool)High) ? (999999 - ((long)(chance * 10000))).ToString() : ((long)(chance * 10000)).ToString()
@@ -248,14 +248,14 @@ namespace DiceBot
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 SafeDiceBetResult tmpResult = json.JsonDeserialize<SafeDiceBetResult>(sEmitResponse);
                 Bet bet = new Bet();
-                bet.Amount = (decimal)tmpResult.amount / (Currency != "2" ? 100000000m : 1000000000000m);
+                bet.Amount = (decimal)tmpResult.amount / (curen != 2 ? 100000000m : 1000000000000m);
                 bet.date = json.ToDateTime2(tmpResult.processTime);
                 bet.Chance = (!tmpResult.isRollLow ? 100m - (decimal)tmpResult.target / 1000000m * 100m : (decimal)tmpResult.target / 1000000m * 100m);
                 bet.high = !tmpResult.isRollLow;
                 bet.clientseed = client;
                 bet.Id = tmpResult.id;
                 bet.nonce = nonce++;
-                bet.Profit = tmpResult.profit / (Currency != "2" ? 100000000m : 1000000000000m);
+                bet.Profit = tmpResult.profit / (curen != 2 ? 100000000m : 1000000000000m);
                 bet.Roll = tmpResult.roll / 10000;
                 bet.serverhash = serverhash;
                 bet.uid = (int)tmpResult.accountId;
@@ -507,17 +507,17 @@ namespace DiceBot
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
 
-                    Parent.updateBalance(tmp2.balance / (Currency != "2" ? 100000000m : 1000000000000m));
-                    balance = tmp2.balance / (Currency != "2" ? 100000000.0 : 1000000000000.0);
+                    Parent.updateBalance(tmp2.balance / (curen != 2 ? 100000000m : 1000000000000m));
+                    balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0);
                     
                     Parent.updateBets(tmp2.win + tmp2.lose);
                     Parent.updateLosses(tmp2.lose);
                     wins = (int)tmp2.win;
                     losses = (int)tmp2.lose;
-                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0));
-                    profit = (tmp2.amountWin - tmp2.amountLose) / (Currency != "2" ? 100000000.0 : 1000000000000.0);
-                    Parent.updateWagered(tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0));
-                    wagered = tmp2.wagered / (Currency != "2" ? 100000000.0 : 1000000000000.0);
+                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (curen != 2 ? 100000000.0 : 1000000000000.0));
+                    profit = (tmp2.amountWin - tmp2.amountLose) / (curen != 2 ? 100000000.0 : 1000000000000.0);
+                    Parent.updateWagered(tmp2.wagered / (curen != 2 ? 100000000.0 : 1000000000000.0));
+                    wagered = tmp2.wagered / (curen != 2 ? 100000000.0 : 1000000000000.0);
                     Parent.updateWins(tmp2.win);
                     Parent.updateStatus("Logged in");
                     serverhash = tmp1.serverSeedHash;

@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
             this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -3876,7 +3876,6 @@
             // 
             // TrayIcon
             // 
-            this.TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayIcon.Icon")));
             this.TrayIcon.Text = "DiceBot";
             this.TrayIcon.Visible = true;
             this.TrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_Click);
@@ -4987,7 +4986,8 @@
             "labouchere(win:boolean):double",
             "fibonacci(win:bool):double",
             "dalembert(win:bool):double",
-            "presetlist(win:bool):double"});
+            "presetlist(win:bool):double",
+            "resetstats(): void"});
             this.listBox1.Location = new System.Drawing.Point(11, 222);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(261, 82);

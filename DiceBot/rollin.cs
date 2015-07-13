@@ -103,14 +103,22 @@ namespace DiceBot
                 }
 
             }
-            catch
+            catch (Exception E)
             {
-
+                Parent.updateStatus(E.Message);
+                if (Parent.logging > 1)
+                using (StreamWriter sw = File.AppendText("log.txt"))
+                {
+                    sw.WriteLine(E.Message);
+                    sw.WriteLine(E.StackTrace);
+                    sw.WriteLine(json.JsonSerializer<System.Collections.IDictionary> (E.Data));
+                }
             }
 
         }
         protected override void internalPlaceBet(bool High)
         {
+
             Thread T = new Thread(new ParameterizedThreadStart(PlaceBetThread));
             T.Start(High);
         }
@@ -222,88 +230,99 @@ namespace DiceBot
         string Token = "";
         public override void Login(string Username, string Password, string twofa)
         {
-            this.username = Username;
-            HttpWebRequest getHeaders = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/ref/8c4");
-            if (Prox != null)
-                getHeaders.Proxy = Prox;
-            var cookies = new CookieContainer();
-            getHeaders.CookieContainer = cookies;
-            
             try
             {
-                HttpWebResponse Response = (HttpWebResponse)getHeaders.GetResponse();
-                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                foreach (Cookie C in Response.Cookies)
+                this.username = Username;
+                HttpWebRequest getHeaders = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/ref/8c4");
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
+                var cookies = new CookieContainer();
+                getHeaders.CookieContainer = cookies;
+
+                try
                 {
-                    cookies.Add(C);
+                    HttpWebResponse Response = (HttpWebResponse)getHeaders.GetResponse();
+                    string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                    foreach (Cookie C in Response.Cookies)
+                    {
+                        cookies.Add(C);
+                    }
+                    s1 = s1.Substring(s1.IndexOf("<input name=\"_token\" type=\"hidden\""));
+                    s1 = s1.Substring("<input name=\"_token\" type=\"hidden\" value=\"".Length);
+                    Token = s1.Substring(0, s1.IndexOf("\""));
                 }
-                s1 = s1.Substring(s1.IndexOf("<input name=\"_token\" type=\"hidden\""));
-                s1 = s1.Substring("<input name=\"_token\" type=\"hidden\" value=\"".Length);
-                Token = s1.Substring(0, s1.IndexOf("\""));
+                catch
+                {
+                    finishedlogin(false);
+                    return;
+                }
+
+
+                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/login");
+                if (Prox != null)
+                    betrequest.Proxy = Prox;
+                betrequest.CookieContainer = cookies;
+
+                betrequest.Method = "POST";
+
+                string post = string.Format("username={0}&password={1}&code={2}", Username, Password, twofa);
+                betrequest.ContentLength = post.Length;
+                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                betrequest.Headers.Add("X-CSRF-Token", Token);
+                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                {
+
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                if (!sEmitResponse.ToLower().Contains("true"))
+                {
+                    finishedlogin(false);
+                    return;
+                }
+                this.Cookies = cookies;
+                HttpWebRequest betrequest2 = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/info?username=" + username);
+                if (Prox != null)
+                    betrequest2.Proxy = Prox;
+                betrequest2.CookieContainer = cookies;
+                betrequest2.Headers.Add("X-CSRF-Token", Token);
+                HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest2.GetResponse();
+                string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                RollinLoginStats tmpStats = json.JsonDeserialize<RollinLoginStats>(sEmitResponse2);
+
+                //https://rollin.io/api/customer/sync
+                betrequest2 = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/sync");
+                if (Prox != null)
+                    betrequest2.Proxy = Prox;
+                betrequest2.CookieContainer = cookies;
+                betrequest2.Headers.Add("X-CSRF-Token", Token);
+                EmitResponse2 = (HttpWebResponse)betrequest2.GetResponse();
+                sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                RollinBet tmpStats2 = json.JsonDeserialize<RollinBet>(sEmitResponse2);
+
+                if (tmpStats.success && tmpStats2.success)
+                {
+                    GetDeposit();
+                    balance = double.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0; //i assume
+                    bets = tmpStats.user.bets;
+                    profit = double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0;
+
+                    Parent.updateBalance((decimal)(balance));
+                    Parent.updateBets(tmpStats.user.bets);
+                    Parent.updateLosses(tmpStats.user.losses);
+                    Parent.updateProfit(double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
+                    Parent.updateWagered(double.Parse(tmpStats.user.wagered, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
+                    Parent.updateWins(tmpStats.user.wins);
+
+                    finishedlogin(true);
+                    return;
+                }
             }
             catch
             {
-                finishedlogin(false);
-                return;
+
             }
-
-            
-            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/login");
-            if (Prox != null)
-                betrequest.Proxy = Prox;
-            betrequest.CookieContainer = cookies;
-            
-            betrequest.Method = "POST";
-            
-            string post = string.Format("username={0}&password={1}&code={2}", Username, Password, twofa);
-            betrequest.ContentLength = post.Length;
-            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-            betrequest.Headers.Add("X-CSRF-Token", Token);
-            using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-            {
-
-                writer.Write(post);
-            }
-            HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-            this.Cookies = cookies;
-            HttpWebRequest betrequest2 = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/info?username=" + username);
-            if (Prox != null)
-                betrequest2.Proxy = Prox;
-            betrequest2.CookieContainer = cookies;
-            betrequest2.Headers.Add("X-CSRF-Token", Token);
-            HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest2.GetResponse();
-            string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-            RollinLoginStats tmpStats = json.JsonDeserialize<RollinLoginStats>(sEmitResponse2);
-
-            //https://rollin.io/api/customer/sync
-            betrequest2 = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/sync");
-            if (Prox != null)
-                betrequest2.Proxy = Prox;
-            betrequest2.CookieContainer = cookies;
-            betrequest2.Headers.Add("X-CSRF-Token", Token);
-            EmitResponse2 = (HttpWebResponse)betrequest2.GetResponse();
-            sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-            RollinBet tmpStats2 = json.JsonDeserialize<RollinBet>(sEmitResponse2);
-
-            if (tmpStats.success && tmpStats2.success)
-            {
-                GetDeposit();
-                balance = double.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo)/1000.0; //i assume
-                bets = tmpStats.user.bets;
-                profit = double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0;
-                
-                Parent.updateBalance((decimal)(balance));
-                Parent.updateBets(tmpStats.user.bets);
-                Parent.updateLosses(tmpStats.user.losses);
-                Parent.updateProfit(double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
-                Parent.updateWagered(double.Parse(tmpStats.user.wagered, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
-                Parent.updateWins(tmpStats.user.wins);
-                
-                finishedlogin(true);
-                return;
-            }
-            
             finishedlogin(false);
         }
 

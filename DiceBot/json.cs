@@ -23,9 +23,11 @@ namespace DiceBot
                 T obj = (T)ser.ReadObject(ms);
                 return obj;
             }
-            catch (Exception e)
+            catch (Exception E)
             {
-                throw e;
+                
+               
+                throw E;
             }
         }
 

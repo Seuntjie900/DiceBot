@@ -66,7 +66,9 @@ namespace DiceBot
                     ++wins;
                     LastBalance = DateTime.Now;
                     betcount = 0;
+                    Lastbet = DateTime.Now;
                     FinishedBet(tmp.roll.ToBet());
+
                 }
                 else
                 {
@@ -266,7 +268,7 @@ namespace DiceBot
 
         public override bool ReadyToBet()
         {
-            return (DateTime.Now-Lastbet).TotalMilliseconds>300;
+            return (DateTime.Now-Lastbet).TotalMilliseconds>500;
         }
 
         public override void Disconnect()

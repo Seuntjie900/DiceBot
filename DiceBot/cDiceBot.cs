@@ -27,7 +27,7 @@ namespace DiceBot
     public partial class cDiceBot : Form
     {
         Control[] ControlsToDisable;
-        private const string vers = "2.5.5";
+        private const string vers = "3.0.0";
         DateTime OpenTime = DateTime.UtcNow;
         Random r = new Random();
         Graph LiveGraph;
@@ -35,6 +35,7 @@ namespace DiceBot
         Simulate SimWindow;
         
         #region Variables
+        public int logging = 0;
         Random rand = new Random();
         bool retriedbet = false;
         double StartBalance = 0;        
@@ -154,6 +155,11 @@ namespace DiceBot
         delegate void dDobet(Bet bet);
         public void GetBetResult(double Balance, Bet bet)
         {
+            if (logging>2)
+            using (StreamWriter sw = File.AppendText("log.txt"))
+            {
+                sw.WriteLine(json.JsonSerializer<Bet>(bet));
+            }
             PreviousBalance = (double)Balance;
             profit += (double)bet.Profit;
             if (!RunningSimulation)
@@ -343,7 +349,7 @@ namespace DiceBot
                     "If this is the first time you are running Dice Bot, it is highly recommended you see the begginners guide"+
                     "\n\nGo to Beginners Guide now?", "Warning", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
                 {
-                    Process.Start("https://bitcointalk.org/index.php?topic=391870");
+                    Process.Start("https://bot.seuntjie.com/GettingStarted.aspx");
                 }
                 try
                 {
@@ -390,6 +396,7 @@ namespace DiceBot
             Lua.RegisterFunction("fibonacci", this, new dStrat(LuaFibonacci).Method);
             Lua.RegisterFunction("dalembert", this, new dStrat(LuaDAlember).Method);
             Lua.RegisterFunction("presetlist", this, new dStrat(LuaPreset).Method);
+            Lua.RegisterFunction("resetstats", this, new dResetStats(resetstats).Method);
         }
 
         delegate double dStrat(bool Win);
@@ -445,6 +452,9 @@ namespace DiceBot
         {
             return sqlite_helper.GetHistoryByQuery(Query);
         }
+
+        delegate void dResetStats();
+       
 
         delegate void dRunsim(double startingabalance, int bets);
         void runsim(double startingbalance, int bets)
@@ -548,7 +558,7 @@ namespace DiceBot
                     string newfeatures = ss.Length>1?"New features include: "+ss[1]:"";
                     if (MessageBox.Show("A new version of DiceBot is available. "+newfeatures+" \n\nDo you want to go to the download page now?","Update Available", MessageBoxButtons.YesNo)== System.Windows.Forms.DialogResult.Yes)
                     {
-                        Process.Start("http://sourceforge.net/projects/seuntjiejddb");
+                        Process.Start("http://bot.seuntjie.com/botpage.aspx");
                     }
                 }
             }
@@ -892,6 +902,7 @@ namespace DiceBot
                 Wins=  tmpwins ;
                 Losses = tmplosses;
                 StartBalance = tmpStartBalance ;
+                profit = tmpprofit;
             }
         }
 
@@ -3208,6 +3219,7 @@ namespace DiceBot
                         Emails.StreakSize = (int)Emails.StreakSize;
                         autoseeds = getvalue(saveditems, "AutoGetSeed") != "0";
                         maxRows = iparse(getvalue(saveditems, "NumLiveBets"));
+                        maxRows = maxRows <= 0 ? 1 : maxRows;
                     }
 
                 }
@@ -3671,6 +3683,7 @@ namespace DiceBot
         double tmpbalance = 0;
         int tmpwins = 0;
         int tmplosses = 0;
+        double tmpprofit = 0;
         double tmpStartBalance = 0;
         void runsim()
         {
@@ -3678,8 +3691,10 @@ namespace DiceBot
             tmpwins = Wins;
             tmplosses = Losses;
             tmpStartBalance = StartBalance;
+            tmpprofit = profit;
             StartBalance = dPreviousBalance = (double)SimWindow.nudSimBalance.Value;
             Wins = Losses = 0;
+            profit = 0;
             
             
             
@@ -3918,7 +3933,7 @@ namespace DiceBot
         }
         #endregion
 
-        private void btnResetStats_Click(object sender, EventArgs e)
+        void resetstats()
         {
             Wins = 0;
             Losses = 0;
@@ -3930,6 +3945,11 @@ namespace DiceBot
             Winstreak = Losestreak = BestStreak = laststreaklose = laststreakwin = WorstStreak = BestStreak2 = WorstStreak3 = BestStreak3 = WorstStreak3 = numstreaks = numwinstreasks = numlosesreaks = 0;
             avgloss = avgstreak = LargestBet = LargestLoss = LargestWin = avgwin = 0.0;
             UpdateStats();
+        }
+
+        private void btnResetStats_Click(object sender, EventArgs e)
+        {
+            resetstats();
         }
 
         private void btnSaveUser_Click(object sender, EventArgs e)
@@ -4386,6 +4406,11 @@ namespace DiceBot
                 sqlite_helper.AddBet(Bet as Bet, CurrentSite.Name);
                 dataGridView1.DataBindings.Clear();
                 Bet _Bet = (Bet as Bet);
+                if (logging > 2)
+                using (StreamWriter sw = File.AppendText("log.txt"))
+                {
+                    sw.WriteLine(json.JsonSerializer<Bet>(_Bet));
+                }
                 dataGridView1.Rows.Insert(0, _Bet.Id, _Bet.date, _Bet.Amount, _Bet.high, _Bet.Chance, _Bet.Roll,_Bet.Profit,_Bet.nonce );
                 if ( dataGridView1.Rows.Count >0 )
                 {
@@ -4402,7 +4427,7 @@ namespace DiceBot
                         }
                     }
                 }
-                while (dataGridView1.Rows.Count > maxRows)
+                while (dataGridView1.Rows.Count > maxRows && dataGridView1.Rows.Count>0)
                 {
                     dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 1);
                 }
