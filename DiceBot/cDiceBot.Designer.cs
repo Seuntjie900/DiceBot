@@ -5450,6 +5450,7 @@
             this.betterbetsToolStripMenuItem.Name = "betterbetsToolStripMenuItem";
             this.betterbetsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.betterbetsToolStripMenuItem.Text = "betterbets";
+            this.betterbetsToolStripMenuItem.Visible = false;
             this.betterbetsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.betterbetsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
