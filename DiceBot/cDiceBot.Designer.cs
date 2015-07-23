@@ -43,6 +43,9 @@
             this.btnHelpMartingale = new System.Windows.Forms.Button();
             this.rdbMartingale = new System.Windows.Forms.RadioButton();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.nudStretchLoss = new System.Windows.Forms.NumericUpDown();
             this.chkFirstResetLoss = new System.Windows.Forms.CheckBox();
             this.nudChangeChanceLoseTo = new System.Windows.Forms.NumericUpDown();
             this.label67 = new System.Windows.Forms.Label();
@@ -66,6 +69,9 @@
             this.lblAfter = new System.Windows.Forms.Label();
             this.lblMaxMultiplier = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.nudStretchWin = new System.Windows.Forms.NumericUpDown();
             this.chkFirstResetWin = new System.Windows.Forms.CheckBox();
             this.nudChangeChanceWinTo = new System.Windows.Forms.NumericUpDown();
             this.label68 = new System.Windows.Forms.Label();
@@ -428,6 +434,7 @@
             this.daDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rollinIOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bitDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.betterbetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -452,6 +459,7 @@
             this.tabControl1.SuspendLayout();
             this.tbMartingale.SuspendLayout();
             this.groupBox9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStretchLoss)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreakTo)).BeginInit();
@@ -461,6 +469,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxMultiplies)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).BeginInit();
             this.groupBox8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStretchWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinTo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinStreak)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreakTo)).BeginInit();
@@ -688,6 +697,9 @@
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.label17);
+            this.groupBox9.Controls.Add(this.label16);
+            this.groupBox9.Controls.Add(this.nudStretchLoss);
             this.groupBox9.Controls.Add(this.chkFirstResetLoss);
             this.groupBox9.Controls.Add(this.nudChangeChanceLoseTo);
             this.groupBox9.Controls.Add(this.label67);
@@ -712,10 +724,50 @@
             this.groupBox9.Controls.Add(this.lblMaxMultiplier);
             this.groupBox9.Location = new System.Drawing.Point(8, 27);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(406, 188);
+            this.groupBox9.Size = new System.Drawing.Size(406, 213);
             this.groupBox9.TabIndex = 2;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Multiplier on Loss";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(204, 180);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(25, 13);
+            this.label17.TabIndex = 130;
+            this.label17.Text = "loss";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(14, 180);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(98, 13);
+            this.label16.TabIndex = 129;
+            this.label16.Text = "Multiply after every ";
+            // 
+            // nudStretchLoss
+            // 
+            this.nudStretchLoss.Location = new System.Drawing.Point(118, 178);
+            this.nudStretchLoss.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudStretchLoss.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudStretchLoss.Name = "nudStretchLoss";
+            this.nudStretchLoss.Size = new System.Drawing.Size(75, 20);
+            this.nudStretchLoss.TabIndex = 128;
+            this.nudStretchLoss.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // chkFirstResetLoss
             // 
@@ -1002,6 +1054,9 @@
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.label18);
+            this.groupBox8.Controls.Add(this.label20);
+            this.groupBox8.Controls.Add(this.nudStretchWin);
             this.groupBox8.Controls.Add(this.chkFirstResetWin);
             this.groupBox8.Controls.Add(this.nudChangeChanceWinTo);
             this.groupBox8.Controls.Add(this.label68);
@@ -1024,12 +1079,52 @@
             this.groupBox8.Controls.Add(this.rdbWinConstant);
             this.groupBox8.Controls.Add(this.label47);
             this.groupBox8.Controls.Add(this.label54);
-            this.groupBox8.Location = new System.Drawing.Point(11, 234);
+            this.groupBox8.Location = new System.Drawing.Point(11, 246);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(406, 188);
+            this.groupBox8.Size = new System.Drawing.Size(406, 213);
             this.groupBox8.TabIndex = 1;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Multiplier on Win";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(201, 178);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(25, 13);
+            this.label18.TabIndex = 142;
+            this.label18.Text = "loss";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(11, 178);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(98, 13);
+            this.label20.TabIndex = 141;
+            this.label20.Text = "Multiply after every ";
+            // 
+            // nudStretchWin
+            // 
+            this.nudStretchWin.Location = new System.Drawing.Point(115, 176);
+            this.nudStretchWin.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudStretchWin.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudStretchWin.Name = "nudStretchWin";
+            this.nudStretchWin.Size = new System.Drawing.Size(75, 20);
+            this.nudStretchWin.TabIndex = 140;
+            this.nudStretchWin.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // chkFirstResetWin
             // 
@@ -1187,7 +1282,7 @@
             0,
             0});
             this.nudWinMaxMultiplies.Minimum = new decimal(new int[] {
-            999,
+            1,
             0,
             0,
             0});
@@ -2204,7 +2299,6 @@
             this.gbCustom.Controls.Add(this.nudMutawaMultiplier);
             this.gbCustom.Controls.Add(this.checkBox1);
             this.gbCustom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbCustom.Enabled = false;
             this.gbCustom.Location = new System.Drawing.Point(3, 3);
             this.gbCustom.Name = "gbCustom";
             this.gbCustom.Size = new System.Drawing.Size(447, 653);
@@ -4962,7 +5056,9 @@
             "bethigh:bool, RW",
             "lastBet:Bet, RO",
             "currencies:string[], RO. List of currencies available at current site",
-            "currency:string, RW. Current betting currency"});
+            "currency:string, RW. Current betting currency",
+            "enablersc: bool, RW",
+            "enablezz: bool, RW"});
             this.lbVariables.Location = new System.Drawing.Point(12, 22);
             this.lbVariables.Name = "lbVariables";
             this.lbVariables.Size = new System.Drawing.Size(262, 173);
@@ -4987,7 +5083,12 @@
             "fibonacci(win:bool):double",
             "dalembert(win:bool):double",
             "presetlist(win:bool):double",
-            "resetstats(): void"});
+            "resetstats(): void",
+            "setvalueint(name:string, value:int): void",
+            "setvaluestring(name:string, value:string): void",
+            "setvaluedouble(name:string, value:double): void",
+            "setvaluebool(name:string, value:bool): void",
+            "getvalue(name:string): object"});
             this.listBox1.Location = new System.Drawing.Point(11, 222);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(261, 82);
@@ -5271,7 +5372,8 @@
             this.safediceToolStripMenuItem,
             this.daDiceToolStripMenuItem,
             this.rollinIOToolStripMenuItem,
-            this.bitDiceToolStripMenuItem});
+            this.bitDiceToolStripMenuItem,
+            this.betterbetsToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -5342,6 +5444,14 @@
             this.bitDiceToolStripMenuItem.Text = "BitDice";
             this.bitDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // betterbetsToolStripMenuItem
+            // 
+            this.betterbetsToolStripMenuItem.Name = "betterbetsToolStripMenuItem";
+            this.betterbetsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.betterbetsToolStripMenuItem.Text = "betterbets";
+            this.betterbetsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.betterbetsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // settingsModeToolStripMenuItem
             // 
@@ -5493,6 +5603,7 @@
             this.tbMartingale.PerformLayout();
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStretchLoss)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeLoseStreakTo)).EndInit();
@@ -5503,6 +5614,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).EndInit();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStretchWin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinTo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinStreak)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeWinStreakTo)).EndInit();
@@ -6067,6 +6179,13 @@
         private System.Windows.Forms.ToolStripMenuItem rollinIOToolStripMenuItem;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ToolStripMenuItem bitDiceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem betterbetsToolStripMenuItem;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.NumericUpDown nudStretchLoss;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.NumericUpDown nudStretchWin;
 
     }
 }

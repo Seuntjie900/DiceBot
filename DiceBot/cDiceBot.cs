@@ -26,6 +26,7 @@ namespace DiceBot
     
     public partial class cDiceBot : Form
     {
+        Dictionary<string, Control> SaveNames = new Dictionary<string, Control>();
         Control[] ControlsToDisable;
         private const string vers = "3.0.0";
         DateTime OpenTime = DateTime.UtcNow;
@@ -215,7 +216,8 @@ namespace DiceBot
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture =  new CultureInfo("en-US");
             sqlite_helper.CheckDBS();
-            InitializeComponent(); 
+            InitializeComponent();
+            PopulateSaveNames();
             PopoutChat.SendMessage += PopoutChat_SendMessage;
             SimWindow = new Simulate(this);
             StatsWindows.btnResetStats.Click += btnResetStats_Click;
@@ -397,7 +399,22 @@ namespace DiceBot
             Lua.RegisterFunction("dalembert", this, new dStrat(LuaDAlember).Method);
             Lua.RegisterFunction("presetlist", this, new dStrat(LuaPreset).Method);
             Lua.RegisterFunction("resetstats", this, new dResetStats(resetstats).Method);
+            Lua.RegisterFunction("setvalueint", this, new dSetValue(SetValue).Method);
+            Lua.RegisterFunction("setvaluestring", this, new dSetValue1(SetValue).Method);
+            Lua.RegisterFunction("setvaluedouble", this, new dSetValue2(SetValue).Method);
+            Lua.RegisterFunction("setvaluebool", this, new dSetValue3(SetValue).Method);
+            Lua.RegisterFunction("getvalue", this, new dGetValue(getValue).Method);
+
+            
         }
+
+        delegate void dSetValue(string Name, int Value);
+        delegate void dSetValue1(string Name, string Value);
+        delegate void dSetValue2(string Name, double Value);
+        delegate void dSetValue3(string Name, bool Value);
+
+        delegate object dGetValue(string Name);
+
 
         delegate double dStrat(bool Win);
         double LuaMartingale(bool Win)
@@ -1360,7 +1377,8 @@ namespace DiceBot
                 {
                     WinMultiplier *= WinDevider;
                 }
-                Lastbet *= WinMultiplier;
+                if (Winstreak% (int)nudStretchWin.Value == 0)
+                    Lastbet *= WinMultiplier;
                 if (Winstreak == 1)
                 {
                     if(chkFirstResetWin.Checked && !chkMK.Checked)
@@ -1480,7 +1498,8 @@ namespace DiceBot
                     trazelwin = 0;
                 }
                 //set new bet size
-                Lastbet *= Multiplier;
+                if (Losestreak % (int)nudStretchLoss.Value == 0)
+                    Lastbet *= Multiplier;
                 if (Losestreak == 1)
                 {
                     if (chkFirstResetLoss.Checked)
@@ -1654,11 +1673,16 @@ namespace DiceBot
         double ProfitSinceLastReset = 0;
         double StreakProfitSinceLastReset = 0;
         double StreakLossSinceLastReset = 0;
-        
 
+        bool EnableReset = false;
+        bool EnableProgZigZag = false;
         public void DoBet(Bet bet)
         {
             bool Win = (((bool)bet.high ? (decimal)bet.Roll> (decimal)CurrentSite.maxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
+            if (!Win)
+            {
+
+            }
             double profit = (Double)bet.Profit;
             retriedbet = false;
             if (!stop && !reset)
@@ -1707,7 +1731,7 @@ namespace DiceBot
                                     laststreakwin = Winstreak;
                             }
                         
-                        if (!programmerToolStripMenuItem.Checked)
+                        if (!programmerToolStripMenuItem.Checked || EnableReset)
                         {
                             if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
                             {
@@ -1770,7 +1794,7 @@ namespace DiceBot
                     }
                     iMultiplyCounter = 0;                    
                     Multiplier = (double)(nudMultiplier.Value);
-                    if ((!programmerToolStripMenuItem.Checked))
+                    if ((!programmerToolStripMenuItem.Checked) || EnableProgZigZag)
                     {
                         if (chkZigZagWins.Checked && Wins% (int)nudZigZagWins.Value==0 && Wins!=0)
                         {
@@ -1818,7 +1842,7 @@ namespace DiceBot
                                 laststreaklose = Losestreak;
 
                     //switch high low if applied in the zig zag tab
-                    if ((!programmerToolStripMenuItem.Checked))
+                    if ((!programmerToolStripMenuItem.Checked) || EnableProgZigZag)
                     {
                         if (chkZigZagLoss.Checked && Losses % (int)nudZigZagLoss.Value == 0 && Losses != 0)
                         {
@@ -1849,7 +1873,7 @@ namespace DiceBot
                         }
                     }
 
-                    if (!programmerToolStripMenuItem.Checked )
+                    if (!programmerToolStripMenuItem.Checked || EnableReset)
                     {
                         if (chkResetBetLoss.Checked && Losestreak %nudResetBetLoss.Value == 0)
                         {
@@ -1933,7 +1957,7 @@ namespace DiceBot
                     WinMultiplier = (double)(nudWinMultiplier.Value);
 
                 }
-                if (chkZigZagBets.Checked && !programmerToolStripMenuItem.Checked)
+                if (chkZigZagBets.Checked && (!programmerToolStripMenuItem.Checked || EnableProgZigZag ))
                 {
                     if ((Wins+Losses) % (int)nudZigZagBets.Value == 0 && (Wins+Losses)!=0 )
                     {
@@ -2388,201 +2412,16 @@ namespace DiceBot
                 try
                 {
                     sw.WriteLine("SaveVersion|" + "3");
-                    sw.WriteLine("MinBet|"+nudMinBet.Value);
-                    sw.WriteLine("Multiplier|"+nudMultiplier.Value);
-                    sw.WriteLine("Chance|"+nudChance.Value);
-                    sw.WriteLine("MaxMultiply|"+nudMaxMultiplies.Value);
-                    sw.WriteLine("NBets|"+nudNbets.Value);
-                    sw.WriteLine("Devider|"+ nudDevider.Value);
-                    sw.Write("MultiplierMode|");
-                    if (rdbMaxMultiplier.Checked)
-                        sw.WriteLine("0");
-                    else if (rdbDevider.Checked)
-                        sw.WriteLine("1");
-                    else if (rdbConstant.Checked)
-                        sw.WriteLine("2");
-                    else sw.WriteLine("3");
-                    sw.Write("ReverseEnabled|");
-                   sw.Write("ResetBetLossEnabled|");
-                    if (chkResetBetLoss.Checked)
+                    for (int i = 0; i < SaveNames.Count; i++ )
                     {
-                        sw.WriteLine("1");
+                        sw.WriteLine(SaveNames.Keys.ToArray<string>()[i]+"|"+Convert.ToString(getValue(SaveNames.Keys.ToArray<string>()[i])));
                     }
-                    else
-                    {
-                        sw.WriteLine("0");
-                    }
-                    sw.WriteLine("ResetBetLossValue|"+nudResetBetLoss.Value.ToString());
-
-                    sw.Write("ResetBetWinsEnabled|");
-                    if (chkResetBetWins.Checked)
-                        sw.WriteLine("1");
-                    else
-                        sw.WriteLine("0");
-                    sw.WriteLine("ResetWinsValue|"+nudResetWins.Value.ToString());
-                    sw.WriteLine("WinMultiplier|" + nudWinMultiplier.Value);
-                    sw.WriteLine("WinMaxMultiplies|" + nudWinMaxMultiplies.Value);
-                    sw.WriteLine("WinNBets|" + nudWinNBets.Value);
-                    sw.WriteLine("WinDevider|" + nudWinDevider.Value);
-                    sw.Write("WinMultiplyMode|");
-                    if (rdbWinConstant.Checked)
-                        sw.WriteLine("0");
-                    else if (rdbWinDevider.Checked)
-                        sw.WriteLine("1");
-                    else if (rdbWinMaxMultiplier.Checked)
-                        sw.WriteLine("2");
-                    else if (rdbWinReduce.Checked)
-                        sw.WriteLine("3");
-
-                    string msg = "";
-                    
-                    
-                    if (chkStopLossStreak.Checked) msg = "1";
-                    else msg="0";
-                    sw.WriteLine("StopAfterLoseStreakEnabled|"+msg);                    
-                    sw.WriteLine("StopAfterLoseStreakValue|"+nudStopLossStreak.Value.ToString());
-                    
-                    if ( chkStopLossBtcStreak.Checked ) msg = "1";
-                    else msg="0";
-                    sw.WriteLine("StopAfterLoseStreakBtcEnabled|"+msg);
-                    sw.WriteLine("StopAfterLoseStreakBtcValue|"+nudStopLossBtcStreal.Value.ToString());
-                    
-                    if (  chkStopLossBtc.Checked ) msg = "1";
-                    else msg="0";
-                    sw.WriteLine("StopAfterLoseBtcEnabled|"+msg);
-                    sw.WriteLine("StopAfterLoseBtcValue|"+nudStopLossBtc.Value.ToString());
+                        sw.Close();
+                    sw.Dispose();
+                    return;
                     
                     
                     
-                    if ( chkChangeLoseStreak.Checked ) msg = "1";
-                    else msg="0";
-                    sw.WriteLine("ChangeAfterLoseStreakEnabled|"+msg);
-                    sw.WriteLine("ChangeAfterLoseStreakSize|"+nudChangeLoseStreak.Value.ToString());
-                    sw.WriteLine("ChangeAfterLoseStreakTo|"+nudChangeLoseStreakTo.Value.ToString());
-
-
-                    if (chkStopWinStreak.Checked) msg = "1";
-                    else msg = "0";
-                    sw.WriteLine("StopAfterWinStreakEnabled|" + msg);
-                    sw.WriteLine("StopAfterWinStreakValue|" + nudStopWinStreak.Value.ToString());
-                    if (chkStopWinBtcStreak.Checked) msg = "1";
-                    else msg = "0";
-                    sw.WriteLine("StopAfterWinStreakBtcEnabled|" + msg);
-                    sw.WriteLine("StopAfterWinStreakBtcValue|" + nudStopWinBtcStreak.Value.ToString());
-                    if (chkStopWinBtc.Checked) msg = "1";
-                    else msg = "0";
-                    sw.WriteLine("StopAfterWinBtcEnabled|" + msg);
-                    sw.WriteLine("StopAfterWinBtcValue|" + nudStopWinBtc.Value.ToString());
-
-                    if (chkChangeWinStreak.Checked) msg = "1";
-                    else msg = "0";
-                    sw.WriteLine("ChangeAfterWinStreakEnabled|" + msg);
-                    sw.WriteLine("ChangeAfterWinStreakSize|" + nudChangeWinStreak.Value.ToString());
-                    sw.WriteLine("ChangeAfterWinStreakTo|" + nudChangeWinStreakTo.Value.ToString());
-                    
-                    sw.WriteLine("ChangeChanceAfterLoseStreakEnabled|" + ((chkChangeChanceLose.Checked)?"1":"0"));
-                    sw.WriteLine("ChangeChanceAfterLoseStreakSize|" + nudChangeChanceLoseStreak.Value.ToString("00"));
-                    sw.WriteLine("ChangeChanceAfterLoseStreakValue|" + nudChangeChanceLoseTo.Value.ToString());
-
-                    sw.WriteLine("ChangeChanceAfterWinStreakEnabled|" + ((chkChangeChanceWin.Checked) ? "1" : "0"));
-                    sw.WriteLine("ChangeChanceAfterWinStreakSize|" + nudChangeChanceWinStreak.Value.ToString("00"));
-                    sw.WriteLine("ChangeChanceAfterWinStreakValue|" + nudChangeChanceWinTo.Value.ToString());
-                    sw.WriteLine("MutawaMultiplier|" + nudMutawaMultiplier.Value.ToString());
-                    sw.WriteLine("MutawaWins|" + nudMutawaWins.Value.ToString());
-                    sw.WriteLine("MutawaEnabled|"+(checkBox1.Checked?"1":"0"));
-                    
-
-                    sw.WriteLine("TrazalWin|" + nudTrazelWin.Value.ToString());
-                    sw.WriteLine("TrazalWinTo|" + nudtrazelwinto.Value.ToString());
-                    sw.WriteLine("TrazalLose|" + NudTrazelLose.Value.ToString("00"));
-                    sw.WriteLine("TrazalLoseTo|" + nudtrazelloseto.Value.ToString());
-                    sw.WriteLine("TrazelMultiPlier|" + nudTrazelMultiplier.Value.ToString());
-                    sw.WriteLine("TrazelEnabled|" + (chkTrazel.Checked ? "1" : "0"));
-
-                    sw.WriteLine("MKIncrement|" + nudMKIncrement.Value.ToString());
-                    sw.WriteLine("MKDecrement|" + nudMKDecrement.Value.ToString());
-                    sw.WriteLine("MKEnabled|" + (chkMK.Checked ? "1" : "0"));
-
-                    
-                    sw.WriteLine("LabReverse|" + (chkReverseLab.Checked ? "1" : "0"));
-                    string labtmp = "";
-                    foreach (string s in rtbBets.Lines)
-                    {
-                        if (labtmp != "")
-                            labtmp += "?";
-                        labtmp += s;
-                    }
-                    sw.WriteLine("LabValues|" + labtmp);
-                    sw.WriteLine("LabComplete|" + (rdbLabStop.Checked ? "2" : "1"));
-
-                    int Strat = 0;
-                    if (rdbMartingale.Checked)
-                        Strat = 0;
-                    else if (rdbLabEnable.Checked)
-                        Strat = 1;
-                    else if (rdbFibonacci.Checked)
-                        Strat = 2;
-                    else if (rdbAlembert.Checked)
-                        Strat = 3;
-                    else if (rdbPreset.Checked)
-                        Strat = 4;
-                    sw.WriteLine("Strategy|" + Strat);
-
-                    sw.WriteLine("FibonacciLoss|" + (rdbFiboLossIncrement.Checked ? "0" : rdbFiboLossReset.Checked ? "1" : "2"));
-                    sw.WriteLine("FibonacciWin|" + (rdbFiboWinIncrement.Checked ? "0" : rdbFiboWinReset.Checked ? "1" : "2"));
-                    sw.WriteLine("FibonacciLevel|" + (rdbFiboLevelStop.Checked ? "0" : "1"));
-                    sw.WriteLine("FibonacciLevelEnabled|" + (chkFiboLevel.Checked ? "0" : "1"));
-                    sw.WriteLine("FibonacciLossSteps|" + nudFiboLossIncrement.Value);
-                    sw.WriteLine("FibonacciWinSteps|" + nudFiboWinIncrement.Value);
-                    sw.WriteLine("FibonnaciLevelSteps|" + nudFiboLeve.Value);
-
-                    sw.WriteLine("dAlembertLossIncrement|" + nudAlembertIncrementLoss.Value);
-                    sw.WriteLine("dAlembertLossStretch|" + nudAlembertStretchLoss.Value);
-                    sw.WriteLine("dAlembertWinIncrement|" + nudAlembertIncrementWin.Value);
-                    sw.WriteLine("dAlembertWinStretch|" + nudAlembertStretchWin.Value);
-
-
-                    string presettmp = "";
-                    foreach (string s in rtbPresetList.Lines)
-                    {
-                        if (presettmp != "")
-                            presettmp += "?";
-                        presettmp += s;
-                    }
-                    sw.WriteLine("PresetValues|" + presettmp);
-                    sw.WriteLine("PresetEnd|"+ (rdbPresetEndReset.Checked?0:rdbPresetEndStep.Checked?1:2));
-                    sw.WriteLine("PresetEndStep|"+nudPresetEndStep.Value);
-                    sw.WriteLine("PresetLoss|" + (rdbPresetLossReset.Checked ? 0 : rdbPresetLossStep.Checked ? 1 : 2));
-                    sw.WriteLine("PresetLossStep|" + nudPresetLossStep.Value);
-                    sw.WriteLine("PresetWin|" + (rdbPresetWinReset.Checked ? 0 : rdbPresetWinStep.Checked ? 1 : 2));
-                    sw.WriteLine("PresetWinStep|" + nudPresetWinStep.Value);
-
-                    sw.WriteLine("ReverseWin|" + (chkZigZagWins.Checked ? "1" : "0"));
-                    sw.WriteLine("ReverseWinStreak|" + (chkZigZagWinsStreak.Checked ? "1" : "0"));
-                    sw.WriteLine("ReverseLoss|" + (chkZigZagLoss.Checked ? "1" : "0"));
-                    sw.WriteLine("ReverseLossStreak|" + (chkZigZagLossStreak.Checked ? "1" : "0"));
-                    sw.WriteLine("ReverseBet|" + (chkZigZagBets.Checked ? "1" : "0"));
-
-                    sw.WriteLine("ReverseWinValue|"+nudZigZagWins.Value);
-                    sw.WriteLine("ReverseWinStreakValue|" + nudZigZagWinsStreak.Value);
-                    sw.WriteLine("ReverseLossValue|" + nudZigZagLoss.Value);
-                    sw.WriteLine("ReverseLossStreakValue|" + nudZigZagLossStreak.Value);
-                    sw.WriteLine("ReverseBetValue|" + nudZigZagBets.Value);
-
-                    sw.WriteLine("ResetBtcStreakLoss|"+(chkResetBtcStreakLoss.Checked?"1":"0"));
-                    sw.WriteLine("ResetBtcStreakLossValue|"+nudResetBtcStreakLoss.Value.ToString());
-                    sw.WriteLine("ResetBtcLoss|"+(chkResetBtcLoss.Checked?"1":"0"));
-                    sw.WriteLine("ResetBtcLossValue|" + nudResetBtcLoss.Value.ToString());
-
-                    sw.WriteLine("ResetBtcStreakProfit|" + (chkResetBtcStreakProfit.Checked ? "1" : "0"));
-                    sw.WriteLine("ResetBtcStreakProfitValue|" + nudResetBtcStreakProfit.Value.ToString());
-                    sw.WriteLine("ResetBtcProfit|" + (chkResetBtcProfit.Checked ? "1" : "0"));
-                    sw.WriteLine("ResetBtcProfitValue|" + nudResetBtcProfit.Value.ToString());
-
-                    sw.WriteLine("FirstResetLoss|" + (chkFirstResetLoss.Checked ? "1" : "0"));
-                    sw.WriteLine("FirstResetWin|" + (chkFirstResetWin.Checked ? "1" : "0"));
-                    
-
                 }
                 catch
                 {
@@ -2784,6 +2623,26 @@ namespace DiceBot
                             }
                         }
                     }
+                    bool safe = true;
+                    string errors = "";
+                    foreach (SavedItem t in saveditems)
+                    {
+                        try
+                        {
+                            SetValue(t.Name, t.Value);
+                        }
+                        catch
+                        {
+                            errors += t.Name+", ";
+                            safe = false;
+                        }
+                    }
+                    variabledisable();
+                    if (!safe)
+                    {
+                        MessageBox.Show("There was a problem loading the following settnigs: " +errors);
+                    }
+                    return true;
                     nudAmount.Value=decimal.Parse(getvalue( saveditems, "Amount"));
                     nudLimit.Value = decimal.Parse(getvalue(saveditems, "Limit"));
                     chkLimit.Checked= (getvalue(saveditems, "LimitEnabled") == "1");
@@ -2945,7 +2804,7 @@ namespace DiceBot
                     if (tmp.Length > 0)
                     {
                         if (tmp[0] != "0-0-0")
-                            rtbBets.Lines = tmp;
+                            rtbPresetList.Lines = tmp;
                     }
                     temp = getvalue(saveditems, "PresetEnd");
                     rdbPresetEndReset.Checked = temp == "0";
@@ -2990,12 +2849,13 @@ namespace DiceBot
 
                     chkFirstResetLoss.Checked = getvalue(saveditems, "FirstResetLoss") == "1";
                     chkFirstResetWin.Checked = getvalue(saveditems, "FirstResetWin") == "1";
+                    nudStretchLoss.Value = (decimal)dparse(getvalue(saveditems, "MartingaleStretchLoss"), ref convert);
+                    nudStretchWin.Value = (decimal)dparse(getvalue(saveditems, "MartingaleStretchWin"), ref convert);
                 }
 
                 
                 
-                variabledisable();
-                return true;
+                
             }
             catch
             {
@@ -4417,8 +4277,8 @@ namespace DiceBot
                     
                     if (dataGridView1.Rows[0].Cells[6].Value != null)
                     {
-                        if (((bool)dataGridView1.Rows[0].Cells[3].Value ? (decimal)dataGridView1.Rows[0].Cells[5].Value < (decimal)CurrentSite.maxRoll - (decimal)(dataGridView1.Rows[0].Cells[4].Value) : (decimal)dataGridView1.Rows[0].Cells[5].Value > (decimal)(dataGridView1.Rows[0].Cells[4].Value)))
-                        {
+                        if (!((bool)_Bet.high ? (decimal)_Bet.Roll > (decimal)CurrentSite.maxRoll - (decimal)(_Bet.Chance) : (decimal)_Bet.Roll < (decimal)(_Bet.Chance)))
+                         {
                             dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.Pink;
                         }
                         else
@@ -4957,12 +4817,17 @@ namespace DiceBot
                     case "daDiceToolStripMenuItem": CurrentSite = new dadice(this); siteToolStripMenuItem.Text = "Site (DAD)"; break;
                     case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
                     case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
+                    //case "betterbetsToolStripMenuItem": CurrentSite = new BB(this); siteToolStripMenuItem.Text = "Site (BB)"; break;
                        
                 }
                 if (CurrentSite is dadice)
                 {
                     lblPass.Text = "API key:";
                 }
+                /*else if (CurrentSite is BB)
+                {
+                    lblPass.Text = "AUTH Token";
+                }*/
                 else
                 {
                     lblPass.Text = "Password:";
@@ -5047,7 +4912,9 @@ namespace DiceBot
                 Lua["wins"] = Wins;
                 Lua["losses"] = Losses;
                 Lua["currencies"] = CurrentSite.Currencies;
-                Lua["currency"] = CurrentSite.Currency;
+                Lua["currency"] = CurrentSite.Currency;                
+                Lua["enablersc"] = EnableReset;
+                Lua["enablezz"] = EnableProgZigZag;
             }
             catch (Exception e)
             {
@@ -5067,6 +4934,8 @@ namespace DiceBot
                 CurrentSite.amount = Lastbet;
                 CurrentSite.chance = Chance;
                 CurrentSite.Currency = (string)Lua["currency"];
+                EnableReset = (bool)Lua["enablesrc"];
+                EnableProgZigZag = (bool)Lua["enablezz"];
             }
             catch
             {
@@ -5305,6 +5174,486 @@ namespace DiceBot
                     MessageBox.Show("Could not save code to file.");
                 }
             }
+        }
+
+
+        object getValue(string key)
+        {
+            if (SaveNames.ContainsKey(key))
+            {
+                Control c = SaveNames[key];
+                if (c is TextBox)
+                    return (c as TextBox).Text;
+                else if (c is NumericUpDown)
+                    return (c as NumericUpDown).Value;
+                else if (c is RadioButton)
+                {
+                    if (key == "MultiplierMode")
+                    return rdbMaxMultiplier.Checked? "0" : rdbDevider.Checked ?"1": rdbConstant.Checked ?"2":"3";
+                    
+                    if (key == "WinMultiplyMode")
+                    {
+                        return rdbWinConstant.Checked? "0": rdbWinDevider.Checked ? "1":
+                        rdbWinMaxMultiplier.Checked ? "2":"3";
+
+                    }
+                    if (key == "LabComplete")
+                    {
+                        return rdbLabRestart.Checked ? "1":"2";
+                    }
+                    if (key == "Strategy")
+                    {
+                        return rdbMartingale.Checked ?"0":
+                        rdbLabEnable.Checked ?"1":
+                        rdbFibonacci.Checked ?"2":
+                        rdbAlembert.Checked ?"3":"4";
+                    }
+                    if (key == "FibonacciLoss")
+                    {
+                        return rdbFiboLossIncrement.Checked ?"0":
+                            rdbFiboLossReset.Checked ?"1":"2";
+                    }
+                    if (key == "FibonacciWin")
+                    {
+                        return rdbFiboWinIncrement.Checked ?"0":
+                        rdbFiboWinReset.Checked ?"1":"2";
+                    }
+                    if (key == "FibonacciLevel")
+                    {
+                       return  rdbFiboLevelStop.Checked ?"0":"1";
+
+                    }
+                    if (key == "PresetEnd")
+                    {
+                        return rdbPresetEndReset.Checked ?"0":
+                        rdbPresetEndStep.Checked ?"1":"2";
+                    }
+                    if (key == "PresetLoss")
+                    {
+                        return rdbPresetLossReset.Checked ?"0":
+                        rdbPresetLossStep.Checked ?"1":"2";
+                    }
+                    if (key == "PresetWin")
+                    {
+                        return rdbPresetWinReset.Checked ?"0":
+                        rdbPresetWinStep.Checked ?"1":"2";
+                    }
+                }
+                else if (c is CheckBox)
+                    return (c as CheckBox).Checked;
+                else if (c is RichTextBox)
+                    return (c as RichTextBox).Lines;
+
+                return null;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        void SetValue(string Key, int value)
+        {
+            if (SaveNames.ContainsKey(Key))
+            {
+                Control c = SaveNames[Key];
+                if (c == null)
+                {
+
+                    //sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked ? "0" : advancedToolStripMenuItem.Checked ? "1" : "2"));
+                    //sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked ? "0" : primeDiceToolStripMenuItem.Checked ? "1" : pocketRocketsCasinoToolStripMenuItem.Checked ? "2" : diceToolStripMenuItem.Checked ? "3" : safediceToolStripMenuItem.Checked ? "4" : daDiceToolStripMenuItem.Checked ? "5" : rollinIOToolStripMenuItem.Checked ? "6" : bitDiceToolStripMenuItem.Checked ? "7" : "1"));
+                    if (Key == "SettingsMode")
+                    {
+                        justDiceToolStripMenuItem.Checked = value == 0;
+                        primeDiceToolStripMenuItem.Checked = value == 1;
+                        pocketRocketsCasinoToolStripMenuItem.Checked = value == 2;
+                        diceToolStripMenuItem.Checked = value == 3;
+                        safediceToolStripMenuItem.Checked = value == 4;
+                        daDiceToolStripMenuItem.Checked = value == 5;
+                        rollinIOToolStripMenuItem.Checked = value == 6;
+                        bitDiceToolStripMenuItem.Checked = value == 7;
+                        if (value > 7)
+                        {
+                            justDiceToolStripMenuItem.Checked = true; ;
+                        }
+
+                    }
+                    else if (Key == "Site")
+                    {
+
+                        basicToolStripMenuItem.Checked = value == 0;
+                        advancedToolStripMenuItem.Checked = value == 1;
+                        programmerToolStripMenuItem.Checked = value == 2;
+                    }
+                }
+                else if (c is NumericUpDown)
+                    (c as NumericUpDown).Value = Convert.ToDecimal(value);
+                else if (c is RadioButton)
+                {
+                    if (Key == "MultiplierMode")
+                    {
+                        
+                        rdbMaxMultiplier.Checked = value==0;                            
+                        rdbDevider.Checked = value ==1;
+                        rdbConstant.Checked = value == 2;                            
+                        rdbReduce.Checked = value == 3;
+                    }
+                    if (Key == "WinMultiplyMode")
+                    {
+                        rdbWinConstant.Checked = value == 0;
+                        rdbWinDevider.Checked = value == 1;                            
+                        rdbWinMaxMultiplier.Checked= value == 2;
+                        rdbWinReduce.Checked = value == 3;
+                            
+                    }
+                    if ( Key == "LabComplete")
+                    {
+                        rdbLabRestart.Checked = value==1;
+                        rdbLabStop.Checked = value== 2;
+                    }
+                    if (Key == "Strategy")
+                    {
+                        rdbMartingale.Checked = value == 0;
+                        rdbLabEnable.Checked = value == 1;
+                        rdbFibonacci.Checked = value == 2;
+                        rdbAlembert.Checked = value == 3;
+                        rdbPreset.Checked = value == 4;
+                    }
+                    if (Key == "FibonacciLoss")
+                    {
+                        rdbFiboLossIncrement.Checked =value== 0;
+                        rdbFiboLossReset.Checked = value==1;
+                        rdbFiboLossStop.Checked = value== 2;
+                    }
+                    if (Key == "FibonacciWin")
+                    {
+                        rdbFiboWinIncrement.Checked = value == 0;
+                        rdbFiboWinReset.Checked = value == 1;
+                        rdbFiboWinStop.Checked = value == 2;
+                    }
+                    if (Key == "FibonacciLevel")
+                    {
+                       rdbFiboLevelStop.Checked = value == 0;
+                       rdbFiboLevelReset.Checked = value == 1;
+                        
+                    }
+                    if (Key == "PresetEnd")
+                    {
+                        rdbPresetEndReset.Checked = value == 0;
+                        rdbPresetEndStep.Checked = value == 1;
+                        rdbPresetEndStop.Checked = value == 2;
+                    }
+                    if (Key == "PresetLoss")
+                    {
+                        rdbPresetLossReset.Checked = value == 0;
+                        rdbPresetLossStep.Checked = value == 1;
+                        rdbPresetLossStop.Checked = value == 2;
+                    }
+                    if (Key == "PresetWin")
+                    {
+                        rdbPresetWinReset.Checked = value == 0;
+                        rdbPresetWinStep.Checked = value == 1;
+                        rdbPresetWinStop.Checked = value == 2;
+                    }
+                    
+                }
+                else if (c is CheckBox)
+                    (c as CheckBox).Checked = value == 1;
+            }
+        }
+        void SetValue(string Key, string value)
+        {
+            if (SaveNames.ContainsKey(Key))
+            {
+
+                Control c = SaveNames[Key];
+                if (c == null)
+                {
+
+                    //sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked ? "0" : advancedToolStripMenuItem.Checked ? "1" : "2"));
+                    //sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked ? "0" : primeDiceToolStripMenuItem.Checked ? "1" : pocketRocketsCasinoToolStripMenuItem.Checked ? "2" : diceToolStripMenuItem.Checked ? "3" : safediceToolStripMenuItem.Checked ? "4" : daDiceToolStripMenuItem.Checked ? "5" : rollinIOToolStripMenuItem.Checked ? "6" : bitDiceToolStripMenuItem.Checked ? "7" : "1"));
+                    if (Key == "SettingsMode")
+                    {
+                        justDiceToolStripMenuItem.Checked = value == "0";
+                        primeDiceToolStripMenuItem.Checked = value == "1";
+                        pocketRocketsCasinoToolStripMenuItem.Checked = value == "2";
+                        diceToolStripMenuItem.Checked = value == "3";
+                        safediceToolStripMenuItem.Checked = value == "4";
+                        daDiceToolStripMenuItem.Checked = value == "5";
+                        rollinIOToolStripMenuItem.Checked = value == "6";
+                        bitDiceToolStripMenuItem.Checked = value == "7";
+                        
+                        
+                    }
+                    else if (Key == "Site")
+                    {
+                        
+                        basicToolStripMenuItem.Checked = value == "0";
+                        advancedToolStripMenuItem.Checked = value == "1";
+                        programmerToolStripMenuItem.Checked = value == "2";
+                    }
+                }
+                else if (c is TextBox)
+                    (c as TextBox).Text = value;
+                else if (c is NumericUpDown)
+                    (c as NumericUpDown).Value = Convert.ToDecimal(value);
+                else if (c is RadioButton)
+                {
+                    if (Key == "MultiplierMode")
+                    {
+                        
+                        rdbMaxMultiplier.Checked = value=="0";                            
+                        rdbDevider.Checked = value =="1";
+                        rdbConstant.Checked = value == "2";                            
+                        rdbReduce.Checked = value == "3";
+                    }
+                    if (Key == "WinMultiplyMode")
+                    {
+                        rdbWinConstant.Checked = value == "0";
+                        rdbWinDevider.Checked = value == "1";                            
+                        rdbWinMaxMultiplier.Checked= value == "2";
+                        rdbWinReduce.Checked = value == "3";
+                            
+                    }
+                    if ( Key == "LabComplete")
+                    {
+                        rdbLabRestart.Checked = value=="1";
+                        rdbLabStop.Checked = value== "2";
+                    }
+                    if (Key == "Strategy")
+                    {
+                        rdbMartingale.Checked = value =="0";
+                        rdbLabEnable.Checked = value == "1";
+                        rdbFibonacci.Checked = value == "2";
+                        rdbAlembert.Checked = value == "3";
+                        rdbPreset.Checked = value == "4";
+                    }
+                    if (Key == "FibonacciLoss")
+                    {
+                        rdbFiboLossIncrement.Checked =value== "0";
+                        rdbFiboLossReset.Checked = value=="1";
+                        rdbFiboLossStop.Checked = value== "2";
+                    }
+                    if (Key == "FibonacciWin")
+                    {
+                        rdbFiboWinIncrement.Checked = value == "0";
+                        rdbFiboWinReset.Checked = value == "1";
+                        rdbFiboWinStop.Checked = value == "2";
+                    }
+                    if (Key == "FibonacciLevel")
+                    {
+                       rdbFiboLevelStop.Checked = value == "0";
+                       rdbFiboLevelReset.Checked = value == "1";
+                        
+                    }
+                    if (Key == "PresetEnd")
+                    {
+                        rdbPresetEndReset.Checked = value == "0";
+                        rdbPresetEndStep.Checked = value == "1";
+                        rdbPresetEndStop.Checked = value == "2";
+                    }
+                    if (Key == "PresetLoss")
+                    {
+                        rdbPresetLossReset.Checked = value == "0";
+                        rdbPresetLossStep.Checked = value == "1";
+                        rdbPresetLossStop.Checked = value == "2";
+                    }
+                    if (Key == "PresetWin")
+                    {
+                        rdbPresetWinReset.Checked = value == "0";
+                        rdbPresetWinStep.Checked = value == "1";
+                        rdbPresetWinStop.Checked = value == "2";
+                    }
+                    if (Key=="OnStop")
+                    {
+                        rdbInvest.Checked= value =="0";
+                        rdbStop.Checked = value == "1";
+                        rdbWithdraw.Checked = value == "2";
+                    }
+                    if (Key == "ResetSeedMode")
+                    {
+                        rdbResetSeedBets.Checked = value =="0";
+                        rdbResetSeedWins.Checked = value == "1";
+                        rdbResetSeedLosses.Checked = value == "2";
+                    }
+
+                
+                }
+                else if (c is CheckBox)
+                    (c as CheckBox).Checked = value == "1";
+                else if (c is RichTextBox)
+                    (c as RichTextBox).Lines = value.Split('?');
+                
+            }
+        }
+        void SetValue(string Key, double value)
+        {
+            if (SaveNames.ContainsKey(Key))
+            {
+                Control c = SaveNames[Key];
+                if (c is NumericUpDown)
+                    (c as NumericUpDown).Value = Convert.ToDecimal(value);
+            }
+        }
+        void SetValue(string Key, bool value)
+        {
+            if (SaveNames.ContainsKey(Key))
+            {
+                Control c = SaveNames[Key];
+                if (c is CheckBox)
+                    (c as CheckBox).Checked = value;
+            }
+        }
+
+        void PopulateSaveNames()
+        {
+            SaveNames.Add("MinBet", nudMinBet);
+            SaveNames.Add("Multiplier", nudMultiplier);
+            SaveNames.Add("Chance", nudChance);
+            SaveNames.Add("MaxMultiply", nudMaxMultiplies);
+            SaveNames.Add("NBets", nudNbets);
+            SaveNames.Add("Devider", nudDevider);
+            SaveNames.Add("MultiplierMode", rdbMaxMultiplier);
+            SaveNames.Add("ResetBetLossEnabled", chkResetBetLoss);
+            SaveNames.Add("ResetBetLossValue", nudResetBetLoss);
+            SaveNames.Add("ResetBetWinsEnabled", chkResetBetWins);
+            SaveNames.Add("ResetWinsValue", nudResetWins);
+            SaveNames.Add("WinMultiplier", nudWinMultiplier);
+            SaveNames.Add("WinMaxMultiplies", nudWinMaxMultiplies);
+            SaveNames.Add("WinNBets", nudWinNBets);
+            SaveNames.Add("WinDevider", nudWinDevider);
+            SaveNames.Add("WinMultiplyMode", rdbWinConstant);
+            SaveNames.Add("StopAfterLoseStreakEnabled", chkStopLossStreak);
+            SaveNames.Add("StopAfterLoseStreakValue", nudStopLossStreak);
+            SaveNames.Add("StopAfterLoseStreakBtcEnabled", chkStopLossBtcStreak);
+            SaveNames.Add("StopAfterLoseStreakBtcValue", nudStopLossBtcStreal);
+            SaveNames.Add("StopAfterLoseBtcEnabled", chkStopLossBtc);
+            SaveNames.Add("StopAfterLoseBtcValue", nudStopLossBtc);
+            
+            /*sw.Write("MultiplierMode|");
+            if (rdbMaxMultiplier.Checked)
+                sw.WriteLine("0");
+            else if (rdbDevider.Checked)
+                sw.WriteLine("1");
+            else if (rdbConstant.Checked)
+                sw.WriteLine("2");
+            else sw.WriteLine("3");*/            
+            /*sw.Write("WinMultiplyMode|");
+            if (rdbWinConstant.Checked)
+                sw.WriteLine("0");
+            else if (rdbWinDevider.Checked)
+                sw.WriteLine("1");
+            else if (rdbWinMaxMultiplier.Checked)
+                sw.WriteLine("2");
+            else if (rdbWinReduce.Checked)
+                sw.WriteLine("3");*/
+
+            SaveNames.Add("ChangeAfterLoseStreakEnabled", chkChangeLoseStreak);
+            SaveNames.Add("ChangeAfterLoseStreakSize", nudChangeLoseStreak);
+            SaveNames.Add("ChangeAfterLoseStreakTo", nudChangeLoseStreakTo);
+            SaveNames.Add("StopAfterWinStreakEnabled", chkStopWinStreak);
+            SaveNames.Add("StopAfterWinStreakValue", nudStopWinStreak);
+            SaveNames.Add("StopAfterWinStreakBtcEnabled", chkStopWinBtcStreak);
+            SaveNames.Add("StopAfterWinStreakBtcValue", nudStopWinBtcStreak);
+            SaveNames.Add("StopAfterWinBtcEnabled", chkStopWinBtc);
+            SaveNames.Add("StopAfterWinBtcValue", nudStopWinBtc);
+            SaveNames.Add("ChangeAfterWinStreakEnabled", chkChangeWinStreak);
+            SaveNames.Add("ChangeAfterWinStreakSize", nudChangeWinStreak);
+            SaveNames.Add("ChangeAfterWinStreakTo", nudChangeWinStreakTo);
+
+            SaveNames.Add("ChangeChanceAfterLoseStreakEnabled", chkChangeChanceLose);
+            SaveNames.Add("ChangeChanceAfterLoseStreakSize", nudChangeChanceLoseStreak);
+            SaveNames.Add("ChangeChanceAfterLoseStreakValue", nudChangeChanceLoseTo);
+            SaveNames.Add("ChangeChanceAfterWinStreakEnabled", chkChangeChanceWin);
+            SaveNames.Add("ChangeChanceAfterWinStreakSize", nudChangeChanceWinStreak);
+            SaveNames.Add("ChangeChanceAfterWinStreakValue", nudChangeChanceWinTo);
+            SaveNames.Add("MutawaMultiplier", nudMutawaMultiplier);
+            SaveNames.Add("MutawaWins", nudMutawaWins);
+            SaveNames.Add("MutawaEnabled", checkBox1);
+
+            SaveNames.Add("TrazalWin", nudTrazelWin);
+            SaveNames.Add("TrazalWinTo", nudtrazelwinto);
+            SaveNames.Add("TrazalLose", NudTrazelLose);
+            SaveNames.Add("TrazalLoseTo", nudtrazelloseto);
+            SaveNames.Add("TrazelMultiPlier", nudTrazelMultiplier);
+            SaveNames.Add("TrazelEnabled", chkTrazel);
+            SaveNames.Add("MKIncrement", nudMKIncrement);
+            SaveNames.Add("MKDecrement", nudMKDecrement);
+            SaveNames.Add("MKEnabled", chkMK);
+
+            SaveNames.Add("LabReverse", chkReverseLab);
+            SaveNames.Add("LabValues", rtbBets);
+            SaveNames.Add("LabComplete", rdbLabStop );
+
+            SaveNames.Add("Strategy", rdbMartingale);
+            
+            SaveNames.Add("FibonacciLoss", rdbFiboLossIncrement);
+            SaveNames.Add("FibonacciWin", rdbFiboWinIncrement);
+            SaveNames.Add("FibonacciLevel", rdbFiboLevelStop);
+            SaveNames.Add("FibonacciLevelEnabled", chkFiboLevel);
+            SaveNames.Add("FibonacciLossSteps", nudFiboLossIncrement);
+            SaveNames.Add("FibonacciWinSteps", nudFiboWinIncrement);
+            SaveNames.Add("FibonnaciLevelSteps", nudFiboLeve);
+            
+            SaveNames.Add("dAlembertLossIncrement", nudAlembertIncrementLoss);
+            SaveNames.Add("dAlembertLossStretch", nudAlembertStretchLoss);
+            SaveNames.Add("dAlembertWinIncrement", nudAlembertIncrementWin);
+            SaveNames.Add("dAlembertWinStretch", nudAlembertStretchWin);
+            
+            SaveNames.Add("PresetValues", rtbPresetList);
+            SaveNames.Add("PresetEnd", rdbPresetEndReset);
+            SaveNames.Add("PresetEndStep", nudPresetEndStep);
+            SaveNames.Add("PresetLoss", rdbPresetLossReset);
+            SaveNames.Add("PresetLossStep", nudPresetLossStep);
+            SaveNames.Add("PresetWin", rdbPresetWinReset);
+            SaveNames.Add("PresetWinStep", nudPresetWinStep);
+
+            SaveNames.Add("ReverseWin", chkZigZagWins);
+            SaveNames.Add("ReverseWinStreak", chkZigZagWinsStreak);
+            SaveNames.Add("ReverseLoss", chkZigZagLoss);
+            SaveNames.Add("ReverseLossStreak", chkZigZagLossStreak);
+            SaveNames.Add("ReverseBet", chkZigZagBets);
+            SaveNames.Add("ReverseWinValue",nudZigZagWins );
+            SaveNames.Add("ReverseWinStreakValue", nudZigZagWinsStreak);
+            SaveNames.Add("ReverseLossValue", nudZigZagLoss);
+            SaveNames.Add("ReverseLossStreakValue",nudZigZagLossStreak );
+            SaveNames.Add("ReverseBetValue", nudZigZagBets);
+            
+            SaveNames.Add("ResetBtcStreakLoss", chkResetBtcStreakLoss);
+            SaveNames.Add("ResetBtcStreakLossValue", nudResetBtcStreakLoss);
+            SaveNames.Add("ResetBtcLoss",chkResetBtcLoss );
+            SaveNames.Add("ResetBtcLossValue", nudResetBtcLoss);
+
+            SaveNames.Add("ResetBtcStreakProfit",chkResetBtcStreakProfit );
+            SaveNames.Add("ResetBtcStreakProfitValue", nudResetBtcStreakProfit);
+            SaveNames.Add("ResetBtcProfit", chkResetBtcProfit);
+            SaveNames.Add("ResetBtcProfitValue", nudResetBtcProfit);
+
+            SaveNames.Add("FirstResetLoss", chkFirstResetLoss);
+            SaveNames.Add("FirstResetWin", chkFirstResetWin);
+            
+            SaveNames.Add("MartingaleStretchLoss", nudStretchLoss);
+            SaveNames.Add("MartingaleStretchWin", nudStretchWin);
+
+            SaveNames.Add("Amount",nudAmount );
+            SaveNames.Add("Limit", nudLimit);
+            SaveNames.Add("LimitEnabled", chkLimit);
+            SaveNames.Add("LowerLimit",nudLowerLimit );
+            SaveNames.Add("LowerLimitEnabled", chkLowerLimit);
+            SaveNames.Add("To", txtTo);
+            SaveNames.Add("OnStop", rdbInvest);
+                        
+            SaveNames.Add("LastStreakWin", StatsWindows.nudLastStreakWin);
+            SaveNames.Add("LastStreakLose", StatsWindows.nudLastStreakLose);
+            SaveNames.Add("BotSpeedEnabled", chkBotSpeed);
+            SaveNames.Add("BotSpeedValue", nudBotSpeed);
+            SaveNames.Add("ResetSeedEnabled", chkResetSeed);
+            SaveNames.Add("ResetSeedMode", rdbResetSeedBets);
+
+            SaveNames.Add("ResetSeedValue",nudResetSeed );
+            SaveNames.Add("QuickSwitchFolder", txtQuickSwitch);
+            SaveNames.Add("SettingsMode", null);
+            SaveNames.Add("Site", null);
+            
         }
     }
 }

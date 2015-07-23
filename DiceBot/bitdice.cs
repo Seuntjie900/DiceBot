@@ -64,8 +64,11 @@ namespace DiceBot
         bool loggedin = false;
         void Client_Opened(object sender, EventArgs e)
         {
-            if (!loggedin)
+            /*if (!loggedin)
+            {
+                loggedin = true;
                 finishedlogin(true);
+            }*/
         }
 
         
@@ -206,7 +209,7 @@ namespace DiceBot
                 CurrencyChanged();
                 finishedlogin(Client.State == WebSocketState.Open);
                 loggedin = true;
-                System.Windows.Forms.MessageBox.Show("Due to current limitations of the API, I can't show you your stats until you place a valid bet. Sorry.", "Stats Errors", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+                System.Windows.Forms.MessageBox.Show("Due to current limitations of the API, I can't show you your stats until you place a valid bet. Sorry.\n\nAlso, you will need to reselect your currency. If you already selected the currency you want to play in, please select another first, and then switch back.", "Stats Errors", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
             }
             catch
             {
@@ -335,7 +338,9 @@ namespace DiceBot
 
         public override void Disconnect()
         {
+            cookie =csrf = stream = "";
             loggedin = false;
+            if (Client!=null)
             Client.Close();
         }
 
@@ -412,7 +417,10 @@ namespace DiceBot
                 Client.Closed += Client_Closed;
                 Client.MessageReceived += Client_MessageReceived;
                 Client.Open();
-
+                while (Client.State == WebSocketState.Connecting)
+                {
+                    Thread.Sleep(100);
+                }
             }
         }
 
@@ -467,184 +475,7 @@ namespace DiceBot
             return base.GetLucky(server, client, nonce);
         }
     }
-    /*
-    class BitDiceClient
-    {
-        private static object consoleLock = new object();
-        private const int sendChunkSize = 256;
-        private const int receiveChunkSize = 256;
-        private const bool verbose = true;
-        private static readonly TimeSpan delay = TimeSpan.FromMilliseconds(30000);
-        public WebSocketState State { get { if (webSocket != null) return webSocket.State; else return WebSocketState.Closed; } }
-        /*static void Main(string[] args)
-        {
-            Thread.Sleep(1000);
-            Connect("ws://ws.blockchain.info:8335/inv").Wait();
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
-        }
-        public void disconnect()
-        {
-            try
-            {
-                webSocket.Abort();
-                webSocket.Dispose();
-            }
-            catch
-            {
-
-            }
-            
-        }
-
-        System.Net.WebProxy _prox = null;
-        public System.Net.WebProxy prox { get { return _prox; } set { _prox = value; if (webSocket!=null ) webSocket.Options.Proxy=_prox; } }
-        ClientWebSocket webSocket = null;
-        public async Task Connect(string uri, string cookie)
-        {
-
-            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-            try
-            {
-                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
-                {
-                    sw.WriteLine("begin connect");
-                }
-                webSocket = new ClientWebSocket();
-                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
-                {
-                    sw.WriteLine("created socket");
-                }
-                if (prox!= null)
-                {
-                    webSocket.Options.Proxy = prox;
-                }
-                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
-                {
-                    sw.WriteLine("done proxy");
-                }
-                webSocket.Options.Cookies = new System.Net.CookieContainer();
-                webSocket.Options.Cookies.Add(new System.Net.Cookie("_csn_session", cookie, "/", "bitdice.me"));
-                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
-                {
-                    sw.WriteLine("added cookie\nconnecting");
-                }
-                await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
-                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
-                {
-                    sw.WriteLine("connected\nstarting send+receive");
-                }
-                await Task.WhenAll(Receive(webSocket), Send(webSocket));
-            }
-            catch (Exception ex)
-            {
-                using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
-                {
-                    sw.WriteLine(ex.Message);
-                }
-            }
-            finally
-            {
-                if (webSocket != null)
-                    webSocket.Dispose();
-                Console.WriteLine();
-
-                lock (consoleLock)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("WebSocket closed.");
-                    Console.ResetColor();
-                    using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
-                    {
-                        sw.WriteLine("socket closed");
-                    }
-                }
-            }
-        }
-        UTF8Encoding encoder = new UTF8Encoding();
-
-        public void Send(string Message)
-        {
-            byte[] buffer = encoder.GetBytes(Message);
-            webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-        }
-
-        private async Task Send(ClientWebSocket webSocket)
-        {
-
-            //byte[] buffer = encoder.GetBytes("{\"op\":\"blocks_sub\"}"); //"{\"op\":\"unconfirmed_sub\"}");
-            byte[] buffer = encoder.GetBytes("{\"op\":\"unconfirmed_sub\"}");
-            await webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-
-            while (webSocket.State == WebSocketState.Open)
-            {
-                
-                await Task.Delay(delay);
-            }
-        }
-
-        public delegate void dBetResult(bitstatsbet Bet);
-        public delegate void dUserStats(bitstatsbuser User);
-        public delegate void dChatMessage(bitChatReceived Chat);
-        public event dBetResult BetResult;
-        public event dUserStats UserStats;
-        public event dChatMessage ChatReceived;
-        List<byte> bytes = new List<byte>();
-
-        void processReceived(string Message)
-        {
-            socketbase tmp = json.JsonDeserialize<socketbase>(Message);
-            if (!string.IsNullOrEmpty(tmp.method))
-            {
-                switch (tmp.method)
-                {
-                    case "chat:new": if (ChatReceived != null) ChatReceived(json.JsonDeserialize<bitchatSocket>(Message.Replace("params", "_params"))._params); break;
-                    case "stat.global": break;
-                    case "stat.user": if (UserStats != null) UserStats(json.JsonDeserialize<bitstatsusersocket>(Message.Replace("params", "_params"))._params); break;
-                    case "stat.bets": if (BetResult != null) BetResult(json.JsonDeserialize<bitstatsbetsocket>(Message.Replace("params", "_params").Replace("\\", "").Replace("\"{", "{").Replace("}\"", "}"))._params); break;
-                }
-            }
-        }
-
-        private async Task Receive(ClientWebSocket webSocket)
-        {
-            byte[] buffer = new byte[receiveChunkSize];
-            while (webSocket.State == WebSocketState.Open)
-            {
-                var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                if (result.MessageType == WebSocketMessageType.Close)
-                {
-                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-                }
-                else
-                {
-
-                    for (int i = 0; i < result.Count; i++)
-                    {
-                        if (buffer[i] != 0)
-                            bytes.Add(buffer[i]);
-                    }
-                    
-                    if (result.EndOfMessage)
-                    {
-                        var str = System.Text.Encoding.Default.GetString(bytes.ToArray());
-                        using (System.IO.StreamWriter sw = System.IO.File.AppendText("socketlog.txt"))
-                        {
-                            sw.WriteLine(str);
-                        }
-                        
-                        bytes = new List<byte>();
-                        processReceived(str);
-                    }
-                }
-            }
-        }
-
-        
-
-        
-    }
-*/
+    
     public class socketbase
     {
         public string jsonrpc { get; set; }

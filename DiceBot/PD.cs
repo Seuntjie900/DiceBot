@@ -666,7 +666,7 @@ namespace DiceBot
 
         
     }
-
+    
     public class pdlogin
     {
         public bool admin { get; set; }
