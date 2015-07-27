@@ -27,8 +27,9 @@ namespace DiceBot
     public partial class cDiceBot : Form
     {
         Dictionary<string, Control> SaveNames = new Dictionary<string, Control>();
+        Dictionary<string, Control> PSaveNames = new Dictionary<string, Control>();
         Control[] ControlsToDisable;
-        private const string vers = "3.0.0";
+        private const string vers = "3.0.1";
         DateTime OpenTime = DateTime.UtcNow;
         Random r = new Random();
         Graph LiveGraph;
@@ -399,22 +400,40 @@ namespace DiceBot
             Lua.RegisterFunction("dalembert", this, new dStrat(LuaDAlember).Method);
             Lua.RegisterFunction("presetlist", this, new dStrat(LuaPreset).Method);
             Lua.RegisterFunction("resetstats", this, new dResetStats(resetstats).Method);
-            Lua.RegisterFunction("setvalueint", this, new dSetValue(SetValue).Method);
-            Lua.RegisterFunction("setvaluestring", this, new dSetValue1(SetValue).Method);
-            Lua.RegisterFunction("setvaluedouble", this, new dSetValue2(SetValue).Method);
-            Lua.RegisterFunction("setvaluebool", this, new dSetValue3(SetValue).Method);
-            Lua.RegisterFunction("getvalue", this, new dGetValue(getValue).Method);
+            Lua.RegisterFunction("setvalueint", this, new dSetValue(LuaSetValue).Method);
+            Lua.RegisterFunction("setvaluestring", this, new dSetValue1(LuaSetValue).Method);
+            Lua.RegisterFunction("setvaluedouble", this, new dSetValue2(LuaSetValue).Method);
+            Lua.RegisterFunction("setvaluebool", this, new dSetValue3(LuaSetValue).Method);
+            Lua.RegisterFunction("getvalue", this, new dGetValue(LuaGetValue).Method);
 
             
         }
 
         delegate void dSetValue(string Name, int Value);
+        void LuaSetValue(string Name, int Value)
+        {
+            SetValue(Name, Value, false);
+        }
         delegate void dSetValue1(string Name, string Value);
+        void LuaSetValue(string Name, string Value)
+        {
+            SetValue(Name, Value, false);
+        }
         delegate void dSetValue2(string Name, double Value);
+        void LuaSetValue(string Name, double Value)
+        {
+            SetValue(Name, Value, false);
+        }
         delegate void dSetValue3(string Name, bool Value);
-
+        void LuaSetValue(string Name, bool Value)
+        {
+            SetValue(Name, Value, false);
+        }
         delegate object dGetValue(string Name);
-
+        object LuaGetValue(string Name)
+        {
+            return getValue(Name, false);
+        }
 
         delegate double dStrat(bool Win);
         double LuaMartingale(bool Win)
@@ -575,7 +594,7 @@ namespace DiceBot
                     string newfeatures = ss.Length>1?"New features include: "+ss[1]:"";
                     if (MessageBox.Show("A new version of DiceBot is available. "+newfeatures+" \n\nDo you want to go to the download page now?","Update Available", MessageBoxButtons.YesNo)== System.Windows.Forms.DialogResult.Yes)
                     {
-                        Process.Start("http://bot.seuntjie.com/botpage.aspx");
+                        Process.Start("http://bot.seuep ntjie.com/botpage.aspx");
                     }
                 }
             }
@@ -2342,6 +2361,15 @@ namespace DiceBot
         {
             using (StreamWriter sw = new StreamWriter(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings3"))
             {
+                for (int i = 0; i < PSaveNames.Count; i++)
+                {
+                    sw.WriteLine(PSaveNames.Keys.ToArray<string>()[i] + "|" + Convert.ToString(getValue(PSaveNames.Keys.ToArray<string>()[i], true)));
+                }
+                sw.Close();
+                sw.Dispose();
+                return;
+                    
+
                 sw.WriteLine("Amount|" + nudAmount.Value);
                 sw.WriteLine("Limit|" + nudLimit.Value);
                 if (chkLimit.Checked)
@@ -2414,7 +2442,7 @@ namespace DiceBot
                     sw.WriteLine("SaveVersion|" + "3");
                     for (int i = 0; i < SaveNames.Count; i++ )
                     {
-                        sw.WriteLine(SaveNames.Keys.ToArray<string>()[i]+"|"+Convert.ToString(getValue(SaveNames.Keys.ToArray<string>()[i])));
+                        sw.WriteLine(SaveNames.Keys.ToArray<string>()[i]+"|"+Convert.ToString(getValue(SaveNames.Keys.ToArray<string>()[i], false)));
                     }
                         sw.Close();
                     sw.Dispose();
@@ -2629,11 +2657,23 @@ namespace DiceBot
                     {
                         try
                         {
-                            SetValue(t.Name, t.Value);
+                            SetValue(t.Name, t.Value, false);
                         }
                         catch
                         {
                             errors += t.Name+", ";
+                            safe = false;
+                        }
+                    }
+                    foreach (SavedItem t in saveditems)
+                    {
+                        try
+                        {
+                            SetValue(t.Name, t.Value, true);
+                        }
+                        catch
+                        {
+                            errors += t.Name + ", ";
                             safe = false;
                         }
                     }
@@ -4817,17 +4857,17 @@ namespace DiceBot
                     case "daDiceToolStripMenuItem": CurrentSite = new dadice(this); siteToolStripMenuItem.Text = "Site (DAD)"; break;
                     case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
                     case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
-                    //case "betterbetsToolStripMenuItem": CurrentSite = new BB(this); siteToolStripMenuItem.Text = "Site (BB)"; break;
+                    case "betterbetsToolStripMenuItem": CurrentSite = new BB(this); siteToolStripMenuItem.Text = "Site (BB)"; break;
                        
                 }
                 if (CurrentSite is dadice)
                 {
                     lblPass.Text = "API key:";
                 }
-                /*else if (CurrentSite is BB)
+                else if (CurrentSite is BB)
                 {
-                    lblPass.Text = "AUTH Token";
-                }*/
+                    lblPass.Text = "API Token";
+                }
                 else
                 {
                     lblPass.Text = "Password:";
@@ -5177,12 +5217,19 @@ namespace DiceBot
         }
 
 
-        object getValue(string key)
+        object getValue(string key, bool Private)
         {
-            if (SaveNames.ContainsKey(key))
+            if ((SaveNames.ContainsKey(key) && !Private) || (Private && PSaveNames.ContainsKey(key)))
             {
-                Control c = SaveNames[key];
-                if (c is TextBox)
+                Control c = !Private ? SaveNames[key] : PSaveNames[key];
+                if (c == null)
+                {
+                    if ( key == "SettingsMode")
+                        return (basicToolStripMenuItem.Checked ? 0 : advancedToolStripMenuItem.Checked ? 1 : 2);
+                    if (key == "Site")
+                        return (justDiceToolStripMenuItem.Checked ? 0 : primeDiceToolStripMenuItem.Checked ? 1 : pocketRocketsCasinoToolStripMenuItem.Checked ? 2 : diceToolStripMenuItem.Checked ? 3 : safediceToolStripMenuItem.Checked ? 4 : daDiceToolStripMenuItem.Checked ? 5 : rollinIOToolStripMenuItem.Checked ? 6 : bitDiceToolStripMenuItem.Checked ? 7 : 1);
+                }
+                else if (c is TextBox)
                     return (c as TextBox).Text;
                 else if (c is NumericUpDown)
                     return (c as NumericUpDown).Value;
@@ -5251,17 +5298,17 @@ namespace DiceBot
                 return null;
             }
         }
-        void SetValue(string Key, int value)
+        void SetValue(string Key, int value, bool Private)
         {
-            if (SaveNames.ContainsKey(Key))
+            if ((SaveNames.ContainsKey(Key) && !Private) || (Private && PSaveNames.ContainsKey(Key)))
             {
-                Control c = SaveNames[Key];
+                Control c = !Private ? SaveNames[Key] : PSaveNames[Key];
                 if (c == null)
                 {
 
                     //sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked ? "0" : advancedToolStripMenuItem.Checked ? "1" : "2"));
                     //sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked ? "0" : primeDiceToolStripMenuItem.Checked ? "1" : pocketRocketsCasinoToolStripMenuItem.Checked ? "2" : diceToolStripMenuItem.Checked ? "3" : safediceToolStripMenuItem.Checked ? "4" : daDiceToolStripMenuItem.Checked ? "5" : rollinIOToolStripMenuItem.Checked ? "6" : bitDiceToolStripMenuItem.Checked ? "7" : "1"));
-                    if (Key == "SettingsMode")
+                    if (Key == "Site")
                     {
                         justDiceToolStripMenuItem.Checked = value == 0;
                         primeDiceToolStripMenuItem.Checked = value == 1;
@@ -5277,7 +5324,7 @@ namespace DiceBot
                         }
 
                     }
-                    else if (Key == "Site")
+                    else if (Key == "SettingsMode")
                     {
 
                         basicToolStripMenuItem.Checked = value == 0;
@@ -5360,18 +5407,18 @@ namespace DiceBot
                     (c as CheckBox).Checked = value == 1;
             }
         }
-        void SetValue(string Key, string value)
+        void SetValue(string Key, string value, bool Private)
         {
-            if (SaveNames.ContainsKey(Key))
+            if ((SaveNames.ContainsKey(Key) && !Private) || (Private && PSaveNames.ContainsKey(Key)))
             {
 
-                Control c = SaveNames[Key];
+                Control c = !Private ? SaveNames[Key] : PSaveNames[Key];
                 if (c == null)
                 {
 
                     //sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked ? "0" : advancedToolStripMenuItem.Checked ? "1" : "2"));
                     //sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked ? "0" : primeDiceToolStripMenuItem.Checked ? "1" : pocketRocketsCasinoToolStripMenuItem.Checked ? "2" : diceToolStripMenuItem.Checked ? "3" : safediceToolStripMenuItem.Checked ? "4" : daDiceToolStripMenuItem.Checked ? "5" : rollinIOToolStripMenuItem.Checked ? "6" : bitDiceToolStripMenuItem.Checked ? "7" : "1"));
-                    if (Key == "SettingsMode")
+                    if (Key == "Site")
                     {
                         justDiceToolStripMenuItem.Checked = value == "0";
                         primeDiceToolStripMenuItem.Checked = value == "1";
@@ -5384,7 +5431,7 @@ namespace DiceBot
                         
                         
                     }
-                    else if (Key == "Site")
+                    else if (Key == "SettingsMode")
                     {
                         
                         basicToolStripMenuItem.Checked = value == "0";
@@ -5479,26 +5526,26 @@ namespace DiceBot
                 
                 }
                 else if (c is CheckBox)
-                    (c as CheckBox).Checked = value == "1";
+                    (c as CheckBox).Checked = value == "1" || value == "True";
                 else if (c is RichTextBox)
                     (c as RichTextBox).Lines = value.Split('?');
                 
             }
         }
-        void SetValue(string Key, double value)
+        void SetValue(string Key, double value, bool Private)
         {
-            if (SaveNames.ContainsKey(Key))
+            if ((SaveNames.ContainsKey(Key) && !Private) || (Private && PSaveNames.ContainsKey(Key)))
             {
-                Control c = SaveNames[Key];
+                Control c = !Private ? SaveNames[Key] : PSaveNames[Key];
                 if (c is NumericUpDown)
                     (c as NumericUpDown).Value = Convert.ToDecimal(value);
             }
         }
-        void SetValue(string Key, bool value)
+        void SetValue(string Key, bool value, bool Private)
         {
-            if (SaveNames.ContainsKey(Key))
+            if ((SaveNames.ContainsKey(Key) && !Private) || (Private && PSaveNames.ContainsKey(Key)))
             {
-                Control c = SaveNames[Key];
+                Control c = !Private? SaveNames[Key]: PSaveNames[Key];
                 if (c is CheckBox)
                     (c as CheckBox).Checked = value;
             }
@@ -5634,25 +5681,25 @@ namespace DiceBot
             SaveNames.Add("MartingaleStretchLoss", nudStretchLoss);
             SaveNames.Add("MartingaleStretchWin", nudStretchWin);
 
-            SaveNames.Add("Amount",nudAmount );
-            SaveNames.Add("Limit", nudLimit);
-            SaveNames.Add("LimitEnabled", chkLimit);
-            SaveNames.Add("LowerLimit",nudLowerLimit );
-            SaveNames.Add("LowerLimitEnabled", chkLowerLimit);
-            SaveNames.Add("To", txtTo);
-            SaveNames.Add("OnStop", rdbInvest);
+            PSaveNames.Add("Amount",nudAmount );
+            PSaveNames.Add("Limit", nudLimit);
+            PSaveNames.Add("LimitEnabled", chkLimit);
+            PSaveNames.Add("LowerLimit",nudLowerLimit );
+            PSaveNames.Add("LowerLimitEnabled", chkLowerLimit);
+            PSaveNames.Add("To", txtTo);
+            PSaveNames.Add("OnStop", rdbInvest);
                         
-            SaveNames.Add("LastStreakWin", StatsWindows.nudLastStreakWin);
-            SaveNames.Add("LastStreakLose", StatsWindows.nudLastStreakLose);
-            SaveNames.Add("BotSpeedEnabled", chkBotSpeed);
-            SaveNames.Add("BotSpeedValue", nudBotSpeed);
-            SaveNames.Add("ResetSeedEnabled", chkResetSeed);
-            SaveNames.Add("ResetSeedMode", rdbResetSeedBets);
+            PSaveNames.Add("LastStreakWin", StatsWindows.nudLastStreakWin);
+            PSaveNames.Add("LastStreakLose", StatsWindows.nudLastStreakLose);
+            PSaveNames.Add("BotSpeedEnabled", chkBotSpeed);
+            PSaveNames.Add("BotSpeedValue", nudBotSpeed);
+            PSaveNames.Add("ResetSeedEnabled", chkResetSeed);
+            PSaveNames.Add("ResetSeedMode", rdbResetSeedBets);
 
-            SaveNames.Add("ResetSeedValue",nudResetSeed );
-            SaveNames.Add("QuickSwitchFolder", txtQuickSwitch);
-            SaveNames.Add("SettingsMode", null);
-            SaveNames.Add("Site", null);
+            PSaveNames.Add("ResetSeedValue",nudResetSeed );
+            PSaveNames.Add("QuickSwitchFolder", txtQuickSwitch);
+            PSaveNames.Add("SettingsMode", null);
+            PSaveNames.Add("Site", null);
             
         }
     }
