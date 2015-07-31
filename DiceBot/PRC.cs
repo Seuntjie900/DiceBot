@@ -322,6 +322,14 @@ namespace DiceBot
                 prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
                 client = getseed.ClientSeed;
                 serverhash = getseed.ServerHash;
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
+                getHeaders.CookieContainer = Cookies;
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
+                Parent.updateDeposit(dep.Address);
                 finishedlogin(true);
             }
             catch
@@ -447,6 +455,14 @@ namespace DiceBot
                 prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
                 client = getseed.ClientSeed;
                 serverhash = getseed.ServerHash;
+                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
+                if (Prox != null)
+                    getHeaders.Proxy = Prox;
+                getHeaders.CookieContainer = Cookies;
+                Response = (HttpWebResponse)getHeaders.GetResponse();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
+                Parent.updateDeposit(dep.Address);
                 finishedlogin(true);
                 return true;
             }
@@ -463,7 +479,7 @@ namespace DiceBot
     public class PRCUser
     {
         public int Id { get; set; }
-        public string Username { get; set; }
+        public string UserName { get; set; }
         public int NumBets { get; set; }
         public decimal Wagered { get; set; }
         public long Wins { get; set; }
@@ -516,5 +532,10 @@ namespace DiceBot
         public int Wins { get; set; }
         public int Losses { get; set; }
         public decimal Profit { get; set; }
+    }
+    public class PRCDepost
+    {
+        public bool Success { get; set; }
+        public string Address { get; set; }
     }
 }

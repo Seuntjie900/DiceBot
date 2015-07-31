@@ -36,6 +36,12 @@ namespace DiceBot
             Currencies = new string[] { "btc", "doge","ltc","redd","clam","dash"};
         }
 
+        void getDeposit(string html)
+        {
+            string tmp = html.Substring(html.IndexOf("href=\"bitcoin:") + "href=\"bitcoin:".Length);
+            Parent.updateDeposit(tmp.Substring(0, tmp.IndexOf("?")));
+        }
+
         void Client_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
             socketbase tmp = json.JsonDeserialize<socketbase>(e.Message);
@@ -184,6 +190,7 @@ namespace DiceBot
 
                 EmitResponse = (HttpWebResponse)betrequest.GetResponse();
                 sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                getDeposit(sEmitResponse);
                 getcsrf(sEmitResponse);
                 cookie = EmitResponse.Cookies["_csn_session"].Value;
 
@@ -300,6 +307,7 @@ namespace DiceBot
 
                 EmitResponse = (HttpWebResponse)betrequest.GetResponse();
                 sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                getDeposit(sEmitResponse);
                 getcsrf(sEmitResponse);
                 cookie = EmitResponse.Cookies["_csn_session"].Value;
 
@@ -404,6 +412,7 @@ namespace DiceBot
                 betrequest.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
                 EmitResponse = (HttpWebResponse)betrequest.GetResponse();
                 sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                getDeposit(sEmitResponse);
                 getcsrf(sEmitResponse);
                 getstream(sEmitResponse);
                 if (Client != null)

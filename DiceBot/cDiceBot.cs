@@ -223,7 +223,7 @@ namespace DiceBot
             SimWindow = new Simulate(this);
             StatsWindows.btnResetStats.Click += btnResetStats_Click;
             
-            ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow, btnStartHigh2, btnStartLow2 };
+            ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow, btnStartHigh2, btnStartLow2, btnMPWithdraw, btnMPDeposit };
             EnableNotLoggedInControls(false);
             basicToolStripMenuItem.Checked = true;
             chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
@@ -2421,7 +2421,7 @@ namespace DiceBot
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
-                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":daDiceToolStripMenuItem.Checked?"5":rollinIOToolStripMenuItem.Checked?"6":bitDiceToolStripMenuItem.Checked?"7":"1"));
+                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":daDiceToolStripMenuItem.Checked?"5":rollinIOToolStripMenuItem.Checked?"6":bitDiceToolStripMenuItem.Checked?"7":betterbetsToolStripMenuItem.Checked?"8":moneyPotToolStripMenuItem.Checked?"9":"1"));
             }
         }
         
@@ -2792,6 +2792,8 @@ namespace DiceBot
                     daDiceToolStripMenuItem.Checked = tmpI == 5;
                     rollinIOToolStripMenuItem.Checked = tmpI == 6;
                     bitDiceToolStripMenuItem.Checked = tmpI == 7;
+                    betterbetsToolStripMenuItem.Checked = tmpI == 8;
+                    moneyPotToolStripMenuItem.Checked = tmpI == 9;
                     if (tmpI>7)
                     {
                         justDiceToolStripMenuItem.Checked = true; ;
@@ -4858,6 +4860,7 @@ namespace DiceBot
                     case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
                     case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
                     case "betterbetsToolStripMenuItem": CurrentSite = new BB(this); siteToolStripMenuItem.Text = "Site (BB)"; break;
+                    case "moneyPotToolStripMenuItem" : CurrentSite = new moneypot(this); siteToolStripMenuItem.Text = "Site (MP)"; break;
                        
                 }
                 if (CurrentSite is dadice)
@@ -4871,6 +4874,14 @@ namespace DiceBot
                 else
                 {
                     lblPass.Text = "Password:";
+                }
+                if (CurrentSite is moneypot)
+                {
+                    btnMPDeposit.Visible = btnMPWithdraw.Visible = true;
+                }
+                else
+                {
+                    btnMPDeposit.Visible = btnMPWithdraw.Visible = false;
                 }
                 rdbInvest.Enabled = CurrentSite.AutoInvest;
                 if (!rdbInvest.Enabled)
@@ -5132,6 +5143,9 @@ namespace DiceBot
         {
             Verify tmp = new Verify(this);
             tmp.ShowDialog();
+            
+            
+
         }
 
         private void customToolStripMenuItem_Click(object sender, EventArgs e)
@@ -5227,7 +5241,7 @@ namespace DiceBot
                     if ( key == "SettingsMode")
                         return (basicToolStripMenuItem.Checked ? 0 : advancedToolStripMenuItem.Checked ? 1 : 2);
                     if (key == "Site")
-                        return (justDiceToolStripMenuItem.Checked ? 0 : primeDiceToolStripMenuItem.Checked ? 1 : pocketRocketsCasinoToolStripMenuItem.Checked ? 2 : diceToolStripMenuItem.Checked ? 3 : safediceToolStripMenuItem.Checked ? 4 : daDiceToolStripMenuItem.Checked ? 5 : rollinIOToolStripMenuItem.Checked ? 6 : bitDiceToolStripMenuItem.Checked ? 7 : 1);
+                        return (justDiceToolStripMenuItem.Checked ? 0 : primeDiceToolStripMenuItem.Checked ? 1 : pocketRocketsCasinoToolStripMenuItem.Checked ? 2 : diceToolStripMenuItem.Checked ? 3 : safediceToolStripMenuItem.Checked ? 4 : daDiceToolStripMenuItem.Checked ? 5 : rollinIOToolStripMenuItem.Checked ? 6 : bitDiceToolStripMenuItem.Checked ? 7: betterbetsToolStripMenuItem.Checked?8:moneyPotToolStripMenuItem.Checked?9:1);
                 }
                 else if (c is TextBox)
                     return (c as TextBox).Text;
@@ -5318,7 +5332,9 @@ namespace DiceBot
                         daDiceToolStripMenuItem.Checked = value == 5;
                         rollinIOToolStripMenuItem.Checked = value == 6;
                         bitDiceToolStripMenuItem.Checked = value == 7;
-                        if (value > 7)
+                        betterbetsToolStripMenuItem.Checked = value == 8;
+                        moneyPotToolStripMenuItem.Checked = value == 9;
+                        if (value > 9)
                         {
                             justDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -5428,7 +5444,8 @@ namespace DiceBot
                         daDiceToolStripMenuItem.Checked = value == "5";
                         rollinIOToolStripMenuItem.Checked = value == "6";
                         bitDiceToolStripMenuItem.Checked = value == "7";
-                        
+                        betterbetsToolStripMenuItem.Checked = value == "8";
+                        moneyPotToolStripMenuItem.Checked = value == "9";
                         
                     }
                     else if (Key == "SettingsMode")
@@ -5701,6 +5718,29 @@ namespace DiceBot
             PSaveNames.Add("SettingsMode", null);
             PSaveNames.Add("Site", null);
             
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (CurrentSite is moneypot)
+            {
+                (CurrentSite as moneypot).ShowMPDeposit();
+                
+            }
+        }
+
+        private void btnMPWithdraw_Click(object sender, EventArgs e)
+        {
+            if (CurrentSite is moneypot)
+            {
+                (CurrentSite as moneypot).ShowMPWithdraw();
+
+            }
+        }
+
+        private void btnDepositAlt_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

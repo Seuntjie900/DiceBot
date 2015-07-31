@@ -45,7 +45,7 @@ namespace DiceBot
         protected override void CurrencyChanged()
         {
             GetBalance();
-            
+            GetDepositAddress();
         }
         DateTime Lastbalance = DateTime.Now;
         void GetBalanceThread()
@@ -286,7 +286,7 @@ namespace DiceBot
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
             if (Prox != null)
                 loginrequest.Proxy = Prox;
-            string post = "a=Login&Key=7a3ada10cb804ec695cda315db6b8789&Username=" + Username + "&Password=" + Password + (twofa != "" ? "&Totp=" + twofa : "");
+            string post = "a=Login&key=7a3ada10cb804ec695cda315db6b8789&Username=" + Username + "&Password=" + Password + (twofa != "" ? "&Totp=" + twofa : "");
             loginrequest.Method = "POST";
 
             loginrequest.ContentLength = post.Length;
@@ -334,7 +334,7 @@ namespace DiceBot
             HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
             if (Prox != null)
                 loginrequest.Proxy = Prox;
-            string post = "a=CreateAccount&Key=7a3ada10cb804ec695cda315db6b8789";
+            string post = "a=CreateAccount&key=7a3ada10cb804ec695cda315db6b8789";
             loginrequest.Method = "POST";
 
             loginrequest.ContentLength = post.Length;
@@ -354,7 +354,7 @@ namespace DiceBot
                 loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
-                post = "a=CreateUser&Key=7a3ada10cb804ec695cda315db6b8789&s=" + sessionCookie + "&Username="+username+"&Password="+password;
+                post = "a=CreateUser&key=7a3ada10cb804ec695cda315db6b8789&s=" + sessionCookie + "&Username="+username+"&Password="+password;
                 loginrequest.Method = "POST";
 
                 loginrequest.ContentLength = post.Length;
@@ -381,6 +381,31 @@ namespace DiceBot
                 
             }
             return sessionCookie != "" && sessionCookie != null;
+        }
+
+        public void GetDepositAddress()
+        {
+            if (sessionCookie != "" && sessionCookie != null)
+            {
+                HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
+                if (Prox != null)
+                    loginrequest.Proxy = Prox;
+                string post = "a=GetDepositAddress&s=" + sessionCookie + "&Currency=" + Currency;
+                loginrequest.Method = "POST";
+
+                loginrequest.ContentLength = post.Length;
+                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                {
+
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                d999deposit tmp = json.JsonDeserialize<d999deposit>(sEmitResponse);
+                Parent.updateDeposit(tmp.Address);
+            }
         }
 
         public override double GetLucky(string serverSeed, string clientSeed, int nonce)
@@ -480,7 +505,10 @@ namespace DiceBot
     {
         public string Hash { get; set; }
     }
-
+    public class d999deposit
+    {
+        public string Address { get; set; }
+    }
     public class d999Bet
     {
         public long BetId { get; set; }

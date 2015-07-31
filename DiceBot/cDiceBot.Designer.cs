@@ -330,6 +330,7 @@
             this.lblPass = new System.Windows.Forms.Label();
             this.label88 = new System.Windows.Forms.Label();
             this.gbManualBet = new System.Windows.Forms.GroupBox();
+            this.btnMPDeposit = new System.Windows.Forms.Button();
             this.btnTip = new System.Windows.Forms.Button();
             this.btnInvest = new System.Windows.Forms.Button();
             this.btnWithdraw = new System.Windows.Forms.Button();
@@ -435,6 +436,7 @@
             this.rollinIOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bitDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.betterbetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moneyPotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -451,6 +453,8 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnMPWithdraw = new System.Windows.Forms.Button();
+            this.btnDepositAlt = new System.Windows.Forms.Button();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
@@ -3994,9 +3998,9 @@
             // 
             this.pnlApiInfo.Controls.Add(this.groupBox6);
             this.pnlApiInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlApiInfo.Location = new System.Drawing.Point(0, 231);
+            this.pnlApiInfo.Location = new System.Drawing.Point(0, 242);
             this.pnlApiInfo.Name = "pnlApiInfo";
-            this.pnlApiInfo.Size = new System.Drawing.Size(438, 563);
+            this.pnlApiInfo.Size = new System.Drawing.Size(438, 552);
             this.pnlApiInfo.TabIndex = 7;
             // 
             // groupBox6
@@ -4005,7 +4009,7 @@
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(0, 0);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(438, 563);
+            this.groupBox6.Size = new System.Drawing.Size(438, 552);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Bets:";
@@ -4027,14 +4031,14 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer1.Size = new System.Drawing.Size(432, 544);
-            this.splitContainer1.SplitterDistance = 320;
+            this.splitContainer1.Size = new System.Drawing.Size(432, 533);
+            this.splitContainer1.SplitterDistance = 313;
             this.splitContainer1.TabIndex = 0;
             // 
             // btnChartReset
             // 
             this.btnChartReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChartReset.Location = new System.Drawing.Point(354, 236);
+            this.btnChartReset.Location = new System.Drawing.Point(354, 229);
             this.btnChartReset.Name = "btnChartReset";
             this.btnChartReset.Size = new System.Drawing.Size(75, 23);
             this.btnChartReset.TabIndex = 3;
@@ -4045,7 +4049,7 @@
             // btnDisable
             // 
             this.btnDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDisable.Location = new System.Drawing.Point(354, 265);
+            this.btnDisable.Location = new System.Drawing.Point(354, 258);
             this.btnDisable.Name = "btnDisable";
             this.btnDisable.Size = new System.Drawing.Size(75, 23);
             this.btnDisable.TabIndex = 2;
@@ -4056,7 +4060,7 @@
             // btnHideLive
             // 
             this.btnHideLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHideLive.Location = new System.Drawing.Point(354, 294);
+            this.btnHideLive.Location = new System.Drawing.Point(354, 287);
             this.btnHideLive.Name = "btnHideLive";
             this.btnHideLive.Size = new System.Drawing.Size(75, 23);
             this.btnHideLive.TabIndex = 1;
@@ -4078,7 +4082,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Profit";
             this.chrtEmbeddedLiveChart.Series.Add(series1);
-            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(432, 320);
+            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(432, 313);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
             // 
@@ -4100,7 +4104,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(432, 220);
+            this.dataGridView1.Size = new System.Drawing.Size(432, 216);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
@@ -4162,7 +4166,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(438, 231);
+            this.panel5.Size = new System.Drawing.Size(438, 242);
             this.panel5.TabIndex = 4;
             // 
             // gbLogin
@@ -4179,7 +4183,7 @@
             this.gbLogin.Dock = System.Windows.Forms.DockStyle.Left;
             this.gbLogin.Location = new System.Drawing.Point(745, 0);
             this.gbLogin.Name = "gbLogin";
-            this.gbLogin.Size = new System.Drawing.Size(265, 214);
+            this.gbLogin.Size = new System.Drawing.Size(265, 225);
             this.gbLogin.TabIndex = 3;
             this.gbLogin.TabStop = false;
             this.gbLogin.Text = "Login/Register";
@@ -4268,6 +4272,9 @@
             // 
             // gbManualBet
             // 
+            this.gbManualBet.Controls.Add(this.btnDepositAlt);
+            this.gbManualBet.Controls.Add(this.btnMPWithdraw);
+            this.gbManualBet.Controls.Add(this.btnMPDeposit);
             this.gbManualBet.Controls.Add(this.btnTip);
             this.gbManualBet.Controls.Add(this.btnInvest);
             this.gbManualBet.Controls.Add(this.btnWithdraw);
@@ -4286,11 +4293,22 @@
             this.gbManualBet.Dock = System.Windows.Forms.DockStyle.Left;
             this.gbManualBet.Location = new System.Drawing.Point(299, 0);
             this.gbManualBet.Name = "gbManualBet";
-            this.gbManualBet.Size = new System.Drawing.Size(446, 214);
+            this.gbManualBet.Size = new System.Drawing.Size(446, 225);
             this.gbManualBet.TabIndex = 1;
             this.gbManualBet.TabStop = false;
             this.gbManualBet.Text = "Place a bet";
             this.gbManualBet.Enter += new System.EventHandler(this.groupBox5_Enter);
+            // 
+            // btnMPDeposit
+            // 
+            this.btnMPDeposit.Location = new System.Drawing.Point(33, 199);
+            this.btnMPDeposit.Name = "btnMPDeposit";
+            this.btnMPDeposit.Size = new System.Drawing.Size(75, 23);
+            this.btnMPDeposit.TabIndex = 15;
+            this.btnMPDeposit.Text = "Deposit";
+            this.btnMPDeposit.UseVisualStyleBackColor = true;
+            this.btnMPDeposit.Visible = false;
+            this.btnMPDeposit.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // btnTip
             // 
@@ -4502,7 +4520,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Left;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(299, 214);
+            this.groupBox3.Size = new System.Drawing.Size(299, 225);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Basic Stats";
@@ -5229,7 +5247,7 @@
             this.chartToolStripMenuItem.CheckOnClick = true;
             this.chartToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chartToolStripMenuItem.Name = "chartToolStripMenuItem";
-            this.chartToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.chartToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.chartToolStripMenuItem.Text = "Live Chart";
             this.chartToolStripMenuItem.CheckedChanged += new System.EventHandler(this.chartToolStripMenuItem_CheckedChanged);
             // 
@@ -5239,7 +5257,7 @@
             this.loginPanelToolStripMenuItem.CheckOnClick = true;
             this.loginPanelToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.loginPanelToolStripMenuItem.Name = "loginPanelToolStripMenuItem";
-            this.loginPanelToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.loginPanelToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.loginPanelToolStripMenuItem.Text = "Login Panel";
             this.loginPanelToolStripMenuItem.CheckedChanged += new System.EventHandler(this.loginPanelToolStripMenuItem_CheckedChanged);
             // 
@@ -5249,19 +5267,19 @@
             this.manualBettingToolStripMenuItem.CheckOnClick = true;
             this.manualBettingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.manualBettingToolStripMenuItem.Name = "manualBettingToolStripMenuItem";
-            this.manualBettingToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.manualBettingToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.manualBettingToolStripMenuItem.Text = "Manual Betting";
             this.manualBettingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.manualBettingToolStripMenuItem_CheckedChanged);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             // 
             // statsToolStripMenuItem
             // 
             this.statsToolStripMenuItem.Name = "statsToolStripMenuItem";
-            this.statsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.statsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.statsToolStripMenuItem.Text = "Stats";
             this.statsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.statsToolStripMenuItem_CheckedChanged);
             this.statsToolStripMenuItem.Click += new System.EventHandler(this.statsToolStripMenuItem_Click);
@@ -5275,7 +5293,7 @@
             this.allTimeStaticToolStripMenuItem,
             this.customToolStripMenuItem});
             this.chartsToolStripMenuItem.Name = "chartsToolStripMenuItem";
-            this.chartsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.chartsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.chartsToolStripMenuItem.Text = "Charts";
             // 
             // sessionLiveToolStripMenuItem
@@ -5316,49 +5334,49 @@
             // chatToolStripMenuItem
             // 
             this.chatToolStripMenuItem.Name = "chatToolStripMenuItem";
-            this.chatToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.chatToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.chatToolStripMenuItem.Text = "Chat";
             this.chatToolStripMenuItem.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // simulationToolStripMenuItem
             // 
             this.simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
-            this.simulationToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.simulationToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.simulationToolStripMenuItem.Text = "Simulate";
             this.simulationToolStripMenuItem.Click += new System.EventHandler(this.simulationToolStripMenuItem_Click);
             // 
             // betHistoryToolStripMenuItem
             // 
             this.betHistoryToolStripMenuItem.Name = "betHistoryToolStripMenuItem";
-            this.betHistoryToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.betHistoryToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.betHistoryToolStripMenuItem.Text = "Bet History";
             this.betHistoryToolStripMenuItem.Click += new System.EventHandler(this.btnBetHistory_Click);
             // 
             // badStreakTableToolStripMenuItem
             // 
             this.badStreakTableToolStripMenuItem.Name = "badStreakTableToolStripMenuItem";
-            this.badStreakTableToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.badStreakTableToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.badStreakTableToolStripMenuItem.Text = "Bad Streak Table";
             this.badStreakTableToolStripMenuItem.Click += new System.EventHandler(this.btnStreakTable_Click);
             // 
             // luckyNumberVerifierToolStripMenuItem
             // 
             this.luckyNumberVerifierToolStripMenuItem.Name = "luckyNumberVerifierToolStripMenuItem";
-            this.luckyNumberVerifierToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.luckyNumberVerifierToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.luckyNumberVerifierToolStripMenuItem.Text = "Roll Verifier";
             this.luckyNumberVerifierToolStripMenuItem.Click += new System.EventHandler(this.luckyNumberVerifierToolStripMenuItem_Click);
             // 
             // proxySettingsToolStripMenuItem
             // 
             this.proxySettingsToolStripMenuItem.Name = "proxySettingsToolStripMenuItem";
-            this.proxySettingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.proxySettingsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.proxySettingsToolStripMenuItem.Text = "Proxy settings";
             this.proxySettingsToolStripMenuItem.Click += new System.EventHandler(this.proxySettingsToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
@@ -5373,7 +5391,8 @@
             this.daDiceToolStripMenuItem,
             this.rollinIOToolStripMenuItem,
             this.bitDiceToolStripMenuItem,
-            this.betterbetsToolStripMenuItem});
+            this.betterbetsToolStripMenuItem,
+            this.moneyPotToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -5452,6 +5471,14 @@
             this.betterbetsToolStripMenuItem.Text = "betterbets";
             this.betterbetsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.betterbetsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // moneyPotToolStripMenuItem
+            // 
+            this.moneyPotToolStripMenuItem.Name = "moneyPotToolStripMenuItem";
+            this.moneyPotToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.moneyPotToolStripMenuItem.Text = "MoneyPot";
+            this.moneyPotToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.moneyPotToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // settingsModeToolStripMenuItem
             // 
@@ -5574,6 +5601,27 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
+            // 
+            // btnMPWithdraw
+            // 
+            this.btnMPWithdraw.Location = new System.Drawing.Point(114, 199);
+            this.btnMPWithdraw.Name = "btnMPWithdraw";
+            this.btnMPWithdraw.Size = new System.Drawing.Size(75, 23);
+            this.btnMPWithdraw.TabIndex = 16;
+            this.btnMPWithdraw.Text = "WIthdraw";
+            this.btnMPWithdraw.UseVisualStyleBackColor = true;
+            this.btnMPWithdraw.Visible = false;
+            this.btnMPWithdraw.Click += new System.EventHandler(this.btnMPWithdraw_Click);
+            // 
+            // btnDepositAlt
+            // 
+            this.btnDepositAlt.Location = new System.Drawing.Point(342, 198);
+            this.btnDepositAlt.Name = "btnDepositAlt";
+            this.btnDepositAlt.Size = new System.Drawing.Size(75, 23);
+            this.btnDepositAlt.TabIndex = 17;
+            this.btnDepositAlt.Text = "Deposit Alt";
+            this.btnDepositAlt.UseVisualStyleBackColor = true;
+            this.btnDepositAlt.Click += new System.EventHandler(this.btnDepositAlt_Click);
             // 
             // betBindingSource
             // 
@@ -6186,6 +6234,10 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.NumericUpDown nudStretchWin;
+        private System.Windows.Forms.ToolStripMenuItem moneyPotToolStripMenuItem;
+        private System.Windows.Forms.Button btnMPDeposit;
+        private System.Windows.Forms.Button btnMPWithdraw;
+        private System.Windows.Forms.Button btnDepositAlt;
 
     }
 }

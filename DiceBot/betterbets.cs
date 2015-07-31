@@ -230,8 +230,7 @@ namespace DiceBot
                     }
                     HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
                     string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                    /*PDseeds tmpSeed = json.JsonDeserialize<PDseeds>(sEmitResponse);
-                    sqlite_helper.InsertSeed(tmpSeed.seeds.previous_server_hashed, tmpSeed.seeds.previous_server);*/
+                    
                 }
                 catch (WebException e)
                 {
@@ -271,33 +270,7 @@ namespace DiceBot
 
         protected override bool internalWithdraw(double Amount, string Address)
         {
-            try
-            {
-                
-                Thread.Sleep(500);
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://betterbets.io/api/api/withdraw?access_token=" + accesstoken);
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.Method = "POST";
-                string post = string.Format("amount={0}&address={1}", (Amount * 100000000).ToString(""), Address);
-                betrequest.ContentLength = post.Length;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-                {
-
-                    writer.Write(post);
-                }
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
 
         public override double GetLucky(string server, string client, int nonce)
@@ -450,10 +423,6 @@ namespace DiceBot
         
         }
 
-        
-       
-
-        
     }
 
     public class bbResult
@@ -524,7 +493,10 @@ namespace DiceBot
             
             
         }
-    
+    public class bbSeed
+    {
+        public int newSeed { get; set; }
+    }
 
     
 }

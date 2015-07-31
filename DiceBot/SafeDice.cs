@@ -690,7 +690,7 @@ namespace DiceBot
 
         string GetDepositAddress()
         {
-            HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/"+UID+"/sites/1/deposit");
+            HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/"+UID+"/sites/"+curen+"/deposit");
             if (Prox != null)
                 loginrequest.Proxy = Prox;
             loginrequest.Method = "GET";

@@ -24,12 +24,18 @@ namespace DiceBot
             Instance.OnChat += Instance_OnChat;
             Instance.OnWins += Instance_OnWins;
             Instance.OnLossess += Instance_OnLossess;
+            Instance.OnAddress += Instance_OnAddress;
             Instance.logging = false;
             
             this.Parent = Parent;
             Name = "JustDice";
             Tip = true;
             TipUsingName = false;
+        }
+
+        void Instance_OnAddress(Address Address)
+        {
+            Parent.updateDeposit(Address.DepositAddress);
         }
 
       
@@ -86,10 +92,7 @@ namespace DiceBot
             Parent.updateStatus(Error);
         }
 
-        void Instance_OnAddress(string Address)
-        {
-            Parent.updateDeposit(Address);
-        }
+        
 
         void Instance_OnResult(Result result, bool IsMine)
         {
@@ -155,6 +158,7 @@ namespace DiceBot
         }
         public override void Login(string Username, string Password, string twoFa)
         {
+            
             bool tmp = Instance.Connect(false, Username, Password, twoFa);
             if (Instance.Connected)
             {
@@ -164,7 +168,8 @@ namespace DiceBot
                 Parent.updateProfit(Instance.Profit);
                 Parent.updateWagered(Instance.Wagered);
                 Parent.updateWins(Instance.Wins);
-                
+                System.Threading.Thread.Sleep(300);
+                Instance.Deposit();
                 
             }
 
@@ -237,7 +242,7 @@ namespace DiceBot
                 Parent.updateProfit(Instance.Profit);
                 Parent.updateWagered(Instance.Wagered);
                 Parent.updateWins(Instance.Wins);
-
+                Instance.Deposit();
 
             }
 
