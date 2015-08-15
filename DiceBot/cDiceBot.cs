@@ -29,7 +29,7 @@ namespace DiceBot
         Dictionary<string, Control> SaveNames = new Dictionary<string, Control>();
         Dictionary<string, Control> PSaveNames = new Dictionary<string, Control>();
         Control[] ControlsToDisable;
-        private const string vers = "3.0.1";
+        private const string vers = "3.0.2";
         DateTime OpenTime = DateTime.UtcNow;
         Random r = new Random();
         Graph LiveGraph;
@@ -4867,7 +4867,7 @@ namespace DiceBot
                 {
                     lblPass.Text = "API key:";
                 }
-                else if (CurrentSite is BB)
+                else if (CurrentSite is BB || CurrentSite is moneypot)
                 {
                     lblPass.Text = "API Token";
                 }
@@ -5727,6 +5727,11 @@ namespace DiceBot
                 (CurrentSite as moneypot).ShowMPDeposit();
                 
             }
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            Process.Start(CurrentSite.SiteURL);
         }
 
         private void btnMPWithdraw_Click(object sender, EventArgs e)

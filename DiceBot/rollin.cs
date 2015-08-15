@@ -15,6 +15,7 @@ namespace DiceBot
         string server_hash = "";
         string client = "";
         string username = "";
+        Random R = new Random();
         public rollin(cDiceBot Parent)
         {
             maxRoll = 99;
@@ -27,6 +28,7 @@ namespace DiceBot
             Name = "RollinIO";
             Thread t = new Thread(new ThreadStart(SyncThread));
             t.Start();
+            SiteURL = "https://rollin.io/ref/8c4";
         }
         DateTime lastbet = DateTime.Now;
         DateTime LastBalance = DateTime.Now;
@@ -36,20 +38,29 @@ namespace DiceBot
             {
                 if (Token!="" && Token!=null && username!="" && (DateTime.Now - LastBalance).TotalSeconds>15)
                 {
-                    HttpWebRequest betrequest2 = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/sync");
-                    if (Prox != null)
-                        betrequest2.Proxy = Prox;
-                    betrequest2.CookieContainer = Cookies;
-                    betrequest2.Headers.Add("X-CSRF-Token", Token);
-                    HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest2.GetResponse();
-                    string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-                    RollinBet tmpStats2 = json.JsonDeserialize<RollinBet>(sEmitResponse2);
-                    if (tmpStats2.success)
+                    try
                     {
-                        balance = (double.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
-                        Parent.updateBalance(balance);
+
+
+                        HttpWebRequest betrequest2 = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/sync");
+                        if (Prox != null)
+                            betrequest2.Proxy = Prox;
+                        betrequest2.CookieContainer = Cookies;
+                        betrequest2.Headers.Add("X-CSRF-Token", Token);
+                        HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest2.GetResponse();
+                        string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                        RollinBet tmpStats2 = json.JsonDeserialize<RollinBet>(sEmitResponse2);
+                        if (tmpStats2.success)
+                        {
+                            balance = (double.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
+                            Parent.updateBalance(balance);
+                        }
+                        LastBalance = DateTime.Now;
                     }
-                    LastBalance = DateTime.Now;
+                    catch (Exception e)
+                    {
+                        Parent.updateStatus(e.Message);
+                    }
                 }
                 System.Threading.Thread.Sleep(500);
             }
@@ -69,7 +80,7 @@ namespace DiceBot
                     betrequest.Proxy = Prox;
                 betrequest.Method = "POST";
                 double tmpchance = High ? 99.99 - chance : chance;
-                string post = string.Format("bet_amount={0}&bet_number={1}&prediction={2}", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo), tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo), High ? "bigger" : "smaller");
+                string post = string.Format("bet_amount={0}&bet_number={1}&prediction={2}&seed={3}", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo), tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo), High ? "bigger" : "smaller", R.Next(int.MaxValue));
                 betrequest.ContentLength = post.Length;
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 

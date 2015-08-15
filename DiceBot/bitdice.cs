@@ -27,12 +27,13 @@ namespace DiceBot
             ChangeSeed = true;
             Name = "BitDice";
             this.Parent = Parent;
+            SiteURL = "https://bitdice.me";
             /*Client = new WebSocket("");
             Client.Opened += Client_Opened;
             Client.Error += Client_Error;
             Client.Closed += Client_Closed;
             Client.MessageReceived += Client_MessageReceived;*/
-            
+
             Currencies = new string[] { "btc", "doge","ltc","redd","clam","dash"};
         }
 

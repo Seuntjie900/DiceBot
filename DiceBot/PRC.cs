@@ -28,6 +28,7 @@ namespace DiceBot
             Name = "PRCDice";
             BetURL = "https://pocketrocketscasino.eu/api/bets/GetBet?id=";
             con.Received += con_Received;
+            SiteURL = "https://pocketrocketscasino.eu";
         }
 
         public override void SetProxy(string host, int port)

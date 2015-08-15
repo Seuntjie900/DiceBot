@@ -20,6 +20,7 @@ namespace DiceBot
         public string[] Currencies = new string[] { "btc" };
         public double maxRoll { get; set; }
         string currency = "Btc";
+        public string SiteURL { get; set; }
         public string Currency
         {
             get { return currency; }

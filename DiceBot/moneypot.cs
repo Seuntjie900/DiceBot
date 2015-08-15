@@ -24,7 +24,7 @@ namespace DiceBot
             AutoLogin = false;
             Thread t = new Thread(new ThreadStart(GetBalanceThread));
             t.Start();
-
+            SiteURL = "https://www.moneypot.com/oauth/authorize?app_id=492&response_type=token";
         }
 
         DateTime lastupdate = DateTime.Now;
@@ -171,22 +171,12 @@ namespace DiceBot
 
         public void ShowMPWithdraw()
         {
-            MiniBrowser tmp = new MiniBrowser("https://www.moneypot.com/dialog/withdraw?app_id=492");
-            DialogResult login = tmp.ShowDialog();
-            //if (login == System.Windows.Forms.DialogResult.OK)
-            {
-                lastupdate = DateTime.Now.AddSeconds(-200);
-            }
+            System.Diagnostics.Process.Start("https://www.moneypot.com/dialog/withdraw?app_id=492");
         }
 
         public void ShowMPDeposit()
         {
-            MiniBrowser tmp = new MiniBrowser("https://www.moneypot.com/dialog/deposit?app_id=492");
-            DialogResult login = tmp.ShowDialog();
-            //if (login == System.Windows.Forms.DialogResult.OK)
-            {
-                lastupdate = DateTime.Now.AddSeconds(-200);
-            }
+            System.Diagnostics.Process.Start("https://www.moneypot.com/dialog/deposit?app_id=492");
         }
 
         protected override bool internalWithdraw(double Amount, string Address)
@@ -197,67 +187,84 @@ namespace DiceBot
         string token = "";
         public override void Login(string Username, string Password, string twofa)
         {
-            MiniBrowser tmp = new MiniBrowser("https://www.moneypot.com/oauth/authorize?app_id=492&response_type=token");
-            DialogResult login = tmp.ShowDialog();
-            if (login == System.Windows.Forms.DialogResult.OK)
+            if (Password == "")
             {
-                token = tmp.result as string;
-                lastupdate = DateTime.Now;
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.moneypot.com/v1/auth?access_token=" + token);
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-                MPAuth tmp2 = json.JsonDeserialize<MPAuth>(sEmitResponse2);
-                this.balance = tmp2.user.balance / 100000000.0;
-                wagered = tmp2.user.betted_wager / 100000000.0;
-                profit = tmp2.user.betted_profit / 100000000.0;
-                bets = (int)tmp2.user.betted_count;
-                Parent.updateBalance(balance);
-                Parent.updateBet(bets);
-                Parent.updateProfit(profit);
-                Parent.updateWagered(wagered);
-                ResetSeed();
-                finishedlogin(true);
+                System.Diagnostics.Process.Start(SiteURL);
+                finishedlogin(false);
             }
             else
             {
-                finishedlogin(false);
+                try
+                {
+                    token = Password;
+                    lastupdate = DateTime.Now;
+                    HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.moneypot.com/v1/auth?access_token=" + token);
+                    if (Prox != null)
+                        betrequest.Proxy = Prox;
+                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                    HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
+                    string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                    MPAuth tmp2 = json.JsonDeserialize<MPAuth>(sEmitResponse2);
+                    this.balance = tmp2.user.balance / 100000000.0;
+                    wagered = tmp2.user.betted_wager / 100000000.0;
+                    profit = tmp2.user.betted_profit / 100000000.0;
+                    bets = (int)tmp2.user.betted_count;
+                    Parent.updateBalance(balance);
+                    Parent.updateBet(bets);
+                    Parent.updateProfit(profit);
+                    Parent.updateWagered(wagered);
+                    ResetSeed();
+                    finishedlogin(true);
+                }
+                catch
+                {
+                    finishedlogin(true);
+                }
+                
             }
         }
 
         public override bool Register(string username, string password)
         {
-            MiniBrowser tmp = new MiniBrowser("https://www.moneypot.com/oauth/authorize?app_id=492&response_type=token");
-            DialogResult login = tmp.ShowDialog();
-            if (login == System.Windows.Forms.DialogResult.OK)
+            if (password == "")
             {
-                token = tmp.result as string;
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.moneypot.com/v1/auth?access_token=" + token);
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                lastupdate = DateTime.Now;
-                HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-                MPAuth tmp2 = json.JsonDeserialize<MPAuth>(sEmitResponse2);
-                this.balance = tmp2.user.balance / 100000000.0;
-                wagered = tmp2.user.betted_wager / 100000000.0;
-                profit = tmp2.user.betted_profit / 100000000.0;
-                bets = (int)tmp2.user.betted_count;
-                Parent.updateBalance(balance);
-                Parent.updateBet(bets);
-                Parent.updateProfit(profit);
-                Parent.updateWagered(wagered);
-                ResetSeed();
-                finishedlogin(true);
+                System.Diagnostics.Process.Start(SiteURL);
+                finishedlogin(false);
+                return false;
             }
             else
             {
-                finishedlogin(false);
+                try
+                {
+                    token = password;
+                    lastupdate = DateTime.Now;
+                    HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.moneypot.com/v1/auth?access_token=" + token);
+                    if (Prox != null)
+                        betrequest.Proxy = Prox;
+                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                    HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
+                    string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                    MPAuth tmp2 = json.JsonDeserialize<MPAuth>(sEmitResponse2);
+                    this.balance = tmp2.user.balance / 100000000.0;
+                    wagered = tmp2.user.betted_wager / 100000000.0;
+                    profit = tmp2.user.betted_profit / 100000000.0;
+                    bets = (int)tmp2.user.betted_count;
+                    Parent.updateBalance(balance);
+                    Parent.updateBet(bets);
+                    Parent.updateProfit(profit);
+                    Parent.updateWagered(wagered);
+                    ResetSeed();
+                    finishedlogin(true);
+                    return true;
+                }
+                catch
+                {
+                    finishedlogin(true);
+                    return false;
+                }
+
             }
-            return token != "" && token != null;
+            
         }
 
         public override bool ReadyToBet()

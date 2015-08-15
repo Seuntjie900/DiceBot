@@ -40,6 +40,7 @@ namespace DiceBot
             Currencies = cCurrencies;
             /*Thread tChat = new Thread(GetMessagesThread);
             tChat.Start();*/
+            SiteURL = "https://www.999dice.com/?20073598";
         }
 
         protected override void CurrencyChanged()

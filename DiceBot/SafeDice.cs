@@ -30,6 +30,7 @@ namespace DiceBot
             edge = 0.5m;
             Currencies = new string[]{"Btc", "XMR"};
             Currency = "Btc";
+            SiteURL = "https://safedice.com/?r=1050";
         }
         long curen = 1;
         protected override void CurrencyChanged()
@@ -256,7 +257,7 @@ namespace DiceBot
                 bet.Id = tmpResult.id;
                 bet.nonce = nonce++;
                 bet.Profit = tmpResult.profit / (curen != 2 ? 100000000m : 1000000000000m);
-                bet.Roll = tmpResult.roll / 10000;
+                bet.Roll = (decimal)tmpResult.roll / 10000m;
                 bet.serverhash = serverhash;
                 bet.uid = (int)tmpResult.accountId;
                 balance += (double)bet.Profit;

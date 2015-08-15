@@ -320,6 +320,7 @@
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbLogin = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnRegister = new System.Windows.Forms.Button();
             this.btnLogIn = new System.Windows.Forms.Button();
             this.txtApi2fa = new System.Windows.Forms.TextBox();
@@ -330,6 +331,8 @@
             this.lblPass = new System.Windows.Forms.Label();
             this.label88 = new System.Windows.Forms.Label();
             this.gbManualBet = new System.Windows.Forms.GroupBox();
+            this.btnDepositAlt = new System.Windows.Forms.Button();
+            this.btnMPWithdraw = new System.Windows.Forms.Button();
             this.btnMPDeposit = new System.Windows.Forms.Button();
             this.btnTip = new System.Windows.Forms.Button();
             this.btnInvest = new System.Windows.Forms.Button();
@@ -453,8 +456,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.btnMPWithdraw = new System.Windows.Forms.Button();
-            this.btnDepositAlt = new System.Windows.Forms.Button();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
@@ -4171,6 +4172,7 @@
             // 
             // gbLogin
             // 
+            this.gbLogin.Controls.Add(this.button1);
             this.gbLogin.Controls.Add(this.btnRegister);
             this.gbLogin.Controls.Add(this.btnLogIn);
             this.gbLogin.Controls.Add(this.txtApi2fa);
@@ -4187,6 +4189,16 @@
             this.gbLogin.TabIndex = 3;
             this.gbLogin.TabStop = false;
             this.gbLogin.Text = "Login/Register";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 175);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(104, 34);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "View Site";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_2);
             // 
             // btnRegister
             // 
@@ -4298,6 +4310,28 @@
             this.gbManualBet.TabStop = false;
             this.gbManualBet.Text = "Place a bet";
             this.gbManualBet.Enter += new System.EventHandler(this.groupBox5_Enter);
+            // 
+            // btnDepositAlt
+            // 
+            this.btnDepositAlt.Location = new System.Drawing.Point(342, 198);
+            this.btnDepositAlt.Name = "btnDepositAlt";
+            this.btnDepositAlt.Size = new System.Drawing.Size(75, 23);
+            this.btnDepositAlt.TabIndex = 17;
+            this.btnDepositAlt.Text = "Deposit Alt";
+            this.btnDepositAlt.UseVisualStyleBackColor = true;
+            this.btnDepositAlt.Visible = false;
+            this.btnDepositAlt.Click += new System.EventHandler(this.btnDepositAlt_Click);
+            // 
+            // btnMPWithdraw
+            // 
+            this.btnMPWithdraw.Location = new System.Drawing.Point(114, 199);
+            this.btnMPWithdraw.Name = "btnMPWithdraw";
+            this.btnMPWithdraw.Size = new System.Drawing.Size(75, 23);
+            this.btnMPWithdraw.TabIndex = 16;
+            this.btnMPWithdraw.Text = "WIthdraw";
+            this.btnMPWithdraw.UseVisualStyleBackColor = true;
+            this.btnMPWithdraw.Visible = false;
+            this.btnMPWithdraw.Click += new System.EventHandler(this.btnMPWithdraw_Click);
             // 
             // btnMPDeposit
             // 
@@ -5602,27 +5636,6 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
-            // btnMPWithdraw
-            // 
-            this.btnMPWithdraw.Location = new System.Drawing.Point(114, 199);
-            this.btnMPWithdraw.Name = "btnMPWithdraw";
-            this.btnMPWithdraw.Size = new System.Drawing.Size(75, 23);
-            this.btnMPWithdraw.TabIndex = 16;
-            this.btnMPWithdraw.Text = "WIthdraw";
-            this.btnMPWithdraw.UseVisualStyleBackColor = true;
-            this.btnMPWithdraw.Visible = false;
-            this.btnMPWithdraw.Click += new System.EventHandler(this.btnMPWithdraw_Click);
-            // 
-            // btnDepositAlt
-            // 
-            this.btnDepositAlt.Location = new System.Drawing.Point(342, 198);
-            this.btnDepositAlt.Name = "btnDepositAlt";
-            this.btnDepositAlt.Size = new System.Drawing.Size(75, 23);
-            this.btnDepositAlt.TabIndex = 17;
-            this.btnDepositAlt.Text = "Deposit Alt";
-            this.btnDepositAlt.UseVisualStyleBackColor = true;
-            this.btnDepositAlt.Click += new System.EventHandler(this.btnDepositAlt_Click);
-            // 
             // betBindingSource
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
@@ -6238,7 +6251,7 @@
         private System.Windows.Forms.Button btnMPDeposit;
         private System.Windows.Forms.Button btnMPWithdraw;
         private System.Windows.Forms.Button btnDepositAlt;
-
+        private System.Windows.Forms.Button button1;
     }
 }
 

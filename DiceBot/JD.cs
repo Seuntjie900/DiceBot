@@ -31,6 +31,7 @@ namespace DiceBot
             Name = "JustDice";
             Tip = true;
             TipUsingName = false;
+            SiteURL = "https://just-dice.com";
         }
 
         void Instance_OnAddress(Address Address)

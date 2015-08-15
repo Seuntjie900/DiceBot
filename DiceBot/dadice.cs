@@ -28,7 +28,7 @@ namespace DiceBot
             Name = "dadice";
             Tip = true;
             TipUsingName = true;
-            
+            SiteURL = "https://www.dadice.com/?referrer=seuntjie";
         }
 
         int betcount = 0;

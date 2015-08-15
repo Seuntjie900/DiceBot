@@ -26,14 +26,15 @@ namespace DiceBot
             AutoWithdraw = false;
             ChangeSeed = true;
             AutoLogin = false;
-            BetURL = "https://betterbets.io/api/bets/";
+            BetURL = "https://betterbets.io/api/bet/id?=";
             Thread t = new Thread(GetBalanceThread);
             t.Start();
             this.Parent = Parent;
             Name = "BetterBets";
             Tip = true;
             TipUsingName = true;
-            
+            SiteURL = "https://betterbets.io/?ref=1301492";
+
         }
 
         
@@ -120,6 +121,7 @@ namespace DiceBot
                             Parent.updateWagered(wagered);
                             Parent.updateWins(wins);
                             lastupdate = DateTime.Now;
+                            getDepositAddress();
                             
                             finishedlogin(true);
                             return;
@@ -359,6 +361,14 @@ namespace DiceBot
         public string getDepositAddress()
         {
             return "";
+            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://betterbets.io/api/depositAddress?accessToken=" + accesstoken);
+            if (Prox != null)
+                betrequest.Proxy = Prox;
+            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+            HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
+            string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+            PRCDepost tmp = json.JsonDeserialize<PRCDepost>(sEmitResponse2);
+            return tmp.Address;
         }
 
         public override void Disconnect()
@@ -497,6 +507,9 @@ namespace DiceBot
     {
         public int newSeed { get; set; }
     }
-
+    public class bbdeposit
+    {
+        public string deposit_address { get; set; }
+    }
     
 }
