@@ -2074,6 +2074,15 @@ namespace DiceBot
                             PresetList(Win);
                         }
                     }
+                    if (chkMinBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet< (double)nudMinumumBet.Value)
+                    {
+                        Lastbet = (double)nudMinumumBet.Value;
+
+                    }
+                    if (chkMaxBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet > (double)nudMaximumBet.Value)
+                    {
+                        Lastbet = (double)nudMaximumBet.Value;
+                    }
                     if (RunningSimulation && Lastbet > dPreviousBalance)
                     {
                         Stop();
@@ -4709,7 +4718,7 @@ namespace DiceBot
         }
 
         DateTime LastMissingCheck = DateTime.Now;
-        private void btnGetSeeds_Click(object sender, EventArgs e)
+        public void btnGetSeeds_Click(object sender, EventArgs e)
         {
             if (running)
             {
@@ -5299,6 +5308,14 @@ namespace DiceBot
                         return rdbPresetWinReset.Checked ?"0":
                         rdbPresetWinStep.Checked ?"1":"2";
                     }
+                    if (key == "OnStop")
+                    {
+                        return rdbInvest.Checked?"0": rdbStop.Checked?"1":"2";
+                    }
+                    if (key == "ResetSeedMode")
+                    {
+                        return rdbResetSeedBets.Checked ? "0":rdbResetSeedWins.Checked? "1":"2";
+                    }
                 }
                 else if (c is CheckBox)
                     return (c as CheckBox).Checked;
@@ -5417,7 +5434,18 @@ namespace DiceBot
                         rdbPresetWinStep.Checked = value == 1;
                         rdbPresetWinStop.Checked = value == 2;
                     }
-                    
+                    if (Key == "OnStop")
+                    {
+                        rdbInvest.Checked = value == 0;
+                        rdbStop.Checked = value == 1;
+                        rdbWithdraw.Checked = value == 2;
+                    }
+                    if (Key == "ResetSeedMode")
+                    {
+                        rdbResetSeedBets.Checked = value == 0;
+                        rdbResetSeedWins.Checked = value == 1;
+                        rdbResetSeedLosses.Checked = value == 2;
+                    }
                 }
                 else if (c is CheckBox)
                     (c as CheckBox).Checked = value == 1;
@@ -5697,6 +5725,10 @@ namespace DiceBot
             
             SaveNames.Add("MartingaleStretchLoss", nudStretchLoss);
             SaveNames.Add("MartingaleStretchWin", nudStretchWin);
+            SaveNames.Add("EnableMaximumBet", chkMaxBet);
+            SaveNames.Add("EnableMinumumBet", chkMinBet);
+            SaveNames.Add("MaximumBet",nudMaximumBet);
+            SaveNames.Add("MinumumBet", nudMinumumBet);
 
             PSaveNames.Add("Amount",nudAmount );
             PSaveNames.Add("Limit", nudLimit);

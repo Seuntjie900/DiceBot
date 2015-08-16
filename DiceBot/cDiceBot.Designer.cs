@@ -457,6 +457,10 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.chkMinBet = new System.Windows.Forms.CheckBox();
+            this.chkMaxBet = new System.Windows.Forms.CheckBox();
+            this.nudMinumumBet = new System.Windows.Forms.NumericUpDown();
+            this.nudMaximumBet = new System.Windows.Forms.NumericUpDown();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -588,6 +592,8 @@
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinumumBet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaximumBet)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlAdvanced
@@ -3461,6 +3467,10 @@
             // 
             // pnlAdvancedAdvanced
             // 
+            this.pnlAdvancedAdvanced.Controls.Add(this.nudMaximumBet);
+            this.pnlAdvancedAdvanced.Controls.Add(this.nudMinumumBet);
+            this.pnlAdvancedAdvanced.Controls.Add(this.chkMaxBet);
+            this.pnlAdvancedAdvanced.Controls.Add(this.chkMinBet);
             this.pnlAdvancedAdvanced.Controls.Add(this.label15);
             this.pnlAdvancedAdvanced.Controls.Add(this.gbZigZag);
             this.pnlAdvancedAdvanced.Controls.Add(this.label84);
@@ -3481,7 +3491,7 @@
             this.pnlAdvancedAdvanced.Controls.Add(this.chkBotSpeed);
             this.pnlAdvancedAdvanced.Location = new System.Drawing.Point(12, 6);
             this.pnlAdvancedAdvanced.Name = "pnlAdvancedAdvanced";
-            this.pnlAdvancedAdvanced.Size = new System.Drawing.Size(406, 457);
+            this.pnlAdvancedAdvanced.Size = new System.Drawing.Size(406, 540);
             this.pnlAdvancedAdvanced.TabIndex = 82;
             this.pnlAdvancedAdvanced.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlAdvancedAdvanced_Paint);
             // 
@@ -3512,7 +3522,7 @@
             this.gbZigZag.Controls.Add(this.label1);
             this.gbZigZag.Controls.Add(this.label8);
             this.gbZigZag.Controls.Add(this.label7);
-            this.gbZigZag.Location = new System.Drawing.Point(12, 139);
+            this.gbZigZag.Location = new System.Drawing.Point(12, 220);
             this.gbZigZag.Name = "gbZigZag";
             this.gbZigZag.Size = new System.Drawing.Size(330, 161);
             this.gbZigZag.TabIndex = 110;
@@ -3727,7 +3737,7 @@
             // label84
             // 
             this.label84.AutoSize = true;
-            this.label84.Location = new System.Drawing.Point(16, 378);
+            this.label84.Location = new System.Drawing.Point(16, 459);
             this.label84.Name = "label84";
             this.label84.Size = new System.Drawing.Size(103, 13);
             this.label84.TabIndex = 94;
@@ -3736,14 +3746,14 @@
             // lsbStrats
             // 
             this.lsbStrats.FormattingEnabled = true;
-            this.lsbStrats.Location = new System.Drawing.Point(125, 378);
+            this.lsbStrats.Location = new System.Drawing.Point(125, 459);
             this.lsbStrats.Name = "lsbStrats";
             this.lsbStrats.Size = new System.Drawing.Size(217, 69);
             this.lsbStrats.TabIndex = 93;
             // 
             // btnStratRefresh
             // 
-            this.btnStratRefresh.Location = new System.Drawing.Point(187, 349);
+            this.btnStratRefresh.Location = new System.Drawing.Point(187, 430);
             this.btnStratRefresh.Name = "btnStratRefresh";
             this.btnStratRefresh.Size = new System.Drawing.Size(75, 23);
             this.btnStratRefresh.TabIndex = 92;
@@ -3753,7 +3763,7 @@
             // 
             // btnBrowseStratFolder
             // 
-            this.btnBrowseStratFolder.Location = new System.Drawing.Point(267, 349);
+            this.btnBrowseStratFolder.Location = new System.Drawing.Point(267, 430);
             this.btnBrowseStratFolder.Name = "btnBrowseStratFolder";
             this.btnBrowseStratFolder.Size = new System.Drawing.Size(75, 23);
             this.btnBrowseStratFolder.TabIndex = 91;
@@ -3763,7 +3773,7 @@
             // 
             // txtQuickSwitch
             // 
-            this.txtQuickSwitch.Location = new System.Drawing.Point(125, 323);
+            this.txtQuickSwitch.Location = new System.Drawing.Point(125, 404);
             this.txtQuickSwitch.Name = "txtQuickSwitch";
             this.txtQuickSwitch.Size = new System.Drawing.Size(217, 20);
             this.txtQuickSwitch.TabIndex = 90;
@@ -3771,7 +3781,7 @@
             // label83
             // 
             this.label83.AutoSize = true;
-            this.label83.Location = new System.Drawing.Point(20, 326);
+            this.label83.Location = new System.Drawing.Point(20, 407);
             this.label83.Name = "label83";
             this.label83.Size = new System.Drawing.Size(105, 13);
             this.label83.TabIndex = 89;
@@ -5640,6 +5650,52 @@
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
             // 
+            // chkMinBet
+            // 
+            this.chkMinBet.AutoSize = true;
+            this.chkMinBet.Location = new System.Drawing.Point(12, 139);
+            this.chkMinBet.Name = "chkMinBet";
+            this.chkMinBet.Size = new System.Drawing.Size(93, 17);
+            this.chkMinBet.TabIndex = 112;
+            this.chkMinBet.Text = "Minumum Bet:";
+            this.chkMinBet.UseVisualStyleBackColor = true;
+            // 
+            // chkMaxBet
+            // 
+            this.chkMaxBet.AutoSize = true;
+            this.chkMaxBet.Location = new System.Drawing.Point(12, 171);
+            this.chkMaxBet.Name = "chkMaxBet";
+            this.chkMaxBet.Size = new System.Drawing.Size(95, 17);
+            this.chkMaxBet.TabIndex = 113;
+            this.chkMaxBet.Text = "Maximum Bet: ";
+            this.chkMaxBet.UseVisualStyleBackColor = true;
+            // 
+            // nudMinumumBet
+            // 
+            this.nudMinumumBet.DecimalPlaces = 8;
+            this.nudMinumumBet.Location = new System.Drawing.Point(111, 138);
+            this.nudMinumumBet.Maximum = new decimal(new int[] {
+            1215752192,
+            23,
+            0,
+            0});
+            this.nudMinumumBet.Name = "nudMinumumBet";
+            this.nudMinumumBet.Size = new System.Drawing.Size(101, 20);
+            this.nudMinumumBet.TabIndex = 114;
+            // 
+            // nudMaximumBet
+            // 
+            this.nudMaximumBet.DecimalPlaces = 8;
+            this.nudMaximumBet.Location = new System.Drawing.Point(111, 170);
+            this.nudMaximumBet.Maximum = new decimal(new int[] {
+            1215752192,
+            23,
+            0,
+            0});
+            this.nudMaximumBet.Name = "nudMaximumBet";
+            this.nudMaximumBet.Size = new System.Drawing.Size(101, 20);
+            this.nudMaximumBet.TabIndex = 115;
+            // 
             // cDiceBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -5820,6 +5876,8 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinumumBet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaximumBet)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6252,6 +6310,10 @@
         private System.Windows.Forms.Button btnMPWithdraw;
         private System.Windows.Forms.Button btnDepositAlt;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.NumericUpDown nudMaximumBet;
+        private System.Windows.Forms.NumericUpDown nudMinumumBet;
+        private System.Windows.Forms.CheckBox chkMaxBet;
+        private System.Windows.Forms.CheckBox chkMinBet;
     }
 }
 

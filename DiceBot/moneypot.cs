@@ -47,7 +47,7 @@ namespace DiceBot
                     profit = tmp2.user.betted_profit / 100000000.0;
                     bets = (int)tmp2.user.betted_count;
                     Parent.updateBalance(balance);
-                    Parent.updateBet(bets);
+                    Parent.updateBets(bets);
                     Parent.updateProfit(profit);
                     Parent.updateWagered(wagered);
                 }
@@ -210,7 +210,7 @@ namespace DiceBot
                     profit = tmp2.user.betted_profit / 100000000.0;
                     bets = (int)tmp2.user.betted_count;
                     Parent.updateBalance(balance);
-                    Parent.updateBet(bets);
+                    Parent.updateBets(bets);
                     Parent.updateProfit(profit);
                     Parent.updateWagered(wagered);
                     ResetSeed();
@@ -250,7 +250,7 @@ namespace DiceBot
                     profit = tmp2.user.betted_profit / 100000000.0;
                     bets = (int)tmp2.user.betted_count;
                     Parent.updateBalance(balance);
-                    Parent.updateBet(bets);
+                    Parent.updateBets(bets);
                     Parent.updateProfit(profit);
                     Parent.updateWagered(wagered);
                     ResetSeed();

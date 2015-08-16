@@ -20,7 +20,7 @@ namespace DiceBot
             this.Parent = Parent;
             AutoInvest = false;
             AutoLogin = true;
-            AutoWithdraw = false;
+            AutoWithdraw = true;
             ChangeSeed = false;
             BetURL = "";
             Thread t = new Thread(new ThreadStart(GetBalanceThread));
@@ -292,7 +292,7 @@ namespace DiceBot
             {
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://dadice.com/api/tip");
                 betrequest.Method = "POST";
-                string post = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}&payee={2}&amount={30:00000000}", username, key, (args as string[])[0], (args as string[])[1]);
+                string post = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "username={0}&key={1}&payee={2}&amount={3:0.00000000}", username, key, (args as string[])[0], (args as string[])[1]);
                 betrequest.ContentLength = post.Length;
                 if (Prox != null)
                     betrequest.Proxy = Prox;
@@ -312,6 +312,7 @@ namespace DiceBot
         }
 
         
+
 
         public override void SendTip(string User, double amount)
         {

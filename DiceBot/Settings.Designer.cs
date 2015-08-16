@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox19 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.nudLiveBetsNum = new System.Windows.Forms.NumericUpDown();
             this.lblSeedFound = new System.Windows.Forms.Label();
             this.lblSeedProgress = new System.Windows.Forms.Label();
             this.btnGetSeeds = new System.Windows.Forms.Button();
@@ -66,15 +68,13 @@
             this.label50 = new System.Windows.Forms.Label();
             this.chkTray = new System.Windows.Forms.CheckBox();
             this.btnSaveUser = new System.Windows.Forms.Button();
-            this.nudLiveBetsNum = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox19.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLiveBetsNum)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSoundStreak)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLiveBetsNum)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox19
@@ -91,6 +91,38 @@
             this.groupBox19.TabIndex = 62;
             this.groupBox19.TabStop = false;
             this.groupBox19.Text = "Bets";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 44);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(217, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Number of bets to show in the live bet panel:";
+            // 
+            // nudLiveBetsNum
+            // 
+            this.nudLiveBetsNum.Location = new System.Drawing.Point(229, 42);
+            this.nudLiveBetsNum.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nudLiveBetsNum.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLiveBetsNum.Name = "nudLiveBetsNum";
+            this.nudLiveBetsNum.Size = new System.Drawing.Size(54, 20);
+            this.nudLiveBetsNum.TabIndex = 4;
+            this.nudLiveBetsNum.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudLiveBetsNum.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // lblSeedFound
             // 
@@ -116,6 +148,7 @@
             this.btnGetSeeds.TabIndex = 1;
             this.btnGetSeeds.Text = "Look for seeds now";
             this.btnGetSeeds.UseVisualStyleBackColor = true;
+            this.btnGetSeeds.Click += new System.EventHandler(this.btnGetSeeds_Click);
             // 
             // chkAutoSeeds
             // 
@@ -173,6 +206,7 @@
             this.btnBrowseAlarm.TabIndex = 12;
             this.btnBrowseAlarm.Text = "Browse";
             this.btnBrowseAlarm.UseVisualStyleBackColor = true;
+            this.btnBrowseAlarm.Click += new System.EventHandler(this.btnBrowseAlarm_Click);
             // 
             // txtPathAlarm
             // 
@@ -189,6 +223,7 @@
             this.btnBrowseChing.TabIndex = 10;
             this.btnBrowseChing.Text = "Browse";
             this.btnBrowseChing.UseVisualStyleBackColor = true;
+            this.btnBrowseChing.Click += new System.EventHandler(this.btnBrowseChing_Click_1);
             // 
             // txtPathChing
             // 
@@ -285,6 +320,7 @@
             this.btnSMTP.TabIndex = 8;
             this.btnSMTP.Text = "Edit SMTP";
             this.btnSMTP.UseVisualStyleBackColor = true;
+            this.btnSMTP.Click += new System.EventHandler(this.btnSMTP_Click);
             // 
             // nudEmailStreak
             // 
@@ -477,38 +513,6 @@
             this.btnSaveUser.UseVisualStyleBackColor = true;
             this.btnSaveUser.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
-            // nudLiveBetsNum
-            // 
-            this.nudLiveBetsNum.Location = new System.Drawing.Point(229, 42);
-            this.nudLiveBetsNum.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nudLiveBetsNum.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudLiveBetsNum.Name = "nudLiveBetsNum";
-            this.nudLiveBetsNum.Size = new System.Drawing.Size(54, 20);
-            this.nudLiveBetsNum.TabIndex = 4;
-            this.nudLiveBetsNum.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nudLiveBetsNum.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 44);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(217, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Number of bets to show in the live bet panel:";
-            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -527,6 +531,7 @@
             this.Text = "Settings";
             this.groupBox19.ResumeLayout(false);
             this.groupBox19.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLiveBetsNum)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSoundStreak)).EndInit();
@@ -535,7 +540,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLiveBetsNum)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

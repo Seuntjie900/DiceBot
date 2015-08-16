@@ -180,13 +180,6 @@ namespace DiceBot
             }
         }
 
-        private void btnSMTP_Click_1(object sender, EventArgs e)
-        {
-            string smtp = Interaction.InputBox("Enter new smtp server address", "SMTP", "smtp.secrueserver.net");
-            Parent.Emails.SMTP = smtp;
-
-        }
-
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             if (nudLiveBetsNum.Value>500)
@@ -195,5 +188,41 @@ namespace DiceBot
             }
         }
 
+        private void btnSMTP_Click(object sender, EventArgs e)
+        {
+            string smtp = Interaction.InputBox("Enter new smtp server address", "SMTP", "smtp.secrueserver.net");
+            Parent.Emails.SMTP = smtp;
+        }
+
+        private void btnBrowseChing_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog ofdChing = new OpenFileDialog();
+            ofdChing.Filter = "sound Files (*.mp3,*.wav)|*.mp3;*.wav";
+            if (ofdChing.ShowDialog() == DialogResult.OK)
+            {
+                if (File.Exists(ofdChing.FileName))
+                {
+                    txtPathChing.Text = ofdChing.FileName;
+                }
+            }
+        }
+
+        private void btnBrowseAlarm_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofdChing = new OpenFileDialog();
+            ofdChing.Filter = "sound Files (*.mp3,*.wav)|*.mp3;*.wav";
+            if (ofdChing.ShowDialog() == DialogResult.OK)
+            {
+                if (File.Exists(ofdChing.FileName))
+                {
+                    txtPathAlarm.Text = ofdChing.FileName;
+                }
+            }
+        }
+
+        private void btnGetSeeds_Click(object sender, EventArgs e)
+        {
+            Parent.btnGetSeeds_Click(btnGetSeeds, e);
+        }
     }
 }
