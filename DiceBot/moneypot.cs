@@ -7,11 +7,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Http;
 
 namespace DiceBot
 {
     class moneypot:DiceSite
     {
+        HttpClient Client = new HttpClient { BaseAddress = new Uri("https://api.moneypot.com/v1/") };
+
         Random R = new Random();
         public moneypot(cDiceBot Parent)
         {
@@ -24,9 +27,9 @@ namespace DiceBot
             AutoLogin = false;
             Thread t = new Thread(new ThreadStart(GetBalanceThread));
             t.Start();
-            SiteURL = "https://www.moneypot.com/oauth/authorize?app_id=492&response_type=token";
+            SiteURL = "https://www.moneypot.com/oauth/authorize?app_id="+appid+"&response_type=token";
         }
-
+       protected int appid = 492;
         DateTime lastupdate = DateTime.Now;
         void GetBalanceThread()
         {
@@ -35,13 +38,9 @@ namespace DiceBot
                 if (token != "" && token != null && (DateTime.Now-lastupdate).TotalSeconds > 30)
                 {
                     lastupdate = DateTime.Now;
-                    HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.moneypot.com/v1/auth?access_token=" + token);
-                    if (Prox != null)
-                        betrequest.Proxy = Prox;
-                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                    HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                    string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-                    MPAuth tmp2 = json.JsonDeserialize<MPAuth>(sEmitResponse2);
+                    string s = Client.GetStringAsync("auth?access_token="+token).Result;
+
+                    MPAuth tmp2 = json.JsonDeserialize<MPAuth>(s);
                     this.balance = tmp2.user.balance / 100000000.0;
                     wagered = tmp2.user.betted_wager / 100000000.0;
                     profit = tmp2.user.betted_profit / 100000000.0;
@@ -64,34 +63,27 @@ namespace DiceBot
 
                 bool High = (bool)_High;
                 int client = R.Next(0, int.MaxValue);
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.moneypot.com/v1/bets/simple-dice?access_token="+token);
-                betrequest.CookieContainer = new CookieContainer();
-                betrequest.CookieContainer.Add(new Cookie("sessionId", token, "/", "moneypot.com"));
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.Method = "POST";
                 double tmpchance = High ? maxRoll - chance : chance;
-                MPBetPlace betplace = new MPBetPlace {
+                MPBetPlace betplace = new MPBetPlace
+                {
                     client_seed = client,
                     cond = High ? ">" : "<",
-                    hash=next,
+                    hash = next,
                     payout = (((double)(100.0m - edge) / chance) * (amount * 100000000)),
                     target = tmpchance,
                     wager = amount * 100000000
                 };
-                string post = json.JsonSerializer<MPBetPlace>(betplace);
-                betrequest.ContentLength = post.Length;
-                betrequest.ContentType = "application/json";
-
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                
+                HttpContent cont = new StringContent(json.JsonSerializer<MPBetPlace>(betplace));
+                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                string Resp = "";
+                using (var response = Client.PostAsync("bets/simple-dice?access_token=" + token, cont))
                 {
+                    Resp = response.Result.Content.ReadAsStringAsync().Result;
 
-                    writer.Write(post);
                 }
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-
-                MPBet tmp = json.JsonDeserialize<MPBet>(sEmitResponse);
+                
+                MPBet tmp = json.JsonDeserialize<MPBet>(Resp);
 
                 Bet tmpBet = new Bet {
                 Amount = (decimal)amount,
@@ -144,23 +136,12 @@ namespace DiceBot
 
         public override void ResetSeed()
         {
-            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.moneypot.com/v1/hashes?access_token=" + token);
-            if (Prox != null)
-                betrequest.Proxy = Prox;
-            betrequest.Method = "POST";
+            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+            pairs.Add(new KeyValuePair<string, string>("access_token", token));
+            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+            string res = Client.PostAsync("hashes?access_token=" + token, Content).Result.Content.ReadAsStringAsync().Result;
 
-            string post = "access_token="+token;
-            betrequest.ContentLength = post.Length;
-            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-            using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-            {
-
-                writer.Write(post);
-            }
-            HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-            string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-            MPSeed tmp = json.JsonDeserialize<MPSeed>(sEmitResponse2);
+            MPSeed tmp = json.JsonDeserialize<MPSeed>(res);
             next = tmp.hash;
         }
 
@@ -171,12 +152,12 @@ namespace DiceBot
 
         public void ShowMPWithdraw()
         {
-            System.Diagnostics.Process.Start("https://www.moneypot.com/dialog/withdraw?app_id=492");
+            System.Diagnostics.Process.Start("https://www.moneypot.com/dialog/withdraw?app_id="+appid+"");
         }
 
         public void ShowMPDeposit()
         {
-            System.Diagnostics.Process.Start("https://www.moneypot.com/dialog/deposit?app_id=492");
+            System.Diagnostics.Process.Start("https://www.moneypot.com/dialog/deposit?app_id="+appid+"");
         }
 
         protected override bool internalWithdraw(double Amount, string Address)
@@ -198,13 +179,11 @@ namespace DiceBot
                 {
                     token = Password;
                     lastupdate = DateTime.Now;
-                    HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.moneypot.com/v1/auth?access_token=" + token);
-                    if (Prox != null)
-                        betrequest.Proxy = Prox;
-                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                    HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                    string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-                    MPAuth tmp2 = json.JsonDeserialize<MPAuth>(sEmitResponse2);
+                    lastupdate = DateTime.Now;
+                    string s = Client.GetStringAsync("auth?access_token=" + token).Result;
+
+                    MPAuth tmp2 = json.JsonDeserialize<MPAuth>(s);
+                    
                     this.balance = tmp2.user.balance / 100000000.0;
                     wagered = tmp2.user.betted_wager / 100000000.0;
                     profit = tmp2.user.betted_profit / 100000000.0;
@@ -218,33 +197,30 @@ namespace DiceBot
                 }
                 catch
                 {
-                    finishedlogin(true);
+                    finishedlogin(false);
                 }
                 
             }
         }
 
-        public override bool Register(string username, string password)
+        public override bool Register(string username, string Password)
         {
-            if (password == "")
+            if (Password == "")
             {
                 System.Diagnostics.Process.Start(SiteURL);
                 finishedlogin(false);
-                return false;
             }
             else
             {
                 try
                 {
-                    token = password;
+                    token = Password;
                     lastupdate = DateTime.Now;
-                    HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://api.moneypot.com/v1/auth?access_token=" + token);
-                    if (Prox != null)
-                        betrequest.Proxy = Prox;
-                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                    HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                    string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-                    MPAuth tmp2 = json.JsonDeserialize<MPAuth>(sEmitResponse2);
+                    lastupdate = DateTime.Now;
+                    string s = Client.GetStringAsync("auth?access_token=" + token).Result;
+
+                    MPAuth tmp2 = json.JsonDeserialize<MPAuth>(s);
+
                     this.balance = tmp2.user.balance / 100000000.0;
                     wagered = tmp2.user.betted_wager / 100000000.0;
                     profit = tmp2.user.betted_profit / 100000000.0;
@@ -259,12 +235,13 @@ namespace DiceBot
                 }
                 catch
                 {
-                    finishedlogin(true);
+                    finishedlogin(false);
                     return false;
                 }
 
             }
-            
+            return true;
+
         }
 
         public override bool ReadyToBet()
