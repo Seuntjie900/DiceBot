@@ -17,6 +17,7 @@ namespace DiceBot
         string username = "";
         public dadice(cDiceBot Parent)
         {
+            register = false;
             maxRoll = 99.99;
             this.Parent = Parent;
             AutoInvest = false;

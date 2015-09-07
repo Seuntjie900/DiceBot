@@ -22,6 +22,7 @@ namespace DiceBot
         Random R = new Random();
         public BB(cDiceBot Parent)
         {
+            register = false;
             maxRoll = 99.99;
             AutoInvest = false;
             AutoWithdraw = false;

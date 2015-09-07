@@ -360,6 +360,22 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
+            foreach (string s in CoinMillions.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                coinMillionsToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
 
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
@@ -4248,23 +4264,33 @@ namespace DiceBot
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            ConfirmPassword Conf = new ConfirmPassword();
-            bool Valid = false;
-            
-            if (Conf.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (CurrentSite.register)
             {
-                Valid = Conf.Password == txtApiPassword.Text;
-            }
-            if (Valid)
-            {
-                if (CurrentSite.Register(txtApiUsername.Text, txtApiPassword.Text))
+                ConfirmPassword Conf = new ConfirmPassword();
+                bool Valid = false;
+
+                if (Conf.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    EnableNotLoggedInControls(true);
+                    Valid = Conf.Password == txtApiPassword.Text;
+                }
+                if (Valid)
+                {
+                    if (CurrentSite.Register(txtApiUsername.Text, txtApiPassword.Text))
+                    {
+                        EnableNotLoggedInControls(true);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Registration Failed.");
                 }
             }
             else
             {
-                MessageBox.Show("Registration Failed.");
+                if (MessageBox.Show(string.Format("It looks like {0} does not allow registration through the API. Would you like to open {0} in your browser to register an account?", CurrentSite.Name)) == DialogResult.OK)
+                {
+                    Process.Start(CurrentSite.SiteURL);
+                }
             }
         }
 

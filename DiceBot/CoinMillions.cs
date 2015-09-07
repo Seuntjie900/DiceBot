@@ -20,7 +20,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         Random R = new Random();
         HttpClient Client = new HttpClient { BaseAddress = new Uri("https://coinmillions.com/api/1/") };
-        
+        public static string[] cCurrencies = new string[] { "btc", "xrp", "ltc" };
         public CoinMillions(cDiceBot Parent)
         {
             Currency = "btc";
@@ -42,6 +42,12 @@ namespace DiceBot
             new HttpClient { BaseAddress = new Uri("https://coinmillions.com/api/1/") };
         }
 
+        protected override void CurrencyChanged()
+        {
+            lastupdate = DateTime.Now.AddMinutes(-1);
+            base.CurrencyChanged();
+        }
+
         void dumapipcontent(string message)
         {
             using (StreamWriter sw = System.IO.File.AppendText("cmlog.txt"))
@@ -51,6 +57,7 @@ namespace DiceBot
         }
         DateTime lastChat = DateTime.Now;
         int lastChatId = 0;
+        int uid = 0;
         private void GetBalanceThread()
         {
             try
@@ -66,22 +73,26 @@ namespace DiceBot
                             {
                                 //HttpResponseMessage tmp = Client.GetAsync("user/balance").Result;
                                 
-                                string s = Client.GetAsync("user/balance").Result.Content.ReadAsStringAsync().Result;
-                                
-                                /*bbStats tmpu = json.JsonDeserialize<bbStats>(s);
-                                balance = tmpu.balance; //i assume
-                                bets = tmpu.total_bets;
-                                wagered = tmpu.total_wagered;
-                                profit = tmpu.total_profit;
-                                wins = tmpu.total_wins;
-                                losses = bets - losses;
+                                string s = Client.GetAsync("user/rankings?user_id="+uid).Result.Content.ReadAsStringAsync().Result;
+                                cmRankings tmpu = json.JsonDeserialize<cmRankings>(s);
+
+
+
+                                balance = double.Parse( Currency == "btc" ? tmpu.current_balance.value.btc : Currency == "ltc" ? tmpu.current_balance.value.ltc : tmpu.current_balance.value.xrp, System.Globalization.NumberFormatInfo.InvariantInfo);
+
+
+                                bets = (int)tmpu.bets_placed.value;
+                                wagered = double.Parse(Currency == "btc" ? tmpu.amount_wagered.value.btc : Currency == "ltc" ? tmpu.amount_wagered.value.ltc : tmpu.amount_wagered.value.xrp, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                profit = double.Parse(Currency == "btc" ? tmpu.profit.value.btc : Currency == "ltc" ? tmpu.profit.value.ltc : tmpu.profit.value.xrp, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                wins = (int)tmpu.bets_won.value;
+                                losses = (int)tmpu.bets_lost.value;
                                 Parent.updateBalance((decimal)(balance));
                                 Parent.updateBets(bets);
                                 Parent.updateLosses(losses);
                                 Parent.updateProfit(profit);
                                 Parent.updateWagered(wagered);
                                 Parent.updateWins(wins);
-                                */
+                                
                             }
                             catch
                             {
@@ -147,17 +158,22 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string twofa)
         {
-            accesstoken = Password;
+            
             Client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Password);
             //Client.DefaultRequestHeaders.Add("X-Affiliate-ID", "10156");
-            lastupdate = DateTime.Now.AddMinutes(-1);
+            
             try
             {
                 //HttpResponseMessage tmp = Client.GetAsync("user/balance").Result;
 
                 string s = Client.GetAsync("user/balance").Result.Content.ReadAsStringAsync().Result;
-                
+                string tmps = Password.Substring(2).Substring(0, Password.Substring(2).IndexOf("."));
+                uid = int.Parse(tmps);
+
+                lastupdate = DateTime.Now.AddMinutes(-1);
+                accesstoken = Password;
                 finishedlogin(true);
+                return;
             }
             catch
             {
@@ -256,29 +272,51 @@ namespace DiceBot
                             PlaceBetThread(_High);
                             return;
                         }
+                        else
+                        {
+                            Parent.updateStatus("Oops! Something went wrong. Make sure your bet is larger than the minimum.");
+                            return;
+                        }
                     }
                 }
                 
+
                 CmBetResult tmp = json.JsonDeserialize<CmBetResult>(responseData);
 
-                Bet tmp2 = tmp.Tobet((decimal)chance);
-                //next = tmp.nextServerSeed;
-                lastupdate = DateTime.Now;
-                balance = double.Parse(tmp.new_balance.btc.available, System.Globalization.NumberFormatInfo.InvariantInfo);
-                bets++;
-                /*if (tmp2)
-                    wins++;
-                else losses++;*/
-                
-                wagered += (double)(tmp2.Amount);
-                profit += (double)tmp2.Profit;
+
+                if (tmp.details != null || tmp.error_code!=0)
+                {
+                    if (tmp.details.Length>0)
+                    {
+                        Parent.updateStatus(tmp.details[0]);
+                    }
+                    else
+                    {
+                        Parent.updateStatus("Oops! Something went wrong. Make sure your bet is larger than the minimum.");
+                    }
+                }
+                else
+                {
+                    Bet tmp2 = tmp.Tobet((decimal)chance);
+                    //next = tmp.nextServerSeed;
+                    lastupdate = DateTime.Now;
+                    balance = double.Parse(tmp.new_balance.btc.available, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    bets++;
+                    /*if (tmp2)
+                        wins++;
+                    else losses++;*/
+
+                    wagered += (double)(tmp2.Amount);
+                    profit += (double)tmp2.Profit;
 
 
-                
-                //tmp2.serverhash = next;
-                //next = tmp.nextServerSeed;
 
-                FinishedBet(tmp2);
+                    //tmp2.serverhash = next;
+                    //next = tmp.nextServerSeed;
+
+                    FinishedBet(tmp2);
+                }
+
             }
             catch (WebException e)
             {
@@ -297,7 +335,7 @@ namespace DiceBot
             }
             catch (Exception e)
             {
-
+                Parent.updateStatus("Oops! Something went wrong. Make sure your bet is larger than the minimum.");
             }
         }
 
@@ -333,7 +371,9 @@ namespace DiceBot
         public string lucky_number { get; set; }
         public long id { get; set; }
         public string crypto { get; set; }
-
+        
+        public int error_code { get; set; }
+        public string[] details { get; set; }
         public Bet Tobet(decimal chance)
         {
             Bet tmp = new Bet {
@@ -365,5 +405,44 @@ namespace DiceBot
         public string profit_fee_base { get; set; }
 
         public int num_unconfirmed_deposits { get; set; }
+    }
+
+    public class cmRankings
+    {
+        public cmRankingBase current_balance { get; set; }
+        public cmRankingBase investment_profit { get; set; }
+        public cmRankingBase amount_lost { get; set; }
+
+        public cmRankingBaseInt global_rank { get; set; }
+        public cmRankingBase current_investment { get; set; }
+        public cmRankingBase profit { get; set; }
+        public cmRankingBase affiliation_profit { get; set; }
+        public cmRankingBaseInt bets_lost { get; set; }
+        public cmRankingBase amount_wagered { get; set; }
+        public cmRankingBase amount_won { get; set; }
+        public cmRankingBaseInt bets_placed { get; set; }
+        public cmRankingBaseInt bets_won { get; set; }
+        public string username { get; set; }
+        public long joined { get; set; }
+        public bool show_stats_publically { get; set; }
+
+    }
+    public class cmRankingBase
+    {
+        public double percentile { get; set; }
+        public double rank { get; set; }
+        public cmRankingValueBase value { get; set; }
+    }
+    public class cmRankingBaseInt
+    {
+        public double percentile { get; set; }
+        public double rank { get; set; }
+        public double value { get; set; }
+    }
+    public class cmRankingValueBase
+    {
+        public string btc { get; set; }
+        public string xrp { get; set; }
+        public string ltc { get; set; }
     }
 }

@@ -12,6 +12,8 @@ namespace DiceBot
 {
     public abstract class DiceSite
     {
+        bool reg = true;
+        public bool register { get { return reg; } set { reg = value; } }
         protected string prox_host = "";
         protected int prox_port = 3128;
         protected string prox_username = "";

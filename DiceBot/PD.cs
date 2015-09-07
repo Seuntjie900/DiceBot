@@ -278,19 +278,19 @@ namespace DiceBot
                 profit = (double)(tmp.user.profit / 100000000m);
                 FinishedBet(tmp.bet.toBet());
             }
-            catch (WebException e)
+            catch (AggregateException e)
             {
-                if (e.Response != null)
-                {
-                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                    Parent.updateStatus(sEmitResponse);
-                }
-                if (e.Message.Contains("429") || e.Message.Contains("502"))
+                
+                if (e.InnerException.Message.Contains("429") || e.InnerException.Message.Contains("502"))
                 {
                     Thread .Sleep(200);
                     placebetthread();
                 }
                 
+
+            }
+            catch (Exception e2)
+            {
 
             }
         }
