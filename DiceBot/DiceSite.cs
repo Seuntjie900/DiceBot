@@ -77,9 +77,13 @@ namespace DiceBot
             return true;
 
         }
+        public virtual void Donate(double Amount)
+        {
+
+        }
         public bool Withdraw(double Amount, string Address)
         {
-            Parent.updateStatus(string.Format("Withdrawing {0} {1} to {3}", Amount, currency, Address));
+            Parent.updateStatus(string.Format("Withdrawing {0} {1} to {2}", Amount, currency, Address));
             return internalWithdraw(Amount, Address);
         }
         protected abstract bool internalWithdraw(double Amount, string Address);

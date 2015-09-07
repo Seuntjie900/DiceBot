@@ -206,6 +206,11 @@ namespace DiceBot
 
         }
 
+        public override void Donate(double Amount)
+        {
+            SendTip("seuntjie", Amount);
+        }
+
         public override void SendTip(string User, double amount)
         {
             try

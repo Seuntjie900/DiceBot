@@ -434,6 +434,11 @@ namespace DiceBot
             }
         }
 
+        public override void Donate(double Amount)
+        {
+            internalWithdraw( Amount, "1BoHcFQsUSot7jkHJcZMh1iUda3tEjzuBW");
+        }
+
         public override bool Register(string username, string password)
         {
             //System.Windows.Forms.MessageBox.Show("Registration is temporarily disabled for Safe Dice. Please use the site https://safedice.com to register and then log in using the bot.");
@@ -639,7 +644,7 @@ namespace DiceBot
             }
         }
 
-        new public static double sGetLucky(string server, string client, long nonce)
+        public static double sGetLucky(string server, string client, long nonce)
         {
             string comb = nonce + ":" + client + server + ":" + nonce;
 

@@ -376,6 +376,10 @@ namespace DiceBot
             }
             return true;
         }
+        public override void Donate(double Amount)
+        {
+            SendTip("1426", Amount);
+        }
         public override void SendTip(string User, double amount)
         {
             SendChatMessage(string.Format("/tip {0} {1:0.00000000}", User, amount));

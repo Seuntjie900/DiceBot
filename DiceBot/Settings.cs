@@ -148,7 +148,14 @@ namespace DiceBot
                         txtPathAlarm.Text = Parent.getvalue(saveditems, "AlarmPath");
                         //Emails.StreakSize = (int)Emails.StreakSize;
                         chkAutoSeeds.Checked = Parent.getvalue(saveditems, "AutoGetSeed") != "0";
-                        nudLiveBetsNum.Value = (decimal)Parent.iparse(Parent.getvalue(saveditems, "NumLiveBets"));   
+                        nudLiveBetsNum.Value = (decimal)Parent.iparse(Parent.getvalue(saveditems, "NumLiveBets"));
+                        bool convert = false;
+                        nudDonatePercentage.Value = (decimal)Parent.dparse(Parent.getvalue(saveditems, "DonatePercentage"), ref convert);
+                        chkStartup.Checked = Parent.getvalue(saveditems, "StartupMessage")=="1";
+                        string tmp = Parent.getvalue(saveditems, "DonateMode");
+                        rdbDonateDont.Checked = tmp == "1";
+                        rdbDonateDefault.Checked = tmp == "2";
+                        rdbDonateAuto.Checked = tmp == "3";
                     }
 
                 }

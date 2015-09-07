@@ -141,6 +141,11 @@ namespace DiceBot
             }
         }
 
+        public override void Donate(double Amount)
+        {
+            SendTip("357", Amount);
+        }
+
         public override void SendTip(string User, double amount)
         {
             
@@ -332,11 +337,14 @@ namespace DiceBot
                 PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
                 Parent.updateDeposit(dep.Address);
                 finishedlogin(true);
+                return;
             }
             catch
             {
-                
+                finishedlogin(false);
+                return;
             }
+            finishedlogin(false);
         }
         
         

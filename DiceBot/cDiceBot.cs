@@ -26,10 +26,17 @@ namespace DiceBot
     
     public partial class cDiceBot : Form
     {
+        #region saving and loading strat vars
         Dictionary<string, Control> SaveNames = new Dictionary<string, Control>();
         Dictionary<string, Control> PSaveNames = new Dictionary<string, Control>();
-        Control[] ControlsToDisable;
+        #endregion
+
+        //Version number to test against site
         private const string vers = "3.0.2";
+
+
+        Control[] ControlsToDisable;
+        
         DateTime OpenTime = DateTime.UtcNow;
         Random r = new Random();
         Graph LiveGraph;
@@ -93,7 +100,8 @@ namespace DiceBot
         bool reset = false;
         bool running = false;
         bool stoponwin = false;
-        
+
+        #region settings vars
         public bool tray = false;
         public bool Sound = true;
         public bool SoundWithdraw=true;
@@ -101,19 +109,26 @@ namespace DiceBot
         public bool SoundStreak = false;
         public bool autologin = false;
         public bool autostart = false;
+        public string username = "";
+        public string password = "";
+        public string Botname = "";
+        public Email Emails { get; set; }
+        bool autoseeds = true;
+        string ching = "";
+        string salarm = "";
+        bool startupMessage = true;
+        int donateMode = 2;
+        double donatePercentage = 1;
+        #endregion
+
+
         bool high = true;
         bool starthigh = true;
         private bool withdrew;
         DateTime dtStarted = new DateTime();
         DateTime dtLastBet = new DateTime();
         TimeSpan TotalTime = new TimeSpan(0, 0, 0);
-        public string username = "";
-        public string password = "";        
-        public string Botname = "";
-        public Email Emails { get; set; }
         Simulation lastsim;
-        string ching = "";
-        string salarm = "";
 
         //labouchere
         List<double> LabList = new List<double>();
@@ -381,6 +396,8 @@ namespace DiceBot
             
             if (autologin)
             {
+                CurrentSite.FinishedLogin -= CurrentSite_FinishedLogin;
+                CurrentSite.FinishedLogin += CurrentSite_FinishedLogin;
                 CurrentSite.Login(username, password , txtApi2fa.Text);
                 
             }
@@ -405,8 +422,28 @@ namespace DiceBot
             Lua.RegisterFunction("setvaluedouble", this, new dSetValue2(LuaSetValue).Method);
             Lua.RegisterFunction("setvaluebool", this, new dSetValue3(LuaSetValue).Method);
             Lua.RegisterFunction("getvalue", this, new dGetValue(LuaGetValue).Method);
+            Lua.RegisterFunction("loadstrategy", this, new dLoadStrat(LuaLoadStrat).Method);
+            Lua.RegisterFunction("read", this, new dGetInput(GetInputForLua).Method);
 
-            
+        }
+
+        delegate bool dLoadStrat(string File);
+        bool LuaLoadStrat(string File)
+        {
+            return load(File, false);
+        }
+        delegate object dGetInput(string prompt, int type);
+        /*
+            0= bool
+            1= int
+            2= decimal
+            3= string
+        */
+        object GetInputForLua(string prompt, int type)
+        {
+            UserInput tmp = new UserInput();
+            DialogResult tmpRes = tmp.ShowDialog(prompt, type);
+            return tmp.Value;
         }
 
         delegate void dSetValue(string Name, int Value);
@@ -1702,7 +1739,7 @@ namespace DiceBot
             {
 
             }
-            double profit = (Double)bet.Profit;
+            double profit = (double)bet.Profit;
             retriedbet = false;
             if (!stop && !reset)
             {
@@ -1734,9 +1771,10 @@ namespace DiceBot
                             StreakLossSinceLastReset = 0;
                         }                        
                         
-                        currentprofit += (Lastbet*(99/Chance))-Lastbet;
-                        ProfitSinceLastReset += (Lastbet*(99/Chance))-Lastbet;
-                        StreakProfitSinceLastReset += (Lastbet * (99 / Chance)) - Lastbet;
+                        currentprofit += profit;
+                        ProfitSinceLastReset += profit;
+                        StreakProfitSinceLastReset += profit;
+                        
                         
                         Wins++;
                         Winstreak++;
@@ -1764,7 +1802,7 @@ namespace DiceBot
                             {
                                 Stop();
                             }
-                            if (profit >= (double)nudStopWinBtc.Value && chkStopWinBtc.Checked)
+                            if (this.profit >= (double)nudStopWinBtc.Value && chkStopWinBtc.Checked)
                             {
                                 Stop();
                             }
@@ -1912,7 +1950,7 @@ namespace DiceBot
                         }
 
                         // stop if total profit/total loss is below/above certain value
-                        if (profit <= 0.0 - (double)nudStopLossBtc.Value && chkStopLossBtc.Checked)
+                        if (this.profit <= 0.0 - (double)nudStopLossBtc.Value && chkStopLossBtc.Checked)
                         {
                             Stop();
                         }
@@ -2289,12 +2327,41 @@ namespace DiceBot
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            if ((CurrentSite.AutoWithdraw || CurrentSite.Tip) && profit>0)
+            {
+                if (donateMode == 1)
+                {
+
+                }
+                else if (donateMode == 2)
+                {
+                    DonateBox tmp = new DonateBox();
+                    if (tmp.ShowDialog(profit, CurrentSite.Currency, donatePercentage) == DialogResult.Yes)
+                    {
+                        CurrentSite.Donate(tmp.amount);
+                        Thread.Sleep(200);
+                    }
+                    donateMode = (tmp.radioButton3.Checked ? 3 : tmp.radioButton2.Checked ? 1 : 2);
+                    donatePercentage = (double)tmp.numericUpDown1.Value;
+                }
+                else if (donateMode==3)
+                {
+                    CurrentSite.Donate((donatePercentage / 100.0) * profit);
+                }
+            }
             Stop();
             if (CurrentSite != null)
             {
                 CurrentSite.Disconnect();
             }
             save();
+            Settings tmpSet = new DiceBot.Settings(this);
+            tmpSet.loadsettings();
+            tmpSet.nudDonatePercentage.Value = (decimal)donatePercentage;
+            tmpSet.rdbDonateAuto.Checked = donateMode == 3;
+            tmpSet.rdbDonateDefault.Checked = donateMode == 2;
+            tmpSet.rdbDonateDont.Checked = donateMode == 1;
+            writesettings(tmpSet);
             if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
             {
                 File.Delete(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim");
@@ -2469,7 +2536,7 @@ namespace DiceBot
         bool load()
         {
             
-            return (load(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"));
+            return (load(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings", true));
         }
 
         bool oldLoad(string File)
@@ -2622,7 +2689,7 @@ namespace DiceBot
             return "0-0-0";
         }
 
-        bool load(string File)
+        bool load(string File, bool Settings)
         {
             try
             {
@@ -2631,7 +2698,7 @@ namespace DiceBot
                 {
                     header = sr.ReadLine();
                 }
-                               
+
                 //if load file is not of version 2 or above, do old load
                 if (!header.ToUpper().Contains("VERSION"))
                 {
@@ -2642,21 +2709,24 @@ namespace DiceBot
                 {
                     List<SavedItem> saveditems = new List<SavedItem>();
                     using (StreamReader sr = new StreamReader(File))
-                    {                        
+                    {
                         while (!sr.EndOfStream)
                         {
                             string[] s = sr.ReadLine().Split('|');
-                            saveditems.Add(new SavedItem(s[0],s[1]));
+                            saveditems.Add(new SavedItem(s[0], s[1]));
                         }
                     }
-                    if (System.IO.File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings3"))
+                    if (Settings)
                     {
-                        using (StreamReader sr = new StreamReader(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings3"))
+                        if (System.IO.File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings3"))
                         {
-                            while (!sr.EndOfStream)
+                            using (StreamReader sr = new StreamReader(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings3"))
                             {
-                                string[] s = sr.ReadLine().Split('|');
-                                saveditems.Add(new SavedItem(s[0], s[1]));
+                                while (!sr.EndOfStream)
+                                {
+                                    string[] s = sr.ReadLine().Split('|');
+                                    saveditems.Add(new SavedItem(s[0], s[1]));
+                                }
                             }
                         }
                     }
@@ -2670,7 +2740,7 @@ namespace DiceBot
                         }
                         catch
                         {
-                            errors += t.Name+", ";
+                            errors += t.Name + ", ";
                             safe = false;
                         }
                     }
@@ -2689,224 +2759,11 @@ namespace DiceBot
                     variabledisable();
                     if (!safe)
                     {
-                        MessageBox.Show("There was a problem loading the following settnigs: " +errors);
+                        MessageBox.Show("There was a problem loading the following settnigs: " + errors);
                     }
                     return true;
-                    nudAmount.Value=decimal.Parse(getvalue( saveditems, "Amount"));
-                    nudLimit.Value = decimal.Parse(getvalue(saveditems, "Limit"));
-                    chkLimit.Checked= (getvalue(saveditems, "LimitEnabled") == "1");
-                    nudLowerLimit.Value = decimal.Parse(getvalue(saveditems, "LowerLimit"));
-                    chkLowerLimit.Checked = (getvalue(saveditems, "LowerLimitEnabled") == "1");
-                    nudMinBet.Value = decimal.Parse(getvalue(saveditems, "MinBet"));
-                    nudMultiplier.Value = decimal.Parse(getvalue(saveditems, "Multiplier"));
-                    
-                    txtTo.Text = getvalue(saveditems, "To");
-                    string temp = getvalue(saveditems, "OnStop");
-                    rdbInvest.Checked = (temp == "0");
-                    rdbStop.Checked = (temp == "1");
-                    rdbWithdraw.Checked = (temp == "2");
-                    //chkStopOnWin.Checked = ("1"==getvalue(saveditems, "StopOnWin"));
-                    nudChance.Value = decimal.Parse(getvalue(saveditems, "Chance"));
-                    nudMaxMultiplies.Value = decimal.Parse(getvalue(saveditems, "MaxMultiply"));
-                    nudNbets.Value = decimal.Parse(getvalue(saveditems, "NBets"));
-                    nudDevider.Value = decimal.Parse(getvalue(saveditems, "devider"));
-                    temp = getvalue(saveditems, "MultiplierMode");
-                    rdbMaxMultiplier.Checked = (temp == "0");
-                    rdbDevider.Checked = (temp == "1");
-                    rdbConstant.Checked = (temp == "2");
-                    rdbReduce.Checked = (temp=="3");
-                    
-                    StatsWindows.nudLastStreakWin.Value = (decimal)dparse(getvalue(saveditems, "LastStreakWin"), ref convert);
-                    StatsWindows.nudLastStreakLose.Value = (decimal)dparse(getvalue(saveditems, "LastStreakLose"), ref convert);
-                    chkResetBetLoss.Checked = ("1"==getvalue(saveditems, "ResetBetLossEnabled"));
-                    nudResetBetLoss.Value = (decimal)dparse(getvalue(saveditems, "ResetBetLossValue"), ref convert);
-                    chkResetBetWins.Checked = ("1"==getvalue(saveditems, "ResetBetWinsEnabled"));
-                    nudResetWins.Value = (decimal)dparse(getvalue(saveditems, "ResetWinsValue"), ref convert);
-                    nudWinMultiplier.Value = decimal.Parse(getvalue(saveditems, "WinMultiplier"));
-                    nudWinMaxMultiplies.Value = decimal.Parse(getvalue(saveditems, "WinMaxMultiplies"));
-                    nudWinNBets.Value = decimal.Parse(getvalue(saveditems, "WinNBets"));
-                    nudWinDevider.Value = decimal.Parse(getvalue(saveditems, "WinDevider"));
-                    temp = getvalue(saveditems, "WinMultiplyMode");
-                    rdbWinConstant.Checked = ("0" == temp);
-                    rdbWinDevider.Checked = ("1" == temp);
-                    rdbWinMaxMultiplier.Checked = ("2" == temp);
-                    rdbWinReduce.Checked = ("3" == temp);
-                    chkBotSpeed.Checked = ("1"==getvalue(saveditems, "BotSpeedEnabled"));
-                    nudBotSpeed.Value = (decimal)dparse(getvalue(saveditems, "BotSpeedValue"), ref convert);
-                    chkResetSeed.Checked = ("1"==getvalue(saveditems, "ResetSeedEnabled"));
-                    temp = getvalue(saveditems, "ResetSeedMode");
-                    rdbResetSeedBets.Checked = ("0" == temp);
-                    rdbResetSeedWins.Checked = ("1" == temp);
-                    rdbResetSeedLosses.Checked = ("2" == temp);
-                    nudResetSeed.Value = (decimal)dparse(getvalue(saveditems, "ResetSeedValue"), ref convert);
-
-                    chkStopLossStreak.Checked = ("1" == getvalue(saveditems, "StopAfterLoseStreakEnabled"));
-                    nudStopLossStreak.Value = (decimal)dparse(getvalue(saveditems, "StopAfterLoseStreakValue"), ref convert);
-                    chkStopLossBtcStreak.Checked = ("1" == getvalue(saveditems, "StopAfterLoseStreakBtcEnabled"));
-                    nudStopLossBtcStreal.Value = (decimal)dparse(getvalue(saveditems, "StopAfterLoseStreakBtcValue"), ref convert);
-                    chkStopLossBtc.Checked = ("1" == getvalue(saveditems, "StopAfterLoseBtcEnabled"));
-                    nudStopLossBtc.Value = (decimal)dparse(getvalue(saveditems, "StopAfterLoseBtcValue"), ref convert);
-
-                    chkChangeLoseStreak.Checked = ("1" == getvalue(saveditems, "ChangeAfterLoseStreakEnabled"));
-                    nudChangeLoseStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterLoseStreakSize"), ref convert);
-                    nudChangeLoseStreakTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterLoseStreakTo"), ref convert);
-
-
-                    chkStopWinStreak.Checked = ("1" == getvalue(saveditems, "StopAfterWinStreakEnabled"));
-                    nudStopWinStreak.Value = (decimal)dparse(getvalue(saveditems, "StopAfterWinStreakValue"), ref convert);
-                    chkStopWinBtcStreak.Checked = ("1" == getvalue(saveditems, "StopAfterWinStreakBtcEnabled"));
-                    nudStopWinBtcStreak.Value = (decimal)dparse(getvalue(saveditems, "StopAfterWinStreakBtcValue"), ref convert);
-                    chkStopWinBtc.Checked = ("1" == getvalue(saveditems, "StopAfterWinBtcEnabled"));
-                    nudStopWinBtc.Value = (decimal)dparse(getvalue(saveditems, "StopAfterWinBtcValue"), ref convert);
-
-                    chkChangeWinStreak.Checked = ("1" == getvalue(saveditems, "ChangeAfterWinStreakEnabled"));
-                    nudChangeWinStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterWInStreakSize"), ref convert);
-                    nudChangeWinStreakTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeAfterWInStreakTo"), ref convert);
-
-                    chkChangeChanceLose.Checked = ("1" == getvalue(saveditems, "ChangeChanceAfterLoseStreakEnabled"));
-                    nudChangeChanceLoseStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterLoseStreakSize"), ref convert);
-                    nudChangeChanceLoseTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterLoseStreakValue"), ref convert);
-
-                    chkChangeChanceWin.Checked = ("1" == getvalue(saveditems, "ChangeChanceAfterWinStreakEnabled"));
-                    nudChangeChanceWinStreak.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterWinStreakSize"), ref convert);
-                    nudChangeChanceWinTo.Value = (decimal)dparse(getvalue(saveditems, "ChangeChanceAfterWinStreakValue"), ref convert);
-
-                    nudMKIncrement.Value = (decimal)dparse(getvalue(saveditems, "MKIncrement"), ref convert);
-                    nudMKDecrement.Value = (decimal)dparse(getvalue(saveditems, "MKDecrement"), ref convert);
-                    chkMK.Checked = ("1" == getvalue(saveditems, "MKEnabled"));
-                    txtQuickSwitch.Text = getvalue(saveditems, "QuickSwitchFolder");
-                    if (txtQuickSwitch.Text!="")
-                    {
-                        btnStratRefresh_Click(btnStratRefresh, new EventArgs() );
-                    }
-
-                    
-                    chkReverseLab.Checked = ("1" == getvalue(saveditems, "LabReverse"));
-
-                   string[] tmp =getvalue(saveditems, "LabValues").Split('?');
-                    if (tmp.Length>0)
-                    { 
-                        if (tmp[0]!="0-0-0")
-                            rtbBets.Lines = getvalue(saveditems, "LabValues").Split('?');
-                    }
-                    rdbLabRestart.Checked = ("1" == getvalue(saveditems, "LabComplete"));
-                    rdbLabStop.Checked = ("2" == getvalue(saveditems, "LabComplete"));
-
-                    int tmpI = int.Parse(getvalue(saveditems, "Site"));
-                    justDiceToolStripMenuItem.Checked = tmpI == 0;
-                    primeDiceToolStripMenuItem.Checked = tmpI == 1;
-                    pocketRocketsCasinoToolStripMenuItem.Checked = tmpI == 2;
-                    diceToolStripMenuItem.Checked = tmpI == 3;
-                    safediceToolStripMenuItem.Checked = tmpI == 4;
-                    daDiceToolStripMenuItem.Checked = tmpI == 5;
-                    rollinIOToolStripMenuItem.Checked = tmpI == 6;
-                    bitDiceToolStripMenuItem.Checked = tmpI == 7;
-                    betterbetsToolStripMenuItem.Checked = tmpI == 8;
-                    moneyPotToolStripMenuItem.Checked = tmpI == 9;
-                    if (tmpI>7)
-                    {
-                        justDiceToolStripMenuItem.Checked = true; ;
-                    }
-                    tmpI = int.Parse(getvalue(saveditems, "SettingsMode"));
-                    basicToolStripMenuItem.Checked = tmpI == 0;
-                    advancedToolStripMenuItem.Checked = tmpI == 1;
-                    programmerToolStripMenuItem.Checked = tmpI == 2;
-
-
-                    int Strat = int.Parse(getvalue(saveditems, "Strategy"));
-                    switch (Strat)
-                    {
-                        case 0: rdbMartingale.Checked = true; break;
-                            case 1: rdbLabEnable.Checked = true; break;
-                            case 2: rdbFibonacci.Checked = true; break;
-                            case 3: rdbAlembert.Checked = true; break;
-                            case 4: rdbPreset.Checked = true; break;
-                    }
-
-                    
-                    temp = getvalue(saveditems,"FibonacciLoss" );
-                    rdbFiboLossIncrement.Checked = temp=="0";
-                    rdbFiboLossReset.Checked = temp=="1";
-                    rdbFiboLossStop.Checked = temp=="2";
-                    nudFiboLossIncrement.Value = decimal.Parse(getvalue(saveditems,"FibonacciLossSteps"));
-
-                    temp = getvalue(saveditems,"FibonacciLevel" );
-                    rdbFiboLevelReset.Checked = temp=="1";
-                    rdbFiboLevelStop.Checked = temp == "2";
-                    chkFiboLevel.Checked = getvalue(saveditems, "FibonacciLevelEnabled") == "1";
-                    nudFiboLeve.Value = decimal.Parse(getvalue(saveditems, "FibonnaciLevelSteps"));
-
-                    temp = getvalue(saveditems,"FibonacciWin" );
-                    rdbFiboWinIncrement.Checked = temp=="0";
-                    rdbFiboWinReset.Checked = temp=="1";
-                    rdbFiboWinStop.Checked = temp=="2";
-                    nudFiboWinIncrement.Value = decimal.Parse(getvalue(saveditems, "FibonacciWinSteps"));
-
-
-                   
-                    nudAlembertIncrementLoss.Value = decimal.Parse(getvalue(saveditems, "dAlembertLossIncrement"));
-                    nudAlembertStretchLoss.Value = decimal.Parse(getvalue(saveditems, "dAlembertLossStretch"));
-                    nudAlembertIncrementWin.Value = decimal.Parse(getvalue(saveditems, "dAlembertWinIncrement"));
-                    nudAlembertStretchWin.Value = decimal.Parse(getvalue(saveditems, "dAlembertWinStretch"));
-
-
-                  
-                    tmp = getvalue(saveditems, "PresetValues").Split('?');
-                    if (tmp.Length > 0)
-                    {
-                        if (tmp[0] != "0-0-0")
-                            rtbPresetList.Lines = tmp;
-                    }
-                    temp = getvalue(saveditems, "PresetEnd");
-                    rdbPresetEndReset.Checked = temp == "0";
-                    rdbPresetEndStep.Checked = temp == "1";
-                    rdbPresetEndStop.Checked = temp == "2";
-                    temp = getvalue(saveditems, "PresetLoss");
-                    rdbPresetLossReset.Checked = temp == "0";
-                    rdbPresetLossStep.Checked = temp == "1";
-                    rdbPresetLossStop.Checked = temp == "2";
-                    temp = getvalue(saveditems, "PresetWin");
-                    rdbPresetWinReset.Checked = temp == "0";
-                    rdbPresetWinStep.Checked = temp == "1";
-                    rdbPresetWinStop.Checked = temp == "2";
-
-                    nudPresetEndStep.Value = decimal.Parse(getvalue(saveditems, "PresetEndStep"));
-                    nudPresetLossStep.Value = decimal.Parse(getvalue(saveditems, "PresetLossStep"));
-                    nudPresetWinStep.Value = decimal.Parse(getvalue(saveditems, "PresetWinStep"));
-
-
-                    chkZigZagWins.Checked = getvalue(saveditems, "ReverseWin") == "1";
-                    chkZigZagWinsStreak.Checked = getvalue(saveditems, "ReversWinStreak") == "1";
-                    chkZigZagLoss.Checked = getvalue(saveditems, "ReverseLoss") == "1";
-                    chkZigZagLossStreak.Checked = getvalue(saveditems, "ReverseLossStreak") == "1";
-                    chkZigZagBets.Checked = getvalue(saveditems, "ReverseBet") == "1";
-
-                    nudZigZagWins.Value = decimal.Parse(getvalue(saveditems, "ReverseWinValue"));
-                    nudZigZagWinsStreak.Value = decimal.Parse(getvalue(saveditems, "ReverseWinStreakValue"));
-                    nudZigZagLoss.Value = decimal.Parse(getvalue(saveditems, "ReverseLossValue"));
-                    nudZigZagLossStreak.Value = decimal.Parse(getvalue(saveditems, "ReverseLossStreakValue"));
-                    nudZigZagBets.Value = decimal.Parse(getvalue(saveditems, "ReverseBetValue"));
-
-
-                    chkResetBtcStreakLoss.Checked = getvalue(saveditems, "ResetBtcStreakLoss") == "1";
-                    nudResetBtcStreakLoss.Value = (decimal)dparse(getvalue(saveditems, "ResetBtcStreakLossValue"), ref convert); 
-                    chkResetBtcLoss.Checked = getvalue(saveditems, "ResetBtcLoss") == "1";
-                    nudResetBtcLoss.Value = (decimal)dparse(getvalue(saveditems, "ResetBtcLossValue"), ref convert);
-
-                    chkResetBtcStreakProfit.Checked = getvalue(saveditems, "ResetBtcStreakProfit") == "1";
-                    nudResetBtcStreakProfit.Value = (decimal)dparse(getvalue(saveditems, "ResetBtcStreakProfitValue"), ref convert);
-                    chkResetBtcProfit.Checked = getvalue(saveditems, "ResetBtcProfit") == "1";
-                    nudResetBtcProfit.Value = (decimal)dparse(getvalue(saveditems, "ResetBtcProfitValue"), ref convert);
-
-                    chkFirstResetLoss.Checked = getvalue(saveditems, "FirstResetLoss") == "1";
-                    chkFirstResetWin.Checked = getvalue(saveditems, "FirstResetWin") == "1";
-                    nudStretchLoss.Value = (decimal)dparse(getvalue(saveditems, "MartingaleStretchLoss"), ref convert);
-                    nudStretchWin.Value = (decimal)dparse(getvalue(saveditems, "MartingaleStretchWin"), ref convert);
                 }
-
-                
-                
-                
+                                   
             }
             catch
             {
@@ -3030,7 +2887,7 @@ namespace DiceBot
             return true;
         }
 
-        bool autoseeds = true;
+        
         public void loadsettings()
         {
             try
@@ -3131,6 +2988,13 @@ namespace DiceBot
                         autoseeds = getvalue(saveditems, "AutoGetSeed") != "0";
                         maxRows = iparse(getvalue(saveditems, "NumLiveBets"));
                         maxRows = maxRows <= 0 ? 1 : maxRows;
+                        startupMessage = (getvalue(saveditems, "StartupMessage") == "1" || getvalue(saveditems, "StartupMessage") == "-1");
+                        donatePercentage = dparse(getvalue(saveditems, "DonatePercentage"), ref convert);
+                        donateMode = iparse(getvalue(saveditems, "DonateMode"));
+                        if (donatePercentage == -1) donatePercentage = 1;
+                        if (donateMode == -1) donateMode = 2;
+
+
                     }
 
                 }
@@ -3201,6 +3065,10 @@ namespace DiceBot
                 sw.WriteLine("AutoGetSeed|"+ (autoseeds?"1":"0"));
                 sw.WriteLine("NumLiveBets|" + TmpSet.nudLiveBetsNum.Value);
 
+                sw.WriteLine("DonatePercentage|" +TmpSet.nudDonatePercentage.Value );
+                sw.WriteLine("StartupMessage|" + (TmpSet.chkStartup.Checked?"1":"0"));
+                sw.WriteLine("DonateMode|"+ (TmpSet.rdbDonateDont.Checked?"1":TmpSet.rdbDonateDefault.Checked?"2":"3"));
+
             }
         }
         
@@ -3212,7 +3080,7 @@ namespace DiceBot
             {
                 if (ofdImport.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    load(ofdImport.FileName);
+                    load(ofdImport.FileName, false);
                     valid = true;
                 }
                 else
@@ -3230,7 +3098,7 @@ namespace DiceBot
                     if (valid)
                         if (ofdImport.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                         {
-                            load(ofdImport.FileName);
+                            load(ofdImport.FileName, false);
                         }
                 }
                 else if (d == System.Windows.Forms.DialogResult.Cancel)
@@ -3330,7 +3198,7 @@ namespace DiceBot
             }
         }
 
-        double dparse(string text,ref bool success)
+        public double dparse(string text,ref bool success)
         {
             double number = -1;
             string test = "0.000001";
@@ -4048,7 +3916,7 @@ namespace DiceBot
         {
             if (File.Exists(txtQuickSwitch.Text+"\\"+cmbStrat.SelectedItem.ToString()))
             {
-                load(txtQuickSwitch.Text + "\\" + cmbStrat.SelectedItem.ToString());
+                load(txtQuickSwitch.Text + "\\" + cmbStrat.SelectedItem.ToString(), false);
             }
         }
 
@@ -4282,21 +4150,28 @@ namespace DiceBot
         
         public void AddChat(object Message)
         {
-            if (InvokeRequired)
+            try
             {
-                Invoke(new dupdateControll(AddChat), Message);
-                
-            }
-            else
-            {
-                if (PopoutChat!=null)
+                if (InvokeRequired)
                 {
-                    if (!PopoutChat.IsDisposed)
-                    {
-                        PopoutChat.GotMessage((string)Message);
-                    }
+                    Invoke(new dupdateControll(AddChat), Message);
+
                 }
-                
+                else
+                {
+                    if (PopoutChat != null)
+                    {
+                        if (!PopoutChat.IsDisposed)
+                        {
+                            PopoutChat.GotMessage((string)Message);
+                        }
+                    }
+
+                }
+            }
+            catch
+            {
+
             }
         }
 
@@ -4870,7 +4745,8 @@ namespace DiceBot
                     case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
                     case "betterbetsToolStripMenuItem": CurrentSite = new BB(this); siteToolStripMenuItem.Text = "Site (BB)"; break;
                     case "moneyPotToolStripMenuItem" : CurrentSite = new moneypot(this); siteToolStripMenuItem.Text = "Site (MP)"; break;
-                       
+                       case "investDiceToolStripMenuItem": CurrentSite = new investdice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
+                    case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site(CM)"; break;
                 }
                 if (CurrentSite is dadice)
                 {
@@ -5766,6 +5642,18 @@ namespace DiceBot
             Process.Start(CurrentSite.SiteURL);
         }
 
+        private void btnWithdrawAlt_Click(object sender, EventArgs e)
+        {
+            SimpleSwap tmp = new SimpleSwap(ExchangeType.withdraw, CurrentSite.Currency);
+            tmp.Withdraw += Tmp_Withdraw;
+            tmp.Show();
+        }
+
+        private void Tmp_Withdraw(string Address, double Amount)
+        {
+            CurrentSite.Withdraw(Amount, Address);
+        }
+
         private void btnMPWithdraw_Click(object sender, EventArgs e)
         {
             if (CurrentSite is moneypot)
@@ -5777,7 +5665,8 @@ namespace DiceBot
 
         private void btnDepositAlt_Click(object sender, EventArgs e)
         {
-
+            SimpleSwap tmp = new SimpleSwap(ExchangeType.deposit, CurrentSite.Currency, txtApiAddress.Text);
+            tmp.Show();
         }
     }
 }

@@ -255,6 +255,10 @@
             this.chkResetBetWins = new System.Windows.Forms.CheckBox();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.pnlAdvancedAdvanced = new System.Windows.Forms.Panel();
+            this.nudMaximumBet = new System.Windows.Forms.NumericUpDown();
+            this.nudMinumumBet = new System.Windows.Forms.NumericUpDown();
+            this.chkMaxBet = new System.Windows.Forms.CheckBox();
+            this.chkMinBet = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.gbZigZag = new System.Windows.Forms.GroupBox();
             this.chkZigZagWins = new System.Windows.Forms.CheckBox();
@@ -331,6 +335,7 @@
             this.lblPass = new System.Windows.Forms.Label();
             this.label88 = new System.Windows.Forms.Label();
             this.gbManualBet = new System.Windows.Forms.GroupBox();
+            this.btnWithdrawAlt = new System.Windows.Forms.Button();
             this.btnDepositAlt = new System.Windows.Forms.Button();
             this.btnMPWithdraw = new System.Windows.Forms.Button();
             this.btnMPDeposit = new System.Windows.Forms.Button();
@@ -440,6 +445,8 @@
             this.bitDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.betterbetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moneyPotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.investDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.coinMillionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -457,10 +464,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.chkMinBet = new System.Windows.Forms.CheckBox();
-            this.chkMaxBet = new System.Windows.Forms.CheckBox();
-            this.nudMinumumBet = new System.Windows.Forms.NumericUpDown();
-            this.nudMaximumBet = new System.Windows.Forms.NumericUpDown();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -546,6 +549,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudResetWins)).BeginInit();
             this.tabPage11.SuspendLayout();
             this.pnlAdvancedAdvanced.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaximumBet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinumumBet)).BeginInit();
             this.gbZigZag.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudZigZagWinsStreak)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudZigZagWins)).BeginInit();
@@ -592,8 +597,6 @@
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMinumumBet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMaximumBet)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlAdvanced
@@ -3495,6 +3498,52 @@
             this.pnlAdvancedAdvanced.TabIndex = 82;
             this.pnlAdvancedAdvanced.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlAdvancedAdvanced_Paint);
             // 
+            // nudMaximumBet
+            // 
+            this.nudMaximumBet.DecimalPlaces = 8;
+            this.nudMaximumBet.Location = new System.Drawing.Point(111, 170);
+            this.nudMaximumBet.Maximum = new decimal(new int[] {
+            1215752192,
+            23,
+            0,
+            0});
+            this.nudMaximumBet.Name = "nudMaximumBet";
+            this.nudMaximumBet.Size = new System.Drawing.Size(101, 20);
+            this.nudMaximumBet.TabIndex = 115;
+            // 
+            // nudMinumumBet
+            // 
+            this.nudMinumumBet.DecimalPlaces = 8;
+            this.nudMinumumBet.Location = new System.Drawing.Point(111, 138);
+            this.nudMinumumBet.Maximum = new decimal(new int[] {
+            1215752192,
+            23,
+            0,
+            0});
+            this.nudMinumumBet.Name = "nudMinumumBet";
+            this.nudMinumumBet.Size = new System.Drawing.Size(101, 20);
+            this.nudMinumumBet.TabIndex = 114;
+            // 
+            // chkMaxBet
+            // 
+            this.chkMaxBet.AutoSize = true;
+            this.chkMaxBet.Location = new System.Drawing.Point(12, 171);
+            this.chkMaxBet.Name = "chkMaxBet";
+            this.chkMaxBet.Size = new System.Drawing.Size(95, 17);
+            this.chkMaxBet.TabIndex = 113;
+            this.chkMaxBet.Text = "Maximum Bet: ";
+            this.chkMaxBet.UseVisualStyleBackColor = true;
+            // 
+            // chkMinBet
+            // 
+            this.chkMinBet.AutoSize = true;
+            this.chkMinBet.Location = new System.Drawing.Point(12, 139);
+            this.chkMinBet.Name = "chkMinBet";
+            this.chkMinBet.Size = new System.Drawing.Size(93, 17);
+            this.chkMinBet.TabIndex = 112;
+            this.chkMinBet.Text = "Minumum Bet:";
+            this.chkMinBet.UseVisualStyleBackColor = true;
+            // 
             // label15
             // 
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -4294,6 +4343,7 @@
             // 
             // gbManualBet
             // 
+            this.gbManualBet.Controls.Add(this.btnWithdrawAlt);
             this.gbManualBet.Controls.Add(this.btnDepositAlt);
             this.gbManualBet.Controls.Add(this.btnMPWithdraw);
             this.gbManualBet.Controls.Add(this.btnMPDeposit);
@@ -4321,15 +4371,24 @@
             this.gbManualBet.Text = "Place a bet";
             this.gbManualBet.Enter += new System.EventHandler(this.groupBox5_Enter);
             // 
+            // btnWithdrawAlt
+            // 
+            this.btnWithdrawAlt.Location = new System.Drawing.Point(341, 198);
+            this.btnWithdrawAlt.Name = "btnWithdrawAlt";
+            this.btnWithdrawAlt.Size = new System.Drawing.Size(75, 23);
+            this.btnWithdrawAlt.TabIndex = 18;
+            this.btnWithdrawAlt.Text = "Withdraw Alt";
+            this.btnWithdrawAlt.UseVisualStyleBackColor = true;
+            this.btnWithdrawAlt.Click += new System.EventHandler(this.btnWithdrawAlt_Click);
+            // 
             // btnDepositAlt
             // 
-            this.btnDepositAlt.Location = new System.Drawing.Point(342, 198);
+            this.btnDepositAlt.Location = new System.Drawing.Point(260, 198);
             this.btnDepositAlt.Name = "btnDepositAlt";
             this.btnDepositAlt.Size = new System.Drawing.Size(75, 23);
             this.btnDepositAlt.TabIndex = 17;
             this.btnDepositAlt.Text = "Deposit Alt";
             this.btnDepositAlt.UseVisualStyleBackColor = true;
-            this.btnDepositAlt.Visible = false;
             this.btnDepositAlt.Click += new System.EventHandler(this.btnDepositAlt_Click);
             // 
             // btnMPWithdraw
@@ -5150,7 +5209,9 @@
             "setvaluestring(name:string, value:string): void",
             "setvaluedouble(name:string, value:double): void",
             "setvaluebool(name:string, value:bool): void",
-            "getvalue(name:string): object"});
+            "getvalue(name:string): object",
+            "loadstrategy(file:string): bool",
+            "read(prompt:string, type:int): object --0: bool, 1:int, 2:double, 3:string"});
             this.listBox1.Location = new System.Drawing.Point(11, 222);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(261, 82);
@@ -5436,7 +5497,9 @@
             this.rollinIOToolStripMenuItem,
             this.bitDiceToolStripMenuItem,
             this.betterbetsToolStripMenuItem,
-            this.moneyPotToolStripMenuItem});
+            this.moneyPotToolStripMenuItem,
+            this.investDiceToolStripMenuItem,
+            this.coinMillionsToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -5523,6 +5586,22 @@
             this.moneyPotToolStripMenuItem.Text = "MoneyPot";
             this.moneyPotToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.moneyPotToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // investDiceToolStripMenuItem
+            // 
+            this.investDiceToolStripMenuItem.Name = "investDiceToolStripMenuItem";
+            this.investDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.investDiceToolStripMenuItem.Text = "InvestDice";
+            this.investDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.investDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // coinMillionsToolStripMenuItem
+            // 
+            this.coinMillionsToolStripMenuItem.Name = "coinMillionsToolStripMenuItem";
+            this.coinMillionsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.coinMillionsToolStripMenuItem.Text = "CoinMillions";
+            this.coinMillionsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.coinMillionsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // settingsModeToolStripMenuItem
             // 
@@ -5650,52 +5729,6 @@
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
             // 
-            // chkMinBet
-            // 
-            this.chkMinBet.AutoSize = true;
-            this.chkMinBet.Location = new System.Drawing.Point(12, 139);
-            this.chkMinBet.Name = "chkMinBet";
-            this.chkMinBet.Size = new System.Drawing.Size(93, 17);
-            this.chkMinBet.TabIndex = 112;
-            this.chkMinBet.Text = "Minumum Bet:";
-            this.chkMinBet.UseVisualStyleBackColor = true;
-            // 
-            // chkMaxBet
-            // 
-            this.chkMaxBet.AutoSize = true;
-            this.chkMaxBet.Location = new System.Drawing.Point(12, 171);
-            this.chkMaxBet.Name = "chkMaxBet";
-            this.chkMaxBet.Size = new System.Drawing.Size(95, 17);
-            this.chkMaxBet.TabIndex = 113;
-            this.chkMaxBet.Text = "Maximum Bet: ";
-            this.chkMaxBet.UseVisualStyleBackColor = true;
-            // 
-            // nudMinumumBet
-            // 
-            this.nudMinumumBet.DecimalPlaces = 8;
-            this.nudMinumumBet.Location = new System.Drawing.Point(111, 138);
-            this.nudMinumumBet.Maximum = new decimal(new int[] {
-            1215752192,
-            23,
-            0,
-            0});
-            this.nudMinumumBet.Name = "nudMinumumBet";
-            this.nudMinumumBet.Size = new System.Drawing.Size(101, 20);
-            this.nudMinumumBet.TabIndex = 114;
-            // 
-            // nudMaximumBet
-            // 
-            this.nudMaximumBet.DecimalPlaces = 8;
-            this.nudMaximumBet.Location = new System.Drawing.Point(111, 170);
-            this.nudMaximumBet.Maximum = new decimal(new int[] {
-            1215752192,
-            23,
-            0,
-            0});
-            this.nudMaximumBet.Name = "nudMaximumBet";
-            this.nudMaximumBet.Size = new System.Drawing.Size(101, 20);
-            this.nudMaximumBet.TabIndex = 115;
-            // 
             // cDiceBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -5819,6 +5852,8 @@
             this.tabPage11.ResumeLayout(false);
             this.pnlAdvancedAdvanced.ResumeLayout(false);
             this.pnlAdvancedAdvanced.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaximumBet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinumumBet)).EndInit();
             this.gbZigZag.ResumeLayout(false);
             this.gbZigZag.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudZigZagWinsStreak)).EndInit();
@@ -5876,8 +5911,6 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMinumumBet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMaximumBet)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6314,6 +6347,9 @@
         private System.Windows.Forms.NumericUpDown nudMinumumBet;
         private System.Windows.Forms.CheckBox chkMaxBet;
         private System.Windows.Forms.CheckBox chkMinBet;
+        private System.Windows.Forms.Button btnWithdrawAlt;
+        private System.Windows.Forms.ToolStripMenuItem investDiceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem coinMillionsToolStripMenuItem;
     }
 }
 

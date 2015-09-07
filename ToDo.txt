@@ -1,12 +1,8 @@
 Todo:
 PD login encoding
 999dice betting bug (date format, not set to instance, Both at Datagridview)(??fixed??. no reproduce so far)
-strategy help pages
-stop and reset on win errors
-chance + max roll calculations
-bitdice
-sd xmr balance
-custom clickable when open
+custom clickable when open -- I can't remmeber what this is supposed to be??
+prog mode timer
 
 
 hopefully before release:
@@ -15,7 +11,6 @@ losing streak table redo
 
 
 Not essential:
-implement other sites (bitdice API incomplete, dadice api incomplete)
 clean up + organize code
 multilingual support
 finish tooltips (don't want to do without the multi lingual support finnished)
@@ -79,3 +74,11 @@ Dynamic currencies for sites
 adjustable number of bets shown in live bets view
 optimize live bet view
 programmer mode swithc currencies
+strategy help pages
+stop and reset on win errors
+chance + max roll calculations
+bitdice
+sd xmr balance
+prog mode user input
+implement other sites
+access load function from prog mode

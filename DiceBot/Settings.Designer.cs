@@ -68,6 +68,14 @@
             this.label50 = new System.Windows.Forms.Label();
             this.chkTray = new System.Windows.Forms.CheckBox();
             this.btnSaveUser = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.nudDonatePercentage = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.rdbDonateAuto = new System.Windows.Forms.RadioButton();
+            this.rdbDonateDefault = new System.Windows.Forms.RadioButton();
+            this.rdbDonateDont = new System.Windows.Forms.RadioButton();
+            this.chkStartup = new System.Windows.Forms.CheckBox();
             this.groupBox19.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLiveBetsNum)).BeginInit();
             this.groupBox4.SuspendLayout();
@@ -75,6 +83,8 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDonatePercentage)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox19
@@ -85,7 +95,7 @@
             this.groupBox19.Controls.Add(this.lblSeedProgress);
             this.groupBox19.Controls.Add(this.btnGetSeeds);
             this.groupBox19.Controls.Add(this.chkAutoSeeds);
-            this.groupBox19.Location = new System.Drawing.Point(15, 443);
+            this.groupBox19.Location = new System.Drawing.Point(442, 44);
             this.groupBox19.Name = "groupBox19";
             this.groupBox19.Size = new System.Drawing.Size(421, 87);
             this.groupBox19.TabIndex = 62;
@@ -505,7 +515,7 @@
             // 
             // btnSaveUser
             // 
-            this.btnSaveUser.Location = new System.Drawing.Point(332, 536);
+            this.btnSaveUser.Location = new System.Drawing.Point(759, 414);
             this.btnSaveUser.Name = "btnSaveUser";
             this.btnSaveUser.Size = new System.Drawing.Size(104, 23);
             this.btnSaveUser.TabIndex = 55;
@@ -513,11 +523,102 @@
             this.btnSaveUser.UseVisualStyleBackColor = true;
             this.btnSaveUser.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.nudDonatePercentage);
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.rdbDonateAuto);
+            this.groupBox3.Controls.Add(this.rdbDonateDefault);
+            this.groupBox3.Controls.Add(this.rdbDonateDont);
+            this.groupBox3.Location = new System.Drawing.Point(442, 137);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(421, 126);
+            this.groupBox3.TabIndex = 63;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Donate";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(229, 95);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(15, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "%";
+            // 
+            // nudDonatePercentage
+            // 
+            this.nudDonatePercentage.DecimalPlaces = 3;
+            this.nudDonatePercentage.Location = new System.Drawing.Point(126, 93);
+            this.nudDonatePercentage.Name = "nudDonatePercentage";
+            this.nudDonatePercentage.Size = new System.Drawing.Size(97, 20);
+            this.nudDonatePercentage.TabIndex = 4;
+            this.nudDonatePercentage.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 95);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(111, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Donation Percentage:";
+            // 
+            // rdbDonateAuto
+            // 
+            this.rdbDonateAuto.AutoSize = true;
+            this.rdbDonateAuto.Location = new System.Drawing.Point(13, 64);
+            this.rdbDonateAuto.Name = "rdbDonateAuto";
+            this.rdbDonateAuto.Size = new System.Drawing.Size(300, 17);
+            this.rdbDonateAuto.TabIndex = 2;
+            this.rdbDonateAuto.TabStop = true;
+            this.rdbDonateAuto.Text = "Automatically donate this percentage when closing the bot";
+            this.rdbDonateAuto.UseVisualStyleBackColor = true;
+            // 
+            // rdbDonateDefault
+            // 
+            this.rdbDonateDefault.AutoSize = true;
+            this.rdbDonateDefault.Checked = true;
+            this.rdbDonateDefault.Location = new System.Drawing.Point(13, 41);
+            this.rdbDonateDefault.Name = "rdbDonateDefault";
+            this.rdbDonateDefault.Size = new System.Drawing.Size(311, 17);
+            this.rdbDonateDefault.TabIndex = 1;
+            this.rdbDonateDefault.TabStop = true;
+            this.rdbDonateDefault.Text = "Use this default percentage when showing the donate dialog";
+            this.rdbDonateDefault.UseVisualStyleBackColor = true;
+            // 
+            // rdbDonateDont
+            // 
+            this.rdbDonateDont.AutoSize = true;
+            this.rdbDonateDont.Location = new System.Drawing.Point(13, 18);
+            this.rdbDonateDont.Name = "rdbDonateDont";
+            this.rdbDonateDont.Size = new System.Drawing.Size(273, 17);
+            this.rdbDonateDont.TabIndex = 0;
+            this.rdbDonateDont.Text = "Do not Show the donate dialog when closign the bot";
+            this.rdbDonateDont.UseVisualStyleBackColor = true;
+            // 
+            // chkStartup
+            // 
+            this.chkStartup.AutoSize = true;
+            this.chkStartup.Location = new System.Drawing.Point(442, 12);
+            this.chkStartup.Name = "chkStartup";
+            this.chkStartup.Size = new System.Drawing.Size(133, 17);
+            this.chkStartup.TabIndex = 64;
+            this.chkStartup.Text = "Show startup message";
+            this.chkStartup.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 571);
+            this.ClientSize = new System.Drawing.Size(873, 450);
+            this.Controls.Add(this.chkStartup);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox19);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -540,6 +641,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudEmailStreak)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDonatePercentage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -587,5 +691,13 @@
         private System.Windows.Forms.Button btnSaveUser;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.NumericUpDown nudLiveBetsNum;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        public System.Windows.Forms.NumericUpDown nudDonatePercentage;
+        public System.Windows.Forms.RadioButton rdbDonateAuto;
+        public System.Windows.Forms.RadioButton rdbDonateDefault;
+        public System.Windows.Forms.RadioButton rdbDonateDont;
+        public System.Windows.Forms.CheckBox chkStartup;
     }
 }
