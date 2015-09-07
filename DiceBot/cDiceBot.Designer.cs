@@ -445,7 +445,6 @@
             this.bitDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.betterbetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moneyPotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.investDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coinMillionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -5498,7 +5497,6 @@
             this.bitDiceToolStripMenuItem,
             this.betterbetsToolStripMenuItem,
             this.moneyPotToolStripMenuItem,
-            this.investDiceToolStripMenuItem,
             this.coinMillionsToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
@@ -5586,14 +5584,6 @@
             this.moneyPotToolStripMenuItem.Text = "MoneyPot";
             this.moneyPotToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.moneyPotToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
-            // 
-            // investDiceToolStripMenuItem
-            // 
-            this.investDiceToolStripMenuItem.Name = "investDiceToolStripMenuItem";
-            this.investDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.investDiceToolStripMenuItem.Text = "InvestDice";
-            this.investDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.investDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // coinMillionsToolStripMenuItem
             // 
@@ -6348,7 +6338,6 @@
         private System.Windows.Forms.CheckBox chkMaxBet;
         private System.Windows.Forms.CheckBox chkMinBet;
         private System.Windows.Forms.Button btnWithdrawAlt;
-        private System.Windows.Forms.ToolStripMenuItem investDiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem coinMillionsToolStripMenuItem;
     }
 }

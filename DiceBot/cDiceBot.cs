@@ -4745,7 +4745,7 @@ namespace DiceBot
                     case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
                     case "betterbetsToolStripMenuItem": CurrentSite = new BB(this); siteToolStripMenuItem.Text = "Site (BB)"; break;
                     case "moneyPotToolStripMenuItem" : CurrentSite = new moneypot(this); siteToolStripMenuItem.Text = "Site (MP)"; break;
-                       case "investDiceToolStripMenuItem": CurrentSite = new investdice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
+                       
                     case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site(CM)"; break;
                 }
                 if (CurrentSite is dadice)
