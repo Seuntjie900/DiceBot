@@ -5,8 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading; 
+using System.Threading;
 using System.Security.Cryptography;
+using System.Net.Http;
 
 namespace DiceBot
 {
@@ -37,7 +38,7 @@ namespace DiceBot
 
         }
 
-        
+        HttpClient Client = new HttpClient { BaseAddress= new Uri("https://betterbets.io/api/") };
         void GetBalanceThread()
         {
             try
@@ -46,14 +47,9 @@ namespace DiceBot
                 {
                     if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
                     {
-                        HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://betterbets.io/api/user?accessToken=" + accesstoken);
-                        if (Prox != null)
-                            betrequest.Proxy = Prox;
-                        betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                        HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                        string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-
-                        bbStats tmpu = json.JsonDeserialize<bbStats>(sEmitResponse2);
+                        lastupdate = DateTime.Now;
+                        string s = Client.GetAsync(new Uri("user?accessToken="+accesstoken)).Result.RequestMessage.Content.ReadAsStringAsync().Result;
+                        bbStats tmpu = json.JsonDeserialize<bbStats>(s);
                         balance = tmpu.balance; //i assume
                         bets = tmpu.total_bets;
                         wagered = tmpu.total_wagered;
@@ -66,7 +62,7 @@ namespace DiceBot
                         Parent.updateProfit(profit);
                         Parent.updateWagered(wagered );
                         Parent.updateWins(wins);
-                        lastupdate = DateTime.Now;
+                        
                         
                     }
                     Thread.Sleep(1000);
@@ -91,21 +87,19 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string otp)
         {
+            lastupdate = DateTime.Now;
             this.username = Username;
                             this.accesstoken = Password;
             try
             {
                 if (accesstoken != "" )
                     {
-                        HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://betterbets.io/api/user?accessToken=" + accesstoken);
-                        betrequest.Method = "GET";
-                        if (Prox != null)
-                            betrequest.Proxy = Prox;
-                        betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                        HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-                        string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-                    
-                        bbStats tmpu = json.JsonDeserialize<bbStats>(sEmitResponse2);
+                    string s1 = "user?accessToken=" + accesstoken;
+                    try
+                    {
+                        string s = Client.GetStringAsync(s1).Result;
+
+                        bbStats tmpu = json.JsonDeserialize<bbStats>(s);
                         if (tmpu.error != 1)
                         {
                             balance = tmpu.balance; //i assume
@@ -122,10 +116,22 @@ namespace DiceBot
                             Parent.updateWins(wins);
                             lastupdate = DateTime.Now;
                             getDepositAddress();
-                            
+
                             finishedlogin(true);
                             return;
                         }
+                        else
+                        {
+                            finishedlogin(false);
+                            return;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        finishedlogin(false);
+                        return;
+                    }
+                        
                     }
                     
                 }
@@ -148,42 +154,54 @@ namespace DiceBot
         {
             try
             {
-
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://betterbets.io/api/betDice/");//?"+string.Format("accessToken={3}&wager={0:0.00000000}&chance={1}&direction={2}", (amount), chance.ToString("0.00"), High ? "1" : "0", accesstoken));
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.Method = "POST";
-                double tmpchance = High ? 99.99 - chance : chance;
-                string post = string.Format("accessToken={3}&wager={0:0.00000000}&chance={1}&direction={2}", (amount), chance.ToString("0.00"), High ? "1" : "0", accesstoken);
-                betrequest.ContentLength = post.Length;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
+                pairs.Add(new KeyValuePair<string, string>("wager", amount.ToString("0.00000000")));
+                pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString("0.00")));
+                pairs.Add(new KeyValuePair<string, string>("direction", High?"1":"0"));
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string responseData = "";
+                using (var response = Client.PostAsync("betDice/", Content))
                 {
-
-                    writer.Write(post);
+                    try
+                    {
+                        responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        if (e.InnerException.Message.Contains("ssl"))
+                        {
+                            placebetthread();
+                            return;
+                        }
+                    }
                 }
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
-                bbResult tmp = json.JsonDeserialize<bbResult>(sEmitResponse);
-                
-                
-                next = tmp.nextServerSeed;
-                lastupdate = DateTime.Now;
-                balance = tmp.balance;
-                bets++;
-                if (tmp.win == 1)
-                    wins++;
-                else losses++;
-                
-                wagered = (tmp.wager);
-                profit = tmp.profit;
-                Bet tmp2 = tmp.toBet();
-                tmp2.serverhash = next;
-                next = tmp.nextServerSeed;
-                
-                FinishedBet(tmp2);
+                bbResult tmp = json.JsonDeserialize<bbResult>(responseData);
+                if (tmp.error != 1)
+                {
+                    next = tmp.nextServerSeed;
+                    lastupdate = DateTime.Now;
+                    balance = tmp.balance;
+                    bets++;
+                    if (tmp.win == 1)
+                        wins++;
+                    else losses++;
+
+                    wagered += (tmp.wager);
+                    profit += tmp.profit;
+
+
+                    Bet tmp2 = tmp.toBet();
+                    tmp2.serverhash = next;
+                    next = tmp.nextServerSeed;
+
+                    FinishedBet(tmp2);
+                }
+                else
+                {
+                    Parent.updateStatus("An error has occured! Betting has stopped for your safety.");
+                }
             }
             catch (WebException e)
             {
@@ -198,6 +216,10 @@ namespace DiceBot
                     placebetthread();
                 }
                 
+
+            }
+            catch (Exception e)
+            {
 
             }
         }
@@ -217,21 +239,26 @@ namespace DiceBot
                 {
                     LastSeedReset = DateTime.Now;
                     Parent.updateStatus("Resetting Seed");
-                    HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://betterbets.io/api/seed");
-                    if (Prox != null)
-                        betrequest.Proxy = Prox;
-                    betrequest.Method = "POST";
-                    string post = string.Format("AccessToken={1}&seed={0}",R.Next(0, Int32.MaxValue), accesstoken);
-                    betrequest.ContentLength = post.Length;
-                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-                    using (var writer = new StreamWriter(betrequest.GetRequestStream()))
+                    List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                    pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
+                    pairs.Add(new KeyValuePair<string, string>("seed", amount.ToString("0.00000000")));
+                    FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                    string responseData = "";
+                    using (var response = Client.PostAsync("seed/", Content))
                     {
-
-                        writer.Write(post);
+                        try
+                        {
+                            responseData = response.Result.Content.ReadAsStringAsync().Result;
+                        }
+                        catch (AggregateException e)
+                        {
+                            if (e.InnerException.Message.Contains("ssl"))
+                            {
+                                ResetSeed();
+                                return;
+                            }
+                        }
                     }
-                    HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                    string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     
                 }
                 catch (WebException e)
@@ -360,15 +387,16 @@ namespace DiceBot
 
         public string getDepositAddress()
         {
-            return "";
-            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://betterbets.io/api/depositAddress?accessToken=" + accesstoken);
-            if (Prox != null)
-                betrequest.Proxy = Prox;
-            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-            HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest.GetResponse();
-            string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
-            PRCDepost tmp = json.JsonDeserialize<PRCDepost>(sEmitResponse2);
-            return tmp.Address;
+            try
+            {
+                string s = Client.GetStringAsync("depositAddress?accessToken=" + accesstoken).Result;
+                PRCDepost tmp = json.JsonDeserialize<PRCDepost>(s);
+                return tmp.Address;
+            }
+            catch (AggregateException e)
+            {
+                return "";
+            }
         }
 
         public override void Disconnect()
@@ -383,7 +411,28 @@ namespace DiceBot
 
             try
             {
-                string post = "accessToken="+ accesstoken +"&uname=" + User+ "&amount=" + (amount * 100000000.0).ToString("");
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
+                pairs.Add(new KeyValuePair<string, string>("uname", User));
+                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0).ToString("")));
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string responseData = "";
+                using (var response = Client.PostAsync("tip/", Content))
+                {
+                    try
+                    {
+                        responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        if (e.InnerException.Message.Contains("ssl"))
+                        {
+                            SendTip(User , amount);
+                            return;
+                        }
+                    }
+                }
+                /*string post = "accessToken="+ accesstoken +"&uname=" + User+ "&amount=" + (amount * 100000000.0).ToString("");
 
 
                 HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://betterbets.io/api/api/tip");
@@ -400,7 +449,7 @@ namespace DiceBot
                     writer.Write(post);
                 }
                 HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
             }
             catch (WebException e)
             {
@@ -467,11 +516,13 @@ namespace DiceBot
                 Profit = (decimal)profit,
                 Roll = (decimal)result,
                 high = direction == 1,
-                Chance = (decimal)target,
+                
                 clientseed = clientSeed.ToString(),
                 serverseed = serverSeed,
                 Id=betId
             };
+
+            tmp.Chance = tmp.high ? 99.99m - (decimal)target : (decimal)target;
 
             return tmp;
         }
