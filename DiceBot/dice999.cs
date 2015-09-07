@@ -7,6 +7,7 @@ using System.Net;
 using System.IO;
 using System.Security.Cryptography;
 using System.Globalization;
+using System.Net.Http;
 
 namespace DiceBot
 {
@@ -20,6 +21,7 @@ namespace DiceBot
         bool isD999 = true;
         
         public static string[] cCurrencies =new string[] { "btc","doge","ltc" };
+        HttpClient Client = new HttpClient { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
         public dice999(cDiceBot Parent)
         {
             maxRoll = 99.9999;
@@ -67,24 +69,30 @@ namespace DiceBot
             if (sessionCookie != "" && sessionCookie != null && (DateTime.Now - Lastbalance).TotalSeconds>60)
             {
                 Lastbalance = DateTime.Now;
-                HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-                if (Prox != null)
-                    loginrequest.Proxy = Prox;
-                string post = string.Format("a=GetBalance&s={0}&Currency={1}", sessionCookie, Currency);
-                loginrequest.Method = "POST";
-
-                loginrequest.ContentLength = post.Length;
-                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("a", "GetBalance"));
+                pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("Currency", Currency));
+                
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string responseData = "";
+                using (var response = Client.PostAsync("", Content))
                 {
-
-                    writer.Write(post);
+                    try
+                    {
+                        responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        if (e.InnerException.Message.Contains("ssl"))
+                        {
+                            GetBalance();
+                            return;
+                        }
+                    }
                 }
-                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-
-                balance = (double)json.JsonDeserialize<d999Login>(sEmitResponse).Balance / 100000000.0;
+                
+                balance = (double)json.JsonDeserialize<d999Login>(responseData).Balance / 100000000.0;
                 if (balance == 0)
                 {
 
@@ -99,35 +107,39 @@ namespace DiceBot
             try
             {
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, this.chance, High ? "High" : "Low"));
-                HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-                if (Prox != null)
-                    loginrequest.Proxy = Prox;
-                string post = string.Format("a=GetServerSeedHash&s={0}", sessionCookie);
-                string sEmitResponse = "";
-                double chance = (999999.0) * (this.chance / 100.0);
-                HttpWebResponse EmitResponse;
                 
+                double chance = (999999.0) * (this.chance / 100.0);
+                //HttpWebResponse EmitResponse;
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string responseData = "";
                 if (next == "" && next!=null)
                 {
-                    
-                    
-                    loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-                    if (Prox != null)
-                        loginrequest.Proxy = Prox;
-                    post = string.Format("a=GetServerSeedHash&s={0}", sessionCookie);
-                    loginrequest.Method = "POST";
 
-                    loginrequest.ContentLength = post.Length;
-                    loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
-                    using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                    
+                    pairs = new List<KeyValuePair<string, string>>();
+                    pairs.Add(new KeyValuePair<string, string>("a", "GetServerSeedHash"));
+                    pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
+                    
+                   Content = new FormUrlEncodedContent(pairs);
+                     responseData = "";
+                    using (var response = Client.PostAsync("", Content))
                     {
-
-                        writer.Write(post);
+                        try
+                        {
+                            responseData = response.Result.Content.ReadAsStringAsync().Result;
+                        }
+                        catch (AggregateException e)
+                        {
+                            if (e.InnerException.Message.Contains("ssl"))
+                            {
+                                PlaceBetThread();
+                                return;
+                            }
+                        }
                     }
-                    EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                    sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                    if (sEmitResponse.Contains("error"))
+                    if (responseData.Contains("error"))
                     {
                         if (BetRetries++ < 3)
                         {
@@ -139,29 +151,38 @@ namespace DiceBot
                         else
                             throw new Exception();
                     }
-                    string Hash = next =  json.JsonDeserialize<d999Hash>(sEmitResponse).Hash;
+                    string Hash = next =  json.JsonDeserialize<d999Hash>(responseData).Hash;
                 }
-                loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-                if (Prox != null)
-                    loginrequest.Proxy = Prox;
-                string ClientSeed = r.Next(0, int.MaxValue).ToString();
+                pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("a", "PlaceBet"));
+                pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("PayIn", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("Low", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("High", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("ClientSeed", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("Currency", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("ProtocolVersion", "2"));
 
-
-                post = string.Format("a=PlaceBet&s={0}&PayIn={1}&Low={2}&High={3}&ClientSeed={4}&Currency={5}&ProtocolVersion=2", sessionCookie, (long)Math.Ceiling(amount * 100000000.0), High ? 999999 - (int)chance : 0, High ? 999999 : (int)chance, ClientSeed, Currency);
-                loginrequest.Method = "POST";
-
-                loginrequest.ContentLength = post.Length;
-                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                Content = new FormUrlEncodedContent(pairs);
+                responseData = "";
+                using (var response = Client.PostAsync("", Content))
                 {
-
-                    writer.Write(post);
+                    try
+                    {
+                        responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        if (e.InnerException.Message.Contains("ssl"))
+                        {
+                            PlaceBetThread();
+                            return;
+                        }
+                    }
                 }
-                EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                 sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 
-                d999Bet tmpBet = json.JsonDeserialize<d999Bet>(sEmitResponse);
+                string ClientSeed = r.Next(0, int.MaxValue).ToString();
+                d999Bet tmpBet = json.JsonDeserialize<d999Bet>(responseData);
                 if (amount>=21)
                 {
 
@@ -257,26 +278,37 @@ namespace DiceBot
             
         }
 
+        public override void Donate(double Amount)
+        {
+            internalWithdraw(Amount, "1BoHcFQsUSot7jkHJcZMh1iUda3tEjzuBW");
+        }
 
         protected override bool internalWithdraw(double Amount, string Address)
         {
-            
-            HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-            if (Prox != null)
-                loginrequest.Proxy = Prox;
-            string post = string.Format("a=Withdraw&s={0}&Amount={1}&Address={2}&currency={3}", sessionCookie, Amount*100000000, Address, Currency);
-            loginrequest.Method = "POST";
+            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+            pairs.Add(new KeyValuePair<string, string>("a", "Withdraw"));
+            pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
+            pairs.Add(new KeyValuePair<string, string>("Currency", Currency));
+            pairs.Add(new KeyValuePair<string, string>("Amount", Amount.ToString()));
+            pairs.Add(new KeyValuePair<string, string>("Address", Address));
 
-            loginrequest.ContentLength = post.Length;
-            loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-            using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+            string responseData = "";
+            using (var response = Client.PostAsync("", Content))
             {
-
-                writer.Write(post);
+                try
+                {
+                    responseData = response.Result.Content.ReadAsStringAsync().Result;
+                }
+                catch (AggregateException e)
+                {
+                    if (e.InnerException.Message.Contains("ssl"))
+                    {
+                        return internalWithdraw(Amount , Address);
+                    }
+                }
             }
-            HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+            
             return true;
         }
 
@@ -284,23 +316,35 @@ namespace DiceBot
         decimal Wagered = 0;
         public override void Login(string Username, string Password, string twofa)
         {
-            HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-            if (Prox != null)
-                loginrequest.Proxy = Prox;
-            string post = "a=Login&key=7a3ada10cb804ec695cda315db6b8789&Username=" + Username + "&Password=" + Password + (twofa != "" ? "&Totp=" + twofa : "");
-            loginrequest.Method = "POST";
+            Lastbalance = DateTime.Now;
+            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+            pairs.Add(new KeyValuePair<string, string>("a", "Login"));
+            pairs.Add(new KeyValuePair<string, string>("key", "7a3ada10cb804ec695cda315db6b8789"));
+            if (twofa!="" && twofa!=null)
+            pairs.Add(new KeyValuePair<string, string>("Totp", twofa));
 
-            loginrequest.ContentLength = post.Length;
-            loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+            pairs.Add(new KeyValuePair<string, string>("Username", Username));
+            pairs.Add(new KeyValuePair<string, string>("Password", Password));
 
-            using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+            string responseData = "";
+            using (var response = Client.PostAsync("", Content))
             {
-
-                writer.Write(post);
+                try
+                {
+                    responseData = response.Result.Content.ReadAsStringAsync().Result;
+                }
+                catch (AggregateException e)
+                {
+                    if (e.InnerException.Message.Contains("ssl"))
+                    {
+                        Login(Username, Password, twofa);
+                        return;
+                    }
+                }
             }
-            HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-            d999Login tmpU = json.JsonDeserialize<d999Login>(sEmitResponse);
+            
+            d999Login tmpU = json.JsonDeserialize<d999Login>(responseData);
             if (tmpU.SessionCookie!="" && tmpU.SessionCookie!=null)
             { 
                 sessionCookie = tmpU.SessionCookie;
@@ -332,43 +376,56 @@ namespace DiceBot
         }
         public override bool Register(string username, string password)
         {
-            HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-            if (Prox != null)
-                loginrequest.Proxy = Prox;
-            string post = "a=CreateAccount&key=7a3ada10cb804ec695cda315db6b8789";
-            loginrequest.Method = "POST";
-
-            loginrequest.ContentLength = post.Length;
-            loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-            using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+            pairs.Add(new KeyValuePair<string, string>("a", "CreateAccount"));
+            pairs.Add(new KeyValuePair<string, string>("key", "7a3ada10cb804ec695cda315db6b8789"));
+            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+            string responseData = "";
+            using (var response = Client.PostAsync("", Content))
             {
-
-                writer.Write(post);
+                try
+                {
+                    responseData = response.Result.Content.ReadAsStringAsync().Result;
+                }
+                catch (AggregateException e)
+                {
+                    if (e.InnerException.Message.Contains("ssl"))
+                    {
+                        return Register(username, password);
+                        
+                    }
+                }
             }
-            HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-            d999Register tmp = json.JsonDeserialize<d999Register>(sEmitResponse);
+            
+            d999Register tmp = json.JsonDeserialize<d999Register>(responseData);
             if (tmp.SessionCookie!="" && tmp.SessionCookie!=null)
             {
                 sessionCookie = tmp.SessionCookie;
-                loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-                if (Prox != null)
-                    loginrequest.Proxy = Prox;
-                post = "a=CreateUser&key=7a3ada10cb804ec695cda315db6b8789&s=" + sessionCookie + "&Username="+username+"&Password="+password;
-                loginrequest.Method = "POST";
-
-                loginrequest.ContentLength = post.Length;
-                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("a", "CreateUser"));
+                pairs.Add(new KeyValuePair<string, string>("key", "7a3ada10cb804ec695cda315db6b8789"));
+                pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("Username", username));
+                pairs.Add(new KeyValuePair<string, string>("Password", password));
+                Content = new FormUrlEncodedContent(pairs);
+                responseData = "";
+                using (var response = Client.PostAsync("", Content))
                 {
+                    try
+                    {
+                        responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        if (e.InnerException.Message.Contains("ssl"))
+                        {
+                            return Register(username, password);
 
-                    writer.Write(post);
+                        }
+                    }
                 }
-                 EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                 sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                 Parent.updateBalance((decimal)(balance));
+                
+                Parent.updateBalance((decimal)(balance));
                  Parent.updateBets(0);
                  Parent.updateLosses(0);
                  Parent.updateProfit(0m);
@@ -388,23 +445,32 @@ namespace DiceBot
         {
             if (sessionCookie != "" && sessionCookie != null)
             {
-                HttpWebRequest loginrequest = HttpWebRequest.Create("https://www.999dice.com/api/web.aspx") as HttpWebRequest;
-                if (Prox != null)
-                    loginrequest.Proxy = Prox;
-                string post = "a=GetDepositAddress&s=" + sessionCookie + "&Currency=" + Currency;
-                loginrequest.Method = "POST";
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("a", "GetDepositAddress"));
+                pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("Currency", Currency));
 
-                loginrequest.ContentLength = post.Length;
-                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string responseData = "";
+                using (var response = Client.PostAsync("", Content))
                 {
+                    try
+                    {
+                        responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        if (e.InnerException.Message.Contains("ssl"))
+                        {
+                            GetDepositAddress();
+                            return;
 
-                    writer.Write(post);
+                        }
+                    }
                 }
-                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                d999deposit tmp = json.JsonDeserialize<d999deposit>(sEmitResponse);
+                
+                
+                d999deposit tmp = json.JsonDeserialize<d999deposit>(responseData);
                 Parent.updateDeposit(tmp.Address);
             }
         }
@@ -418,7 +484,6 @@ namespace DiceBot
             byte[] server = strtobytes(serverSeed);
             byte[] client = BitConverter.GetBytes(int.Parse(clientSeed)).Reverse().ToArray();
             byte[] num = BitConverter.GetBytes(nonce).Reverse().ToArray();
-            //byte[] serverhash = serverSeedHash == null ? null : strtobytes(serverSeedHash);
             byte[] data = server.Concat(client).Concat(num).ToArray();
             using (SHA512 sha512 = new SHA512Managed())
             {
