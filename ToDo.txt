@@ -3,7 +3,7 @@ PD login encoding
 999dice betting bug (date format, not set to instance, Both at Datagridview)(??fixed??. no reproduce so far)
 custom clickable when open -- I can't remmeber what this is supposed to be??
 prog mode timer
-
+migrate all rest api sites to http client
 
 hopefully before release:
 losing streak table redo
