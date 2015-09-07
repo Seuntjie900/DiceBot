@@ -6,17 +6,21 @@ using System.Threading;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
+using System.Net.Http;
+
 namespace DiceBot
 {
     class SafeDice : DiceSite
     {
         string accesstoken = "";
-        
+        HttpClientHandler ClientHandlr = new HttpClientHandler { UseCookies = true };
+        HttpClient Client = null;
         bool ispd = true;
         DateTime LastBalance = DateTime.Now;
         public static string[] cCurrencies = new string[] { "Btc", "XMR"};
         public SafeDice(cDiceBot Parent)
         {
+            Client = new HttpClient(ClientHandlr) { BaseAddress= new Uri("https://safedice.com/api/") };
             maxRoll = 99.9999;
             AutoInvest = false;
             AutoWithdraw = true;
@@ -40,12 +44,12 @@ namespace DiceBot
             {
                 if (accesstoken != "" && accesstoken != null)
                 {
-                    HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/" + curen + "/me");
+                    /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/" + curen + "/me");
                     loginrequest.CookieContainer = new CookieContainer();
                     loginrequest.CookieContainer.Add(new System.Net.Cookie("token", accesstoken, "", "safedice.com"));
                     loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
-                    HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                    string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                    HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
+                    string sEmitResponse = Client.GetStringAsync("accounts/" + UID + "/sites/" + curen + "/me").Result; //new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
                     balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0);
                     Parent.updateBalance((decimal)balance);
@@ -79,12 +83,12 @@ namespace DiceBot
                 {
                     if ((DateTime.Now - LastBalance).TotalSeconds > 60 && accesstoken != "" && accesstoken != null)
                     {
-                        HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/" + curen + "/me");
+                        /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/" + curen + "/me");
                         loginrequest.CookieContainer = new CookieContainer();
                         loginrequest.CookieContainer.Add(new System.Net.Cookie("token", accesstoken, "", "safedice.com"));
                         loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
-                        HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                        string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                        HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
+                        string sEmitResponse = Client.GetStringAsync("accounts/" + UID + "/sites/" + curen + "/me").Result;//new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                         SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
                         balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0); ;
                         Parent.updateBalance((decimal)balance);
@@ -92,14 +96,14 @@ namespace DiceBot
 
                     if (accesstoken != "" && accesstoken != null)
                     {
-                        HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/chats/en_US");
-                        //loginrequest.Accept = "application/json, text/plain, */*";
+                        /* loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/chats/en_US");
+                        //loginrequest.Accept = "application/json, text/plain, ";
                         loginrequest.ContentType = " application/json;charset=utf-8";
                         loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
                         loginrequest.CookieContainer = new CookieContainer();
                         loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
-                        HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                        string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                        HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
+                        string sEmitResponse = Client.GetStringAsync("chats/en_US").Result; //new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                         SDChat[] sdchat = json.JsonDeserialize<SDChat[]>(sEmitResponse);
 
                         foreach (SDChat chat in sdchat)
@@ -129,6 +133,7 @@ namespace DiceBot
         long UID = 0;
         public override void Login(string Username, string Password, string twofa)
         {
+            LastBalance = DateTime.Now;
             try
             {
                 HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/auth/local");
@@ -152,6 +157,7 @@ namespace DiceBot
                     finishedlogin(false);
                 else
                 {
+                    
                     loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/me?token=" + accesstoken);
                     if (Prox != null)
                         loginrequest.Proxy = Prox;
@@ -173,6 +179,13 @@ namespace DiceBot
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
+
+                    ClientHandlr = new HttpClientHandler() { UseCookies = true };
+
+                    ClientHandlr.CookieContainer = new CookieContainer();
+                    ClientHandlr.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
+                    Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://safedice.com/api/") };
+                    Client.DefaultRequestHeaders.Add("authorization", "Bearer " + accesstoken);
                     Parent.updateBalance(tmp2.balance / (curen != 2 ? 100000000m : 1000000000000m));
                     balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0);
 
@@ -218,7 +231,17 @@ namespace DiceBot
             try
             {
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, (bool)High ? "High" : "Low"));
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/dicebets");
+                SafeDiceBet tmpBet = new SafeDiceBet
+                {
+                    siteId = curen,
+                    amount = (long)(amount * (Currency != "2" ? 100000000 : 1000000000000)),
+                    payout = (double)(((long)((99.5 / chance) * (curen != 2 ? 100000000 : 1000000000000))) / (curen != 2 ? 100000000.0 : 1000000000000.0)),
+                    isFixedPayout = false,
+                    isRollLow = !(bool)High,
+                    target = ((bool)High) ? (999999 - ((long)(chance * 10000))).ToString() : ((long)(chance * 10000)).ToString()
+                };
+                string post = json.JsonSerializer<SafeDiceBet>(tmpBet);
+                /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/dicebets");
                 if (Prox != null)
                     betrequest.Proxy = Prox;
                 betrequest.Method = "POST";
@@ -245,9 +268,23 @@ namespace DiceBot
                     writer.Close();
                 }
                 string tmp = betrequest.ToString();
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                SafeDiceBetResult tmpResult = json.JsonDeserialize<SafeDiceBetResult>(sEmitResponse);
+                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();*/
+                string sEmitResponse = ""; //new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+
+                HttpContent cont = new StringContent(post);
+                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                string Resp = "";
+                using (var response = Client.PostAsync("dicebets", cont))
+                {
+                    Resp = response.Result.Content.ReadAsStringAsync().Result;
+                    if (Resp == "{}")
+                    {
+                        Parent.updateStatus("Something went wrong! Please check your bet size.");
+                        return;
+                    }
+                }
+
+                SafeDiceBetResult tmpResult = json.JsonDeserialize<SafeDiceBetResult>(Resp);
                 Bet bet = new Bet();
                 bet.Amount = (decimal)tmpResult.amount / (curen != 2 ? 100000000m : 1000000000000m);
                 bet.date = json.ToDateTime2(tmpResult.processTime);
@@ -306,19 +343,19 @@ namespace DiceBot
         {
             try
             {
-                HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/randomizeseed");
+                /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/randomizeseed");
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
                 loginrequest.Method = "GET";
 
-                loginrequest.Accept = "application/json, text/plain, */*";
+                loginrequest.Accept = "application/json, text/plain, /*";
 
                 loginrequest.ContentType = " application/json;charset=utf-8";
                 loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
                 loginrequest.CookieContainer = new CookieContainer();
                 loginrequest.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
-                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
+                string sEmitResponse = Client.GetStringAsync("accounts/randomizeseed").Result;//new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
                 SDRandomize tmp = json.JsonDeserialize<SDRandomize>(sEmitResponse);
                 serverhash = tmp.serverSeedHash;
@@ -357,12 +394,12 @@ namespace DiceBot
             {
                 try
                 {
-                    HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/chats/en_US");
+                    /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/chats/en_US");
                     if (Prox != null)
                         loginrequest.Proxy = Prox;
                     loginrequest.Method = "POST";
 
-                    loginrequest.Accept = "application/json, text/plain, */*";
+                    loginrequest.Accept = "application/json, text/plain, /*";
 
                     loginrequest.ContentType = " application/json;charset=utf-8";
                     loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
@@ -377,8 +414,17 @@ namespace DiceBot
                         writer.Flush();
                         writer.Close();
                     }
-                    HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                    string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                    HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
+                    string post = json.JsonSerializer<SDSendChat>(new SDSendChat { _message = (string)Message, room = "en_US" });
+                    HttpContent cont = new StringContent(post);
+                    cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                    string Resp = "";
+                    using (var response = Client.PostAsync("chats/en_US", cont))
+                    {
+                        Resp = response.Result.Content.ReadAsStringAsync().Result;
+
+                    }
+                    //new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 }
                 catch
                 {
@@ -399,13 +445,13 @@ namespace DiceBot
             try
             {
                 Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
-                HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/1/withdraw");
+                /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/1/withdraw");
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
 
                 loginrequest.Method = "PUT";
 
-                loginrequest.Accept = "application/json, text/plain, */*";
+                loginrequest.Accept = "application/json, text/plain, /*";
 
                 loginrequest.ContentType = " application/json;charset=utf-8";
                 loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
@@ -420,8 +466,17 @@ namespace DiceBot
                     writer.Flush();
                     writer.Close();
                 }
-                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
+                string post = json.JsonSerializer<SDSendWIthdraw>(new SDSendWIthdraw { amount = (long)(Amount * 100000000), address = Address });
+                HttpContent cont = new StringContent(post);
+                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                string Resp = "";
+                using (var response = Client.PostAsync("accounts/" + UID + "/sites/1/withdraw", cont))
+                {
+                    Resp = response.Result.Content.ReadAsStringAsync().Result;
+
+                }
+                string sEmitResponse = "";//new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
                 
                 balance -= Amount;
@@ -512,7 +567,12 @@ namespace DiceBot
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
+                    ClientHandlr = new HttpClientHandler() { UseCookies = true };
 
+                    ClientHandlr.CookieContainer = new CookieContainer();
+                    ClientHandlr.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
+                    Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://safedice.com/api/") };
+                    Client.DefaultRequestHeaders.Add("authorization", "Bearer " + accesstoken);
                     Parent.updateBalance(tmp2.balance / (curen != 2 ? 100000000m : 1000000000000m));
                     balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0);
                     
@@ -609,13 +669,13 @@ namespace DiceBot
             try
             {
                 Parent.updateStatus(string.Format("Investing {0:0.00000000}", Amount));
-                HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/1/invest");
+                /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/1/invest");
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
 
                 loginrequest.Method = "POST";
 
-                loginrequest.Accept = "application/json, text/plain, */*";
+                loginrequest.Accept = "application/json, text/plain, /*";
 
                 loginrequest.ContentType = " application/json;charset=utf-8";
                 loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
@@ -630,8 +690,17 @@ namespace DiceBot
                     writer.Flush();
                     writer.Close();
                 }
-                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
+                string post = json.JsonSerializer<SDSendInvest>(new SDSendInvest { amount = (long)(Amount * 100000000) });
+                HttpContent cont = new StringContent(post);
+                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                string Resp = "";
+                using (var response = Client.PostAsync("accounts/" + UID + "/sites/1/invest", cont))
+                {
+                    Resp = response.Result.Content.ReadAsStringAsync().Result;
+
+                }
+                string sEmitResponse = "";//new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
                 
                 balance -= Amount;
@@ -696,7 +765,7 @@ namespace DiceBot
 
         string GetDepositAddress()
         {
-            HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/"+UID+"/sites/"+curen+"/deposit");
+            /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/"+UID+"/sites/"+curen+"/deposit");
             if (Prox != null)
                 loginrequest.Proxy = Prox;
             loginrequest.Method = "GET";
@@ -705,8 +774,8 @@ namespace DiceBot
             loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
             loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
             
-            HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+            HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
+            string sEmitResponse = Client.GetStringAsync("accounts/" + UID + "/sites/" + curen + "/deposit").Result; //new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
             return json.JsonDeserialize<SDDEpost>(sEmitResponse).address;
         }

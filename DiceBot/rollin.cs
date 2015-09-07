@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -16,6 +17,8 @@ namespace DiceBot
         string client = "";
         string username = "";
         Random R = new Random();
+        HttpClientHandler ClientHandlr = new HttpClientHandler();
+        HttpClient Client = null;
         public rollin(cDiceBot Parent)
         {
             maxRoll = 99;
@@ -29,6 +32,8 @@ namespace DiceBot
             Thread t = new Thread(new ThreadStart(SyncThread));
             t.Start();
             SiteURL = "https://rollin.io/ref/8c4";
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
+            
         }
         DateTime lastbet = DateTime.Now;
         DateTime LastBalance = DateTime.Now;
@@ -42,13 +47,7 @@ namespace DiceBot
                     {
 
 
-                        HttpWebRequest betrequest2 = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/sync");
-                        if (Prox != null)
-                            betrequest2.Proxy = Prox;
-                        betrequest2.CookieContainer = Cookies;
-                        betrequest2.Headers.Add("X-CSRF-Token", Token);
-                        HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest2.GetResponse();
-                        string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                        string sEmitResponse2 = Client.GetStringAsync("customer/sync").Result;
                         RollinBet tmpStats2 = json.JsonDeserialize<RollinBet>(sEmitResponse2);
                         if (tmpStats2.success)
                         {
@@ -72,25 +71,16 @@ namespace DiceBot
             {
                 lastbet = DateTime.Now;
                 bool High = (bool)_High;
-                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/games/dice/play");
-                betrequest.CookieContainer = Cookies;
-                betrequest.Headers.Add("X-CSRF-Token", Token);
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.Method = "POST";
                 double tmpchance = High ? 99.99 - chance : chance;
-                string post = string.Format("bet_amount={0}&bet_number={1}&prediction={2}&seed={3}", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo), tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo), High ? "bigger" : "smaller", R.Next(int.MaxValue));
-                betrequest.ContentLength = post.Length;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-                {
-
-                    writer.Write(post);
-                }
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("bet_amount", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("bet_number", tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("prediction", High ? "bigger" : "smaller"));
+                pairs.Add(new KeyValuePair<string, string>("seed", R.Next(int.MaxValue).ToString()));
+                
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string sEmitResponse = Client.PostAsync("games/dice/play", Content).Result.Content.ReadAsStringAsync().Result;
                 RollinBet tmp = json.JsonDeserialize<RollinBet>(sEmitResponse);
                 if (tmp.errors != null && tmp.errors.Length>0)
                 {
@@ -137,15 +127,8 @@ namespace DiceBot
         public override void ResetSeed()
         {
             
-            Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
-            HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/seed/randomize");
-            if (Prox != null)
-                betrequest.Proxy = Prox;
-            betrequest.CookieContainer = Cookies;
-            betrequest.Headers.Add("X-CSRF-Token", Token);
-            betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-            HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-            string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+            
+            string sEmitResponse = Client.GetStringAsync("customer/seed/randomize").Result;
             RollinRandomize rand = json.JsonDeserialize<RollinRandomize>(sEmitResponse);
             if (rand.success)
             {
@@ -163,24 +146,11 @@ namespace DiceBot
         {
             try
             {
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/transaction/withdraw");
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.CookieContainer = Cookies;
-                betrequest.Headers.Add("X-CSRF-Token", Token);
-                betrequest.Method = "POST";
-                double tmpchance = High ? 99.99 - chance : chance;
-                string post = string.Format("address={0}&amount={1}", Address, (Amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo));
-                betrequest.ContentLength = post.Length;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-                {
-
-                    writer.Write(post);
-                }
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("address", Address));
+                pairs.Add(new KeyValuePair<string, string>("amount", (Amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string sEmitResponse = Client.PostAsync("transaction/withdraw", Content).Result.Content.ReadAsStringAsync().Result;
                 return true;
             }
             catch
@@ -191,13 +161,7 @@ namespace DiceBot
 
         public void GetDeposit()
         {
-            HttpWebRequest betrequest2 = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/address");
-            if (Prox != null)
-                betrequest2.Proxy = Prox;
-            betrequest2.CookieContainer = Cookies;
-            betrequest2.Headers.Add("X-CSRF-Token", Token);
-            HttpWebResponse EmitResponse2 = (HttpWebResponse)betrequest2.GetResponse();
-            string sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+            string sEmitResponse2 = Client.GetStringAsync("customer/address").Result;
             RollinDeposit tmp = json.JsonDeserialize<RollinDeposit>(sEmitResponse2);
             if (tmp.success)
             {
@@ -215,24 +179,13 @@ namespace DiceBot
         {
             try
             {
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/tipsy/tip");
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.CookieContainer = Cookies;
-                betrequest.Headers.Add("X-CSRF-Token", Token);
-                betrequest.Method = "POST";
-                double tmpchance = High ? 99.99 - chance : chance;
-                string post = string.Format("username={0}&amount={1}&private=0", User, (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo));
-                betrequest.ContentLength = post.Length;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("username", User));
+                pairs.Add(new KeyValuePair<string, string>("private", "0"));
+                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string sEmitResponse = Client.PostAsync("tipsy/tip", Content).Result.Content.ReadAsStringAsync().Result;
 
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-                {
-
-                    writer.Write(post);
-                }
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 return;
             }
             catch
@@ -319,6 +272,10 @@ namespace DiceBot
 
                 if (tmpStats.success && tmpStats2.success)
                 {
+                    ClientHandlr.UseCookies = true;
+                    ClientHandlr.CookieContainer = this.Cookies;
+                    Client.DefaultRequestHeaders.Add("X-CSRF-Token", Token);
+                    
                     GetDeposit();
                     balance = double.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0; //i assume
                     bets = tmpStats.user.bets;
@@ -421,6 +378,10 @@ namespace DiceBot
 
             if (tmpStats.success && tmpStats2.success)
             {
+                ClientHandlr.UseCookies = true;
+                ClientHandlr.CookieContainer = this.Cookies;
+                Client.DefaultRequestHeaders.Add("X-CSRF-Token", Token);
+
                 GetDeposit();
                 balance = double.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0; //i assume
                 bets = tmpStats.user.bets;
@@ -450,7 +411,7 @@ namespace DiceBot
                 return (DateTime.Now - lastbet).TotalSeconds >= 5;
             else if (amount < 0.00000100)
                 return (DateTime.Now - lastbet).TotalSeconds >= 3;
-            else if (amount == 0.00001000)
+            else if (amount < 0.00001000)
                 return (DateTime.Now - lastbet).TotalSeconds >= 2;
             else
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 500;
