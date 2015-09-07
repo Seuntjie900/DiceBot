@@ -205,12 +205,17 @@ namespace DiceBot
             Instance.Disconnect();
         }
 
+        public override void Donate(double Amount)
+        {
+            SendTip("91380", Amount);
+        }
+
         public override void SendTip(string Username, double Amount)
         {
             int uid = -1;
             if (int.TryParse(Username, out uid))
             {
-                Instance.Chat(string.Format("/tip {0} {1:0.00000000}", uid, Amount));
+                Instance.Chat(string.Format("/tip noconf {0} {1:0.00000000}", uid, Amount));
             }
             else
             {
