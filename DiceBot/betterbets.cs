@@ -38,8 +38,8 @@ namespace DiceBot
             SiteURL = "https://betterbets.io/?ref=1301492";
 
         }
-
-        HttpClient Client = new HttpClient { BaseAddress= new Uri("https://betterbets.io/api/") };
+        HttpClientHandler ClientHandlr;// = new HttpClientHandler { UseCookies = true };
+        HttpClient Client;
         void GetBalanceThread()
         {
             try
@@ -88,6 +88,8 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string otp)
         {
+            ClientHandlr = new HttpClientHandler() { UseCookies = true };
+            Client = new HttpClient(ClientHandlr) { BaseAddress= new Uri("https://betterbets.io/api/") };
             lastupdate = DateTime.Now;
             this.username = Username;
                             this.accesstoken = Password;
@@ -157,8 +159,8 @@ namespace DiceBot
             {
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
-                pairs.Add(new KeyValuePair<string, string>("wager", amount.ToString("0.00000000")));
-                pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString("0.00")));
+                pairs.Add(new KeyValuePair<string, string>("wager", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("direction", High?"1":"0"));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string responseData = "";
@@ -242,7 +244,7 @@ namespace DiceBot
                     Parent.updateStatus("Resetting Seed");
                     List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                     pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
-                    pairs.Add(new KeyValuePair<string, string>("seed", amount.ToString("0.00000000")));
+                    pairs.Add(new KeyValuePair<string, string>("seed", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
                     FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                     string responseData = "";
                     using (var response = Client.PostAsync("seed/", Content))
@@ -415,7 +417,7 @@ namespace DiceBot
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("uname", User));
-                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0).ToString("")));
+                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string responseData = "";
                 using (var response = Client.PostAsync("tip/", Content))

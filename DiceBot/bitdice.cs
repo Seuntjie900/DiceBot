@@ -369,7 +369,7 @@ namespace DiceBot
 
         public override bool Invest(double Amount)
         {
-            string s = "{\"jsonrpc\":\"2.0\",\"method\":\"invest:invest\",\"params\":{\"amount\":\""+Amount.ToString("0.00000000")+"\"},\"id\":"+(id++)+"}";
+            string s = "{\"jsonrpc\":\"2.0\",\"method\":\"invest:invest\",\"params\":{\"amount\":\""+Amount.ToString("0.00000000",System.Globalization.NumberFormatInfo.InvariantInfo) +"\"},\"id\":"+(id++)+"}";
             if (Client.State == WebSocketState.Open)
             {
                 Client.Send(s);

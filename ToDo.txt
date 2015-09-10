@@ -1,9 +1,8 @@
 Todo:
 PD login encoding
-999dice betting bug (date format, not set to instance, Both at Datagridview)(??fixed??. no reproduce so far)
+999dice betting bug (date format, not set to instance, Both at Datagridview)(??fixed??. no reproduce so far) apparantly not fixed in 3.0.3 beta
 custom clickable when open -- I can't remmeber what this is supposed to be??
 prog mode timer
-migrate all rest api sites to http client
 
 hopefully before release:
 losing streak table redo
@@ -82,3 +81,4 @@ sd xmr balance
 prog mode user input
 implement other sites
 access load function from prog mode
+migrate all rest api sites to http client

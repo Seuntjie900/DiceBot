@@ -21,7 +21,8 @@ namespace DiceBot
         bool isD999 = true;
         
         public static string[] cCurrencies =new string[] { "btc","doge","ltc" };
-        HttpClient Client = new HttpClient { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
+        HttpClientHandler ClientHandlr;
+        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
         public dice999(cDiceBot Parent)
         {
             maxRoll = 99.9999;
@@ -104,6 +105,7 @@ namespace DiceBot
         string next = "";
         void PlaceBetThread()
         {
+            string err = "";
             try
             {
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, this.chance, High ? "High" : "Low"));
@@ -153,14 +155,15 @@ namespace DiceBot
                     }
                     string Hash = next =  json.JsonDeserialize<d999Hash>(responseData).Hash;
                 }
+                string ClientSeed = r.Next(0, int.MaxValue).ToString();
                 pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("a", "PlaceBet"));
                 pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
-                pairs.Add(new KeyValuePair<string, string>("PayIn", sessionCookie));
-                pairs.Add(new KeyValuePair<string, string>("Low", sessionCookie));
-                pairs.Add(new KeyValuePair<string, string>("High", sessionCookie));
-                pairs.Add(new KeyValuePair<string, string>("ClientSeed", sessionCookie));
-                pairs.Add(new KeyValuePair<string, string>("Currency", sessionCookie));
+                pairs.Add(new KeyValuePair<string, string>("PayIn", ((long)Math.Ceiling(amount * 100000000.0)).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("Low", (High ? 999999 - (int)chance : 0).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("High", (High ? 999999 : (int)chance).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("ClientSeed", ClientSeed));
+                pairs.Add(new KeyValuePair<string, string>("Currency", Currency));
                 pairs.Add(new KeyValuePair<string, string>("ProtocolVersion", "2"));
 
                 Content = new FormUrlEncodedContent(pairs);
@@ -181,60 +184,75 @@ namespace DiceBot
                     }
                 }
                 
-                string ClientSeed = r.Next(0, int.MaxValue).ToString();
+                
                 d999Bet tmpBet = json.JsonDeserialize<d999Bet>(responseData);
                 if (amount>=21)
                 {
 
                 }
-                if (tmpBet.ChanceTooHigh==1 || tmpBet.ChanceTooLow==1| tmpBet.InsufficientFunds == 1|| tmpBet.MaxPayoutExceeded==1|| tmpBet.NoPossibleProfit==1)
+                if (tmpBet.ChanceTooHigh == 1 || tmpBet.ChanceTooLow == 1 | tmpBet.InsufficientFunds == 1 || tmpBet.MaxPayoutExceeded == 1 || tmpBet.NoPossibleProfit == 1)
+                {
+                    if (tmpBet.ChanceTooHigh == 1)
+                        err = "Chance too high";
+                    if (tmpBet.ChanceTooLow == 1)
+                        err += "Chance too Low";
+                    if (tmpBet.InsufficientFunds == 1)
+                        err += "Insufficient Funds";
+                    if (tmpBet.MaxPayoutExceeded == 1)
+                        err += "Max Payout Exceeded";
+                    if (tmpBet.NoPossibleProfit == 1)
+                        err += "No Possible Profit";
+                    throw new Exception();
+                }
+                else if (tmpBet.BetId == 0)
                 {
                     throw new Exception();
                 }
-                if (tmpBet.BetId==0)
-                {
-
-                }
-                balance = (double)tmpBet.StartingBalance / 100000000.0 - (amount) + ((double)tmpBet.PayOut / 100000000.0);
-
-                profit += -(amount ) + (double)(tmpBet.PayOut / 100000000m);
-                Bet tmp = new Bet();
-                tmp.Amount = (decimal)amount;
-                tmp.BetDate = DateTime.Now.ToString(); ;
-                tmp.Chance = ((decimal)chance * 100m) / 999999m;
-                tmp.clientseed = ClientSeed;
-                tmp.Currency = Currency;
-                tmp.high = High;
-                tmp.Id = tmpBet.BetId;
-                tmp.nonce = 0;
-                tmp.Profit = ((decimal)tmpBet.PayOut / 100000000m) - ((decimal)amount);
-                tmp.Roll = tmpBet.Secret / 10000m;
-                tmp.serverhash = next;
-                tmp.serverseed = tmpBet.ServerSeed;
-                tmp.uid = (int)uid;
-                tmp.UserName = "";
-
-                bool win = false;
-                if ((tmp.Roll > 99.99m - tmp.Chance && High) || (tmp.Roll < tmp.Chance && !High))
-                {
-                    win = true;
-                }
-                if (win)
-                    wins++;
                 else
-                    losses++;
-                Wagered += tmp.Amount;
-                bets++;
-                BetRetries = 0;
-                
-                sqlite_helper.InsertSeed(tmp.serverhash, tmp.serverseed);
-                next = tmpBet.Next;
-                FinishedBet(tmp);
-                
+                {
+                    balance = (double)tmpBet.StartingBalance / 100000000.0 - (amount) + ((double)tmpBet.PayOut / 100000000.0);
+
+                    profit += -(amount) + (double)(tmpBet.PayOut / 100000000m);
+                    Bet tmp = new Bet();
+                    tmp.Amount = (decimal)amount;
+                    tmp.BetDate = DateTime.Now.ToString(); ;
+                    tmp.Chance = ((decimal)chance * 100m) / 999999m;
+                    tmp.clientseed = ClientSeed;
+                    tmp.Currency = Currency;
+                    tmp.high = High;
+                    tmp.Id = tmpBet.BetId;
+                    tmp.nonce = 0;
+                    tmp.Profit = ((decimal)tmpBet.PayOut / 100000000m) - ((decimal)amount);
+                    tmp.Roll = tmpBet.Secret / 10000m;
+                    tmp.serverhash = next;
+                    tmp.serverseed = tmpBet.ServerSeed;
+                    tmp.uid = (int)uid;
+                    tmp.UserName = "";
+
+                    bool win = false;
+                    if ((tmp.Roll > 99.99m - tmp.Chance && High) || (tmp.Roll < tmp.Chance && !High))
+                    {
+                        win = true;
+                    }
+                    if (win)
+                        wins++;
+                    else
+                        losses++;
+                    Wagered += tmp.Amount;
+                    bets++;
+                    BetRetries = 0;
+
+                    sqlite_helper.InsertSeed(tmp.serverhash, tmp.serverseed);
+                    next = tmpBet.Next;
+                    FinishedBet(tmp);
+                }
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Something went wrong! betting stopped.");
+                if (err != "")
+                    Parent.updateStatus(err);
+                else
+                    Parent.updateStatus("Something went wrong! stopped betting");
             }
         }
 
@@ -289,7 +307,7 @@ namespace DiceBot
             pairs.Add(new KeyValuePair<string, string>("a", "Withdraw"));
             pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
             pairs.Add(new KeyValuePair<string, string>("Currency", Currency));
-            pairs.Add(new KeyValuePair<string, string>("Amount", Amount.ToString()));
+            pairs.Add(new KeyValuePair<string, string>("Amount", Amount.ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
             pairs.Add(new KeyValuePair<string, string>("Address", Address));
 
             FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
@@ -316,7 +334,9 @@ namespace DiceBot
         decimal Wagered = 0;
         public override void Login(string Username, string Password, string twofa)
         {
-            Lastbalance = DateTime.Now;
+            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
+            
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
             pairs.Add(new KeyValuePair<string, string>("a", "Login"));
             pairs.Add(new KeyValuePair<string, string>("key", "7a3ada10cb804ec695cda315db6b8789"));
@@ -346,10 +366,11 @@ namespace DiceBot
             
             d999Login tmpU = json.JsonDeserialize<d999Login>(responseData);
             if (tmpU.SessionCookie!="" && tmpU.SessionCookie!=null)
-            { 
+            {
+                Lastbalance = DateTime.Now;
                 sessionCookie = tmpU.SessionCookie;
-                
-                profit= (double)tmpU.Profit/100000000.0;
+                balance = (double)tmpU.Balance / 100000000.0;
+                profit = (double)tmpU.Profit/100000000.0;
                 Wagered = tmpU.Wagered/100000000m;
                 bets = (int)tmpU.BetCount;
                 wins = (int)tmpU.BetWinCount;
@@ -376,6 +397,8 @@ namespace DiceBot
         }
         public override bool Register(string username, string password)
         {
+            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
             pairs.Add(new KeyValuePair<string, string>("a", "CreateAccount"));
             pairs.Add(new KeyValuePair<string, string>("key", "7a3ada10cb804ec695cda315db6b8789"));

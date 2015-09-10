@@ -33,7 +33,8 @@ namespace DiceBot
             SiteURL = "https://www.dadice.com/?referrer=seuntjie";
             
         }
-        HttpClient Client = new HttpClient { BaseAddress = new Uri("https://dadice.com/api/") };
+        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://dadice.com/api/") };
+        HttpClientHandler ClientHandlr;
         int betcount = 0;
         DateTime Lastbet = DateTime.Now;
         void PlaceBetThread(object _High)
@@ -45,8 +46,8 @@ namespace DiceBot
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username",username));
                 pairs.Add(new KeyValuePair<string, string>("key", key));
-                pairs.Add(new KeyValuePair<string, string>("amount", amount.ToString()));
-                pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString()));
+                pairs.Add(new KeyValuePair<string, string>("amount", amount.ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("bet", High ? "over" : "under"));
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
@@ -117,7 +118,7 @@ namespace DiceBot
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username", username));
                 pairs.Add(new KeyValuePair<string, string>("key", key));
-                pairs.Add(new KeyValuePair<string, string>("amount", Amount.ToString()));
+                pairs.Add(new KeyValuePair<string, string>("amount", Amount.ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("payee", Address));                
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
@@ -140,6 +141,8 @@ namespace DiceBot
         
         public override void Login(string Username, string Password, string twofa)
         {
+            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://dadice.com/api/") };
             username = Username;
             key = Password;
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -302,7 +305,7 @@ namespace DiceBot
         public override void SendTip(string User, double amount)
         {
             Thread t = new Thread(new ParameterizedThreadStart(SendTipThread));
-            t.Start(new string[]{User, amount.ToString("0.00000000")});
+            t.Start(new string[]{User, amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) });
         }
 
         public override double GetLucky(string server, string client, int nonce)

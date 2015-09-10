@@ -403,7 +403,7 @@ namespace DiceBot
                 loadsettings();
                 
             }
-            
+           
             tmStop.Enabled = true;
             
             Thread tGetVers = new Thread(new ThreadStart(getversion));
@@ -647,7 +647,25 @@ namespace DiceBot
                     string newfeatures = ss.Length>1?"New features include: "+ss[1]:"";
                     if (MessageBox.Show("A new version of DiceBot is available. "+newfeatures+" \n\nDo you want to go to the download page now?","Update Available", MessageBoxButtons.YesNo)== System.Windows.Forms.DialogResult.Yes)
                     {
-                        Process.Start("http://bot.seuep ntjie.com/botpage.aspx");
+                        Process.Start("http://bot.seuntjie.com/botpage.aspx");
+                    }
+                }
+                else
+                {
+                    if (startupMessage)
+                    {
+                        if (ss.Length>=3)
+                        {
+                            string Message = ss[2];
+                            string Link = "";
+                            if (ss.Length>=4)
+                            {
+                                Link = ss[3];
+                            }
+                            
+                            
+                            ShowStartup(Message, Link);
+                        }
                     }
                 }
             }
@@ -657,7 +675,35 @@ namespace DiceBot
             }
         }
 
-               
+        delegate void dShowStartup(string Message, string Link);
+        void ShowStartup(string Message, string Link)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new dShowStartup(ShowStartup), Message, Link);
+                return;
+
+            }
+            else
+            {
+                Startup tmp = new Startup();
+                tmp.FormClosing += Tmp_FormClosing;
+                tmp.Show(Message, Link);
+            }
+        }
+
+        private void Tmp_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            startupMessage = !(sender as Startup).chkDontShow.Checked;
+            if (!startupMessage)
+            {
+                DiceBot.Settings tmpSet = new Settings(this);
+                tmpSet.chkStartup.Checked = startupMessage;
+                writesettings(tmpSet);
+                tmpSet.Dispose();
+            }
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             
@@ -2497,7 +2543,7 @@ namespace DiceBot
                     msg = "1";
                 else msg = "0";
                 sw.WriteLine("BotSpeedEnabled|" + msg);
-                sw.WriteLine("BotSpeedValue|" + nudBotSpeed.Value.ToString());
+                sw.WriteLine("BotSpeedValue|" + nudBotSpeed.Value.ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
                 if (chkResetSeed.Checked)
                     msg = "1";
                 else msg = "0";
@@ -2510,7 +2556,7 @@ namespace DiceBot
                 else if (rdbResetSeedLosses.Checked)
                     msg = "2";
                 sw.WriteLine("ResetSeedMode|" + msg);
-                sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString());
+                sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
                 sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":daDiceToolStripMenuItem.Checked?"5":rollinIOToolStripMenuItem.Checked?"6":bitDiceToolStripMenuItem.Checked?"7":betterbetsToolStripMenuItem.Checked?"8":moneyPotToolStripMenuItem.Checked?"9":"1"));
@@ -3041,7 +3087,7 @@ namespace DiceBot
 
                 foreach (char c in temp2)
                 {
-                    jdline += ((int)c).ToString() + " ";
+                    jdline += ((int)c).ToString(System.Globalization.NumberFormatInfo.InvariantInfo) + " ";
                 }
                 sw.WriteLine(jdline);
 
@@ -3059,7 +3105,12 @@ namespace DiceBot
                 sw.WriteLine("emaillow|"+msg);
                 msg = (TmpSet.chkEmailStreak.Checked) ? "1" : "0";  
                 sw.WriteLine("emailstreak|"+msg);
-                sw.WriteLine("emailstreakval|" + TmpSet.nudEmailStreak.Value.ToString());
+                sw.WriteLine("emailstreakval|" + TmpSet.nudEmailStreak.Value.ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
+                if (Emails == null)
+                {
+                    Emails = new Email("","");
+                    Emails.SMTP = "emails11.secureserver.net";
+                }
                 sw.WriteLine("SMTP|" + Emails.SMTP);
                 
 
@@ -3075,7 +3126,7 @@ namespace DiceBot
                 msg = (TmpSet.chkSoundStreak.Checked) ? "1" : "0";
                 sw.WriteLine("AlarmStreakEnabled|" + msg);
 
-                sw.WriteLine("AlarmStreakValue|" + TmpSet.nudSoundStreak.Value.ToString());
+                sw.WriteLine("AlarmStreakValue|" + TmpSet.nudSoundStreak.Value.ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
                 sw.WriteLine("AlarmPath|" + TmpSet.txtPathAlarm.Text);
 
                 sw.WriteLine("AutoGetSeed|"+ (autoseeds?"1":"0"));
@@ -3369,7 +3420,7 @@ namespace DiceBot
             if (max == -500)
                 StatsWindows.lblMaxBets.Text = "500+";
             else
-                StatsWindows.lblMaxBets.Text = max.ToString();
+                StatsWindows.lblMaxBets.Text = max.ToString(System.Globalization.NumberFormatInfo.InvariantInfo);
 
             variabledisable();
             
@@ -4774,11 +4825,11 @@ namespace DiceBot
                        
                     case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site(CM)"; break;
                 }
-                if (CurrentSite is dadice)
+                if (CurrentSite is dadice || CurrentSite is CoinMillions)
                 {
                     lblPass.Text = "API key:";
                 }
-                else if (CurrentSite is BB || CurrentSite is moneypot)
+                else if (CurrentSite is BB || CurrentSite is moneypot) 
                 {
                     lblPass.Text = "API Token";
                 }

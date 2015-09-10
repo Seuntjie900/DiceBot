@@ -19,7 +19,8 @@ namespace DiceBot
 
         DateTime lastupdate = new DateTime();
         Random R = new Random();
-        HttpClient Client = new HttpClient { BaseAddress = new Uri("https://coinmillions.com/api/1/") };
+        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://coinmillions.com/api/1/") };
+        HttpClientHandler ClientHandlr;
         public static string[] cCurrencies = new string[] { "btc", "xrp", "ltc" };
         public CoinMillions(cDiceBot Parent)
         {
@@ -158,9 +159,10 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string twofa)
         {
-            
+            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://coinmillions.com/api/1/") };
             Client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Password);
-            //Client.DefaultRequestHeaders.Add("X-Affiliate-ID", "10156");
+            Client.DefaultRequestHeaders.Add("X-Affiliate-ID", "10156");
             
             try
             {
@@ -254,8 +256,8 @@ namespace DiceBot
             {
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("crypto", Currency));
-                pairs.Add(new KeyValuePair<string, string>("amount", amount.ToString("0.00000000")));
-                pairs.Add(new KeyValuePair<string, string>("chance_to_win", chance.ToString("0.0000")));
+                pairs.Add(new KeyValuePair<string, string>("amount", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("chance_to_win", chance.ToString("0.0000", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("roll_type", High ? "h" : "l"));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string responseData = "";

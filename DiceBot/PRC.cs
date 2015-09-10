@@ -216,11 +216,12 @@ namespace DiceBot
             getHeaders.CookieContainer = cookies;
             HttpWebResponse Response = null;
             string rqtoken = "";
+            string s1 = "";
             try
             {
 
                 Response = (HttpWebResponse)getHeaders.GetResponse();
-                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 string tmp = s1.Substring(s1.IndexOf("__RequestVerificationToken")+"__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
                 s = rqtoken = tmp.Substring(0, tmp.IndexOf("\""));
             }
@@ -252,7 +253,7 @@ namespace DiceBot
             {
 
                 Response = (HttpWebResponse)getHeaders.GetResponse();
-                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 if (!s1.ToLower().Contains("success"))
                 {
                     System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
@@ -264,7 +265,7 @@ namespace DiceBot
             catch (WebException e)
             {
                 Response = (HttpWebResponse)e.Response;
-                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
                 finishedlogin(false);
             }
@@ -303,7 +304,7 @@ namespace DiceBot
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
-                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
                 balance = (double)tmp.AvailableBalance;
                 profit = (double)tmp.Profit;
@@ -319,6 +320,7 @@ namespace DiceBot
                 Parent.updateWagered(wagered);
                 Parent.updateWins(tmp.Wins);
                 //Parent.updateDeposit(tmp.DepositAddress);
+                
                 getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetCurrentSeed") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
@@ -328,14 +330,15 @@ namespace DiceBot
                 prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
                 client = getseed.ClientSeed;
                 serverhash = getseed.ServerHash;
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
+                
+                /*getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
-                Parent.updateDeposit(dep.Address);
+                Parent.updateDeposit(dep.Address);*/
                 finishedlogin(true);
                 return;
             }

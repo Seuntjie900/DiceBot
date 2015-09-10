@@ -605,6 +605,8 @@
             // chkStartup
             // 
             this.chkStartup.AutoSize = true;
+            this.chkStartup.Checked = true;
+            this.chkStartup.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkStartup.Location = new System.Drawing.Point(442, 12);
             this.chkStartup.Name = "chkStartup";
             this.chkStartup.Size = new System.Drawing.Size(133, 17);

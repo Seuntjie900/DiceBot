@@ -20,7 +20,7 @@ namespace DiceBot
         public static string[] cCurrencies = new string[] { "Btc", "XMR"};
         public SafeDice(cDiceBot Parent)
         {
-            Client = new HttpClient(ClientHandlr) { BaseAddress= new Uri("https://safedice.com/api/") };
+            
             maxRoll = 99.9999;
             AutoInvest = false;
             AutoWithdraw = true;
@@ -238,7 +238,7 @@ namespace DiceBot
                     payout = (double)(((long)((99.5 / chance) * (curen != 2 ? 100000000 : 1000000000000))) / (curen != 2 ? 100000000.0 : 1000000000000.0)),
                     isFixedPayout = false,
                     isRollLow = !(bool)High,
-                    target = ((bool)High) ? (999999 - ((long)(chance * 10000))).ToString() : ((long)(chance * 10000)).ToString()
+                    target = ((bool)High) ? (999999 - ((long)(chance * 10000))).ToString(System.Globalization.NumberFormatInfo.InvariantInfo) : ((long)(chance * 10000)).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)
                 };
                 string post = json.JsonSerializer<SafeDiceBet>(tmpBet);
                 /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/dicebets");

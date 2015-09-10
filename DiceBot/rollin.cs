@@ -17,8 +17,8 @@ namespace DiceBot
         string client = "";
         string username = "";
         Random R = new Random();
-        HttpClientHandler ClientHandlr = new HttpClientHandler();
-        HttpClient Client = null;
+        HttpClientHandler ClientHandlr;// = new HttpClientHandler();
+        HttpClient Client;
         public rollin(cDiceBot Parent)
         {
             maxRoll = 99;
@@ -32,7 +32,7 @@ namespace DiceBot
             Thread t = new Thread(new ThreadStart(SyncThread));
             t.Start();
             SiteURL = "https://rollin.io/ref/8c4";
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
+            
             
         }
         DateTime lastbet = DateTime.Now;
@@ -199,6 +199,7 @@ namespace DiceBot
         string Token = "";
         public override void Login(string Username, string Password, string twofa)
         {
+
             try
             {
                 this.username = Username;
@@ -272,7 +273,8 @@ namespace DiceBot
 
                 if (tmpStats.success && tmpStats2.success)
                 {
-                    ClientHandlr.UseCookies = true;
+                    ClientHandlr = new HttpClientHandler { UseCookies = true };
+                    Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
                     ClientHandlr.CookieContainer = this.Cookies;
                     Client.DefaultRequestHeaders.Add("X-CSRF-Token", Token);
                     
@@ -378,7 +380,8 @@ namespace DiceBot
 
             if (tmpStats.success && tmpStats2.success)
             {
-                ClientHandlr.UseCookies = true;
+                ClientHandlr = new HttpClientHandler { UseCookies = true };
+                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
                 ClientHandlr.CookieContainer = this.Cookies;
                 Client.DefaultRequestHeaders.Add("X-CSRF-Token", Token);
 

@@ -19,7 +19,8 @@ namespace DiceBot
         string username = "";
         long uid = 0;
         DateTime lastupdate = new DateTime();
-        HttpClient Client = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
+        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
+        HttpClientHandler ClientHandlr;
         public PD(cDiceBot Parent)
         {
             maxRoll = 99.99;
@@ -72,6 +73,8 @@ namespace DiceBot
 
         public override bool Register(string Username, string Password)
         {
+            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://api.primedice.com/api/") };
             try
             {
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -118,6 +121,8 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string otp)
         {
+            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://api.primedice.com/api/") };
             try
             {
                 
@@ -131,7 +136,11 @@ namespace DiceBot
                 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("login", Content).Result.Content.ReadAsStringAsync().Result;
-
+                if (sEmitResponse == "Invalid Password")
+                {
+                    finishedlogin(false);
+                    return;
+                }
                 pdlogin tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
                 accesstoken = tmp.access_token;
                 if (accesstoken == "")
@@ -173,6 +182,10 @@ namespace DiceBot
                 }
                 finishedlogin(false);
             }
+            catch (Exception e)
+            {
+                finishedlogin(false);
+            }
         }
 
         void placebetthread()
@@ -182,8 +195,8 @@ namespace DiceBot
 
                 double tmpchance = High ? 99.99 - chance : chance;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000).ToString()));
-                pairs.Add(new KeyValuePair<string, string>("target", tmpchance.ToString("0.00")));
+                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("target", tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("condition", High ? ">" : "<"));
                 
 
@@ -293,7 +306,7 @@ namespace DiceBot
                 
                 Thread.Sleep(500);
                  List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("amount", (Amount * 100000000).ToString("")));
+                pairs.Add(new KeyValuePair<string, string>("amount", (Amount * 100000000).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("address", Address));
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
@@ -442,7 +455,7 @@ namespace DiceBot
             {
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username", User));
-                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0).ToString("")));
+                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("tip?access_token=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;

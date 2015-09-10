@@ -13,8 +13,8 @@ namespace DiceBot
 {
     class moneypot:DiceSite
     {
-        HttpClient Client = new HttpClient { BaseAddress = new Uri("https://api.moneypot.com/v1/") };
-
+        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.moneypot.com/v1/") };
+        HttpClientHandler ClientHandlr;
         Random R = new Random();
         public moneypot(cDiceBot Parent)
         {
@@ -38,17 +38,29 @@ namespace DiceBot
                 if (token != "" && token != null && (DateTime.Now-lastupdate).TotalSeconds > 30)
                 {
                     lastupdate = DateTime.Now;
-                    string s = Client.GetStringAsync("auth?access_token="+token).Result;
+                    try
+                    {
+                        string s = Client.GetStringAsync("auth?access_token=" + token).Result;
+                        MPAuth tmp2 = json.JsonDeserialize<MPAuth>(s);
+                        this.balance = tmp2.user.balance / 100000000.0;
+                        wagered = tmp2.user.betted_wager / 100000000.0;
+                        profit = tmp2.user.betted_profit / 100000000.0;
+                        bets = (int)tmp2.user.betted_count;
+                        Parent.updateBalance(balance);
+                        Parent.updateBets(bets);
+                        Parent.updateProfit(profit);
+                        Parent.updateWagered(wagered);
 
-                    MPAuth tmp2 = json.JsonDeserialize<MPAuth>(s);
-                    this.balance = tmp2.user.balance / 100000000.0;
-                    wagered = tmp2.user.betted_wager / 100000000.0;
-                    profit = tmp2.user.betted_profit / 100000000.0;
-                    bets = (int)tmp2.user.betted_count;
-                    Parent.updateBalance(balance);
-                    Parent.updateBets(bets);
-                    Parent.updateProfit(profit);
-                    Parent.updateWagered(wagered);
+                    }
+                    catch (AggregateException e)
+                    { 
+
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
+                    
                 }
                 Thread.Sleep(100);
             }
@@ -83,8 +95,15 @@ namespace DiceBot
 
                 }
                 
+                
                 MPBet tmp = json.JsonDeserialize<MPBet>(Resp);
-
+                if (tmp.error!=null)
+                if (tmp.error.ToLower() == "you did not provide a valid hash")
+                {
+                    ResetSeed();
+                    placebetthread(High);
+                    return;
+                }
                 Bet tmpBet = new Bet {
                 Amount = (decimal)amount,
                 date = DateTime.Now,
@@ -111,19 +130,19 @@ namespace DiceBot
                 profit += (tmp.profit / 100000000.0);
                 FinishedBet(tmpBet);
             }
-            catch (WebException e)
+            catch (AggregateException e)
             {
-                if (e.Response != null)
-                {
-                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                    Parent.updateStatus(sEmitResponse);
-                }
-                if (e.Message.Contains("429") || e.Message.Contains("502"))
+
+                if (e.InnerException.InnerException.Message.Contains("tsl/ssl") || e.InnerException.Message.Contains("502"))
                 {
                     Thread.Sleep(200);
                     placebetthread(High);
                 }
 
+
+            }
+            catch (Exception e2)
+            {
 
             }
         }
@@ -168,6 +187,8 @@ namespace DiceBot
         string token = "";
         public override void Login(string Username, string Password, string twofa)
         {
+            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://api.moneypot.com/v1/") };
             if (Password == "")
             {
                 System.Diagnostics.Process.Start(SiteURL);
@@ -300,6 +321,7 @@ namespace DiceBot
         public double secret { get; set; }
         public string salt { get; set; }
         public string next_hash { get; set; }
+        public string error { get; set; }
     }
     public class MPBetPlace
     {
