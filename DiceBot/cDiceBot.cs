@@ -420,7 +420,7 @@ namespace DiceBot
             Lua.RegisterFunction("withdraw",this, new dWithdraw(luaWithdraw).Method);
             Lua.RegisterFunction("invest", this, new dInvest(luainvest).Method);
             Lua.RegisterFunction("tip", this, new dtip(luatip).Method);
-            Lua.RegisterFunction("stop", this, new dStop(Stop).Method);
+            Lua.RegisterFunction("stop", this, new dStop(luaStop).Method);
             Lua.RegisterFunction("resetseed", this, new dResetSeed(luaResetSeed).Method);
             Lua.RegisterFunction("print", this, new dWriteConsole(WriteConsole).Method);
             Lua.RegisterFunction("getHistory", this, new dluagethistory(luagethistory).Method);
@@ -441,6 +441,10 @@ namespace DiceBot
             Lua.RegisterFunction("loadstrategy", this, new dLoadStrat(LuaLoadStrat).Method);
             Lua.RegisterFunction("read", this, new dGetInput(GetInputForLua).Method);
 
+        }
+        void luaStop()
+        {
+            Stop("Lua stop command issued");
         }
 
         delegate bool dLoadStrat(string File);
@@ -605,7 +609,7 @@ namespace DiceBot
             catch (Exception e)
             {
                 WriteConsole(e.Message);
-                Stop();
+                Stop("Lua exception");
                 return null;
             }
         }
@@ -1006,8 +1010,11 @@ namespace DiceBot
         //tmstop_tick
         #region Core Program
 
-        private void Stop()
+        private void Stop(string Reason)
         {
+            updateStatus(Reason+", stopping");
+            TrayIcon.BalloonTipText = Reason + ", stopping";
+            TrayIcon.ShowBalloonTip(1000);
             //tmBetting.Enabled = false;
             WriteConsole("Betting Stopped!");
             double dBalance = CurrentSite.balance;
@@ -1082,7 +1089,7 @@ namespace DiceBot
                   }
                   else
                   {
-                      Stop();
+                      Stop("Invalid bet in list");
                       MessageBox.Show("Invalid bet in list. Please make sure there is only one bet per line and no other charachters or letters in the list.");
                   }
               }
@@ -1271,7 +1278,7 @@ namespace DiceBot
                         else
                         {
                             MessageBox.Show("Please enter a list of bets into the bet box on the labouchere tab, 1 bet per line.");
-                            Stop();
+                            Stop("No bets in labouchere bet list");
                             return;
                         }
                     }
@@ -1376,7 +1383,10 @@ namespace DiceBot
                         if (LabList.Count == 0)
                         {
                             if (rdbLabStop.Checked)
-                                Stop();
+                            {
+                                Stop("End of labouchere list reached");
+                                
+                            }
                             else
                             {
                                 Reset();
@@ -1387,7 +1397,10 @@ namespace DiceBot
                     else
                     {
                         if (rdbLabStop.Checked)
-                            Stop();
+                        {
+                            Stop("End of labouchere list reached");
+                            
+                        }
                         else
                         {
                             string[] ss = GetLabList();
@@ -1425,12 +1438,18 @@ namespace DiceBot
                             LabList.RemoveAt(0);
                             LabList.RemoveAt(LabList.Count - 1);
                             if (LabList.Count == 0)
-                                Stop();
+                            {
+                                Stop("Stopping: End of labouchere list reached.");
+                                
+                            }
                         }
                         else
                         {
                             if (rdbLabStop.Checked)
-                                Stop();
+                            {
+                                Stop("Stopping: End of labouchere list reached.");
+                                
+                            }
                             else
                             {
                                 string[] ss = GetLabList();
@@ -1459,7 +1478,10 @@ namespace DiceBot
                 else
                 {
                     if (rdbLabStop.Checked)
-                        Stop();
+                    {
+                        Stop("Stopping: End of labouchere list reached.");
+                        
+                    }
                     else
                     {
                         string[] ss = GetLabList();
@@ -1662,7 +1684,8 @@ namespace DiceBot
                 else
                 {
                     FibonacciLevel = 0;
-                    Stop();
+                    Stop("Fibonacci bet won.");
+                    
                 }
             }
             else
@@ -1678,7 +1701,8 @@ namespace DiceBot
                 else
                 {
                     FibonacciLevel = 0;
-                    Stop();
+                    Stop("Fibonacci bet lost.");
+                    
                 }
             }
             if (FibonacciLevel < 0)
@@ -1690,8 +1714,10 @@ namespace DiceBot
                     FibonacciLevel = 0;
                 else
                 {
+                    
                     FibonacciLevel = 0;
-                    Stop();
+                    Stop("Fibonacci level " + (int)nudFiboLeve.Value + ".");
+                    
                 }
             }
             Lastbet = double.Parse(lstFibonacci.Items[FibonacciLevel].ToString().Substring(lstFibonacci.Items[FibonacciLevel].ToString().IndexOf(" ")+1));
@@ -1733,8 +1759,9 @@ namespace DiceBot
                 }
                 else
                 {
-                    presetLevel = 0; 
-                    Stop();
+                    presetLevel = 0;
+                    Stop("Preset List bet won.");
+                    
                 }
             }
             else
@@ -1750,7 +1777,8 @@ namespace DiceBot
                 else
                 {
                     presetLevel = 0;
-                    Stop();
+                    Stop("Preset List bet lost.");
+                    
                 }
             }
             if (presetLevel < 0)
@@ -1759,7 +1787,8 @@ namespace DiceBot
             {
                 if (rdbPresetEndStop.Checked)
                 {
-                    Stop();
+                    Stop("End of preset list reached.");
+                    
                 }
                 else if (rdbPresetEndStep.Checked)
                 {
@@ -1782,8 +1811,7 @@ namespace DiceBot
                 }
                 else
                 {
-                    Stop();
-                    MessageBox.Show("Invalid bet in list. Please make sure there is only one bet per line and no other charachters or letters in the list.");
+                    Stop("Invalid bet inpreset list");
                 }
             }
         }
@@ -1858,15 +1886,18 @@ namespace DiceBot
                             }
                             if (currentprofit >= ((double)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
                             {
-                                Stop();
+                                Stop("Made " + currentprofit + " profit in a row");
+                                
                             }
                             if (Winstreak >= nudStopWinStreak.Value && chkStopWinStreak.Checked)
                             {
-                                Stop();
+                                Stop("Won "+ Winstreak + " bets in a row");
+                                
                             }
                             if (this.profit >= (double)nudStopWinBtc.Value && chkStopWinBtc.Checked)
                             {
-                                Stop();
+                                Stop("Made " + this.profit + " profit");
+                                
                             }
                             if (StreakProfitSinceLastReset >= (double)nudResetBtcStreakProfit.Value && chkResetBtcStreakProfit.Checked)
                             {
@@ -1909,7 +1940,8 @@ namespace DiceBot
                     
                     if (stoponwin)
                     {
-                        Stop();
+                        Stop("Stop on win clicked, bet won");
+                        
                     }
                     iMultiplyCounter = 0;                    
                     Multiplier = (double)(nudMultiplier.Value);
@@ -2002,19 +2034,19 @@ namespace DiceBot
                         //stop if lose streak is higher than specified
                         if (Losestreak >= nudStopLossStreak.Value && chkStopLossStreak.Checked)
                         {
-                            Stop();
+                            Stop("Lost " +Losestreak + "bets in a row");
                         }
 
                         //stop if current profit drops below specified value/ loss is larger than specified value
                         if (currentprofit <= (0.0 - (double)nudStopLossBtcStreal.Value) && chkStopLossBtcStreak.Checked)
                         {
-                            Stop();
+                            Stop("Lost " + currentprofit+ " " + CurrentSite.Currency+" in a row");
                         }
 
                         // stop if total profit/total loss is below/above certain value
                         if (this.profit <= 0.0 - (double)nudStopLossBtc.Value && chkStopLossBtc.Checked)
                         {
-                            Stop();
+                            Stop("Lost " + this.profit + " " + CurrentSite.Currency);
                         }
                         if (StreakLossSinceLastReset <= -(double)nudResetBtcStreakLoss.Value && chkResetBtcStreakLoss.Checked)
                         {
@@ -2089,7 +2121,7 @@ namespace DiceBot
 
                     if (rdbStop.Checked)
                     {
-                        Stop();
+                        Stop("Balance larger than "+Limit+" (limit)");
                     }
                     else if (rdbWithdraw.Checked)
                     {
@@ -2105,9 +2137,9 @@ namespace DiceBot
                 if (!RunningSimulation)
                 if (dPreviousBalance - Lastbet <= LowerLimit && chkLowerLimit.Checked &&(!programmerToolStripMenuItem.Checked))
                 {
-                    TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
+                    //TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
                     TrayIcon.ShowBalloonTip(1000);
-                    Stop();
+                    Stop("Balance lower than " + nudLowerLimit.Value);
                     if (Sound && SoundLow)
                         playalarm();
                     TrayIcon.BalloonTipText = "DiceBot has Stopped Betting\nThe next bet will will have put your Balance below your lower limit";
@@ -2142,7 +2174,7 @@ namespace DiceBot
                 }
                 if (RunningSimulation && (Wins + Losses > SimWindow.nudSimNumBets.Value || Lastbet > PreviousBalance))
                 {
-                    Stop();
+                    Stop("Simulation complete");
                 }
                 
                 if (!(stop || withdraw ||invest))
@@ -2185,7 +2217,7 @@ namespace DiceBot
                     }
                     if (RunningSimulation && Lastbet > dPreviousBalance)
                     {
-                        Stop();
+                        Stop("Simulation complete");
                     }
                     if (!stop)
                     {
@@ -2361,7 +2393,7 @@ namespace DiceBot
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.S) && Keyboard.IsKeyDown(Key.LeftShift))
             {
-                Stop();
+                Stop("Emergency stop keys detected");
             }
            
             if (!stop && timecounter > 10)
@@ -2411,7 +2443,7 @@ namespace DiceBot
                     CurrentSite.Donate((donatePercentage / 100.0) * profit);
                 }
             }
-            Stop();
+            Stop("");
             if (CurrentSite != null)
             {
                 CurrentSite.Disconnect();
@@ -2468,7 +2500,7 @@ namespace DiceBot
         private void btnStop_Click(object sender, EventArgs e)
         {
             
-            Stop();
+            Stop("stop button clicked");
         }
 
         #region Save and load settings
@@ -3469,7 +3501,7 @@ namespace DiceBot
             }
             else if (name.ToLower() == "stop")
             {
-                Stop();
+                Stop("stop button clicked");
             }
             else if (name.ToLower() == "close")
             {
@@ -3653,7 +3685,8 @@ namespace DiceBot
                 GetBetResult(PreviousBalance, tmp);
             }
             else
-                Stop();
+                Stop("Simulation Complete");
+            
             
         }
 
@@ -4302,7 +4335,7 @@ namespace DiceBot
             {
                 if (CurrentSite!=null)
                 {
-                    Stop();
+                    Stop("Logging out of site");
                     CurrentSite.Disconnect();
                     EnableNotLoggedInControls(false);
                 }
@@ -4931,7 +4964,7 @@ namespace DiceBot
             }
             catch (Exception e)
             {
-                Stop();
+                Stop("LUA ERROR!!");
                 WriteConsole("LUA ERROR!!");
                 WriteConsole(e.Message);
             }
@@ -4973,7 +5006,9 @@ namespace DiceBot
                     LuaRuntime.SetLua(Lua);
                     try
                     {
+                        SetLuaVars();
                         LuaRuntime.Run(richTextBox3.Text);
+                        GetLuaVars();
                         Start(false);
                     }
                     catch (Exception ex)
