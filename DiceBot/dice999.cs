@@ -48,6 +48,7 @@ namespace DiceBot
 
         protected override void CurrencyChanged()
         {
+            Lastbalance = DateTime.Now.AddMinutes(-2);
             GetBalance();
             GetDepositAddress();
         }
@@ -180,6 +181,10 @@ namespace DiceBot
                         {
                             PlaceBetThread();
                             return;
+                        }
+                        else
+                        {
+                            Parent.updateStatus("An error has occurred");
                         }
                     }
                 }
