@@ -187,7 +187,7 @@ namespace DiceBot
                 finishedlogin(false);
             }
         }
-
+        int retrycount = 0;
         void placebetthread()
         {
             try
@@ -217,6 +217,7 @@ namespace DiceBot
                     wagered = (double)(tmp.user.wagered / 100000000m);
                     profit = (double)(tmp.user.profit / 100000000m);
                     FinishedBet(tmp.bet.toBet());
+                    retrycount = 0;
                 }
                 catch
                 {
@@ -225,7 +226,11 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
-                
+                if (retrycount++ < 3)
+                {
+                    placebetthread();
+                    return;
+                }
                 if (e.InnerException.Message.Contains("429") || e.InnerException.Message.Contains("502"))
                 {
                     Thread .Sleep(200);

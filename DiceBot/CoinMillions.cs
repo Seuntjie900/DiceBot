@@ -248,7 +248,7 @@ namespace DiceBot
         {
             throw new NotImplementedException();
         }
-
+        int retrycount = 0;
         void PlaceBetThread(object _High)
         {
             bool High = (bool)_High;
@@ -269,6 +269,11 @@ namespace DiceBot
                     }
                     catch (AggregateException e)
                     {
+                        if (retrycount++ < 3)
+                        {
+                            PlaceBetThread(High);
+                            return;
+                        }
                         if (e.InnerException.Message.Contains("ssl"))
                         {
                             PlaceBetThread(_High);
@@ -317,6 +322,7 @@ namespace DiceBot
                     //next = tmp.nextServerSeed;
 
                     FinishedBet(tmp2);
+                    retrycount = 0;
                 }
 
             }
@@ -337,6 +343,11 @@ namespace DiceBot
             }
             catch (Exception e)
             {
+                if (retrycount++ < 3)
+                {
+                    PlaceBetThread(High);
+                    return;
+                }
                 Parent.updateStatus("Oops! Something went wrong. Make sure your bet is larger than the minimum.");
             }
         }

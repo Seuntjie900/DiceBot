@@ -463,6 +463,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.magicalDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -5497,7 +5498,8 @@
             this.bitDiceToolStripMenuItem,
             this.betterbetsToolStripMenuItem,
             this.moneyPotToolStripMenuItem,
-            this.coinMillionsToolStripMenuItem});
+            this.coinMillionsToolStripMenuItem,
+            this.magicalDiceToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -5718,6 +5720,14 @@
             // betBindingSource
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
+            // 
+            // magicalDiceToolStripMenuItem
+            // 
+            this.magicalDiceToolStripMenuItem.Name = "magicalDiceToolStripMenuItem";
+            this.magicalDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.magicalDiceToolStripMenuItem.Text = "MagicalDice";
+            this.magicalDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.magicalDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 
@@ -6339,6 +6349,7 @@
         private System.Windows.Forms.CheckBox chkMinBet;
         private System.Windows.Forms.Button btnWithdrawAlt;
         private System.Windows.Forms.ToolStripMenuItem coinMillionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem magicalDiceToolStripMenuItem;
     }
 }
 

@@ -37,6 +37,7 @@ namespace DiceBot
         HttpClientHandler ClientHandlr;
         int betcount = 0;
         DateTime Lastbet = DateTime.Now;
+        int retrycount = 0;
         void PlaceBetThread(object _High)
         {
             try
@@ -71,6 +72,7 @@ namespace DiceBot
                     betcount = 0;
                     Lastbet = DateTime.Now;
                     FinishedBet(tmp.roll.ToBet());
+                    retrycount = 0;
 
                 }
                 else

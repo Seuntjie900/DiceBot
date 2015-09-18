@@ -205,6 +205,7 @@
     <Compile Include="imgur.cs" />
     <Compile Include="JD.cs" />
     <Compile Include="json.cs" />
+    <Compile Include="MagicalDice.cs" />
     <Compile Include="Messagehelpr.cs" />
     <Compile Include="MiniBrowser.cs">
       <SubType>Form</SubType>
@@ -413,6 +414,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.94.0\build\net40\System.Data.SQLite.Core.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

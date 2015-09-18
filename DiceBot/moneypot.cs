@@ -67,6 +67,7 @@ namespace DiceBot
         }
 
         string next = "";
+        int retrycount = 0;
         void placebetthread(object _High)
         {
             
@@ -97,13 +98,22 @@ namespace DiceBot
                 
                 
                 MPBet tmp = json.JsonDeserialize<MPBet>(Resp);
-                if (tmp.error!=null)
-                if (tmp.error.ToLower() == "you did not provide a valid hash")
+                if (tmp.error != null)
                 {
-                    ResetSeed();
-                    placebetthread(High);
+                    if (tmp.error.ToLower() == "you did not provide a valid hash")
+                    {
+                        ResetSeed();
+                        placebetthread(High);
+                        
+                    }
+                    else
+                    {
+                        Parent.updateStatus(tmp.error);
+                    }
                     return;
                 }
+
+
                 Bet tmpBet = new Bet {
                 Amount = (decimal)amount,
                 date = DateTime.Now,
@@ -128,11 +138,16 @@ namespace DiceBot
                 
                 wagered +=amount;
                 profit += (tmp.profit / 100000000.0);
+                retrycount = 0;
                 FinishedBet(tmpBet);
             }
             catch (AggregateException e)
             {
-
+                if (retrycount++ <3)
+                {
+                    placebetthread(High);
+                    return;
+                }
                 if (e.InnerException.InnerException.Message.Contains("tsl/ssl") || e.InnerException.Message.Contains("502"))
                 {
                     Thread.Sleep(200);

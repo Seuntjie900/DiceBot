@@ -225,7 +225,7 @@ namespace DiceBot
 
             }
         }
-
+        int retrycount = 0;
         void PlaceBetThread(object High)
         {
             try
@@ -312,6 +312,7 @@ namespace DiceBot
                     ++losses;
                 profit += (double)bet.Profit;
                 FinishedBet(bet);
+                retrycount = 0;
             }
             catch (WebException e)
             {
@@ -326,6 +327,14 @@ namespace DiceBot
                         System.Windows.Forms.MessageBox.Show("Could not log in. Please ensure the username, passowrd and 2fa code are all correct.");
                     }*/
 
+                }
+            }
+            catch
+            {
+                if (retrycount++ < 3)
+                {
+                    PlaceBetThread(High);
+                    return;
                 }
             }
 

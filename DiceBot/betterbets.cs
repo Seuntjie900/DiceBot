@@ -153,6 +153,7 @@ namespace DiceBot
             finishedlogin(false);
         }
         string next = "";
+        int retrycount = 0;
         void placebetthread()
         {
             try
@@ -172,6 +173,11 @@ namespace DiceBot
                     }
                     catch (AggregateException e)
                     {
+                        if (retrycount++ < 3)
+                        {
+                            placebetthread();
+                            return;
+                        }
                         if (e.InnerException.Message.Contains("ssl"))
                         {
                             placebetthread();
@@ -200,6 +206,7 @@ namespace DiceBot
                     next = tmp.nextServerSeed;
 
                     FinishedBet(tmp2);
+                    retrycount = 0;
                 }
                 else
                 {

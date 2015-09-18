@@ -234,6 +234,7 @@ namespace DiceBot
             sqlite_helper.CheckDBS();
             InitializeComponent();
             PopulateSaveNames();
+            WriteConsole("Starting Dicebot " + vers);
             PopoutChat.SendMessage += PopoutChat_SendMessage;
             SimWindow = new Simulate(this);
             StatsWindows.btnResetStats.Click += btnResetStats_Click;
@@ -625,6 +626,10 @@ namespace DiceBot
                     EnableNotLoggedInControls(true);
                     MessageBox.Show("Successfully Logged in or registered.");
                     updateStatus("Logged in.");
+                    if (autostart)
+                    {
+                        Start(false);
+                    }
                 }
                 else
                 {
@@ -2260,19 +2265,28 @@ namespace DiceBot
                         
         }
 
+        
         void WriteConsole(string Message)
         {
-            
-            if (rtbConsole.Lines.Length>1000)
+
+            if (InvokeRequired)
             {
-                List<string> lines = new List<string>(rtbConsole.Lines);
-                while (lines.Count>950)
-                {
-                    lines.RemoveAt(0);
-                }
-                rtbConsole.Lines = lines.ToArray();
+                Invoke(new dWriteConsole(WriteConsole), Message);
+                return;
             }
-            rtbConsole.AppendText(Message + "\r\n");
+            else
+            {
+                if (rtbConsole.Lines.Length > 1000)
+                {
+                    List<string> lines = new List<string>(rtbConsole.Lines);
+                    while (lines.Count > 950)
+                    {
+                        lines.RemoveAt(0);
+                    }
+                    rtbConsole.Lines = lines.ToArray();
+                }
+                rtbConsole.AppendText(Message + "\r\n");
+            }
         }
         delegate void dWriteConsole(string Message);
         delegate void dWithdraw(double Amount, string Address);
@@ -2409,11 +2423,11 @@ namespace DiceBot
                 timecounter = 0;
             }
             timecounter++;
-            if (autostart && !running)
+            /*if (autostart && !running)
             {
                 Start(false);
                 running = true;
-            }
+            }*/
         }
 
         #endregion
@@ -4857,6 +4871,7 @@ namespace DiceBot
                     case "moneyPotToolStripMenuItem" : CurrentSite = new moneypot(this); siteToolStripMenuItem.Text = "Site (MP)"; break;
                        
                     case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site(CM)"; break;
+                    case "magicalDiceToolStripMenuItem": CurrentSite = new MagicalDice(this); siteToolStripMenuItem.Text = "Site(MD)"; break;
                 }
                 if (CurrentSite is dadice || CurrentSite is CoinMillions)
                 {

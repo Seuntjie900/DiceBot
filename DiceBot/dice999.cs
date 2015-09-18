@@ -102,7 +102,7 @@ namespace DiceBot
                 Parent.updateBalance((decimal)balance);
             }
         }
-        int BetRetries = 0;
+        int retrycount = 0;
         string next = "";
         void PlaceBetThread()
         {
@@ -144,7 +144,7 @@ namespace DiceBot
                     }
                     if (responseData.Contains("error"))
                     {
-                        if (BetRetries++ < 3)
+                        if (retrycount++ < 3)
                         {
 
                             Thread.Sleep(200);
@@ -171,6 +171,11 @@ namespace DiceBot
                 responseData = "";
                 using (var response = Client.PostAsync("", Content))
                 {
+                    if (retrycount++ < 3)
+                    {
+                        PlaceBetThread();
+                        return;
+                    }
                     try
                     {
                         responseData = response.Result.Content.ReadAsStringAsync().Result;
@@ -245,10 +250,11 @@ namespace DiceBot
                         losses++;
                     Wagered += tmp.Amount;
                     bets++;
-                    BetRetries = 0;
+                    
 
                     sqlite_helper.InsertSeed(tmp.serverhash, tmp.serverseed);
                     next = tmpBet.Next;
+                    retrycount = 0;
                     FinishedBet(tmp);
                 }
             }

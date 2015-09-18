@@ -64,7 +64,7 @@ namespace DiceBot
                 System.Threading.Thread.Sleep(500);
             }
         }
-
+        int retrycount = 0;
         void PlaceBetThread(object _High)
         {
             try
@@ -101,11 +101,17 @@ namespace DiceBot
                     wins = (tmp.statistics.wins);
                     LastBalance = DateTime.Now;
                     FinishedBet(tmp2);
+                    retrycount = 0;
                 }
 
             }
             catch (Exception E)
             {
+                if (retrycount++ < 3)
+                {
+                    PlaceBetThread(High);
+                    return;
+                }
                 Parent.updateStatus(E.Message);
                 if (Parent.logging > 1)
                 using (StreamWriter sw = File.AppendText("log.txt"))
