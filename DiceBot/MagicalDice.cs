@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
 using System.IO;
-
+using Noesis.Javascript;
 using System.Threading;
 
 namespace DiceBot
@@ -56,12 +56,12 @@ namespace DiceBot
         {
             try
             {
-
+                High = (bool)Bool;
                 double tmpchance = High ? 99.99 - chance : chance;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("a", "place_bet"));
                 pairs.Add(new KeyValuePair<string, string>("amount", (amount).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
-                pairs.Add(new KeyValuePair<string, string>("win_chance", chance.ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("win_chance", tmpchance.ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("direction", High ? "over" : "under"));
                 pairs.Add(new KeyValuePair<string, string>("auth_key", authkey));
                 pairs.Add(new KeyValuePair<string, string>("origin", "manual"));
@@ -175,10 +175,78 @@ namespace DiceBot
         string csrf = "";
         string authkey = "";
         CookieContainer cookies;
+        int cflevel = 0;
+        bool doCFThing( WebResponse Response )
+        {
+            Thread.Sleep(4000);
+            JavascriptContext JSC = new JavascriptContext();
+            
+            string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+            string Script = "";
+            string jschl_vc = s1.Substring(s1.IndexOf("jschl_vc"));
+            jschl_vc = jschl_vc.Substring(jschl_vc.IndexOf("value=\"") + "value=\"".Length);
+            jschl_vc = jschl_vc.Substring(0, jschl_vc.IndexOf("\""));
+            string pass = s1.Substring(s1.IndexOf("pass"));
+            pass = pass.Substring(pass.IndexOf("value=\"") + "value=\"".Length);
+            pass = pass.Substring(0, pass.IndexOf("\""));
+
+            //do the CF bypass thing and get the headers
+            Script = s1.Substring(s1.IndexOf("var t,r,a,f,") + "var t,r,a,f, ".Length);
+            string Script1 = "var " + Script.Substring(0, Script.IndexOf(";") + 1);
+            string varName = Script.Substring(0, Script.IndexOf("="));
+            string varNamep2 = Script.Substring(Script.IndexOf("\"") + 1);
+            varName += "." + varNamep2.Substring(0, varNamep2.IndexOf("\""));
+            Script1 += Script.Substring(Script.IndexOf(varName));
+            Script1 = Script1.Substring(0, Script1.IndexOf("f.submit()"));
+            Script1 = Script1.Replace("t.length", "magicaldice.com".Length + "");
+            Script1 = Script1.Replace("a.value", "var answer");
+            JSC.Run(Script1);
+            string answer = JSC.GetParameter("answer").ToString();
+
+            string url = "https://magicaldice.com/cdn-cgi/l/chk_jschl?jschl_vc=" + jschl_vc + "&pass=" + pass.Replace("+","%2") + "&jschl_answer=" + answer;
+            HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create(url);
+            Request.Host = "magicaldice.com";
+            Request.Referer = "https://magicaldice.com/";
+            Request.KeepAlive = true;
+            Request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            Request.Headers.Add("Accept-Language", "en-US,en;q=0.5");
+            Request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+
+            //Request.UserAgent = "DiceBot automated gambling";
+            //Request.Headers.Add("referer", "magicaldice.com");
+
+            if (Prox != null)
+                Request.Proxy = Prox;
+            
+            Request.CookieContainer = cookies;
+            Response = null;
+            s1 = "";
+            try
+            {
+
+                Response = (HttpWebResponse)Request.GetResponse();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                cookies = Request.CookieContainer;
+                return true;
+            }
+            catch (WebException e)
+            {
+
+                if (e.Message.Contains("503") && cflevel++<5)
+                {
+                    return doCFThing(e.Response);
+                }
+                else
+                {
+                    return false;
+                }
+                
+            }
+        }
+
         public override void Login(string Username, string Password, string twofa)
         {
-            
-            
+
             //get the cloudflare and site headers
             HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create("https://magicaldice.com/");
             if (Prox != null)
@@ -198,10 +266,20 @@ namespace DiceBot
             {
                 if (e.Message.Contains("503") && e.Response!=null)
                 {
-                    Response = (HttpWebResponse)e.Response;
-                    s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-
-                    //do the CF bypass thing and get the headers
+                    cflevel = 0;
+                    cookies = Request.CookieContainer;
+                    
+                    if (doCFThing(e.Response))
+                    {
+                        
+                    }
+                    else
+                    {
+                        finishedlogin(false);
+                        return;
+                    }
+                    //Response = (HttpWebResponse)e.Response;
+                    
                 }
                 else
                 {
@@ -246,24 +324,30 @@ namespace DiceBot
             //get the auth key
             ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies };
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
+            try
+            {
+                s1 = Client.GetStringAsync("ajax.php?a=get_authkey").Result;
 
-            s1 = Client.GetStringAsync("ajax.php?a=get_authkey").Result;
+                //make auth key from s1*/
+                MDAuthKey au = json.JsonDeserialize<MDAuthKey>(s1);
+                //set auth key
+                authkey = au.auth_key;
+                //get user stats
+                //disect html to get stats*/
+                s1 = Client.GetStringAsync("account/statistics").Result;
+                GetStats(s1);
+                //get balance
 
-            //make auth key from s1*/
-            MDAuthKey au = json.JsonDeserialize<MDAuthKey>(s1);
-            //set auth key
-            authkey = au.auth_key;
-            //get user stats
-            //disect html to get stats*/
-            s1 = Client.GetStringAsync("account/statistics").Result;
-            GetStats(s1);
-            //get balance
-
-            s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
-            balance = double.Parse(s1.Replace("\"",""), System.Globalization.NumberFormatInfo.InvariantInfo);
-            Parent.updateBalance(balance);
-            new Thread(GetDeposit).Start();
-            finishedlogin(true);
+                s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
+                balance = double.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
+                Parent.updateBalance(balance);
+                new Thread(GetDeposit).Start();
+                finishedlogin(true);
+            }
+            catch
+            {
+                finishedlogin(false);
+            }
         }
 
         void GetStats(string S)
@@ -291,7 +375,113 @@ namespace DiceBot
 
         public override bool Register(string username, string password)
         {
-            throw new NotImplementedException();
+
+            //get the cloudflare and site headers
+            HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create("https://magicaldice.com/");
+            if (Prox != null)
+                Request.Proxy = Prox;
+            cookies = new CookieContainer();
+            Request.CookieContainer = cookies;
+            HttpWebResponse Response = null;
+            string s1 = "";
+            try
+            {
+
+                Response = (HttpWebResponse)Request.GetResponse();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                cookies = Request.CookieContainer;
+            }
+            catch (WebException e)
+            {
+                if (e.Message.Contains("503") && e.Response != null)
+                {
+                    cflevel = 0;
+                    cookies = Request.CookieContainer;
+
+                    if (doCFThing(e.Response))
+                    {
+
+                    }
+                    else
+                    {
+                        finishedlogin(false);
+                        return false;
+                    }
+                    //Response = (HttpWebResponse)e.Response;
+
+                }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
+                    finishedlogin(false);
+                    return false;
+                }
+            }
+            //log in
+            Request = HttpWebRequest.Create("https://magicaldice.com/") as HttpWebRequest;
+            if (Prox != null)
+                Request.Proxy = Prox;
+
+            foreach (Cookie c in Response.Cookies)
+            {
+
+                cookies.Add(c);
+            }
+            Request.CookieContainer = cookies;
+            Request.Method = "POST";
+            string post = string.Format("register_name={0}&register_password={1}&register_password_check={1}", username, password);
+            Request.ContentType = "application/x-www-form-urlencoded";
+            Request.ContentLength = post.Length;
+            using (var writer = new StreamWriter(Request.GetRequestStream()))
+            {
+                string writestring = post as string;
+                writer.Write(writestring);
+            }
+            try
+            {
+
+                Response = (HttpWebResponse)Request.GetResponse();
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+
+            }
+            catch (WebException e)
+            {
+                Response = (HttpWebResponse)e.Response;
+                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
+                finishedlogin(false);
+                return false;
+            }
+            try
+            {
+                //get the auth key
+                ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies };
+                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
+
+                s1 = Client.GetStringAsync("ajax.php?a=get_authkey").Result;
+
+                //make auth key from s1*/
+                MDAuthKey au = json.JsonDeserialize<MDAuthKey>(s1);
+                //set auth key
+                authkey = au.auth_key;
+                //get user stats
+                //disect html to get stats*/
+                s1 = Client.GetStringAsync("account/statistics").Result;
+                GetStats(s1);
+                //get balance
+
+                s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
+                balance = double.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
+                Parent.updateBalance(balance);
+                new Thread(GetDeposit).Start();
+                finishedlogin(true);
+                return true;
+            }
+            catch
+            {
+                finishedlogin(false);
+                return false;
+            }
         }
 
         public override bool ReadyToBet()

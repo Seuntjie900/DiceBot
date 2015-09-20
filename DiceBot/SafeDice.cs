@@ -234,7 +234,7 @@ namespace DiceBot
                 SafeDiceBet tmpBet = new SafeDiceBet
                 {
                     siteId = curen,
-                    amount = (long)(amount * (Currency != "2" ? 100000000 : 1000000000000)),
+                    amount = (long)(amount * (curen != 2 ? 100000000 : 1000000000000)),
                     payout = (double)(((long)((99.5 / chance) * (curen != 2 ? 100000000 : 1000000000000))) / (curen != 2 ? 100000000.0 : 1000000000000.0)),
                     isFixedPayout = false,
                     isRollLow = !(bool)High,

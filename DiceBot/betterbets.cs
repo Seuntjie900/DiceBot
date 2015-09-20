@@ -88,6 +88,7 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string otp)
         {
+            
             ClientHandlr = new HttpClientHandler() { UseCookies = true };
             Client = new HttpClient(ClientHandlr) { BaseAddress= new Uri("https://betterbets.io/api/") };
             lastupdate = DateTime.Now;

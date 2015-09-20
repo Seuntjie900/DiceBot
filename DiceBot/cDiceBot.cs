@@ -5253,7 +5253,19 @@ namespace DiceBot
                     if ( key == "SettingsMode")
                         return (basicToolStripMenuItem.Checked ? 0 : advancedToolStripMenuItem.Checked ? 1 : 2);
                     if (key == "Site")
-                        return (justDiceToolStripMenuItem.Checked ? 0 : primeDiceToolStripMenuItem.Checked ? 1 : pocketRocketsCasinoToolStripMenuItem.Checked ? 2 : diceToolStripMenuItem.Checked ? 3 : safediceToolStripMenuItem.Checked ? 4 : daDiceToolStripMenuItem.Checked ? 5 : rollinIOToolStripMenuItem.Checked ? 6 : bitDiceToolStripMenuItem.Checked ? 7: betterbetsToolStripMenuItem.Checked?8:moneyPotToolStripMenuItem.Checked?9:1);
+                        return (justDiceToolStripMenuItem.Checked ? 0 : 
+                            primeDiceToolStripMenuItem.Checked ? 1 : 
+                            pocketRocketsCasinoToolStripMenuItem.Checked ? 2 : 
+                            diceToolStripMenuItem.Checked ? 3 : 
+                            safediceToolStripMenuItem.Checked ? 4 : 
+                            daDiceToolStripMenuItem.Checked ? 5 : 
+                            rollinIOToolStripMenuItem.Checked ? 6 : 
+                            bitDiceToolStripMenuItem.Checked ? 7: 
+                            betterbetsToolStripMenuItem.Checked?8:
+                            moneyPotToolStripMenuItem.Checked?9:
+                            coinMillionsToolStripMenuItem.Checked ? 10 :
+                            magicalDiceToolStripMenuItem.Checked ? 11 :
+                            1);
                 }
                 else if (c is TextBox)
                     return (c as TextBox).Text;
@@ -5354,7 +5366,9 @@ namespace DiceBot
                         bitDiceToolStripMenuItem.Checked = value == 7;
                         betterbetsToolStripMenuItem.Checked = value == 8;
                         moneyPotToolStripMenuItem.Checked = value == 9;
-                        if (value > 9)
+                        coinMillionsToolStripMenuItem.Checked = value == 10;
+                        magicalDiceToolStripMenuItem.Checked = value == 11;
+                        if (value > 11)
                         {
                             justDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -5477,6 +5491,9 @@ namespace DiceBot
                         bitDiceToolStripMenuItem.Checked = value == "7";
                         betterbetsToolStripMenuItem.Checked = value == "8";
                         moneyPotToolStripMenuItem.Checked = value == "9";
+                        coinMillionsToolStripMenuItem.Checked = value == "10";
+                        magicalDiceToolStripMenuItem.Checked = value == "11";
+                        
                         
                     }
                     else if (Key == "SettingsMode")
