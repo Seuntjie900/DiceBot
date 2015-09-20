@@ -330,15 +330,22 @@ namespace DiceBot
                 prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
                 client = getseed.ClientSeed;
                 serverhash = getseed.ServerHash;
-                
-                /*getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
-                if (Prox != null)
-                    getHeaders.Proxy = Prox;
-                getHeaders.CookieContainer = Cookies;
-                Response = (HttpWebResponse)getHeaders.GetResponse();
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
-                Parent.updateDeposit(dep.Address);*/
+
+                try
+                {
+                    getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
+                    if (Prox != null)
+                        getHeaders.Proxy = Prox;
+                    getHeaders.CookieContainer = Cookies;
+                    Response = (HttpWebResponse)getHeaders.GetResponse();
+                    s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                    PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
+                    Parent.updateDeposit(dep.Address);
+                }
+                catch
+                {
+                    new System.Threading.Thread(GetDeposit).Start();
+                }
                 finishedlogin(true);
                 return;
             }
@@ -350,6 +357,18 @@ namespace DiceBot
             finishedlogin(false);
         }
         
+        void GetDeposit()
+        {
+            System.Threading.Thread.Sleep(10000);
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
+            if (Prox != null)
+                getHeaders.Proxy = Prox;
+            getHeaders.CookieContainer = Cookies;
+            HttpWebResponse Response = (HttpWebResponse)getHeaders.GetResponse();
+            string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+            PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
+            Parent.updateDeposit(dep.Address);
+        }
         
         string client = "", serverhash = "";
         public override bool Register(string Username, string Passwrd)
@@ -467,14 +486,21 @@ namespace DiceBot
                 prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
                 client = getseed.ClientSeed;
                 serverhash = getseed.ServerHash;
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
-                if (Prox != null)
-                    getHeaders.Proxy = Prox;
-                getHeaders.CookieContainer = Cookies;
-                Response = (HttpWebResponse)getHeaders.GetResponse();
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
-                Parent.updateDeposit(dep.Address);
+                try
+                {
+                    getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
+                    if (Prox != null)
+                        getHeaders.Proxy = Prox;
+                    getHeaders.CookieContainer = Cookies;
+                    Response = (HttpWebResponse)getHeaders.GetResponse();
+                    s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                    PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
+                    Parent.updateDeposit(dep.Address);
+                }
+                catch
+                {
+                    new System.Threading.Thread(GetDeposit).Start();
+                }
                 finishedlogin(true);
                 return true;
             }
