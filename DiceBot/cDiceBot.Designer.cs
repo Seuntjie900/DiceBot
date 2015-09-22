@@ -446,6 +446,7 @@
             this.betterbetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moneyPotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coinMillionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.magicalDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -463,7 +464,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.magicalDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -4948,6 +4948,11 @@
             // 
             this.nudWinMultiplier2.DecimalPlaces = 5;
             this.nudWinMultiplier2.Location = new System.Drawing.Point(19, 37);
+            this.nudWinMultiplier2.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
             this.nudWinMultiplier2.Name = "nudWinMultiplier2";
             this.nudWinMultiplier2.Size = new System.Drawing.Size(82, 20);
             this.nudWinMultiplier2.TabIndex = 2;
@@ -4982,6 +4987,11 @@
             // 
             this.nudMutliplier2.DecimalPlaces = 5;
             this.nudMutliplier2.Location = new System.Drawing.Point(19, 40);
+            this.nudMutliplier2.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
             this.nudMutliplier2.Name = "nudMutliplier2";
             this.nudMutliplier2.Size = new System.Drawing.Size(82, 20);
             this.nudMutliplier2.TabIndex = 2;
@@ -5184,6 +5194,7 @@
             this.lbVariables.Name = "lbVariables";
             this.lbVariables.Size = new System.Drawing.Size(262, 173);
             this.lbVariables.TabIndex = 2;
+            this.lbVariables.SelectedIndexChanged += new System.EventHandler(this.lbVariables_SelectedIndexChanged);
             // 
             // listBox1
             // 
@@ -5595,6 +5606,14 @@
             this.coinMillionsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.coinMillionsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
+            // magicalDiceToolStripMenuItem
+            // 
+            this.magicalDiceToolStripMenuItem.Name = "magicalDiceToolStripMenuItem";
+            this.magicalDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.magicalDiceToolStripMenuItem.Text = "MagicalDice";
+            this.magicalDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.magicalDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
             // settingsModeToolStripMenuItem
             // 
             this.settingsModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -5720,14 +5739,6 @@
             // betBindingSource
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
-            // 
-            // magicalDiceToolStripMenuItem
-            // 
-            this.magicalDiceToolStripMenuItem.Name = "magicalDiceToolStripMenuItem";
-            this.magicalDiceToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.magicalDiceToolStripMenuItem.Text = "MagicalDice";
-            this.magicalDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.magicalDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 

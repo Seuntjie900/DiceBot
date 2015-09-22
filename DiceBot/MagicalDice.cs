@@ -57,11 +57,11 @@ namespace DiceBot
             try
             {
                 High = (bool)Bool;
-                double tmpchance = High ? 99.99 - chance : chance;
+                //double tmpchance = High ? 99.99 - chance : chance;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("a", "place_bet"));
                 pairs.Add(new KeyValuePair<string, string>("amount", (amount).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
-                pairs.Add(new KeyValuePair<string, string>("win_chance", tmpchance.ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("win_chance", chance.ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("direction", High ? "over" : "under"));
                 pairs.Add(new KeyValuePair<string, string>("auth_key", authkey));
                 pairs.Add(new KeyValuePair<string, string>("origin", "manual"));
@@ -74,19 +74,26 @@ namespace DiceBot
                 {
 
                     MDBet tmp = json.JsonDeserialize<MDBet>(sEmitResponse);
-                    Bet tmp2 = tmp.ToBet();
-                    
-                    balance += (double)tmp2.Profit;
-                    bets++;
-                    if (tmp.bet_win)
-                        wins++;
+                    if (tmp.error == 0)
+                    {
+                        Bet tmp2 = tmp.ToBet();
+
+                        balance += (double)tmp2.Profit;
+                        bets++;
+                        if (tmp.bet_win)
+                            wins++;
+                        else
+                            losses++;
+
+                        wagered += (double)(tmp2.Amount);
+                        profit += (double)(tmp2.Profit);
+                        FinishedBet(tmp2);
+                        retrycount = 0;
+                    }
                     else
-                        losses++;
-                    
-                    wagered += (double)(tmp2.Amount);
-                    profit += (double)(tmp2.Profit);
-                    FinishedBet(tmp2);
-                    retrycount = 0;
+                    {
+                        Parent.updateStatus(tmp.msg);
+                    }
                 }
                 catch
                 {
@@ -562,7 +569,8 @@ namespace DiceBot
         public string bet_chat_display { get; set; }
         public bool bet_win { get; set; }
         public string bet_id { get; set; }
-
+        public int error { get; set; }
+        public string msg { get; set; }
         public Bet ToBet()
         {
             
@@ -572,11 +580,13 @@ namespace DiceBot
             Id = long.Parse(bet_id),
             Profit = (decimal)(bet_profit/100000000.0),
             Roll = bet_roll,
-            Chance = decimal.Parse(bet_game_value, System.Globalization.NumberFormatInfo.InvariantInfo),
+            
             high = bet_game_type=="over",
             nonce = long.Parse(bet_nonce, System.Globalization.NumberFormatInfo.InvariantInfo),
             serverhash = bet_seed_id,
             clientseed = bet_key_id};
+            decimal tchance = decimal.Parse(bet_game_value, System.Globalization.NumberFormatInfo.InvariantInfo);
+            tmp.Chance = (tmp.high ? 99.99m - tchance : tchance);
             return tmp;
         }
     }

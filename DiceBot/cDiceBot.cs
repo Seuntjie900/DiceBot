@@ -5812,5 +5812,10 @@ namespace DiceBot
             SimpleSwap tmp = new SimpleSwap(ExchangeType.deposit, CurrentSite.Currency, txtApiAddress.Text);
             tmp.Show();
         }
+
+        private void lbVariables_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
