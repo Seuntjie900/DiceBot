@@ -1,14 +1,19 @@
 DiceBot
 =======
 
-Betting Bot for http://www.just-dice.com, http://999dice.com, http://safedice.com, http://primedice.com, http://pocketrocketscasino.eu.
+Betting Bot for just-dice.com, PrimeDice.com, Bitdice.me, 999dice.com, safedice.com, primedice.com, pocketrocketscasino.eu, Coinmillions.com, Dadice.com, Rollin.io, Betterbets.io, Moneypot.com (bot.seuntjie.com/mpdb) and Magicaldice.com
+
+Binary downloads for the latest version can be found at: https://bot.seuntjie.com/botpage.aspx
+List of all downloads (old versions and beta): https://bot.seuntjie.com/downloads.aspx
+Getting started Guide: https://bot.seuntjie.com/GettingStarted.aspx
+
 
 This bot allows you to automatically bet using the martingale, labouchere, fibonacci and d'Alembert strategies and almost any other betting strategy you can think of.
 
 Bitcointalk thread: https://bitcointalk.org/index.php?topic=307425
 
 Features:
-customizable martingale
+customizable martingale<br/>
 customizable labouchere
 customizable fibonacci
 customizable d'Alembert
