@@ -19,7 +19,7 @@ namespace DiceBot
         public moneypot(cDiceBot Parent)
         {
             this.Parent = Parent;
-            edge = 1;
+            edge = 0.9m;
             maxRoll = 99.99;
             AutoInvest = false;
             AutoWithdraw = false;

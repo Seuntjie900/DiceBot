@@ -42,12 +42,15 @@ namespace DiceBot
         DateTime lastupdate = DateTime.Now;
         void getbalanceThread()
         {
-            if (authkey!="" && (DateTime.Now-lastupdate).TotalSeconds>15 && isMD)
+            while (isMD)
             {
-                lastupdate = DateTime.Now;
-                string s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
-                balance = double.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
-                Parent.updateBalance(balance);
+                if (authkey != "" && (DateTime.Now - lastupdate).TotalSeconds > 15 && isMD)
+                {
+                    lastupdate = DateTime.Now;
+                    string s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
+                    balance = double.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
+                    Parent.updateBalance(balance);
+                }
             }
         }
 
@@ -183,12 +186,12 @@ namespace DiceBot
         string authkey = "";
         CookieContainer cookies;
         int cflevel = 0;
-        bool doCFThing( WebResponse Response )
+        bool doCFThing( string Response )
         {
             Thread.Sleep(4000);
             JavascriptContext JSC = new JavascriptContext();
-            
-            string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+
+            string s1 = Response;//new StreamReader(Response.GetResponseStream()).ReadToEnd();
             string Script = "";
             string jschl_vc = s1.Substring(s1.IndexOf("jschl_vc"));
             jschl_vc = jschl_vc.Substring(jschl_vc.IndexOf("value=\"") + "value=\"".Length);
@@ -210,127 +213,96 @@ namespace DiceBot
             JSC.Run(Script1);
             string answer = JSC.GetParameter("answer").ToString();
 
-            string url = "https://magicaldice.com/cdn-cgi/l/chk_jschl?jschl_vc=" + jschl_vc + "&pass=" + pass.Replace("+","%2") + "&jschl_answer=" + answer;
-            HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create(url);
-            Request.Host = "magicaldice.com";
-            Request.Referer = "https://magicaldice.com/";
-            Request.KeepAlive = true;
-            Request.Headers.Add("Accept-Encoding", "gzip, deflate");
-            Request.Headers.Add("Accept-Language", "en-US,en;q=0.5");
-            Request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-
-            //Request.UserAgent = "DiceBot automated gambling";
-            //Request.Headers.Add("referer", "magicaldice.com");
-
-            if (Prox != null)
-                Request.Proxy = Prox;
-            
-            Request.CookieContainer = cookies;
-            Response = null;
-            s1 = "";
             try
             {
+                HttpResponseMessage Resp = Client.GetAsync("cdn-cgi/l/chk_jschl?jschl_vc=" + jschl_vc + "&pass=" + pass.Replace("+","%2") + "&jschl_answer=" + answer).Result;
+                bool Found = false;
 
-                Response = (HttpWebResponse)Request.GetResponse();
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                cookies = Request.CookieContainer;
-                return true;
+                foreach (Cookie c in ClientHandlr.CookieContainer.GetCookies(new Uri("https://magicaldice.com")))
+                {
+                    if (c.Name == "cf_clearance")
+                    {
+                        Found = true;
+                        break;
+                    }
+                }
+                /*if (ClientHandlr.CookieContainer.Count==3)
+                {
+                    Thread.Sleep(2000);
+                }*/
+                if (!Found && cflevel++<5)
+                    Found = doCFThing(Resp.Content.ReadAsStringAsync().Result);
+                return Found;
+
             }
-            catch (WebException e)
+            catch (AggregateException e)
             {
 
-                if (e.Message.Contains("503") && cflevel++<5)
-                {
-                    return doCFThing(e.Response);
-                }
-                else
-                {
-                    return false;
-                }
-                
             }
+            return false;
         }
 
         public override void Login(string Username, string Password, string twofa)
         {
 
             //get the cloudflare and site headers
-            HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create("https://magicaldice.com/");
-            if (Prox != null)
-                Request.Proxy = Prox;
             cookies = new CookieContainer();
-            Request.CookieContainer = cookies;
-            HttpWebResponse Response = null;
+            ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
+
             string s1 = "";
+            
             try
             {
-
-                Response = (HttpWebResponse)Request.GetResponse();
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                cookies = Request.CookieContainer;
-            }
-            catch (WebException e)
-            {
-                if (e.Message.Contains("503") && e.Response!=null)
+                HttpResponseMessage resp = Client.GetAsync("").Result;
+                if (resp.IsSuccessStatusCode)
                 {
-                    cflevel = 0;
-                    cookies = Request.CookieContainer;
-                    
-                    if (doCFThing(e.Response))
-                    {
-                        
-                    }
-                    else
-                    {
-                        finishedlogin(false);
-                        return;
-                    }
-                    //Response = (HttpWebResponse)e.Response;
-                    
+                    s1 = resp.Content.ReadAsStringAsync().Result;
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
-                    finishedlogin(false);
+                    if (resp.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    {
+                        s1 = resp.Content.ReadAsStringAsync().Result;
+                        cflevel = 0;
+                        System.Threading.Tasks.Task.Factory.StartNew(() =>
+                            {
+                                System.Windows.Forms.MessageBox.Show("MagicalDice.com has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                            });
+                        if (!doCFThing(s1))
+                        {
+                            finishedlogin(false);
+                            return;
+                        }
+                        
+                    }
                 }
             }
-            //log in
-            Request = HttpWebRequest.Create("https://magicaldice.com/") as HttpWebRequest;
-            if (Prox != null)
-                Request.Proxy = Prox;
-            
-            foreach (Cookie c in Response.Cookies)
+            catch (AggregateException e)
             {
+                if (e.InnerException.Message.Contains("503"))
+                {
+                    //doCFThing(e.InnerException);
+                }
+            }
 
-                cookies.Add(c);
-            }
-            Request.CookieContainer = cookies;
-            Request.Method = "POST";
-            string post = string.Format("user_name={0}&user_password={1}", Username, Password);
-            Request.ContentType = "application/x-www-form-urlencoded";
-            Request.ContentLength = post.Length;
-            using (var writer = new StreamWriter(Request.GetRequestStream()))
-            {
-                string writestring = post as string;
-                writer.Write(writestring);
-            }
+            
+            
+            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+            pairs.Add(new KeyValuePair<string, string>("user_name", Username));
+            pairs.Add(new KeyValuePair<string, string>("user_password", Password));
+            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
             try
             {
-
-                Response = (HttpWebResponse)Request.GetResponse();
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                string sEmitResponse = Client.PostAsync("", Content).Result.Content.ReadAsStringAsync().Result;
                 
             }
-            catch (WebException e)
+            catch (AggregateException e)
             {
-                Response = (HttpWebResponse)e.Response;
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
-                finishedlogin(false);
+                
             }
-            //get the auth key
-            ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies };
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
+
+            
             try
             {
                 s1 = Client.GetStringAsync("ajax.php?a=get_authkey").Result;
@@ -384,87 +356,66 @@ namespace DiceBot
         {
 
             //get the cloudflare and site headers
-            HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create("https://magicaldice.com/");
-            if (Prox != null)
-                Request.Proxy = Prox;
             cookies = new CookieContainer();
-            Request.CookieContainer = cookies;
-            HttpWebResponse Response = null;
+            ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
+
             string s1 = "";
+
             try
             {
-
-                Response = (HttpWebResponse)Request.GetResponse();
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                cookies = Request.CookieContainer;
-            }
-            catch (WebException e)
-            {
-                if (e.Message.Contains("503") && e.Response != null)
+                HttpResponseMessage resp = Client.GetAsync("").Result;
+                if (resp.IsSuccessStatusCode)
                 {
-                    cflevel = 0;
-                    cookies = Request.CookieContainer;
-
-                    if (doCFThing(e.Response))
-                    {
-
-                    }
-                    else
-                    {
-                        finishedlogin(false);
-                        return false;
-                    }
-                    //Response = (HttpWebResponse)e.Response;
-
+                    s1 = resp.Content.ReadAsStringAsync().Result;
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
-                    finishedlogin(false);
-                    return false;
+                    if (resp.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    {
+                        s1 = resp.Content.ReadAsStringAsync().Result;
+                        cflevel = 0;
+                        System.Threading.Tasks.Task.Factory.StartNew(() =>
+                        {
+                            System.Windows.Forms.MessageBox.Show("MagicalDice.com has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                        });
+                        if (!doCFThing(s1))
+                        {
+                            finishedlogin(false);
+                            return false;
+                        }
+
+                    }
                 }
             }
-            //log in
-            Request = HttpWebRequest.Create("https://magicaldice.com/") as HttpWebRequest;
-            if (Prox != null)
-                Request.Proxy = Prox;
-
-            foreach (Cookie c in Response.Cookies)
+            catch (AggregateException e)
             {
-
-                cookies.Add(c);
+                if (e.InnerException.Message.Contains("503"))
+                {
+                    //doCFThing(e.InnerException);
+                }
             }
-            Request.CookieContainer = cookies;
-            Request.Method = "POST";
-            string post = string.Format("register_name={0}&register_password={1}&register_password_check={1}", username, password);
-            Request.ContentType = "application/x-www-form-urlencoded";
-            Request.ContentLength = post.Length;
-            using (var writer = new StreamWriter(Request.GetRequestStream()))
+
+
+
+            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+            pairs.Add(new KeyValuePair<string, string>("register_name", username));
+            pairs.Add(new KeyValuePair<string, string>("register_password", password));
+            pairs.Add(new KeyValuePair<string, string>("register_password_check", password));
+            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+            
+            try
             {
-                string writestring = post as string;
-                writer.Write(writestring);
+                string sEmitResponse = Client.PostAsync("", Content).Result.Content.ReadAsStringAsync().Result;
+
+            }
+            catch (AggregateException e)
+            {
+
             }
             try
             {
-
-                Response = (HttpWebResponse)Request.GetResponse();
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-
-            }
-            catch (WebException e)
-            {
-                Response = (HttpWebResponse)e.Response;
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
-                finishedlogin(false);
-                return false;
-            }
-            try
-            {
-                //get the auth key
-                ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies };
-                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
-
+                
                 s1 = Client.GetStringAsync("ajax.php?a=get_authkey").Result;
 
                 //make auth key from s1*/
@@ -515,14 +466,14 @@ namespace DiceBot
 
         public override void SendTip(string User, double amount)
         {
-            string s1 = Client.GetStringAsync("ajax.php?a=get_csrf").Result;
+            
+           string s1 = Client.GetStringAsync("ajax.php?a=get_csrf").Result;
             MDCsrf tmp = json.JsonDeserialize<MDCsrf>(s1);
-
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
             pairs.Add(new KeyValuePair<string, string>("a", "tip_user"));
             pairs.Add(new KeyValuePair<string, string>("user_id", User));
             pairs.Add(new KeyValuePair<string, string>("amount", amount.ToString( System.Globalization.NumberFormatInfo.InvariantInfo)));
-            pairs.Add(new KeyValuePair<string, string>("csrf", csrf));
+            pairs.Add(new KeyValuePair<string, string>("csrf", tmp.csrf));
 
 
             FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);

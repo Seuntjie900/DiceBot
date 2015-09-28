@@ -1824,7 +1824,9 @@ namespace DiceBot
         double ProfitSinceLastReset = 0;
         double StreakProfitSinceLastReset = 0;
         double StreakLossSinceLastReset = 0;
-
+        int betsAtLastReset = 0;
+        int lossesAtLastReset = 0;
+        int winsAtLastReset = 0;
         bool EnableReset = false;
         bool EnableProgZigZag = false;
         public void DoBet(Bet bet)
@@ -1913,6 +1915,15 @@ namespace DiceBot
                             {
                                 Reset();
                                 ProfitSinceLastReset -= (double)nudResetBtcProfit.Value;
+                            }
+                            if (Wins >= nudStopWins.Value && chkStopWins.Checked)
+                            {
+                                Stop("More than " + nudStopLosses.Value + " Wins (" + Wins + "). Reset stats before restarting bot");
+                            }
+                            if (Wins - winsAtLastReset >= nudResetWins2.Value && chkResetWins.Checked)
+                            {
+                                Reset();
+                                winsAtLastReset = Wins;
                             }
                         }
                         if (Losestreak != 0)
@@ -2063,6 +2074,15 @@ namespace DiceBot
                             Reset();
                             ProfitSinceLastReset += (double)nudResetBtcLoss.Value;
                         }
+                        if (Losses>= nudStopLosses.Value && chkStopLosses.Checked)
+                        {
+                            Stop("More than " + nudStopLosses.Value + " losses ("+Losses+"). Reset stats before restarting bot");
+                        }
+                        if (Losses-lossesAtLastReset >= nudResetLosses.Value && chkResetLosses.Checked)
+                        {
+                            Reset();
+                            lossesAtLastReset = Losses;
+                        }
                     }
                     //when switching from win streak to lose streak, calculate some stats
                     if (Winstreak != 0)
@@ -2113,6 +2133,23 @@ namespace DiceBot
                     WinMultiplier = (double)(nudWinMultiplier.Value);
 
                 }
+
+                if (Wins + Losses >= nudStopBets.Value && chkStopBets.Checked)
+                {
+                    Stop("Bets exeeding " + nudStopBets.Value +"(stop after x bets)");
+                }
+                if ( Wins+Losses-betsAtLastReset >= nudResetBets.Value && chkResetBets.Checked)
+                {
+                    Reset();
+                    betsAtLastReset = Wins + Losses;
+                }
+                TimeSpan curtime = DateTime.Now - dtStarted;
+
+                if (curtime.TotalHours >= (double)nudStopTimeH.Value && curtime.Minutes >= (double)nudStopTimeM.Value && curtime.Seconds >= (double)nudStopTimeS.Value && chkStopTime.Checked)
+                {
+                    Stop(string.Format("Time exeeding {0}:{1}:{2}", nudStopTimeH.Value, nudStopTimeM.Value, nudStopTimeS.Value));
+                }
+                
                 if (chkZigZagBets.Checked && (!programmerToolStripMenuItem.Checked || EnableProgZigZag ))
                 {
                     if ((Wins+Losses) % (int)nudZigZagBets.Value == 0 && (Wins+Losses)!=0 )
@@ -2258,9 +2295,15 @@ namespace DiceBot
                 LuaRuntime.Run("dobet()");
                 GetLuaVars();
             }
-            catch
+            catch (LuaException e)
             {
-
+                Stop("Lua error!");
+                WriteConsole(e.Message);
+            }
+            catch (Exception e)
+            {
+                Stop("An error has occurred parsing the lua script.");
+                WriteConsole(e.Message);
             }
                         
         }
@@ -4362,6 +4405,7 @@ namespace DiceBot
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
+                
             if (CurrentSite.register)
             {
                 ConfirmPassword Conf = new ConfirmPassword();
@@ -4373,6 +4417,9 @@ namespace DiceBot
                 }
                 if (Valid)
                 {
+                    CurrentSite.FinishedLogin -= CurrentSite_FinishedLogin;
+                    CurrentSite.FinishedLogin += CurrentSite_FinishedLogin;
+            
                     if (CurrentSite.Register(txtApiUsername.Text, txtApiPassword.Text))
                     {
                         EnableNotLoggedInControls(true);
@@ -4380,7 +4427,7 @@ namespace DiceBot
                 }
                 else
                 {
-                    MessageBox.Show("Registration Failed.");
+                    MessageBox.Show("Passwords do not match!.");
                 }
             }
             else
@@ -4872,6 +4919,7 @@ namespace DiceBot
                        
                     case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site(CM)"; break;
                     case "magicalDiceToolStripMenuItem": CurrentSite = new MagicalDice(this); siteToolStripMenuItem.Text = "Site(MD)"; break;
+                    //case "investDiceToolStripMenuItem": CurrentSite = new InvestDice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
                 }
                 if (CurrentSite is dadice || CurrentSite is CoinMillions)
                 {
@@ -5817,5 +5865,7 @@ namespace DiceBot
         {
 
         }
+
+        
     }
 }
