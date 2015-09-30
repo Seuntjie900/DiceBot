@@ -226,13 +226,22 @@ namespace DiceBot
             }
         }
         
-        public cDiceBot()
+        public cDiceBot(string[] args)
         {
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture =  new CultureInfo("en-US");
             sqlite_helper.CheckDBS();
             InitializeComponent();
+            foreach (string s in args)
+            {
+                if (s.StartsWith("log="))
+                {
+                    string loglev = s.Substring(s.IndexOf("=") + 1);
+                    int.TryParse(loglev, out LogLevel);
+                }
+            }
+
             PopulateSaveNames();
             WriteConsole("Starting Dicebot " + vers);
             PopoutChat.SendMessage += PopoutChat_SendMessage;
@@ -391,9 +400,10 @@ namespace DiceBot
 
                     Directory.CreateDirectory(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2");
                 }
-                catch
+                catch (Exception e)
                 {
-
+                    DumpLog(e.Message, 1);
+                    DumpLog(e.StackTrace, 2);
                 }
             }
             else
@@ -610,6 +620,8 @@ namespace DiceBot
             catch (Exception e)
             {
                 WriteConsole(e.Message);
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
                 Stop("Lua exception");
                 return null;
             }
@@ -678,9 +690,10 @@ namespace DiceBot
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
             }
         }
 
@@ -1055,7 +1068,7 @@ namespace DiceBot
 
       private void Reset()
         {
-            reset = true;
+            //reset = true;
           if (rdbMartingale.Checked)
           {
               Lastbet = MinBet;
@@ -1088,15 +1101,7 @@ namespace DiceBot
               double Betval = -1;
               if (presetLevel < rtbPresetList.Lines.Length)
               {
-                  if (double.TryParse(rtbPresetList.Lines[presetLevel], out Betval))
-                  {
-                      Lastbet = Betval;
-                  }
-                  else
-                  {
-                      Stop("Invalid bet in list");
-                      MessageBox.Show("Invalid bet in list. Please make sure there is only one bet per line and no other charachters or letters in the list.");
-                  }
+                  SetPresetValues(presetLevel);
               }
           }
         }
@@ -1118,9 +1123,10 @@ namespace DiceBot
                 EnableTimer(tmBet, false);
                 
             }
-            catch
+            catch (Exception e)
             {
-
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
             }
         }
 
@@ -1157,8 +1163,10 @@ namespace DiceBot
                             }
                         }
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        DumpLog(e.Message, 1);
+                        DumpLog(e.StackTrace, 2);
                         MessageBox.Show("Failed to play CHING, pelase make sure file exists");
                     }
                     
@@ -1201,8 +1209,10 @@ namespace DiceBot
                             }
                         }
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        DumpLog(e.Message, 1);
+                        DumpLog(e.StackTrace, 2);
                         MessageBox.Show("Failed to play CHING, pelase make sure file exists");
                     }
                     
@@ -1536,9 +1546,10 @@ namespace DiceBot
                         if (!RunningSimulation)
                             CurrentSite.chance =(Chance);
                     }
-                    catch
+                    catch (Exception e)
                     {
-
+                        DumpLog(e.Message, 1);
+                        DumpLog(e.StackTrace, 2);
                     }
                 }
                 if (chkTrazel.Checked)
@@ -1593,9 +1604,10 @@ namespace DiceBot
                             CurrentSite.chance = ((double)nudChangeChanceWinTo.Value);
 
                     }
-                    catch
+                    catch (Exception e)
                     {
-
+                        DumpLog(e.Message, 1);
+                        DumpLog(e.StackTrace, 2);
                     }
                 }
                         
@@ -1750,6 +1762,69 @@ namespace DiceBot
         }
 
         int presetLevel = 0;
+        void SetPresetValues(int Level)
+        {
+            double Betval = -1;
+            string[] Vars = null;
+            if (rtbPresetList.Lines[Level].Contains("-"))
+            {
+                Vars = rtbPresetList.Lines[Level].Split('-');
+            }
+            else if (rtbPresetList.Lines[Level].Contains("/"))
+            {
+                Vars = rtbPresetList.Lines[Level].Split('/');
+            }
+            else if (rtbPresetList.Lines[Level].Contains("\\"))
+            {
+                Vars = rtbPresetList.Lines[Level].Split('\\');
+            }
+            else 
+            {
+                Vars = rtbPresetList.Lines[Level].Split('&');
+            }
+            
+            if (double.TryParse(Vars[0], out Betval))
+            {
+                Lastbet = Betval;
+            }
+            if (Vars.Length >= 2)
+            {
+                double chance = -1;
+                if (double.TryParse(Vars[1], out chance))
+                {
+                    Chance = chance;
+                }
+                else
+                {
+                    if (Vars[1].ToLower() == "low" || Vars[1].ToLower() == "lo")
+                        high = false;
+                    else if (Vars[1].ToLower() == "high" || Vars[1].ToLower() == "hi")
+                    {
+                        high = true;
+                    }
+                }
+                if (Vars.Length >= 3)
+                {
+                    if (double.TryParse(Vars[2], out chance))
+                    {
+                        Chance = chance;
+                    }
+                    else
+                    {
+                        if (Vars[2].ToLower() == "low" || Vars[2].ToLower() == "lo")
+                            high = false;
+                        else if (Vars[2].ToLower() == "high" || Vars[2].ToLower() == "hi")
+                        {
+                            high = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Stop("Invalid bet inpreset list");
+            }
+        }
         void PresetList(bool Win)
         {
             if (Win)
@@ -1807,17 +1882,10 @@ namespace DiceBot
                     presetLevel = 0;
                 }
             }
-            double Betval = -1;
+            
             if (presetLevel < rtbPresetList.Lines.Length)
             {
-                if (double.TryParse(rtbPresetList.Lines[presetLevel], out Betval))
-                {
-                    Lastbet = Betval;
-                }
-                else
-                {
-                    Stop("Invalid bet inpreset list");
-                }
+                SetPresetValues(presetLevel);
             }
         }
 
@@ -1909,12 +1977,12 @@ namespace DiceBot
                             if (StreakProfitSinceLastReset >= (double)nudResetBtcStreakProfit.Value && chkResetBtcStreakProfit.Checked)
                             {
                                 Reset();
-                                StreakProfitSinceLastReset -= (double)nudResetBtcStreakProfit.Value;
+                                StreakProfitSinceLastReset = 0;
                             }
                             if (ProfitSinceLastReset> (double)nudResetBtcProfit.Value && chkResetBtcProfit.Checked)
                             {
                                 Reset();
-                                ProfitSinceLastReset -= (double)nudResetBtcProfit.Value;
+                                ProfitSinceLastReset = 0;
                             }
                             if (Wins >= nudStopWins.Value && chkStopWins.Checked)
                             {
@@ -2034,9 +2102,10 @@ namespace DiceBot
                             
                             
                         }
-                        catch
+                        catch (Exception e)
                         {
-
+                            DumpLog(e.Message, 1);
+                            DumpLog(e.StackTrace, 2);
                         }
                     }
 
@@ -2067,12 +2136,12 @@ namespace DiceBot
                         if (StreakLossSinceLastReset <= -(double)nudResetBtcStreakLoss.Value && chkResetBtcStreakLoss.Checked)
                         {
                             Reset();
-                            StreakLossSinceLastReset += (double)nudResetBtcStreakLoss.Value;
+                            StreakLossSinceLastReset = 0;
                         }
                         if (ProfitSinceLastReset < -(double)nudResetBtcLoss.Value && chkResetBtcLoss.Checked)
                         {
                             Reset();
-                            ProfitSinceLastReset += (double)nudResetBtcLoss.Value;
+                            ProfitSinceLastReset = 0;
                         }
                         if (Losses>= nudStopLosses.Value && chkStopLosses.Checked)
                         {
@@ -2210,9 +2279,10 @@ namespace DiceBot
                    
                     UpdateStats();
                 }
-                catch
+                catch (Exception e)
                 {
-
+                    DumpLog(e.Message, 1);
+                    DumpLog(e.StackTrace, 2);
                 }
                 if (RunningSimulation && (Wins + Losses > SimWindow.nudSimNumBets.Value || Lastbet > PreviousBalance))
                 {
@@ -2298,11 +2368,15 @@ namespace DiceBot
             catch (LuaException e)
             {
                 Stop("Lua error!");
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
                 WriteConsole(e.Message);
             }
             catch (Exception e)
             {
                 Stop("An error has occurred parsing the lua script.");
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
                 WriteConsole(e.Message);
             }
                         
@@ -2407,9 +2481,10 @@ namespace DiceBot
                 }
                
             }
-            catch
+            catch (Exception ex)
             {
-
+                DumpLog(ex.Message, 1);
+                DumpLog(ex.StackTrace, 2);
             }
 
         }
@@ -2440,8 +2515,10 @@ namespace DiceBot
                     }
                 
             }
-            catch
+            catch (Exception e)
             {
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
                 MessageBox.Show("Failed to play Alarm, pelase make sure file exists");
             }
         }
@@ -2576,9 +2653,10 @@ namespace DiceBot
                 {
                     File.WriteAllText("TempCodeBackup.txt", richTextBox3.Text);
                 }
-                catch
+                catch (Exception e)
                 {
-
+                    DumpLog(e.Message, 1);
+                    DumpLog(e.StackTrace, 2);
                 }
             }
             savepersonal();
@@ -2669,7 +2747,19 @@ namespace DiceBot
                     sw.WriteLine("SaveVersion|" + "3");
                     for (int i = 0; i < SaveNames.Count; i++ )
                     {
-                        sw.WriteLine(SaveNames.Keys.ToArray<string>()[i]+"|"+Convert.ToString(getValue(SaveNames.Keys.ToArray<string>()[i], false)));
+                        object t = getValue(SaveNames.Keys.ToArray<string>()[i], false);
+                        if (t is string[])
+                        {
+                            string t2 = "";
+                            foreach (string s in t as string[])
+                            {
+                                if (t2.Length > 0)
+                                    t2 += "?";
+                                t2 += s;
+                            }
+                            t = t2;
+                        }
+                        sw.WriteLine(SaveNames.Keys.ToArray<string>()[i]+"|"+Convert.ToString(t));
                     }
                         sw.Close();
                     sw.Dispose();
@@ -2678,9 +2768,10 @@ namespace DiceBot
                     
                     
                 }
-                catch
+                catch (Exception e)
                 {
-
+                    DumpLog(e.Message, 1);
+                    DumpLog(e.StackTrace, 2);
                 }
             }
         }
@@ -2889,8 +2980,10 @@ namespace DiceBot
                         {
                             SetValue(t.Name, t.Value, false);
                         }
-                        catch
+                        catch (Exception e)
                         {
+                            DumpLog(e.Message, 1);
+                            DumpLog(e.StackTrace, 2);
                             errors += t.Name + ", ";
                             safe = false;
                         }
@@ -2901,8 +2994,10 @@ namespace DiceBot
                         {
                             SetValue(t.Name, t.Value, true);
                         }
-                        catch
+                        catch (Exception e)
                         {
+                            DumpLog(e.Message, 1);
+                            DumpLog(e.StackTrace, 2);
                             errors += t.Name + ", ";
                             safe = false;
                         }
@@ -2910,14 +3005,16 @@ namespace DiceBot
                     variabledisable();
                     if (!safe)
                     {
-                        MessageBox.Show("There was a problem loading the following settnigs: " + errors);
+                        MessageBox.Show("There was a problem loading the following settings: " + errors);
                     }
                     return true;
                 }
                                    
             }
-            catch
+            catch (Exception e)
             {
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
                 return false;
             }
         }
@@ -3154,9 +3251,10 @@ namespace DiceBot
                 
             }
 
-            catch
+            catch (Exception e)
             {
-
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
             }
         }
 
@@ -3348,9 +3446,10 @@ namespace DiceBot
                 CurrentSite.chance =  (Chance);
                                 
             }
-            catch
+            catch (Exception ex)
             {
-
+                DumpLog(ex.Message, 1);
+                DumpLog(ex.StackTrace, 2);
             }
         }
 
@@ -3814,8 +3913,10 @@ namespace DiceBot
                         MessageBox.Show("exported to " + svdExportSim.FileName);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    DumpLog(ex.Message, 1);
+                    DumpLog(ex.StackTrace, 2);
                     MessageBox.Show("Failed exporting to " + svdExportSim.FileName);
                 }
             }
@@ -3846,8 +3947,10 @@ namespace DiceBot
                     }
                     MessageBox.Show("Saved bets to: " + "LuckyNum-" + DateTime.Now.ToShortDateString().Replace("/", "-") + ".csv");
                 }
-                catch
+                catch (Exception e)
                 {
+                    DumpLog(e.Message, 1);
+                    DumpLog(e.StackTrace, 2);
                     MessageBox.Show("Failed saving bets to: " + "LuckyNum-" + DateTime.Now.ToShortDateString().Replace("/", "-") + ".csv");
                 }
             }
@@ -4114,8 +4217,10 @@ namespace DiceBot
                         MessageBox.Show("Invalid bets file. Please make sure there are only bets in the file, 1 per line. NO other characters are permitted.");
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    DumpLog(ex.Message, 1);
+                    DumpLog(ex.StackTrace, 2);
                     MessageBox.Show("Invalid bets file. Please make sure there are only bets in the file, 1 per line. NO other characters are permitted.");
                 }
             }
@@ -4326,9 +4431,10 @@ namespace DiceBot
 
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
             }
         }
 
@@ -4685,8 +4791,10 @@ namespace DiceBot
                             MessageBox.Show("Invalid bets file. Please make sure there are only bets in the file, 1 per line. NO other characters are permitted.");
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        DumpLog(ex.Message, 1);
+                        DumpLog(ex.StackTrace, 2);
                         MessageBox.Show("Invalid bets file. Please make sure there are only bets in the file, 1 per line. NO other characters are permitted.");
                     }
             }
@@ -5027,6 +5135,8 @@ namespace DiceBot
             }
             catch (Exception e)
             {
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
                 Stop("LUA ERROR!!");
                 WriteConsole("LUA ERROR!!");
                 WriteConsole(e.Message);
@@ -5046,9 +5156,10 @@ namespace DiceBot
                 EnableReset = (bool)Lua["enablesrc"];
                 EnableProgZigZag = (bool)Lua["enablezz"];
             }
-            catch
+            catch (Exception e)
             {
-
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
             }
         }
         int LCindex = 0;
@@ -5078,6 +5189,8 @@ namespace DiceBot
                     {
                         WriteConsole("LUA ERROR!!");
                         WriteConsole(ex.Message);
+                        DumpLog(ex.Message, 1);
+                        DumpLog(ex.StackTrace, 2);
                     }
                     
                 }
@@ -5093,6 +5206,8 @@ namespace DiceBot
                     {
                         WriteConsole("LUA ERROR!!");
                         WriteConsole(ex.Message);
+                        DumpLog(ex.Message, 1);
+                        DumpLog(ex.StackTrace, 2);
                     }
                 }
                 
@@ -5266,8 +5381,10 @@ namespace DiceBot
                         richTextBox3.Text = tmp;
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    DumpLog(ex.Message, 1);
+                    DumpLog(ex.StackTrace, 2);
                     MessageBox.Show("Invalid file!");
                 }
             }
@@ -5283,8 +5400,10 @@ namespace DiceBot
                     File.WriteAllText(svdtmp.FileName, richTextBox3.Text);
                     MessageBox.Show("Saved!");
                 }
-                catch
+                catch (Exception ex)
                 {
+                    DumpLog(ex.Message, 1);
+                    DumpLog(ex.StackTrace, 2);
                     MessageBox.Show("Could not save code to file.");
                 }
             }
@@ -5383,7 +5502,10 @@ namespace DiceBot
                 else if (c is CheckBox)
                     return (c as CheckBox).Checked;
                 else if (c is RichTextBox)
+                {
+                    
                     return (c as RichTextBox).Lines;
+                }
 
                 return null;
             }
@@ -5798,7 +5920,27 @@ namespace DiceBot
             SaveNames.Add("MaximumBet",nudMaximumBet);
             SaveNames.Add("MinumumBet", nudMinumumBet);
 
-            PSaveNames.Add("Amount",nudAmount );
+            SaveNames.Add("StopBetsEnable", chkStopBets);
+            SaveNames.Add("StopBetsValue", nudStopBets);
+            SaveNames.Add("ResetBetsEnable", chkResetBets);
+            SaveNames.Add("ResetBetsValue", nudResetBets);
+            SaveNames.Add("StopTimeEnable", chkStopTime);
+            SaveNames.Add("StopTimeHour", nudStopTimeH);
+            SaveNames.Add("StopTimeMinute", nudStopTimeM);
+            SaveNames.Add("StopTimeSecond", nudStopTimeS);
+
+            SaveNames.Add("StopLossesEnable", chkStopLosses);
+            SaveNames.Add("StopLossesValue", nudStopLosses);
+            SaveNames.Add("ResetLossesEnable", chkResetLosses);
+            SaveNames.Add("ResetLossesValue", nudResetLosses);
+
+            SaveNames.Add("StopWinsEnable", chkStopWins);
+            SaveNames.Add("StopWinsValue", nudStopWins);
+            SaveNames.Add("ResetWinsEnable", chkResetWins);
+            SaveNames.Add("ResetWinsValue2", nudResetWins2);
+            
+            
+            PSaveNames.Add("Amount", nudAmount);
             PSaveNames.Add("Limit", nudLimit);
             PSaveNames.Add("LimitEnabled", chkLimit);
             PSaveNames.Add("LowerLimit",nudLowerLimit );
@@ -5866,6 +6008,27 @@ namespace DiceBot
 
         }
 
+        int LogLevel = 0;
+        public void DumpLog(string Message, int Level)
+        {
+            if (Message!=null)
+            {
+                if (Level<=LogLevel)
+                {
+                    try
+                    {
+                        using (StreamWriter SW = File.AppendText("DICEBOTLOG.txt"))
+                        {
+                            SW.WriteLine(Message);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
+                }
+            }
+        }
         
     }
 }

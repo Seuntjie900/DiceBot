@@ -98,8 +98,10 @@ namespace DiceBot
                         Parent.updateStatus(tmp.msg);
                     }
                 }
-                catch
+                catch (Exception e)
                 {
+                    Parent.DumpLog(e.Message, 3);
+                    Parent.DumpLog(e.StackTrace, 4);
                     Parent.updateStatus(sEmitResponse);
                 }
             }
@@ -115,12 +117,14 @@ namespace DiceBot
                     Thread.Sleep(200);
                     PlaceBetThread(High);
                 }
-
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
 
             }
             catch (Exception e2)
             {
-
+                Parent.DumpLog(e2.Message, 3);
+                Parent.DumpLog(e2.StackTrace, 4);
             }
         }
         Random R = new Random();
@@ -139,6 +143,8 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
                 
             }
         }
@@ -176,6 +182,8 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
                 return false;
             }
 
@@ -237,7 +245,8 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
-
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
             }
             return false;
         }
@@ -280,6 +289,8 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
                 if (e.InnerException.Message.Contains("503"))
                 {
                     //doCFThing(e.InnerException);
@@ -299,7 +310,8 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
-                
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
             }
 
             
@@ -323,8 +335,16 @@ namespace DiceBot
                 new Thread(GetDeposit).Start();
                 finishedlogin(true);
             }
-            catch
+                catch (AggregateException e)
             {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
+                finishedlogin(false);
+            }
+            catch (Exception e)
+            {
+                Parent.DumpLog(e.Message, 3);
+                Parent.DumpLog(e.StackTrace, 4);
                 finishedlogin(false);
             }
         }
@@ -390,6 +410,8 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
                 if (e.InnerException.Message.Contains("503"))
                 {
                     //doCFThing(e.InnerException);
@@ -411,7 +433,8 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
-
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
             }
             try
             {
@@ -435,8 +458,17 @@ namespace DiceBot
                 finishedlogin(true);
                 return true;
             }
-            catch
+            catch (AggregateException e)
             {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
+                finishedlogin(false);
+                return false;
+            }
+            catch (Exception e)
+            {
+                Parent.DumpLog(e.Message, 3);
+                Parent.DumpLog(e.StackTrace, 4);
                 finishedlogin(false);
                 return false;
             }
@@ -484,7 +516,8 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
-                ;
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
             }
         }
 

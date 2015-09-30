@@ -2826,7 +2826,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(245, 43);
+            this.label26.Location = new System.Drawing.Point(212, 43);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(28, 13);
             this.label26.TabIndex = 5;
@@ -2840,14 +2840,24 @@
             2,
             0,
             0});
+            this.nudResetBets.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudResetBets.Name = "nudResetBets";
-            this.nudResetBets.Size = new System.Drawing.Size(120, 20);
+            this.nudResetBets.Size = new System.Drawing.Size(84, 20);
             this.nudResetBets.TabIndex = 4;
+            this.nudResetBets.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(245, 17);
+            this.label21.Location = new System.Drawing.Point(212, 17);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(28, 13);
             this.label21.TabIndex = 3;
@@ -2861,9 +2871,19 @@
             0,
             0,
             0});
+            this.nudStopBets.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudStopBets.Name = "nudStopBets";
-            this.nudStopBets.Size = new System.Drawing.Size(120, 20);
+            this.nudStopBets.Size = new System.Drawing.Size(84, 20);
             this.nudStopBets.TabIndex = 2;
+            this.nudStopBets.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // chkResetBets
             // 
@@ -3092,7 +3112,7 @@
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(245, 199);
+            this.label30.Location = new System.Drawing.Point(209, 199);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(40, 13);
             this.label30.TabIndex = 120;
@@ -3106,14 +3126,24 @@
             2,
             0,
             0});
+            this.nudResetLosses.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudResetLosses.Name = "nudResetLosses";
-            this.nudResetLosses.Size = new System.Drawing.Size(120, 20);
+            this.nudResetLosses.Size = new System.Drawing.Size(84, 20);
             this.nudResetLosses.TabIndex = 119;
+            this.nudResetLosses.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(245, 173);
+            this.label31.Location = new System.Drawing.Point(209, 173);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(40, 13);
             this.label31.TabIndex = 118;
@@ -3127,9 +3157,19 @@
             0,
             0,
             0});
+            this.nudStopLosses.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudStopLosses.Name = "nudStopLosses";
-            this.nudStopLosses.Size = new System.Drawing.Size(120, 20);
+            this.nudStopLosses.Size = new System.Drawing.Size(84, 20);
             this.nudStopLosses.TabIndex = 117;
+            this.nudStopLosses.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // chkResetLosses
             // 
@@ -3457,7 +3497,7 @@
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(241, 200);
+            this.label32.Location = new System.Drawing.Point(209, 200);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(31, 13);
             this.label32.TabIndex = 127;
@@ -3471,14 +3511,24 @@
             2,
             0,
             0});
+            this.nudResetWins2.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudResetWins2.Name = "nudResetWins2";
-            this.nudResetWins2.Size = new System.Drawing.Size(120, 20);
+            this.nudResetWins2.Size = new System.Drawing.Size(84, 20);
             this.nudResetWins2.TabIndex = 126;
+            this.nudResetWins2.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(241, 174);
+            this.label33.Location = new System.Drawing.Point(209, 174);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(31, 13);
             this.label33.TabIndex = 125;
@@ -3492,9 +3542,19 @@
             0,
             0,
             0});
+            this.nudStopWins.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudStopWins.Name = "nudStopWins";
-            this.nudStopWins.Size = new System.Drawing.Size(120, 20);
+            this.nudStopWins.Size = new System.Drawing.Size(84, 20);
             this.nudStopWins.TabIndex = 124;
+            this.nudStopWins.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // chkResetWins
             // 
