@@ -104,7 +104,7 @@ namespace DiceBot
                     {
                         ResetSeed();
                         placebetthread(High);
-                        
+                        return;
                     }
                     else
                     {

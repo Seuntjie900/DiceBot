@@ -139,6 +139,7 @@ namespace DiceBot
         delegate void dpopFibonacci();
         void populateFiboNacci()
         {
+            DumpLog("Populating Fibonacci",7);
             if (InvokeRequired)
             {
                 Invoke(new dpopFibonacci(populateFiboNacci));
@@ -172,6 +173,7 @@ namespace DiceBot
         delegate void dDobet(Bet bet);
         public void GetBetResult(double Balance, Bet bet)
         {
+            DumpLog("received bet result: Balance: "+Balance+", Bet:"+json.JsonSerializer<Bet>(bet) , 6);
             if (logging>2)
             using (StreamWriter sw = File.AppendText("log.txt"))
             {
@@ -197,19 +199,22 @@ namespace DiceBot
         delegate void dAddChartPoint(double Profit);
         void AddChartPoint(double Profit)
         {
+
             if (InvokeRequired)
             {
                 Invoke(new dAddChartPoint(AddChartPoint), profit);
             }
             else
             {
+                
                 if (chrtEmbeddedLiveChart.Enabled)
                 chrtEmbeddedLiveChart.Series[0].Points.AddY(Profit);
             }
         }
 
         void EnableNotLoggedInControls(bool Enabled)
-        { 
+        {
+            DumpLog("Funushed logging in. Result: " + Enabled, 6);
             foreach (Control c in ControlsToDisable)
             {
                 c.Enabled = Enabled;
@@ -228,7 +233,7 @@ namespace DiceBot
         
         public cDiceBot(string[] args)
         {
-
+            
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture =  new CultureInfo("en-US");
             sqlite_helper.CheckDBS();
@@ -241,7 +246,7 @@ namespace DiceBot
                     int.TryParse(loglev, out LogLevel);
                 }
             }
-
+            DumpLog("starting bot "+ vers, 6);
             PopulateSaveNames();
             WriteConsole("Starting Dicebot " + vers);
             PopoutChat.SendMessage += PopoutChat_SendMessage;
@@ -451,7 +456,7 @@ namespace DiceBot
             Lua.RegisterFunction("getvalue", this, new dGetValue(LuaGetValue).Method);
             Lua.RegisterFunction("loadstrategy", this, new dLoadStrat(LuaLoadStrat).Method);
             Lua.RegisterFunction("read", this, new dGetInput(GetInputForLua).Method);
-
+            DumpLog("constructor done", 8);
         }
         void luaStop()
         {
@@ -472,6 +477,7 @@ namespace DiceBot
         */
         object GetInputForLua(string prompt, int type)
         {
+            DumpLog("getting user input for lua script", 7);
             UserInput tmp = new UserInput();
             DialogResult tmpRes = tmp.ShowDialog(prompt, type);
             return tmp.Value;
@@ -815,10 +821,10 @@ namespace DiceBot
                             betsps = (decimal)(Wins + Losses) / (decimal)(curtime.TotalSeconds);
                         decimal profph = 0;
                         if (profpB > 0 && betsps > 0)
-                            profph = (profpB / betsps) * (decimal)60.0 * (decimal)60.0;
+                            profph = (profpB / betsps) * 60.0m * 60.0m;
                         StatsWindows.lblProfpb.Text = profpB.ToString("0.00000000");
-                        StatsWindows.lblProfitph.Text = (profpB * (decimal)60.0 * (decimal)60.0).ToString("0.00000000");
-                        StatsWindows.lblProfit24.Text = (profpB * (decimal)60.0 * (decimal)60.0 * (decimal)24.0).ToString("0.00000000");
+                        StatsWindows.lblProfitph.Text = (profph.ToString("0.00000000"));
+                        StatsWindows.lblProfit24.Text = (profph* 24.0m).ToString("0.00000000");
 
                         int imaxbets = maxbets();
                         if (imaxbets == -500)
@@ -3981,8 +3987,10 @@ namespace DiceBot
             double tmp = CurrentSite.balance;
             if (success)
                 StartBalance = tmp;
-            Winstreak = Losestreak = BestStreak = laststreaklose = laststreakwin = WorstStreak = BestStreak2 = WorstStreak3 = BestStreak3 = WorstStreak3 = numstreaks = numwinstreasks = numlosesreaks = 0;
+            Winstreak = Losestreak = BestStreak = WorstStreak = laststreaklose = laststreakwin =   BestStreak2 = WorstStreak2 = BestStreak3 = WorstStreak3 = numstreaks = numwinstreasks = numlosesreaks = 0;
             avgloss = avgstreak = LargestBet = LargestLoss = LargestWin = avgwin = 0.0;
+            TotalTime += (DateTime.Now - dtStarted);
+            dtStarted = DateTime.Now;
             UpdateStats();
         }
 
@@ -4547,7 +4555,7 @@ namespace DiceBot
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex==0)
+            if (e.ColumnIndex==0 && e.RowIndex>=0)
             {
 
                 string url = CurrentSite.BetURL+ dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
@@ -5027,7 +5035,7 @@ namespace DiceBot
                        
                     case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site(CM)"; break;
                     case "magicalDiceToolStripMenuItem": CurrentSite = new MagicalDice(this); siteToolStripMenuItem.Text = "Site(MD)"; break;
-                    //case "investDiceToolStripMenuItem": CurrentSite = new InvestDice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
+                    case "investdiceToolStripMenuItem": CurrentSite = new InvestDice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
                 }
                 if (CurrentSite is dadice || CurrentSite is CoinMillions)
                 {

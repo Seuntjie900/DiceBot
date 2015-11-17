@@ -47,8 +47,23 @@ namespace DiceBot
                 if (authkey != "" && (DateTime.Now - lastupdate).TotalSeconds > 15 && isMD)
                 {
                     lastupdate = DateTime.Now;
-                    string s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
-                    balance = double.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
+                    try
+                    {
+                        string s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
+                        balance = double.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
+                    }
+                    catch (AggregateException e)
+                    {
+                        Parent.DumpLog(e.InnerException.Message, 3);
+                        Parent.DumpLog(e.InnerException.StackTrace, 4);
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        Parent.DumpLog(e.Message, 3);
+                        Parent.DumpLog(e.StackTrace, 4);
+                        return;
+                    }
                     Parent.updateBalance(balance);
                 }
             }

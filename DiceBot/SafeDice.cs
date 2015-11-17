@@ -69,9 +69,10 @@ namespace DiceBot
                 }
 
             }
-            catch
+            catch (AggregateException e)
             {
-
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
             }
         }
 
@@ -116,9 +117,10 @@ namespace DiceBot
                         }
                     }
                 }
-                catch
+                catch (AggregateException e)
                 {
-
+                    Parent.DumpLog(e.InnerException.Message, 3);
+                    Parent.DumpLog(e.InnerException.StackTrace, 4);
                 }
                 Thread.Sleep(1500);
             }
@@ -329,6 +331,11 @@ namespace DiceBot
 
                 }
             }
+            catch (AggregateException e)
+            {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
+            }
             catch
             {
                 if (retrycount++ < 3)
@@ -370,9 +377,10 @@ namespace DiceBot
                 serverhash = tmp.serverSeedHash;
                 nonce = 1;
             }
-            catch
+            catch (AggregateException e)
             {
-
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
             }
 
         }
@@ -435,9 +443,10 @@ namespace DiceBot
                     }
                     //new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 }
-                catch
+                catch (AggregateException e)
                 {
-
+                    Parent.DumpLog(e.InnerException.Message, 3);
+                    Parent.DumpLog(e.InnerException.StackTrace, 4);
                 }
             }
         }
@@ -492,8 +501,10 @@ namespace DiceBot
                 Parent.updateBalance(balance);
                 return true;
             }
-            catch
+            catch (AggregateException e)
             {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
                 return false;
             }
         }
@@ -716,8 +727,10 @@ namespace DiceBot
                 Parent.updateBalance(balance);
                 return true;
             }
-            catch
+            catch (AggregateException e)
             {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
                 return false;
             }
         }
@@ -784,9 +797,18 @@ namespace DiceBot
             loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
             
             HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
-            string sEmitResponse = Client.GetStringAsync("accounts/" + UID + "/sites/" + curen + "/deposit").Result; //new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+            try
+            {
+                string sEmitResponse = Client.GetStringAsync("accounts/" + UID + "/sites/" + curen + "/deposit").Result; //new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
-            return json.JsonDeserialize<SDDEpost>(sEmitResponse).address;
+                return json.JsonDeserialize<SDDEpost>(sEmitResponse).address;
+            }
+            catch (AggregateException e)
+            {
+                Parent.DumpLog(e.InnerException.Message, 3);
+                Parent.DumpLog(e.InnerException.StackTrace, 4);
+                return "";
+            }
         }
 
         long lastchat = 0;

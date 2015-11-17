@@ -160,7 +160,7 @@ namespace DiceBot
                 pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("a", "PlaceBet"));
                 pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
-                pairs.Add(new KeyValuePair<string, string>("PayIn", ((long)Math.Ceiling(amount * 100000000.0)).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("PayIn", ((long)(amount * 100000000.0)).ToString("0",System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("Low", (High ? 999999 - (int)chance : 0).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("High", (High ? 999999 : (int)chance).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("ClientSeed", ClientSeed));
@@ -171,17 +171,18 @@ namespace DiceBot
                 responseData = "";
                 using (var response = Client.PostAsync("", Content))
                 {
-                    if (retrycount++ < 3)
-                    {
-                        PlaceBetThread();
-                        return;
-                    }
+                    
                     try
                     {
                         responseData = response.Result.Content.ReadAsStringAsync().Result;
                     }
                     catch (AggregateException e)
                     {
+                        if (retrycount++ < 3)
+                        {
+                            PlaceBetThread();
+                            return;
+                        }
                         if (e.InnerException.Message.Contains("ssl"))
                         {
                             PlaceBetThread();
@@ -196,6 +197,7 @@ namespace DiceBot
                 
                 
                 d999Bet tmpBet = json.JsonDeserialize<d999Bet>(responseData);
+                
                 if (amount>=21)
                 {
 
@@ -558,7 +560,7 @@ namespace DiceBot
                     using (SHA256 sha256 = new SHA256Managed())
                         if (!sha256.ComputeHash(server).SequenceEqual(serverhash))
                         {
-                            //throw new Exception("Server seed hash does not match server seed");
+                            return -1;
                         }
                 byte[] hash = sha512.ComputeHash(sha512.ComputeHash(data));
                 while (true)

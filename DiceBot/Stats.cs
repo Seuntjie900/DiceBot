@@ -31,6 +31,11 @@ namespace DiceBot
         {
             this.Hide();
         }
+
+        private void label37_Click(object sender, EventArgs e)
+        {
+
+        }
         
     }
 }

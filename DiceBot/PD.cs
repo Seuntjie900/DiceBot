@@ -51,9 +51,9 @@ namespace DiceBot
                     {
                         string sEmitResponse2 = Client.GetStringAsync("users/1?access_token=" + accesstoken).Result;
                         pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
-                        balance = tmpu.user.balance; //i assume
+                        balance = tmpu.user.balance / 100000000.0; //i assume
                         bets = tmpu.user.bets;
-                        Parent.updateBalance((decimal)(balance / 100000000.0));
+                        Parent.updateBalance((decimal)(balance));
                         Parent.updateBets(tmpu.user.bets);
                         Parent.updateLosses(tmpu.user.losses);
                         Parent.updateProfit(tmpu.user.profit / 100000000m);
@@ -188,11 +188,15 @@ namespace DiceBot
             }
         }
         int retrycount = 0;
+        DateTime Lastbet = DateTime.Now;
         void placebetthread()
         {
             try
             {
-
+                if ((DateTime.Now - Lastbet).TotalMilliseconds<500)
+                {
+                    Thread.Sleep((int)(500.0 - (DateTime.Now - Lastbet).TotalMilliseconds));
+                }
                 double tmpchance = High ? 99.99 - chance : chance;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
@@ -202,7 +206,7 @@ namespace DiceBot
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("bet?access_token=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
-
+                Lastbet = DateTime.Now;
                 try
                 {
                     pdbetresult tmp = json.JsonDeserialize<pdbetresult>(sEmitResponse);
@@ -228,12 +232,13 @@ namespace DiceBot
             {
                 if (retrycount++ < 3)
                 {
+                    Thread.Sleep(500);
                     placebetthread();
                     return;
                 }
                 if (e.InnerException.Message.Contains("429") || e.InnerException.Message.Contains("502"))
                 {
-                    Thread .Sleep(200);
+                    Thread .Sleep(500);
                     placebetthread();
                 }
                 
@@ -566,7 +571,7 @@ namespace DiceBot
                 {
 
                 }
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(1500);
             }
             
         }

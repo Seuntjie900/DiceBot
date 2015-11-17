@@ -207,6 +207,7 @@
       <DependentUpon>Graph.cs</DependentUpon>
     </Compile>
     <Compile Include="imgur.cs" />
+    <Compile Include="InvestDice.cs" />
     <Compile Include="JD.cs" />
     <Compile Include="json.cs" />
     <Compile Include="MagicalDice.cs" />
