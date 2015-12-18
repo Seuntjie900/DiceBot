@@ -2282,7 +2282,7 @@ namespace DiceBot
 
                 try
                 {
-                   
+                   if (!RunningSimulation)
                     UpdateStats();
                 }
                 catch (Exception e)
@@ -2290,7 +2290,7 @@ namespace DiceBot
                     DumpLog(e.Message, 1);
                     DumpLog(e.StackTrace, 2);
                 }
-                if (RunningSimulation && (Wins + Losses > SimWindow.nudSimNumBets.Value || Lastbet > PreviousBalance))
+                if (RunningSimulation && (Wins + Losses > numSimBets || Lastbet > PreviousBalance))
                 {
                     Stop("Simulation complete");
                 }
@@ -2339,7 +2339,7 @@ namespace DiceBot
                     }
                     if (!stop)
                     {
-                        
+                        if (!RunningSimulation)
                         WriteConsole("Betting " + Lastbet + " at " + Chance +"% chance to win, "+ (high?"high":"low"));
                         EnableTimer(tmBet, true);
 
@@ -3725,8 +3725,10 @@ namespace DiceBot
         int tmplosses = 0;
         double tmpprofit = 0;
         double tmpStartBalance = 0;
+        int numSimBets = 0;
         void runsim()
         {
+            numSimBets = (int)SimWindow.nudSimNumBets.Value;
             tmpbalance = PreviousBalance;
             tmpwins = Wins;
             tmplosses = Losses;
@@ -3779,7 +3781,7 @@ namespace DiceBot
             dtLastBet = DateTime.Now;
             EnableTimer(tmBet, false);
             Bet tmp = new Bet();
-            if (Wins + Losses <= SimWindow.nudSimNumBets.Value)
+            if (Wins + Losses <= numSimBets)
             {
                 string betstring = (Wins + Losses).ToString() + ",";
                 double number = CurrentSite.GetLucky(server, client, Wins + Losses);
@@ -3829,7 +3831,7 @@ namespace DiceBot
                 int bets = Wins + Losses;
                 if (bets % 1000 == 0)
                 {
-                    Updatetext(SimWindow.lblSimProgress, ((double)bets / (double)SimWindow.nudSimNumBets.Value * 100.00).ToString("00.00") + "%");
+                    Updatetext(SimWindow.lblSimProgress, ((double)bets / (double)numSimBets * 100.00).ToString("00.00") + "%");
                 }
                 if (bets % 10000 == 0)
                 {
@@ -5023,7 +5025,7 @@ namespace DiceBot
                 switch ((sender as ToolStripMenuItem).Name)
                 {
                     case "justDiceToolStripMenuItem": CurrentSite = new JD(this); siteToolStripMenuItem.Text = "Site " + "(JD)"; break;
-                    case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new PRC(this); siteToolStripMenuItem.Text = "Site " + "(PRC)"; break;                    
+                    case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new PRC(this); siteToolStripMenuItem.Text = "Site " + "(BK)"; break;                    
                     case "diceToolStripMenuItem": CurrentSite = new dice999(this); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
                     case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
@@ -5035,9 +5037,10 @@ namespace DiceBot
                        
                     case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site(CM)"; break;
                     case "magicalDiceToolStripMenuItem": CurrentSite = new MagicalDice(this); siteToolStripMenuItem.Text = "Site(MD)"; break;
-                    case "investdiceToolStripMenuItem": CurrentSite = new InvestDice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
+                    //case "investdiceToolStripMenuItem": CurrentSite = new InvestDice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
+                    case "coinichiwaToolStripMenuItem": CurrentSite = new Coinichiwa(this); siteToolStripMenuItem.Text = "Site(CW)"; break;
                 }
-                if (CurrentSite is dadice || CurrentSite is CoinMillions)
+                if (CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa)
                 {
                     lblPass.Text = "API key:";
                 }

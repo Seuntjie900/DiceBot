@@ -143,8 +143,10 @@ namespace DiceBot
         
         public override void Login(string Username, string Password, string twofa)
         {
-            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://dadice.com/api/") };
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             username = Username;
             key = Password;
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();

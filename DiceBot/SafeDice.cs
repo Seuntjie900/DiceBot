@@ -13,7 +13,7 @@ namespace DiceBot
     class SafeDice : DiceSite
     {
         string accesstoken = "";
-        HttpClientHandler ClientHandlr = new HttpClientHandler { UseCookies = true };
+        HttpClientHandler ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };
         HttpClient Client = null;
         bool ispd = true;
         DateTime LastBalance = DateTime.Now;
@@ -182,11 +182,13 @@ namespace DiceBot
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
 
-                    ClientHandlr = new HttpClientHandler() { UseCookies = true };
+                    ClientHandlr = new HttpClientHandler() { UseCookies = true, AutomaticDecompression= DecompressionMethods.GZip| DecompressionMethods.Deflate };
 
                     ClientHandlr.CookieContainer = new CookieContainer();
                     ClientHandlr.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
                     Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://safedice.com/api/") };
+                    Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
                     Client.DefaultRequestHeaders.Add("authorization", "Bearer " + accesstoken);
                     Parent.updateBalance(tmp2.balance / (curen != 2 ? 100000000m : 1000000000000m));
                     balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0);
@@ -587,11 +589,13 @@ namespace DiceBot
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
-                    ClientHandlr = new HttpClientHandler() { UseCookies = true };
+                    ClientHandlr = new HttpClientHandler() { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };
 
                     ClientHandlr.CookieContainer = new CookieContainer();
                     ClientHandlr.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
                     Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://safedice.com/api/") };
+                    Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
                     Client.DefaultRequestHeaders.Add("authorization", "Bearer " + accesstoken);
                     Parent.updateBalance(tmp2.balance / (curen != 2 ? 100000000m : 1000000000000m));
                     balance = tmp2.balance / (curen != 2 ? 100000000.0 : 1000000000000.0);

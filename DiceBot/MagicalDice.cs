@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
 using System.IO;
-using Noesis.Javascript;
+//using Noesis.Javascript;
 using System.Threading;
 
 namespace DiceBot
@@ -212,7 +212,7 @@ namespace DiceBot
         bool doCFThing( string Response )
         {
             Thread.Sleep(4000);
-            JavascriptContext JSC = new JavascriptContext();
+            /*JavascriptContext JSC = new JavascriptContext();
 
             string s1 = Response;//new StreamReader(Response.GetResponseStream()).ReadToEnd();
             string Script = "";
@@ -253,7 +253,7 @@ namespace DiceBot
                 {
                     Thread.Sleep(2000);
                 }*/
-                if (!Found && cflevel++<5)
+                /*if (!Found && cflevel++<5)
                     Found = doCFThing(Resp.Content.ReadAsStringAsync().Result);
                 return Found;
 
@@ -262,7 +262,7 @@ namespace DiceBot
             {
                 Parent.DumpLog(e.InnerException.Message, 3);
                 Parent.DumpLog(e.InnerException.StackTrace, 4);
-            }
+            }*/
             return false;
         }
 
@@ -271,8 +271,10 @@ namespace DiceBot
 
             //get the cloudflare and site headers
             cookies = new CookieContainer();
-            ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies };
+            ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
 
             string s1 = "";
             
@@ -392,8 +394,10 @@ namespace DiceBot
 
             //get the cloudflare and site headers
             cookies = new CookieContainer();
-            ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies };
+            ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies, AutomaticDecompression= DecompressionMethods.GZip| DecompressionMethods.Deflate };
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
 
             string s1 = "";
 

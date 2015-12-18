@@ -11,7 +11,7 @@ namespace DiceBot
 {
     class PRC:DiceSite
     {
-        HubConnection con = new HubConnection("https://pocketrocketscasino.eu/SignalR/", "", false);
+        HubConnection con = new HubConnection("https://betking.io/SignalR/", "", false);
         CookieContainer Cookies = new CookieContainer();
         IHubProxy dicehub;
         
@@ -26,9 +26,9 @@ namespace DiceBot
             Tip = true;
             this.Parent = Parent;
             Name = "PRCDice";
-            BetURL = "https://pocketrocketscasino.eu/api/bets/GetBet?id=";
+            BetURL = "https://betking.io/api/bets/GetBet?id=";
             con.Received += con_Received;
-            SiteURL = "https://pocketrocketscasino.eu";
+            SiteURL = "https://betking.io";
         }
 
         public override void SetProxy(string host, int port)
@@ -74,7 +74,7 @@ namespace DiceBot
                         wagered = (double)tmpStats.Wagered;
                         bets = tmpStats.NumBets;
                         profit = (double)tmpStats.Profit;
-
+                        
                         tmp.serverhash = serverhash;
                         retries = 5;
                         FinishedBet(tmp);
@@ -103,7 +103,7 @@ namespace DiceBot
         public override void ResetSeed()
         {
             
-            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GenerateNewServerSeed") as HttpWebRequest;
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://betking.io/account/GenerateNewServerSeed") as HttpWebRequest;
             if (Prox != null)
                 getHeaders.Proxy = Prox;
             getHeaders.CookieContainer =Cookies;
@@ -209,7 +209,7 @@ namespace DiceBot
         string s = "";
         public override void Login(string Username, string Password, string twofa)
         {
-            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/play/#dice") as HttpWebRequest;
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://betking.io/play/#dice") as HttpWebRequest;
             if (Prox != null)
                 getHeaders.Proxy = Prox;
             var cookies = new CookieContainer();
@@ -231,7 +231,7 @@ namespace DiceBot
                 finishedlogin(false);
             }
             
-            getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/login") as HttpWebRequest;
+            getHeaders = HttpWebRequest.Create("https://betking.io/account/login") as HttpWebRequest;
             if (Prox != null)
                 getHeaders.Proxy = Prox;
             getHeaders.CookieContainer = new CookieContainer();
@@ -276,11 +276,11 @@ namespace DiceBot
                     rqtoken = c.Value;
                 Cookies.Add(c);
             }
-            Cookies.Add((new Cookie("PRC_Affiliate", "357", "/", "pocketrocketscasino.eu")));
+            Cookies.Add((new Cookie("PRC_Affiliate", "357", "/", "betking.io")));
             con.CookieContainer = Cookies;
             try
             {
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/play/#dice") as HttpWebRequest;
+                getHeaders = HttpWebRequest.Create("https://betking.io/play/#dice") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
@@ -299,7 +299,7 @@ namespace DiceBot
                 dicehub.On<string, string, string, int, int, bool>("chat", ReceivedChat);
                 dicehub.On<string, string, string, int, bool>("receivePrivateMesssage", ReceivedChat);
 
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
+                getHeaders = HttpWebRequest.Create("https://betking.io/account/GetUserAccount") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
@@ -321,7 +321,7 @@ namespace DiceBot
                 Parent.updateWins(tmp.Wins);
                 //Parent.updateDeposit(tmp.DepositAddress);
                 
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetCurrentSeed") as HttpWebRequest;
+                getHeaders = HttpWebRequest.Create("https://betking.io/account/GetCurrentSeed") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
@@ -333,7 +333,7 @@ namespace DiceBot
 
                 try
                 {
-                    getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
+                    getHeaders = HttpWebRequest.Create("https://betking.io/account/getDepositAddress") as HttpWebRequest;
                     if (Prox != null)
                         getHeaders.Proxy = Prox;
                     getHeaders.CookieContainer = Cookies;
@@ -360,7 +360,7 @@ namespace DiceBot
         void GetDeposit()
         {
             System.Threading.Thread.Sleep(10000);
-            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://betking.io/account/getDepositAddress") as HttpWebRequest;
             if (Prox != null)
                 getHeaders.Proxy = Prox;
             getHeaders.CookieContainer = Cookies;
@@ -375,11 +375,12 @@ namespace DiceBot
         {
 
 
-            HttpWebRequest getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/play/#account") as HttpWebRequest;
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://betking.io/play/#account") as HttpWebRequest;
             if (Prox != null)
                 getHeaders.Proxy = Prox;
             var cookies = new CookieContainer();
             getHeaders.CookieContainer = cookies;
+            getHeaders.CookieContainer.Add(new Cookie("PRC_Affiliate", "357", "/", "betking.io"));
             HttpWebResponse Response = null;
             string rqtoken = "";
             try
@@ -407,7 +408,8 @@ namespace DiceBot
             try
             {
                 string s1 = "";
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
+                getHeaders = HttpWebRequest.Create("https://betking.io/account/GetUserAccount") as HttpWebRequest;
+                //getHeaders.CookieContainer.Add(new Cookie("PRC_Affiliate", "357", "/", "betking.io"));
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
@@ -419,7 +421,7 @@ namespace DiceBot
 
                 dicehub = con.CreateHubProxy("diceHub");
                 con.Start().Wait();
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/SaveUserNameAndPassword") as HttpWebRequest;
+                getHeaders = HttpWebRequest.Create("https://betking.io/account/SaveUserNameAndPassword") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = tmpContainer;
@@ -428,7 +430,7 @@ namespace DiceBot
 
                     getHeaders.CookieContainer.Add(c);
                 }
-                getHeaders.CookieContainer.Add(new Cookie("PRC_Affiliate", "357", "/", "pocketrocketscasino.eu"));
+                getHeaders.CookieContainer.Add(new Cookie("PRC_Affiliate", "357", "/", "betking.io"));
                 System.Threading.Thread.Sleep(5000);
                 getHeaders.Method = "POST";
                 string post = string.Format("userName={0}&password={1}&confirmPassword={1}&__RequestVerificationToken={2}", Username, Passwrd, rqtoken);
@@ -456,28 +458,28 @@ namespace DiceBot
 
                 dicehub.On<string, string, string, string, string, string>("receiveChatMessage", GotChatMessage);
                 
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetUserAccount") as HttpWebRequest;
+                getHeaders = HttpWebRequest.Create("https://betking.io/account/GetUserAccount") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
-                Response = (HttpWebResponse)getHeaders.GetResponse();
-                s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
-                balance = (double)tmp.AvailableBalance;
-                profit = (double)tmp.Profit;
-                wagered =(double) tmp.Wagered;
-                bets = (int)tmp.NumBets;
-                wins = (int)tmp.Wins;
-                losses = (int)tmp.Losses;
-                UserID = tmp.Id;
+                //Response = (HttpWebResponse)getHeaders.GetResponse();
+                //s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                //PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
+                balance = 0;// (double)tmp.AvailableBalance;
+                profit = 0;//(double)tmp.Profit;
+                wagered = 0;//(double) tmp.Wagered;
+                bets = 0;//(int)tmp.NumBets;
+                wins = 0;//(int)tmp.Wins;
+                losses = 0;//(int)tmp.Losses;
+                UserID = 0;//tmp.Id;
                 Parent.updateBalance((decimal)(balance));
-                Parent.updateBets(tmp.NumBets);
-                Parent.updateLosses(tmp.Losses);
+                Parent.updateBets(bets);
+                Parent.updateLosses(losses);
                 Parent.updateProfit(profit);
                 Parent.updateWagered(wagered);
-                Parent.updateWins(tmp.Wins);
+                Parent.updateWins(wins);
                 //Parent.updateDeposit(tmp.DepositAddress);
-                getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/GetCurrentSeed") as HttpWebRequest;
+                /*getHeaders = HttpWebRequest.Create("https://betking.io/account/GetCurrentSeed") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
@@ -485,10 +487,10 @@ namespace DiceBot
                 s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
                 client = getseed.ClientSeed;
-                serverhash = getseed.ServerHash;
+                serverhash = getseed.ServerHash;*/
                 try
                 {
-                    getHeaders = HttpWebRequest.Create("https://pocketrocketscasino.eu/account/getDepositAddress") as HttpWebRequest;
+                    getHeaders = HttpWebRequest.Create("https://betking.io/account/getDepositAddress") as HttpWebRequest;
                     if (Prox != null)
                         getHeaders.Proxy = Prox;
                     getHeaders.CookieContainer = Cookies;

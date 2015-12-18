@@ -202,8 +202,10 @@ namespace DiceBot
         string token = "";
         public override void Login(string Username, string Password, string twofa)
         {
-            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://api.moneypot.com/v1/") };
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             if (Password == "")
             {
                 System.Diagnostics.Process.Start(SiteURL);

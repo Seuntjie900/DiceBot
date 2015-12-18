@@ -73,8 +73,10 @@ namespace DiceBot
 
         public override bool Register(string Username, string Password)
         {
-            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://api.primedice.com/api/") };
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             try
             {
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -91,19 +93,31 @@ namespace DiceBot
                 {
                     string sEmitResponse2 = Client.GetStringAsync("users/1?access_token=" + accesstoken).Result;
                     pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
-                    string s = "";
+                    try
                     {
-                        s = getDepositAddress();
+                        string s = "";
+                        {
+                            s = getDepositAddress();
+                        }
+                        if (s != null)
+                        {
+                            Parent.updateDeposit(s);
+                        }
                     }
-                    if (s != null)
+                    catch
                     {
-                        Parent.updateDeposit(s);
+
                     }
-                    
+
                     balance = tmpu.user.balance; //i assume
                     bets = tmpu.user.bets;
                     Thread.Sleep(500);
+                    pairs = new List<KeyValuePair<string, string>>();
+                    pairs.Add(new KeyValuePair<string, string>("password", Password));
+                    Content = new FormUrlEncodedContent(pairs);
                      string sEmitResponse3 = Client.PostAsync("password?access_token="+accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                     tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
+                     accesstoken = tmp.access_token;
                     lastupdate = DateTime.Now;
                     return true;
 
@@ -121,8 +135,11 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string otp)
         {
-            ClientHandlr = new HttpClientHandler { UseCookies = true };
+            //accept-encoding:gzip, deflate,
+            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://api.primedice.com/api/") };
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             try
             {
                 
@@ -159,13 +176,20 @@ namespace DiceBot
                     Parent.updateProfit(tmpu.user.profit / 100000000m);
                     Parent.updateWagered(tmpu.user.wagered / 100000000m);
                     string s = tmpu.user.address;
-                    if (s==null)
+                    try
                     {
-                        s= getDepositAddress();
+                        if (s == null)
+                        {
+                            s = getDepositAddress();
+                        }
+                        if (s != null)
+                        {
+                            Parent.updateDeposit(s);
+                        }
                     }
-                    if (s != null)
+                    catch
                     {
-                        Parent.updateDeposit(s);
+
                     }
                     Parent.updateWins(tmpu.user.wins);
                     lastupdate = DateTime.Now;

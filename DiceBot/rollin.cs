@@ -279,8 +279,10 @@ namespace DiceBot
 
                 if (tmpStats.success && tmpStats2.success)
                 {
-                    ClientHandlr = new HttpClientHandler { UseCookies = true };
+                    ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
                     Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
+                    Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+                    Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
                     ClientHandlr.CookieContainer = this.Cookies;
                     Client.DefaultRequestHeaders.Add("X-CSRF-Token", Token);
                     
@@ -386,8 +388,10 @@ namespace DiceBot
 
             if (tmpStats.success && tmpStats2.success)
             {
-                ClientHandlr = new HttpClientHandler { UseCookies = true };
+                ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
                 Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
+                Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+                Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
                 ClientHandlr.CookieContainer = this.Cookies;
                 Client.DefaultRequestHeaders.Add("X-CSRF-Token", Token);
 

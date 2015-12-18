@@ -38,7 +38,7 @@ namespace DiceBot
             SiteURL = "https://betterbets.io/?ref=1301492";
 
         }
-        HttpClientHandler ClientHandlr;// = new HttpClientHandler { UseCookies = true };
+        HttpClientHandler ClientHandlr;// = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
         HttpClient Client;
         void GetBalanceThread()
         {
@@ -89,8 +89,10 @@ namespace DiceBot
         public override void Login(string Username, string Password, string otp)
         {
             
-            ClientHandlr = new HttpClientHandler() { UseCookies = true };
+            ClientHandlr = new HttpClientHandler() { UseCookies = true, AutomaticDecompression= DecompressionMethods.GZip| DecompressionMethods.Deflate };
             Client = new HttpClient(ClientHandlr) { BaseAddress= new Uri("https://betterbets.io/api/") };
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             lastupdate = DateTime.Now;
             this.username = Username;
                             this.accesstoken = Password;
