@@ -240,16 +240,18 @@ namespace DiceBot
                 headers.Add(new KeyValuePair<string, string>("Origin", "https://www.bitdice.me"));
                 headers.Add(new KeyValuePair<string, string>("Host", "www.bitdice.me"));
                 headers.Add(new KeyValuePair<string, string>("Upgrade", "websocket"));
-                headers.Add(new KeyValuePair<string, string>("Connection", "Upgrade"));
+                headers.Add(new KeyValuePair<string, string>("Connection", "keep-alive, Upgrade"));
                 headers.Add(new KeyValuePair<string, string>("user-agent", "DiceBot"));
                 
                 Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", cookies2, headers);
                 
-                Client.AllowUnstrustedCertificate = true;
+                
                 Client.Opened += Client_Opened;
                 Client.Error += Client_Error;
                 Client.Closed += Client_Closed;
                 Client.MessageReceived += Client_MessageReceived;
+                
+                
                 Client.Open();
                 while (Client.State == WebSocketState.Connecting)
                 {

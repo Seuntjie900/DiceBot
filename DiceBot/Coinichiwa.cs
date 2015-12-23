@@ -38,9 +38,10 @@ namespace DiceBot
         DateTime lastBalance = DateTime.Now;
         void GetBalanceThread()
         {
-            try
+            
+            while (iscw)
             {
-                while (iscw)
+                try
                 {
                     if (Client!=null)
                     if (Client.Connected && (DateTime.Now-lastBalance).Seconds>30)
@@ -49,16 +50,17 @@ namespace DiceBot
                         Write("stats", username);
                     }
                 }
-            }
-            catch
-            {
+                catch
+                {
 
+                }
             }
+            
         }
 
         void placebetthread(object High)
         {
-            Write("dice", (amount * 100000000).ToString(), chance.ToString(), ((bool)High ? "h" : "l"));
+            Write("dice", (amount * 100000000).ToString(System.Globalization.NumberFormatInfo.InvariantInfo), chance.ToString(System.Globalization.NumberFormatInfo.InvariantInfo), ((bool)High ? "h" : "l"));
         }
         int delay = 0;
         DateTime LastBet = DateTime.Now;
@@ -83,8 +85,9 @@ namespace DiceBot
             else
                 losses++;
             bets++;
-            balance += (double)tmp.Profit;
-            wagered += (double)tmp.Amount;
+            balance = ReceivedBet.balance/100000000.0;
+            profit += (double)tmp.Profit;
+            wagered += (double)tmp.Amount; 
             FinishedBet(tmp);
         }
         protected override void internalPlaceBet(bool High)
@@ -199,20 +202,30 @@ namespace DiceBot
 
         void Write(string Method, params string[] Params)
         {
-            string s = reqID + ":" + Method + ":";
-            foreach (string p in Params)
+            if (Client.Connected)
             {
-                s += p + ":";
+                try
+                {
+                    string s = reqID + ":" + Method + ":";
+                    foreach (string p in Params)
+                    {
+                        s += p + ":";
+                    }
+                    string hash = computehash(s + challenge + ":" + apikey);
+                    s = s + hash + "\n";
+                    byte[] bytes = new byte[s.Length];
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        bytes[i] = (byte)s[i];
+                    }
+                    Requests.Add(reqID++, Method);
+                    Client.GetStream().Write(bytes, 0, bytes.Length);
+                }
+                catch
+                {
+                    Parent.updateStatus("It seems an error has occured!");
+                }
             }
-            string hash = computehash(s + challenge+":"+apikey);
-            s = s + hash + "\n";
-            byte[] bytes = new byte[s.Length];
-            for (int i =0; i<s.Length; i++)
-            {
-                bytes[i] = (byte)s[i];
-            }
-            Requests.Add(reqID++, Method);
-            Client.GetStream().Write(bytes, 0, bytes.Length);
         }
 
         string computehash(string msg)
@@ -232,68 +245,68 @@ namespace DiceBot
         Dictionary<int, string> Requests = new Dictionary<int, string>();
         private void Read(IAsyncResult ar)
         {
-
-            //NetworkStream mystream = (NetworkStream)ar.AsyncState;
-            //byte[] mahReadBuffer = new byte[256];
-            //int NumBytesRead;
-            string response = "";
-
-            //NumBytesRead = mystream.EndRead(ar);
-            //response = string.Concat(response, Encoding.ASCII.GetString(mahReadBuffer, 0, NumBytesRead));
-            //while (mystream.DataAvailable)
+            try
             {
-                //mystream.BeginRead(mahReadBuffer, 0, mahReadBuffer.Length, new AsyncCallback(Read), mystream);
-            }
-            foreach (byte b in ReadBuffer)
-            {
-                if ((char)b != '\n' && (char)b != '\0')
+                string response = "";
+                foreach (byte b in ReadBuffer)
                 {
-                    response += (char)b;
-                }
-            }
-            ReadBuffer = new byte[256];
-            //
-            string[] parts = response.Split(':');
-            int id = 0;
-            if (parts.Length>1)
-            {
-                if (int.TryParse(parts[0], out id) && parts[1]=="ok")
-                {
-                    if (Requests.ContainsKey(id))
+                    if ((char)b != '\n' && (char)b != '\0')
                     {
-                        string method = Requests[id];
-                        Requests.Remove(id);
-                        switch (method)
+                        response += (char)b;
+                    }
+                }
+                ReadBuffer = new byte[256];
+                string[] parts = response.Split(':');
+                int id = 0;
+                if (parts.Length > 1)
+                {
+                    if (int.TryParse(parts[0], out id) && parts[1] == "ok")
+                    {
+                        if (Requests.ContainsKey(id))
                         {
-                            case "dice": ReceivedBet(new CoinichiwaBet 
-                            { 
-                                delay=int.Parse(parts[2]),
-                                betid = long.Parse(parts[3]),
-                                result = parts[4],
-                                luckyNumber = double.Parse(parts[5]),
-                                seedIncrement = int.Parse(parts[6]),
-                                profit = double.Parse(parts[7]),
-                                jackpot = int.Parse(parts[8]),
-                                balance = double.Parse(parts[9])
-                            }); break;
-                            case "info": info( new CoinichiwaInfo{ username= parts[2], clientSeed=parts[3], nonce=int.Parse(parts[4]), hash=parts[5] } ); break;
-                            case "stats": stats(new CoinichiwatStat { balance=double.Parse(parts[2]), bets=int.Parse(parts[3]),wins=int.Parse(parts[4]), losses= int.Parse(parts[5]),wagered=double.Parse(parts[6]),profit=double.Parse(parts[7]) }); break;
-                            case "deposit": deposit(new CoinichiwaDepost { address=parts[2] }); break;
+                            string method = Requests[id];
+                            Requests.Remove(id);
+                            switch (method)
+                            {
+                                case "dice": ReceivedBet(new CoinichiwaBet
+                                {
+                                    delay = int.Parse(parts[2]),
+                                    betid = long.Parse(parts[3]),
+                                    result = parts[4],
+                                    luckyNumber = double.Parse(parts[5], System.Globalization.NumberFormatInfo.InvariantInfo),
+                                    seedIncrement = int.Parse(parts[6]),
+                                    profit = double.Parse(parts[7], System.Globalization.NumberFormatInfo.InvariantInfo),
+                                    jackpot = int.Parse(parts[8]),
+                                    balance = double.Parse(parts[9], System.Globalization.NumberFormatInfo.InvariantInfo)
+                                }); break;
+                                case "info": info(new CoinichiwaInfo { username = parts[2], clientSeed = parts[3], nonce = int.Parse(parts[4]), hash = parts[5] }); break;
+                                case "stats": stats(new CoinichiwatStat { balance = double.Parse(parts[2], System.Globalization.NumberFormatInfo.InvariantInfo), 
+                                    bets = int.Parse(parts[3]), 
+                                    wins = int.Parse(parts[4]), 
+                                    losses = int.Parse(parts[5]), 
+                                    wagered = double.Parse(parts[6], System.Globalization.NumberFormatInfo.InvariantInfo), 
+                                    profit = double.Parse(parts[7], System.Globalization.NumberFormatInfo.InvariantInfo) }); break;
+                                case "deposit": deposit(new CoinichiwaDepost { address = parts[2] }); break;
+                            }
                         }
                     }
                 }
-            }
-            if (Client.Connected)
-            {
-                try
+                if (Client.Connected)
                 {
-                    Client.GetStream().EndRead(ar);
-                    Client.GetStream().BeginRead(ReadBuffer, 0, 256, Read, Client.GetStream());
-                }
-                catch
-                {
+                    try
+                    {
+                        Client.GetStream().EndRead(ar);
+                        Client.GetStream().BeginRead(ReadBuffer, 0, 256, Read, Client.GetStream());
+                    }
+                    catch
+                    {
 
+                    }
                 }
+            }
+            catch
+            {
+                Parent.updateStatus("It seems an error as occured");
             }
         }
 

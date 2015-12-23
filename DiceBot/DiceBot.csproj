@@ -235,6 +235,7 @@
     <Compile Include="MiniBrowser.Designer.cs">
       <DependentUpon>MiniBrowser.cs</DependentUpon>
     </Compile>
+    <Compile Include="MoneroDice.cs" />
     <Compile Include="moneypot.cs" />
     <Compile Include="PD.cs" />
     <Compile Include="PRC.cs" />

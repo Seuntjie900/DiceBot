@@ -5039,18 +5039,28 @@ namespace DiceBot
                     case "magicalDiceToolStripMenuItem": CurrentSite = new MagicalDice(this); siteToolStripMenuItem.Text = "Site(MD)"; break;
                     //case "investdiceToolStripMenuItem": CurrentSite = new InvestDice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
                     case "coinichiwaToolStripMenuItem": CurrentSite = new Coinichiwa(this); siteToolStripMenuItem.Text = "Site(CW)"; break;
+                    case "moneroDiceToolStripMenuItem": CurrentSite=new MoneroDice(this); siteToolStripMenuItem.Text="Site (MonD)"; break;
                 }
                 if (CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa)
                 {
                     lblPass.Text = "API key:";
+                    lblUsername.Text = "Username:";
                 }
                 else if (CurrentSite is BB || CurrentSite is moneypot) 
                 {
-                    lblPass.Text = "API Token";
+                    lblPass.Text = "API Token:";
+
+                    lblUsername.Text = "Username:";
+                }
+                else if (CurrentSite is MoneroDice)
+                {
+                    lblPass.Text = "Private Key:";
+                    lblUsername.Text = "Public Key:";
                 }
                 else
                 {
                     lblPass.Text = "Password:";
+                    lblUsername.Text = "Username:";
                 }
                 if (CurrentSite is moneypot)
                 {

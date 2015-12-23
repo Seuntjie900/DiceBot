@@ -359,7 +359,7 @@
             this.label91 = new System.Windows.Forms.Label();
             this.label90 = new System.Windows.Forms.Label();
             this.lblPass = new System.Windows.Forms.Label();
-            this.label88 = new System.Windows.Forms.Label();
+            this.lblUsername = new System.Windows.Forms.Label();
             this.gbManualBet = new System.Windows.Forms.GroupBox();
             this.btnWithdrawAlt = new System.Windows.Forms.Button();
             this.btnDepositAlt = new System.Windows.Forms.Button();
@@ -475,6 +475,7 @@
             this.magicalDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.investdiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coinichiwaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moneroDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4632,7 +4633,7 @@
             this.gbLogin.Controls.Add(this.label91);
             this.gbLogin.Controls.Add(this.label90);
             this.gbLogin.Controls.Add(this.lblPass);
-            this.gbLogin.Controls.Add(this.label88);
+            this.gbLogin.Controls.Add(this.lblUsername);
             this.gbLogin.Dock = System.Windows.Forms.DockStyle.Left;
             this.gbLogin.Location = new System.Drawing.Point(745, 0);
             this.gbLogin.Name = "gbLogin";
@@ -4724,14 +4725,14 @@
             this.lblPass.TabIndex = 1;
             this.lblPass.Text = "Password:";
             // 
-            // label88
+            // lblUsername
             // 
-            this.label88.AutoSize = true;
-            this.label88.Location = new System.Drawing.Point(13, 35);
-            this.label88.Name = "label88";
-            this.label88.Size = new System.Drawing.Size(58, 13);
-            this.label88.TabIndex = 0;
-            this.label88.Text = "Username:";
+            this.lblUsername.AutoSize = true;
+            this.lblUsername.Location = new System.Drawing.Point(13, 35);
+            this.lblUsername.Name = "lblUsername";
+            this.lblUsername.Size = new System.Drawing.Size(58, 13);
+            this.lblUsername.TabIndex = 0;
+            this.lblUsername.Text = "Username:";
             // 
             // gbManualBet
             // 
@@ -5904,7 +5905,8 @@
             this.coinMillionsToolStripMenuItem,
             this.magicalDiceToolStripMenuItem,
             this.investdiceToolStripMenuItem,
-            this.coinichiwaToolStripMenuItem});
+            this.coinichiwaToolStripMenuItem,
+            this.moneroDiceToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -5971,6 +5973,7 @@
             // 
             // bitDiceToolStripMenuItem
             // 
+            this.bitDiceToolStripMenuItem.Enabled = false;
             this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
             this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.bitDiceToolStripMenuItem.Text = "BitDice";
@@ -6003,6 +6006,7 @@
             // 
             // magicalDiceToolStripMenuItem
             // 
+            this.magicalDiceToolStripMenuItem.Enabled = false;
             this.magicalDiceToolStripMenuItem.Name = "magicalDiceToolStripMenuItem";
             this.magicalDiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.magicalDiceToolStripMenuItem.Text = "MagicalDice";
@@ -6026,6 +6030,14 @@
             this.coinichiwaToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.coinichiwaToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
+            // moneroDiceToolStripMenuItem
+            // 
+            this.moneroDiceToolStripMenuItem.Name = "moneroDiceToolStripMenuItem";
+            this.moneroDiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.moneroDiceToolStripMenuItem.Text = "MoneroDice";
+            this.moneroDiceToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.moneroDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
             // settingsModeToolStripMenuItem
             // 
             this.settingsModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -6039,7 +6051,7 @@
             // basicToolStripMenuItem
             // 
             this.basicToolStripMenuItem.Name = "basicToolStripMenuItem";
-            this.basicToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.basicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.basicToolStripMenuItem.Text = "Basic";
             this.basicToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.basicToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6047,7 +6059,7 @@
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.advancedToolStripMenuItem.Text = "Advanced";
             this.advancedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.advancedToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6055,7 +6067,7 @@
             // programmerToolStripMenuItem
             // 
             this.programmerToolStripMenuItem.Name = "programmerToolStripMenuItem";
-            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.programmerToolStripMenuItem.Text = "Programmer";
             this.programmerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.programmerToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6392,7 +6404,7 @@
         private System.Windows.Forms.BindingSource betBindingSource;
         private System.Windows.Forms.GroupBox gbLogin;
         private System.Windows.Forms.Label lblPass;
-        private System.Windows.Forms.Label label88;
+        private System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.Button btnRegister;
         private System.Windows.Forms.Button btnLogIn;
         private System.Windows.Forms.TextBox txtApi2fa;
@@ -6812,6 +6824,7 @@
         private System.Windows.Forms.CheckBox chkStopWins;
         private System.Windows.Forms.ToolStripMenuItem investdiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem coinichiwaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem moneroDiceToolStripMenuItem;
     }
 }
 
