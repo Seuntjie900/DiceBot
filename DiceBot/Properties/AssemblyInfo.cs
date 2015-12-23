@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DiceBot")]
-[assembly: AssemblyDescription("Auto Betting, investing, divesting bot for http://just-dice.com and https://prcdice.eu")]
+[assembly: AssemblyDescription("Automatic and flexible Betting bot for all the big dice sites")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Seuntjie")]
 [assembly: AssemblyProduct("DiceBot")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.0.0.2")]
-[assembly: AssemblyFileVersion("0.0.0.0")]
+[assembly: AssemblyVersion("3.1.2.0")]
+[assembly: AssemblyFileVersion("3.1.2.0")]
