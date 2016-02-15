@@ -35,8 +35,8 @@ namespace DiceBot
             Name = "PrimeDice";
             Tip = true;
             TipUsingName = true;
-            Thread tChat = new Thread(GetMessagesThread);
-            tChat.Start();
+            //Thread tChat = new Thread(GetMessagesThread);
+            //tChat.Start();
             SiteURL = "https://primedice.com/?ref=Seuntjie";
         }
 
