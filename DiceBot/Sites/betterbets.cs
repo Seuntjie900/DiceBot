@@ -36,8 +36,10 @@ namespace DiceBot.Sites
             Tip = true;
             TipUsingName = true;
             SiteURL = "https://betterbets.io/?ref=1304270";
+
             Currencies = new string[2] { "Btc", "Rbies" };
             Currency = "Btc";
+
         }
         HttpClientHandler ClientHandlr;// = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
         HttpClient Client;

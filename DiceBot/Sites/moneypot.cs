@@ -101,7 +101,7 @@ namespace DiceBot.Sites
                 MPBet tmp = json.JsonDeserialize<MPBet>(Resp);
                 if (tmp.error != null)
                 {
-                    if (tmp.error.ToLower() == "you did not provide a valid hash")
+                    if (tmp.error.ToLower().Contains("valid hash"))
                     {
                         ResetSeed();
                         placebetthread(High);

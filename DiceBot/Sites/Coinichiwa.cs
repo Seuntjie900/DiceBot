@@ -118,6 +118,7 @@ namespace DiceBot.Sites
             reqID = 0;
             if (Client!=null)
             {
+
                 try
                 {
                     Client.Close();
