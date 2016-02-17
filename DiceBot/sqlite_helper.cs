@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Data.SQLite;
 using System.IO;
+using DiceBot.Sites;
+
 namespace DiceBot
 {
     class sqlite_helper

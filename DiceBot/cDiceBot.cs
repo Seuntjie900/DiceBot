@@ -20,6 +20,7 @@ using SharpLua;
 using WMPLib;
 using System.Globalization;
 using System.Reflection;
+using DiceBot.Sites;
 
 namespace DiceBot
 {
@@ -191,9 +192,6 @@ namespace DiceBot
             }
             else
                 DoBet(bet);
-            
-            
-            
         }
 
         delegate void dAddChartPoint(double Profit);
@@ -458,6 +456,7 @@ namespace DiceBot
             Lua.RegisterFunction("read", this, new dGetInput(GetInputForLua).Method);
             DumpLog("constructor done", 8);
         }
+        
         void luaStop()
         {
             Stop("Lua stop command issued");
@@ -4995,7 +4994,7 @@ namespace DiceBot
 
         private void beginnersGuidToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://bitcointalk.org/index.php?topic=391870");
+            Process.Start("http://bot.seuntjie.com/GettingStarted.aspx");
         }
 
         private void justDiceToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
@@ -6049,6 +6048,11 @@ namespace DiceBot
                     }
                 }
             }
+        }
+
+        private void frequentlyAskedQuestionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://bot.seuntjie.com/FAQs.aspx");
         }
         
     }

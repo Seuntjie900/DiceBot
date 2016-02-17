@@ -13,6 +13,15 @@ namespace DiceBot
         [STAThread]
         static void Main(string[] args)
         {
+            if (IntPtr.Size > 4)
+            {
+                
+                AppDomain.CurrentDomain.AppendPrivatePath(@".\External\x64");
+            }
+            else
+            {
+                AppDomain.CurrentDomain.AppendPrivatePath(@".\External\x86");
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new cLogin());

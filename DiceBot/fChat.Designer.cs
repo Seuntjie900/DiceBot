@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.rtbMessage = new System.Windows.Forms.RichTextBox();
             this.btnSend = new System.Windows.Forms.Button();
+            this.rtbMessage = new System.Windows.Forms.RichTextBox();
             this.rtbChat = new System.Windows.Forms.RichTextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -45,14 +45,6 @@
             this.panel1.Size = new System.Drawing.Size(445, 49);
             this.panel1.TabIndex = 0;
             // 
-            // rtbMessage
-            // 
-            this.rtbMessage.Location = new System.Drawing.Point(3, 3);
-            this.rtbMessage.Name = "rtbMessage";
-            this.rtbMessage.Size = new System.Drawing.Size(358, 43);
-            this.rtbMessage.TabIndex = 0;
-            this.rtbMessage.Text = "";
-            // 
             // btnSend
             // 
             this.btnSend.Location = new System.Drawing.Point(367, 3);
@@ -63,16 +55,25 @@
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
+            // rtbMessage
+            // 
+            this.rtbMessage.Location = new System.Drawing.Point(3, 3);
+            this.rtbMessage.Name = "rtbMessage";
+            this.rtbMessage.Size = new System.Drawing.Size(358, 43);
+            this.rtbMessage.TabIndex = 0;
+            this.rtbMessage.Text = "";
+            // 
             // rtbChat
             // 
             this.rtbChat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbChat.HideSelection = false;
             this.rtbChat.Location = new System.Drawing.Point(0, 0);
             this.rtbChat.Name = "rtbChat";
             this.rtbChat.Size = new System.Drawing.Size(445, 361);
             this.rtbChat.TabIndex = 1;
             this.rtbChat.Text = "";
             // 
-            // Chat
+            // fChat
             // 
             this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -80,7 +81,7 @@
             this.ClientSize = new System.Drawing.Size(445, 410);
             this.Controls.Add(this.rtbChat);
             this.Controls.Add(this.panel1);
-            this.Name = "Chat";
+            this.Name = "fChat";
             this.Text = "Chat";
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

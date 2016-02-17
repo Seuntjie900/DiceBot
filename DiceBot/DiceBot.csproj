@@ -131,9 +131,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Noesis.Javascript, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SeuntjieBot\packages\Noesis.Javascript.0.7.1.0\lib\net40\x86\Noesis.Javascript.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="SharpLua">
       <HintPath>..\packages\SharpLua.2.1.1.1\lib\net40\SharpLua.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.ClientEngine">
+      <HintPath>..\..\websocket4net\websocket4net\bin\Debug\SuperSocket.ClientEngine.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -153,10 +160,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebSocket4Net, Version=0.12.0.0, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebSocket4Net.0.13.1\lib\net45\WebSocket4Net.dll</HintPath>
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+    <Reference Include="WebSocket4Net, Version=0.14.1.0, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\websocket4net\websocket4net\bin\Debug\WebSocket4Net.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -173,8 +179,9 @@
     <Compile Include="BetHistory.Designer.cs">
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
-    <Compile Include="betterbets.cs" />
-    <Compile Include="bitdice.cs" />
+    <Compile Include="Core\DiceBotCore.cs" />
+    <Compile Include="Sites\betterbets.cs" />
+    <Compile Include="Sites\bitdice.cs" />
     <Compile Include="cDiceBot.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,15 +189,21 @@
       <DependentUpon>cDiceBot.cs</DependentUpon>
     </Compile>
     <Compile Include="cBet.cs" />
-    <Compile Include="Coinichiwa.cs" />
-    <Compile Include="CoinMillions.cs" />
+    <Compile Include="Sites\Coinichiwa.cs" />
+    <Compile Include="Sites\CoinMillions.cs" />
     <Compile Include="Custom Chart.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Custom Chart.Designer.cs">
       <DependentUpon>Custom Chart.cs</DependentUpon>
     </Compile>
-    <Compile Include="dadice.cs" />
+    <Compile Include="Sites\dadice.cs" />
+    <Compile Include="DiceBotTab.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DiceBotTab.Designer.cs">
+      <DependentUpon>DiceBotTab.cs</DependentUpon>
+    </Compile>
     <Compile Include="Donate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,8 +228,8 @@
     <Compile Include="ConfirmPassword.Designer.cs">
       <DependentUpon>ConfirmPassword.cs</DependentUpon>
     </Compile>
-    <Compile Include="dice999.cs" />
-    <Compile Include="DiceSite.cs" />
+    <Compile Include="Sites\dice999.cs" />
+    <Compile Include="Sites\DiceSite.cs" />
     <Compile Include="Email.cs" />
     <Compile Include="Graph.cs">
       <SubType>Form</SubType>
@@ -225,9 +238,9 @@
       <DependentUpon>Graph.cs</DependentUpon>
     </Compile>
     <Compile Include="imgur.cs" />
-    <Compile Include="JD.cs" />
+    <Compile Include="Sites\JD.cs" />
     <Compile Include="json.cs" />
-    <Compile Include="MagicalDice.cs" />
+    <Compile Include="Sites\MagicalDice.cs" />
     <Compile Include="Messagehelpr.cs" />
     <Compile Include="MiniBrowser.cs">
       <SubType>Form</SubType>
@@ -235,10 +248,10 @@
     <Compile Include="MiniBrowser.Designer.cs">
       <DependentUpon>MiniBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="MoneroDice.cs" />
-    <Compile Include="moneypot.cs" />
-    <Compile Include="PD.cs" />
-    <Compile Include="PRC.cs" />
+    <Compile Include="Sites\MoneroDice.cs" />
+    <Compile Include="Sites\moneypot.cs" />
+    <Compile Include="Sites\PD.cs" />
+    <Compile Include="Sites\PRC.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxy.cs">
@@ -247,10 +260,10 @@
     <Compile Include="Proxy.Designer.cs">
       <DependentUpon>Proxy.cs</DependentUpon>
     </Compile>
-    <Compile Include="rollin.cs">
+    <Compile Include="Sites\rollin.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SafeDice.cs" />
+    <Compile Include="Sites\SafeDice.cs" />
     <Compile Include="SavedItem.cs" />
     <Compile Include="Settings.cs">
       <SubType>Form</SubType>
@@ -314,6 +327,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Custom Chart.resx">
       <DependentUpon>Custom Chart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiceBotTab.resx">
+      <DependentUpon>DiceBotTab.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Donate.resx">
       <DependentUpon>Donate.cs</DependentUpon>
@@ -388,6 +404,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="External\x64\Noesis.Javascript.dll" />
+    <Content Include="External\x86\Noesis.Javascript.dll" />
     <Content Include="logo.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -439,7 +457,10 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>
-    </PostBuildEvent>
+    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+    xcopy /s /y "$(SolutionDir)packages\Noesis.Javascript.0.7.1.0\NativeBinaries\net40\x86\*.*" "$(TargetDir)x86"
+    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+    xcopy /s /y "$(SolutionDir)packages\Noesis.Javascript.0.7.1.0\NativeBinaries\net40\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

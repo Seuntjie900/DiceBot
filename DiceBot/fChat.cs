@@ -25,6 +25,7 @@ namespace DiceBot
         public void GotMessage(string Message)
         {
             rtbChat.AppendText(Message+"\r\n");
+            
         }
         public delegate void dSendMessage(string Message);
         public event dSendMessage SendMessage;

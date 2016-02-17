@@ -32,6 +32,8 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
             this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
@@ -484,6 +486,7 @@
             this.cmbStrat = new System.Windows.Forms.ToolStripComboBox();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.beginnersGuidToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.frequentlyAskedQuestionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4576,6 +4579,8 @@
             // 
             // amoun
             // 
+            dataGridViewCellStyle1.Format = "0.00000000";
+            this.amoun.DefaultCellStyle = dataGridViewCellStyle1;
             this.amoun.HeaderText = "Amount";
             this.amoun.Name = "amoun";
             this.amoun.ReadOnly = true;
@@ -4600,6 +4605,8 @@
             // 
             // Column3
             // 
+            dataGridViewCellStyle2.Format = "0.00000000";
+            this.Column3.DefaultCellStyle = dataGridViewCellStyle2;
             this.Column3.HeaderText = "Profit";
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
@@ -5973,7 +5980,6 @@
             // 
             // bitDiceToolStripMenuItem
             // 
-            this.bitDiceToolStripMenuItem.Enabled = false;
             this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
             this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.bitDiceToolStripMenuItem.Text = "BitDice";
@@ -6051,7 +6057,7 @@
             // basicToolStripMenuItem
             // 
             this.basicToolStripMenuItem.Name = "basicToolStripMenuItem";
-            this.basicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.basicToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.basicToolStripMenuItem.Text = "Basic";
             this.basicToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.basicToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6059,7 +6065,7 @@
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.advancedToolStripMenuItem.Text = "Advanced";
             this.advancedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.advancedToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6067,7 +6073,7 @@
             // programmerToolStripMenuItem
             // 
             this.programmerToolStripMenuItem.Name = "programmerToolStripMenuItem";
-            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.programmerToolStripMenuItem.Text = "Programmer";
             this.programmerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.programmerToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6091,6 +6097,7 @@
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.beginnersGuidToolStripMenuItem,
+            this.frequentlyAskedQuestionsToolStripMenuItem,
             this.toolStripSeparator3,
             this.aboutToolStripMenuItem,
             this.sourceCodeToolStripMenuItem});
@@ -6101,26 +6108,33 @@
             // beginnersGuidToolStripMenuItem
             // 
             this.beginnersGuidToolStripMenuItem.Name = "beginnersGuidToolStripMenuItem";
-            this.beginnersGuidToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.beginnersGuidToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.beginnersGuidToolStripMenuItem.Text = "Beginners Guide";
             this.beginnersGuidToolStripMenuItem.Click += new System.EventHandler(this.beginnersGuidToolStripMenuItem_Click);
+            // 
+            // frequentlyAskedQuestionsToolStripMenuItem
+            // 
+            this.frequentlyAskedQuestionsToolStripMenuItem.Name = "frequentlyAskedQuestionsToolStripMenuItem";
+            this.frequentlyAskedQuestionsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+            this.frequentlyAskedQuestionsToolStripMenuItem.Text = "Frequently Asked Questions";
+            this.frequentlyAskedQuestionsToolStripMenuItem.Click += new System.EventHandler(this.frequentlyAskedQuestionsToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(157, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(218, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.btnAbout_Click);
             // 
             // sourceCodeToolStripMenuItem
             // 
             this.sourceCodeToolStripMenuItem.Name = "sourceCodeToolStripMenuItem";
-            this.sourceCodeToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.sourceCodeToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.sourceCodeToolStripMenuItem.Text = "Source Code";
             this.sourceCodeToolStripMenuItem.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem_Click);
             // 
@@ -6765,14 +6779,6 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Button btnCodeSave;
         private System.Windows.Forms.Button btnOpenCode;
-        private System.Windows.Forms.DataGridViewLinkColumn Id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn amoun;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn hig;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.ToolStripMenuItem daDiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rollinIOToolStripMenuItem;
         private System.Windows.Forms.Label label15;
@@ -6825,6 +6831,15 @@
         private System.Windows.Forms.ToolStripMenuItem investdiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem coinichiwaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moneroDiceToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewLinkColumn Id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn amoun;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn hig;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.ToolStripMenuItem frequentlyAskedQuestionsToolStripMenuItem;
     }
 }
 
