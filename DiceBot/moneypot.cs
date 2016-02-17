@@ -23,6 +23,8 @@ namespace DiceBot
             maxRoll = 99.99;
             AutoInvest = false;
             AutoWithdraw = false;
+            Tip = true;
+            TipUsingName = true;
             ChangeSeed = true;
             AutoLogin = false;
             Thread t = new Thread(new ThreadStart(GetBalanceThread));
@@ -100,7 +102,7 @@ namespace DiceBot
                 MPBet tmp = json.JsonDeserialize<MPBet>(Resp);
                 if (tmp.error != null)
                 {
-                    if (tmp.error.ToLower().Contains("valid hash"))
+                    if (tmp.error.ToLower().Contains("invalid_hash"))
                     {
                         ResetSeed();
                         placebetthread(High);
@@ -177,6 +179,44 @@ namespace DiceBot
 
             MPSeed tmp = json.JsonDeserialize<MPSeed>(res);
             next = tmp.hash;
+        }
+
+        public override void SendTip(string user, double tip)
+        {
+            MPTipSend Tip = new MPTipSend
+            {
+                uname = user,
+                amount = tip * 100000000
+            };
+
+            HttpContent cont = new StringContent(json.JsonSerializer<MPTipSend>(Tip));
+            cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            string Resp = "";
+            using (var response = Client.PostAsync("tip?access_token=" + token, cont))
+            {
+                Resp = response.Result.Content.ReadAsStringAsync().Result;
+            }
+
+            MPTip tmp = json.JsonDeserialize<MPTip>(Resp);
+            if (tmp.error != null)
+            {
+                if (tmp.error.ToLower().Contains("invalid amount"))
+                {
+                    MessageBox.Show("Invalid Tip Amount");
+                    return;
+                }
+                else
+                {
+                    Parent.updateStatus(tmp.error);
+                }
+                return;
+            }
+            else
+            {
+                this.balance = this.balance - (tmp.amount / 100000000);
+                Parent.updateBalance(balance);
+                Parent.updateStatus("Sent " + (tmp.amount / 100000000).ToString("F8") + " to " + tmp.to);
+            }
         }
 
         public override void SetClientSeed(string Seed)
@@ -305,6 +345,20 @@ namespace DiceBot
         }
     }
 
+    public class MPTipSend
+    {
+        public string uname { get; set; }
+        public double amount { get; set; }
+    }
+    public class MPTip
+    {
+        public int id { get; set; }
+        public string from { get; set; }
+        public string to { get; set; }
+        public double amount { get; set; }
+        public string created_at { get; set; }
+        public string error { get; set; }
+    }
     public class MPUInfo
     {
         public string token { get; set; }
