@@ -29,7 +29,7 @@ namespace DiceBot
             this.Parent = Parent;
             AutoInvest = false;
             AutoWithdraw = true;
-            
+            edge = 0.1m;
             ChangeSeed = false;
             AutoLogin = false;
             BetURL = "https://www.999dice.com/Bets/?b=";

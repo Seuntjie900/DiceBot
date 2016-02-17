@@ -35,7 +35,7 @@ namespace DiceBot
             Name = "BetterBets";
             Tip = true;
             TipUsingName = true;
-            SiteURL = "https://betterbets.io/?ref=1301492";
+            SiteURL = "https://betterbets.io/?ref=1304270";
 
         }
         HttpClientHandler ClientHandlr;// = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;

@@ -2194,7 +2194,7 @@ namespace DiceBot
                     if (Sound && SoundStreak && Losestreak > SoundStreakCount)
                         playalarm();
                     //email
-                    if (!RunningSimulation)
+                    if (!RunningSimulation && Emails!=null)
                     if (Emails.Streak && Losestreak > Emails.StreakSize)
                         Emails.SendStreak(Losestreak, Emails.StreakSize, dPreviousBalance);
 
@@ -4995,7 +4995,7 @@ namespace DiceBot
 
         private void beginnersGuidToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://bitcointalk.org/index.php?topic=391870");
+            Process.Start("https://bot.seuntjie.com/gettingstarted.aspxex");
         }
 
         private void justDiceToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
@@ -6049,6 +6049,11 @@ namespace DiceBot
                     }
                 }
             }
+        }
+
+        private void frequentlyAskedQuestionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://bot.seuntjie.com/faqs.aspx");
         }
         
     }

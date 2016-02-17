@@ -303,7 +303,7 @@
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(86, 13);
             this.label37.TabIndex = 35;
-            this.label37.Text = "3 Wosrt Streaks:";
+            this.label37.Text = "3 Worst Streaks:";
             this.label37.Click += new System.EventHandler(this.label37_Click);
             // 
             // label30

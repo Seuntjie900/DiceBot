@@ -116,11 +116,17 @@ namespace DiceBot
         public override void Login(string Username, string Password, string twofa)
         {
             reqID = 0;
+            if (Client!=null)
+            {
+                try { Client.Close(); }catch
+                { }
+            }
             Client = new TcpClient("api.coinichiwa.com", 81);
             if (Client.Connected)
             {
                 apikey = Password;
                 //Client.Connect("api.coinichiwa.com", 81);
+                ReadBuffer = new byte[256];
                 Client.GetStream().Read(ReadBuffer, 0, 256);
 
                 foreach (byte b in ReadBuffer)

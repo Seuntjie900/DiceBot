@@ -75,7 +75,7 @@ namespace DiceBot
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("bet_amount", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)));
-                pairs.Add(new KeyValuePair<string, string>("bet_number", tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("bet_number", tmpchance.ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("prediction", High ? "bigger" : "smaller"));
                 pairs.Add(new KeyValuePair<string, string>("seed", R.Next(int.MaxValue).ToString()));
                 
@@ -188,7 +188,7 @@ namespace DiceBot
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username", User));
                 pairs.Add(new KeyValuePair<string, string>("private", "0"));
-                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 1000).ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("tipsy/tip", Content).Result.Content.ReadAsStringAsync().Result;
 
@@ -419,15 +419,15 @@ namespace DiceBot
         {
             //return true;
             if (amount == 0)
-                return (DateTime.Now - lastbet).TotalSeconds >= 10;
-            else if (amount < 0.00000010)
-                return (DateTime.Now - lastbet).TotalSeconds >= 5;
-            else if (amount < 0.00000100)
                 return (DateTime.Now - lastbet).TotalSeconds >= 3;
-            else if (amount < 0.00001000)
+            else if (amount < 0.00000010)
                 return (DateTime.Now - lastbet).TotalSeconds >= 2;
+            else if (amount < 0.00000100)
+                return (DateTime.Now - lastbet).TotalSeconds >= 1;
+            else if (amount < 0.00001000)
+                return (DateTime.Now - lastbet).TotalSeconds >= 500;
             else
-                return (DateTime.Now - lastbet).TotalMilliseconds >= 500;
+                return (DateTime.Now - lastbet).TotalMilliseconds >= 100;
         }
 
         bool isRollin = true;
@@ -450,8 +450,6 @@ namespace DiceBot
         public override double GetLucky(string server, string client, int nonce)
         {
 
-            server = "3fba0c51b98de5b3dce8c8c7df0505a4041b4eb44a983f94d5f8c34a6b86366e";
-            client = "0679f25b2c3e3ed93f80be4bf1f7930115279cd7";
             HMACSHA512 betgenerator = new HMACSHA512();
             List<byte> serverb = new List<byte>();
 
