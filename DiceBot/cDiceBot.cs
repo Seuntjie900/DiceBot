@@ -4994,11 +4994,7 @@ namespace DiceBot
 
         private void beginnersGuidToolStripMenuItem_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-            Process.Start("http://bot.seuntjie.com/GettingStarted.aspx");
-=======
             Process.Start("https://bot.seuntjie.com/gettingstarted.aspxex");
->>>>>>> 282201790a8e134ddf5f2bc25663eda24b657c45
         }
 
         private void justDiceToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
@@ -6056,11 +6052,7 @@ namespace DiceBot
 
         private void frequentlyAskedQuestionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-            Process.Start("http://bot.seuntjie.com/FAQs.aspx");
-=======
             Process.Start("https://bot.seuntjie.com/faqs.aspx");
->>>>>>> 282201790a8e134ddf5f2bc25663eda24b657c45
         }
         
     }

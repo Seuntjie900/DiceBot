@@ -269,7 +269,7 @@ namespace DiceBotCore.Sites
         }
         protected virtual bool _Register(string Username, string Password) { return false; }
 
-        public bool GetLucky(string Hash, string ServerSeed, string ClientSeed, int Nonce)
+        public double GetLucky(string Hash, string ServerSeed, string ClientSeed, int Nonce)
         {
             if (CanVerify)
             {
@@ -279,10 +279,10 @@ namespace DiceBotCore.Sites
             {
 
                 callError("Roll verifying not implemented!", false);
-                return false;
+                return -1;
             }
         }
-        protected virtual bool _GetLucky(string Hash, string ServerSeed, string ClientSeed, int Nonce) { return false; }
+        protected virtual double _GetLucky(string Hash, string ServerSeed, string ClientSeed, int Nonce) { return int.MaxValue; }
 
         public string GetSeed(long BetID)
         {
@@ -320,6 +320,16 @@ namespace DiceBotCore.Sites
                 callError("Chatting not allowed!", false);
         }
         protected virtual void _SendChat(string Message) { }
+
+        public virtual int _TimeToBet()
+        {
+            return -1;
+        }
+
+        public int TimeToBet()
+        {
+            return _TimeToBet();
+        }
         #endregion
 
         #region Events

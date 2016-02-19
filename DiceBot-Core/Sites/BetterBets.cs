@@ -31,17 +31,17 @@ namespace DiceBotCore.Sites
             SiteURL = "https://betterbets.io/?ref=1701";
             AutoWithdraw = false;
             AutoInvest = false;
-            CanTip = false;
+            CanTip = true;
             TipUsingName = true;
             SiteName = "BetterBets";
             SiteAbbreviation = "BB";
-            BetURL = "https://betterbets.io";
+            BetURL = "https://betterbets.io/api/bet/?id={0}";
             CanGetSeed = false;
             GettingSeed = false;
             CanVerify = true;
             CanChat = false;
             CanChangeSeed = true;
-            CanSetClientSeed = false;
+            CanSetClientSeed = true;
 
         }
 
@@ -129,12 +129,80 @@ namespace DiceBotCore.Sites
 
         protected override bool _Login(string Username, string Password, string TFA)
         {
-            throw new NotImplementedException();
+            ClientHandlr = new HttpClientHandler() { UseCookies = true, AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://betterbets.io/api/") };
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+            lastupdate = DateTime.Now;
+            this.username = Username;
+            this.accesstoken = Password;
+            try
+            {
+                if (accesstoken != "")
+                {
+                    string s1 = "user?accessToken=" + accesstoken;
+                    try
+                    {
+                        string s = Client.GetStringAsync(s1).Result;
+
+                        bbStats tmpu = Helpers.json.JsonDeserialize<bbStats>(s);
+                        if (tmpu.error != 1)
+                        {
+                            this.Stats = new SiteStats { Balance=tmpu.balance, bets=tmpu.total_bets, wins=tmpu.total_wins, losses=tmpu.total_bets-tmpu.total_wins, Profit=tmpu.total_profit, Wagered=tmpu.total_wagered };
+                            /*balance = tmpu.balance; //i assume
+                            bets = tmpu.total_bets;
+                            wagered = tmpu.total_wagered;
+                            profit = tmpu.total_profit;
+                            wins = tmpu.total_wins;
+                            losses = bets - losses;*/
+                            //Parent.updateBalance((decimal)(balance));
+                            //Parent.updateBets(bets);
+                            //Parent.updateLosses(losses);
+                            //Parent.updateProfit(profit);
+                            //Parent.updateWagered(wagered);
+                            //Parent.updateWins(wins);
+                            lastupdate = DateTime.Now;
+                            //getDepositAddress();
+
+                            
+                            return true;
+                        }
+                        else
+                        {
+                            
+                            return false;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        
+                        return false;
+                    }
+
+                }
+
+            }
+
+            catch (WebException e)
+            {
+                if (e.Response != null)
+                {
+
+
+
+                }
+                return (false);
+                
+            }
+            return false;
         }
 
         protected override void _Disconnect()
         {
-            throw new NotImplementedException();
+            isbb = false;
+            accesstoken = "";
+            username = "";
+            Stats = new SiteStats();
         }
 
         public override void SetProxy(Helpers.ProxyDetails ProxyInfo)
@@ -174,6 +242,147 @@ namespace DiceBotCore.Sites
 
             }
         }
+
+        string customSeed = "";
+        protected override void _ResetSeed()
+        {
+            if ((DateTime.Now - LastSeedReset).TotalSeconds > 90)
+            {
+                try
+                {
+                    string tseed = R.Next(0, int.MaxValue).ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo);
+                    if (customSeed!=null && customSeed!= "")
+                    {
+                        tseed = customSeed;
+                    }
+                    LastSeedReset = DateTime.Now;
+                    ////Parent.updateStatus("Resetting Seed");
+                    List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                    pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
+                    pairs.Add(new KeyValuePair<string, string>("seed", tseed));
+                    FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                    string responseData = "";
+                    using (var response = Client.PostAsync("seed/", Content))
+                    {
+                        try
+                        {
+                            responseData = response.Result.Content.ReadAsStringAsync().Result;
+                        }
+                        catch (AggregateException e)
+                        {
+                            if (e.InnerException.Message.Contains("ssl"))
+                            {
+                                _ResetSeed();
+                                return;
+                            }
+                        }
+                    }
+
+                }
+                catch (WebException e)
+                {
+                    if (e.Response != null)
+                    {
+
+                        string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                        //Parent.updateStatus(sEmitResponse);
+                        if (e.Message.Contains("429"))
+                        {
+                            Thread.Sleep(2000);
+                            _ResetSeed();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //Parent.updateStatus("Too soon to reset seed. Delaying reset.");
+            }
+
+        }
+
+        protected override void _SetClientSeed(string ClientSeed)
+        {
+            customSeed = ClientSeed;
+        }
+
+        protected override double _GetLucky(string Hash, string ServerSeed, string ClientSeed, int Nonce)
+        {
+            string serverhash = Helpers.Hash.SHA256(ServerSeed);
+
+            int matchash = serverhash.Equals(Hash)?1:-1;
+            int charstouse = 5;
+            string msg = ClientSeed + "-" + Nonce.ToString();            
+            string hash = Helpers.Hash.HMAC512(msg, ServerSeed);
+            for (int i = 0; i < hash.Length; i += charstouse)
+            {
+
+                string s = hash.Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return matchash*( lucky / 10000.0);
+            }
+            return int.MaxValue;
+        }
+
+        protected override void _SendTip(string Username, double Amount)
+        {
+            try
+            {
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
+                pairs.Add(new KeyValuePair<string, string>("uname", Username));
+                pairs.Add(new KeyValuePair<string, string>("amount", (Amount * 100000000.0).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string responseData = "";
+                using (var response = Client.PostAsync("tip/", Content))
+                {
+                    try
+                    {
+                        responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        if (e.InnerException.Message.Contains("ssl"))
+                        {
+                            SendTip(Username, Amount);
+                            return;
+                        }
+                    }
+                }
+                
+            }
+            catch (WebException e)
+            {
+                if (e.Response != null)
+                {
+
+                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                    //Parent.updateStatus(sEmitResponse);
+
+                }
+            }
+        }
+
+        public string getDepositAddress()
+        {
+            try
+            {
+                string s = Client.GetStringAsync("depositAddress?accessToken=" + accesstoken).Result;
+                bbDeposit tmp = Helpers.json.JsonDeserialize<bbDeposit>(s);
+                return tmp.Address;
+            }
+            catch (AggregateException e)
+            {
+                return "";
+            }
+        }
+    }
+    public class bbDeposit
+    {
+        public bool Success { get; set; }
+        public string Address { get; set; }
     }
     public class bbResult
     {

@@ -6839,7 +6839,6 @@
         private System.Windows.Forms.ToolStripMenuItem investdiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem coinichiwaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moneroDiceToolStripMenuItem;
-<<<<<<< HEAD
         private System.Windows.Forms.DataGridViewLinkColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn date;
         private System.Windows.Forms.DataGridViewTextBoxColumn amoun;
@@ -6848,8 +6847,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-=======
->>>>>>> 282201790a8e134ddf5f2bc25663eda24b657c45
         private System.Windows.Forms.ToolStripMenuItem frequentlyAskedQuestionsToolStripMenuItem;
     }
 }
