@@ -279,7 +279,7 @@ namespace DiceBot
 
                 if (tmpStats.success && tmpStats2.success)
                 {
-                    ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
+                    ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
                     Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
                     Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
                     Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
@@ -388,7 +388,7 @@ namespace DiceBot
 
             if (tmpStats.success && tmpStats2.success)
             {
-                ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
+                ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
                 Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
                 Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
                 Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
@@ -425,7 +425,7 @@ namespace DiceBot
             else if (amount < 0.00000100)
                 return (DateTime.Now - lastbet).TotalSeconds >= 1;
             else if (amount < 0.00001000)
-                return (DateTime.Now - lastbet).TotalSeconds >= 500;
+                return (DateTime.Now - lastbet).TotalMilliseconds >= 500;
             else
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 100;
         }

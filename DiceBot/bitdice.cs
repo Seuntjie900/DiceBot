@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WebSocket4Net;
+using System.Net.Http;
 
 namespace DiceBot
 {
@@ -140,6 +141,9 @@ namespace DiceBot
             return true;
         }
 
+        HttpClient WebClient = null;
+        HttpClientHandler ClientHandlr = null;
+        CookieContainer cookies = null;
         public override void Login(string Username, string Password, string twofa)
         {
             try
@@ -148,18 +152,49 @@ namespace DiceBot
        | SecurityProtocolType.Tls11
        | SecurityProtocolType.Tls12
        | SecurityProtocolType.Ssl3;
-                CookieContainer Cookies = new CookieContainer();
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
+                cookies = new CookieContainer();
+                ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip };
+                WebClient = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.bitdice.me/") };
+                WebClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+                WebClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+                WebClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
+                /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
                     if (Prox != null)
                         betrequest.Proxy = Prox;
                     betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
                     betrequest.CookieContainer = Cookies;
-                HttpWebResponse EmitResponse;
-                string sEmitResponse;
+                HttpWebResponse EmitResponse;*/
+                string s1 = "";
                     try
                     {
-                        EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                        sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                        HttpResponseMessage resp = WebClient.GetAsync("").Result;
+                        if (resp.IsSuccessStatusCode)
+                        {
+                            s1 = resp.Content.ReadAsStringAsync().Result;
+                        }
+                        else
+                        {
+                            if (resp.StatusCode == HttpStatusCode.ServiceUnavailable)
+                            {
+                                s1 = resp.Content.ReadAsStringAsync().Result;
+                                //cflevel = 0;
+                                System.Threading.Tasks.Task.Factory.StartNew(() =>
+                                {
+                                    System.Windows.Forms.MessageBox.Show("bitdice.me has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                                });
+                                if (!Cloudflare.doCFThing(s1, WebClient, ClientHandlr, 0, "www.bitdice.me"))
+                                {
+                                    finishedlogin(false);
+                                    return;
+                                }
+                                /*if (!Cloudflare.doCFThing(s1, WebClient, ClientHandlr, 0, "www.bitdice.me"))
+                                {
+                                    finishedlogin(false);
+                                    return;
+                                }*/
+
+                            }
+                        }
                     }
                 catch
                     {
@@ -167,7 +202,7 @@ namespace DiceBot
                         return;
                     }
                     Cookie c = new Cookie();
-                foreach (Cookie tc in EmitResponse.Cookies)
+                foreach (Cookie tc in ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me")))
                 {
                     if (tc.Name == "__cfduid")
                     {
@@ -175,25 +210,28 @@ namespace DiceBot
                         break;
                     }
                 }
-                betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
+                /*betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
                 if (Prox != null)
                     betrequest.Proxy = Prox;
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
                 betrequest.CookieContainer = Cookies;
 
                 EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                
+                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
+                string sEmitResponse = WebClient.GetStringAsync("").Result;
                 getcsrf(sEmitResponse);
 
-                cookie = EmitResponse.Cookies["_csn_session"].Value;
-                betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/users/sign_in");
+                cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
+                //betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/users/sign_in");
+                //betrequest.Method = "POST";
+                //betrequest.CookieContainer = Cookies;
 
-
-                betrequest.Method = "POST";
-                betrequest.CookieContainer = Cookies;
-
-                string post = string.Format("utf8=%E2%9C%93&user%5Busername%5D={0}&user%5Bpassword%5D={1}&user%5Botp_code%5D=&button=", Username, Password);
+                /*string post = string.Format("
+                 * utf8=%E2%9C%93
+                 * user%5Busername%5D={0}
+                 * user%5Bpassword%5D={1}
+                 * user%5Botp_code%5D=
+                 * button=", Username, Password);
                 username = Username;
                 betrequest.ContentLength = post.Length;
 
@@ -208,11 +246,37 @@ namespace DiceBot
                     writer.Write(post);
                 }
                 EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                cookie = EmitResponse.Cookies["_csn_session"].Value;
+                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("utf8", "✓"));
+                pairs.Add(new KeyValuePair<string, string>("user[username]", Username));
+                pairs.Add(new KeyValuePair<string, string>("user[password]", Password));
+                pairs.Add(new KeyValuePair<string, string>("user[otp_code]", twofa ));
+                pairs.Add(new KeyValuePair<string, string>("button", ""));
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
+                {
+                    WebClient.DefaultRequestHeaders.Remove("X-CSRF-Token");
+                }
+                WebClient.DefaultRequestHeaders.Add("X-CSRF-Token", csrf);
+                
+                username = Username;
+                try
+                {
+                    sEmitResponse = WebClient.PostAsync("users/sign_in", Content).Result.Content.ReadAsStringAsync().Result;
+                }
+                catch { finishedlogin(false); }
+                cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
+                if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
+                {
 
-
-                betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
+                }
+                try
+                {
+                    ClientHandlr.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
+                }catch
+                { }
+                /*betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
                 if (Prox != null)
                     betrequest.Proxy = Prox;
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
@@ -220,15 +284,30 @@ namespace DiceBot
                 betrequest.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
 
                 EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
+                try
+                {
+                    sEmitResponse = WebClient.GetStringAsync("").Result;
+
+                }
+                    catch (AggregateException e) 
+                { 
+                        finishedlogin(false); }
+                catch { finishedlogin(false); }
                 getDeposit(sEmitResponse);
                 getcsrf(sEmitResponse);
-                cookie = EmitResponse.Cookies["_csn_session"].Value;
+                ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value = cookie;
+                //cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
 
                 getstream(sEmitResponse);
 
                 getcsrf(sEmitResponse);
                 getstream(sEmitResponse);
+                if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
+                {
+                    WebClient.DefaultRequestHeaders.Remove("X-CSRF-Token");
+                }
+                WebClient.DefaultRequestHeaders.Add("X-CSRF-Token", csrf);
                 if (Client != null)
                     Client.Close();
                 
@@ -241,9 +320,10 @@ namespace DiceBot
                 headers.Add(new KeyValuePair<string, string>("Host", "www.bitdice.me"));
                 headers.Add(new KeyValuePair<string, string>("Upgrade", "websocket"));
                 headers.Add(new KeyValuePair<string, string>("Connection", "keep-alive, Upgrade"));
-                headers.Add(new KeyValuePair<string, string>("user-agent", "DiceBot"));
-                
-                Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", cookies2, headers);
+                headers.Add(new KeyValuePair<string, string>("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"));
+
+                Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", cookies2, headers, "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
+                    "https://www.bitdice.me", WebSocketVersion.Rfc6455, null, System.Security.Authentication.SslProtocols.Tls| System.Security.Authentication.SslProtocols.Tls11| System.Security.Authentication.SslProtocols.Tls12);
                 
                 
                 Client.Opened += Client_Opened;
@@ -257,7 +337,7 @@ namespace DiceBot
                 {
                     Thread.Sleep(100);
                 }
-                CurrencyChanged();
+                //CurrencyChanged();
                 finishedlogin(Client.State == WebSocketState.Open);
                 loggedin = true;
                 System.Windows.Forms.MessageBox.Show("Due to current limitations of the API, I can't show you your stats until you place a valid bet. Sorry.\n\nAlso, you will need to reselect your currency. If you already selected the currency you want to play in, please select another first, and then switch back.", "Stats Errors", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
@@ -441,7 +521,7 @@ namespace DiceBot
         {
             if (cookie != "")
             {
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/users/currency");
+                /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/users/currency");
                 if (Prox != null)
                     betrequest.Proxy = Prox;
                 betrequest.Method = "POST";
@@ -457,29 +537,60 @@ namespace DiceBot
                     writer.Write(post);
                 }
                 HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                cookie = EmitResponse.Cookies["_csn_session"].Value;
-                betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("wallet[5Bcurrency]", Currency));
+               
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
+                {
+                    WebClient.DefaultRequestHeaders.Remove("X-CSRF-Token");
+                }
+                WebClient.DefaultRequestHeaders.Add("X-CSRF-Token", csrf);
+
+                string sEmitResponse = "";
+                try
+                {
+                    sEmitResponse = WebClient.PostAsync("users/sign_in", Content).Result.Content.ReadAsStringAsync().Result;
+                }
+                catch { finishedlogin(false); }
+
+                cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
+                /*betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
                 if (Prox != null)
                     betrequest.Proxy = Prox;
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
                 betrequest.CookieContainer = new CookieContainer();
                 betrequest.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
                 EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
+                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
+                sEmitResponse = WebClient.GetStringAsync("").Result;
                 getDeposit(sEmitResponse);
                 getcsrf(sEmitResponse);
                 getstream(sEmitResponse);
                 if (Client != null)
                     Client.Close();
                 List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
-                headers.Add(new KeyValuePair<string, string>("Cookie", "_csn_session=" + cookie));
-                Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", null, headers, "dicebot", "http://bitdice.me", WebSocketVersion.Rfc6455);
+                //headers.Add(new KeyValuePair<string, string>("Cookie", "_csn_session=" + cookie));
+                List<KeyValuePair<string, string>> cookies2 = new List<KeyValuePair<string, string>>();
+                cookies2.Add(new KeyValuePair<string, string>("_csn_session", cookie));
+                cookies2.Add(new KeyValuePair<string, string>("__cfduid", cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["__cfduid"].Value));
+                headers.Add(new KeyValuePair<string, string>("Origin", "https://www.bitdice.me"));
+                headers.Add(new KeyValuePair<string, string>("Host", "www.bitdice.me"));
+                headers.Add(new KeyValuePair<string, string>("Upgrade", "websocket"));
+                headers.Add(new KeyValuePair<string, string>("Connection", "keep-alive, Upgrade"));
+                headers.Add(new KeyValuePair<string, string>("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"));
+
+                Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", cookies2, headers, "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
+                    "https://www.bitdice.me", WebSocketVersion.Rfc6455, null, System.Security.Authentication.SslProtocols.Tls | System.Security.Authentication.SslProtocols.Tls11 | System.Security.Authentication.SslProtocols.Tls12);
+
 
                 Client.Opened += Client_Opened;
                 Client.Error += Client_Error;
                 Client.Closed += Client_Closed;
                 Client.MessageReceived += Client_MessageReceived;
+
+
                 Client.Open();
                 while (Client.State == WebSocketState.Connecting)
                 {

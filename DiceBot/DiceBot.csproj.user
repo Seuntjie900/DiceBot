@@ -14,4 +14,7 @@
     <StartArguments>
     </StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>loglevel=10</StartArguments>
+  </PropertyGroup>
 </Project>

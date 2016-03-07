@@ -391,7 +391,38 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
+            foreach (string s in BB.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
 
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                betterbetsToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
+            foreach (string s in FortuneJack.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                fortuneJackToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -1788,44 +1819,46 @@ namespace DiceBot
             {
                 Vars = rtbPresetList.Lines[Level].Split('&');
             }
-            
+
             if (double.TryParse(Vars[0], out Betval))
             {
                 Lastbet = Betval;
-            }
-            if (Vars.Length >= 2)
-            {
-                double chance = -1;
-                if (double.TryParse(Vars[1], out chance))
+
+                if (Vars.Length >= 2)
                 {
-                    Chance = chance;
-                }
-                else
-                {
-                    if (Vars[1].ToLower() == "low" || Vars[1].ToLower() == "lo")
-                        high = false;
-                    else if (Vars[1].ToLower() == "high" || Vars[1].ToLower() == "hi")
-                    {
-                        high = true;
-                    }
-                }
-                if (Vars.Length >= 3)
-                {
-                    if (double.TryParse(Vars[2], out chance))
+                    double chance = -1;
+                    if (double.TryParse(Vars[1], out chance))
                     {
                         Chance = chance;
                     }
                     else
                     {
-                        if (Vars[2].ToLower() == "low" || Vars[2].ToLower() == "lo")
+                        if (Vars[1].ToLower() == "low" || Vars[1].ToLower() == "lo")
                             high = false;
-                        else if (Vars[2].ToLower() == "high" || Vars[2].ToLower() == "hi")
+                        else if (Vars[1].ToLower() == "high" || Vars[1].ToLower() == "hi")
                         {
                             high = true;
                         }
                     }
+                    if (Vars.Length >= 3)
+                    {
+                        if (double.TryParse(Vars[2], out chance))
+                        {
+                            Chance = chance;
+                        }
+                        else
+                        {
+                            if (Vars[2].ToLower() == "low" || Vars[2].ToLower() == "lo")
+                                high = false;
+                            else if (Vars[2].ToLower() == "high" || Vars[2].ToLower() == "hi")
+                            {
+                                high = true;
+                            }
+                        }
+                    }
                 }
             }
+           
             else
             {
                 Stop("Invalid bet inpreset list");
@@ -2011,7 +2044,7 @@ namespace DiceBot
                             avgbetcalc /= ++numstreaks;
                             avgstreak = avgbetcalc;
                             if (Losestreak > WorstStreak3)
-                            {
+                           {
                                 WorstStreak3 = Losestreak;
                                 if (Losestreak > WorstStreak2)
                                 {
@@ -2024,6 +2057,7 @@ namespace DiceBot
                                     }
                                 }
                             }
+                            
                         }
                         Losestreak = 0;
                     }
@@ -2200,9 +2234,9 @@ namespace DiceBot
 
                     
                     //update worst streaks
-                    if (!RunningSimulation)
+                    /*if (!RunningSimulation)
                     if (Losestreak > WorstStreak)
-                        WorstStreak = Losestreak;
+                        WorstStreak = Losestreak;*/
 
                     //reset win multplier
                     WinMultiplier = (double)(nudWinMultiplier.Value);
@@ -5040,6 +5074,7 @@ namespace DiceBot
                     //case "investdiceToolStripMenuItem": CurrentSite = new InvestDice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
                     case "coinichiwaToolStripMenuItem": CurrentSite = new Coinichiwa(this); siteToolStripMenuItem.Text = "Site(CW)"; break;
                     case "moneroDiceToolStripMenuItem": CurrentSite=new MoneroDice(this); siteToolStripMenuItem.Text="Site (MonD)"; break;
+                    case "fortuneJackToolStripMenuItem" : CurrentSite = new FortuneJack(this); siteToolStripMenuItem.Text = "Site (FJ)"; break;
                 }
                 if (CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa)
                 {

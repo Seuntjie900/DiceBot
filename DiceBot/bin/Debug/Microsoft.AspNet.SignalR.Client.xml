@@ -305,11 +305,6 @@
             </summary>
             <param name="disposing"></param>
         </member>
-        <member name="T:Microsoft.AspNet.SignalR.Client.Http.DefaultHttpClient">
-            <summary>
-            The default <see cref="T:Microsoft.AspNet.SignalR.Client.Http.IHttpClient"/> implementation.
-            </summary>
-        </member>
         <member name="T:Microsoft.AspNet.SignalR.Client.Http.IHttpClient">
             <summary>
             A client that can make http request.
@@ -339,31 +334,6 @@
             <param name="postData">form url encoded data.</param>
             <param name="isLongRunning">Indicates whether it is a long running request</param>
             <returns>A <see cref="T:Task{IResponse}"/>.</returns>
-        </member>
-        <member name="M:Microsoft.AspNet.SignalR.Client.Http.DefaultHttpClient.Get(System.String,System.Action{Microsoft.AspNet.SignalR.Client.Http.IRequest},System.Boolean)">
-            <summary>
-            Makes an asynchronous http GET request to the specified url.
-            </summary>
-            <param name="url">The url to send the request to.</param>
-            <param name="prepareRequest">A callback that initializes the request with default values.</param>
-            <param name="isLongRunning">Indicates whether the request is long running</param>
-            <returns>A <see cref="T:Task{IResponse}"/>.</returns>
-        </member>
-        <member name="M:Microsoft.AspNet.SignalR.Client.Http.DefaultHttpClient.Post(System.String,System.Action{Microsoft.AspNet.SignalR.Client.Http.IRequest},System.Collections.Generic.IDictionary{System.String,System.String},System.Boolean)">
-            <summary>
-            Makes an asynchronous http POST request to the specified url.
-            </summary>
-            <param name="url">The url to send the request to.</param>
-            <param name="prepareRequest">A callback that initializes the request with default values.</param>
-            <param name="postData">form url encoded data.</param>
-            <param name="isLongRunning">Indicates whether the request is long running</param>
-            <returns>A <see cref="T:Task{IResponse}"/>.</returns>
-        </member>
-        <member name="M:Microsoft.AspNet.SignalR.Client.Http.DefaultHttpClient.PrepareClientRequest(Microsoft.AspNet.SignalR.Client.Http.HttpWebRequestWrapper)">
-            <summary>
-            Adds certificates, credentials, proxies and cookies to the request
-            </summary>
-            <param name="req">Request object</param>
         </member>
         <member name="T:Microsoft.AspNet.SignalR.Client.Http.IRequest">
             <summary>
@@ -740,6 +710,47 @@
             Class to store all the Keep Alive properties
             </summary>
         </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader"/> class.
+            </summary>
+            <param name="stream">The stream to read asynchronously payloads from.</param>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Start">
+            <summary>
+            Starts the reader.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Close">
+            <summary>
+            Closes the connection and the underlying stream.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Opened">
+            <summary>
+            Invoked when the stream is open.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Closed">
+            <summary>
+            Invoked when the reader is closed while in the Processing state.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Data">
+            <summary>
+            Invoked when there's a message if received in the stream.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.ClientTransportBase.Name">
+            <summary>
+            Gets transport name.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Infrastructure.Disposer">
+            <summary>
+            Helper class to manage disposing a resource at an arbirtary time
+            </summary>
+        </member>
         <member name="T:Microsoft.AspNet.SignalR.Client.Infrastructure.ThreadSafeInvoker">
             <summary>
             Allows for thread safe invocation of a delegate.
@@ -876,60 +887,6 @@
               Looks up a localized string similar to Connection started reconnecting before invocation result was received..
             </summary>
         </member>
-        <member name="M:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.#ctor(System.IO.Stream)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader"/> class.
-            </summary>
-            <param name="stream">The stream to read asynchronously payloads from.</param>
-        </member>
-        <member name="M:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Start">
-            <summary>
-            Starts the reader.
-            </summary>
-        </member>
-        <member name="M:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Close">
-            <summary>
-            Closes the connection and the underlying stream.
-            </summary>
-        </member>
-        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Opened">
-            <summary>
-            Invoked when the stream is open.
-            </summary>
-        </member>
-        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Closed">
-            <summary>
-            Invoked when the reader is closed while in the Processing state.
-            </summary>
-        </member>
-        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.AsyncStreamReader.Data">
-            <summary>
-            Invoked when there's a message if received in the stream.
-            </summary>
-        </member>
-        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.ClientTransportBase.Name">
-            <summary>
-            Gets transport name.
-            </summary>
-        </member>
-        <member name="T:Microsoft.AspNet.SignalR.Client.Transports.ServerSentEvents.EventSourceStreamReader">
-            <summary>
-            Event source implementation for .NET. This isn't to the spec but it's enough to support SignalR's
-            server.
-            </summary>
-        </member>
-        <member name="M:Microsoft.AspNet.SignalR.Client.Transports.ServerSentEvents.EventSourceStreamReader.#ctor(Microsoft.AspNet.SignalR.Client.IConnection,System.IO.Stream)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Microsoft.AspNet.SignalR.Client.Transports.ServerSentEvents.EventSourceStreamReader"/> class.
-            </summary>
-            <param name="connection">The connection associated with this event source</param>
-            <param name="stream">The stream to read event source payloads from.</param>
-        </member>
-        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.ServerSentEvents.EventSourceStreamReader.Message">
-            <summary>
-            Invoked when there's a message if received in the stream.
-            </summary>
-        </member>
         <member name="T:Microsoft.AspNet.SignalR.Client.StateChange">
             <summary>
             Represents a change in the connection state.
@@ -995,6 +952,76 @@
         <member name="P:Microsoft.AspNet.SignalR.Client.Transports.ServerSentEventsTransport.ReconnectDelay">
             <summary>
             The time to wait after a connection drops to try reconnecting.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Client.Transports.ServerSentEvents.EventSourceStreamReader">
+            <summary>
+            Event source implementation for .NET. This isn't to the spec but it's enough to support SignalR's
+            server.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Transports.ServerSentEvents.EventSourceStreamReader.#ctor(Microsoft.AspNet.SignalR.Client.IConnection,System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.AspNet.SignalR.Client.Transports.ServerSentEvents.EventSourceStreamReader"/> class.
+            </summary>
+            <param name="connection">The connection associated with this event source</param>
+            <param name="stream">The stream to read event source payloads from.</param>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.ServerSentEvents.EventSourceStreamReader.Message">
+            <summary>
+            Invoked when there's a message if received in the stream.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Client.Http.DefaultHttpClient">
+            <summary>
+            The default <see cref="T:Microsoft.AspNet.SignalR.Client.Http.IHttpClient"/> implementation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Http.DefaultHttpClient.Initialize(Microsoft.AspNet.SignalR.Client.IConnection)">
+            <summary>
+            Initialize the Http Clients
+            </summary>
+            <param name="connection">Connection</param>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Http.DefaultHttpClient.Get(System.String,System.Action{Microsoft.AspNet.SignalR.Client.Http.IRequest},System.Boolean)">
+            <summary>
+            Makes an asynchronous http GET request to the specified url.
+            </summary>
+            <param name="url">The url to send the request to.</param>
+            <param name="prepareRequest">A callback that initializes the request with default values.</param>
+            <param name="isLongRunning">Indicates whether the request is long running</param>
+            <returns>A <see cref="T:Task{IResponse}"/>.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Http.DefaultHttpClient.Post(System.String,System.Action{Microsoft.AspNet.SignalR.Client.Http.IRequest},System.Collections.Generic.IDictionary{System.String,System.String},System.Boolean)">
+            <summary>
+            Makes an asynchronous http POST request to the specified url.
+            </summary>
+            <param name="url">The url to send the request to.</param>
+            <param name="prepareRequest">A callback that initializes the request with default values.</param>
+            <param name="postData">form url encoded data.</param>
+            <param name="isLongRunning">Indicates whether the request is long running</param>
+            <returns>A <see cref="T:Task{IResponse}"/>.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Http.DefaultHttpClient.GetHttpClient(System.Boolean)">
+            <summary>
+            Returns the appropriate client based on whether it is a long running request
+            </summary>
+            <param name="isLongRunning">Indicates whether the request is long running</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Transports.WebSocketWrapperRequest.PrepareRequest">
+            <summary>
+            Adds certificates, credentials, proxies and cookies to the request
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.WebSocketTransport.ReconnectDelay">
+            <summary>
+            The time to wait after a connection drops to try reconnecting.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Transports.WebSocketTransport.SupportsKeepAlive">
+            <summary>
+            Indicates whether or not the transport supports keep alive
             </summary>
         </member>
     </members>

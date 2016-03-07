@@ -24,8 +24,9 @@ namespace DiceBot
         public static string[] cCurrencies = new string[] { "btc", "xrp", "ltc" };
         public CoinMillions(cDiceBot Parent)
         {
+            Currencies = new string[] { "btc", "xrp", "ltc" };
             Currency = "btc";
-            Currencies = new string[] { "btc","xrp","ltc" };
+            
             this.Parent = Parent;
             maxRoll = 99.9999;
             AutoInvest = false;
@@ -35,14 +36,14 @@ namespace DiceBot
             BetURL = "https://coinmillions.com/api/1/bet?game=dice&bet_id=";
             Thread t = new Thread(GetBalanceThread);
             t.Start();
-            this.Parent = Parent;
+            
             Name = "CoinMillions";
             Tip = false;
             TipUsingName = true;
             SiteURL = "https://coinmillions.com?a=10156";
-            new HttpClient { BaseAddress = new Uri("https://coinmillions.com/api/1/") };
+            /*new HttpClient { BaseAddress = new Uri("https://coinmillions.com/api/1/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));*/
         }
 
         protected override void CurrencyChanged()
@@ -161,7 +162,7 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string twofa)
         {
-            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
+            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://coinmillions.com/api/1/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));

@@ -20,8 +20,10 @@ namespace DiceBot
         
         DateTime lastupdate = new DateTime();
         Random R = new Random();
+        public static string[] cCurrencies = new string[2] { "btc", "rbs" };
         public BB(cDiceBot Parent)
         {
+            Currency = "btc";
             register = false;
             maxRoll = 99.99;
             AutoInvest = false;
@@ -36,7 +38,38 @@ namespace DiceBot
             Tip = true;
             TipUsingName = true;
             SiteURL = "https://betterbets.io/?ref=1304270";
+            Currencies = new string[2] { "btc", "rbs" };
+            
 
+        }
+
+        protected override void CurrencyChanged()
+    {  
+            try
+            {
+                if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
+                {
+                    lastupdate = DateTime.Now;
+                    string s = Client.GetAsync(new Uri("user?accessToken=" + accesstoken+"&coin="+Currency)).Result.RequestMessage.Content.ReadAsStringAsync().Result;
+                    bbStats tmpu = json.JsonDeserialize<bbStats>(s);
+                    balance = tmpu.balance; //i assume
+                    bets = tmpu.total_bets;
+                    wagered = tmpu.total_wagered;
+                    profit = tmpu.total_profit;
+                    wins = tmpu.total_wins;
+                    losses = bets - losses;
+                    Parent.updateBalance((decimal)(balance));
+                    Parent.updateBets(bets);
+                    Parent.updateLosses(losses);
+                    Parent.updateProfit(profit);
+                    Parent.updateWagered(wagered);
+                    Parent.updateWins(wins);
+
+
+                }
+            }
+            catch
+            { }
         }
         HttpClientHandler ClientHandlr;// = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
         HttpClient Client;
@@ -49,7 +82,7 @@ namespace DiceBot
                     if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
                     {
                         lastupdate = DateTime.Now;
-                        string s = Client.GetAsync(new Uri("user?accessToken="+accesstoken)).Result.RequestMessage.Content.ReadAsStringAsync().Result;
+                        string s = Client.GetAsync("user?accessToken=" + accesstoken + "&coin=" + Currency).Result.RequestMessage.Content.ReadAsStringAsync().Result;
                         bbStats tmpu = json.JsonDeserialize<bbStats>(s);
                         balance = tmpu.balance; //i assume
                         bets = tmpu.total_bets;
@@ -100,7 +133,7 @@ namespace DiceBot
             {
                 if (accesstoken != "" )
                     {
-                    string s1 = "user?accessToken=" + accesstoken;
+                    string s1 = "user?accessToken=" + accesstoken+"&coin="+Currency;
                     try
                     {
                         string s = Client.GetStringAsync(s1).Result;
@@ -131,6 +164,10 @@ namespace DiceBot
                             finishedlogin(false);
                             return;
                         }
+                    }
+                        catch (AggregateException e)
+                    {
+
                     }
                     catch (Exception e)
                     {
@@ -166,6 +203,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("wager", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("direction", High?"1":"0"));
+                pairs.Add(new KeyValuePair<string, string>("coin", Currency));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string responseData = "";
                 using (var response = Client.PostAsync("betDice/", Content))
@@ -255,6 +293,7 @@ namespace DiceBot
                     List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                     pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
                     pairs.Add(new KeyValuePair<string, string>("seed", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                    pairs.Add(new KeyValuePair<string, string>("coin", Currency));
                     FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                     string responseData = "";
                     using (var response = Client.PostAsync("seed/", Content))
@@ -402,7 +441,7 @@ namespace DiceBot
         {
             try
             {
-                string s = Client.GetStringAsync("depositAddress?accessToken=" + accesstoken).Result;
+                string s = Client.GetStringAsync("depositAddress?accessToken=" + accesstoken + "&coin=" + Currency).Result;
                 PRCDepost tmp = json.JsonDeserialize<PRCDepost>(s);
                 return tmp.Address;
             }
@@ -427,6 +466,7 @@ namespace DiceBot
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("uname", User));
+                pairs.Add(new KeyValuePair<string, string>("coin", Currency));
                 pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string responseData = "";

@@ -130,6 +130,11 @@
             // 
             this.nudSending.DecimalPlaces = 8;
             this.nudSending.Location = new System.Drawing.Point(15, 86);
+            this.nudSending.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
             this.nudSending.Name = "nudSending";
             this.nudSending.Size = new System.Drawing.Size(120, 20);
             this.nudSending.TabIndex = 7;

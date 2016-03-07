@@ -93,13 +93,19 @@ namespace DiceBot
                         }
                     }
                 }
-                
-                balance = (double)json.JsonDeserialize<d999Login>(responseData).Balance / 100000000.0;
-                if (balance == 0)
+                try
+                {
+                    balance = (double)json.JsonDeserialize<d999Login>(responseData).Balance / 100000000.0;
+                    if (balance != 0)
+                    {
+                        Parent.updateBalance((decimal)balance);
+                    }
+                    
+                }
+                catch
                 {
 
                 }
-                Parent.updateBalance((decimal)balance);
             }
         }
         int retrycount = 0;
@@ -347,7 +353,7 @@ namespace DiceBot
         decimal Wagered = 0;
         public override void Login(string Username, string Password, string twofa)
         {
-            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
+            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
@@ -396,6 +402,8 @@ namespace DiceBot
                 Parent.updateProfit(profit);
                 Parent.updateWagered(Wagered);
                 Parent.updateWins(tmpU.BetWinCount);
+                Lastbalance = DateTime.Now.AddMinutes(-2);
+                GetBalance();
                 try
                 {
                     Parent.updateDeposit(tmpU.DepositAddress);
@@ -411,7 +419,7 @@ namespace DiceBot
         }
         public override bool Register(string username, string password)
         {
-            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
+            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));

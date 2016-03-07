@@ -13,7 +13,7 @@ namespace DiceBot
     class SafeDice : DiceSite
     {
         string accesstoken = "";
-        HttpClientHandler ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };
+        HttpClientHandler ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip};
         HttpClient Client = null;
         bool ispd = true;
         DateTime LastBalance = DateTime.Now;
@@ -82,7 +82,7 @@ namespace DiceBot
             {
                 try
                 {
-                    if ((DateTime.Now - LastBalance).TotalSeconds > 60 && accesstoken != "" && accesstoken != null)
+                    if ((DateTime.Now - LastBalance).TotalSeconds > 60 && accesstoken != "" && accesstoken != null && Client != null)
                     {
                         /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/" + curen + "/me");
                         loginrequest.CookieContainer = new CookieContainer();
@@ -95,7 +95,7 @@ namespace DiceBot
                         Parent.updateBalance((decimal)balance);
                     }
 
-                    if (accesstoken != "" && accesstoken != null)
+                    if (accesstoken != "" && accesstoken != null && Client!=null)
                     {
                         /* loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/chats/en_US");
                         //loginrequest.Accept = "application/json, text/plain, ";

@@ -102,7 +102,7 @@ namespace DiceBot
                 MPBet tmp = json.JsonDeserialize<MPBet>(Resp);
                 if (tmp.error != null)
                 {
-                    if (tmp.error.ToLower().Contains("invalid_hash"))
+                    if (tmp.error.ToLower().Contains("invalid_hash") || tmp.error.ToLower().Contains("valid hash"))
                     {
                         ResetSeed();
                         placebetthread(High);
@@ -242,7 +242,7 @@ namespace DiceBot
         string token = "";
         public override void Login(string Username, string Password, string twofa)
         {
-            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };;
+            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://api.moneypot.com/v1/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));

@@ -118,7 +118,7 @@ namespace DiceBot
         private void btnProgress_Click(object sender, EventArgs e)
         {
             if (last_swap!="")
-            System.Diagnostics.Process.Start("http://www.simpleswap.me/swap/" + last_swap);
+            System.Diagnostics.Process.Start("http://www.simpleswap.me/exchange/" + last_swap);
         }
 
         bool GetRates()
@@ -222,6 +222,7 @@ namespace DiceBot
                     {
                         txtDeposit.Text = Rate.deposit_address;
                         last_swap = Rate.swap_id;
+                        panel1.Visible = true;
                         if (Type == ExchangeType.withdraw)
                         {
                             if (Withdraw!=null)
