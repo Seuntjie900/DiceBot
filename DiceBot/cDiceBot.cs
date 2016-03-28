@@ -32,7 +32,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.1.3";
+        private const string vers = "3.1.4";
 
 
         Control[] ControlsToDisable;
@@ -238,6 +238,7 @@ namespace DiceBot
             Thread.CurrentThread.CurrentUICulture =  new CultureInfo("en-US");
             sqlite_helper.CheckDBS();
             InitializeComponent();
+            tsmiVersion.Text = vers;
             foreach (string s in args)
             {
                 if (s.StartsWith("log="))
@@ -1489,11 +1490,7 @@ namespace DiceBot
                         {
                             LabList.RemoveAt(0);
                             LabList.RemoveAt(LabList.Count - 1);
-                            if (LabList.Count == 0)
-                            {
-                                Stop("Stopping: End of labouchere list reached.");
-                                
-                            }
+                            
                         }
                         else
                         {
@@ -4517,6 +4514,10 @@ namespace DiceBot
                         else
                         {
                             dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightGreen;
+                            if (_Bet.Profit<0)
+                            {
+
+                            }
                         }
                     }
                 }
@@ -5208,8 +5209,9 @@ namespace DiceBot
                 high = (bool)Lua["bethigh"];
                 CurrentSite.amount = Lastbet;
                 CurrentSite.chance = Chance;
-                CurrentSite.Currency = (string)Lua["currency"];
-                EnableReset = (bool)Lua["enablesrc"];
+                if (CurrentSite.Currency != (string)Lua["currency"])
+                    CurrentSite.Currency = (string)Lua["currency"];
+                EnableReset = (bool)Lua["enablersc"];
                 EnableProgZigZag = (bool)Lua["enablezz"];
             }
             catch (Exception e)
@@ -5488,6 +5490,7 @@ namespace DiceBot
                             moneyPotToolStripMenuItem.Checked?9:
                             coinMillionsToolStripMenuItem.Checked ? 10 :
                             magicalDiceToolStripMenuItem.Checked ? 11 :
+                            fortuneJackToolStripMenuItem.Checked? 12:
                             1);
                 }
                 else if (c is TextBox)
@@ -5594,6 +5597,7 @@ namespace DiceBot
                         moneyPotToolStripMenuItem.Checked = value == 9;
                         coinMillionsToolStripMenuItem.Checked = value == 10;
                         magicalDiceToolStripMenuItem.Checked = value == 11;
+                        fortuneJackToolStripMenuItem.Checked = value == 12;
                         if (value > 11)
                         {
                             justDiceToolStripMenuItem.Checked = true; ;
@@ -5719,7 +5723,7 @@ namespace DiceBot
                         moneyPotToolStripMenuItem.Checked = value == "9";
                         coinMillionsToolStripMenuItem.Checked = value == "10";
                         magicalDiceToolStripMenuItem.Checked = value == "11";
-                        
+                        fortuneJackToolStripMenuItem.Checked = value == "12";
                         
                     }
                     else if (Key == "SettingsMode")

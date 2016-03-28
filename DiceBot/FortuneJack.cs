@@ -107,13 +107,29 @@ namespace DiceBot
         protected override void internalPlaceBet(bool High)
         {
             chance = High ? 99.99 - chance : chance;
-            Client.Send(string.Format("64,{0},{1},{2},{3}\r\n", amount, (int)(chance*100), High?1:0, R.Next(0, int.MaxValue)));
+            decimal tmpamount = (decimal)amount;
+            decimal tmpchancet = (decimal)chance;
+            string s = string.Format("64,{0:0.00000000},{1},{2},{3}\r\n", tmpamount, (int)(tmpchancet * 100), High ? 1 : 0, 1/*R.Next(0, int.MaxValue-1000000)*/);
+            string[] Something = s.Split('\n');
+            
+            Client.Send(Something[0]+"\n");
+            //new Thread(new ParameterizedThreadStart(PlaceBetThread)).Start(High);
 
+        }
+
+        void PlaceBetThread(object _High)
+        {
+            bool High = (bool)_High;
+            chance = High ? 99.99 - chance : chance;
+            string s = string.Format("64,{0:0.00000000},{1},{2},{3}\r\n", amount, (int)(chance * 100), High ? 1 : 0, R.Next(0, int.MaxValue));
+            
+            Client.Send(s);
+            
         }
 
         public override void ResetSeed()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public override void SetClientSeed(string Seed)
@@ -324,11 +340,11 @@ namespace DiceBot
                 {
                     string stats = WebClient.GetStringAsync("api/dice3/utils.php?stats&rnd=" + R.Next(0, int.MaxValue)).Result;
                     string[] StatsVals = stats.Split('|');
-                    wagered = double.Parse(StatsVals[0]);
-                    profit = double.Parse(StatsVals[1]);
-                    bets = int.Parse(StatsVals[2]);
-                    wins = int.Parse(StatsVals[3]);
-                    losses = int.Parse(StatsVals[4]);
+                    wagered = double.Parse(StatsVals[0], System.Globalization.NumberFormatInfo.InvariantInfo);
+                    profit = double.Parse(StatsVals[1], System.Globalization.NumberFormatInfo.InvariantInfo);
+                    bets = int.Parse(StatsVals[2], System.Globalization.NumberFormatInfo.InvariantInfo);
+                    wins = int.Parse(StatsVals[3], System.Globalization.NumberFormatInfo.InvariantInfo);
+                    losses = int.Parse(StatsVals[4], System.Globalization.NumberFormatInfo.InvariantInfo);
                 }
                 catch
                 {
@@ -413,7 +429,7 @@ namespace DiceBot
                     if (RetObjs[0] == ("63"))
                     {
                         Client.Send("67,2\r\n");
-                        balance = double.Parse(RetObjs[2]);
+                        balance = double.Parse(RetObjs[2], System.Globalization.NumberFormatInfo.InvariantInfo);
                         Parent.updateBalance(balance);
                         Parent.updateBets(bets);
                         Parent.updateWins(wins);
@@ -421,24 +437,28 @@ namespace DiceBot
                         Parent.updateWagered(wagered);
                         Parent.updateProfit(profit);
                     }
+                    if (RetObjs[0] == ("53"))
+                    {
+
+                    }
                     if (RetObjs[0] == ("65"))
                     {
                         //string[] values = e.Message.Split(',');
 
                         Bet Result = new Bet
                         {
-                            Amount = decimal.Parse(RetObjs[5]),
+                            Amount = decimal.Parse(RetObjs[5], System.Globalization.NumberFormatInfo.InvariantInfo),
                             Id = long.Parse(RetObjs[1]),
                             date = DateTime.Now,
-                            Profit = decimal.Parse(RetObjs[6]),
-                            Roll = decimal.Parse(RetObjs[9]) / 100m,
+                            Profit = decimal.Parse(RetObjs[6], System.Globalization.NumberFormatInfo.InvariantInfo),
+                            Roll = decimal.Parse(RetObjs[9], System.Globalization.NumberFormatInfo.InvariantInfo) / 100m,
                             serverseed = (RetObjs[10]),
                             clientseed = (RetObjs[11]),
                             high = RetObjs[8] == "1",
                             uid = int.Parse(RetObjs[3])
 
                         };
-                        decimal tmpChance = decimal.Parse(RetObjs[7]) / 100m;
+                        decimal tmpChance = decimal.Parse(RetObjs[7], System.Globalization.NumberFormatInfo.InvariantInfo) / 100m;
                         Result.Chance = Result.high ? (decimal)maxRoll - tmpChance : tmpChance;
 
                         bool win = false;

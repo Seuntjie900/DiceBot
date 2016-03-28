@@ -110,8 +110,9 @@ namespace DiceBot
         }
         int retrycount = 0;
         string next = "";
-        void PlaceBetThread()
+        void PlaceBetThread(object _High)
         {
+            bool High = (bool)_High;
             string err = "";
             try
             {
@@ -143,7 +144,7 @@ namespace DiceBot
                         {
                             if (e.InnerException.Message.Contains("ssl"))
                             {
-                                PlaceBetThread();
+                                PlaceBetThread(High);
                                 return;
                             }
                         }
@@ -154,7 +155,7 @@ namespace DiceBot
                         {
 
                             Thread.Sleep(200);
-                            PlaceBetThread();
+                            PlaceBetThread(High);
                             return;
                         }
                         else
@@ -174,6 +175,8 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("ProtocolVersion", "2"));
 
                 Content = new FormUrlEncodedContent(pairs);
+                string tmps = Content.ReadAsStringAsync().Result;
+                
                 responseData = "";
                 using (var response = Client.PostAsync("", Content))
                 {
@@ -181,17 +184,19 @@ namespace DiceBot
                     try
                     {
                         responseData = response.Result.Content.ReadAsStringAsync().Result;
+                        
                     }
                     catch (AggregateException e)
                     {
+                        Parent.DumpLog(e.InnerException.Message, 0);
                         if (retrycount++ < 3)
                         {
-                            PlaceBetThread();
+                            PlaceBetThread(High);
                             return;
                         }
                         if (e.InnerException.Message.Contains("ssl"))
                         {
-                            PlaceBetThread();
+                            PlaceBetThread(High);
                             return;
                         }
                         else
@@ -278,8 +283,8 @@ namespace DiceBot
         protected override void internalPlaceBet(bool High)
         {
             this.High = High;
-            Thread t = new Thread(PlaceBetThread);
-            t.Start();
+            Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
+            t.Start(High);
         }
 
         public override void ResetSeed()
@@ -326,7 +331,7 @@ namespace DiceBot
             pairs.Add(new KeyValuePair<string, string>("a", "Withdraw"));
             pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
             pairs.Add(new KeyValuePair<string, string>("Currency", Currency));
-            pairs.Add(new KeyValuePair<string, string>("Amount", Amount.ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+            pairs.Add(new KeyValuePair<string, string>("Amount", (Amount*100000000).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
             pairs.Add(new KeyValuePair<string, string>("Address", Address));
 
             FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
