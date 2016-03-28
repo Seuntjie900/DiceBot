@@ -62,6 +62,7 @@
     <Compile Include="Bet.cs" />
     <Compile Include="DiceBot.cs" />
     <Compile Include="Helpers\Email.cs" />
+    <Compile Include="Helpers\Hash.cs" />
     <Compile Include="Helpers\imgur.cs" />
     <Compile Include="Helpers\json.cs" />
     <Compile Include="Helpers\Messagehelpr.cs" />
