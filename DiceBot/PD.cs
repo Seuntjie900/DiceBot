@@ -28,7 +28,7 @@ namespace DiceBot
             AutoWithdraw = true;
             ChangeSeed = true;
             AutoLogin = true;
-            BetURL = "https://www.moneypot.com/bets/";
+            BetURL = "https://api.primedice.com/bets/";
             Thread t = new Thread(GetBalanceThread);
             t.Start();
             this.Parent = Parent;

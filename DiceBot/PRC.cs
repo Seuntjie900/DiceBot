@@ -6,6 +6,7 @@ using Microsoft.AspNet.SignalR.Client;
 using System.Net;
 using System.IO;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace DiceBot
 {
@@ -99,7 +100,8 @@ namespace DiceBot
             System.Threading.Thread.Sleep(120);
             return true;
         }
-      
+
+        Random r = new Random();
         public override void ResetSeed()
         {
             
@@ -123,11 +125,52 @@ namespace DiceBot
                 HttpWebResponse Response = (HttpWebResponse)getHeaders.GetResponse();
                 string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 PRCResetSeed tmp = json.JsonDeserialize<PRCResetSeed>(s1);
+                
                 if (tmp.Success)
                 {
                     sqlite_helper.InsertSeed(tmp.PreviousServerHash, tmp.PreviousServerSeed);
                     serverhash = tmp.CurrentServerHash;
-                    client = tmp.CurrentClientSeed;
+
+
+                    HttpWebRequest getHeaders2 = HttpWebRequest.Create("https://betking.io/account/SaveClientSeed") as HttpWebRequest;
+                    if (Prox != null)
+                        getHeaders2.Proxy = Prox;
+                    getHeaders2.CookieContainer = Cookies;
+
+                    getHeaders2.Method = "POST";
+                    string tmpClient = r.Next(0, int.MaxValue).ToString();
+                    string post2 = string.Format("clientSeed="+tmpClient+"&__RequestVerificationToken=" + s);
+                    getHeaders2.ContentType = "application/x-www-form-urlencoded";
+                    getHeaders2.ContentLength = post2.Length;
+                    using (var writer = new StreamWriter(getHeaders2.GetRequestStream()))
+                    {
+                        string writestring = post2 as string;
+                        writer.Write(writestring);
+                    }
+                    try
+                    {
+
+                        Response = (HttpWebResponse)getHeaders2.GetResponse();
+                        s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                        tmp = json.JsonDeserialize<PRCResetSeed>(s1);
+                        if (tmp.Success)
+                        {
+                            //sqlite_helper.InsertSeed(tmp.PreviousServerHash, tmp.PreviousServerSeed);
+                            
+                            client = tmpClient;
+                        }
+                        else
+                        {
+                            Parent.updateStatus("Failed to reset seed, too soon.");
+                        }
+
+                    }
+                    catch
+                    {
+
+                    }
+                    
+                    
                 }
                 else
                 {
@@ -513,6 +556,84 @@ namespace DiceBot
             }
         }
         int UserID = 0;
+        public virtual double GetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+            server = nonce.ToString() + ":" + server + ":" + nonce.ToString();
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = nonce.ToString() + ":" +client + ":" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }
+            return 0;
+        }
+        public static double sGetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+            server = nonce.ToString() + ":" + server + ":" + nonce.ToString();
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = nonce.ToString() + ":" + client + ":" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }
+            return 0;
+        }
     }
 
     

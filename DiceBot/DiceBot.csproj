@@ -191,6 +191,7 @@
     <Compile Include="Cloudflare.cs" />
     <Compile Include="Coinichiwa.cs" />
     <Compile Include="CoinMillions.cs" />
+    <Compile Include="cryptogames.cs" />
     <Compile Include="Custom Chart.cs">
       <SubType>Form</SubType>
     </Compile>

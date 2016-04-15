@@ -104,15 +104,24 @@ namespace DiceBot
                     case "site": site = (string)Reader[i]; break;
                 }
             }
-            if (!string.IsNullOrEmpty(tmp.serverseed) && tmp.nonce != -1 && !string.IsNullOrEmpty(tmp.clientseed) && tmp.Roll!=-1 && site!="")
+            if (!string.IsNullOrEmpty(tmp.serverseed) && !string.IsNullOrEmpty(tmp.clientseed) && tmp.Roll!=-1 && site!="")
             {
                 switch (site)
                 {
                     case "JustDice": tmp.Verified = tmp.Roll == (decimal)DiceSite.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                     case "PrimeDice": tmp.Verified = tmp.Roll == (decimal)PD.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                     case "999Dice": tmp.Verified = tmp.Roll== (decimal)dice999.sGetLucky(tmp.serverseed, (tmp.clientseed), (int)tmp.nonce, /*(long)(tmp.Roll*10000m),*/ tmp.serverhash); break;
-                    //case "SafeDice": tmp.Verified = tmp.Roll == (decimal)SD.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    //case "PRC": tmp.Verified = tmp.Roll == (decimal)PD.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "SafeDice": tmp.Verified = tmp.Roll == (decimal)SafeDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "PRCDice": tmp.Verified = tmp.Roll == (decimal)PRC.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "RollinIO": tmp.Verified = tmp.Roll == (decimal)rollin.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "BitDice": tmp.Verified = tmp.Roll == (decimal)bitdice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "BetterBets": tmp.Verified = tmp.Roll == (decimal)BB.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "MoneyPot": tmp.Verified = tmp.Roll == (decimal)moneypot.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "MoneroDice": tmp.Verified = tmp.Roll == (decimal)MoneroDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "FortuneJack": tmp.Verified = tmp.Roll == (decimal)FortuneJack.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "Coinichiwa": tmp.Verified = tmp.Roll == (decimal)Coinichiwa.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "CoinMillions": tmp.Verified = tmp.Roll == (decimal)CoinMillions.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "CryptoGames": tmp.Verified = tmp.Roll == (decimal)cryptogames.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                 }
             }
             return tmp;

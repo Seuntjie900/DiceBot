@@ -424,6 +424,22 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
+            foreach (string s in cryptogames.sCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                cryptoGamesToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -5076,8 +5092,9 @@ namespace DiceBot
                     case "coinichiwaToolStripMenuItem": CurrentSite = new Coinichiwa(this); siteToolStripMenuItem.Text = "Site(CW)"; break;
                     case "moneroDiceToolStripMenuItem": CurrentSite=new MoneroDice(this); siteToolStripMenuItem.Text="Site (MonD)"; break;
                     case "fortuneJackToolStripMenuItem" : CurrentSite = new FortuneJack(this); siteToolStripMenuItem.Text = "Site (FJ)"; break;
+                    case "cryptoGamesToolStripMenuItem" : CurrentSite = new cryptogames(this); siteToolStripMenuItem.Text = "Site (CG)"; break;
                 }
-                if (CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa)
+                if (CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
                     lblPass.Text = "API key:";
                     lblUsername.Text = "Username:";

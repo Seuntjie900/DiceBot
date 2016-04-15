@@ -18,6 +18,7 @@ namespace DiceBot
         Random R = new Random();
         public moneypot(cDiceBot Parent)
         {
+            Name = "MoneyPot";
             this.Parent = Parent;
             edge = 0.9m;
             maxRoll = 99.99;

@@ -150,7 +150,7 @@ namespace DiceBot
 
 
                 }
-                Task.Delay(1000);
+                Thread.Sleep(1000);
             }
         }
         Random R = new Random();
@@ -356,7 +356,7 @@ namespace DiceBot
                 StartSocket();
                 while (Client.State == WebSocketState.Connecting)
                 {
-                    Task.Delay(100);
+                    Thread.Sleep(100);
                 }
                 finishedlogin(true);
                 IsLoggedIn = true;
