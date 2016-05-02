@@ -364,7 +364,7 @@ namespace DiceBot
                 Parent.updateWins(tmp.Wins);
                 //Parent.updateDeposit(tmp.DepositAddress);
                 
-                getHeaders = HttpWebRequest.Create("https://betking.io/account/GetCurrentSeed") as HttpWebRequest;
+                getHeaders = HttpWebRequest.Create("https://betking.io/account/GetCurrentSeed?gameType=0") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
