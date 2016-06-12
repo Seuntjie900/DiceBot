@@ -7,6 +7,7 @@ using System.Net;
 using System.IO;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.Threading;
 
 namespace DiceBot
 {
@@ -53,8 +54,9 @@ namespace DiceBot
         {
             
         }
-
-        protected override async void internalPlaceBet(bool High)
+        DateTime LastBet = DateTime.Now;
+        double LastBetAmount = 0;
+        protected override async void internalPlaceBet(bool High, double amount, double chance)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             int retries =0;
@@ -65,7 +67,9 @@ namespace DiceBot
                 try
                 {
                     var tmpStats = await dicehub.Invoke<PRCMYstats>("Bet", High ? 0 : 1, amount, chance);
-
+                    LastBet = DateTime.Now;
+                    LastBetAmount = amount;
+                    
                     Bet tmp = tmpStats.DiceBet;
                     if (tmp.uid == UserID)
                     {
@@ -128,11 +132,12 @@ namespace DiceBot
                 
                 if (tmp.Success)
                 {
+                    Thread.Sleep(11000);
                     sqlite_helper.InsertSeed(tmp.PreviousServerHash, tmp.PreviousServerSeed);
                     serverhash = tmp.CurrentServerHash;
 
 
-                    HttpWebRequest getHeaders2 = HttpWebRequest.Create("https://betking.io/account/SaveClientSeed") as HttpWebRequest;
+                    HttpWebRequest getHeaders2 = HttpWebRequest.Create("https://betking.io/account/SaveClientSeed?gameType=0") as HttpWebRequest;
                     if (Prox != null)
                         getHeaders2.Proxy = Prox;
                     getHeaders2.CookieContainer = Cookies;
@@ -212,7 +217,17 @@ namespace DiceBot
 
         public override bool ReadyToBet()
         {
-
+            double millis = (DateTime.Now - LastBet).TotalMilliseconds;
+            if (LastBetAmount >= 0.001)
+                return true;
+            else if (LastBetAmount >= 0.0001 && millis > 200)
+                return true;
+            else if (LastBetAmount >= 0.00001 && millis > 500)
+                return true;
+            else if (LastBetAmount >= 0.000001 && millis > 800)
+                return true;
+            else if (millis > 1000)
+                return true;
             return true;
         }
         
@@ -270,8 +285,9 @@ namespace DiceBot
             }
             catch (WebException e)
             {
-                System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
+                
                 finishedlogin(false);
+                return;
             }
             
             getHeaders = HttpWebRequest.Create("https://betking.io/account/login") as HttpWebRequest;
@@ -297,10 +313,11 @@ namespace DiceBot
 
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                if (!s1.ToLower().Contains("success"))
+                if (!s1.ToLower().Contains("true"))
                 {
-                    System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
+                    
                     finishedlogin(false);
+                    return;
                 }
                 /*string tmp = s1.Substring(s1.IndexOf("__RequestVerificationToken") + "__RequestVerificationToken\" type=\"hidden\" value=\"".Length);
                 rqtoken = tmp.Substring(0, tmp.IndexOf("\""));*/
@@ -309,8 +326,8 @@ namespace DiceBot
             {
                 Response = (HttpWebResponse)e.Response;
                 s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                System.Windows.Forms.MessageBox.Show("Failed to log in. Please check your username and password.");
                 finishedlogin(false);
+                return;
             }
             
             foreach (Cookie c in Response.Cookies)
@@ -636,7 +653,11 @@ namespace DiceBot
         }
     }
 
-    
+    public  class PRCLogin
+    {
+        public bool Success { get; set; }
+        public string ErrorMessage { get; set; }
+    }
     public class PRCUser
     {
         public int Id { get; set; }

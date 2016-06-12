@@ -34,10 +34,10 @@ namespace DiceBot
             t.Start();
 
         }
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
 
-            new Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(High);
+            new Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
         }
         DateTime lastupdate = DateTime.Now;
         void getbalanceThread()
@@ -74,7 +74,11 @@ namespace DiceBot
         {
             try
             {
-                High = (bool)Bool;
+                PlaceBetObj tmp9 = Bool as PlaceBetObj;
+                
+                bool High = tmp9.High;
+                double amount = tmp9.Amount;
+                double chance = tmp9.Chance;
                 //double tmpchance = High ? 99.99 - chance : chance;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("a", "place_bet"));

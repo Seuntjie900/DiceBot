@@ -21,7 +21,7 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
         
-        public static string[] sCurrencies = new string[] { "BCT", "Doge", "ETH", "DASH", "GRC", "GMC", "PPC", "PLAY", "LTC" };
+        public static string[] sCurrencies = new string[] { "BCT", "Doge", "ETH", "DASH", "GRC", "GAME", "PPC", "PLAY", "LTC" };
         public cryptogames(cDiceBot Parent)
         {
             this.Parent = Parent;
@@ -31,7 +31,7 @@ namespace DiceBot
             ChangeSeed = false;
             edge = 0.8m;
             maxRoll = 99.999;
-            this.Currencies = new string[] { "BCT", "Doge", "ETH", "DASH", "GRC", "GMC", "PPC", "PLAY", "LTC" };
+            this.Currencies = new string[] { "BCT", "Doge", "ETH", "DASH", "GRC", "GAME", "PPC", "PLAY", "LTC" };
             this.Currency = "btc";
             register = false;
             SiteURL = "https://www.crypto-games.net?i=KaSwpL1Bky";
@@ -83,10 +83,13 @@ namespace DiceBot
         string CurrenyHash = "";
         void PlaceBetThread(object _High)
         {
-            bool High = (bool)_High;
+            PlaceBetObj tmp9 = _High as PlaceBetObj;
+            bool High = tmp9.High;
+            double amount = tmp9.Amount;
+            double chance = tmp9.Chance;
             string Clients = ClientSeedGen.Next(0, int.MaxValue).ToString();
-            decimal payout = (100m - edge) / (decimal)chance;
-            cgPlaceBet tmpPlaceBet = new cgPlaceBet() { Bet=amount, ClientSeed=Clients, UnderOver=!High, Payout=(double)payout };
+            decimal payout = decimal.Parse(((100m - edge) / (decimal)chance).ToString("0.0000"));
+            cgPlaceBet tmpPlaceBet = new cgPlaceBet() { Bet=amount, ClientSeed=Clients, UnderOver=High, Payout=(double)payout };
 
             string post = json.JsonSerializer<cgPlaceBet>(tmpPlaceBet);
             HttpContent cont = new StringContent(post);
@@ -141,9 +144,9 @@ namespace DiceBot
             { }
         }
 
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
-            new Thread(new ParameterizedThreadStart(PlaceBetThread)).Start(High);
+            new Thread(new ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
         }
 
         public override void ResetSeed()

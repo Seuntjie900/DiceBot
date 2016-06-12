@@ -32,7 +32,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.1.4";
+        private const string vers = "3.1.5";
 
 
         Control[] ControlsToDisable;
@@ -504,6 +504,7 @@ namespace DiceBot
             Lua.RegisterFunction("getvalue", this, new dGetValue(LuaGetValue).Method);
             Lua.RegisterFunction("loadstrategy", this, new dLoadStrat(LuaLoadStrat).Method);
             Lua.RegisterFunction("read", this, new dGetInput(GetInputForLua).Method);
+            
             DumpLog("constructor done", 8);
         }
         void luaStop()
@@ -523,11 +524,14 @@ namespace DiceBot
             2= decimal
             3= string
         */
+        bool WaitForInput = false;
         object GetInputForLua(string prompt, int type)
         {
+            WaitForInput = true;
             DumpLog("getting user input for lua script", 7);
             UserInput tmp = new UserInput();
             DialogResult tmpRes = tmp.ShowDialog(prompt, type);
+            WaitForInput = false;
             return tmp.Value;
         }
 
@@ -1120,9 +1124,11 @@ namespace DiceBot
             }
         }
 
+        bool ResetBet = false;
       private void Reset()
         {
-            //reset = true;
+
+          reset = true;
           if (rdbMartingale.Checked)
           {
               Lastbet = MinBet;
@@ -1171,7 +1177,7 @@ namespace DiceBot
                     return;
 
                 CurrentSite.chance = Chance;
-                CurrentSite.PlaceBet(high);
+                CurrentSite.PlaceBet(high,Lastbet, Chance);
                     
                 dtLastBet = DateTime.Now;
                 EnableTimer(tmBet, false);
@@ -1305,6 +1311,7 @@ namespace DiceBot
             }
             if (testInputs())
             {
+                Reset();
                 stop = false;
                 if (rdbLabEnable.Checked)
                 {
@@ -1389,14 +1396,14 @@ namespace DiceBot
                 {
                     if ((DateTime.Now - dtLastBet).TotalSeconds > 30 && !stop)
                     {
-                        if (!retriedbet)
+                        if (!retriedbet && !WaitForInput)
                         {
                             retriedbet = true;
                             EnableTimer(tmBet, true);
 
                         }
                     }
-                    if ((DateTime.Now - dtLastBet).TotalSeconds > 120 && !stop)
+                    if ((DateTime.Now - dtLastBet).TotalSeconds > 120 && !stop && !WaitForInput)
                     {
 
                         
@@ -1405,8 +1412,8 @@ namespace DiceBot
                         
 
                     }
-                    
-                    if (restartcounter > 50 && restartcounter < 51 && !stop)
+
+                    if (restartcounter > 50 && restartcounter < 51 && !stop && !WaitForInput)
                     {
                         Start(true);
                         restartcounter++;
@@ -1420,10 +1427,11 @@ namespace DiceBot
                 {
                     Invest();
                 }
-                if (reset)
+                /*if (reset)
                 {
                     ResetSeed();
-                }
+                }*/
+
 
             }
         }
@@ -1958,7 +1966,7 @@ namespace DiceBot
             }
             double profit = (double)bet.Profit;
             retriedbet = false;
-            if (!stop && !reset)
+            if (!stop)
             {
                 if (Win)
                 {
@@ -1975,7 +1983,7 @@ namespace DiceBot
                     LargestBet = Lastbet;
 
                 //if its a win
-                if (Win && !(reset))
+                if (Win)
                 {
 
                     if (PreviousBalance != 0)
@@ -2098,7 +2106,7 @@ namespace DiceBot
                 }
 
                     //if its a loss
-                else if (!Win && !(reset))
+                else if (!Win)
                 {
                     
                     //do i use this line?
@@ -2529,8 +2537,9 @@ namespace DiceBot
                 else
                 if (CurrentSite.ReadyToBet() && valid)
                 {
-                    
-                    PlaceBet();
+                    if (!stop)
+                        PlaceBet();
+                    EnableTimer(tmBet, false);
                 }
                
             }
@@ -4523,18 +4532,46 @@ namespace DiceBot
                     
                     if (dataGridView1.Rows[0].Cells[6].Value != null)
                     {
-                        if (!((bool)_Bet.high ? (decimal)_Bet.Roll > (decimal)CurrentSite.maxRoll - (decimal)(_Bet.Chance) : (decimal)_Bet.Roll < (decimal)(_Bet.Chance)))
-                         {
-                            dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.Pink;
-                        }
-                        else
-                        {
-                            dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightGreen;
-                            if (_Bet.Profit<0)
+                        
+                            if (!((bool)_Bet.high ? (decimal)_Bet.Roll > (decimal)CurrentSite.maxRoll - (decimal)(_Bet.Chance) : (decimal)_Bet.Roll < (decimal)(_Bet.Chance)))
                             {
-
+                                if (_Bet.Chance<=50)
+                                {
+                                    if (
+                                        (decimal)_Bet.Roll < (decimal)CurrentSite.maxRoll - (decimal)(_Bet.Chance) && 
+                                        (decimal)_Bet.Roll > (decimal)(_Bet.Chance))
+                                    {
+                                        dataGridView1.Rows[0].Cells[5].Style.BackColor = Color.LightGray;
+                                    }
+                                    else
+                                        dataGridView1.Rows[0].Cells[5].Style.BackColor = Color.Pink;
+                                }
+                                
+                                dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.Pink;
                             }
-                        }
+                            else
+                            {
+                                if (_Bet.Chance > 50)
+                                {
+                                    
+                                    if ((decimal)_Bet.Roll > (decimal)CurrentSite.maxRoll - (decimal)(_Bet.Chance) && 
+                                        (decimal)_Bet.Roll < (decimal)(_Bet.Chance))
+                                    {
+                                        dataGridView1.Rows[0].Cells[5].Style.BackColor = Color.Gold;
+                                    }
+                                    else
+                                    {
+                                        dataGridView1.Rows[0].Cells[5].Style.BackColor = Color.LightGreen;
+                                    }
+                                }
+                                
+                                    dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightGreen;
+                                if (_Bet.Profit < 0)
+                                {
+
+                                }
+                            }
+                        
                     }
                 }
                 while (dataGridView1.Rows.Count > maxRows && dataGridView1.Rows.Count>0)
@@ -4547,8 +4584,32 @@ namespace DiceBot
 
         private void btnLogIn_Click(object sender, EventArgs e)
         {
+
+
+
             if ((sender as Button).Text == "Log In")
             {
+                string curcur = CurrentSite.Currency;
+                switch (CurrentSite.GetType().Name)
+                {
+                    case "JD": CurrentSite = new JD(this); break;
+                    case "PRC": CurrentSite = new PRC(this); break;
+                    case "BB": CurrentSite = new BB(this); break;
+                    case "bitdice": CurrentSite = new bitdice(this); break;
+                    case "Coinichiwa": CurrentSite = new Coinichiwa(this); break;
+                    case "CoinMillions": CurrentSite = new CoinMillions(this); break;
+                    case "cryptogames": CurrentSite = new cryptogames(this); break;
+                    case "dadice": CurrentSite = new dadice(this); break;
+                    case "dice999": CurrentSite = new dice999(this); break;
+                    case "FortuneJack": CurrentSite = new FortuneJack(this); break;
+                    case "MagicalDice": CurrentSite = new MagicalDice(this); break;
+                    case "MoneroDice": CurrentSite = new MoneroDice(this); break;
+                    case "moneypot": CurrentSite = new moneypot(this); break;
+                    case "PD": CurrentSite = new PD(this); break;
+                    case "rollin": CurrentSite = new rollin(this); break;
+                    case "SafeDice": CurrentSite = new SafeDice(this); break;
+                }
+                CurrentSite.Currency = curcur;
                 CurrentSite.FinishedLogin -= CurrentSite_FinishedLogin;
                 CurrentSite.FinishedLogin +=CurrentSite_FinishedLogin;
                 
@@ -4561,6 +4622,27 @@ namespace DiceBot
                 {
                     Stop("Logging out of site");
                     CurrentSite.Disconnect();
+                    string curcur = CurrentSite.Currency;
+                    switch (CurrentSite.GetType().Name)
+                    {
+                        case "JD": CurrentSite = new JD(this); break;
+                        case "PRC": CurrentSite = new PRC(this); break;
+                        case "BB": CurrentSite = new BB(this); break;
+                        case "bitdice": CurrentSite = new bitdice(this); break;
+                        case "Coinichiwa": CurrentSite = new Coinichiwa(this); break;
+                        case "CoinMillions": CurrentSite = new CoinMillions(this); break;
+                        case "cryptogames": CurrentSite = new cryptogames(this); break;
+                        case "dadice": CurrentSite = new dadice(this); break;
+                        case "dice999": CurrentSite = new dice999(this); break;
+                        case "FortuneJack": CurrentSite = new FortuneJack(this); break;
+                        case "MagicalDice": CurrentSite = new MagicalDice(this); break;
+                        case "MoneroDice": CurrentSite = new MoneroDice(this); break;
+                        case "moneypot": CurrentSite = new moneypot(this); break;
+                        case "PD": CurrentSite = new PD(this); break;
+                        case "rollin": CurrentSite = new rollin(this); break;
+                        case "SafeDice": CurrentSite = new SafeDice(this); break;
+                    }
+                    CurrentSite.Currency = curcur;
                     EnableNotLoggedInControls(false);
                 }
             }
@@ -4625,7 +4707,7 @@ namespace DiceBot
         {
             CurrentSite.amount = ((double)nudApiBet.Value);
             CurrentSite.chance = (double)(nudApiChance.Value);
-            CurrentSite.PlaceBet(true);
+            CurrentSite.PlaceBet(true, (double)nudApiBet.Value, (double)(nudApiChance.Value));
         }
 
         /// <summary>
@@ -4637,7 +4719,7 @@ namespace DiceBot
         {
             CurrentSite.amount =((double)nudApiBet.Value);
             CurrentSite.chance = (double)(nudApiChance.Value);
-            CurrentSite.PlaceBet(false);
+            CurrentSite.PlaceBet(false, (double)nudApiBet.Value,(double)(nudApiChance.Value));
         }
 
         private void nudApiBet_ValueChanged(object sender, EventArgs e)
@@ -5508,6 +5590,7 @@ namespace DiceBot
                             coinMillionsToolStripMenuItem.Checked ? 10 :
                             magicalDiceToolStripMenuItem.Checked ? 11 :
                             fortuneJackToolStripMenuItem.Checked? 12:
+                            cryptoGamesToolStripMenuItem.Checked?13:
                             1);
                 }
                 else if (c is TextBox)
@@ -5615,9 +5698,10 @@ namespace DiceBot
                         coinMillionsToolStripMenuItem.Checked = value == 10;
                         magicalDiceToolStripMenuItem.Checked = value == 11;
                         fortuneJackToolStripMenuItem.Checked = value == 12;
-                        if (value > 11)
+                        cryptoGamesToolStripMenuItem.Checked = value == 13;
+                        if (value > 13)
                         {
-                            justDiceToolStripMenuItem.Checked = true; ;
+                            primeDiceToolStripMenuItem.Checked = true; ;
                         }
 
                     }
@@ -5741,6 +5825,7 @@ namespace DiceBot
                         coinMillionsToolStripMenuItem.Checked = value == "10";
                         magicalDiceToolStripMenuItem.Checked = value == "11";
                         fortuneJackToolStripMenuItem.Checked = value == "12";
+                        cryptoGamesToolStripMenuItem.Checked = value == "13";
                         
                     }
                     else if (Key == "SettingsMode")

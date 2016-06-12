@@ -54,10 +54,10 @@ namespace DiceBot
         public bool GettingSeed { get; set; }
 
 
-        public void PlaceBet(bool High)
+        public void PlaceBet(bool High, double amount, double chance)
         {
             Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
-            internalPlaceBet(High);
+            internalPlaceBet(High,amount, chance);
         }
         protected void FinishedBet(Bet newBet)
         {
@@ -71,7 +71,7 @@ namespace DiceBot
             Parent.GetBetResult(balance, newBet);
                 
         }
-        protected abstract void internalPlaceBet(bool High);
+        protected abstract void internalPlaceBet(bool High,double amount, double chance);
         public abstract void ResetSeed();
         public abstract void SetClientSeed(string Seed);
         public virtual bool Invest(double Amount)
@@ -212,6 +212,18 @@ namespace DiceBot
             Prox.Credentials = new NetworkCredential(prox_username, prox_pass);
         }
         
+    }
+    public class PlaceBetObj
+    {
+        public PlaceBetObj(bool High, double Amount, double Chance)
+        {
+            this.High = High;
+            this.Amount = Amount;
+            this.Chance = Chance;
+        }
+        public bool High { get; set; }
+        public double Amount { get; set; }
+        public double Chance { get; set; }
     }
 
 }

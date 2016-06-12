@@ -72,50 +72,57 @@ namespace DiceBot
 
         void PlaceBetThread(object high)
         {
-            bool High = (bool)high;
-            double prize = amount * ((100.0 - (double)edge) / chance);
-            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-            pairs.Add(new KeyValuePair<string, string>("public_key", pub));
-            pairs.Add(new KeyValuePair<string, string>("private_key", priv));
-            pairs.Add(new KeyValuePair<string, string>("input_bet", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
-            pairs.Add(new KeyValuePair<string, string>("input_prize", prize.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
-            pairs.Add(new KeyValuePair<string, string>("input_roll_type", (High?"over":"under")));
-            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-            string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
-            monerobase tmp = json.JsonDeserialize<monerobase>(sEmitResponse);
-            if (tmp.bet_data.error == null)
+            try
             {
-                Bet tmp2 = new Bet();
-                tmp2.Amount = decimal.Parse(tmp.bet_data.size, System.Globalization.NumberFormatInfo.InvariantInfo);
-                tmp2.date = DateTime.Now;
-                tmp2.Id = (decimal)tmp.bet_data.bet_id;
-                tmp2.Profit = (tmp.bet_data.win) ? decimal.Parse(tmp.bet_data.profit, System.Globalization.NumberFormatInfo.InvariantInfo) : -tmp2.Amount;
-                tmp2.Roll = decimal.Parse(tmp.bet_data.roll_result, System.Globalization.NumberFormatInfo.InvariantInfo);
-                tmp2.high = tmp.bet_data.roll_type == "over";
-                tmp2.Chance = decimal.Parse(tmp.bet_data.win_chance, System.Globalization.NumberFormatInfo.InvariantInfo);
-                tmp2.nonce = (long)tmp.bet_data.nonce;
-                tmp2.serverhash = tmp.bet_data.hash;
-                tmp2.clientseed = tmp.bet_data.seed_user;
-                bets++;
-                wagered += (double)tmp2.Amount;
-                balance = tmp.bet_data.balance;
-                profit += (double)tmp2.Profit;
-                if (tmp.bet_data.win)
+                PlaceBetObj tmp9 = high as PlaceBetObj;
+                bool High = tmp9.High;
+                double amount = tmp9.Amount;
+                double chacne = tmp9.Chance;
+                double prize = amount * ((100.0 - (double)edge) / chance);
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("public_key", pub));
+                pairs.Add(new KeyValuePair<string, string>("private_key", priv));
+                pairs.Add(new KeyValuePair<string, string>("input_bet", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("input_prize", prize.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("input_roll_type", (High ? "over" : "under")));
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
+                monerobase tmp = json.JsonDeserialize<monerobase>(sEmitResponse);
+                if (tmp.bet_data.error == null)
                 {
-                    wins++;
+                    Bet tmp2 = new Bet();
+                    tmp2.Amount = decimal.Parse(tmp.bet_data.size, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    tmp2.date = DateTime.Now;
+                    tmp2.Id = (decimal)tmp.bet_data.bet_id;
+                    tmp2.Profit = (tmp.bet_data.win) ? decimal.Parse(tmp.bet_data.profit, System.Globalization.NumberFormatInfo.InvariantInfo) : -tmp2.Amount;
+                    tmp2.Roll = decimal.Parse(tmp.bet_data.roll_result, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    tmp2.high = tmp.bet_data.roll_type == "over";
+                    tmp2.Chance = decimal.Parse(tmp.bet_data.win_chance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    tmp2.nonce = (long)tmp.bet_data.nonce;
+                    tmp2.serverhash = tmp.bet_data.hash;
+                    tmp2.clientseed = tmp.bet_data.seed_user;
+                    bets++;
+                    wagered += (double)tmp2.Amount;
+                    balance = tmp.bet_data.balance;
+                    profit += (double)tmp2.Profit;
+                    if (tmp.bet_data.win)
+                    {
+                        wins++;
+                    }
+                    else
+                    {
+                        losses++;
+                    }
+                    FinishedBet(tmp2);
                 }
-                else
-                {
-                    losses++;
-                }
-                FinishedBet(tmp2);
+                else Parent.updateStatus(tmp.bet_data.error);
             }
-            else Parent.updateStatus(tmp.bet_data.error);
+            catch { }
         }
 
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
-            new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(High);
+            new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
         }
 
         public override void ResetSeed()

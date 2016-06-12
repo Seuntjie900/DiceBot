@@ -108,7 +108,7 @@ namespace DiceBot
 
         int id = 1;
         //BitDiceClient Client = new BitDiceClient();
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
             string s = string.Format("{{\"jsonrpc\":\"2.0\",\"method\":\"bets:make\",\"params\":{{\"amount\":\"{0:0.00000000}\",\"chance\":\"{1:0.000000}\",\"type\":\"{2}\"}},\"id\":{3}}}", amount, chance, High?"high":"low",id++);
             if (Client.State == WebSocketState.Open)

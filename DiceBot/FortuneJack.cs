@@ -24,7 +24,7 @@ namespace DiceBot
             AutoWithdraw = true;
             ChangeSeed = false;
             AutoLogin = true;
-            BetURL = "https://www.moneypot.com/bets/";
+            BetURL = "https://fortunejack.com";
              Currencies = new string[11] { "btc", "ltc", "xdg", "clam", "nvc", "dash", "ppc", "nmc", "rdd", "xmr", "fjc"};
 
             Currency = "BTC";
@@ -33,7 +33,7 @@ namespace DiceBot
             TipUsingName = false;
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
-            SiteURL = "https://primedice.com/?ref=Seuntjie";
+            SiteURL = "https://fortunejack.com/affiliate/179043/";
         }
 
         protected override void CurrencyChanged()
@@ -104,7 +104,7 @@ namespace DiceBot
         bool IsFJ = true;
         bool IsLoggedIn = false;
 
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
             chance = High ? 99.99 - chance : chance;
             decimal tmpamount = (decimal)amount;

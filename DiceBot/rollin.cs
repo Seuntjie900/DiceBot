@@ -69,8 +69,12 @@ namespace DiceBot
         {
             try
             {
+                PlaceBetObj tmp9 = _High as PlaceBetObj;
+                bool High = tmp9.High;
+                double amount = tmp9.Amount;
+                double chance = tmp9.Chance;
                 lastbet = DateTime.Now;
-                bool High = (bool)_High;
+                //bool High = (bool)_High;
                 double tmpchance = High ? 99.99 - chance : chance;
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -123,11 +127,11 @@ namespace DiceBot
             }
 
         }
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
 
             Thread T = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            T.Start(High);
+            T.Start(new PlaceBetObj(High, amount, chance));
         }
 
         public override void ResetSeed()
@@ -540,7 +544,7 @@ namespace DiceBot
 
             };
             decimal Profit = decimal.Parse(game.profit, System.Globalization.CultureInfo.InvariantCulture) / 1000m;
-            if ((tmp.high && tmp.Roll>(99-tmp.Chance)) || (!tmp.high && tmp.Roll < tmp.Chance))
+            if ((tmp.high && tmp.Roll>(99m-tmp.Chance)) || (!tmp.high && tmp.Roll < tmp.Chance))
             {
                 tmp.Profit = Profit;
             }

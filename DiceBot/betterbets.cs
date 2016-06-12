@@ -194,10 +194,15 @@ namespace DiceBot
         }
         string next = "";
         int retrycount = 0;
-        void placebetthread()
+        void placebetthread(object BetObj)
         {
             try
             {
+                PlaceBetObj tmp9 = BetObj as PlaceBetObj;
+                bool High = tmp9.High;
+                double amount = tmp9.Amount;
+                double chance = tmp9.Chance;
+
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("wager", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
@@ -216,12 +221,12 @@ namespace DiceBot
                     {
                         if (retrycount++ < 3)
                         {
-                            placebetthread();
+                            placebetthread(new PlaceBetObj(High, amount, chance));
                             return;
                         }
                         if (e.InnerException.Message.Contains("ssl"))
                         {
-                            placebetthread();
+                            placebetthread(new PlaceBetObj(High, amount, chance));
                             return;
                         }
                     }
@@ -264,7 +269,7 @@ namespace DiceBot
                 if (e.Message.Contains("429") || e.Message.Contains("502"))
                 {
                     Thread .Sleep(200);
-                    placebetthread();
+                    placebetthread(new PlaceBetObj(High, amount, chance));
                 }
                 
 
@@ -275,10 +280,10 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
             this.High = High;
-            new Thread(placebetthread).Start();
+            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance));
         }
 
        

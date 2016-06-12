@@ -76,8 +76,10 @@ namespace DiceBot
             
             try
             {
-
-                bool High = (bool)_High;
+                PlaceBetObj tmp9 = _High as PlaceBetObj;
+                bool High = tmp9.High;
+                double amount = tmp9.Amount;
+                double chance = tmp9.Chance;
                 int client = R.Next(0, int.MaxValue);
                 double tmpchance = High ? maxRoll - chance : chance;
                 MPBetPlace betplace = new MPBetPlace
@@ -165,10 +167,10 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
             Thread t = new Thread(new ParameterizedThreadStart(placebetthread));
-            t.Start(High);
+            t.Start(new PlaceBetObj(High, amount, chance));
         }
 
         public override void ResetSeed()

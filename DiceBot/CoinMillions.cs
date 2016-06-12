@@ -256,7 +256,12 @@ namespace DiceBot
         int retrycount = 0;
         void PlaceBetThread(object _High)
         {
-            bool High = (bool)_High;
+            PlaceBetObj tmp9 = _High as PlaceBetObj;
+            
+            bool High = tmp9.High;
+            double amount = tmp9.Amount;
+            double chance = tmp9.Chance;
+
             try
             {
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -357,10 +362,10 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chacne)
         {
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            t.Start(High);
+            t.Start(new PlaceBetObj(High, amount, chacne));
         }
 
         protected override bool internalWithdraw(double Amount, string Address)

@@ -213,10 +213,15 @@ namespace DiceBot
         }
         int retrycount = 0;
         DateTime Lastbet = DateTime.Now;
-        void placebetthread()
+        void placebetthread(object bet)
         {
+            
             try
             {
+                PlaceBetObj tmp5 = bet as PlaceBetObj;
+                double amount = tmp5.Amount;
+                double chance = tmp5.Chance;
+                bool High = tmp5.High;
                 if ((DateTime.Now - Lastbet).TotalMilliseconds<500)
                 {
                     Thread.Sleep((int)(500.0 - (DateTime.Now - Lastbet).TotalMilliseconds));
@@ -257,13 +262,13 @@ namespace DiceBot
                 if (retrycount++ < 3)
                 {
                     Thread.Sleep(500);
-                    placebetthread();
+                    placebetthread(new PlaceBetObj(High, amount, chance));
                     return;
                 }
                 if (e.InnerException.Message.Contains("429") || e.InnerException.Message.Contains("502"))
                 {
                     Thread .Sleep(500);
-                    placebetthread();
+                    placebetthread(new PlaceBetObj(High, amount, chance));
                 }
                 
 
@@ -274,10 +279,10 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
             this.High = High;
-            new Thread(placebetthread).Start();
+            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance));
         }
 
        

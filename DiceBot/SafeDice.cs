@@ -230,8 +230,12 @@ namespace DiceBot
             }
         }
         int retrycount = 0;
-        void PlaceBetThread(object High)
+        void PlaceBetThread(object Obj)
         {
+            PlaceBetObj tmp = Obj as PlaceBetObj;
+            bool High = tmp.High;
+            double amount = tmp.Amount;
+            double chance = tmp.Chance;
             try
             {
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, (bool)High ? "High" : "Low"));
@@ -342,17 +346,17 @@ namespace DiceBot
             {
                 if (retrycount++ < 3)
                 {
-                    PlaceBetThread(High);
+                    PlaceBetThread(tmp);
                     return;
                 }
             }
 
         }
 
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High,double amount, double chance)
         {
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            t.Start(High);
+            t.Start(new PlaceBetObj(High, amount, chance));
 
         }
 

@@ -112,13 +112,19 @@ namespace DiceBot
         string next = "";
         void PlaceBetThread(object _High)
         {
-            bool High = (bool)_High;
+            
             string err = "";
             try
             {
-                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, this.chance, High ? "High" : "Low"));
-                
-                double chance = (999999.0) * (this.chance / 100.0);
+                PlaceBetObj tmp9 = _High as PlaceBetObj;
+
+                bool High = tmp9.High;
+                double amount = tmp9.Amount;
+                //double chance = tmp9.Chance;
+
+                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, tmp9.Chance, High ? "High" : "Low"));
+
+                double chance = (999999.0) * (tmp9.Chance / 100.0);
                 //HttpWebResponse EmitResponse;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
@@ -280,11 +286,11 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double amount, double chance)
         {
             this.High = High;
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            t.Start(High);
+            t.Start(new PlaceBetObj(High, amount, chance));
         }
 
         public override void ResetSeed()

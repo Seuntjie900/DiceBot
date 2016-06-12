@@ -90,7 +90,7 @@ namespace DiceBot
             wagered += (double)tmp.Amount; 
             FinishedBet(tmp);
         }
-        protected override void internalPlaceBet(bool High)
+        protected override void internalPlaceBet(bool High, double chance, double amount)
         {
             
             this.High = High;
