@@ -1312,6 +1312,7 @@ namespace DiceBot
             if (testInputs())
             {
                 Reset();
+                reset = false;
                 stop = false;
                 if (rdbLabEnable.Checked)
                 {

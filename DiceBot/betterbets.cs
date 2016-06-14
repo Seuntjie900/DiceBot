@@ -121,8 +121,14 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string otp)
         {
-            
-            ClientHandlr = new HttpClientHandler() { UseCookies = true, AutomaticDecompression= DecompressionMethods.GZip| DecompressionMethods.Deflate };
+
+            ClientHandlr = new HttpClientHandler()
+            {
+                UseCookies = true,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                Proxy = (IWebProxy)this.Prox,
+                UseProxy = this.Prox != null
+            };
             Client = new HttpClient(ClientHandlr) { BaseAddress= new Uri("https://betterbets.io/api/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));

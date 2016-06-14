@@ -153,7 +153,14 @@ namespace DiceBot
        | SecurityProtocolType.Tls12
        | SecurityProtocolType.Ssl3;
                 cookies = new CookieContainer();
-                ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip };
+                ClientHandlr = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = cookies,
+                    AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
+                    Proxy = (IWebProxy)this.Prox,
+                    UseProxy = this.Prox != null
+                };
                 WebClient = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.bitdice.me/") };
                 WebClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
                 WebClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));

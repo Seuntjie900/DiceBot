@@ -275,7 +275,14 @@ namespace DiceBot
 
             //get the cloudflare and site headers
             cookies = new CookieContainer();
-            ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };
+            ClientHandlr = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = cookies,
+                AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
+                Proxy = (IWebProxy)this.Prox,
+                UseProxy = this.Prox != null
+            };
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
@@ -398,7 +405,14 @@ namespace DiceBot
 
             //get the cloudflare and site headers
             cookies = new CookieContainer();
-            ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer = cookies, AutomaticDecompression= DecompressionMethods.GZip| DecompressionMethods.Deflate };
+            ClientHandlr = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = cookies,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                Proxy = (IWebProxy)this.Prox,
+                UseProxy = this.Prox != null
+            };
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://magicaldice.com/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));

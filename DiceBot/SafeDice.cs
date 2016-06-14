@@ -13,7 +13,12 @@ namespace DiceBot
     class SafeDice : DiceSite
     {
         string accesstoken = "";
-        HttpClientHandler ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip};
+        HttpClientHandler ClientHandlr = new HttpClientHandler
+        {
+            UseCookies = true,
+            AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip
+            
+        };
         HttpClient Client = null;
         bool ispd = true;
         DateTime LastBalance = DateTime.Now;
@@ -182,7 +187,13 @@ namespace DiceBot
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                     SafeDiceWalletInfo tmp2 = json.JsonDeserialize<SafeDiceWalletInfo>(sEmitResponse);
 
-                    ClientHandlr = new HttpClientHandler() { UseCookies = true, AutomaticDecompression= DecompressionMethods.GZip| DecompressionMethods.Deflate };
+                    ClientHandlr = new HttpClientHandler()
+                    {
+                        UseCookies = true,
+                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                        Proxy = (IWebProxy)this.Prox,
+                        UseProxy = this.Prox != null
+                    };
 
                     ClientHandlr.CookieContainer = new CookieContainer();
                     ClientHandlr.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
@@ -593,7 +604,13 @@ namespace DiceBot
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
-                    ClientHandlr = new HttpClientHandler() { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip };
+                    ClientHandlr = new HttpClientHandler()
+                    {
+                        UseCookies = true,
+                        AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
+                        Proxy = (IWebProxy)this.Prox,
+                        UseProxy = this.Prox != null
+                    };
 
                     ClientHandlr.CookieContainer = new CookieContainer();
                     ClientHandlr.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
