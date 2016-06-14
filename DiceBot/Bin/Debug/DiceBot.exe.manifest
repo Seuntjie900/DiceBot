@@ -50,19 +50,19 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>02xaPE068rDAojb2RfhH2EzELqNy8dvQn2HsqI5BEz0=</dsig:DigestValue>
+        <dsig:DigestValue>LbZQWuFTk+xiC0H9JB10/VOSFGtsq0O2VjFNFKa6oW0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="JDCAPI.dll" size="103424">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="JDCAPI.dll" size="102912">
       <assemblyIdentity name="JDCAPI" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Ue54scUXne28a2Lz+LNR3hHKE5RvTk/l/EPME0iIMXU=</dsig:DigestValue>
+        <dsig:DigestValue>2ukwFrUrMlWiKQPbNzJUyWTdAhlyIZAZg3wrDv99KVI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

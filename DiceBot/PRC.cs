@@ -85,11 +85,14 @@ namespace DiceBot
                         FinishedBet(tmp);
                     }
                 }
-                catch
+                catch (Exception e)
                 {
-                    Parent.updateStatus(string.Format("Failed to place bets after 3 retries, stopping. Please check network and bot settings."));
+                    Thread.Sleep(500);
+                    Parent.updateStatus(string.Format("Bet Failed. Retrying."));
                 }
             }
+            if (retries<5)
+                Parent.updateStatus(string.Format("Failed to place bets after 3 retries, stopping. Please check network and bot settings."));
         }
 
       
@@ -218,17 +221,17 @@ namespace DiceBot
         public override bool ReadyToBet()
         {
             double millis = (DateTime.Now - LastBet).TotalMilliseconds;
-            if (LastBetAmount >= 0.001)
+            if (amount >= 0.001 )//&& millis>250)
                 return true;
-            else if (LastBetAmount >= 0.0001 && millis > 200)
+            else if (LastBetAmount >= 0.0001 && millis > 210)
                 return true;
-            else if (LastBetAmount >= 0.00001 && millis > 500)
+            else if (LastBetAmount >= 0.00001 && millis > 510)
                 return true;
-            else if (LastBetAmount >= 0.000001 && millis > 800)
+            else if (LastBetAmount >= 0.000001 && millis > 810)
                 return true;
-            else if (millis > 1000)
+            else if (millis > 1010)
                 return true;
-            return true;
+            return false;
         }
         
 
