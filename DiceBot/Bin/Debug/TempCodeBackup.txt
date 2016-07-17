@@ -1,3 +1,9 @@
-function dobet()
-
-end
+15:20 [1] dean [private] ah ok so....
+15:21 [1] dean [private] that could cause an issue for anon account. You would need to visit page, get anon cookie then connect to signalr? And for your own account you would need to login and get the different cookie for that then?
+15:22 [357] seuntjie [private] dean : doesn't look like it's getting the chat messages though. Do i manually need to subscribe to anything?
+15:22 [357] seuntjie [private] dean : I'm not sure how i'm going to handle it.... will have to figure that out
+15:23 [1] dean [private] not used client much but I think you may need to add subscribe methods for all the other things that are in the /app/diceHub.js file
+15:23 [1] dean [private] the one you will see like _hub.client.diceResult = function (diceBet, myStats, siteStats) { etc
+15:23 [1] dean [private] so subscribe to diceResult, chat etc
+15:24 [1] dean [private] got to head out for a bit just now. let me know how you get on. c ya
+15:24 [357] seuntjie [private] dean : thanks. Will do

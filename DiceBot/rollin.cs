@@ -423,15 +423,15 @@ namespace DiceBot
         {
             //return true;
             if (amount == 0)
-                return (DateTime.Now - lastbet).TotalSeconds >= 3;
-            else if (amount < 0.00000010)
-                return (DateTime.Now - lastbet).TotalSeconds >= 2;
-            else if (amount < 0.00000100)
                 return (DateTime.Now - lastbet).TotalSeconds >= 1;
+            else if (amount < 0.00000010)
+                return (DateTime.Now - lastbet).TotalSeconds >= 50;
+            else if (amount < 0.00000100)
+                return (DateTime.Now - lastbet).TotalSeconds >= 300;
             else if (amount < 0.00001000)
-                return (DateTime.Now - lastbet).TotalMilliseconds >= 500;
-            else
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 100;
+            else
+                return (DateTime.Now - lastbet).TotalMilliseconds >= 10;
         }
 
         bool isRollin = true;
