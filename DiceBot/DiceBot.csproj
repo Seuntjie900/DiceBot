@@ -181,6 +181,7 @@
     </Compile>
     <Compile Include="betterbets.cs" />
     <Compile Include="bitdice.cs" />
+    <Compile Include="Bitlser.cs" />
     <Compile Include="cDiceBot.cs">
       <SubType>Form</SubType>
     </Compile>

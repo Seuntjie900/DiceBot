@@ -6,13 +6,18 @@ using System.Data.SQLite;
 using System.IO;
 namespace DiceBot
 {
-    class sqlite_helper
+    class sqlite_helper: IDisposable
     {
         static string constring = "Data Source=DiceBot.db;Version=3;New=False;Compress=True;datetimeformat=CurrentCulture";
-        
+        static SQLiteConnection Conn = null;
         static SQLiteConnection GetConnection()
         {
-            return new SQLiteConnection(constring);
+            if (Conn==null)
+            {
+                Conn = new SQLiteConnection(constring);
+                Conn.Open();
+            }
+            return Conn;
         }
         
         public static void CheckDBS()
@@ -37,12 +42,52 @@ namespace DiceBot
                 Command.ExecuteNonQuery();
                  
             
-            sqcon.Clone();
+            sqcon.Close();
+        }
+
+        static void AddBet(object sqlBetObj)
+        {
+            try
+            {
+                SQLiteConnection sqcon = GetConnection();
+                SQLiteCommand Command = new SQLiteCommand("", sqcon);
+                Bet curbet = (sqlBetObj as sqbet)._Bet;
+                string sitename = (sqlBetObj as sqbet).SiteName;
+                try
+                {
+                    Command.CommandText = string.Format("insert into seed(hash,server) values('{0}','{1}')", curbet.serverhash, curbet.serverseed, sitename);
+                    Command.ExecuteNonQuery();
+                }
+                catch
+                {
+
+
+                }
+                Command.CommandText = string.Format("insert into bet(betid, date,stake,profit,chance,high,lucky,hash,nonce,uid,client,site) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{0}')",
+                        sitename,
+                        curbet.Id,
+                        curbet.date,
+                        curbet.Amount,
+                        curbet.Profit,
+                        curbet.Chance,
+                        curbet.high ? "1" : "0",
+                        curbet.Roll,
+                        curbet.serverhash,
+                        curbet.nonce,
+                        curbet.uid, curbet.clientseed);
+                Command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                
+            }
         }
 
         public static void AddBet(Bet curbet, string sitename)
         {
-            SQLiteConnection sqcon = GetConnection();
+            new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(AddBet)).Start((new sqbet { _Bet = curbet, SiteName = sitename }));
+            return;
+            /*SQLiteConnection sqcon = GetConnection();
             try
             {
                 sqcon.Open();
@@ -76,8 +121,8 @@ namespace DiceBot
 
 
             }
-            sqcon.Clone();
-            
+            sqcon.Close();
+            */
         }
 
         static Bet BetParser(SQLiteDataReader Reader)
@@ -129,12 +174,13 @@ namespace DiceBot
 
         public static Bet[] GetBetForCharts(string site)
         {
-            using (SQLiteConnection sqcon = GetConnection())
+            //using (
+            SQLiteConnection sqcon = GetConnection();
             {
                 
                 try
                 {
-                    sqcon.Open();
+              //      sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand("select betid, profit, stake from bet", sqcon);
                     if (site!="")
                     {
@@ -152,19 +198,20 @@ namespace DiceBot
                 catch
                 { 
                 }
-            sqcon.Close();
+            //sqcon.Close();
             }
             return null;
         }
         
         public static Bet[] GetBetForCharts(string site, long startID)
         {
-            using (SQLiteConnection sqcon = GetConnection())
+            //using (
+            SQLiteConnection sqcon = GetConnection();
             {
 
                 try
                 {
-                    sqcon.Open();
+              //      sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand("select betid, profit, stake from bet where betid>"+startID, sqcon);
                     if (site != "")
                     {
@@ -182,19 +229,20 @@ namespace DiceBot
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.Close();
             }
             return null;
         }
 
         public static Bet[] GetBetForCharts(string site, DateTime StartDate, DateTime EndDate)
         {
-            using (SQLiteConnection sqcon = GetConnection())
+            //using (
+            SQLiteConnection sqcon = GetConnection();
             {
 
                 try
                 {
-                    sqcon.Open();
+                  //  sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand("select betid, profit, stake from bet where date>='" + StartDate + "' and date <= '" + EndDate + "'", sqcon);
                     if (site != "")
                     {
@@ -206,13 +254,13 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    sqcon.Close();
+                    //sqcon.Close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.Close();
             }
             return null;
         }
@@ -220,12 +268,13 @@ namespace DiceBot
         
         public static Bet[] GetBetHistory(string site)
         {
-            using (SQLiteConnection sqcon = GetConnection())
+            //using (
+            SQLiteConnection sqcon = GetConnection();
             {
 
                 try
                 {
-                    sqcon.Open();
+                  //  sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand("select bet.*,seed.server from bet, seed where bet.hash=seed.hash ", sqcon);
                     if (site != "")
                     {
@@ -237,25 +286,26 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    sqcon.Close();
+                    //sqcon.Close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.Close();
             }
             return null;
         }
 
         public static Bet[] GetBetHistory(string site, DateTime StartDate, DateTime EndDate)
         {
-            using (SQLiteConnection sqcon = GetConnection())
+            //using (
+            SQLiteConnection sqcon = GetConnection();
             {
 
                 try
                 {
-                    sqcon.Open();
+                  //  sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand("select bet.*, seed.server from bet, seed where bet.hash=seed.hash and date>='" + StartDate + "' and date<='" + EndDate + "' ", sqcon);
                     if (site != "")
                     {
@@ -267,13 +317,13 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    sqcon.Close();
+                    //sqcon.Close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.Close();
             }
             return null;
         }
@@ -281,12 +331,12 @@ namespace DiceBot
         public static void InsertSeed(string hash, string Seed)
         {
             if (Seed != null && hash!=null)
-            using (SQLiteConnection sqcon = GetConnection())
+            
             {
-
+                SQLiteConnection sqcon = GetConnection();
                 try
                 {
-                    sqcon.Open();
+                  //  sqcon.Open();
 
                     SQLiteCommand Command = new SQLiteCommand("update seed set server ='"+Seed+"' where hash='"+hash+"'", sqcon);
                     SQLiteDataReader Reader = Command.ExecuteReader();
@@ -295,13 +345,13 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    sqcon.Close();
+                    //sqcon.Close();
                     
                 }
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.Close();
             }
             
         }
@@ -389,12 +439,13 @@ namespace DiceBot
                 searchSring += " and high = 0";
             }
             
-            using (SQLiteConnection sqcon = GetConnection())
+            //using 
+            SQLiteConnection sqcon = GetConnection();
             {
 
                 try
                 {
-                    sqcon.Open();
+                  //  sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand(searchSring, sqcon);
 
                     SQLiteDataReader Reader = Command.ExecuteReader();
@@ -407,13 +458,13 @@ namespace DiceBot
                             Bets.Add(b);
                         }
                     }
-                    sqcon.Close();
+                    //sqcon.Close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.Close();
 
             }
             return null;
@@ -503,7 +554,8 @@ namespace DiceBot
             }
             searchSring += "and date >= '" + Start.ToShortDateString() + "'";
             searchSring += "and date <= '" + End.ToShortDateString() + "'";
-            using (SQLiteConnection sqcon = GetConnection())
+            //ing (
+            SQLiteConnection sqcon = GetConnection();
             {
 
                 try
@@ -535,7 +587,8 @@ namespace DiceBot
 
         public static Bet[] GetHistoryByQuery(string Query)
         {
-            using (SQLiteConnection sqcon = GetConnection())
+            //using (
+            SQLiteConnection sqcon = GetConnection();
             {
                 try
                 {
@@ -562,7 +615,8 @@ namespace DiceBot
 
         public static List<long> GetMissingSeedIDs(string site)
         {
-            using (SQLiteConnection sqcon = GetConnection())
+            //using (
+            SQLiteConnection sqcon = GetConnection();
             {
 
                 try
@@ -600,7 +654,8 @@ namespace DiceBot
 
         public static string GetHashForBet(string site, long betid)
         {
-            using (SQLiteConnection sqcon = GetConnection())
+            //using (
+            SQLiteConnection sqcon = GetConnection();
             {
 
                 try
@@ -623,7 +678,16 @@ namespace DiceBot
             }
             return null;
         }
-    }
 
+        public void Dispose()
+        {
+            Conn.Close();
+        }
+    }
+    public class sqbet
+    {
+        public Bet _Bet { get; set; }
+        public string SiteName { get; set; }
+    }
     
 }
