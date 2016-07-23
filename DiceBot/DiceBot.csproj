@@ -238,6 +238,7 @@
     <Compile Include="JD.cs" />
     <Compile Include="json.cs" />
     <Compile Include="MagicalDice.cs" />
+    <Compile Include="Mersenne.cs" />
     <Compile Include="Messagehelpr.cs" />
     <Compile Include="MiniBrowser.cs">
       <SubType>Form</SubType>

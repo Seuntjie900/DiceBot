@@ -591,7 +591,7 @@ namespace DiceBot
             betgenerator.Key = serverb.ToArray();
 
             List<byte> buffer = new List<byte>();
-            string msg = nonce.ToString() + ":" +client + ":" + nonce.ToString();
+            string msg = nonce.ToString() + ":" + client + ":" + nonce.ToString();
             foreach (char c in msg)
             {
                 buffer.Add(Convert.ToByte(c));

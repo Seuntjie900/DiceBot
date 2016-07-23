@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace DiceBot
         public Bitsler(cDiceBot Parent)
         {
             Currencies = new string[] { "btc","ltc","doge" };
-            maxRoll = 99.99;
+            maxRoll = 99.999;
             AutoInvest = false;
             AutoWithdraw = false;
             ChangeSeed = false;
@@ -54,13 +55,22 @@ namespace DiceBot
                     FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                     string sEmitResponse = Client.PostAsync("getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
                     bsStatsBase bsstatsbase = json.JsonDeserialize<bsStatsBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
-                    balance = bsstatsbase._return.balance;
-                    profit = bsstatsbase._return.profit;
-                    wagered = bsstatsbase._return.wagered;
+                    switch (Currency.ToLower())
+                    {
+                        case "btc": balance = bsstatsbase._return.btc_balance;
+                            profit = bsstatsbase._return.btc_profit;
+                            wagered = bsstatsbase._return.btc_wagered;break;
+                        case "ltc": balance = bsstatsbase._return.ltc_balance;
+                            profit = bsstatsbase._return.ltc_profit;
+                            wagered = bsstatsbase._return.ltc_wagered; break;
+                        case "doge": balance = bsstatsbase._return.doge_balance;
+                            profit = bsstatsbase._return.doge_profit;
+                            wagered = bsstatsbase._return.doge_wagered; break;
+                    }
                     bets = int.Parse(bsstatsbase._return.bets);
                     wins = int.Parse(bsstatsbase._return.wins);
                     losses = int.Parse(bsstatsbase._return.losses);
-                    Parent.DumpLog(sEmitResponse, 0);
+                    
                     Parent.updateBalance(balance);
                     Parent.updateBets(bets);
                     Parent.updateLosses(losses);
@@ -69,6 +79,42 @@ namespace DiceBot
                     Parent.updateWins(wins);
                 }
                 Thread.Sleep(1000);
+            }
+        }
+
+        protected override void CurrencyChanged()
+        {
+            base.CurrencyChanged();
+            lastupdate = DateTime.Now;
+            if (accesstoken != "" && IsBitsler)
+            {
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("access_token", accesstoken));
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string sEmitResponse = Client.PostAsync("getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
+                bsStatsBase bsstatsbase = json.JsonDeserialize<bsStatsBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
+                switch (Currency.ToLower())
+                {
+                    case "btc": balance = bsstatsbase._return.btc_balance;
+                        profit = bsstatsbase._return.btc_profit;
+                        wagered = bsstatsbase._return.btc_wagered; break;
+                    case "ltc": balance = bsstatsbase._return.ltc_balance;
+                        profit = bsstatsbase._return.ltc_profit;
+                        wagered = bsstatsbase._return.ltc_wagered; break;
+                    case "doge": balance = bsstatsbase._return.doge_balance;
+                        profit = bsstatsbase._return.doge_profit;
+                        wagered = bsstatsbase._return.doge_wagered; break;
+                } 
+                bets = int.Parse(bsstatsbase._return.bets);
+                wins = int.Parse(bsstatsbase._return.wins);
+                losses = int.Parse(bsstatsbase._return.losses);
+                
+                Parent.updateBalance(balance);
+                Parent.updateBets(bets);
+                Parent.updateLosses(losses);
+                Parent.updateProfit(profit);
+                Parent.updateWagered(wagered);
+                Parent.updateWins(wins);
             }
         }
 
@@ -88,8 +134,9 @@ devise:btc*/
                 pairs.Add(new KeyValuePair<string, string>("type", "dice"));
                 pairs.Add(new KeyValuePair<string, string>("amount", tmpob.Amount.ToString("0.00000000")));
                 pairs.Add(new KeyValuePair<string, string>("condition", tmpob.High?">":"<"));
-                pairs.Add(new KeyValuePair<string, string>("game", tmpob.Chance.ToString("0.00")));
+                pairs.Add(new KeyValuePair<string, string>("game", !tmpob.High ? tmpob.Chance.ToString("0.00") : ( maxRoll -tmpob.Chance).ToString("0.00")));
                 pairs.Add(new KeyValuePair<string, string>("devise", Currency));
+                pairs.Add(new KeyValuePair<string, string>("key", "seuntjiebot"));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
                 bsBetBase bsbase = json.JsonDeserialize<bsBetBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
@@ -114,7 +161,9 @@ devise:btc*/
                                 losses++;
                             bets++;
                             FinishedBet(tmp);
+                            return;
                         }
+                Parent.updateStatus("An Unknown error has ocurred.");
                 //
 
             }
@@ -163,7 +212,7 @@ devise:btc*/
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("login", Content).Result.Content.ReadAsStringAsync().Result;
-                Parent.DumpLog(sEmitResponse, 0);
+                
                 //getuserstats 
                 bsloginbase bsbase = json.JsonDeserialize<bsloginbase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
                 
@@ -174,26 +223,37 @@ devise:btc*/
                             accesstoken = bsbase._return.access_token;
                             IsBitsler = true;
                             lastupdate = DateTime.Now;
-                            Thread t = new Thread(GetBalanceThread);
-                            t.Start();
+                            
                             pairs = new List<KeyValuePair<string, string>>();
                             pairs.Add(new KeyValuePair<string, string>("access_token", accesstoken));
                             Content = new FormUrlEncodedContent(pairs);
                             sEmitResponse = Client.PostAsync("getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
                             bsStatsBase bsstatsbase = json.JsonDeserialize<bsStatsBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
-                            balance = bsstatsbase._return.balance;
-                            profit = bsstatsbase._return.profit;
-                            wagered = bsstatsbase._return.wagered;
+                            switch (Currency.ToLower())
+                            {
+                                case "btc": balance = bsstatsbase._return.btc_balance;
+                                    profit = bsstatsbase._return.btc_profit;
+                                    wagered = bsstatsbase._return.btc_wagered; break;
+                                case "ltc": balance = bsstatsbase._return.ltc_balance;
+                                    profit = bsstatsbase._return.ltc_profit;
+                                    wagered = bsstatsbase._return.ltc_wagered; break;
+                                case "doge": balance = bsstatsbase._return.doge_balance;
+                                    profit = bsstatsbase._return.doge_profit;
+                                    wagered = bsstatsbase._return.doge_wagered; break;
+                            } 
                             bets = int.Parse(bsstatsbase._return.bets);
                             wins = int.Parse(bsstatsbase._return.wins);
                             losses = int.Parse(bsstatsbase._return.losses);
-                            Parent.DumpLog(sEmitResponse, 0);
+                            
                             Parent.updateBalance(balance);
                             Parent.updateBets(bets);
                             Parent.updateLosses(losses);
                             Parent.updateProfit(profit);
                             Parent.updateWagered(wagered);
                             Parent.updateWins(wins);
+                            IsBitsler = true;
+                            Thread t = new Thread(GetBalanceThread);
+                            t.Start();
                             finishedlogin(true);
                             return;
                         }
@@ -213,12 +273,12 @@ devise:btc*/
 
         public override bool ReadyToBet()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override void Disconnect()
         {
-            throw new NotImplementedException();
+            IsBitsler = false;
         }
 
         public override void GetSeed(long BetID)
@@ -229,6 +289,96 @@ devise:btc*/
         public override void SendChatMessage(string Message)
         {
             throw new NotImplementedException();
+        }
+
+        public static double sGetLucky(string server, string client, int nonce)
+        {
+            SHA1 betgenerator = SHA1.Create();
+            string Seed = server + "-" + client + "-" + nonce;
+            byte[] serverb = new byte[Seed.Length];
+
+            for (int i = 0; i < Seed.Length; i++)
+            {
+                serverb[i] = Convert.ToByte(Seed[i]);
+            }
+            double Lucky = 0;
+            do
+            {
+                serverb = betgenerator.ComputeHash(serverb.ToArray());
+                StringBuilder hex = new StringBuilder(serverb.Length * 2);
+                foreach (byte b in serverb)
+                    hex.AppendFormat("{0:x2}", b);
+
+                string s = hex.ToString().Substring(0, 8);
+                Lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
+            } while (Lucky > 4294960000);
+            Lucky = (Lucky % 10000.0) / 100.0;
+            if (Lucky < 0)
+                return -Lucky;
+            return Lucky;
+        }
+
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            
+            SHA1 betgenerator = SHA1.Create();
+            string Seed = server+"-"+client+"-"+nonce;
+            byte[] serverb = new byte[Seed.Length];
+
+            for (int i = 0; i < Seed.Length; i++)
+            {
+                serverb[i] = Convert.ToByte(Seed[i]);
+            }
+            double Lucky = 0;
+            do
+            {
+                serverb = betgenerator.ComputeHash(serverb.ToArray());
+                StringBuilder hex = new StringBuilder(serverb.Length * 2);
+                foreach (byte b in serverb)
+                    hex.AppendFormat("{0:x2}", b);
+
+                string s = hex.ToString().Substring(0, 8);
+                Lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
+            } while (Lucky > 4294960000);
+            Lucky = (Lucky % 10000.0) / 100.0;
+            if (Lucky < 0)
+                return -Lucky;
+            return Lucky;
+            /*
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = /*nonce.ToString() + ":" + client + ":" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }*/
+            return 0;
         }
     }
 
@@ -245,10 +395,18 @@ devise:btc*/
     public class bsStats
     {
         public string success { get; set; }
-        public double balance { get; set; }
-        public double wagered { get; set; }
-        public double profit { get; set; }
+        public double btc_balance { get; set; }
+        public double btc_wagered { get; set; }
+        public double btc_profit { get; set; }
         public string bets { get; set; }
+        public double ltc_balance { get; set; }
+        public double ltc_wagered { get; set; }
+        public double ltc_profit { get; set; }
+
+        public double doge_balance { get; set; }
+        public double doge_wagered { get; set; }
+        public double doge_profit { get; set; }
+        
         public string wins { get; set; }
         public string losses { get; set; }
     }

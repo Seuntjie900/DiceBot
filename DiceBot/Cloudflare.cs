@@ -27,7 +27,7 @@ namespace DiceBot
             pass = pass.Substring(0, pass.IndexOf("\""));
 
             //do the CF bypass thing and get the headers
-            Script = s1.Substring(s1.IndexOf("var t,r,a,f,") + "var t,r,a,f, ".Length);
+            Script = s1.Substring(s1.IndexOf("var s,t,o,p,b,r,e,a,k,i,n,g,f,") + "var s,t,o,p,b,r,e,a,k,i,n,g,f, ".Length);
             string Script1 = "var " + Script.Substring(0, Script.IndexOf(";") + 1);
             string varName = Script.Substring(0, Script.IndexOf("="));
             string varNamep2 = Script.Substring(Script.IndexOf("\"") + 1);

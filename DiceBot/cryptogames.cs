@@ -14,7 +14,7 @@ namespace DiceBot
     {
         string accesstoken = "";
         
-        public bool iscg = true;
+        public bool iscg = false;
         string username = "";
         long uid = 0;
         DateTime lastupdate = new DateTime();
@@ -38,8 +38,7 @@ namespace DiceBot
             BetURL = "https://www.crypto-games.net/fair.aspx?coin=BTC&type=3&id=";
             Tip = false;
             Name = "CryptoGames";
-            Thread t = new Thread(GetBalanceThread);
-            t.Start();
+            
         }
 
         protected override void CurrencyChanged()
@@ -191,6 +190,10 @@ namespace DiceBot
                 Parent.updateProfit(profit);
                 Parent.updateWagered(wagered);
                 Parent.updateWins(wins);
+                Thread t = new Thread(GetBalanceThread);
+                iscg = true;
+                t.Start();
+                
                 finishedlogin(true);
             }
             catch (AggregateException e)
@@ -252,10 +255,13 @@ namespace DiceBot
 
                 double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
-                    return lucky / 10000;
+                {
+                    string tmps = lucky.ToString().Substring(lucky.ToString().Length - 5);
+                    return double.Parse(tmps) / 1000.0;
+                }
             }
             return 0;
-            return 0;
+
         }
         public static double sGetLucky(string server, string client, int nonce)
         {

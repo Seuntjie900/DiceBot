@@ -20,7 +20,7 @@ namespace DiceBot
             
         };
         HttpClient Client = null;
-        bool ispd = true;
+        bool ispd = false;
         DateTime LastBalance = DateTime.Now;
         public static string[] cCurrencies = new string[] { "Btc", "XMR"};
         public SafeDice(cDiceBot Parent)
@@ -32,8 +32,7 @@ namespace DiceBot
             ChangeSeed = true;
             AutoLogin = false;
             BetURL = "https://safedice.com/bets/";
-            Thread t = new Thread(GetBalanceThread);
-            t.Start();
+            
             this.Parent = Parent;
             Name = "SafeDice";
             edge = 0.5m;
@@ -219,6 +218,9 @@ namespace DiceBot
                     nonce = tmp1.nonce;
                     UID = tmp1.id;
                     Parent.updateDeposit(GetDepositAddress());
+                    ispd = true;
+                    Thread t = new Thread(GetBalanceThread);
+                    t.Start();
                     finishedlogin(true);
                 }
 
@@ -636,6 +638,9 @@ namespace DiceBot
                     nonce = tmp1.nonce;
                     UID = tmp1.id;
                     Parent.updateDeposit(GetDepositAddress());
+                    ispd = true;
+                    Thread t = new Thread(GetBalanceThread);
+                    t.Start();
                     finishedlogin(true);
                 }
 

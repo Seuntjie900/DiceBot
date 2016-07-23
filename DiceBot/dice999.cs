@@ -18,13 +18,14 @@ namespace DiceBot
         Random r = new Random();
         long uid = 0;
         
-        bool isD999 = true;
+        bool isD999 = false;
         
-        public static string[] cCurrencies =new string[] { "btc","doge","ltc" };
+        public static string[] cCurrencies =new string[] { "btc","doge","ltc","eth" };
         HttpClientHandler ClientHandlr;
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
-        public dice999(cDiceBot Parent)
+        public dice999(cDiceBot Parent, bool doge999)
         {
+            this.doge999 = doge999;
             maxRoll = 99.9999;
             this.Parent = Parent;
             AutoInvest = false;
@@ -32,9 +33,12 @@ namespace DiceBot
             edge = 0.1m;
             ChangeSeed = false;
             AutoLogin = false;
+            if (doge999)
+                BetURL = "https://www.999doge.com/Bets/?b=";
+            else
             BetURL = "https://www.999dice.com/Bets/?b=";
-            Thread t = new Thread(GetBalanceThread);
-            t.Start();
+            /*Thread t = new Thread(GetBalanceThread);
+            t.Start();*/
             this.Parent = Parent;
             Name = "999Dice";
             Tip = false;
@@ -43,6 +47,9 @@ namespace DiceBot
             Currencies = cCurrencies;
             /*Thread tChat = new Thread(GetMessagesThread);
             tChat.Start();*/
+            if (doge999)
+                SiteURL = "https://www.999doge.com/?20073598";
+            else
             SiteURL = "https://www.999dice.com/?20073598";
         }
 
@@ -360,12 +367,15 @@ namespace DiceBot
             return true;
         }
 
-        
+        bool doge999 = false;
         decimal Wagered = 0;
         public override void Login(string Username, string Password, string twofa)
         {
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
+            if (doge999)
+                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999doge.com/api/web.aspx") };
+            else
+                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -426,12 +436,22 @@ namespace DiceBot
             {
                 
             }
+            if (sessionCookie!="")
+            {
+                isD999 = true;
+                Thread t = new Thread(GetBalanceThread);
+                t.Start();
+                
+            }
             finishedlogin(sessionCookie != "");
         }
         public override bool Register(string username, string password)
         {
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
+            if (doge999)
+                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999doge.com/api/web.aspx") };
+            else
+                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -494,7 +514,14 @@ namespace DiceBot
             }
             else
             {
-                
+
+            } 
+            if (sessionCookie != "")
+            {
+                isD999 = true;
+                Thread t = new Thread(GetBalanceThread);
+                t.Start();
+
             }
             return sessionCookie != "" && sessionCookie != null;
         }

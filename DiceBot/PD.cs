@@ -15,7 +15,7 @@ namespace DiceBot
     {
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
-        public bool ispd = true;
+        public bool ispd = false;
         string username = "";
         long uid = 0;
         DateTime lastupdate = new DateTime();
@@ -29,8 +29,7 @@ namespace DiceBot
             ChangeSeed = true;
             AutoLogin = true;
             BetURL = "https://api.primedice.com/bets/";
-            Thread t = new Thread(GetBalanceThread);
-            t.Start();
+            
             this.Parent = Parent;
             Name = "PrimeDice";
             Tip = true;
@@ -119,6 +118,9 @@ namespace DiceBot
                      tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
                      accesstoken = tmp.access_token;
                     lastupdate = DateTime.Now;
+                    ispd = true;
+                    Thread t = new Thread(GetBalanceThread);
+                    t.Start();
                     return true;
 
 
@@ -142,24 +144,31 @@ namespace DiceBot
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             try
             {
-                
-                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("username", Username));
-                pairs.Add(new KeyValuePair<string, string>("password", Password));
-                if (!string.IsNullOrWhiteSpace(otp))
+
+                if (Password.Length < 128)
                 {
-                    pairs.Add(new KeyValuePair<string, string>("otp", otp));
+
+                    List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                    pairs.Add(new KeyValuePair<string, string>("username", Username));
+                    pairs.Add(new KeyValuePair<string, string>("password", Password));
+                    if (!string.IsNullOrWhiteSpace(otp))
+                    {
+                        pairs.Add(new KeyValuePair<string, string>("otp", otp));
+                    }
+
+                    FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                    string sEmitResponse = Client.PostAsync("login", Content).Result.Content.ReadAsStringAsync().Result;
+                    if (sEmitResponse == "Invalid Password")
+                    {
+                        finishedlogin(false);
+                        return;
+                    }
+                    pdlogin tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
+                    accesstoken = tmp.access_token;
+                    
                 }
-                
-                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("login", Content).Result.Content.ReadAsStringAsync().Result;
-                if (sEmitResponse == "Invalid Password")
-                {
-                    finishedlogin(false);
-                    return;
-                }
-                pdlogin tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
-                accesstoken = tmp.access_token;
+                else
+                    accesstoken = Password;
                 if (accesstoken == "")
                     finishedlogin(false);
                 else
@@ -193,6 +202,9 @@ namespace DiceBot
                     }
                     Parent.updateWins(tmpu.user.wins);
                     lastupdate = DateTime.Now;
+                    ispd = true;
+                    Thread t = new Thread(GetBalanceThread);
+                    t.Start();
                     finishedlogin(true);
                 }
             }

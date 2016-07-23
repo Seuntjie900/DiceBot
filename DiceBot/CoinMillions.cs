@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace DiceBot
     {
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
-        public bool ispd = true;
+        public bool ispd = false;
         string username = "";
 
         DateTime lastupdate = new DateTime();
@@ -34,9 +35,9 @@ namespace DiceBot
             AutoWithdraw = false;
             ChangeSeed = true;
             BetURL = "https://coinmillions.com/api/1/bet?game=dice&bet_id=";
-            Thread t = new Thread(GetBalanceThread);
+            /*Thread t = new Thread(GetBalanceThread);
             t.Start();
-            
+            ispd=true*/
             Name = "CoinMillions";
             Tip = false;
             TipUsingName = true;
@@ -179,6 +180,10 @@ namespace DiceBot
 
                 lastupdate = DateTime.Now.AddMinutes(-1);
                 accesstoken = Password;
+                ispd = true;
+                Thread t = new Thread(GetBalanceThread);
+            t.Start();
+            
                 finishedlogin(true);
                 return;
             }
@@ -371,6 +376,48 @@ namespace DiceBot
         protected override bool internalWithdraw(double Amount, string Address)
         {
             throw new NotImplementedException();
+        }
+
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            server = "33c0f32876c9168cbea4a4ef77ac29603c62adefa8602b189a5c338ccd06e614";
+            client = "8a32oZaWXDcnp2MiwmFA6q38ANlyVT";
+            nonce = 32;
+            string seed = nonce + ":" + server + ":" + client + ":" + nonce;
+            HMACSHA512 betgenerator = new HMACSHA512();
+            byte[] message = Encoding.UTF8.GetBytes(seed);
+            byte[] key = Encoding.UTF8.GetBytes(server);
+            betgenerator.Key=key;
+            byte[] hash = betgenerator.ComputeHash(message);
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+            string hashres = hex.ToString();
+            int start = (hashres.ToString().Length / 2) - 4;
+            string s = hashres.ToString().Substring(start, 8);
+            UInt32 seeds = UInt32.Parse(s, System.Globalization.NumberStyles.HexNumber);
+            MersenneTwister twist = new MersenneTwister(seeds);
+            double roll = (double)twist.Next(1000000)/10000.0;
+
+            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+            pairs.Add(new KeyValuePair<string, string>("client_seed", client));
+            pairs.Add(new KeyValuePair<string, string>("server_seed", server));
+            pairs.Add(new KeyValuePair<string, string>("bet_num",nonce.ToString()));
+                
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string responseData = "";
+                using (var response = Client.PostAsync("game/dice/base-values", Content))
+                {
+                    try
+                    {
+                        responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                    }
+                }
+
+            return roll;
         }
     }
 

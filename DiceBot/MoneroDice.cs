@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,10 +27,9 @@ namespace DiceBot
             Tip = false;
             SiteURL = "https://monerodice.net/";
             register = false;
-            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(GetBalanceThread));
-            t.Start();
+            
         }
-        bool ismd = true;
+        bool ismd = false;
         DateTime lastupdate = DateTime.Now;
         void GetBalanceThread()
         {
@@ -175,6 +175,9 @@ namespace DiceBot
                 Parent.updateProfit(profit);
                 Parent.updateWagered(wagered);
                 Parent.updateWins(wins);*/
+                ismd = true;
+                System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(GetBalanceThread));
+                t.Start();
                 finishedlogin(true);
             }
             catch
@@ -221,7 +224,62 @@ namespace DiceBot
         {
             throw new NotImplementedException();
         }
-        
+
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+            byte[] message = Encoding.UTF8.GetBytes(server);
+            byte[] key = Encoding.UTF8.GetBytes(client + "_" + nonce);
+            betgenerator.Key = key;
+
+            byte[] hash = betgenerator.ComputeHash(message);
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return ((double)(lucky % 10000)) / 100.0;
+            }
+            return 0;
+        }
+
+        public static double sGetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+            byte[] message = Encoding.UTF8.GetBytes(server);
+            byte[] key = Encoding.UTF8.GetBytes(client + "_" + nonce);
+            betgenerator.Key = key;
+
+            byte[] hash = betgenerator.ComputeHash(message);
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return ((double)(lucky % 10000)) / 100.0;
+            }
+            return 0;
+        }
     }
 
     public class monerobase

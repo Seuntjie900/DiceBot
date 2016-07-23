@@ -15,7 +15,7 @@ namespace DiceBot
     {
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
-        public bool ispd = true;
+        public bool ispd = false;
         string username = "";
         
         DateTime lastupdate = new DateTime();
@@ -31,8 +31,6 @@ namespace DiceBot
             ChangeSeed = true;
             AutoLogin = false;
             BetURL = "https://betterbets.io/api/bet/id?=";
-            Thread t = new Thread(GetBalanceThread);
-            t.Start();
             this.Parent = Parent;
             Name = "BetterBets";
             Tip = true;
@@ -161,7 +159,10 @@ namespace DiceBot
                             Parent.updateWins(wins);
                             lastupdate = DateTime.Now;
                             getDepositAddress();
-
+                            Thread t = new Thread(GetBalanceThread);
+                            ispd = true;
+                            t.Start();
+                            
                             finishedlogin(true);
                             return;
                         }

@@ -465,6 +465,7 @@
             this.primeDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pocketRocketsCasinoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dogeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.safediceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.daDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rollinIOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -478,6 +479,7 @@
             this.moneroDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fortuneJackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cryptoGamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bitslerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -497,7 +499,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.bitslerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -5901,6 +5902,7 @@
             this.primeDiceToolStripMenuItem,
             this.pocketRocketsCasinoToolStripMenuItem,
             this.diceToolStripMenuItem,
+            this.dogeToolStripMenuItem,
             this.safediceToolStripMenuItem,
             this.daDiceToolStripMenuItem,
             this.rollinIOToolStripMenuItem,
@@ -5953,6 +5955,14 @@
             this.diceToolStripMenuItem.Text = "999Dice";
             this.diceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.diceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // dogeToolStripMenuItem
+            // 
+            this.dogeToolStripMenuItem.Name = "dogeToolStripMenuItem";
+            this.dogeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dogeToolStripMenuItem.Text = "999Doge";
+            this.dogeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.dogeToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // safediceToolStripMenuItem
             // 
@@ -6061,6 +6071,14 @@
             this.cryptoGamesToolStripMenuItem.Text = "Crypto-Games";
             this.cryptoGamesToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.cryptoGamesToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // bitslerToolStripMenuItem
+            // 
+            this.bitslerToolStripMenuItem.Name = "bitslerToolStripMenuItem";
+            this.bitslerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.bitslerToolStripMenuItem.Text = "Bitsler";
+            this.bitslerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.bitslerToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // settingsModeToolStripMenuItem
             // 
@@ -6203,14 +6221,6 @@
             // betBindingSource
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
-            // 
-            // bitslerToolStripMenuItem
-            // 
-            this.bitslerToolStripMenuItem.Name = "bitslerToolStripMenuItem";
-            this.bitslerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.bitslerToolStripMenuItem.Text = "Bitsler";
-            this.bitslerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.bitslerToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 
@@ -6878,6 +6888,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiVersion;
         private System.Windows.Forms.ToolStripMenuItem cryptoGamesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bitslerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dogeToolStripMenuItem;
     }
 }
 

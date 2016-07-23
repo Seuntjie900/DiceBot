@@ -342,6 +342,22 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
                 
             }
+            foreach (string s in dice999.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                dogeToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
 
             foreach (string s in SafeDice.cCurrencies)
             {
@@ -4617,7 +4633,8 @@ namespace DiceBot
                     case "CoinMillions": CurrentSite = new CoinMillions(this); break;
                     case "cryptogames": CurrentSite = new cryptogames(this); break;
                     case "dadice": CurrentSite = new dadice(this); break;
-                    case "dice999": CurrentSite = new dice999(this); break;
+                    case "dice999": CurrentSite = new dice999(this,false); break;
+                    case "doge999": CurrentSite = new dice999(this, true); break;
                     case "FortuneJack": CurrentSite = new FortuneJack(this); break;
                     case "MagicalDice": CurrentSite = new MagicalDice(this); break;
                     case "MoneroDice": CurrentSite = new MoneroDice(this); break;
@@ -4649,8 +4666,8 @@ namespace DiceBot
                         case "Coinichiwa": CurrentSite = new Coinichiwa(this); break;
                         case "CoinMillions": CurrentSite = new CoinMillions(this); break;
                         case "cryptogames": CurrentSite = new cryptogames(this); break;
-                        case "dadice": CurrentSite = new dadice(this); break;
-                        case "dice999": CurrentSite = new dice999(this); break;
+                        case "dice999": CurrentSite = new dice999(this, false); break;
+                        case "doge999": CurrentSite = new dice999(this, true); break;
                         case "FortuneJack": CurrentSite = new FortuneJack(this); break;
                         case "MagicalDice": CurrentSite = new MagicalDice(this); break;
                         case "MoneroDice": CurrentSite = new MoneroDice(this); break;
@@ -5053,18 +5070,21 @@ namespace DiceBot
         
         private void tmrMissingSeeds_Tick(object sender, EventArgs e)
         {
-            if ((DateTime.Now - LastMissingCheck).TotalMinutes>5)
+            try
             {
-                GetMissingSeeds();
-            }
-            if (BetIDs.Count > 0 && !CurrentSite.GettingSeed)
-            {
-                long tmp = BetIDs[0];
-                BetIDs.RemoveAt(0);
-                CurrentSite.GetSeed(tmp);
+                if ((DateTime.Now - LastMissingCheck).TotalMinutes > 5)
+                {
+                    GetMissingSeeds();
+                }
+                if (BetIDs.Count > 0 && !CurrentSite.GettingSeed)
+                {
+                    long tmp = BetIDs[0];
+                    BetIDs.RemoveAt(0);
+                    CurrentSite.GetSeed(tmp);
 
+                }
             }
-            
+            catch { }
         }
 
         private void ChatSend_Click(string Message)
@@ -5176,7 +5196,8 @@ namespace DiceBot
                 {
                     case "justDiceToolStripMenuItem": CurrentSite = new JD(this); siteToolStripMenuItem.Text = "Site " + "(JD)"; break;
                     case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new PRC(this); siteToolStripMenuItem.Text = "Site " + "(BK)"; break;                    
-                    case "diceToolStripMenuItem": CurrentSite = new dice999(this); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
+                    case "diceToolStripMenuItem": CurrentSite = new dice999(this,false); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
+                    case "dogeToolStripMenuItem": CurrentSite = new dice999(this, true); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
                     case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
                     case "daDiceToolStripMenuItem": CurrentSite = new dadice(this); siteToolStripMenuItem.Text = "Site (DAD)"; break;
@@ -5609,6 +5630,8 @@ namespace DiceBot
                             magicalDiceToolStripMenuItem.Checked ? 11 :
                             fortuneJackToolStripMenuItem.Checked? 12:
                             cryptoGamesToolStripMenuItem.Checked?13:
+                            bitslerToolStripMenuItem.Checked?14:
+                            dogeToolStripMenuItem.Checked?15:
                             1);
                 }
                 else if (c is TextBox)
@@ -5717,7 +5740,9 @@ namespace DiceBot
                         magicalDiceToolStripMenuItem.Checked = value == 11;
                         fortuneJackToolStripMenuItem.Checked = value == 12;
                         cryptoGamesToolStripMenuItem.Checked = value == 13;
-                        if (value > 13)
+                        bitslerToolStripMenuItem.Checked = value == 14;
+                        dogeToolStripMenuItem.Checked = value == 15;
+                        if (value > 15)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -5844,7 +5869,8 @@ namespace DiceBot
                         magicalDiceToolStripMenuItem.Checked = value == "11";
                         fortuneJackToolStripMenuItem.Checked = value == "12";
                         cryptoGamesToolStripMenuItem.Checked = value == "13";
-                        
+                        bitslerToolStripMenuItem.Checked = value == "14";
+                        dogeToolStripMenuItem.Checked = value == "15";
                     }
                     else if (Key == "SettingsMode")
                     {

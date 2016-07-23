@@ -28,8 +28,7 @@ namespace DiceBot
             TipUsingName = true;
             ChangeSeed = true;
             AutoLogin = false;
-            Thread t = new Thread(new ThreadStart(GetBalanceThread));
-            t.Start();
+            
             SiteURL = "https://www.moneypot.com/oauth/authorize?app_id="+appid+"&response_type=token";
         }
        protected int appid = 492;
@@ -127,7 +126,7 @@ namespace DiceBot
                 Roll = (decimal)tmp.outcome,
                 high = High,
                 Chance = (decimal)chance,
-                nonce = 0,
+                nonce = (int)(tmp.outcome*100),
                 serverhash = next,
                 serverseed = tmp.secret.ToString(),
                 clientseed = client.ToString()
@@ -274,6 +273,9 @@ namespace DiceBot
                     Parent.updateProfit(profit);
                     Parent.updateWagered(wagered);
                     ResetSeed();
+                    ismp = true;
+                    Thread t = new Thread(new ThreadStart(GetBalanceThread));
+                    t.Start();
                     finishedlogin(true);
                 }
                 catch
@@ -330,7 +332,7 @@ namespace DiceBot
             return true;
         }
 
-        bool ismp = true;
+        bool ismp = false;
         public override void Disconnect()
         {
             ismp = false;
@@ -345,6 +347,13 @@ namespace DiceBot
         public override void SendChatMessage(string Message)
         {
             
+        }
+
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            int cl = int.Parse(client);
+            double roll = Math.Floor((100.0 / 4294967296.0) * (double)((long)(((double)nonce) + cl) % 4294967296) * 100)/100;
+            return roll;
         }
     }
 

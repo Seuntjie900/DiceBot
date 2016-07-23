@@ -43,30 +43,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="894464">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="907264">
       <assemblyIdentity name="DiceBot" version="3.2.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-<<<<<<< HEAD
-        <dsig:DigestValue>2RjOsoQIeb0skiOrhQScjn9PVSGMIZi+Szvm5EmbjHE=</dsig:DigestValue>
-=======
-        <dsig:DigestValue>p4rlj/tLetz14lH20OdighPEH5eYf0HWK5qpZJDC4D8=</dsig:DigestValue>
->>>>>>> origin/master
+        <dsig:DigestValue>T3c86jlz4rDROaaAa0j1V9qDmtPdHnL6vDatJvIlKYk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="JDCAPI.dll" size="102912">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="JDCAPI.dll" size="103424">
       <assemblyIdentity name="JDCAPI" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>2ukwFrUrMlWiKQPbNzJUyWTdAhlyIZAZg3wrDv99KVI=</dsig:DigestValue>
+        <dsig:DigestValue>Ue54scUXne28a2Lz+LNR3hHKE5RvTk/l/EPME0iIMXU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

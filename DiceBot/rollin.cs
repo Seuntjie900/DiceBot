@@ -29,8 +29,7 @@ namespace DiceBot
             TipUsingName = true;
             ChangeSeed = true;
             Name = "RollinIO";
-            Thread t = new Thread(new ThreadStart(SyncThread));
-            t.Start();
+            
             SiteURL = "https://rollin.io/ref/8c4";
             
             
@@ -75,11 +74,12 @@ namespace DiceBot
                 double chance = tmp9.Chance;
                 lastbet = DateTime.Now;
                 //bool High = (bool)_High;
-                double tmpchance = High ? 99.99 - chance : chance;
+                double tmpchance = High ? maxRoll - chance : chance;
+                string sendchance = tmpchance.ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo);
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("bet_amount", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)));
-                pairs.Add(new KeyValuePair<string, string>("bet_number", tmpchance.ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("bet_number",sendchance ));
                 pairs.Add(new KeyValuePair<string, string>("prediction", High ? "bigger" : "smaller"));
                 pairs.Add(new KeyValuePair<string, string>("seed", R.Next(int.MaxValue).ToString()));
                 
@@ -301,7 +301,9 @@ namespace DiceBot
                     Parent.updateProfit(double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
                     Parent.updateWagered(double.Parse(tmpStats.user.wagered, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
                     Parent.updateWins(tmpStats.user.wins);
-
+                    isRollin = true;
+                    Thread t = new Thread(new ThreadStart(SyncThread));
+                    t.Start();
                     finishedlogin(true);
                     return;
                 }
@@ -410,7 +412,9 @@ namespace DiceBot
                 Parent.updateProfit(double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
                 Parent.updateWagered(double.Parse(tmpStats.user.wagered, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
                 Parent.updateWins(tmpStats.user.wins);
-
+                isRollin = true;
+                Thread t = new Thread(new ThreadStart(SyncThread));
+                t.Start();
                 finishedlogin(true);
                 return true;
             }
@@ -423,18 +427,18 @@ namespace DiceBot
         {
             //return true;
             if (amount == 0)
-                return (DateTime.Now - lastbet).TotalSeconds >= 1;
+                return (DateTime.Now - lastbet).TotalMilliseconds >= 1000;
             else if (amount < 0.00000010)
-                return (DateTime.Now - lastbet).TotalSeconds >= 50;
+                return (DateTime.Now - lastbet).TotalMilliseconds >= 500;
             else if (amount < 0.00000100)
-                return (DateTime.Now - lastbet).TotalSeconds >= 300;
+                return (DateTime.Now - lastbet).TotalMilliseconds >= 300;
             else if (amount < 0.00001000)
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 100;
             else
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 10;
         }
 
-        bool isRollin = true;
+        bool isRollin = false;
         
         public override void Disconnect()
         {
@@ -453,7 +457,8 @@ namespace DiceBot
 
         public override double GetLucky(string server, string client, int nonce)
         {
-
+            /*server = "182fb47eb2f00c928b041795faf5bbd5759829086a67a46edc73a54e9505cfb0";
+            client = "468538814";*/
             HMACSHA512 betgenerator = new HMACSHA512();
             List<byte> serverb = new List<byte>();
 
@@ -475,18 +480,16 @@ namespace DiceBot
             StringBuilder hex = new StringBuilder(hash.Length * 2);
             foreach (byte b in hash)
                 hex.AppendFormat("{0:x2}", b);
-            string s = hex.ToString().Substring((hex.ToString().Length / 2) - 4,8);
+            string hashres = hex.ToString();
+            int start = (hashres.ToString().Length / 2) - 4;
+            string s = hashres.ToString().Substring(start, 8);
             UInt32 seed = UInt32.Parse(s, System.Globalization.NumberStyles.HexNumber);
-            //DiceBot.MT19937 twist = new MT19937();
-            //twist.init_genrand(Convert.ToUInt32(seed));
-            //MersenneTwister twist = new MersenneTwister(seed);
-            int t =0;
+            MersenneTwister twist = new MersenneTwister(seed);
             
+            int t4 = (int)(twist.genrand_real2() * 100);
+
             
-            //    t = twist.Next(99);
-                //t = twist.RandomRange(0,100);
-            
-            return t;
+            return t4;
         }
 
         new public static double sGetLucky(string server, string client, int nonce)
@@ -498,7 +501,7 @@ namespace DiceBot
             {
                 serverb.Add(Convert.ToByte(server[i]));
             }
-            betgenerator.Key = serverb.ToArray();
+
 
             List<byte> buffer = new List<byte>();
             string msg = client;
@@ -506,17 +509,19 @@ namespace DiceBot
             {
                 buffer.Add(Convert.ToByte(c));
             }
-            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+            betgenerator.Key = buffer.ToArray();
+            byte[] hash = betgenerator.ComputeHash(serverb.ToArray());
 
             StringBuilder hex = new StringBuilder(hash.Length * 2);
             foreach (byte b in hash)
                 hex.AppendFormat("{0:x2}", b);
-            string s = hex.ToString().Substring(hex.ToString().Length / 2 - 4, 8);
-            int seed = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
-            int t = 0;
-            //MersenneTwister twist = new MersenneTwister(Convert.ToUInt32(seed));
-            //t = twist.Next(100);
-            return t;
+            string hashres = hex.ToString();
+            int start = (hashres.ToString().Length / 2) - 4;
+            string s = hashres.ToString().Substring(start, 8);
+            UInt32 seed = UInt32.Parse(s, System.Globalization.NumberStyles.HexNumber);
+            MersenneTwister twist = new MersenneTwister(seed);
+            int t4 = (int)(twist.genrand_real2() * 100);
+            return t4;
         }
     }
 
@@ -543,6 +548,7 @@ namespace DiceBot
                 
 
             };
+            
             decimal Profit = decimal.Parse(game.profit, System.Globalization.CultureInfo.InvariantCulture) / 1000m;
             if ((tmp.high && tmp.Roll>(99m-tmp.Chance)) || (!tmp.high && tmp.Roll < tmp.Chance))
             {

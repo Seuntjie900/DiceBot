@@ -9,6 +9,7 @@ using WebSocket4Net;
 using System.Threading;
 using System.Collections;
 using System.Reflection;
+using System.Security.Cryptography;
 namespace DiceBot
 {
     class FortuneJack:DiceSite
@@ -18,7 +19,7 @@ namespace DiceBot
         public FortuneJack(cDiceBot Parent)
         {
             this.Parent = Parent;
-            new Thread(new ThreadStart(KeepAliveThread)).Start();
+            
             maxRoll = 99.98;
             AutoInvest = false;
             AutoWithdraw = true;
@@ -101,7 +102,7 @@ namespace DiceBot
             Client.Open(); 
         }
 
-        bool IsFJ = true;
+        bool IsFJ = false;
         bool IsLoggedIn = false;
 
         protected override void internalPlaceBet(bool High, double amount, double chance)
@@ -365,6 +366,8 @@ namespace DiceBot
                 {
                     Thread.Sleep(100);
                 }
+                IsFJ = true;
+                new Thread(new ThreadStart(KeepAliveThread)).Start();
                 finishedlogin(true);
                 IsLoggedIn = true;
                 //Client.Send("67,2");
@@ -556,6 +559,74 @@ namespace DiceBot
         public override void SendChatMessage(string Message)
         {
             throw new NotImplementedException();
+        }
+
+        public override double GetLucky(string server, string client, int nonce)
+        {
+            SHA512 HashGen = SHA512.Create();
+            string seed = server + client;
+            byte[] seedbytes = Encoding.UTF8.GetBytes(seed);
+            byte[] hash = HashGen.ComputeHash(seedbytes);
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+            string hashres = hex.ToString();
+            int k = 0;
+            while (k < hashres.Length - 6)
+            {
+                string sub = hashres.Substring(k, k + 6);
+                int roll = int.Parse(sub, System.Globalization.NumberStyles.HexNumber);
+                k += 6;
+                if (roll < 10000000)
+                {
+                    return ((double)(roll % 10000)) / 100.0;
+                }
+                if (k >= hashres.Length - 6)
+                {
+                    seedbytes = Encoding.UTF8.GetBytes(hashres);
+                    hash = HashGen.ComputeHash(seedbytes);
+                    hex = new StringBuilder(hash.Length * 2);
+                    foreach (byte b in hash)
+                        hex.AppendFormat("{0:x2}", b);
+                    hashres = hex.ToString();
+                    k = 0;
+                }
+            }
+            return 0;
+        }
+
+        public static double sGetLucky(string server, string client, int Nonce)
+        {
+            SHA512 HashGen = SHA512.Create();
+            string seed = server + client;
+            byte[] seedbytes = Encoding.UTF8.GetBytes(seed);
+            byte[] hash = HashGen.ComputeHash(seedbytes);
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+            string hashres = hex.ToString();
+            int k = 0;
+            while (k < hashres.Length - 6)
+            {
+                string sub = hashres.Substring(k, k + 6);
+                int roll = int.Parse(sub, System.Globalization.NumberStyles.HexNumber);
+                k += 6;
+                if (roll < 10000000)
+                {
+                    return ((double)(roll % 10000)) / 100.0;
+                }
+                if (k >= hashres.Length - 6)
+                {
+                    seedbytes = Encoding.UTF8.GetBytes(hashres);
+                    hash = HashGen.ComputeHash(seedbytes);
+                    hex = new StringBuilder(hash.Length * 2);
+                    foreach (byte b in hash)
+                        hex.AppendFormat("{0:x2}", b);
+                    hashres = hex.ToString();
+                    k = 0;
+                }
+            }
+            return 0;
         }
     }
     public enum FJProtocols
