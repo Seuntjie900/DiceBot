@@ -64,6 +64,7 @@ namespace DiceBot
             }
         }
         int retrycount = 0;
+        
         void PlaceBetThread(object _High)
         {
             try
@@ -104,6 +105,7 @@ namespace DiceBot
                     wagered = double.Parse(tmp.statistics.wagered, System.Globalization.CultureInfo.InvariantCulture) / 1000.0;
                     wins = (tmp.statistics.wins);
                     LastBalance = DateTime.Now;
+                    tmp2.date = DateTime.Now;
                     FinishedBet(tmp2);
                     retrycount = 0;
                 }
@@ -533,20 +535,22 @@ namespace DiceBot
         public RollinStats statistics { get; set; }
         public double fee { get; set; }
         public string[] errors { get; set; }
+       
+        //public string server_seed_hash { get; set; }
         public Bet ToBet()
         {
             Bet tmp = new Bet
             {
                 Amount=decimal.Parse(game.bet_amount, System.Globalization.CultureInfo.InvariantCulture)/1000m,
                 date = DateTime.Now,
-                Id = statistics.bets,
+                Id = game.id,
                 
                 Roll = game.number,
                 high = game.prediction=="bigger",
                 Chance = game.odds,
-                serverhash = customer.server_hash
-                
 
+                clientseed = game.client_seed,
+                serverseed = game.server_seed
             };
             
             decimal Profit = decimal.Parse(game.profit, System.Globalization.CultureInfo.InvariantCulture) / 1000m;
@@ -581,6 +585,9 @@ namespace DiceBot
         public string prediction { get; set; }
         public string profit { get; set; }
         public string bet_amount { get; set; }
+        public string server_seed { get; set; }
+        public long id { get; set; }
+        public string client_seed { get; set; }
     }
     public class RollinCustomer
     {

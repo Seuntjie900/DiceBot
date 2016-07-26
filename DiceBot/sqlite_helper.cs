@@ -17,6 +17,11 @@ namespace DiceBot
                 Conn = new SQLiteConnection(constring);
                 Conn.Open();
             }
+            else if (Conn.State == System.Data.ConnectionState.Broken || Conn.State == System.Data.ConnectionState.Closed)
+            {
+                Conn = new SQLiteConnection(constring);
+                Conn.Open();
+            }
             return Conn;
         }
         

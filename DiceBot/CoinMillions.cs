@@ -320,6 +320,7 @@ namespace DiceBot
                 else
                 {
                     Bet tmp2 = tmp.Tobet((decimal)chance);
+                    tmp2.date = DateTime.Now;
                     //next = tmp.nextServerSeed;
                     lastupdate = DateTime.Now;
                     balance = double.Parse(tmp.new_balance.btc.available, System.Globalization.NumberFormatInfo.InvariantInfo);

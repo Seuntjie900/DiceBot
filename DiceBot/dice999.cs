@@ -251,7 +251,7 @@ namespace DiceBot
                     profit += -(amount) + (double)(tmpBet.PayOut / 100000000m);
                     Bet tmp = new Bet();
                     tmp.Amount = (decimal)amount;
-                    tmp.BetDate = DateTime.Now.ToString(); ;
+                    tmp.date = DateTime.Now;
                     tmp.Chance = ((decimal)chance * 100m) / 999999m;
                     tmp.clientseed = ClientSeed;
                     tmp.Currency = Currency;

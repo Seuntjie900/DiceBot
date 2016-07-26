@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -136,7 +137,7 @@ devise:btc*/
                 pairs.Add(new KeyValuePair<string, string>("condition", tmpob.High?">":"<"));
                 pairs.Add(new KeyValuePair<string, string>("game", !tmpob.High ? tmpob.Chance.ToString("0.00") : ( maxRoll -tmpob.Chance).ToString("0.00")));
                 pairs.Add(new KeyValuePair<string, string>("devise", Currency));
-                pairs.Add(new KeyValuePair<string, string>("key", "seuntjiebot"));
+                pairs.Add(new KeyValuePair<string, string>("api_key", "0b2edbfe44e98df79665e52896c22987445683e78"));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
                 bsBetBase bsbase = json.JsonDeserialize<bsBetBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
@@ -149,6 +150,7 @@ devise:btc*/
                             Bet tmp = bsbase._return.ToBet();
                             profit += (double)tmp.Profit;
                             wagered += (double)tmp.Amount;
+                            tmp.date = DateTime.Now;
                             bool win = false;
                             if ((tmp.Roll > 99.99m - tmp.Chance && tmp.high) || (tmp.Roll < tmp.Chance && !tmp.high))
                             {
@@ -178,9 +180,39 @@ devise:btc*/
             tBetThread.Start(new PlaceBetObj(High, amount, chance));
         }
 
+        Random R = new Random();
         public override void ResetSeed()
         {
-            throw new NotImplementedException();
+            //Just wanted to test if this works. It doesn't. Will work with the bitsler team to
+            //expand functionality in the future.
+            /*try
+            {
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
+                pairs.Add(new KeyValuePair<string, string>("seed_client", R.Next(0, int.MaxValue).ToString()));
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string sEmitResponse = Client.PostAsync("change-seeds", Content).Result.Content.ReadAsStringAsync().Result;
+                bsResetSeedBase bsbase = json.JsonDeserialize<bsResetSeedBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
+                sqlite_helper.InsertSeed(bsbase._return.last_seeds_revealed.seed_server, bsbase._return.last_seeds_revealed.seed_server_revealed);
+            }
+            catch (WebException e)
+            {
+                if (e.Response != null)
+                {
+
+                    string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                    Parent.updateStatus(sEmitResponse);
+                    if (e.Message.Contains("429"))
+                    {
+                        Thread.Sleep(2000);
+                        ResetSeed();
+                    }
+                }
+            }
+            catch
+            {
+                Parent.updateStatus("Too soon to update seed.");
+            }*/
         }
 
         public override void SetClientSeed(string Seed)
@@ -205,6 +237,7 @@ devise:btc*/
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username", Username));
                 pairs.Add(new KeyValuePair<string, string>("password", Password));
+                pairs.Add(new KeyValuePair<string, string>("api_key", "0b2edbfe44e98df79665e52896c22987445683e78"));
                 //if (!string.IsNullOrWhiteSpace(twofa))
                 {
                     pairs.Add(new KeyValuePair<string, string>("two_factor", twofa));
@@ -436,6 +469,9 @@ devise:btc*/
         public string amount_return { get; set; }
         public string new_balance { get; set; }
         public string _event { get; set; }
+        public string server_seed { get; set; }
+        public string client_seed { get; set; }
+        public long nonce { get; set; }
 
         public Bet ToBet()
         {
@@ -448,11 +484,25 @@ devise:btc*/
                 Roll = (decimal)roll_number,
                 high = condition == ">",
                 Chance = decimal.Parse(winning_chance, System.Globalization.NumberFormatInfo.InvariantInfo),
-                nonce = -1,
-                serverhash = "",
-                clientseed = ""                
+                nonce = nonce,
+                serverhash = server_seed,
+                clientseed = client_seed                
             };
             return tmp;
         }
     }
+    public class bsResetSeedBase
+    {
+        public bsResetSeed _return { get; set; }
+    }
+    public class bsResetSeed
+    {
+        public string seed_server_hashed { get; set; }
+        public string seed_server { get; set; }
+        public string seed_client { get; set; }
+        public string nonce { get; set; }
+        public string seed_server_revealed { get; set; }
+        public bsResetSeed last_seeds_revealed { get; set; }
+    }
+
 }

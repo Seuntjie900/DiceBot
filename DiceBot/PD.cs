@@ -48,7 +48,7 @@ namespace DiceBot
                 {
                     if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
                     {
-                        string sEmitResponse2 = Client.GetStringAsync("users/1?access_token=" + accesstoken).Result;
+                        string sEmitResponse2 = Client.GetStringAsync("users/1?api_key=" + accesstoken).Result;
                         pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
                         balance = tmpu.user.balance / 100000000.0; //i assume
                         bets = tmpu.user.bets;
@@ -85,12 +85,12 @@ namespace DiceBot
                 string sEmitResponse = Client.PostAsync("register", Content).Result.Content.ReadAsStringAsync().Result;
 
                 pdlogin tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
-                accesstoken = tmp.access_token;
+                accesstoken = tmp.api_key;
                 if (accesstoken == "")
                     return false;
                 else
                 {
-                    string sEmitResponse2 = Client.GetStringAsync("users/1?access_token=" + accesstoken).Result;
+                    string sEmitResponse2 = Client.GetStringAsync("users/1?api_key=" + accesstoken).Result;
                     pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
                     try
                     {
@@ -114,9 +114,9 @@ namespace DiceBot
                     pairs = new List<KeyValuePair<string, string>>();
                     pairs.Add(new KeyValuePair<string, string>("password", Password));
                     Content = new FormUrlEncodedContent(pairs);
-                     string sEmitResponse3 = Client.PostAsync("password?access_token="+accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                     string sEmitResponse3 = Client.PostAsync("password?api_key="+accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
                      tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
-                     accesstoken = tmp.access_token;
+                     accesstoken = tmp.api_key;
                     lastupdate = DateTime.Now;
                     ispd = true;
                     Thread t = new Thread(GetBalanceThread);
@@ -145,7 +145,7 @@ namespace DiceBot
             try
             {
 
-                if (Password.Length < 128)
+                /*if (Password.Length < 100)
                 {
 
                     List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -164,16 +164,16 @@ namespace DiceBot
                         return;
                     }
                     pdlogin tmp = json.JsonDeserialize<pdlogin>(sEmitResponse);
-                    accesstoken = tmp.access_token;
+                    accesstoken = tmp.api_key;
                     
                 }
-                else
+                else*/
                     accesstoken = Password;
                 if (accesstoken == "")
                     finishedlogin(false);
                 else
                 {
-                    string sEmitResponse2 = Client.GetStringAsync("users/1?access_token=" + accesstoken).Result;
+                    string sEmitResponse2 = Client.GetStringAsync("users/1?api_key=" + accesstoken).Result;
                     pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
                     this.username = tmpu.user.username;
                     uid = tmpu.user.userid;
@@ -246,7 +246,7 @@ namespace DiceBot
                 
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("bet?access_token=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                string sEmitResponse = Client.PostAsync("bet?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
                 Lastbet = DateTime.Now;
                 try
                 {
@@ -310,7 +310,7 @@ namespace DiceBot
                     pairs.Add(new KeyValuePair<string, string>("seed", Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20)));
 
                     FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                    string sEmitResponse = Client.PostAsync("seed?access_token=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                    string sEmitResponse = Client.PostAsync("seed?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
                     PDseeds tmpSeed = json.JsonDeserialize<PDseeds>(sEmitResponse);
                     sqlite_helper.InsertSeed(tmpSeed.seeds.previous_server_hashed, tmpSeed.seeds.previous_server);
                 }
@@ -361,7 +361,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("address", Address));
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("withdraw?access_token=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                string sEmitResponse = Client.PostAsync("withdraw?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
 
                 return true;
             }
@@ -458,7 +458,7 @@ namespace DiceBot
         {
             try
             {
-                 string sEmitResponse = Client.GetStringAsync("deposit?access_token=" + accesstoken).Result;
+                 string sEmitResponse = Client.GetStringAsync("deposit?api_key=" + accesstoken).Result;
                 pdDeposit tmpa = json.JsonDeserialize<pdDeposit>(sEmitResponse);
                 return tmpa.address;
             }
@@ -486,7 +486,7 @@ namespace DiceBot
             if (accesstoken!="")
             try
             {
-                    string sEmitResponse = Client.GetStringAsync("logout?access_token=" + accesstoken).Result;
+                    string sEmitResponse = Client.GetStringAsync("logout?api_key=" + accesstoken).Result;
                     accesstoken = "";
             }
             catch
@@ -509,7 +509,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("tip?access_token=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                string sEmitResponse = Client.PostAsync("tip?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
             }
             catch (WebException e)
             {
@@ -572,7 +572,7 @@ namespace DiceBot
                     pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
 
                     FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                    string sEmitResponse = Client.PostAsync("send?access_token=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                    string sEmitResponse = Client.PostAsync("send?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
 
                 }
                 catch
@@ -590,7 +590,7 @@ namespace DiceBot
                 {
                     if (accesstoken != "")
                     {
-                       string sEmitResponse = Client.GetStringAsync("messages?access_token=" + accesstoken + "&room=English").Result;
+                       string sEmitResponse = Client.GetStringAsync("messages?api_key=" + accesstoken + "&room=English").Result;
                         chatmessages msgs = json.JsonDeserialize<chatmessages>(sEmitResponse);
                         bool pastlast = false;
                         for (int i = 0; i < msgs.messages.Length; i++)
@@ -623,7 +623,7 @@ namespace DiceBot
     public class pdlogin
     {
         public bool admin { get; set; }
-        public string access_token { get; set; }
+        public string api_key { get; set; }
     }
 
     public class pdbetresult
@@ -656,7 +656,7 @@ namespace DiceBot
             Bet tmp = new Bet 
             {
                 Amount = (decimal)amount / 100000000m, 
-                date = json.ToDateTime2(timestamp),
+                date = DateTime.Now,
                 Id = decimal.Parse(id, System.Globalization.CultureInfo.InvariantCulture), 
                 Profit=(decimal)profit/100000000m, 
                 Roll=(decimal)roll, 

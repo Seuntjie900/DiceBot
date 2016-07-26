@@ -82,6 +82,7 @@ namespace DiceBot
                         
                         tmp.serverhash = serverhash;
                         retries = 5;
+                        tmp.date = DateTime.Now;
                         FinishedBet(tmp);
                     }
                 }

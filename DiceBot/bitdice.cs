@@ -95,7 +95,7 @@ namespace DiceBot
             {
                 Bet tmp = new Bet();
                 tmp.Amount = decimal.Parse(Bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo);
-                tmp.date = DateTime.Parse(Bet.created_at, System.Globalization.NumberFormatInfo.InvariantInfo);
+                tmp.date = DateTime.Now;
                 tmp.Id = (decimal)(Bet.id);
                 tmp.Profit = decimal.Parse(Bet.win, System.Globalization.NumberFormatInfo.InvariantInfo);
                 tmp.Roll = decimal.Parse(Bet.lucky, System.Globalization.NumberFormatInfo.InvariantInfo);

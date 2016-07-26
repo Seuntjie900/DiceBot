@@ -308,7 +308,7 @@ namespace DiceBot
                 SafeDiceBetResult tmpResult = json.JsonDeserialize<SafeDiceBetResult>(Resp);
                 Bet bet = new Bet();
                 bet.Amount = (decimal)tmpResult.amount / (curen != 2 ? 100000000m : 1000000000000m);
-                bet.date = json.ToDateTime2(tmpResult.processTime);
+                bet.date = DateTime.Now;
                 bet.Chance = (!tmpResult.isRollLow ? 100m - (decimal)tmpResult.target / 1000000m * 100m : (decimal)tmpResult.target / 1000000m * 100m);
                 bet.high = !tmpResult.isRollLow;
                 bet.clientseed = client;

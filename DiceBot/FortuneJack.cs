@@ -466,7 +466,7 @@ namespace DiceBot
                             clientseed = (RetObjs[11]),
                             high = RetObjs[8] == "1",
                             uid = int.Parse(RetObjs[3])
-
+                            
                         };
                         decimal tmpChance = decimal.Parse(RetObjs[7], System.Globalization.NumberFormatInfo.InvariantInfo) / 100m;
                         Result.Chance = Result.high ? (decimal)maxRoll - tmpChance : tmpChance;

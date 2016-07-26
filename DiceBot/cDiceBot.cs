@@ -37,7 +37,7 @@ namespace DiceBot
 
         Control[] ControlsToDisable;
         
-        DateTime OpenTime = DateTime.UtcNow;
+        DateTime OpenTime = DateTime.Now;
         Random r = new Random();
         Graph LiveGraph;
         Stats StatsWindows = new Stats();
@@ -170,6 +170,7 @@ namespace DiceBot
             }
         }
 
+        double Chartprofit = 0;
         delegate void dDobet(Bet bet);
         public void GetBetResult(double Balance, Bet bet)
         {
@@ -181,6 +182,7 @@ namespace DiceBot
             }
             PreviousBalance = (double)Balance;
             profit += (double)bet.Profit;
+            Chartprofit += (double)bet.Profit;
             if (!RunningSimulation)
             {
                 AddChartPoint(profit);
@@ -208,7 +210,7 @@ namespace DiceBot
             {
                 
                 if (chrtEmbeddedLiveChart.Enabled)
-                chrtEmbeddedLiveChart.Series[0].Points.AddY(Profit);
+                chrtEmbeddedLiveChart.Series[0].Points.AddY(Chartprofit);
             }
         }
 
@@ -4988,6 +4990,7 @@ namespace DiceBot
 
         private void btnChartReset_Click(object sender, EventArgs e)
         {
+            Chartprofit = 0;
             chrtEmbeddedLiveChart.Series[0].Points.Clear();
             chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
             
@@ -5215,7 +5218,7 @@ namespace DiceBot
                     case "cryptoGamesToolStripMenuItem" : CurrentSite = new cryptogames(this); siteToolStripMenuItem.Text = "Site (CG)"; break;
                     case "bitslerToolStripMenuItem" : CurrentSite = new Bitsler(this); siteToolStripMenuItem.Text = "Site (BS)"; break;
                 }
-                if (CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
+                if (CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
                     lblPass.Text = "API key:";
                     lblUsername.Text = "Username:";

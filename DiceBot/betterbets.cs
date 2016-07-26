@@ -240,6 +240,7 @@ namespace DiceBot
                 }
 
                 bbResult tmp = json.JsonDeserialize<bbResult>(responseData);
+               
                 if (tmp.error != 1)
                 {
                     next = tmp.nextServerSeed;
@@ -255,6 +256,7 @@ namespace DiceBot
 
 
                     Bet tmp2 = tmp.toBet();
+                    tmp2.date = DateTime.Now;
                     tmp2.serverhash = next;
                     next = tmp.nextServerSeed;
 
