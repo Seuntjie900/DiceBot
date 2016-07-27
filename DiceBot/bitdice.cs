@@ -15,7 +15,7 @@ namespace DiceBot
     class bitdice:DiceSite
     {
 
-        public static string[] cCurrencies = new string[] { "btc", "doge", "ltc", "redd", "clam", "dash" };
+        public static string[] cCurrencies = new string[] { "btc", "doge", "ltc", "clam", "eth" };
         WebSocket Client;// = new WebSocket("");
         public bitdice(cDiceBot Parent)
         {
@@ -35,7 +35,7 @@ namespace DiceBot
             Client.Closed += Client_Closed;
             Client.MessageReceived += Client_MessageReceived;*/
 
-            Currencies = new string[] { "btc", "doge","ltc","redd","clam","dash"};
+            Currencies = new string[] { "btc", "doge", "ltc", "clam", "eth" };
         }
 
         void getDeposit(string html)

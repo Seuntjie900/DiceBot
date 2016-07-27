@@ -32,7 +32,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.1.7";
+        private const string vers = "3.2.0";
 
 
         Control[] ControlsToDisable;
@@ -240,7 +240,7 @@ namespace DiceBot
             Thread.CurrentThread.CurrentUICulture =  new CultureInfo("en-US");
             sqlite_helper.CheckDBS();
             InitializeComponent();
-            tsmiVersion.Text = vers;
+            tsmiVersion.Text = "Version "+vers;
             foreach (string s in args)
             {
                 if (s.StartsWith("log="))

@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="909824">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="910848">
       <assemblyIdentity name="DiceBot" version="3.2.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>BSTz29diUcFktLXO4wyZtOyKiE0nk+83DedzirA3748=</dsig:DigestValue>
+        <dsig:DigestValue>ZSjFfPnFZcbDW8yblIJUaL/WSe2dHCUdjs4UcSpvta8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
