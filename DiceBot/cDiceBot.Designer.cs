@@ -4436,7 +4436,7 @@
             this.TrayIcon.Text = "DiceBot";
             this.TrayIcon.Visible = true;
             this.TrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_Click);
-            this.TrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseDoubleClick);
+            this.TrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MousedecimalClick);            
             this.TrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_Click);
             // 
             // tmrCheckInvest
@@ -5572,17 +5572,17 @@
             // 
             this.lbVariables.FormattingEnabled = true;
             this.lbVariables.Items.AddRange(new object[] {
-            "balance:double, RO",
+            "balance:decimal, RO",
             "win:bool, RO",
-            "profit:double, RO",
-            "currentprofit:double, RO",
-            "currentstreak:double, RO",
-            "previousbet:double, RO",
+            "profit:decimal, RO",
+            "currentprofit:decimal, RO",
+            "currentstreak:decimal, RO",
+            "previousbet:decimal, RO",
             "bets:int, RO",
             "wins:int, RO",
             "losses:int, RO",
-            "nextbet:double, RW",
-            "chance:double, RW",
+            "nextbet:decimal, RW",
+            "chance:decimal, RW",
             "bethigh:bool, RW",
             "lastBet:Bet, RO",
             "currencies:string[], RO. List of currencies available at current site",
@@ -5599,9 +5599,9 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Items.AddRange(new object[] {
-            "withdraw(amount:double, bitcoinaddress:string)",
-            "invest(amount:double)",
-            "tip(username/userid:string, amount:double)",
+            "withdraw(amount:decimal, bitcoinaddress:string)",
+            "invest(amount:decimal)",
+            "tip(username/userid:string, amount:decimal)",
             "stop()",
             "resetseed();",
             "print(messagetoprint:string)",
@@ -5609,19 +5609,19 @@
             "getHistoryByDate(FromDateTime:string (inclusive), UntillDateTime:string (exclusiv" +
                 "e)): Bet[]",
             "getHistoryByQuery(SQLiteQuery:string): Bet[]",
-            "martingale(win:boolean):double",
-            "labouchere(win:boolean):double",
-            "fibonacci(win:bool):double",
-            "dalembert(win:bool):double",
-            "presetlist(win:bool):double",
+            "martingale(win:boolean):decimal",
+            "labouchere(win:boolean):decimal",
+            "fibonacci(win:bool):decimal",
+            "dalembert(win:bool):decimal",
+            "presetlist(win:bool):decimal",
             "resetstats(): void",
             "setvalueint(name:string, value:int): void",
             "setvaluestring(name:string, value:string): void",
-            "setvaluedouble(name:string, value:double): void",
+            "setvaluedecimal(name:string, value:decimal): void",
             "setvaluebool(name:string, value:bool): void",
             "getvalue(name:string): object",
             "loadstrategy(file:string): bool",
-            "read(prompt:string, type:int): object --0: bool, 1:int, 2:double, 3:string"});
+            "read(prompt:string, type:int): object --0: bool, 1:int, 2:decimal, 3:string"});
             this.listBox1.Location = new System.Drawing.Point(11, 222);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(261, 82);

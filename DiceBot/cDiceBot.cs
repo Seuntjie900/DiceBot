@@ -47,27 +47,27 @@ namespace DiceBot
         public int logging = 0;
         Random rand = new Random();
         bool retriedbet = false;
-        double StartBalance = 0;        
-        double Lastbet = -1;
-        double MinBet = 0;
-        double Multiplier = 0;
-        double WinMultiplier = 0;
-        double Limit = 0;
-        double Amount = 0;
+        decimal StartBalance = 0;        
+        decimal Lastbet = -1;
+        decimal MinBet = 0;
+        decimal Multiplier = 0;
+        decimal WinMultiplier = 0;
+        decimal Limit = 0;
+        decimal Amount = 0;
         
-        double LargestBet = 0;
-        double LargestWin = 0;
-        double LargestLoss = 0;
-        double LowerLimit = 0;
-        double Devider = 0;
-        double WinDevider = 0;
-        double Chance = 0;
-        double avgloss = 0;
-        double avgwin = 0;
-        double avgstreak = 0;
-        double currentprofit = 0;
-        double profit = 0;
-        double luck = 0;
+        decimal LargestBet = 0;
+        decimal LargestWin = 0;
+        decimal LargestLoss = 0;
+        decimal LowerLimit = 0;
+        decimal Devider = 0;
+        decimal WinDevider = 0;
+        decimal Chance = 0;
+        decimal avgloss = 0;
+        decimal avgwin = 0;
+        decimal avgstreak = 0;
+        decimal currentprofit = 0;
+        decimal profit = 0;
+        decimal luck = 0;
         int numwinstreasks = 0;
         int numlosesreaks = 0;
         int numstreaks = 0;
@@ -118,7 +118,7 @@ namespace DiceBot
         string salarm = "";
         bool startupMessage = true;
         int donateMode = 2;
-        double donatePercentage = 1;
+        decimal donatePercentage = 1;
         #endregion
 
 
@@ -131,11 +131,11 @@ namespace DiceBot
         Simulation lastsim;
 
         //labouchere
-        List<double> LabList = new List<double>();
+        List<decimal> LabList = new List<decimal>();
         #endregion
 
         DiceSite CurrentSite;
-        private double dPreviousBalance;
+        private decimal dPreviousBalance;
         delegate void dpopFibonacci();
         void populateFiboNacci()
         {
@@ -160,7 +160,7 @@ namespace DiceBot
             }
         }
 
-        public double PreviousBalance
+        public decimal PreviousBalance
         {
             get { return dPreviousBalance; }
             set 
@@ -170,9 +170,9 @@ namespace DiceBot
             }
         }
 
-        double Chartprofit = 0;
+        decimal Chartprofit = 0;
         delegate void dDobet(Bet bet);
-        public void GetBetResult(double Balance, Bet bet)
+        public void GetBetResult(decimal Balance, Bet bet)
         {
             DumpLog("received bet result: Balance: "+Balance+", Bet:"+json.JsonSerializer<Bet>(bet) , 6);
             if (logging>2)
@@ -180,9 +180,9 @@ namespace DiceBot
             {
                 sw.WriteLine(json.JsonSerializer<Bet>(bet));
             }
-            PreviousBalance = (double)Balance;
-            profit += (double)bet.Profit;
-            Chartprofit += (double)bet.Profit;
+            PreviousBalance = (decimal)Balance;
+            profit += (decimal)bet.Profit;
+            Chartprofit += (decimal)bet.Profit;
             if (!RunningSimulation)
             {
                 AddChartPoint(profit);
@@ -198,8 +198,8 @@ namespace DiceBot
             
         }
 
-        delegate void dAddChartPoint(double Profit);
-        void AddChartPoint(double Profit)
+        delegate void dAddChartPoint(decimal Profit);
+        void AddChartPoint(decimal Profit)
         {
 
             if (InvokeRequired)
@@ -533,7 +533,7 @@ namespace DiceBot
             Lua.RegisterFunction("resetstats", this, new dResetStats(resetstats).Method);
             Lua.RegisterFunction("setvalueint", this, new dSetValue(LuaSetValue).Method);
             Lua.RegisterFunction("setvaluestring", this, new dSetValue1(LuaSetValue).Method);
-            Lua.RegisterFunction("setvaluedouble", this, new dSetValue2(LuaSetValue).Method);
+            Lua.RegisterFunction("setvaluedecimal", this, new dSetValue2(LuaSetValue).Method);
             Lua.RegisterFunction("setvaluebool", this, new dSetValue3(LuaSetValue).Method);
             Lua.RegisterFunction("getvalue", this, new dGetValue(LuaGetValue).Method);
             Lua.RegisterFunction("loadstrategy", this, new dLoadStrat(LuaLoadStrat).Method);
@@ -579,8 +579,8 @@ namespace DiceBot
         {
             SetValue(Name, Value, false);
         }
-        delegate void dSetValue2(string Name, double Value);
-        void LuaSetValue(string Name, double Value)
+        delegate void dSetValue2(string Name, decimal Value);
+        void LuaSetValue(string Name, decimal Value)
         {
             SetValue(Name, Value, false);
         }
@@ -595,48 +595,48 @@ namespace DiceBot
             return getValue(Name, false);
         }
 
-        delegate double dStrat(bool Win);
-        double LuaMartingale(bool Win)
+        delegate decimal dStrat(bool Win);
+        decimal LuaMartingale(bool Win)
         {
-            double tmpNext = Lastbet;
+            decimal tmpNext = Lastbet;
             martingale(Win);
-            double tmpval = Lastbet;
+            decimal tmpval = Lastbet;
             Lastbet = tmpNext;
             return tmpval;
         }
 
-        double LuaFibonacci(bool Win)
+        decimal LuaFibonacci(bool Win)
         {
-            double tmpNext = Lastbet;
+            decimal tmpNext = Lastbet;
             Fibonacci(Win);
-            double tmpval = Lastbet;
+            decimal tmpval = Lastbet;
             Lastbet = tmpNext;
             return tmpval;
         }
 
-        double LuaLabouchere(bool Win)
+        decimal LuaLabouchere(bool Win)
         {
-            double tmpNext = Lastbet;
+            decimal tmpNext = Lastbet;
             Labouchere(Win);
-            double tmpval = Lastbet;
+            decimal tmpval = Lastbet;
             Lastbet = tmpNext;
             return tmpval;
         }
 
-        double LuaDAlember(bool Win)
+        decimal LuaDAlember(bool Win)
         {
-            double tmpNext = Lastbet;
+            decimal tmpNext = Lastbet;
             Alembert(Win);
-            double tmpval = Lastbet;
+            decimal tmpval = Lastbet;
             Lastbet = tmpNext;
             return tmpval;
         }
 
-        double LuaPreset(bool Win)
+        decimal LuaPreset(bool Win)
         {
-            double tmpNext = Lastbet;
+            decimal tmpNext = Lastbet;
             PresetList(Win);
-            double tmpval = Lastbet;
+            decimal tmpval = Lastbet;
             Lastbet = tmpNext;
             return tmpval;
         }
@@ -652,8 +652,8 @@ namespace DiceBot
         delegate void dResetStats();
        
 
-        delegate void dRunsim(double startingabalance, int bets);
-        void runsim(double startingbalance, int bets)
+        delegate void dRunsim(decimal startingabalance, int bets);
+        void runsim(decimal startingbalance, int bets)
         {
             if (stop)
             {
@@ -677,20 +677,20 @@ namespace DiceBot
             if (CurrentSite.ChangeSeed)
                 CurrentSite.ResetSeed();
         }
-        void luaWithdraw(double amount, string address)
+        void luaWithdraw(decimal amount, string address)
         {
             WriteConsole("Withdrawing " +amount + " to " + address);
             if (CurrentSite.AutoWithdraw)
                 CurrentSite.Withdraw(amount, address);
         }
 
-        void luainvest(double amount)
+        void luainvest(decimal amount)
         {
             WriteConsole("investing " + amount);
             if (CurrentSite.AutoInvest)
                 CurrentSite.Invest(amount);
         }
-        void luatip(string username, double amount)
+        void luatip(string username, decimal amount)
         {
             WriteConsole("Tipping "+ amount + " to "+username);
             if (CurrentSite.Tip)
@@ -877,7 +877,7 @@ namespace DiceBot
                             StatsWindows.lblProfit.ForeColor = Color.Green;
 
                         }
-                        if (profit > 0.001)
+                        if (profit > 0.001m)
                         {
                             donateToolStripMenuItem.ForeColor = Color.Green;
                             donateToolStripMenuItem.BackColor = Color.LightBlue;
@@ -974,11 +974,11 @@ namespace DiceBot
         bool convert = false;
         int maxbetsconstant()
         {
-            double total = 0;
+            decimal total = 0;
             int bets = 0;
-            double curbet = MinBet;
+            decimal curbet = MinBet;
             
-            double Multiplier = (double)(nudMultiplier.Value);
+            decimal Multiplier = (decimal)(nudMultiplier.Value);
 
             while (total < PreviousBalance)
             {
@@ -988,7 +988,7 @@ namespace DiceBot
                 }
                 if (bets == nudChangeLoseStreak.Value && chkChangeLoseStreak.Checked)
                 {
-                    curbet = (double)nudChangeLoseStreakTo.Value;
+                    curbet = (decimal)nudChangeLoseStreakTo.Value;
                 }
                 bets++;
                 total += curbet;
@@ -1000,11 +1000,11 @@ namespace DiceBot
 
         int maxbetsVariable()
         {
-            double total = 0;
+            decimal total = 0;
             int bets = 0;
-            double curbet = MinBet;
+            decimal curbet = MinBet;
             int n = Devidecounter;
-            double dmultiplier = (double)(nudMultiplier.Value);
+            decimal dmultiplier = (decimal)(nudMultiplier.Value);
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -1016,7 +1016,7 @@ namespace DiceBot
                 }
                 if (bets == nudChangeLoseStreak.Value && chkChangeLoseStreak.Checked)
                 {
-                    curbet = (double)nudChangeLoseStreakTo.Value;
+                    curbet = (decimal)nudChangeLoseStreakTo.Value;
                 }
                 bets++;
                 total += curbet;
@@ -1028,11 +1028,11 @@ namespace DiceBot
 
         int maxbetsMaxMultiplies()
         {
-            double total = 0;
+            decimal total = 0;
             int bets = 0;
-            double curbet = MinBet;
+            decimal curbet = MinBet;
             int n = Devidecounter;
-            double dmultiplier = (double)(nudMultiplier.Value);
+            decimal dmultiplier = (decimal)(nudMultiplier.Value);
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -1044,7 +1044,7 @@ namespace DiceBot
                 }
                 if (bets == nudChangeLoseStreak.Value && chkChangeLoseStreak.Checked)
                 {
-                    curbet = (double)nudChangeLoseStreakTo.Value;
+                    curbet = (decimal)nudChangeLoseStreakTo.Value;
                 }
                 bets++;
                 total += curbet;
@@ -1056,11 +1056,11 @@ namespace DiceBot
 
         int maxbetsChangeOnce()
         {
-            double total = 0;
+            decimal total = 0;
             int bets = 0;
-            double curbet = MinBet;
+            decimal curbet = MinBet;
             int n = Devidecounter;
-            double dmultiplier = (double)(nudMultiplier.Value);
+            decimal dmultiplier = (decimal)(nudMultiplier.Value);
             while (total < PreviousBalance)
             {
                 if (bets > 0)
@@ -1072,7 +1072,7 @@ namespace DiceBot
                 }
                 if (bets == nudChangeLoseStreak.Value && chkChangeLoseStreak.Checked)
                 {
-                    curbet = (double)nudChangeLoseStreakTo.Value;
+                    curbet = (decimal)nudChangeLoseStreakTo.Value;
                 }
                 bets++;
                 total += curbet;
@@ -1102,7 +1102,7 @@ namespace DiceBot
             decimal lucktotal = (decimal)luck * (decimal)((Wins + Losses) - 1);
             if (win)
                 lucktotal += (decimal)((decimal)100 / (decimal)Chance)*(decimal)100;
-            double tmp = (double)(lucktotal / (decimal)(Wins + Losses));
+            decimal tmp = (decimal)(lucktotal / (decimal)(Wins + Losses));
             luck = tmp;
         }
         #endregion
@@ -1127,7 +1127,7 @@ namespace DiceBot
             TrayIcon.ShowBalloonTip(1000);
             //tmBetting.Enabled = false;
             WriteConsole("Betting Stopped!");
-            double dBalance = CurrentSite.balance;
+            decimal dBalance = CurrentSite.balance;
             stop = true;
             TotalTime += (DateTime.Now - dtStarted);
             if (RunningSimulation)
@@ -1170,7 +1170,7 @@ namespace DiceBot
           else if (rdbLabEnable.Checked)
           {
               string[] ss = GetLabList();
-              LabList = new List<double>();
+              LabList = new List<decimal>();
               foreach (string s in ss)
               {
                   LabList.Add(dparse(s, ref convert));
@@ -1183,7 +1183,7 @@ namespace DiceBot
           else if (rdbFibonacci.Checked)
           {
               FibonacciLevel = 0;
-              Lastbet = double.Parse(lstFibonacci.Items[FibonacciLevel].ToString().Substring(lstFibonacci.Items[FibonacciLevel].ToString().IndexOf(" ") + 1));
+              Lastbet = decimal.Parse(lstFibonacci.Items[FibonacciLevel].ToString().Substring(lstFibonacci.Items[FibonacciLevel].ToString().IndexOf(" ") + 1));
           }
           else if (rdbAlembert.Checked)
           {
@@ -1192,7 +1192,7 @@ namespace DiceBot
           else if (rdbPreset.Checked)
           {
               presetLevel = 0;
-              double Betval = -1;
+              decimal Betval = -1;
               if (presetLevel < rtbPresetList.Lines.Length)
               {
                   SetPresetValues(presetLevel);
@@ -1228,7 +1228,7 @@ namespace DiceBot
         {
             
             if (CurrentSite.AutoWithdraw)
-                if (CurrentSite.Withdraw((double)(nudAmount.Value), txtTo.Text))
+                if (CurrentSite.Withdraw((decimal)(nudAmount.Value), txtTo.Text))
                 {
 
                     
@@ -1275,7 +1275,7 @@ namespace DiceBot
 
             if (CurrentSite.AutoInvest)
             {
-                if (CurrentSite.Invest((double)(nudAmount.Value)))
+                if (CurrentSite.Invest((decimal)(nudAmount.Value)))
                 {
                     //invest = false;
                     TrayIcon.BalloonTipText = "Invest " + nudAmount.Value + "Complete\nRestarting Bets";
@@ -1338,7 +1338,7 @@ namespace DiceBot
 
                 stoponwin = false;
                 if (!programmerToolStripMenuItem.Checked)
-                Chance = (double)nudChance.Value;
+                Chance = (decimal)nudChance.Value;
                 CurrentSite.chance =(Chance);
 
                 dtStarted = DateTime.Now;
@@ -1350,7 +1350,7 @@ namespace DiceBot
                 stop = false;
                 if (rdbLabEnable.Checked)
                 {
-                    LabList = new List<double>();
+                    LabList = new List<decimal>();
                     string[] lines = GetLabList();
                     foreach (string s in lines)
                     {
@@ -1363,7 +1363,7 @@ namespace DiceBot
                     {
                         Lastbet = MinBet;
                         if (!programmerToolStripMenuItem.Checked)
-                        Chance = (double)nudChance.Value;
+                        Chance = (decimal)nudChance.Value;
                     }
                     else
                     {
@@ -1395,7 +1395,7 @@ namespace DiceBot
                     }
                     if (nudMutawaMultiplier.Value != 0)
                     {
-                        mutawaprev = (double)nudChangeWinStreakTo.Value / (double)nudMutawaMultiplier.Value;
+                        mutawaprev = (decimal)nudChangeWinStreakTo.Value / (decimal)nudMutawaMultiplier.Value;
                     }
                 }
                 if (RunningSimulation)
@@ -1417,7 +1417,7 @@ namespace DiceBot
             
             if (!RunningSimulation)
             {
-                double dBalance = PreviousBalance;
+                decimal dBalance = PreviousBalance;
                 if (CurrentSite != null)
                 dBalance = CurrentSite.balance;
                 if ((dBalance != PreviousBalance && convert || withdrew) && dBalance > 0)
@@ -1471,7 +1471,7 @@ namespace DiceBot
             }
         }
 
-        double mutawaprev = 0;
+        decimal mutawaprev = 0;
         bool trazelmultiply = false;
         int trazelwin = 0;
         
@@ -1516,7 +1516,7 @@ namespace DiceBot
                         else
                         {
                             string[] ss = GetLabList();
-                            LabList = new List<double>();
+                            LabList = new List<decimal>();
                             foreach (string s in ss)
                             {
                                 LabList.Add(dparse(s, ref convert));
@@ -1561,7 +1561,7 @@ namespace DiceBot
                             else
                             {
                                 string[] ss = GetLabList();
-                                LabList = new List<double>();
+                                LabList = new List<decimal>();
                                 foreach (string s in ss)
                                 {
                                     LabList.Add(dparse(s, ref convert));
@@ -1593,7 +1593,7 @@ namespace DiceBot
                     else
                     {
                         string[] ss = GetLabList();
-                        LabList = new List<double>();
+                        LabList = new List<decimal>();
                         foreach (string s in ss)
                         {
                             LabList.Add(dparse(s, ref convert));
@@ -1635,7 +1635,7 @@ namespace DiceBot
                     }
                     try
                     {
-                        Chance = (double)(nudChance.Value);
+                        Chance = (decimal)(nudChance.Value);
                         if (!RunningSimulation)
                             CurrentSite.chance =(Chance);
                     }
@@ -1651,14 +1651,14 @@ namespace DiceBot
                 }
                 if (chkMK.Checked)
                 {
-                    if (double.Parse((Lastbet - (double)nudMKDecrement.Value).ToString("0.00000000"), System.Globalization.CultureInfo.InvariantCulture) > 0)
+                    if (decimal.Parse((Lastbet - (decimal)nudMKDecrement.Value).ToString("0.00000000"), System.Globalization.CultureInfo.InvariantCulture) > 0)
                     {
-                        Lastbet -= (double)nudMKDecrement.Value;
+                        Lastbet -= (decimal)nudMKDecrement.Value;
                     }
                 }
-                if (chkTrazel.Checked && trazelwin % (double)nudTrazelWin.Value == 0 && trazelwin != 0)
+                if (chkTrazel.Checked && trazelwin % (decimal)nudTrazelWin.Value == 0 && trazelwin != 0)
                 {
-                    Lastbet = (double)nudtrazelwinto.Value;
+                    Lastbet = (decimal)nudtrazelwinto.Value;
                     trazelwin = -1;
                     trazelmultiply = true;
                     high = !starthigh;
@@ -1675,16 +1675,16 @@ namespace DiceBot
                 
                 if (chkChangeWinStreak.Checked && (Winstreak == nudChangeWinStreak.Value))
                 {
-                    Lastbet = (double)nudChangeWinStreakTo.Value;
+                    Lastbet = (decimal)nudChangeWinStreakTo.Value;
                 }
                 if (checkBox1.Checked)
                 {
                     if (Winstreak == nudMutawaWins.Value)
-                        Lastbet = mutawaprev *= (double)nudMutawaMultiplier.Value;
+                        Lastbet = mutawaprev *= (decimal)nudMutawaMultiplier.Value;
                     if (Winstreak == nudMutawaWins.Value + 1)
                     {
                         Lastbet = MinBet;
-                        mutawaprev = (double)nudChangeWinStreakTo.Value / (double)nudMutawaMultiplier.Value;
+                        mutawaprev = (decimal)nudChangeWinStreakTo.Value / (decimal)nudMutawaMultiplier.Value;
                     }
 
                 }
@@ -1692,9 +1692,9 @@ namespace DiceBot
                 {
                     try
                     {
-                        Chance = (double)nudChangeChanceWinTo.Value;
+                        Chance = (decimal)nudChangeChanceWinTo.Value;
                         if (!RunningSimulation)
-                            CurrentSite.chance = ((double)nudChangeChanceWinTo.Value);
+                            CurrentSite.chance = ((decimal)nudChangeChanceWinTo.Value);
 
                     }
                     catch (Exception e)
@@ -1726,15 +1726,15 @@ namespace DiceBot
                 }
                 if (chkTrazel.Checked && trazelmultiply)
                 {
-                    Multiplier = (double)nudTrazelMultiplier.Value;
+                    Multiplier = (decimal)nudTrazelMultiplier.Value;
                 }
                 if (chkTrazel.Checked)
                 {
                     high = starthigh;
                 }
-                if (chkTrazel.Checked && Losestreak + 1 >= (double)NudTrazelLose.Value && !trazelmultiply)
+                if (chkTrazel.Checked && Losestreak + 1 >= (decimal)NudTrazelLose.Value && !trazelmultiply)
                 {
-                    Lastbet = (double)nudtrazelloseto.Value;
+                    Lastbet = (decimal)nudtrazelloseto.Value;
                     trazelmultiply = true;
                     high = !starthigh;
                 }
@@ -1759,7 +1759,7 @@ namespace DiceBot
                 }
                 if (chkMK.Checked)
                 {
-                    Lastbet += (double)nudMKIncrement.Value;
+                    Lastbet += (decimal)nudMKIncrement.Value;
                 }
                 if (checkBox1.Checked)
                 {
@@ -1770,12 +1770,12 @@ namespace DiceBot
                 //change bet after a certain losing streak
                 if (chkChangeLoseStreak.Checked && (Losestreak == nudChangeLoseStreak.Value))
                 {
-                    Lastbet = (double)nudChangeLoseStreakTo.Value;
+                    Lastbet = (decimal)nudChangeLoseStreakTo.Value;
                 }
             }
             if (chkPercentage.Checked)
             {
-                Lastbet = (double)(nudPercentage.Value / (decimal)100.0) * dPreviousBalance;
+                Lastbet = (decimal)(nudPercentage.Value / (decimal)100.0) * dPreviousBalance;
             }
         }
         int FibonacciLevel = 0;
@@ -1830,7 +1830,7 @@ namespace DiceBot
                     
                 }
             }
-            Lastbet = double.Parse(lstFibonacci.Items[FibonacciLevel].ToString().Substring(lstFibonacci.Items[FibonacciLevel].ToString().IndexOf(" ")+1));
+            Lastbet = decimal.Parse(lstFibonacci.Items[FibonacciLevel].ToString().Substring(lstFibonacci.Items[FibonacciLevel].ToString().IndexOf(" ")+1));
         }
 
         void Alembert(bool Win)
@@ -1840,14 +1840,14 @@ namespace DiceBot
                 
                 if ((Winstreak) % (nudAlembertStretchWin.Value +1) == 0)
                 {
-                    Lastbet += (double)nudAlembertIncrementWin.Value;
+                    Lastbet += (decimal)nudAlembertIncrementWin.Value;
                 }
             }
             else
             {
                 if ((Losestreak) % (nudAlembertStretchLoss.Value + 1) == 0)
                 {
-                    Lastbet += (double)nudAlembertIncrementLoss.Value;
+                    Lastbet += (decimal)nudAlembertIncrementLoss.Value;
                 }
             }
             if (Lastbet < MinBet)
@@ -1857,7 +1857,7 @@ namespace DiceBot
         int presetLevel = 0;
         void SetPresetValues(int Level)
         {
-            double Betval = -1;
+            decimal Betval = -1;
             string[] Vars = null;
             if (rtbPresetList.Lines[Level].Contains("-"))
             {
@@ -1876,14 +1876,14 @@ namespace DiceBot
                 Vars = rtbPresetList.Lines[Level].Split('&');
             }
 
-            if (double.TryParse(Vars[0], out Betval))
+            if (decimal.TryParse(Vars[0], out Betval))
             {
                 Lastbet = Betval;
 
                 if (Vars.Length >= 2)
                 {
-                    double chance = -1;
-                    if (double.TryParse(Vars[1], out chance))
+                    decimal chance = -1;
+                    if (decimal.TryParse(Vars[1], out chance))
                     {
                         Chance = chance;
                     }
@@ -1898,7 +1898,7 @@ namespace DiceBot
                     }
                     if (Vars.Length >= 3)
                     {
-                        if (double.TryParse(Vars[2], out chance))
+                        if (decimal.TryParse(Vars[2], out chance))
                         {
                             Chance = chance;
                         }
@@ -1984,9 +1984,9 @@ namespace DiceBot
             }
         }
 
-        double ProfitSinceLastReset = 0;
-        double StreakProfitSinceLastReset = 0;
-        double StreakLossSinceLastReset = 0;
+        decimal ProfitSinceLastReset = 0;
+        decimal StreakProfitSinceLastReset = 0;
+        decimal StreakLossSinceLastReset = 0;
         int betsAtLastReset = 0;
         int lossesAtLastReset = 0;
         int winsAtLastReset = 0;
@@ -1999,7 +1999,7 @@ namespace DiceBot
             {
 
             }
-            double profit = (double)bet.Profit;
+            decimal profit = (decimal)bet.Profit;
             retriedbet = false;
             if (!stop)
             {
@@ -2054,7 +2054,7 @@ namespace DiceBot
                             {
                                 Reset();
                             }
-                            if (currentprofit >= ((double)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
+                            if (currentprofit >= ((decimal)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
                             {
                                 Stop("Made " + currentprofit + " profit in a row");
                                 
@@ -2064,17 +2064,17 @@ namespace DiceBot
                                 Stop("Won "+ Winstreak + " bets in a row");
                                 
                             }
-                            if (this.profit >= (double)nudStopWinBtc.Value && chkStopWinBtc.Checked)
+                            if (this.profit >= (decimal)nudStopWinBtc.Value && chkStopWinBtc.Checked)
                             {
                                 Stop("Made " + this.profit + " profit");
                                 
                             }
-                            if (StreakProfitSinceLastReset >= (double)nudResetBtcStreakProfit.Value && chkResetBtcStreakProfit.Checked)
+                            if (StreakProfitSinceLastReset >= (decimal)nudResetBtcStreakProfit.Value && chkResetBtcStreakProfit.Checked)
                             {
                                 Reset();
                                 StreakProfitSinceLastReset = 0;
                             }
-                            if (ProfitSinceLastReset> (double)nudResetBtcProfit.Value && chkResetBtcProfit.Checked)
+                            if (ProfitSinceLastReset> (decimal)nudResetBtcProfit.Value && chkResetBtcProfit.Checked)
                             {
                                 Reset();
                                 ProfitSinceLastReset = 0;
@@ -2091,11 +2091,11 @@ namespace DiceBot
                         }
                         if (Losestreak != 0)
                         {
-                            double avglosecalc = avgloss * numlosesreaks;
+                            decimal avglosecalc = avgloss * numlosesreaks;
                             avglosecalc += Losestreak;
                             avglosecalc /= ++numlosesreaks;
                             avgloss = avglosecalc;
-                            double avgbetcalc = avgstreak * numstreaks;
+                            decimal avgbetcalc = avgstreak * numstreaks;
                             avgbetcalc -= Losestreak;
                             avgbetcalc /= ++numstreaks;
                             avgstreak = avgbetcalc;
@@ -2124,7 +2124,7 @@ namespace DiceBot
                         
                     }
                     iMultiplyCounter = 0;                    
-                    Multiplier = (double)(nudMultiplier.Value);
+                    Multiplier = (decimal)(nudMultiplier.Value);
                     if ((!programmerToolStripMenuItem.Checked) || EnableProgZigZag)
                     {
                         if (chkZigZagWins.Checked && Wins% (int)nudZigZagWins.Value==0 && Wins!=0)
@@ -2192,9 +2192,9 @@ namespace DiceBot
                     {
                         try
                         {
-                            Chance = (double)nudChangeChanceLoseTo.Value;
+                            Chance = (decimal)nudChangeChanceLoseTo.Value;
                             if (!RunningSimulation)
-                                CurrentSite.chance = (double)(nudChangeChanceLoseTo.Value);
+                                CurrentSite.chance = (decimal)(nudChangeChanceLoseTo.Value);
                             
                             
                         }
@@ -2219,22 +2219,22 @@ namespace DiceBot
                         }
 
                         //stop if current profit drops below specified value/ loss is larger than specified value
-                        if (currentprofit <= (0.0 - (double)nudStopLossBtcStreal.Value) && chkStopLossBtcStreak.Checked)
+                        if (currentprofit <= (0.0m - (decimal)nudStopLossBtcStreal.Value) && chkStopLossBtcStreak.Checked)
                         {
                             Stop("Lost " + currentprofit+ " " + CurrentSite.Currency+" in a row");
                         }
 
                         // stop if total profit/total loss is below/above certain value
-                        if (this.profit <= 0.0 - (double)nudStopLossBtc.Value && chkStopLossBtc.Checked)
+                        if (this.profit <= 0.0m - (decimal)nudStopLossBtc.Value && chkStopLossBtc.Checked)
                         {
                             Stop("Lost " + this.profit + " " + CurrentSite.Currency);
                         }
-                        if (StreakLossSinceLastReset <= -(double)nudResetBtcStreakLoss.Value && chkResetBtcStreakLoss.Checked)
+                        if (StreakLossSinceLastReset <= -(decimal)nudResetBtcStreakLoss.Value && chkResetBtcStreakLoss.Checked)
                         {
                             Reset();
                             StreakLossSinceLastReset = 0;
                         }
-                        if (ProfitSinceLastReset < -(double)nudResetBtcLoss.Value && chkResetBtcLoss.Checked)
+                        if (ProfitSinceLastReset < -(decimal)nudResetBtcLoss.Value && chkResetBtcLoss.Checked)
                         {
                             Reset();
                             ProfitSinceLastReset = 0;
@@ -2252,11 +2252,11 @@ namespace DiceBot
                     //when switching from win streak to lose streak, calculate some stats
                     if (Winstreak != 0)
                     {
-                        double avgwincalc = avgwin * numwinstreasks;
+                        decimal avgwincalc = avgwin * numwinstreasks;
                         avgwincalc += Winstreak;
                         avgwincalc /= ++numwinstreasks;
                         avgwin = avgwincalc;
-                        double avgbetcalc = avgstreak * numstreaks;
+                        decimal avgbetcalc = avgstreak * numstreaks;
                         avgbetcalc += Winstreak;
                         avgbetcalc /= ++numstreaks;
                         avgstreak = avgbetcalc;
@@ -2295,7 +2295,7 @@ namespace DiceBot
                         WorstStreak = Losestreak;*/
 
                     //reset win multplier
-                    WinMultiplier = (double)(nudWinMultiplier.Value);
+                    WinMultiplier = (decimal)(nudWinMultiplier.Value);
 
                 }
 
@@ -2310,7 +2310,7 @@ namespace DiceBot
                 }
                 TimeSpan curtime = DateTime.Now - dtStarted;
 
-                if (curtime.TotalHours >= (double)nudStopTimeH.Value && curtime.Minutes >= (double)nudStopTimeM.Value && curtime.Seconds >= (double)nudStopTimeS.Value && chkStopTime.Checked)
+                if ((decimal)curtime.TotalHours >= nudStopTimeH.Value && curtime.Minutes >= (decimal)nudStopTimeM.Value && curtime.Seconds >= (decimal)nudStopTimeS.Value && chkStopTime.Checked)
                 {
                     Stop(string.Format("Time exeeding {0}:{1}:{2}", nudStopTimeH.Value, nudStopTimeM.Value, nudStopTimeS.Value));
                 }
@@ -2414,14 +2414,14 @@ namespace DiceBot
                             PresetList(Win);
                         }
                     }
-                    if (chkMinBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet< (double)nudMinumumBet.Value)
+                    if (chkMinBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet< (decimal)nudMinumumBet.Value)
                     {
-                        Lastbet = (double)nudMinumumBet.Value;
+                        Lastbet = (decimal)nudMinumumBet.Value;
 
                     }
-                    if (chkMaxBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet > (double)nudMaximumBet.Value)
+                    if (chkMaxBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet > (decimal)nudMaximumBet.Value)
                     {
-                        Lastbet = (double)nudMaximumBet.Value;
+                        Lastbet = (decimal)nudMaximumBet.Value;
                     }
                     if (RunningSimulation && Lastbet > dPreviousBalance)
                     {
@@ -2455,7 +2455,7 @@ namespace DiceBot
                 bool Win = !(((bool)bet.high ? (decimal)bet.Roll < 100m - (decimal)(bet.Chance) : (decimal)bet.Roll > (decimal)(bet.Chance)));
                 SetLuaVars();
                 Lua["win"] = Win;
-                Lua["currentprofit"] = ((double)(bet.Profit * 100000000)) / 100000000.0;
+                Lua["currentprofit"] = ((decimal)(bet.Profit * 100000000m)) / 100000000.0m;
                 Lua["lastBet"] = bet;
                 LuaRuntime.SetLua(Lua);
                 LuaRuntime.Run("dobet()");
@@ -2502,9 +2502,9 @@ namespace DiceBot
             }
         }
         delegate void dWriteConsole(string Message);
-        delegate void dWithdraw(double Amount, string Address);
-        delegate void dInvest(double Amount);
-        delegate void dtip(string username, double amount);
+        delegate void dWithdraw(decimal Amount, string Address);
+        delegate void dInvest(decimal Amount);
+        delegate void dtip(string username, decimal amount);
         delegate void dStop();
         delegate void dResetSeed();
     delegate void dEnableTimer(System.Windows.Forms.Timer tmr, bool enabled);
@@ -2667,11 +2667,11 @@ namespace DiceBot
                         Thread.Sleep(200);
                     }
                     donateMode = (tmp.radioButton3.Checked ? 3 : tmp.radioButton2.Checked ? 1 : 2);
-                    donatePercentage = (double)tmp.numericUpDown1.Value;
+                    donatePercentage = (decimal)tmp.numericUpDown1.Value;
                 }
                 else if (donateMode==3)
                 {
-                    CurrentSite.Donate((donatePercentage / 100.0) * profit);
+                    CurrentSite.Donate((donatePercentage / 100.0m) * profit);
                 }
             }
             Stop("");
@@ -3550,14 +3550,14 @@ namespace DiceBot
             }
         }
 
-        public double dparse(string text,ref bool success)
+        public decimal dparse(string text,ref bool success)
         {
-            double number = -1;
+            decimal number = -1;
             string test = "0.000001";
-            double dtest = 0;
-            if (double.TryParse(test, out dtest))
+            decimal dtest = 0;
+            if (decimal.TryParse(test, out dtest))
             {
-                if (dtest != 0.000001)
+                if (dtest != 0.000001m)
                 {
                     text = text.Replace(".", ",");
                 }
@@ -3572,10 +3572,10 @@ namespace DiceBot
             }
 
             
-            if (!double.TryParse(text, out number))
+            if (!decimal.TryParse(text, out number))
             {
                 
-                if (!double.TryParse(text, out number))
+                if (!decimal.TryParse(text, out number))
                 {
                     success = false;
                     return -1;
@@ -3605,19 +3605,19 @@ namespace DiceBot
             
             string sMessage = "";
             bool valid = true;
-            Limit = (double)(nudLimit.Value);
+            Limit = (decimal)(nudLimit.Value);
             if (Limit == -1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Limit Field\n";
             }
-            LowerLimit = (double)(nudLowerLimit.Value);
+            LowerLimit = (decimal)(nudLowerLimit.Value);
             if (LowerLimit == -1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Limit Field\n";
             }
-            Amount = (double)(nudAmount.Value);
+            Amount = (decimal)(nudAmount.Value);
             if (Amount==-1)
             {
                 valid = false;
@@ -3628,14 +3628,14 @@ namespace DiceBot
                 valid = false;
                 sMessage += "Please enter a valid Address in the Address Field\n";
             }
-            MinBet = (double)(nudMinBet.Value);
+            MinBet = (decimal)(nudMinBet.Value);
             if (MinBet==-1)
             {
                 valid = false;
                 sMessage += "Please enter a valid number in the Minimum Bet Field\n";
             }
             if (!programmerToolStripMenuItem.Checked)
-            Chance = (double)(nudChance.Value);
+            Chance = (decimal)(nudChance.Value);
             if (Chance == -1)
             {
                 valid = false;
@@ -3645,7 +3645,7 @@ namespace DiceBot
             {
 
             }
-            Multiplier = (double)(nudMultiplier.Value);
+            Multiplier = (decimal)(nudMultiplier.Value);
             if (Multiplier == -1)
             {
                 valid = false;
@@ -3663,7 +3663,7 @@ namespace DiceBot
                 valid = false;
                 sMessage += "Please enter a valid number in the After n bets Field\n";
             }
-            Devider = (double)(nudDevider.Value);
+            Devider = (decimal)(nudDevider.Value);
             if (Devider == -1)
             {
                 valid = false;
@@ -3687,7 +3687,7 @@ namespace DiceBot
                 valid = false;
                 sMessage += "Please enter a valid number in the After n bets Field\n";
             }
-            WinDevider = (double)(nudWinDevider.Value);
+            WinDevider = (decimal)(nudWinDevider.Value);
             if (WinDevider == -1)
             {
                 valid = false;
@@ -3794,7 +3794,7 @@ namespace DiceBot
             
         }
 
-        private void TrayIcon_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void TrayIcon_MousedecimalClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             this.Show();
             this.WindowState = FormWindowState.Maximized;
@@ -3811,11 +3811,11 @@ namespace DiceBot
         Thread simthread;
         string server = "";
         string client = "";
-        double tmpbalance = 0;
+        decimal tmpbalance = 0;
         int tmpwins = 0;
         int tmplosses = 0;
-        double tmpprofit = 0;
-        double tmpStartBalance = 0;
+        decimal tmpprofit = 0;
+        decimal tmpStartBalance = 0;
         int numSimBets = 0;
         void runsim()
         {
@@ -3825,7 +3825,7 @@ namespace DiceBot
             tmplosses = Losses;
             tmpStartBalance = StartBalance;
             tmpprofit = profit;
-            StartBalance = dPreviousBalance = (double)SimWindow.nudSimBalance.Value;
+            StartBalance = dPreviousBalance = (decimal)SimWindow.nudSimBalance.Value;
             Wins = Losses = 0;
             profit = 0;
             
@@ -3875,7 +3875,7 @@ namespace DiceBot
             if (Wins + Losses <= numSimBets)
             {
                 string betstring = (Wins + Losses).ToString() + ",";
-                double number = CurrentSite.GetLucky(server, client, Wins + Losses);
+                decimal number = CurrentSite.GetLucky(server, client, Wins + Losses);
                 tmp.Roll = (decimal)number;
                 tmp.Chance = (decimal)Chance;
                 tmp.Amount = (decimal)Lastbet;
@@ -3896,7 +3896,7 @@ namespace DiceBot
                 {
                     win = true;
                 }
-                double betProfit = 0;
+                decimal betProfit = 0;
                 if (win)
                 {
                     betstring += "win,";
@@ -3922,7 +3922,7 @@ namespace DiceBot
                 int bets = Wins + Losses;
                 if (bets % 1000 == 0)
                 {
-                    Updatetext(SimWindow.lblSimProgress, ((double)bets / (double)numSimBets * 100.00).ToString("00.00") + "%");
+                    Updatetext(SimWindow.lblSimProgress, ((decimal)bets / (decimal)numSimBets * 100.00m).ToString("00.00") + "%");
                 }
                 if (bets % 10000 == 0)
                 {
@@ -4077,11 +4077,11 @@ namespace DiceBot
             Losses = 0;
             bool success = false;
             profit = 0;
-            double tmp = CurrentSite.balance;
+            decimal tmp = CurrentSite.balance;
             if (success)
                 StartBalance = tmp;
             Winstreak = Losestreak = BestStreak = WorstStreak = laststreaklose = laststreakwin =   BestStreak2 = WorstStreak2 = BestStreak3 = WorstStreak3 = numstreaks = numwinstreasks = numlosesreaks = 0;
-            avgloss = avgstreak = LargestBet = LargestLoss = LargestWin = avgwin = 0.0;
+            avgloss = avgstreak = LargestBet = LargestLoss = LargestWin = avgwin = 0.0m;
             TotalTime += (DateTime.Now - dtStarted);
             dtStarted = DateTime.Now;
             UpdateStats();
@@ -4124,7 +4124,7 @@ namespace DiceBot
         private void button1_Click(object sender, EventArgs e)
         {
             List<Bet> tmpBets = new List<Bet>();
-            double previous = 0;
+            decimal previous = 0;
             for (int i = 0; i < r.Next(1000, 100000); i++)
             {
                 
@@ -4347,7 +4347,7 @@ namespace DiceBot
             else
             {
                 
-                lblApiBalance.Text = (Balance is decimal?(decimal)(Balance):(decimal)(double)Balance).ToString("0.00000000");
+                lblApiBalance.Text = (Balance is decimal?(decimal)(Balance):(decimal)(decimal)Balance).ToString("0.00000000");
             }
         }
 
@@ -4741,9 +4741,9 @@ namespace DiceBot
         /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
-            CurrentSite.amount = ((double)nudApiBet.Value);
-            CurrentSite.chance = (double)(nudApiChance.Value);
-            CurrentSite.PlaceBet(true, (double)nudApiBet.Value, (double)(nudApiChance.Value));
+            CurrentSite.amount = ((decimal)nudApiBet.Value);
+            CurrentSite.chance = (decimal)(nudApiChance.Value);
+            CurrentSite.PlaceBet(true, (decimal)nudApiBet.Value, (decimal)(nudApiChance.Value));
         }
 
         /// <summary>
@@ -4753,9 +4753,9 @@ namespace DiceBot
         /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
-            CurrentSite.amount =((double)nudApiBet.Value);
-            CurrentSite.chance = (double)(nudApiChance.Value);
-            CurrentSite.PlaceBet(false, (double)nudApiBet.Value,(double)(nudApiChance.Value));
+            CurrentSite.amount =((decimal)nudApiBet.Value);
+            CurrentSite.chance = (decimal)(nudApiChance.Value);
+            CurrentSite.PlaceBet(false, (decimal)nudApiBet.Value,(decimal)(nudApiChance.Value));
         }
 
         private void nudApiBet_ValueChanged(object sender, EventArgs e)
@@ -4825,8 +4825,8 @@ namespace DiceBot
             if (CurrentSite.AutoWithdraw)
             {
                 string Response = Interaction.InputBox("Amount to withdraw: ", "Withdraw", "0.00000000", -1, -1);
-                double tmpAmount = 0;
-                if (double.TryParse(Response, out tmpAmount))
+                decimal tmpAmount = 0;
+                if (decimal.TryParse(Response, out tmpAmount))
                 {
                     string Address = Interaction.InputBox("Bitcoin Address: ", "Withdraw", "", -1, -1);
                     System.Text.RegularExpressions.Regex txt = null;
@@ -4856,8 +4856,8 @@ namespace DiceBot
             if (CurrentSite.AutoInvest)
             {
                 string Response = Interaction.InputBox("Amount to invest: ", "Invest", "0.00000000", -1, -1);
-                double tmpAmount = 0;
-                if (double.TryParse(Response, out tmpAmount))
+                decimal tmpAmount = 0;
+                if (decimal.TryParse(Response, out tmpAmount))
                 {
                     CurrentSite.Invest(tmpAmount);
                     
@@ -4884,8 +4884,8 @@ namespace DiceBot
                     }
                 }
                 string Amount = Interaction.InputBox("Amount to tip: ", "Tip", "0.00000000", -1,-1);
-                double tmpAmount = 0;
-                if (double.TryParse(Amount, out tmpAmount))
+                decimal tmpAmount = 0;
+                if (decimal.TryParse(Amount, out tmpAmount))
                 {
                     CurrentSite.SendTip(User, tmpAmount);
 
@@ -5345,8 +5345,8 @@ namespace DiceBot
 
             try
             {
-                Lastbet = (double)Lua["nextbet"];
-                Chance = (double)Lua["chance"];
+                Lastbet = (decimal)Lua["nextbet"];
+                Chance = (decimal)Lua["chance"];
                 high = (bool)Lua["bethigh"];
                 CurrentSite.amount = Lastbet;
                 CurrentSite.chance = Chance;
@@ -5976,7 +5976,7 @@ namespace DiceBot
                 
             }
         }
-        void SetValue(string Key, double value, bool Private)
+        void SetValue(string Key, decimal value, bool Private)
         {
             if ((SaveNames.ContainsKey(Key) && !Private) || (Private && PSaveNames.ContainsKey(Key)))
             {
@@ -6192,7 +6192,7 @@ namespace DiceBot
             tmp.Show();
         }
 
-        private void Tmp_Withdraw(string Address, double Amount)
+        private void Tmp_Withdraw(string Address, decimal Amount)
         {
             CurrentSite.Withdraw(Amount, Address);
         }

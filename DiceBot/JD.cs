@@ -12,7 +12,7 @@ namespace DiceBot
         jdInstance Instance = new jdInstance();
         public JD(cDiceBot Parent)
         {
-            maxRoll = 99.9999;
+            maxRoll = 99.9999m;
             AutoInvest = true;
             AutoWithdraw = true;
             ChangeSeed = true;
@@ -101,22 +101,22 @@ namespace DiceBot
             {
                 
                 
-                balance = (Instance.Balance);
+                balance = (decimal)(Instance.Balance);
                 bets=(int)Instance.Bets;
                 losses = (int)Instance.Losses;
                 wins = (int)Instance.Wins;
 
-                profit = (double)Instance.Profit;
-                wagered = (double)Instance.Wagered;
+                profit = Instance.Profit;
+                wagered = Instance.Wagered;
 
                 FinishedBet(ToBet(result));
             }
         }
 
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
-            Instance.Bet(chance, amount, High);
+            Instance.Bet((double)chance, (double)amount, High);
         }
 
        
@@ -142,18 +142,18 @@ namespace DiceBot
             return true;
         }
 
-        public override bool Invest(double Amount)
+        public override bool Invest(decimal Amount)
         {
             
             Parent.updateStatus(string.Format("Investing {0:0.00000000}", Amount));
-            Instance.Invest(Amount,"");
+            Instance.Invest((double)Amount,"");
             System.Threading.Thread.Sleep(1500);
             return true;
         }
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             
-            Instance.Withdraw(Address, Amount ,"");
+            Instance.Withdraw(Address, (double)Amount ,"");
             System.Threading.Thread.Sleep(1500);
             return true;
         }
@@ -205,12 +205,12 @@ namespace DiceBot
             Instance.Disconnect();
         }
 
-        public override void Donate(double Amount)
+        public override void Donate(decimal Amount)
         {
             SendTip("91380", Amount);
         }
 
-        public override void SendTip(string Username, double Amount)
+        public override void SendTip(string Username, decimal Amount)
         {
             int uid = -1;
             if (int.TryParse(Username, out uid))

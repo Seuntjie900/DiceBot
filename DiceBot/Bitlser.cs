@@ -26,7 +26,7 @@ namespace DiceBot
         public Bitsler(cDiceBot Parent)
         {
             Currencies = new string[] { "btc","ltc","doge" };
-            maxRoll = 99.999;
+            maxRoll = 99.999m;
             AutoInvest = false;
             AutoWithdraw = false;
             ChangeSeed = false;
@@ -182,10 +182,10 @@ devise:btc*/
                     if (bsbase._return!=null)
                         if (bsbase._return.success == "true")
                         {
-                            balance = double.Parse(bsbase._return.new_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                            balance = decimal.Parse(bsbase._return.new_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
                             Bet tmp = bsbase._return.ToBet();
-                            profit += (double)tmp.Profit;
-                            wagered += (double)tmp.Amount;
+                            profit += (decimal)tmp.Profit;
+                            wagered += (decimal)tmp.Amount;
                             tmp.date = DateTime.Now;
                             bool win = false;
                             if ((tmp.Roll > 99.99m - tmp.Chance && tmp.high) || (tmp.Roll < tmp.Chance && !tmp.high))
@@ -223,7 +223,7 @@ devise:btc*/
                 Parent.updateStatus("An Unknown error has ocurred.");
             }
         }
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             System.Threading.Thread tBetThread = new Thread(new ParameterizedThreadStart(PlaceBetThread));
             tBetThread.Start(new PlaceBetObj(High, amount, chance));
@@ -269,7 +269,7 @@ devise:btc*/
             throw new NotImplementedException();
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             throw new NotImplementedException();
         }
@@ -396,7 +396,7 @@ devise:btc*/
             throw new NotImplementedException();
         }
 
-        public static double sGetLucky(string server, string client, int nonce)
+        public static decimal sGetLucky(string server, string client, int nonce)
         {
             SHA1 betgenerator = SHA1.Create();
             string Seed = server + "-" + client + "-" + nonce;
@@ -406,7 +406,7 @@ devise:btc*/
             {
                 serverb[i] = Convert.ToByte(Seed[i]);
             }
-            double Lucky = 0;
+            decimal Lucky = 0;
             do
             {
                 serverb = betgenerator.ComputeHash(serverb.ToArray());
@@ -417,13 +417,13 @@ devise:btc*/
                 string s = hex.ToString().Substring(0, 8);
                 Lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
             } while (Lucky > 4294960000);
-            Lucky = (Lucky % 10000.0) / 100.0;
+            Lucky = (Lucky % 10000.0m) / 100.0m;
             if (Lucky < 0)
                 return -Lucky;
             return Lucky;
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             
             SHA1 betgenerator = SHA1.Create();
@@ -434,7 +434,7 @@ devise:btc*/
             {
                 serverb[i] = Convert.ToByte(Seed[i]);
             }
-            double Lucky = 0;
+            decimal Lucky = 0;
             do
             {
                 serverb = betgenerator.ComputeHash(serverb.ToArray());
@@ -445,7 +445,7 @@ devise:btc*/
                 string s = hex.ToString().Substring(0, 8);
                 Lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
             } while (Lucky > 4294960000);
-            Lucky = (Lucky % 10000.0) / 100.0;
+            Lucky = (Lucky % 10000.0m) / 100.0m;
             if (Lucky < 0)
                 return -Lucky;
             return Lucky;
@@ -479,7 +479,7 @@ devise:btc*/
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
             }*/
@@ -502,17 +502,17 @@ devise:btc*/
     {
         public string success { get; set; }
         public string value { get; set; }
-        public double btc_balance { get; set; }
-        public double btc_wagered { get; set; }
-        public double btc_profit { get; set; }
+        public decimal btc_balance { get; set; }
+        public decimal btc_wagered { get; set; }
+        public decimal btc_profit { get; set; }
         public string bets { get; set; }
-        public double ltc_balance { get; set; }
-        public double ltc_wagered { get; set; }
-        public double ltc_profit { get; set; }
+        public decimal ltc_balance { get; set; }
+        public decimal ltc_wagered { get; set; }
+        public decimal ltc_profit { get; set; }
 
-        public double doge_balance { get; set; }
-        public double doge_wagered { get; set; }
-        public double doge_profit { get; set; }
+        public decimal doge_balance { get; set; }
+        public decimal doge_wagered { get; set; }
+        public decimal doge_profit { get; set; }
         
         public string wins { get; set; }
         public string losses { get; set; }
@@ -536,10 +536,10 @@ devise:btc*/
         public long ts { get; set; }
         public string time { get; set; }
         public string amount { get; set; }
-        public double roll_number { get; set; }
+        public decimal roll_number { get; set; }
         public string condition { get; set; }
         public string game { get; set; }
-        public double payout { get; set; }
+        public decimal payout { get; set; }
         public string winning_chance { get; set; }
         public string amount_return { get; set; }
         public string new_balance { get; set; }

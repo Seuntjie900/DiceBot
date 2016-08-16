@@ -20,7 +20,7 @@ namespace DiceBot
         public MagicalDice(cDiceBot Parent)
         {
             this.Parent = Parent;
-            maxRoll = 99.99;
+            maxRoll = 99.99m;
             edge = 1;
             AutoInvest = false;
             AutoWithdraw = true;
@@ -34,7 +34,7 @@ namespace DiceBot
             t.Start();
 
         }
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
 
             new Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
@@ -50,7 +50,7 @@ namespace DiceBot
                     try
                     {
                         string s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
-                        balance = double.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
+                        balance = decimal.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
                     }
                     catch (AggregateException e)
                     {
@@ -77,9 +77,9 @@ namespace DiceBot
                 PlaceBetObj tmp9 = Bool as PlaceBetObj;
                 
                 bool High = tmp9.High;
-                double amount = tmp9.Amount;
-                double chance = tmp9.Chance;
-                //double tmpchance = High ? 99.99 - chance : chance;
+                decimal amount = tmp9.Amount;
+                decimal chance = tmp9.Chance;
+                //decimal tmpchance = High ? 99.99 - chance : chance;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("a", "place_bet"));
                 pairs.Add(new KeyValuePair<string, string>("amount", (amount).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
@@ -100,15 +100,15 @@ namespace DiceBot
                     {
                         Bet tmp2 = tmp.ToBet();
 
-                        balance += (double)tmp2.Profit;
+                        balance += (decimal)tmp2.Profit;
                         bets++;
                         if (tmp.bet_win)
                             wins++;
                         else
                             losses++;
 
-                        wagered += (double)(tmp2.Amount);
-                        profit += (double)(tmp2.Profit);
+                        wagered += (decimal)(tmp2.Amount);
+                        profit += (decimal)(tmp2.Profit);
                         FinishedBet(tmp2);
                         retrycount = 0;
                     }
@@ -181,7 +181,7 @@ namespace DiceBot
             Parent.updateDeposit(s1);
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             string s1 = Client.GetStringAsync("ajax.php?a=get_csrf").Result;
             MDCsrf tmp = json.JsonDeserialize<MDCsrf>(s1);
@@ -358,7 +358,7 @@ namespace DiceBot
                 //get balance
 
                 s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
-                balance = double.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
+                balance = decimal.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
                 Parent.updateBalance(balance);
                 new Thread(GetDeposit).Start();
                 finishedlogin(true);
@@ -391,12 +391,12 @@ namespace DiceBot
             Parent.updateLosses(losses);
         }
 
-        double GetStats(string S, string Item)
+        decimal GetStats(string S, string Item)
         {
             string S1 = S.Substring(S.IndexOf(Item) + Item.Length);
             S1 = S1.Substring(S1.IndexOf("<BR>") + "<BR>".Length);
             S1 = S1.Substring(0, S1.IndexOf("<"));
-            double t = double.Parse(S1, System.Globalization.NumberFormatInfo.InvariantInfo);
+            decimal t = decimal.Parse(S1, System.Globalization.NumberFormatInfo.InvariantInfo);
             return t;
         }
 
@@ -489,7 +489,7 @@ namespace DiceBot
                 //get balance
 
                 s1 = Client.GetStringAsync("ajax.php?a=get_balance").Result;
-                balance = double.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
+                balance = decimal.Parse(s1.Replace("\"", ""), System.Globalization.NumberFormatInfo.InvariantInfo);
                 Parent.updateBalance(balance);
                 new Thread(GetDeposit).Start();
                 finishedlogin(true);
@@ -533,7 +533,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override void SendTip(string User, double amount)
+        public override void SendTip(string User, decimal amount)
         {
             
            string s1 = Client.GetStringAsync("ajax.php?a=get_csrf").Result;
@@ -558,7 +558,7 @@ namespace DiceBot
             }
         }
 
-        public override void Donate(double Amount)
+        public override void Donate(decimal Amount)
         {
             SendTip("4236", Amount);
         }
@@ -580,12 +580,12 @@ namespace DiceBot
         public string bet_key_id { get; set; }
         public string bet_nonce { get; set; }
         
-        public double bet_amount { get; set; }
+        public decimal bet_amount { get; set; }
         public string bet_payout { get; set; }
         public string bet_game_type { get; set; }
         public string bet_game_value { get; set; }
         public decimal bet_roll { get; set; }
-        public double bet_profit { get; set; }
+        public decimal bet_profit { get; set; }
         public string bet_origin { get; set; }
         public string bet_chat_display { get; set; }
         public bool bet_win { get; set; }
@@ -596,10 +596,10 @@ namespace DiceBot
         {
             
             Bet tmp = new Bet {
-            Amount= (decimal)(bet_amount / 100000000.0),
+            Amount= (decimal)(bet_amount / 100000000.0m),
             date = DateTime.Parse(bet_time),
             Id = long.Parse(bet_id),
-            Profit = (decimal)(bet_profit/100000000.0),
+            Profit = (decimal)(bet_profit/100000000.0m),
             Roll = bet_roll,
             
             high = bet_game_type=="over",

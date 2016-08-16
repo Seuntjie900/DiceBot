@@ -17,10 +17,10 @@ namespace DiceBot
             InitializeComponent();
         }
         string currency = "";
-        public double amount { get; set; }
-        double _Amount = 00;
+        public decimal amount { get; set; }
+        decimal _Amount = 00;
         
-        public DialogResult ShowDialog(double Amount, string currency, double defaultAmount)
+        public DialogResult ShowDialog(decimal Amount, string currency, decimal defaultAmount)
         {
             this.currency = currency;
             _Amount = Amount;
@@ -38,14 +38,14 @@ namespace DiceBot
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            amount = (double)((decimal)_Amount * (numericUpDown1.Value / 100m));
+            amount = (decimal)((decimal)_Amount * (numericUpDown1.Value / 100m));
             DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
         private void btnDonate_Click(object sender, EventArgs e)
         {
-            amount = (double)((decimal)_Amount * (numericUpDown1.Value / 100m));
+            amount = (decimal)((decimal)_Amount * (numericUpDown1.Value / 100m));
             DialogResult = DialogResult.Yes;
             this.Close();
         }

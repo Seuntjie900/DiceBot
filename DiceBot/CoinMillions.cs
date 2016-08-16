@@ -29,7 +29,7 @@ namespace DiceBot
             Currency = "btc";
             
             this.Parent = Parent;
-            maxRoll = 99.9999;
+            maxRoll = 99.9999m;
             AutoInvest = false;
             AutoLogin = true;
             AutoWithdraw = false;
@@ -83,12 +83,12 @@ namespace DiceBot
 
 
 
-                                balance = double.Parse( Currency == "btc" ? tmpu.current_balance.value.btc : Currency == "ltc" ? tmpu.current_balance.value.ltc : tmpu.current_balance.value.xrp, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                balance = decimal.Parse( Currency == "btc" ? tmpu.current_balance.value.btc : Currency == "ltc" ? tmpu.current_balance.value.ltc : tmpu.current_balance.value.xrp, System.Globalization.NumberFormatInfo.InvariantInfo);
 
 
                                 bets = (int)tmpu.bets_placed.value;
-                                wagered = double.Parse(Currency == "btc" ? tmpu.amount_wagered.value.btc : Currency == "ltc" ? tmpu.amount_wagered.value.ltc : tmpu.amount_wagered.value.xrp, System.Globalization.NumberFormatInfo.InvariantInfo);
-                                profit = double.Parse(Currency == "btc" ? tmpu.profit.value.btc : Currency == "ltc" ? tmpu.profit.value.ltc : tmpu.profit.value.xrp, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                wagered = decimal.Parse(Currency == "btc" ? tmpu.amount_wagered.value.btc : Currency == "ltc" ? tmpu.amount_wagered.value.ltc : tmpu.amount_wagered.value.xrp, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                profit = decimal.Parse(Currency == "btc" ? tmpu.profit.value.btc : Currency == "ltc" ? tmpu.profit.value.ltc : tmpu.profit.value.xrp, System.Globalization.NumberFormatInfo.InvariantInfo);
                                 wins = (int)tmpu.bets_won.value;
                                 losses = (int)tmpu.bets_lost.value;
                                 Parent.updateBalance((decimal)(balance));
@@ -264,8 +264,8 @@ namespace DiceBot
             PlaceBetObj tmp9 = _High as PlaceBetObj;
             
             bool High = tmp9.High;
-            double amount = tmp9.Amount;
-            double chance = tmp9.Chance;
+            decimal amount = tmp9.Amount;
+            decimal chance = tmp9.Chance;
 
             try
             {
@@ -323,14 +323,14 @@ namespace DiceBot
                     tmp2.date = DateTime.Now;
                     //next = tmp.nextServerSeed;
                     lastupdate = DateTime.Now;
-                    balance = double.Parse(tmp.new_balance.btc.available, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    balance = decimal.Parse(tmp.new_balance.btc.available, System.Globalization.NumberFormatInfo.InvariantInfo);
                     bets++;
                     /*if (tmp2)
                         wins++;
                     else losses++;*/
 
-                    wagered += (double)(tmp2.Amount);
-                    profit += (double)tmp2.Profit;
+                    wagered += (decimal)(tmp2.Amount);
+                    profit += (decimal)tmp2.Profit;
 
 
 
@@ -368,18 +368,18 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, double amount, double chacne)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chacne)
         {
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
             t.Start(new PlaceBetObj(High, amount, chacne));
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             throw new NotImplementedException();
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             server = "33c0f32876c9168cbea4a4ef77ac29603c62adefa8602b189a5c338ccd06e614";
             client = "8a32oZaWXDcnp2MiwmFA6q38ANlyVT";
@@ -398,7 +398,7 @@ namespace DiceBot
             string s = hashres.ToString().Substring(start, 8);
             UInt32 seeds = UInt32.Parse(s, System.Globalization.NumberStyles.HexNumber);
             MersenneTwister twist = new MersenneTwister(seeds);
-            double roll = (double)twist.Next(1000000)/10000.0;
+            decimal roll = (decimal)twist.Next(1000000)/10000.0m;
 
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
             pairs.Add(new KeyValuePair<string, string>("client_seed", client));
@@ -500,15 +500,15 @@ namespace DiceBot
     }
     public class cmRankingBase
     {
-        public double percentile { get; set; }
-        public double rank { get; set; }
+        public decimal percentile { get; set; }
+        public decimal rank { get; set; }
         public cmRankingValueBase value { get; set; }
     }
     public class cmRankingBaseInt
     {
-        public double percentile { get; set; }
-        public double rank { get; set; }
-        public double value { get; set; }
+        public decimal percentile { get; set; }
+        public decimal rank { get; set; }
+        public decimal value { get; set; }
     }
     public class cmRankingValueBase
     {

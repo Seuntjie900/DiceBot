@@ -21,7 +21,7 @@ namespace DiceBot
             Name = "MoneyPot";
             this.Parent = Parent;
             edge = 0.9m;
-            maxRoll = 99.99;
+            maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = false;
             Tip = true;
@@ -44,9 +44,9 @@ namespace DiceBot
                     {
                         string s = Client.GetStringAsync("auth?access_token=" + token).Result;
                         MPAuth tmp2 = json.JsonDeserialize<MPAuth>(s);
-                        this.balance = tmp2.user.balance / 100000000.0;
-                        wagered = tmp2.user.betted_wager / 100000000.0;
-                        profit = tmp2.user.betted_profit / 100000000.0;
+                        this.balance = tmp2.user.balance / 100000000.0m;
+                        wagered = tmp2.user.betted_wager / 100000000.0m;
+                        profit = tmp2.user.betted_profit / 100000000.0m;
                         bets = (int)tmp2.user.betted_count;
                         Parent.updateBalance(balance);
                         Parent.updateBets(bets);
@@ -77,16 +77,16 @@ namespace DiceBot
             {
                 PlaceBetObj tmp9 = _High as PlaceBetObj;
                 bool High = tmp9.High;
-                double amount = tmp9.Amount;
-                double chance = tmp9.Chance;
+                decimal amount = tmp9.Amount;
+                decimal chance = tmp9.Chance;
                 int client = R.Next(0, int.MaxValue);
-                double tmpchance = High ? maxRoll - chance : chance;
+                decimal tmpchance = High ? maxRoll - chance : chance;
                 MPBetPlace betplace = new MPBetPlace
                 {
                     client_seed = client,
                     cond = High ? ">" : "<",
                     hash = next,
-                    payout = (((double)(100.0m - edge) / chance) * (amount * 100000000)),
+                    payout = (((decimal)(100.0m - edge) / chance) * (amount * 100000000)),
                     target = tmpchance,
                     wager = amount * 100000000
                 };
@@ -133,7 +133,7 @@ namespace DiceBot
                 };
                 next = tmp.next_hash;
                 //lastupdate = DateTime.Now;
-                balance += tmp.profit / 100000000.0; //i assume
+                balance += tmp.profit / 100000000.0m; //i assume
                 bets++;
                 bool Win = (((bool)tmpBet.high ? (decimal)tmpBet.Roll > (decimal)maxRoll - (decimal)(tmpBet.Chance) : (decimal)tmpBet.Roll < (decimal)(tmpBet.Chance)));
                 if (Win)
@@ -141,7 +141,7 @@ namespace DiceBot
                 else losses++;
                 
                 wagered +=amount;
-                profit += (tmp.profit / 100000000.0);
+                profit += (tmp.profit / 100000000.0m);
                 retrycount = 0;
                 FinishedBet(tmpBet);
             }
@@ -166,7 +166,7 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             Thread t = new Thread(new ParameterizedThreadStart(placebetthread));
             t.Start(new PlaceBetObj(High, amount, chance));
@@ -183,7 +183,7 @@ namespace DiceBot
             next = tmp.hash;
         }
 
-        public override void SendTip(string user, double tip)
+        public override void SendTip(string user, decimal tip)
         {
             MPTipSend Tip = new MPTipSend
             {
@@ -236,7 +236,7 @@ namespace DiceBot
             System.Diagnostics.Process.Start("https://www.moneypot.com/dialog/deposit?app_id="+appid+"");
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             return false;
         }
@@ -264,9 +264,9 @@ namespace DiceBot
 
                     MPAuth tmp2 = json.JsonDeserialize<MPAuth>(s);
                     
-                    this.balance = tmp2.user.balance / 100000000.0;
-                    wagered = tmp2.user.betted_wager / 100000000.0;
-                    profit = tmp2.user.betted_profit / 100000000.0;
+                    this.balance = tmp2.user.balance / 100000000.0m;
+                    wagered = tmp2.user.betted_wager / 100000000.0m;
+                    profit = tmp2.user.betted_profit / 100000000.0m;
                     bets = (int)tmp2.user.betted_count;
                     Parent.updateBalance(balance);
                     Parent.updateBets(bets);
@@ -304,9 +304,9 @@ namespace DiceBot
 
                     MPAuth tmp2 = json.JsonDeserialize<MPAuth>(s);
 
-                    this.balance = tmp2.user.balance / 100000000.0;
-                    wagered = tmp2.user.betted_wager / 100000000.0;
-                    profit = tmp2.user.betted_profit / 100000000.0;
+                    this.balance = tmp2.user.balance / 100000000.0m;
+                    wagered = tmp2.user.betted_wager / 100000000.0m;
+                    profit = tmp2.user.betted_profit / 100000000.0m;
                     bets = (int)tmp2.user.betted_count;
                     Parent.updateBalance(balance);
                     Parent.updateBets(bets);
@@ -349,10 +349,10 @@ namespace DiceBot
             
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             int cl = int.Parse(client);
-            double roll = Math.Floor((100.0 / 4294967296.0) * (double)((long)(((double)nonce) + cl) % 4294967296) * 100)/100;
+            decimal roll = Math.Floor((100.0m / 4294967296.0m) * ((long)(((decimal)nonce) + cl) % 4294967296m) * 100m)/100m;
             return roll;
         }
     }
@@ -360,14 +360,14 @@ namespace DiceBot
     public class MPTipSend
     {
         public string uname { get; set; }
-        public double amount { get; set; }
+        public decimal amount { get; set; }
     }
     public class MPTip
     {
         public int id { get; set; }
         public string from { get; set; }
         public string to { get; set; }
-        public double amount { get; set; }
+        public decimal amount { get; set; }
         public string created_at { get; set; }
         public string error { get; set; }
     }
@@ -382,12 +382,12 @@ namespace DiceBot
     public class MPUser
     {
         public string uname { get; set; }
-        public double balance { get; set; }
-        public double unpaid { get; set; }
+        public decimal balance { get; set; }
+        public decimal unpaid { get; set; }
         public long betted_count { get; set; }
-        public double betted_wager { get; set; }
-        public double betted_ev { get; set; }
-        public double betted_profit { get; set; }
+        public decimal betted_wager { get; set; }
+        public decimal betted_ev { get; set; }
+        public decimal betted_profit { get; set; }
         public string role { get; set; }
     }
     public class MPAuth
@@ -399,9 +399,9 @@ namespace DiceBot
     public class MPBet
     {
         public int bet_id { get; set; }
-        public double outcome { get; set; }
-        public double profit { get; set; }
-        public double secret { get; set; }
+        public decimal outcome { get; set; }
+        public decimal profit { get; set; }
+        public decimal secret { get; set; }
         public string salt { get; set; }
         public string next_hash { get; set; }
         public string error { get; set; }
@@ -411,9 +411,9 @@ namespace DiceBot
         public int client_seed { get; set; }
         public string hash { get; set; }
         public string cond { get; set; }
-        public double target { get; set; }
-        public double payout { get; set; }        
-        public double wager { get; set; }
+        public decimal target { get; set; }
+        public decimal payout { get; set; }        
+        public decimal wager { get; set; }
     }
     public class MPSeed
     {

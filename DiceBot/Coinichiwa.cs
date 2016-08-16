@@ -21,7 +21,7 @@ namespace DiceBot
         {
             this.Parent = Parent;
             Hasher = SHA1.Create();
-            maxRoll = 99.99;
+            maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = false;
             ChangeSeed = false;
@@ -85,12 +85,12 @@ namespace DiceBot
             else
                 losses++;
             bets++;
-            balance = ReceivedBet.balance/100000000.0;
-            profit += (double)tmp.Profit;
-            wagered += (double)tmp.Amount; 
+            balance = ReceivedBet.balance/100000000.0m;
+            profit += (decimal)tmp.Profit;
+            wagered += (decimal)tmp.Amount; 
             FinishedBet(tmp);
         }
-        protected override void internalPlaceBet(bool High, double chance, double amount)
+        protected override void internalPlaceBet(bool High, decimal chance, decimal amount)
         {
             
             this.High = High;
@@ -107,7 +107,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             throw new NotImplementedException();
         }
@@ -188,9 +188,9 @@ namespace DiceBot
         {
             wins = Stat.wins;
             losses = Stat.losses;
-            balance = Stat.balance/100000000.0;
-            wagered = Stat.wagered / 100000000.0;
-            profit = Stat.profit / 100000000.0;
+            balance = Stat.balance/100000000.0m;
+            wagered = Stat.wagered / 100000000.0m;
+            profit = Stat.profit / 100000000.0m;
             bets = Stat.bets;
             Parent.updateBalance(balance);
             Parent.updateBets(bets);
@@ -279,19 +279,19 @@ namespace DiceBot
                                     delay = int.Parse(parts[2]),
                                     betid = long.Parse(parts[3]),
                                     result = parts[4],
-                                    luckyNumber = double.Parse(parts[5], System.Globalization.NumberFormatInfo.InvariantInfo),
+                                    luckyNumber = decimal.Parse(parts[5], System.Globalization.NumberFormatInfo.InvariantInfo),
                                     seedIncrement = int.Parse(parts[6]),
-                                    profit = double.Parse(parts[7], System.Globalization.NumberFormatInfo.InvariantInfo),
+                                    profit = decimal.Parse(parts[7], System.Globalization.NumberFormatInfo.InvariantInfo),
                                     jackpot = int.Parse(parts[8]),
-                                    balance = double.Parse(parts[9], System.Globalization.NumberFormatInfo.InvariantInfo)
+                                    balance = decimal.Parse(parts[9], System.Globalization.NumberFormatInfo.InvariantInfo)
                                 }); break;
                                 case "info": info(new CoinichiwaInfo { username = parts[2], clientSeed = parts[3], nonce = int.Parse(parts[4]), hash = parts[5] }); break;
-                                case "stats": stats(new CoinichiwatStat { balance = double.Parse(parts[2], System.Globalization.NumberFormatInfo.InvariantInfo), 
+                                case "stats": stats(new CoinichiwatStat { balance = decimal.Parse(parts[2], System.Globalization.NumberFormatInfo.InvariantInfo), 
                                     bets = int.Parse(parts[3]), 
                                     wins = int.Parse(parts[4]), 
                                     losses = int.Parse(parts[5]), 
-                                    wagered = double.Parse(parts[6], System.Globalization.NumberFormatInfo.InvariantInfo), 
-                                    profit = double.Parse(parts[7], System.Globalization.NumberFormatInfo.InvariantInfo) }); break;
+                                    wagered = decimal.Parse(parts[6], System.Globalization.NumberFormatInfo.InvariantInfo), 
+                                    profit = decimal.Parse(parts[7], System.Globalization.NumberFormatInfo.InvariantInfo) }); break;
                                 case "deposit": deposit(new CoinichiwaDepost { address = parts[2] }); break;
                             }
                         }
@@ -360,20 +360,20 @@ namespace DiceBot
         public int delay { get; set; }
         public long betid { get; set; }
         public string result { get; set; }
-        public double luckyNumber { get; set; }
+        public decimal luckyNumber { get; set; }
         public int seedIncrement { get; set; }
-        public double profit { get; set; }
+        public decimal profit { get; set; }
         public int jackpot { get; set; }
-        public double balance { get; set; }
+        public decimal balance { get; set; }
     }
     class CoinichiwatStat
     {
-        public double balance { get; set; }
+        public decimal balance { get; set; }
         public int wins { get; set; }
         public int bets { get; set; }
         public int losses { get; set; }
-        public double wagered { get; set; }
-        public double profit { get; set; }
+        public decimal wagered { get; set; }
+        public decimal profit { get; set; }
     }
     class CoinichiwaInfo
     {

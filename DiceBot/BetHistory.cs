@@ -171,7 +171,7 @@ namespace DiceBot
 
         void CalcLastPage()
         {
-            lastPage = (int)Math.Ceiling((double)Data.Length / (double)NumPerPage);
+            lastPage = (int)Math.Ceiling((decimal)Data.Length / (decimal)NumPerPage);
             cmbJumpTo.Items.Clear();
             for (int i =0; i< lastPage; i++)
             {

@@ -25,7 +25,7 @@ namespace DiceBot
             this.emailaddress = emailaddress;
             SMTP = "smtp.secureserver.net";
         }
-        public void SendWithdraw(double amount, double balance, string address)
+        public void SendWithdraw(decimal amount, decimal balance, string address)
         {
             string subject = "DiceBot - Withdraw Alert";
             string Message = "Hi, your bot, "+botname+", has just withdrawn "+amount.ToString("0.00000000")+" Btc to "+address+".\n";
@@ -37,7 +37,7 @@ namespace DiceBot
                 sendemail.Start(new eminfo(Message, subject));
             }
         }
-        public void SendInvest(double amount, double balance, double invested)
+        public void SendInvest(decimal amount, decimal balance, decimal invested)
         {
             string subject = "DiceBot - Invest Alert";
             string Message = "Hi, your bot, " + botname + ", has just invested " + amount.ToString("0.00000000") + " Btc.\n";
@@ -50,7 +50,7 @@ namespace DiceBot
                 sendemail.Start(new eminfo(Message, subject));
             }
         }
-        public void SendLowLimit(double balance, double lowmlimit, double lastbet)
+        public void SendLowLimit(decimal balance, decimal lowmlimit, decimal lastbet)
         {
             string subject = "DiceBot - Low Limit Alert!";
             string Message = "Hi, your bot, " + botname + ", has just stopped betting, becuase the last bet, " + lastbet.ToString("0.00000000") + " would have put your balance below your lower limit of "+lowmlimit.ToString("0.00000000")+"\n";
@@ -63,7 +63,7 @@ namespace DiceBot
                 sendemail.Start(new eminfo(Message, subject));
             }
         }
-        public void SendStreak(int streak, double steaklimit, double balance)
+        public void SendStreak(int streak, decimal steaklimit, decimal balance)
         {
             string subject = "DiceBot - Bad Streak Alert!";
             string Message = "Hi, your bot, " + botname + ", has just had a losing streak of "+streak.ToString()+"\n";

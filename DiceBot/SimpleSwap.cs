@@ -16,7 +16,7 @@ namespace DiceBot
         Uri baseAddress = new Uri("http://www.simpleswap.me/api/");
         HttpClient Client;
         ExchangeType Type;
-        public delegate void dWithdraw(string Address, double Amount);
+        public delegate void dWithdraw(string Address, decimal Amount);
         public event dWithdraw Withdraw;
         string[] Currencies = new string[] { "btc","doge", "clam", "dash", "ltc" };
 
@@ -162,7 +162,7 @@ namespace DiceBot
                     else
                     {
                         txtRate.Text = Rate.rate;
-                        double amount = double.Parse(Rate.rate, System.Globalization.NumberFormatInfo.InvariantInfo)* (double)nudSending.Value;
+                        decimal amount = decimal.Parse(Rate.rate, System.Globalization.NumberFormatInfo.InvariantInfo)* (decimal)nudSending.Value;
                         txtReveice.Text = amount.ToString();
                         return true;
                     }
@@ -226,7 +226,7 @@ namespace DiceBot
                         if (Type == ExchangeType.withdraw)
                         {
                             if (Withdraw!=null)
-                            { Withdraw(Rate.deposit_address, (double)nudSending.Value); }
+                            { Withdraw(Rate.deposit_address, (decimal)nudSending.Value); }
                         }
                         //System.Diagnostics.Process.Start("http://www.simpleswap.me/swap/"+Rate.swap_id);
                         return true;
@@ -299,8 +299,8 @@ namespace DiceBot
         public string swap_id { get; set; }
         public string pair { get; set; }
         public string depost_address { get; set; }
-        public double depost_amount { get; set; }
-        public double exchanged_amount { get; set; }
+        public decimal depost_amount { get; set; }
+        public decimal exchanged_amount { get; set; }
         public string send_to_address { get; set; }
         public string send_trx { get; set; }
         public string swap_status { get; set; }

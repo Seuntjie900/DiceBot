@@ -18,7 +18,7 @@ namespace DiceBot
         public dadice(cDiceBot Parent)
         {
             register = false;
-            maxRoll = 99.99;
+            maxRoll = 99.99m;
             this.Parent = Parent;
             AutoInvest = false;
             AutoLogin = true;
@@ -61,12 +61,12 @@ namespace DiceBot
                 if (tmp.status)
                 {
 
-                    balance += (double)tmp.roll.profit;
+                    balance += (decimal)tmp.roll.profit;
                     
                     ++bets;
                     ++losses;
-                    profit += (double)tmp.roll.profit;
-                    wagered += (double)tmp.roll.amount;
+                    profit += (decimal)tmp.roll.profit;
+                    wagered += (decimal)tmp.roll.amount;
                     ++wins;
                     LastBalance = DateTime.Now;
                     betcount = 0;
@@ -97,7 +97,7 @@ namespace DiceBot
 
 
 
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
             t.Start(High);
@@ -113,7 +113,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             try
             {
@@ -173,7 +173,7 @@ namespace DiceBot
                 if (dep.status)
                     Parent.updateDeposit(dep.address);
                 
-                balance = (double)tmp.balance;
+                balance = (decimal)tmp.balance;
 
                 
                 HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://stats.dadice.com/api/userinfo?username=" + Username);
@@ -187,11 +187,11 @@ namespace DiceBot
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 LastBalance = DateTime.Now.AddSeconds(-20);
                 DADICEStatsBase tmp2 = json.JsonDeserialize<DADICEStatsBase>(sEmitResponse);
-                this.wagered = double.Parse(tmp2.user.stats.wagered, System.Globalization.NumberFormatInfo.InvariantInfo);
+                this.wagered = decimal.Parse(tmp2.user.stats.wagered, System.Globalization.NumberFormatInfo.InvariantInfo);
                 this.bets = tmp2.user.stats.bets;
                 this.wins = tmp2.user.stats.won;
                 this.losses = tmp2.user.stats.lost;
-                this.profit = double.Parse(tmp2.user.stats.profit);
+                this.profit = decimal.Parse(tmp2.user.stats.profit);
 
                 Parent.updateBalance((decimal)(balance));
                 Parent.updateBets(bets);
@@ -242,7 +242,7 @@ namespace DiceBot
                             tmp = json.JsonDeserialize<DADICEBlance>(Resp);
                         }
                         if (tmp.status)
-                            balance = (double)tmp.balance;
+                            balance = (decimal)tmp.balance;
                         Parent.updateBalance(balance);
                     }
                     catch (Exception E)
@@ -276,7 +276,7 @@ namespace DiceBot
         {
             Parent.updateStatus("Can't chat at this time. Sorry!");
         }
-        public override void Donate(double Amount)
+        public override void Donate(decimal Amount)
         {
             SendTip("seuntjie", Amount);
         }
@@ -306,13 +306,13 @@ namespace DiceBot
         
 
 
-        public override void SendTip(string User, double amount)
+        public override void SendTip(string User, decimal amount)
         {
             Thread t = new Thread(new ParameterizedThreadStart(SendTipThread));
             t.Start(new string[]{User, amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) });
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -345,14 +345,14 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return (lucky%10000) / 100;
             }
             return 0;
         }
 
-        new public static double sGetLucky(string server, string client, int nonce)
+        new public static decimal sGetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -385,7 +385,7 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return (lucky % 10000) / 100;
             }

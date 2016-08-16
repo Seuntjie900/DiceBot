@@ -46,7 +46,7 @@ namespace DiceBot
             
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             TimeSpan dt = Value - DateTime.Parse("1970/01/01 00:00:00", System.Globalization.DateTimeFormatInfo.InvariantInfo);
-            double mili = dt.TotalMilliseconds;
+            decimal mili = (decimal)dt.TotalMilliseconds;
             return ((long)mili).ToString();
 
         }

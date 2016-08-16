@@ -20,7 +20,7 @@ namespace DiceBot
         {
             this.Parent = Parent;
             
-            maxRoll = 99.98;
+            maxRoll = 99.98m;
             AutoInvest = false;
             AutoWithdraw = true;
             ChangeSeed = false;
@@ -105,9 +105,9 @@ namespace DiceBot
         bool IsFJ = false;
         bool IsLoggedIn = false;
 
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
-            chance = High ? 99.99 - chance : chance;
+            chance = High ? 99.99m - chance : chance;
             decimal tmpamount = (decimal)amount;
             decimal tmpchancet = (decimal)chance;
             string s = string.Format("64,{0:0.00000000},{1},{2},{3}\r\n", tmpamount, (int)(tmpchancet * 100), High ? 1 : 0, 1/*R.Next(0, int.MaxValue-1000000)*/);
@@ -121,7 +121,7 @@ namespace DiceBot
         void PlaceBetThread(object _High)
         {
             bool High = (bool)_High;
-            chance = High ? 99.99 - chance : chance;
+            chance = High ? 99.99m - chance : chance;
             string s = string.Format("64,{0:0.00000000},{1},{2},{3}\r\n", amount, (int)(chance * 100), High ? 1 : 0, R.Next(0, int.MaxValue));
             
             Client.Send(s);
@@ -180,7 +180,7 @@ namespace DiceBot
             catch
             { }
         }
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             string wdrwToken = WebClient.GetStringAsync("ajax/withdraw.php").Result;
             wdrwToken = wdrwToken.Substring(wdrwToken.IndexOf("wdrwToken"));
@@ -348,8 +348,8 @@ namespace DiceBot
                 {
                     string stats = WebClient.GetStringAsync("api/dice3/utils.php?stats&rnd=" + R.Next(0, int.MaxValue)).Result;
                     string[] StatsVals = stats.Split('|');
-                    wagered = double.Parse(StatsVals[0], System.Globalization.NumberFormatInfo.InvariantInfo);
-                    profit = double.Parse(StatsVals[1], System.Globalization.NumberFormatInfo.InvariantInfo);
+                    wagered = decimal.Parse(StatsVals[0], System.Globalization.NumberFormatInfo.InvariantInfo);
+                    profit = decimal.Parse(StatsVals[1], System.Globalization.NumberFormatInfo.InvariantInfo);
                     bets = int.Parse(StatsVals[2], System.Globalization.NumberFormatInfo.InvariantInfo);
                     wins = int.Parse(StatsVals[3], System.Globalization.NumberFormatInfo.InvariantInfo);
                     losses = int.Parse(StatsVals[4], System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -390,7 +390,7 @@ namespace DiceBot
 
         Dictionary<string, int> Curs = new Dictionary<string, int>();
         Dictionary<string, int> Rooms = new Dictionary<string, int>();
-        public override void SendTip(string User, double amount)
+        public override void SendTip(string User, decimal amount)
         {
             string sEmitResponse = WebClient.GetStringAsync("games/dice/").Result;
             GetChatToken(sEmitResponse);
@@ -410,7 +410,7 @@ namespace DiceBot
             
         }
 
-        public override void Donate(double Amount)
+        public override void Donate(decimal Amount)
         {
             SendTip("", Amount);
         }
@@ -439,7 +439,7 @@ namespace DiceBot
                     if (RetObjs[0] == ("63"))
                     {
                         Client.Send("67,2\r\n");
-                        balance = double.Parse(RetObjs[2], System.Globalization.NumberFormatInfo.InvariantInfo);
+                        balance = decimal.Parse(RetObjs[2], System.Globalization.NumberFormatInfo.InvariantInfo);
                         Parent.updateBalance(balance);
                         Parent.updateBets(bets);
                         Parent.updateWins(wins);
@@ -482,9 +482,9 @@ namespace DiceBot
                         else
                             losses++;
                         bets++;
-                        wagered += (double)Result.Amount;
-                        profit += (double)Result.Profit;
-                        balance += (double)Result.Profit;
+                        wagered += (decimal)Result.Amount;
+                        profit += (decimal)Result.Profit;
+                        balance += (decimal)Result.Profit;
 
                         FinishedBet(Result);
                     }
@@ -561,7 +561,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             SHA512 HashGen = SHA512.Create();
             string seed = server + client;
@@ -579,7 +579,7 @@ namespace DiceBot
                 k += 6;
                 if (roll < 10000000)
                 {
-                    return ((double)(roll % 10000)) / 100.0;
+                    return ((decimal)(roll % 10000m)) / 100.0m;
                 }
                 if (k >= hashres.Length - 6)
                 {
@@ -595,7 +595,7 @@ namespace DiceBot
             return 0;
         }
 
-        public static double sGetLucky(string server, string client, int Nonce)
+        public static decimal sGetLucky(string server, string client, int Nonce)
         {
             SHA512 HashGen = SHA512.Create();
             string seed = server + client;
@@ -613,7 +613,7 @@ namespace DiceBot
                 k += 6;
                 if (roll < 10000000)
                 {
-                    return ((double)(roll % 10000)) / 100.0;
+                    return ((decimal)(roll % 10000m)) / 100.0m;
                 }
                 if (k >= hashres.Length - 6)
                 {

@@ -59,7 +59,7 @@ namespace DiceBot
             switch (mode)
             { case 0: Value = true; break;
                 case 1: Value = (int)nudNumInput.Value; break;
-                case 2: Value = (double)nudNumInput.Value; break;
+                case 2: Value = (decimal)nudNumInput.Value; break;
                 case 3: Value = txtTextInput.Text; break;
             }
             this.Close();
