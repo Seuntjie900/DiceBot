@@ -1,4 +1,5 @@
-﻿namespace DiceBot
+using System.IO;
+namespace DiceBot
 {
     partial class UserInput
     {
@@ -28,6 +29,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            string[] lines = File.ReadAllLines("TextSettings.txt");
+            
             this.lblPrompt = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.nudNumInput = new System.Windows.Forms.NumericUpDown();
@@ -48,10 +51,10 @@
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(291, 82);
-            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Name = lines[2];
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Text = lines[1];
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -85,7 +88,7 @@
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 4;
-            this.btnOk.Text = "OK";
+            this.btnOk.Text = lines[2];
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -101,7 +104,7 @@
             this.Controls.Add(this.lblPrompt);
             this.Controls.Add(this.txtTextInput);
             this.Name = "UserInput";
-            this.Text = "UserInput";
+            this.Text = lines[0];
             ((System.ComponentModel.ISupportInitialize)(this.nudNumInput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
