@@ -573,7 +573,7 @@ namespace DiceBot
             DumpLog("getting user input for lua script", 7);
             UserInput tmp = new UserInput();
             DialogResult tmpRes = tmp.ShowDialog(prompt, type);
-            WaitForInput = false;           
+            WaitForInput = false;
             return tmp.Value;
         }
 
