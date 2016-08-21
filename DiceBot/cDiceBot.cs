@@ -1173,7 +1173,13 @@ namespace DiceBot
               LabList = new List<decimal>();
               foreach (string s in ss)
               {
-                  LabList.Add(dparse(s, ref convert));
+                    decimal tmpval = dparse(s, ref convert);
+                    if (convert)
+                        LabList.Add(tmpval);
+                    else
+                    {
+                        MessageBox.Show("Could not parse number: "+s+". Please remove it from the list. (This could be an empty newline character)");
+                    }
               }
               if (LabList.Count == 1)
                   Lastbet = LabList[0];
@@ -1354,7 +1360,13 @@ namespace DiceBot
                     string[] lines = GetLabList();
                     foreach (string s in lines)
                     {
-                        LabList.Add(dparse(s,ref convert));
+                        decimal tmpval = dparse(s, ref convert);
+                        if (convert)
+                            LabList.Add(tmpval);
+                        else
+                        {
+                            MessageBox.Show("Could not parse number: " + s + ". Please remove it from the list. (This could be an empty newline character)");Stop("Invalid bet in Labouchere list");return;
+                        }
                     }
                 }
                 if (!Continue)
@@ -1519,7 +1531,13 @@ namespace DiceBot
                             LabList = new List<decimal>();
                             foreach (string s in ss)
                             {
-                                LabList.Add(dparse(s, ref convert));
+                                decimal tmpval = dparse(s, ref convert);
+                                if (convert)
+                                    LabList.Add(tmpval);
+                                else
+                                {
+                                    MessageBox.Show("Could not parse number: " + s + ". Please remove it from the list. (This could be an empty newline character)"); Stop("Invalid bet in Labouchere list"); return;
+                                }
                             }
                             if (LabList.Count == 1)
                                 Lastbet = LabList[0];
@@ -1564,7 +1582,13 @@ namespace DiceBot
                                 LabList = new List<decimal>();
                                 foreach (string s in ss)
                                 {
-                                    LabList.Add(dparse(s, ref convert));
+                                    decimal tmpval = dparse(s, ref convert);
+                                    if (convert)
+                                        LabList.Add(tmpval);
+                                    else
+                                    {
+                                        MessageBox.Show("Could not parse number: " + s + ". Please remove it from the list. (This could be an empty newline character)"); Stop("Invalid bet in Labouchere list"); return;
+                                    }
                                 }
                                 if (LabList.Count == 1)
                                     Lastbet = LabList[0];
@@ -1596,7 +1620,13 @@ namespace DiceBot
                         LabList = new List<decimal>();
                         foreach (string s in ss)
                         {
-                            LabList.Add(dparse(s, ref convert));
+                            decimal tmpval = dparse(s, ref convert);
+                            if (convert)
+                                LabList.Add(tmpval);
+                            else
+                            {
+                                MessageBox.Show("Could not parse number: " + s + ". Please remove it from the list. (This could be an empty newline character)"); Stop("Invalid bet in Labouchere list"); return;
+                            }
                         }
                         if (LabList.Count == 1)
                             Lastbet = LabList[0];
@@ -5345,8 +5375,8 @@ namespace DiceBot
 
             try
             {
-                Lastbet = (decimal)Lua["nextbet"];
-                Chance = (decimal)Lua["chance"];
+                Lastbet = (decimal)(double)Lua["nextbet"];
+                Chance = (decimal)(double)Lua["chance"];
                 high = (bool)Lua["bethigh"];
                 CurrentSite.amount = Lastbet;
                 CurrentSite.chance = Chance;
