@@ -893,7 +893,7 @@ namespace DiceBot
         public long amountLose { get; set; }
         public long amountWin { get; set; }
         public long wagered { get; set; }
-        
+        public long commission {get;set;}
     }
      public class SafeDiceBet
      {

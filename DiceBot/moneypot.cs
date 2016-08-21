@@ -351,8 +351,8 @@ namespace DiceBot
 
         public override double GetLucky(string server, string client, int nonce)
         {
-            int cl = int.Parse(client);
-            double roll = Math.Floor((100.0 / 4294967296.0) * (double)((long)(((double)nonce) + cl) % 4294967296) * 100)/100;
+            long cl = long.Parse(client);
+            double roll = Math.Floor((100.0 / 4294967296.0) * (double)((long)(((double)nonce) + cl) % (long)(4294967296)) * (long)100) / (long)100;
             return roll;
         }
     }

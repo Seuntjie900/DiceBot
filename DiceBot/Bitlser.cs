@@ -169,9 +169,9 @@ game:49.5
 devise:btc*/
                 pairs.Add(new KeyValuePair<string, string>("access_token", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("type", "dice"));
-                pairs.Add(new KeyValuePair<string, string>("amount", tmpob.Amount.ToString("0.00000000")));
+                pairs.Add(new KeyValuePair<string, string>("amount", tmpob.Amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("condition", tmpob.High?">":"<"));
-                pairs.Add(new KeyValuePair<string, string>("game", !tmpob.High ? tmpob.Chance.ToString("0.00") : ( maxRoll -tmpob.Chance).ToString("0.00")));
+                pairs.Add(new KeyValuePair<string, string>("game", !tmpob.High ? tmpob.Chance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) : (maxRoll - tmpob.Chance).ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("devise", Currency));
                 pairs.Add(new KeyValuePair<string, string>("api_key", "0b2edbfe44e98df79665e52896c22987445683e78"));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
@@ -290,7 +290,7 @@ devise:btc*/
                 pairs.Add(new KeyValuePair<string, string>("api_key", "0b2edbfe44e98df79665e52896c22987445683e78"));
                 //if (!string.IsNullOrWhiteSpace(twofa))
                 {
-                    pairs.Add(new KeyValuePair<string, string>("two_factor", twofa));
+                    pairs.Add(new KeyValuePair<string, string>("twofactor", twofa));
                 }
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);

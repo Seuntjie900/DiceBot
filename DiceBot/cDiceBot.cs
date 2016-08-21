@@ -4635,7 +4635,7 @@ namespace DiceBot
                     case "CoinMillions": CurrentSite = new CoinMillions(this); break;
                     case "cryptogames": CurrentSite = new cryptogames(this); break;
                     case "dadice": CurrentSite = new dadice(this); break;
-                    case "dice999": CurrentSite = new dice999(this,false); break;
+                    case "dice999": CurrentSite = new dice999(this, (CurrentSite as dice999).doge999); break;
                     case "doge999": CurrentSite = new dice999(this, true); break;
                     case "FortuneJack": CurrentSite = new FortuneJack(this); break;
                     case "MagicalDice": CurrentSite = new MagicalDice(this); break;

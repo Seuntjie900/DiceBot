@@ -18,7 +18,7 @@ namespace DiceBot
         Random r = new Random();
         long uid = 0;
         
-        bool isD999 = false;
+         bool isD999 = false;
         
         public static string[] cCurrencies =new string[] { "btc","doge","ltc","eth" };
         HttpClientHandler ClientHandlr;
@@ -367,7 +367,7 @@ namespace DiceBot
             return true;
         }
 
-        bool doge999 = false;
+        public bool doge999 = false;
         decimal Wagered = 0;
         public override void Login(string Username, string Password, string twofa)
         {
