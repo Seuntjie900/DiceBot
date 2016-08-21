@@ -569,21 +569,21 @@ namespace DiceBot
             return tmp.Value;
         }
         
-        delegate object dGetInput0(string prompt, int type,string userinputext, string btncanceltext, string btnoktext);
+        delegate object dGetInput0(string prompt,int type,string userinputext,string btncanceltext,string btnoktext);
         /*
             0= bool
             1= int
             2= decimal
             3= string
         */        
-        object GetInputForLua0(string prompt, int type,string userinputext, string btncanceltext, string btnoktext)
+        object GetInputForLua0(string prompt,int type,string userinputext,string btncanceltext,string btnoktext)
         {
             WaitForInput = true;
             DumpLog("getting advanced user input for lua script", 7);
-            UserInput tmp = new UserInput();
-            DialogResult tmpRes = tmp.ShowDialog0(prompt, type,userinputext,btncanceltext,btnoktext);
+            UserInput tmp0 = new UserInput();
+            DialogResult tmpRes0 = tmp0.ShowDialogx(prompt,type,userinputext,btncanceltext,btnoktext);
             WaitForInput = false;
-            return tmp.Value;
+            return tmp0.Value;
         }
         
         delegate void dSetValue(string Name, int Value);
