@@ -25,7 +25,7 @@ namespace DiceBot
         {
             Currency = "btc";
             register = false;
-            maxRoll = 99.99;
+            maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = false;
             ChangeSeed = true;
@@ -207,8 +207,8 @@ namespace DiceBot
             {
                 PlaceBetObj tmp9 = BetObj as PlaceBetObj;
                 bool High = tmp9.High;
-                double amount = tmp9.Amount;
-                double chance = tmp9.Chance;
+                decimal amount = tmp9.Amount;
+                decimal chance = tmp9.Chance;
 
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
@@ -289,7 +289,7 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             this.High = High;
             new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance));
@@ -363,12 +363,12 @@ namespace DiceBot
             return true;
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             return false;
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -401,13 +401,13 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
             }
             return 0;
         }
-        new public static double sGetLucky(string server, string client, int nonce)
+        new public static decimal sGetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -440,7 +440,7 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                 {
                     lucky %= 10000;
@@ -471,7 +471,7 @@ namespace DiceBot
             accesstoken = "";
         }
 
-        public override void SendTip(string User, double amount)
+        public override void SendTip(string User, decimal amount)
         {
             
 
@@ -481,7 +481,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("uname", User));
                 pairs.Add(new KeyValuePair<string, string>("coin", Currency));
-                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0m).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string responseData = "";
                 using (var response = Client.PostAsync("tip/", Content))
@@ -555,21 +555,21 @@ namespace DiceBot
     {
         public int error { get; set; }
         public int win { get; set; }
-        public double balanceOrig { get; set; }
-        public double balance { get; set; }
-        public double profit { get; set; }
+        public decimal balanceOrig { get; set; }
+        public decimal balance { get; set; }
+        public decimal profit { get; set; }
         public int lfNotified { get; set; }
         public int lfActive { get; set; }
-        public double lfMaxBetAmt { get; set; }
-        public double lfMaturityPercent { get; set; }
-        public double lfActivePercent { get; set; }
-        public double version { get; set; }
-        public double maintenance { get; set; }
+        public decimal lfMaxBetAmt { get; set; }
+        public decimal lfMaturityPercent { get; set; }
+        public decimal lfActivePercent { get; set; }
+        public decimal version { get; set; }
+        public decimal maintenance { get; set; }
         public int happyHour { get; set; }
         public int direction { get; set; }
-        public double wager { get; set; }
-        public double target { get; set; }
-        public double result { get; set; }
+        public decimal wager { get; set; }
+        public decimal target { get; set; }
+        public decimal result { get; set; }
         public int clientSeed { get; set; }
         public string serverSeed { get; set; }
         public string nextServerSeed { get; set; }
@@ -598,8 +598,8 @@ namespace DiceBot
         public class bbTip
         {
             public int error { get; set; }
-            public double balance { get; set; }
-            public double version { get; set; }
+            public decimal balance { get; set; }
+            public decimal version { get; set; }
             public int maintenance { get; set; }
             public int happyHour { get; set; }
         }
@@ -608,16 +608,16 @@ namespace DiceBot
         {
             public int error { get; set; }
             public int id { get; set; }
-            public double balance { get; set; }
+            public decimal balance { get; set; }
             public string alias { get; set; }
 
             public int clientseed { get; set; }
             public int client_seed_sequence { get; set; }
             public string server_seed { get; set; }
             public int total_bets { get; set; }
-            public double total_wagered { get; set; }
+            public decimal total_wagered { get; set; }
             public int total_wins { get; set; }
-            public double total_profit { get; set; }
+            public decimal total_profit { get; set; }
             
             
         }

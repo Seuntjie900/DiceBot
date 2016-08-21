@@ -50,7 +50,7 @@ namespace DiceBot
                         RollinBet tmpStats2 = json.JsonDeserialize<RollinBet>(sEmitResponse2);
                         if (tmpStats2.success)
                         {
-                            balance = (double.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
+                            balance = (decimal.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m);
                             Parent.updateBalance(balance);
                         }
                         LastBalance = DateTime.Now;
@@ -71,11 +71,11 @@ namespace DiceBot
             {
                 PlaceBetObj tmp9 = _High as PlaceBetObj;
                 bool High = tmp9.High;
-                double amount = tmp9.Amount;
-                double chance = tmp9.Chance;
+                decimal amount = tmp9.Amount;
+                decimal chance = tmp9.Chance;
                 lastbet = DateTime.Now;
                 //bool High = (bool)_High;
-                double tmpchance = High ? maxRoll - chance : chance;
+                decimal tmpchance = High ? maxRoll - chance : chance;
                 string sendchance = tmpchance.ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo);
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -96,13 +96,13 @@ namespace DiceBot
                     Bet tmp2 = tmp.ToBet();
                     tmp2.serverhash = server_hash;
                     server_hash = tmp.customer.server_hash;
-                    balance = double.Parse(tmp.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0;
+                    balance = decimal.Parse(tmp.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m;
                     bets = tmp.statistics.bets;
                     
                     losses = tmp.statistics.losses;
-                    profit = double.Parse(tmp.statistics.profit, System.Globalization.CultureInfo.InvariantCulture) / 1000.0;
+                    profit = decimal.Parse(tmp.statistics.profit, System.Globalization.CultureInfo.InvariantCulture) / 1000.0m;
                     
-                    wagered = double.Parse(tmp.statistics.wagered, System.Globalization.CultureInfo.InvariantCulture) / 1000.0;
+                    wagered = decimal.Parse(tmp.statistics.wagered, System.Globalization.CultureInfo.InvariantCulture) / 1000.0m;
                     wins = (tmp.statistics.wins);
                     LastBalance = DateTime.Now;
                     tmp2.date = DateTime.Now;
@@ -129,7 +129,7 @@ namespace DiceBot
             }
 
         }
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
 
             Thread T = new Thread(new ParameterizedThreadStart(PlaceBetThread));
@@ -154,7 +154,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             try
             {
@@ -182,12 +182,12 @@ namespace DiceBot
 
         }
 
-        public override void Donate(double Amount)
+        public override void Donate(decimal Amount)
         {
             SendTip("seuntjie", Amount);
         }
 
-        public override void SendTip(string User, double amount)
+        public override void SendTip(string User, decimal amount)
         {
             try
             {
@@ -293,15 +293,15 @@ namespace DiceBot
                     Client.DefaultRequestHeaders.Add("X-CSRF-Token", Token);
                     
                     GetDeposit();
-                    balance = double.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0; //i assume
+                    balance = decimal.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m; //i assume
                     bets = tmpStats.user.bets;
-                    profit = double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0;
+                    profit = decimal.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m;
 
                     Parent.updateBalance((decimal)(balance));
                     Parent.updateBets(tmpStats.user.bets);
                     Parent.updateLosses(tmpStats.user.losses);
-                    Parent.updateProfit(double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
-                    Parent.updateWagered(double.Parse(tmpStats.user.wagered, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
+                    Parent.updateProfit(decimal.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m);
+                    Parent.updateWagered(decimal.Parse(tmpStats.user.wagered, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m);
                     Parent.updateWins(tmpStats.user.wins);
                     isRollin = true;
                     Thread t = new Thread(new ThreadStart(SyncThread));
@@ -404,15 +404,15 @@ namespace DiceBot
                 Client.DefaultRequestHeaders.Add("X-CSRF-Token", Token);
 
                 GetDeposit();
-                balance = double.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0; //i assume
+                balance = decimal.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m; //i assume
                 bets = tmpStats.user.bets;
-                profit = double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0;
+                profit = decimal.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m;
 
                 Parent.updateBalance((decimal)(balance));
                 Parent.updateBets(tmpStats.user.bets);
                 Parent.updateLosses(tmpStats.user.losses);
-                Parent.updateProfit(double.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
-                Parent.updateWagered(double.Parse(tmpStats.user.wagered, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0);
+                Parent.updateProfit(decimal.Parse(tmpStats.user.profit, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m);
+                Parent.updateWagered(decimal.Parse(tmpStats.user.wagered, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m);
                 Parent.updateWins(tmpStats.user.wins);
                 isRollin = true;
                 Thread t = new Thread(new ThreadStart(SyncThread));
@@ -430,11 +430,11 @@ namespace DiceBot
             //return true;
             if (amount == 0)
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 1000;
-            else if (amount < 0.00000010)
+            else if (amount < 0.00000010m)
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 500;
-            else if (amount < 0.00000100)
+            else if (amount < 0.00000100m)
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 300;
-            else if (amount < 0.00001000)
+            else if (amount < 0.00001000m)
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 100;
             else
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 10;
@@ -457,7 +457,7 @@ namespace DiceBot
             Parent.updateStatus("Cannot chat at this moment. Sorry!");
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             /*server = "182fb47eb2f00c928b041795faf5bbd5759829086a67a46edc73a54e9505cfb0";
             client = "468538814";*/
@@ -494,7 +494,7 @@ namespace DiceBot
             return t4;
         }
 
-        new public static double sGetLucky(string server, string client, int nonce)
+        new public static decimal sGetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
             List<byte> serverb = new List<byte>();
@@ -533,7 +533,7 @@ namespace DiceBot
         public RollinGame game { get; set; }
         public RollinCustomer customer { get; set; }
         public RollinStats statistics { get; set; }
-        public double fee { get; set; }
+        public decimal fee { get; set; }
         public string[] errors { get; set; }
        
         //public string server_seed_hash { get; set; }

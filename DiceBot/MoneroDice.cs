@@ -17,7 +17,7 @@ namespace DiceBot
         public MoneroDice(cDiceBot Parent)
         {
             this.Parent = Parent;
-            maxRoll = 99.99;
+            maxRoll = 99.99m;
             AutoInvest = true;
             AutoWithdraw = false;
             ChangeSeed = true;
@@ -76,9 +76,9 @@ namespace DiceBot
             {
                 PlaceBetObj tmp9 = high as PlaceBetObj;
                 bool High = tmp9.High;
-                double amount = tmp9.Amount;
-                double chacne = tmp9.Chance;
-                double prize = amount * ((100.0 - (double)edge) / chance);
+                decimal amount = tmp9.Amount;
+                decimal chacne = tmp9.Chance;
+                decimal prize = amount * ((100.0m - edge) / chance);
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("public_key", pub));
                 pairs.Add(new KeyValuePair<string, string>("private_key", priv));
@@ -102,9 +102,9 @@ namespace DiceBot
                     tmp2.serverhash = tmp.bet_data.hash;
                     tmp2.clientseed = tmp.bet_data.seed_user;
                     bets++;
-                    wagered += (double)tmp2.Amount;
+                    wagered += (decimal)tmp2.Amount;
                     balance = tmp.bet_data.balance;
-                    profit += (double)tmp2.Profit;
+                    profit += (decimal)tmp2.Profit;
                     if (tmp.bet_data.win)
                     {
                         wins++;
@@ -120,7 +120,7 @@ namespace DiceBot
             catch { }
         }
 
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
         }
@@ -135,7 +135,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             throw new NotImplementedException();
         }
@@ -201,7 +201,7 @@ namespace DiceBot
             ismd = false;
         }
 
-        public override bool Invest(double Amount)
+        public override bool Invest(decimal Amount)
         {
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
             pairs.Add(new KeyValuePair<string, string>("public_key", pub));
@@ -225,7 +225,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -246,14 +246,14 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
-                    return ((double)(lucky % 10000)) / 100.0;
+                    return ((decimal)(lucky % 10000m)) / 100.0m;
             }
             return 0;
         }
 
-        public static double sGetLucky(string server, string client, int nonce)
+        public static decimal sGetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -274,9 +274,9 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
-                    return ((double)(lucky % 10000)) / 100.0;
+                    return ((decimal)(lucky % 10000m)) / 100.0m;
             }
             return 0;
         }
@@ -288,13 +288,13 @@ namespace DiceBot
     }
     public class MoneroStat
     {
-        public double balance { get; set; }
-        public double wagered { get; set; }
-        public double profit { get; set; }
-        public double bets { get; set; }
-        public double wins { get; set; }
-        public double losses { get; set; }
-        public double luck { get; set; }
+        public decimal balance { get; set; }
+        public decimal wagered { get; set; }
+        public decimal profit { get; set; }
+        public decimal bets { get; set; }
+        public decimal wins { get; set; }
+        public decimal losses { get; set; }
+        public decimal luck { get; set; }
     }
     public class MoneroRoll
     {
@@ -314,6 +314,6 @@ namespace DiceBot
         public string bets_count { get; set; }
         public string maximum_profit { get; set; }
         public string error { get; set; }
-        public double balance { get; set; }
+        public decimal balance { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace DiceBot
         protected string prox_pass = "";
         protected WebProxy Prox;
         public string[] Currencies = new string[] { "btc" };
-        public double maxRoll { get; set; }
+        public decimal maxRoll { get; set; }
         string currency = "Btc";
         public string SiteURL { get; set; }
         public string Currency
@@ -38,15 +38,15 @@ namespace DiceBot
         public bool AutoLogin { get; set; }
         public decimal edge = 1;
         public string Name { get; protected set; }
-        public double chance = 0;
-        public double amount = 0;
-        public double balance { get; protected set; }
+        public decimal chance = 0;
+        public decimal amount = 0;
+        public decimal balance { get; protected set; }
         protected int bets = 0;
-        protected double profit = 0;
-        protected double wagered = 0;
+        protected decimal profit = 0;
+        protected decimal wagered = 0;
         protected int wins = 0;
         protected int losses = 0;
-        protected double siteprofit = 0;
+        protected decimal siteprofit = 0;
         protected bool High = false;
         public string BetURL = "";
         public bool Tip { get; set; }
@@ -54,7 +54,7 @@ namespace DiceBot
         public bool GettingSeed { get; set; }
 
 
-        public void PlaceBet(bool High, double amount, double chance)
+        public void PlaceBet(bool High, decimal amount, decimal chance)
         {
             Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
             internalPlaceBet(High,amount, chance);
@@ -71,24 +71,24 @@ namespace DiceBot
             Parent.GetBetResult(balance, newBet);
                 
         }
-        protected abstract void internalPlaceBet(bool High,double amount, double chance);
+        protected abstract void internalPlaceBet(bool High,decimal amount, decimal chance);
         public abstract void ResetSeed();
         public abstract void SetClientSeed(string Seed);
-        public virtual bool Invest(double Amount)
+        public virtual bool Invest(decimal Amount)
         {
             return true;
 
         }
-        public virtual void Donate(double Amount)
+        public virtual void Donate(decimal Amount)
         {
 
         }
-        public bool Withdraw(double Amount, string Address)
+        public bool Withdraw(decimal Amount, string Address)
         {
             Parent.updateStatus(string.Format("Withdrawing {0} {1} to {2}", Amount, currency, Address));
             return internalWithdraw(Amount, Address);
         }
-        protected abstract bool internalWithdraw(double Amount, string Address);
+        protected abstract bool internalWithdraw(decimal Amount, string Address);
         
         public abstract void Login(string Username, string Password, string twofa);
         
@@ -96,7 +96,7 @@ namespace DiceBot
         
         public abstract bool ReadyToBet();
         
-        public virtual double GetLucky(string server, string client, int nonce)
+        public virtual decimal GetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
             
@@ -129,13 +129,13 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
                 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
             }
             return 0;
         }
-        public static double sGetLucky(string server, string client, int nonce)
+        public static decimal sGetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -168,7 +168,7 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
             }
@@ -183,7 +183,7 @@ namespace DiceBot
         {
             Parent.AddChat(Message);
         }
-        public virtual void SendTip(string User, double amount)
+        public virtual void SendTip(string User, decimal amount)
         {
             Parent.updateStatus("Tipping is not enabled for the current site.");
             
@@ -215,15 +215,15 @@ namespace DiceBot
     }
     public class PlaceBetObj
     {
-        public PlaceBetObj(bool High, double Amount, double Chance)
+        public PlaceBetObj(bool High, decimal Amount, decimal Chance)
         {
             this.High = High;
             this.Amount = Amount;
             this.Chance = Chance;
         }
         public bool High { get; set; }
-        public double Amount { get; set; }
-        public double Chance { get; set; }
+        public decimal Amount { get; set; }
+        public decimal Chance { get; set; }
     }
 
 }

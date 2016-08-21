@@ -26,7 +26,7 @@ namespace DiceBot
         public dice999(cDiceBot Parent, bool doge999)
         {
             this.doge999 = doge999;
-            maxRoll = 99.9999;
+            maxRoll = 99.9999m;
             this.Parent = Parent;
             AutoInvest = false;
             AutoWithdraw = true;
@@ -102,7 +102,7 @@ namespace DiceBot
                 }
                 try
                 {
-                    balance = (double)json.JsonDeserialize<d999Login>(responseData).Balance / 100000000.0;
+                    balance = (decimal)json.JsonDeserialize<d999Login>(responseData).Balance / 100000000.0m;
                     if (balance != 0)
                     {
                         Parent.updateBalance((decimal)balance);
@@ -126,12 +126,12 @@ namespace DiceBot
                 PlaceBetObj tmp9 = _High as PlaceBetObj;
 
                 bool High = tmp9.High;
-                double amount = tmp9.Amount;
-                //double chance = tmp9.Chance;
+                decimal amount = tmp9.Amount;
+                //decimal chance = tmp9.Chance;
 
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, tmp9.Chance, High ? "High" : "Low"));
 
-                double chance = (999999.0) * (tmp9.Chance / 100.0);
+                decimal chance = (999999.0m) * (tmp9.Chance / 100.0m);
                 //HttpWebResponse EmitResponse;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
@@ -180,7 +180,7 @@ namespace DiceBot
                 pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("a", "PlaceBet"));
                 pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
-                pairs.Add(new KeyValuePair<string, string>("PayIn", ((long)(amount * 100000000.0)).ToString("0",System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("PayIn", ((long)((decimal)amount * 100000000m)).ToString("0",System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("Low", (High ? 999999 - (int)chance : 0).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("High", (High ? 999999 : (int)chance).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("ClientSeed", ClientSeed));
@@ -246,9 +246,9 @@ namespace DiceBot
                 }
                 else
                 {
-                    balance = (double)tmpBet.StartingBalance / 100000000.0 - (amount) + ((double)tmpBet.PayOut / 100000000.0);
+                    balance = (decimal)tmpBet.StartingBalance / 100000000.0m - (amount) + ((decimal)tmpBet.PayOut / 100000000.0m);
 
-                    profit += -(amount) + (double)(tmpBet.PayOut / 100000000m);
+                    profit += -(amount) + (decimal)(tmpBet.PayOut / 100000000m);
                     Bet tmp = new Bet();
                     tmp.Amount = (decimal)amount;
                     tmp.date = DateTime.Now;
@@ -293,7 +293,7 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             this.High = High;
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
@@ -333,12 +333,12 @@ namespace DiceBot
             
         }
 
-        public override void Donate(double Amount)
+        public override void Donate(decimal Amount)
         {
             internalWithdraw(Amount, "1BoHcFQsUSot7jkHJcZMh1iUda3tEjzuBW");
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
             pairs.Add(new KeyValuePair<string, string>("a", "Withdraw"));
@@ -410,8 +410,8 @@ namespace DiceBot
             {
                 Lastbalance = DateTime.Now;
                 sessionCookie = tmpU.SessionCookie;
-                balance = (double)tmpU.Balance / 100000000.0;
-                profit = (double)tmpU.Profit/100000000.0;
+                balance = tmpU.Balance / 100000000.0m;
+                profit = tmpU.Profit/100000000.0m;
                 Wagered = tmpU.Wagered/100000000m;
                 bets = (int)tmpU.BetCount;
                 wins = (int)tmpU.BetWinCount;
@@ -560,7 +560,7 @@ namespace DiceBot
             }
         }
 
-        public override double GetLucky(string serverSeed, string clientSeed, int nonce)
+        public override decimal GetLucky(string serverSeed, string clientSeed, int nonce)
         {
             Func<string, byte[]> strtobytes = s => Enumerable
                 .Range(0, s.Length / 2)
@@ -584,7 +584,7 @@ namespace DiceBot
                         long result = (hash[x] << 16) | (hash[x + 1] << 8) | hash[x + 2];
                         if (result < 16000000)
                         {
-                            return (result % 1000000)/10000.0;
+                            return (result % 1000000m)/10000.0m;
                         }
                     }
                     hash = sha512.ComputeHash(hash);
@@ -592,7 +592,7 @@ namespace DiceBot
             }
             
         }
-        public static double sGetLucky(string serverSeed, string clientSeed, int betNumber/*, long betResult*/, string serverSeedHash = null)
+        public static decimal sGetLucky(string serverSeed, string clientSeed, int betNumber/*, long betResult*/, string serverSeedHash = null)
         {
             Func<string, byte[]> strtobytes = s => Enumerable
                 .Range(0, s.Length / 2)
@@ -619,7 +619,7 @@ namespace DiceBot
                         long result = (hash[x] << 16) | (hash[x + 1] << 8) | hash[x + 2];
                         if (result < 16000000)
                         {
-                            return (result % 1000000)/10000.0;
+                            return (result % 1000000m)/10000.0m;
                         }
                     }
                     hash = sha512.ComputeHash(hash);

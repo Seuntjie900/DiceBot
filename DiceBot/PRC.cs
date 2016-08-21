@@ -1,9 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNet.SignalR.Client;
 using System.Net;
 using System.IO;
+using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Threading;
 
@@ -18,7 +20,7 @@ namespace DiceBot
         
         public PRC(cDiceBot Parent)
         {
-            maxRoll = 99.9999;
+            maxRoll = 99.9999m;
             AutoWithdraw = true;
             AutoLogin = true;
             ChangeSeed = true;
@@ -53,8 +55,8 @@ namespace DiceBot
             
         }
         DateTime LastBet = DateTime.Now;
-        double LastBetAmount = 0;
-        protected override async void internalPlaceBet(bool High, double amount, double chance)
+        decimal LastBetAmount = 0;
+        protected override async void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             int retries =0;
@@ -64,8 +66,25 @@ namespace DiceBot
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
                 try
                 {
-                   await dicehub.Invoke("Bet", High ? 0 : 1, amount, chance);
-                   retries = 5;
+                    var tmpStats = await dicehub.Invoke<PRCMYstats>("Bet", High ? 0 : 1, amount, chance);
+                    LastBet = DateTime.Now;
+                    LastBetAmount = amount;
+                    
+                    Bet tmp = tmpStats.DiceBet;
+                    if (tmp.uid == UserID)
+                    {
+                        balance = (decimal)tmpStats.AvailableBalance;
+                        wins = tmpStats.Wins;
+                        losses = tmpStats.Losses;
+                        wagered = (decimal)tmpStats.Wagered;
+                        bets = tmpStats.NumBets;
+                        profit = (decimal)tmpStats.Profit;
+                        
+                        tmp.serverhash = serverhash;
+                        retries = 5;
+                        tmp.date = DateTime.Now;
+                        FinishedBet(tmp);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -77,34 +96,8 @@ namespace DiceBot
                 Parent.updateStatus(string.Format("Failed to place bets after 3 retries, stopping. Please check network and bot settings."));
         }
 
-        private void DiceBetResult(PRCMYstats tmpStats)
-        {
-            if (tmpStats.Success)
-            {
-                LastBet = DateTime.Now;
-                LastBetAmount = amount;
-
-                Bet tmp = tmpStats.DiceBet;
-                if (tmp.uid == UserID)
-                {
-                    balance = (double)tmpStats.AvailableBalance;
-                    wins = tmpStats.Wins;
-                    losses = tmpStats.Losses;
-                    wagered = (double)tmpStats.Wagered;
-                    bets = tmpStats.NumBets;
-                    profit = (double)tmpStats.Profit;
-
-                    tmp.serverhash = serverhash;
-                    tmp.date = DateTime.Now;
-                    FinishedBet(tmp);
-                }
-            }
-            else
-                Parent.updateStatus(string.Format("Failed to place bets, stopping. Please check network and bot settings."));
-        }
-
-
-        public override bool Invest(double Amount)
+      
+        public override bool Invest(decimal Amount)
         {
             /*withdraw = 2;
             withdrawTime = DateTime.Now;
@@ -134,59 +127,78 @@ namespace DiceBot
                 string writestring = post as string;
                 writer.Write(writestring);
             }
-            Thread.Sleep(5000);
-        }
-
-        private void SaveClientSeedResult(PRCResetSeed clientSeedReset)
-        {
-            if (clientSeedReset.Result)
+            try
             {
-                //sqlite_helper.InsertSeed(tmp.PreviousServerHash, tmp.PreviousServerSeed);
 
-                client = clientSeedReset.ClientSeed;
-            }
-            else
-            {
-                Parent.updateStatus("Failed to reset seed, too soon.");
-            }
-        }
-
-        private void GenerateServerSeedResult(PRCResetSeed serverSeedReset)
-        {
-            if (serverSeedReset.Result)
-            {
-                sqlite_helper.InsertSeed(serverSeedReset.PreviousServerHash, serverSeedReset.PreviousServerSeed);
-                serverhash = serverSeedReset.CurrentServerHash;
-
-
-                HttpWebRequest getHeaders2 = HttpWebRequest.Create("https://betking.io/account/SaveClientSeed?gameType=0") as HttpWebRequest;
-                if (Prox != null)
-                    getHeaders2.Proxy = Prox;
-                getHeaders2.CookieContainer = Cookies;
-
-                getHeaders2.Method = "POST";
-                string tmpClient = r.Next(0, int.MaxValue).ToString();
-                string post2 = string.Format("clientSeed=" + tmpClient + "&__RequestVerificationToken=" + s);
-                getHeaders2.ContentType = "application/x-www-form-urlencoded";
-                getHeaders2.ContentLength = post2.Length;
-                using (var writer = new StreamWriter(getHeaders2.GetRequestStream()))
+                HttpWebResponse Response = (HttpWebResponse)getHeaders.GetResponse();
+                string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                PRCResetSeed tmp = json.JsonDeserialize<PRCResetSeed>(s1);
+                
+                if (tmp.Success)
                 {
-                    string writestring = post2 as string;
-                    writer.Write(writestring);
+                    Thread.Sleep(11000);
+                    sqlite_helper.InsertSeed(tmp.PreviousServerHash, tmp.PreviousServerSeed);
+                    serverhash = tmp.CurrentServerHash;
+
+
+                    HttpWebRequest getHeaders2 = HttpWebRequest.Create("https://betking.io/account/SaveClientSeed?gameType=0") as HttpWebRequest;
+                    if (Prox != null)
+                        getHeaders2.Proxy = Prox;
+                    getHeaders2.CookieContainer = Cookies;
+
+                    getHeaders2.Method = "POST";
+                    string tmpClient = r.Next(0, int.MaxValue).ToString();
+                    string post2 = string.Format("clientSeed="+tmpClient+"&__RequestVerificationToken=" + s);
+                    getHeaders2.ContentType = "application/x-www-form-urlencoded";
+                    getHeaders2.ContentLength = post2.Length;
+                    using (var writer = new StreamWriter(getHeaders2.GetRequestStream()))
+                    {
+                        string writestring = post2 as string;
+                        writer.Write(writestring);
+                    }
+                    try
+                    {
+
+                        Response = (HttpWebResponse)getHeaders2.GetResponse();
+                        s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                        tmp = json.JsonDeserialize<PRCResetSeed>(s1);
+                        if (tmp.Success)
+                        {
+                            //sqlite_helper.InsertSeed(tmp.PreviousServerHash, tmp.PreviousServerSeed);
+                            
+                            client = tmpClient;
+                        }
+                        else
+                        {
+                            Parent.updateStatus("Failed to reset seed, too soon.");
+                        }
+
+                    }
+                    catch
+                    {
+
+                    }
+                    
+                    
                 }
+                else
+                {
+                    Parent.updateStatus("Failed to reset seed, too soon.");
+                }
+
             }
-            else
+            catch
             {
-                Parent.updateStatus("Failed to reset seed, too soon.");
+
             }
         }
 
-        public override void Donate(double Amount)
+        public override void Donate(decimal Amount)
         {
             SendTip("357", Amount);
         }
 
-        public override void SendTip(string User, double amount)
+        public override void SendTip(string User, decimal amount)
         {
             
             int uid = -1;
@@ -209,14 +221,14 @@ namespace DiceBot
 
         public override bool ReadyToBet()
         {
-            double millis = (DateTime.Now - LastBet).TotalMilliseconds;
-            if (amount >= 0.001 )//&& millis>250)
+            decimal millis = (decimal)(DateTime.Now - LastBet).TotalMilliseconds;
+            if (amount >= 0.001m )//&& millis>250)
                 return true;
-            else if (LastBetAmount >= 0.0001 && millis > 210)
+            else if (LastBetAmount >= 0.0001m && millis > 210m)
                 return true;
-            else if (LastBetAmount >= 0.00001 && millis > 510)
+            else if (LastBetAmount >= 0.00001m && millis > 510m)
                 return true;
-            else if (LastBetAmount >= 0.000001 && millis > 810)
+            else if (LastBetAmount >= 0.000001m && millis > 810m)
                 return true;
             else if (millis > 1010)
                 return true;
@@ -240,7 +252,7 @@ namespace DiceBot
             dicehub.Invoke("Chat", Message, 1);
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             System.Threading.Thread.Sleep(1200);
             dicehub.Invoke("Withdraw", Address, Amount, "");
@@ -350,9 +362,6 @@ namespace DiceBot
                 dicehub.Invoke("joinChatRoom", 1);
                 dicehub.On<string, string, string, int, int, bool>("chat", ReceivedChat);
                 dicehub.On<string, string, string, int, bool>("receivePrivateMesssage", ReceivedChat);
-                dicehub.On<PRCMYstats>("diceBetResult", DiceBetResult);
-                dicehub.On<PRCResetSeed>("generateServerSeedResult", GenerateServerSeedResult);
-                dicehub.On<PRCResetSeed>("saveClientSeedResult", SaveClientSeedResult);
 
                 getHeaders = HttpWebRequest.Create("https://betking.io/account/GetUserAccount") as HttpWebRequest;
                 if (Prox != null)
@@ -361,9 +370,9 @@ namespace DiceBot
                 Response = (HttpWebResponse)getHeaders.GetResponse();
                 s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
-                balance = (double)tmp.AvailableBalance;
-                profit = (double)tmp.Profit;
-                wagered = (double)tmp.Wagered;
+                balance = (decimal)tmp.AvailableBalance;
+                profit = (decimal)tmp.Profit;
+                wagered = (decimal)tmp.Wagered;
                 bets = (int)tmp.NumBets;
                 wins = (int)tmp.Wins;
                 losses = (int)tmp.Losses;
@@ -411,7 +420,7 @@ namespace DiceBot
             }
             finishedlogin(false);
         }
-
+        
         void GetDeposit()
         {
             System.Threading.Thread.Sleep(10000);
@@ -512,10 +521,7 @@ namespace DiceBot
                 }
 
                 dicehub.On<string, string, string, string, string, string>("receiveChatMessage", GotChatMessage);
-                dicehub.On<PRCMYstats>("diceBetResult", DiceBetResult);
-                dicehub.On<PRCResetSeed>("generateServerSeedResult", GenerateServerSeedResult);
-                dicehub.On<PRCResetSeed>("saveClientSeedResult", SaveClientSeedResult);
-
+                
                 getHeaders = HttpWebRequest.Create("https://betking.io/account/GetUserAccount") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
@@ -523,9 +529,9 @@ namespace DiceBot
                 //Response = (HttpWebResponse)getHeaders.GetResponse();
                 //s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
                 //PRCUser tmp = json.JsonDeserialize<PRCUser>(s1);
-                balance = 0;// (double)tmp.AvailableBalance;
-                profit = 0;//(double)tmp.Profit;
-                wagered = 0;//(double) tmp.Wagered;
+                balance = 0;// (decimal)tmp.AvailableBalance;
+                profit = 0;//(decimal)tmp.Profit;
+                wagered = 0;//(decimal) tmp.Wagered;
                 bets = 0;//(int)tmp.NumBets;
                 wins = 0;//(int)tmp.Wins;
                 losses = 0;//(int)tmp.Losses;
@@ -571,7 +577,7 @@ namespace DiceBot
             }
         }
         int UserID = 0;
-        public virtual double GetLucky(string server, string client, int nonce)
+        public virtual decimal GetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -604,13 +610,13 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
             }
             return 0;
         }
-        public static double sGetLucky(string server, string client, int nonce)
+        public static decimal sGetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -643,7 +649,7 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
             }
@@ -694,7 +700,7 @@ namespace DiceBot
 
     public class PRCResetSeed
     {
-        public bool Result { get; set; }
+        public bool Success { get; set; }
         public string CurrentServerHash { get; set; }
         public string CurrentClientSeed { get; set; }
         public int CurrentNonce { get; set; }
@@ -702,11 +708,9 @@ namespace DiceBot
         public string PreviousServerSeed { get; set; }
         public string PreviousClientSeed { get; set; }
         public int PreviousNonce { get; set; }
-        public string ClientSeed { get; internal set; }
     }
     public class PRCMYstats
     {
-        public bool Success { get; set; }
         public Bet DiceBet { get; set; }
         public decimal AvailableBalance { get; set; }
         public int NumBets { get; set; }

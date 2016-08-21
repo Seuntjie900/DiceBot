@@ -30,7 +30,7 @@ namespace DiceBot
             AutoWithdraw = false;
             ChangeSeed = false;
             edge = 0.8m;
-            maxRoll = 99.999;
+            maxRoll = 99.999m;
             this.Currencies = new string[] { "BTC", "Doge", "ETH", "DASH", "GRC", "GAME", "PPC", "PLAY", "LTC" };
             this.Currency = "btc";
             register = false;
@@ -84,11 +84,11 @@ namespace DiceBot
         {
             PlaceBetObj tmp9 = _High as PlaceBetObj;
             bool High = tmp9.High;
-            double amount = tmp9.Amount;
-            double chance = tmp9.Chance;
+            decimal amount = tmp9.Amount;
+            decimal chance = tmp9.Chance;
             string Clients = ClientSeedGen.Next(0, int.MaxValue).ToString();
             decimal payout = decimal.Parse(((100m - edge) / (decimal)chance).ToString("0.0000"));
-            cgPlaceBet tmpPlaceBet = new cgPlaceBet() { Bet=amount, ClientSeed=Clients, UnderOver=High, Payout=(double)payout };
+            cgPlaceBet tmpPlaceBet = new cgPlaceBet() { Bet=amount, ClientSeed=Clients, UnderOver=High, Payout=(decimal)payout };
 
             string post = json.JsonSerializer<cgPlaceBet>(tmpPlaceBet);
             HttpContent cont = new StringContent(post);
@@ -143,7 +143,7 @@ namespace DiceBot
             { }
         }
 
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             new Thread(new ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
         }
@@ -158,7 +158,7 @@ namespace DiceBot
             
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             return false;
         }
@@ -227,7 +227,7 @@ namespace DiceBot
             
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             SHA512 betgenerator = SHA512.Create();
 
@@ -253,17 +253,17 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
-                if (lucky < 1000000)
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000m)
                 {
                     string tmps = lucky.ToString().Substring(lucky.ToString().Length - 5);
-                    return double.Parse(tmps) / 1000.0;
+                    return decimal.Parse(tmps) / 1000.0m;
                 }
             }
             return 0;
 
         }
-        public static double sGetLucky(string server, string client, int nonce)
+        public static decimal sGetLucky(string server, string client, int nonce)
         {
             SHA512 betgenerator = SHA512.Create();
 
@@ -289,12 +289,12 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                 {
                     //return lucky / 10000;
                     string tmps = lucky.ToString().Substring(lucky.ToString().Length-5);
-                    return double.Parse(tmps) / 1000.0;
+                    return decimal.Parse(tmps) / 1000.0m;
                 }
             }
             return 0;
@@ -305,22 +305,22 @@ namespace DiceBot
 
     public class cgBalance
     {
-        public double Balance { get; set; }
+        public decimal Balance { get; set; }
     }
     public class cgPlaceBet
     {
-        public double Bet { get; set; }
-        public double Payout { get; set; }
+        public decimal Bet { get; set; }
+        public decimal Payout { get; set; }
         public bool UnderOver { get; set; }
         public string ClientSeed { get; set; }
     }
     public class cgGetBet
     {
         public long BetId { get; set; }
-        public double Roll { get; set; }
+        public decimal Roll { get; set; }
         public string ClientSeed { get; set; }
         public string Target { get; set; }
-        public double Profit { get; set; }
+        public decimal Profit { get; set; }
         public string NextServerSeedHash { get; set; }
         public string ServerSeed { get; set; }
         public string Message { get; set; }
@@ -328,11 +328,11 @@ namespace DiceBot
     public class cgUser
     {
         public string Nickname { get; set; }
-        public double Balance { get; set; }
+        public decimal Balance { get; set; }
         public string Coin { get; set; }
         public int TotalBets { get; set; }
-        public double Profit { get; set; }
-        public double Wagered { get; set; }
+        public decimal Profit { get; set; }
+        public decimal Wagered { get; set; }
     }
     public class cgNextSeed
     {

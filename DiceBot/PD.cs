@@ -23,7 +23,7 @@ namespace DiceBot
         HttpClientHandler ClientHandlr;
         public PD(cDiceBot Parent)
         {
-            maxRoll = 99.99;
+            maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = true;
             ChangeSeed = true;
@@ -50,7 +50,7 @@ namespace DiceBot
                     {
                         string sEmitResponse2 = Client.GetStringAsync("users/1?api_key=" + accesstoken).Result;
                         pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
-                        balance = tmpu.user.balance / 100000000.0; //i assume
+                        balance = tmpu.user.balance / 100000000.0m; //i assume
                         bets = tmpu.user.bets;
                         Parent.updateBalance((decimal)(balance));
                         Parent.updateBets(tmpu.user.bets);
@@ -179,7 +179,7 @@ namespace DiceBot
                     uid = tmpu.user.userid;
                     balance = tmpu.user.balance; //i assume
                     bets = tmpu.user.bets;
-                    Parent.updateBalance((decimal)(balance / 100000000.0));
+                    Parent.updateBalance((decimal)(balance / 100000000.0m));
                     Parent.updateBets(tmpu.user.bets);
                     Parent.updateLosses(tmpu.user.losses);
                     Parent.updateProfit(tmpu.user.profit / 100000000m);
@@ -231,16 +231,16 @@ namespace DiceBot
             try
             {
                 PlaceBetObj tmp5 = bet as PlaceBetObj;
-                double amount = tmp5.Amount;
-                double chance = tmp5.Chance;
+                decimal amount = tmp5.Amount;
+                decimal chance = tmp5.Chance;
                 bool High = tmp5.High;
                 if ((DateTime.Now - Lastbet).TotalMilliseconds<500)
                 {
                     Thread.Sleep((int)(500.0 - (DateTime.Now - Lastbet).TotalMilliseconds));
                 }
-                double tmpchance = High ? 99.99 - chance : chance;
+                decimal tmpchance = High ? 99.99m - chance : chance;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000m).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("target", tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("condition", High ? ">" : "<"));
                 
@@ -255,12 +255,12 @@ namespace DiceBot
                     tmp.bet.client = tmp.user.client;
                     tmp.bet.serverhash = tmp.user.server;
                     lastupdate = DateTime.Now;
-                    balance = tmp.user.balance / 100000000.0; //i assume
+                    balance = tmp.user.balance / 100000000.0m; //i assume
                     bets = tmp.user.bets;
                     wins = tmp.user.wins;
                     losses = tmp.user.losses;
-                    wagered = (double)(tmp.user.wagered / 100000000m);
-                    profit = (double)(tmp.user.profit / 100000000m);
+                    wagered = (decimal)(tmp.user.wagered / 100000000m);
+                    profit = (decimal)(tmp.user.profit / 100000000m);
                     FinishedBet(tmp.bet.toBet());
                     retrycount = 0;
                 }
@@ -291,7 +291,7 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             this.High = High;
             new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance));
@@ -350,7 +350,7 @@ namespace DiceBot
             return true;
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             try
             {
@@ -371,7 +371,7 @@ namespace DiceBot
             }
         }
 
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -404,13 +404,13 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
             }
             return 0;
         }
-        new public static double sGetLucky(string server, string client, int nonce)
+        new public static decimal sGetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 
@@ -443,7 +443,7 @@ namespace DiceBot
 
                 string s = hex.ToString().Substring(i, charstouse);
 
-                double lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                 {
                     lucky %= 10000;
@@ -495,18 +495,18 @@ namespace DiceBot
             }
         }
 
-        public override void Donate(double Amount)
+        public override void Donate(decimal Amount)
         {
             SendTip("seuntjie", Amount);
         }
 
-        public override void SendTip(string User, double amount)
+        public override void SendTip(string User, decimal amount)
         {
             try
             {
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username", User));
-                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000.0m).ToString("", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("tip?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
@@ -639,13 +639,13 @@ namespace DiceBot
     {
         public pdbet bet { get; set; }
         public string id { get; set; }
-        public double profit { get; set; }
-        public double amount { get; set; }
-        public double target { get; set; }
+        public decimal profit { get; set; }
+        public decimal amount { get; set; }
+        public decimal target { get; set; }
         public bool win { get; set; }
         public string condition { get; set; }
         public string timestamp { get; set; }
-        public double roll { get; set; }
+        public decimal roll { get; set; }
         public long nonce { get; set; }
         public string client { get; set; }
         public string serverhash { get; set; }
@@ -672,7 +672,7 @@ namespace DiceBot
     }
     public class pduser
     {
-        public double balance { get; set; }
+        public decimal balance { get; set; }
         public int bets { get; set; }
         public int wins { get; set; }
         public int losses { get; set; }

@@ -19,7 +19,7 @@ namespace DiceBot
         WebSocket Client;// = new WebSocket("");
         public bitdice(cDiceBot Parent)
         {
-            maxRoll = 99.9999;
+            maxRoll = 99.9999m;
             AutoInvest = true;
             AutoWithdraw = true;
             AutoInvest = true;
@@ -108,7 +108,7 @@ namespace DiceBot
 
         int id = 1;
         //BitDiceClient Client = new BitDiceClient();
-        protected override void internalPlaceBet(bool High, double amount, double chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             string s = string.Format("{{\"jsonrpc\":\"2.0\",\"method\":\"bets:make\",\"params\":{{\"amount\":\"{0:0.00000000}\",\"chance\":\"{1:0.000000}\",\"type\":\"{2}\"}},\"id\":{3}}}", amount, chance, High?"high":"low",id++);
             if (Client.State == WebSocketState.Open)
@@ -131,7 +131,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        protected override bool internalWithdraw(double Amount, string Address)
+        protected override bool internalWithdraw(decimal Amount, string Address)
         {
             string s = string.Format("{{\"jsonrpc\":\"2.0\",\"method\":\"user:cashout\",\"params\":{{\"amount\":\"{0:0.00000000}\",\"address\":\"{1}\"}},\"id\":{2}}}", Amount, Address, id++);
             if (Client.State == WebSocketState.Open)
@@ -504,7 +504,7 @@ namespace DiceBot
             }
         }
 
-        public override bool Invest(double Amount)
+        public override bool Invest(decimal Amount)
         {
             string s = "{\"jsonrpc\":\"2.0\",\"method\":\"invest:invest\",\"params\":{\"amount\":\""+Amount.ToString("0.00000000",System.Globalization.NumberFormatInfo.InvariantInfo) +"\"},\"id\":"+(id++)+"}";
             if (Client.State == WebSocketState.Open)
@@ -513,11 +513,11 @@ namespace DiceBot
             }
             return true;
         }
-        public override void Donate(double Amount)
+        public override void Donate(decimal Amount)
         {
             SendTip("1426", Amount);
         }
-        public override void SendTip(string User, double amount)
+        public override void SendTip(string User, decimal amount)
         {
             SendChatMessage(string.Format("/tip {0} {1:0.00000000}", User, amount));
         }
@@ -652,7 +652,7 @@ namespace DiceBot
             base.SetProxy(host, port, username, password);
             //Client.prox = Prox;
         }
-        public override double GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             return base.GetLucky(server, client, nonce);
         }
@@ -700,10 +700,10 @@ namespace DiceBot
     }
     public class bitstatsbuser
     {
-        public double balance { get; set; }
+        public decimal balance { get; set; }
         public int total_bets { get; set; }
-        public double wagered { get; set; }
-        public double profit { get; set; }
+        public decimal wagered { get; set; }
+        public decimal profit { get; set; }
     }
     public class bitstatsbetsocket : socketbase
     {
@@ -719,8 +719,8 @@ namespace DiceBot
         public string lucky { get; set; }
         public bool result { get; set; }
         public string win { get; set; }
-        public double target { get; set; }
-        public double mutliplier { get; set; }
+        public decimal target { get; set; }
+        public decimal mutliplier { get; set; }
         public bituser user { get; set; }
     }
     public class bituser
