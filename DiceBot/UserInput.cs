@@ -52,7 +52,42 @@ namespace DiceBot
 
             return ShowDialog();
         }
-
+        
+         DialogResult ShowDialogx(string prompt, int type, string userinputext, string btncanceltext, string btnoktext)
+        {
+            
+            lblPrompt.Text = prompt;
+            if (mode == 0)
+            {
+                txtTextInput.Visible = false;
+                nudNumInput.Visible = false;
+                btnCancel.Text = "No";
+                btnOk.Text = "Yes";
+            }
+            if (mode == 1)
+            {
+                nudNumInput.Visible = true;
+                txtTextInput.Visible = false;
+                nudNumInput.DecimalPlaces = 0;
+                nudNumInput.Increment = 1;
+            }
+            if (mode == 2)
+            {
+                nudNumInput.Visible = true;
+                txtTextInput.Visible = false;
+                nudNumInput.DecimalPlaces = 8;
+                nudNumInput.Increment = 0.0001m;
+            }
+            if (mode == 2)
+            {
+                nudNumInput.Visible = false;
+                txtTextInput.Visible = true;
+            }
+            UserInputForm.Text = userinputext;
+            btnCancel.Text = btncanceltext;
+            btnOk.Text = btnoktext;
+            return ShowDialog();
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
