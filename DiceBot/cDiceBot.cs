@@ -551,16 +551,24 @@ namespace DiceBot
         {
             return load(File, false);
         }
-        delegate object dGetInput(string prompt, int type);
+        delegate object dGetInput(string prompt, string userinputext, string btncanceltext, string btnoktext, int type);
         /*
             0= bool
             1= int
             2= decimal
             3= string
         */
-        bool WaitForInput = false;
-        object GetInputForLua(string prompt, int type)
+        bool WaitForInput = false;                                                    
+        object GetInputForLua(string prompt,string userinputext,string btncanceltext,string btnoktext,int type)
         {
+            using (StreamWriter writetext = new StreamWriter("TextSettings.txt"))
+            {
+                writetext.WriteLine(userinputext);
+                writetext.WriteLine(btncanceltext);
+                writetext.WriteLine(btnoktext);
+                writetext.WriteLine();
+                writetext.Flush();
+            }
             WaitForInput = true;
             DumpLog("getting user input for lua script", 7);
             UserInput tmp = new UserInput();
