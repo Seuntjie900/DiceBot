@@ -576,14 +576,14 @@ namespace DiceBot
             2= decimal
             3= string
         */        
-        object GetInputForLua0(string prompt,int type,string userinputext,string btncanceltext,string btnoktext)
+        public object GetInputForLua0(string prompt, int type, string userinputext, string btncanceltext, string btnoktext)
         {
             WaitForInput = true;
             DumpLog("getting advanced user input for lua script", 7);
-            UserInput tmp0 = new UserInput();
-            DialogResult tmpRes0 = tmp0.ShowDialogx(prompt,type,userinputext,btncanceltext,btnoktext);
+            UserInput tmp = new UserInput();
+            DialogResult tmpRes = tmp.ShowDialog(prompt, type, userinputext, btncanceltext, btnoktext);
             WaitForInput = false;
-            return tmp0.Value;
+            return tmp.Value;
         }
         
         delegate void dSetValue(string Name, int Value);
