@@ -19,6 +19,7 @@ namespace DiceBot
         }
         public object Value { get; set; }
         int mode = 0;
+        bool SetDefaultText = true;
         public DialogResult ShowDialog(string prompt, int mode)
         {
             this.mode = mode;
@@ -27,8 +28,11 @@ namespace DiceBot
             {
                 txtTextInput.Visible = false;
                 nudNumInput.Visible = false;
-                btnCancel.Text = "No";
-                btnOk.Text = "Yes";
+                if (SetDefaultText)
+                {
+                    btnCancel.Text = "No";
+                    btnOk.Text = "Yes";
+                }
             }
             if (mode == 1)
             {
@@ -54,41 +58,11 @@ namespace DiceBot
         }
         public DialogResult ShowDialog(string prompt, int mode, string userinputext, string btncanceltext, string btnoktext)
         {
-
-           
             lblPrompt.Text = prompt;
             this.Text = userinputext;
             btnCancel.Text = btncanceltext;
-            btnOk.Text = btnoktext;
-            if (mode == 0)
-            {
-                txtTextInput.Visible = false;
-                nudNumInput.Visible = false;
-                
-            }
-            if (mode == 1)
-            {
-                nudNumInput.Visible = true;
-                txtTextInput.Visible = false;
-                nudNumInput.DecimalPlaces = 0;
-                nudNumInput.Increment = 1;
-                
-            }
-            if (mode == 2)
-            {
-                nudNumInput.Visible = true;
-                txtTextInput.Visible = false;
-                nudNumInput.DecimalPlaces = 8;
-                nudNumInput.Increment = 0.0001m;
-                
-            }
-            if (mode == 2)
-            {
-                nudNumInput.Visible = false;
-                txtTextInput.Visible = true;
-            }
-                        
-            return ShowDialog();
+            btnOk.Text = btnoktext;                        
+            return ShowDialog(prompt, mode);
         }
         private void button2_Click(object sender, EventArgs e)
         {
