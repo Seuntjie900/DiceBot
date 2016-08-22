@@ -1,4 +1,4 @@
-﻿namespace DiceBot
+namespace DiceBot
 {
     partial class UserInput
     {
@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.UserInputForm = new System.Windows.Forms.Form();
             this.lblPrompt = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.nudNumInput = new System.Windows.Forms.NumericUpDown();
@@ -101,7 +100,7 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblPrompt);
             this.Controls.Add(this.txtTextInput);
-            this.Name = "UserInputForm";
+            this.Name = "UserInput";
             this.Text = "UserInput";
             ((System.ComponentModel.ISupportInitialize)(this.nudNumInput)).EndInit();
             this.ResumeLayout(false);
@@ -110,7 +109,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Form UserInputForm;
         private System.Windows.Forms.Label lblPrompt;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.NumericUpDown nudNumInput;
