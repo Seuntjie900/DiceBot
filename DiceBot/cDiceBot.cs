@@ -538,7 +538,7 @@ namespace DiceBot
             Lua.RegisterFunction("getvalue", this, new dGetValue(LuaGetValue).Method);
             Lua.RegisterFunction("loadstrategy", this, new dLoadStrat(LuaLoadStrat).Method);
             Lua.RegisterFunction("read", this, new dGetInput(GetInputForLua).Method);
-            
+            Lua.RegisterFunction("advread", this, new dGetInput0(GetInputForLua0).Method);
             DumpLog("constructor done", 8);
         }
         void luaStop()
@@ -568,7 +568,22 @@ namespace DiceBot
             WaitForInput = false;
             return tmp.Value;
         }
-
+        delegate object dGetInput0(string prompt,int type,string userinputext,string btncanceltext,string btnoktext);
+        /*
+            0= bool
+            1= int
+            2= decimal
+            3= string
+        */        
+        public object GetInputForLua0(string prompt, int type, string userinputext, string btncanceltext, string btnoktext)
+        {
+            WaitForInput = true;
+            DumpLog("getting advanced user input for lua script", 7);
+            UserInput tmp = new UserInput();
+            DialogResult tmpRes = tmp.ShowDialog(prompt, type, userinputext, btncanceltext, btnoktext);
+            WaitForInput = false;
+            return tmp.Value;
+        }
         delegate void dSetValue(string Name, int Value);
         void LuaSetValue(string Name, int Value)
         {
