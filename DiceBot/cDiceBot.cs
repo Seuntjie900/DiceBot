@@ -32,7 +32,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.2.0";
+        private const string vers = "3.2.1";
 
 
         Control[] ControlsToDisable;
@@ -1366,7 +1366,8 @@ namespace DiceBot
             }
             if (testInputs())
             {
-                Reset();
+                if (!programmerToolStripMenuItem.Checked)
+                    Reset();
                 reset = false;
                 stop = false;
                 if (rdbLabEnable.Checked)
@@ -3907,19 +3908,53 @@ namespace DiceBot
             tempsim = new Simulation(dPreviousBalance.ToString("0.00000000"), (Wins+Losses).ToString(), sserver, client);
             RunningSimulation = true;
             stop = false;
-            Lastbet = MinBet;
+            if (programmerToolStripMenuItem.Checked)
+                Lastbet = Lastbet;
+            else
+                Lastbet = MinBet;
             Start(false);
             
         }
 
         void Simbet()
-        {
+         {
             dtLastBet = DateTime.Now;
             EnableTimer(tmBet, false);
             Bet tmp = new Bet();
-            if (Wins + Losses <= numSimBets)
+            if (Wins + Losses < numSimBets)
             {
                 string betstring = (Wins + Losses).ToString() + ",";
+                if (!CurrentSite.NonceBased)
+                {
+                    string chars = "0123456789abcdef";
+                    if (!(CurrentSite is dice999))
+                    {
+                        chars += "ghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
+                    }
+                    server = "";
+
+                    for (int i = 0; i < 64; i++)
+                    {
+                        server += (chars[rand.Next(0, chars.Length)]);
+                    }
+                    client = "";
+                    if (CurrentSite is dice999)
+                    {
+                        client = rand.Next(0, int.MaxValue).ToString();
+                    }
+                    else
+                        for (int i = 0; i < 24; i++)
+                        {
+                            client += rand.Next(0, 10).ToString();
+                        }
+
+                    string sserver = "";
+                    foreach (byte b in server)
+                    {
+                        sserver += Convert.ToChar(b);
+                    }
+                    this.server = sserver;
+                }
                 decimal number = CurrentSite.GetLucky(server, client, Wins + Losses);
                 tmp.Roll = (decimal)number;
                 tmp.Chance = (decimal)Chance;

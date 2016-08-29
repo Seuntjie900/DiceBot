@@ -23,6 +23,14 @@ namespace DiceBot
         public decimal maxRoll { get; set; }
         string currency = "Btc";
         public string SiteURL { get; set; }
+
+        private bool _NonceBased=true;
+        public bool NonceBased
+        {
+            get { return _NonceBased; }
+            set { _NonceBased = value; }
+        }
+        
         public string Currency
         {
             get { return currency; }

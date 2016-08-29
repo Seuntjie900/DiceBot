@@ -31,7 +31,7 @@ namespace DiceBot
             Name = "RollinIO";
             
             SiteURL = "https://rollin.io/ref/8c4";
-            
+            NonceBased = false;
             
         }
         DateTime lastbet = DateTime.Now;

@@ -24,6 +24,7 @@ namespace DiceBot
         public static string[] sCurrencies = new string[] { "BTC", "Doge", "ETH", "DASH", "GRC", "GAME", "PPC", "PLAY", "LTC" };
         public cryptogames(cDiceBot Parent)
         {
+            NonceBased = false;
             this.Parent = Parent;
             AutoInvest = false;
             AutoLogin = true;
@@ -256,13 +257,14 @@ namespace DiceBot
                 decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000m)
                 {
-                    string tmps = lucky.ToString().Substring(lucky.ToString().Length - 5);
+                    string tmps = lucky.ToString("000000").Substring(lucky.ToString("000000").Length - 5);
                     return decimal.Parse(tmps) / 1000.0m;
                 }
             }
             return 0;
 
         }
+        
         public static decimal sGetLucky(string server, string client, int nonce)
         {
             SHA512 betgenerator = SHA512.Create();
@@ -293,7 +295,7 @@ namespace DiceBot
                 if (lucky < 1000000)
                 {
                     //return lucky / 10000;
-                    string tmps = lucky.ToString().Substring(lucky.ToString().Length-5);
+                    string tmps = lucky.ToString("000000").Substring(lucky.ToString("000000").Length - 5);
                     return decimal.Parse(tmps) / 1000.0m;
                 }
             }

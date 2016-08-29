@@ -25,6 +25,7 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
         public dice999(cDiceBot Parent, bool doge999)
         {
+            NonceBased = true;
             this.doge999 = doge999;
             maxRoll = 99.9999m;
             this.Parent = Parent;

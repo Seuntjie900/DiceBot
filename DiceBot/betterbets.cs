@@ -23,6 +23,7 @@ namespace DiceBot
         public static string[] cCurrencies = new string[2] { "btc", "rbs" };
         public BB(cDiceBot Parent)
         {
+            NonceBased = false;
             Currency = "btc";
             register = false;
             maxRoll = 99.99m;

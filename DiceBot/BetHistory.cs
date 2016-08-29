@@ -171,14 +171,21 @@ namespace DiceBot
 
         void CalcLastPage()
         {
-            lastPage = (int)Math.Ceiling((decimal)Data.Length / (decimal)NumPerPage);
-            cmbJumpTo.Items.Clear();
-            for (int i =0; i< lastPage; i++)
+            if (Data != null)
             {
-                cmbJumpTo.Items.Add(i + 1);
+                lastPage = (int)Math.Ceiling((decimal)Data.Length / (decimal)NumPerPage);
+                cmbJumpTo.Items.Clear();
+                for (int i = 0; i < lastPage; i++)
+                {
+                    cmbJumpTo.Items.Add(i + 1);
+                }
+                if (cmbJumpTo.Items.Count > 0)
+                    cmbJumpTo.SelectedIndex = 0;
             }
-            if (cmbJumpTo.Items.Count>0)
-            cmbJumpTo.SelectedIndex = 0;
+            else
+            {
+                MessageBox.Show("Could not read from DB. Please verify the file dicebot.db exists.");
+            }
         }
 
         private void cmbViewPerPage_SelectedIndexChanged(object sender, EventArgs e)

@@ -19,7 +19,7 @@ namespace DiceBot
         public FortuneJack(cDiceBot Parent)
         {
             this.Parent = Parent;
-            
+            NonceBased = false;
             maxRoll = 99.98m;
             AutoInvest = false;
             AutoWithdraw = true;
