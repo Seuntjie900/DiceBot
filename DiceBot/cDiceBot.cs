@@ -539,7 +539,16 @@ namespace DiceBot
             Lua.RegisterFunction("loadstrategy", this, new dLoadStrat(LuaLoadStrat).Method);
             Lua.RegisterFunction("read", this, new dGetInput(GetInputForLua).Method);
             Lua.RegisterFunction("readadv", this, new dGetInputWithParams(GetInputWithParams).Method);
+            Lua.RegisterFunction("alarm", this, new dAlarm(Alarm).Method);
             DumpLog("constructor done", 8);
+        }
+        delegate void dAlarm(string fileloc);
+        void Alarm(string fileloc)
+        {
+            System.Media.SoundPlayer player = new System.Media.SoundPlayer();
+
+            player.SoundLocation = fileloc;
+            player.Play();
         }
         void luaStop()
         {
