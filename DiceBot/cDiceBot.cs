@@ -539,7 +539,51 @@ namespace DiceBot
             Lua.RegisterFunction("loadstrategy", this, new dLoadStrat(LuaLoadStrat).Method);
             Lua.RegisterFunction("read", this, new dGetInput(GetInputForLua).Method);
             Lua.RegisterFunction("readadv", this, new dGetInputWithParams(GetInputWithParams).Method);
+            Lua.RegisterFunction("alarm", this, new dAlarm(Alarm).Method);
             DumpLog("constructor done", 8);
+        }
+       
+        delegate void dAlarm(int mode);
+        int askonce = 1;    
+        void Alarm(int mode)
+        {
+            OpenFileDialog file = new OpenFileDialog();
+            if (mode == 0)
+            {
+                WriteConsole("Playing Alarm Sound");
+                playalarm();
+            }
+            else
+            {
+                if (askonce == 1)
+                {
+                    
+                    file.Filter = "MP3  |*.mp3| Wav|*.wav";
+                    file.RestoreDirectory = true;
+                    file.CheckFileExists = true;
+                    file.Title = "Select your file.";
+                    file.ShowDialog();
+                    
+                    WriteConsole("Playing Custom Sound");
+
+                    System.Media.SoundPlayer player = new System.Media.SoundPlayer();
+                    player.SoundLocation = file.FileName;
+                    player.Play();
+                    askonce = 0;
+                }
+                if (askonce == 0)
+                {
+                    System.Media.SoundPlayer player = new System.Media.SoundPlayer();
+                    player.SoundLocation = file.FileName;
+                    player.Play();
+                }
+
+                else
+                {
+                    WriteConsole("Error Cant play alarm.");
+                }
+                                               
+            }
         }
         void luaStop()
         {
