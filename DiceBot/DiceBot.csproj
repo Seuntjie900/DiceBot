@@ -179,6 +179,13 @@
     <Compile Include="BetHistory.Designer.cs">
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="SeedInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SeedInput.Designer.cs">
+      <DependentUpon>SeedInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="wealthydice.cs" />
     <Compile Include="betterbets.cs" />
     <Compile Include="bitdice.cs" />
     <Compile Include="Bitlser.cs" />
@@ -356,6 +363,9 @@
     </Compile>
     <EmbeddedResource Include="Proxy.resx">
       <DependentUpon>Proxy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SeedInput.resx">
+      <DependentUpon>SeedInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>

@@ -29,7 +29,7 @@ namespace DiceBot
             maxRoll = 99.999m;
             AutoInvest = false;
             AutoWithdraw = false;
-            ChangeSeed = false;
+            ChangeSeed = true;
             AutoLogin = true;
             BetURL = "https://api.primedice.com/bets/";
             /*Thread t = new Thread(GetBalanceThread);
@@ -73,6 +73,9 @@ namespace DiceBot
                                         case "doge": balance = bsstatsbase._return.doge_balance;
                                             profit = bsstatsbase._return.doge_profit;
                                             wagered = bsstatsbase._return.doge_wagered; break;
+                                        case "eth": balance = bsstatsbase._return.eth_balance;
+                                            profit = bsstatsbase._return.eth_profit;
+                                            wagered = bsstatsbase._return.eth_wagered; break;
                                     }
                                     bets = int.Parse(bsstatsbase._return.bets);
                                     wins = int.Parse(bsstatsbase._return.wins);
@@ -129,6 +132,9 @@ namespace DiceBot
                                     case "doge": balance = bsstatsbase._return.doge_balance;
                                         profit = bsstatsbase._return.doge_profit;
                                         wagered = bsstatsbase._return.doge_wagered; break;
+                                    case "eth": balance = bsstatsbase._return.eth_balance;
+                                        profit = bsstatsbase._return.eth_profit;
+                                        wagered = bsstatsbase._return.eth_wagered; break;
                                 }
                                 bets = int.Parse(bsstatsbase._return.bets);
                                 wins = int.Parse(bsstatsbase._return.wins);
@@ -230,19 +236,29 @@ devise:btc*/
         }
 
         Random R = new Random();
+        DateTime LastReset = new DateTime();
         public override void ResetSeed()
         {
             //Just wanted to test if this works. It doesn't. Will work with the bitsler team to
             //expand functionality in the future.
-            /*try
+            try
             {
-                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
-                pairs.Add(new KeyValuePair<string, string>("seed_client", R.Next(0, int.MaxValue).ToString()));
-                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("change-seeds", Content).Result.Content.ReadAsStringAsync().Result;
-                bsResetSeedBase bsbase = json.JsonDeserialize<bsResetSeedBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
-                sqlite_helper.InsertSeed(bsbase._return.last_seeds_revealed.seed_server, bsbase._return.last_seeds_revealed.seed_server_revealed);
+                if ((DateTime.Now - LastReset).TotalMinutes >= 3)
+                {
+                    List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                    pairs.Add(new KeyValuePair<string, string>("access_token", accesstoken));
+                    pairs.Add(new KeyValuePair<string, string>("username", username));
+                    pairs.Add(new KeyValuePair<string, string>("seed_client", R.Next(0, int.MaxValue).ToString()));
+                    FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                    string sEmitResponse = Client.PostAsync("change-seeds", Content).Result.Content.ReadAsStringAsync().Result;
+                    bsResetSeedBase bsbase = json.JsonDeserialize<bsResetSeedBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
+                    //sqlite_helper.InsertSeed(bsbase._return.last_seeds_revealed.seed_server_hashed, bsbase._return.last_seeds_revealed.seed_server_revealed);
+                    sqlite_helper.InsertSeed(bsbase._return.last_seeds_revealed.seed_server, bsbase._return.last_seeds_revealed.seed_server_revealed);
+                }
+                else
+                {
+                    Parent.updateStatus("Too soon to update seed.");
+                }
             }
             catch (WebException e)
             {
@@ -261,7 +277,7 @@ devise:btc*/
             catch
             {
                 Parent.updateStatus("Too soon to update seed.");
-            }*/
+            }
         }
 
         public override void SetClientSeed(string Seed)
@@ -328,6 +344,9 @@ devise:btc*/
                                             case "doge": balance = bsstatsbase._return.doge_balance;
                                                 profit = bsstatsbase._return.doge_profit;
                                                 wagered = bsstatsbase._return.doge_wagered; break;
+                                            case "eth": balance = bsstatsbase._return.eth_balance;
+                                                profit = bsstatsbase._return.eth_profit;
+                                                wagered = bsstatsbase._return.eth_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase._return.bets);
                                         wins = int.Parse(bsstatsbase._return.wins);
@@ -339,6 +358,7 @@ devise:btc*/
                                         Parent.updateProfit(profit);
                                         Parent.updateWagered(wagered);
                                         Parent.updateWins(wins);
+                                        this.username = Username;
                                     }
                                     else
                                     {
@@ -513,7 +533,9 @@ devise:btc*/
         public decimal doge_balance { get; set; }
         public decimal doge_wagered { get; set; }
         public decimal doge_profit { get; set; }
-        
+        public decimal eth_balance { get; set; }
+        public decimal eth_wagered { get; set; }
+        public decimal eth_profit { get; set; }
         public string wins { get; set; }
         public string losses { get; set; }
     }

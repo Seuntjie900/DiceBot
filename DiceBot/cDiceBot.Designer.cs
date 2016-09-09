@@ -499,6 +499,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.wealthyDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -4436,7 +4437,7 @@
             this.TrayIcon.Text = "DiceBot";
             this.TrayIcon.Visible = true;
             this.TrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_Click);
-            this.TrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MousedecimalClick);            
+            this.TrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MousedecimalClick);
             this.TrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_Click);
             // 
             // tmrCheckInvest
@@ -5916,7 +5917,8 @@
             this.moneroDiceToolStripMenuItem,
             this.fortuneJackToolStripMenuItem,
             this.cryptoGamesToolStripMenuItem,
-            this.bitslerToolStripMenuItem});
+            this.bitslerToolStripMenuItem,
+            this.wealthyDiceToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -6221,6 +6223,14 @@
             // betBindingSource
             // 
             this.betBindingSource.DataSource = typeof(DiceBot.Bet);
+            // 
+            // wealthyDiceToolStripMenuItem
+            // 
+            this.wealthyDiceToolStripMenuItem.Name = "wealthyDiceToolStripMenuItem";
+            this.wealthyDiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.wealthyDiceToolStripMenuItem.Text = "WealthyDice";
+            this.wealthyDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.wealthyDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 
@@ -6889,6 +6899,7 @@
         private System.Windows.Forms.ToolStripMenuItem cryptoGamesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bitslerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dogeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wealthyDiceToolStripMenuItem;
     }
 }
 

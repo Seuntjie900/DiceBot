@@ -426,6 +426,22 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
+            foreach (string s in WD.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                wealthyDiceToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
             foreach (string s in FortuneJack.cCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
@@ -539,6 +555,8 @@ namespace DiceBot
             Lua.RegisterFunction("loadstrategy", this, new dLoadStrat(LuaLoadStrat).Method);
             Lua.RegisterFunction("read", this, new dGetInput(GetInputForLua).Method);
             Lua.RegisterFunction("readadv", this, new dGetInputWithParams(GetInputWithParams).Method);
+            Lua.RegisterFunction("alarm", this, new dPlayAlarm(playalarm).Method);
+            Lua.RegisterFunction("ching", this, new dPlayChing(PlayChing).Method);
             DumpLog("constructor done", 8);
         }
         void luaStop()
@@ -1245,6 +1263,37 @@ namespace DiceBot
             }
         }
 
+        delegate void dPlayChing();
+        void PlayChing()
+        {
+            try
+            {
+                if (ching == "")
+                {
+                    (new SoundPlayer(@"media\withdraw.wav")).Play();
+                }
+                else
+                {
+                    if (ching.Substring(ching.LastIndexOf(".")).ToLower() == "mp3")
+                    {
+                        WindowsMediaPlayer player = new WindowsMediaPlayer();
+                        player.URL = ching;
+                        player.controls.play();
+                    }
+                    else
+                    {
+                        (new SoundPlayer(ching)).Play();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                DumpLog(e.Message, 1);
+                DumpLog(e.StackTrace, 2);
+                MessageBox.Show("Failed to play CHING, pelase make sure file exists");
+            }
+        }
+
         void Withdraw()
         {
             
@@ -1259,23 +1308,7 @@ namespace DiceBot
                     {
                         if (Sound && SoundWithdraw)
                         {
-                            if (ching == "")
-                            {
-                                (new SoundPlayer(@"media\withdraw.wav")).Play();
-                            }
-                            else
-                            {
-                                if (ching.Substring(ching.LastIndexOf(".")).ToLower() == "mp3")
-                                {
-                                    WindowsMediaPlayer player = new WindowsMediaPlayer();
-                                    player.URL = ching;
-                                    player.controls.play();
-                                }
-                                else
-                                {
-                                    (new SoundPlayer(ching)).Play();
-                                }
-                            }
+                            PlayChing();
                         }
                     }
                     catch (Exception e)
@@ -1305,23 +1338,7 @@ namespace DiceBot
                     {
                         if (Sound && SoundWithdraw)
                         {
-                            if (ching == "")
-                            {
-                                (new SoundPlayer(@"media\withdraw.wav")).Play();
-                            }
-                            else
-                            {
-                                if (ching.Substring(ching.LastIndexOf(".")).ToLower() == "mp3")
-                                {
-                                    WindowsMediaPlayer player = new WindowsMediaPlayer();
-                                    player.URL = ching;
-                                    player.controls.play();
-                                }
-                                else
-                                {
-                                    (new SoundPlayer(ching)).Play();
-                                }
-                            }
+                            PlayChing();
                         }
                     }
                     catch (Exception e)
@@ -2498,7 +2515,8 @@ namespace DiceBot
 
             try
             {
-                bool Win = !(((bool)bet.high ? (decimal)bet.Roll < 100m - (decimal)(bet.Chance) : (decimal)bet.Roll > (decimal)(bet.Chance)));
+                bool Win = (((bool)bet.high ? (decimal)bet.Roll> (decimal)CurrentSite.maxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
+            
                 SetLuaVars();
                 Lua["win"] = Win;
                 Lua["currentprofit"] = ((decimal)(bet.Profit * 100000000m)) / 100000000.0m;
@@ -2632,7 +2650,7 @@ namespace DiceBot
 
         }
 
-      
+        delegate void dPlayAlarm();
         void playalarm()
         {
             try
@@ -4710,6 +4728,7 @@ namespace DiceBot
                     case "JD": CurrentSite = new JD(this); break;
                     case "PRC": CurrentSite = new PRC(this); break;
                     case "BB": CurrentSite = new BB(this); break;
+                    case "WD": CurrentSite = new WD(this); break;
                     case "bitdice": CurrentSite = new bitdice(this); break;
                     case "Coinichiwa": CurrentSite = new Coinichiwa(this); break;
                     case "CoinMillions": CurrentSite = new CoinMillions(this); break;
@@ -4744,6 +4763,7 @@ namespace DiceBot
                         case "JD": CurrentSite = new JD(this); break;
                         case "PRC": CurrentSite = new PRC(this); break;
                         case "BB": CurrentSite = new BB(this); break;
+                        case "WD": CurrentSite = new WD(this); break;
                         case "bitdice": CurrentSite = new bitdice(this); break;
                         case "Coinichiwa": CurrentSite = new Coinichiwa(this); break;
                         case "CoinMillions": CurrentSite = new CoinMillions(this); break;
@@ -5287,6 +5307,7 @@ namespace DiceBot
                     case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
                     case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
                     case "betterbetsToolStripMenuItem": CurrentSite = new BB(this); siteToolStripMenuItem.Text = "Site (BB)"; break;
+                    case "wealthyDiceToolStripMenuItem": CurrentSite = new WD(this); siteToolStripMenuItem.Text = "Site (WD)"; break;
                     case "moneyPotToolStripMenuItem" : CurrentSite = new moneypot(this); siteToolStripMenuItem.Text = "Site (MP)"; break;
                        
                     case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site(CM)"; break;
@@ -5715,6 +5736,7 @@ namespace DiceBot
                             cryptoGamesToolStripMenuItem.Checked?13:
                             bitslerToolStripMenuItem.Checked?14:
                             dogeToolStripMenuItem.Checked?15:
+                            wealthyDiceToolStripMenuItem.Checked?16:
                             1);
                 }
                 else if (c is TextBox)
@@ -5825,7 +5847,8 @@ namespace DiceBot
                         cryptoGamesToolStripMenuItem.Checked = value == 13;
                         bitslerToolStripMenuItem.Checked = value == 14;
                         dogeToolStripMenuItem.Checked = value == 15;
-                        if (value > 15)
+                        wealthyDiceToolStripMenuItem.Checked = value == 16;
+                        if (value > 16)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -5954,6 +5977,7 @@ namespace DiceBot
                         cryptoGamesToolStripMenuItem.Checked = value == "13";
                         bitslerToolStripMenuItem.Checked = value == "14";
                         dogeToolStripMenuItem.Checked = value == "15";
+                        wealthyDiceToolStripMenuItem.Checked = value == "16";
                     }
                     else if (Key == "SettingsMode")
                     {

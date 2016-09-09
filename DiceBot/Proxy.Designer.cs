@@ -124,6 +124,11 @@
             // nudPort
             // 
             this.nudPort.Location = new System.Drawing.Point(80, 63);
+            this.nudPort.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
             this.nudPort.Name = "nudPort";
             this.nudPort.Size = new System.Drawing.Size(225, 20);
             this.nudPort.TabIndex = 11;
