@@ -4,7 +4,6 @@ C:\Users\seunt\Desktop\GitHub\dicebot-master\dicebot\DiceBot\obj\Debug\DiceBot.c
 C:\Users\seunt\Desktop\GitHub\DiceBot\DiceBot\bin\Debug\DiceBot.exe.config
 C:\Users\seunt\Desktop\GitHub\DiceBot\DiceBot\obj\Debug\Interop.WMPLib.dll
 C:\Users\seunt\Desktop\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.csproj.ResolveComReference.cache
-C:\Users\seunt\Desktop\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.csprojResolveAssemblyReference.cache
 C:\Users\seunt\Desktop\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.About.resources
 C:\Users\seunt\Desktop\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.BetHistory.resources
 C:\Users\seunt\Desktop\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.cDiceBot.resources
@@ -92,3 +91,5 @@ C:\Users\eugene\Documents\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.csproj.Genera
 C:\Users\eugene\Documents\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.TrustInfo.xml
 C:\Users\eugene\Documents\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.exe.manifest
 C:\Users\eugene\Documents\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.application
+C:\Users\seunt\Desktop\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.SeedInput.resources
+C:\Users\seunt\Desktop\GitHub\DiceBot\DiceBot\obj\Debug\DiceBot.csprojResolveAssemblyReference.cache

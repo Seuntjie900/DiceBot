@@ -398,6 +398,7 @@
             this.tabPage7.TabIndex = 0;
             this.tabPage7.Text = "Stats";
             this.tabPage7.UseVisualStyleBackColor = true;
+            this.tabPage7.Click += new System.EventHandler(this.tabPage7_Click);
             // 
             // btnHideStats
             // 

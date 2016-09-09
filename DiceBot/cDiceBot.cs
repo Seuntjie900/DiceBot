@@ -32,7 +32,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.2.1";
+        private const string vers = "3.2.2";
 
 
         Control[] ControlsToDisable;
@@ -515,7 +515,8 @@ namespace DiceBot
                     Emails = new Email("", "");
                 load();
                 loadsettings();
-                
+                if (txtQuickSwitch.Text!="")
+                    btnStratRefresh_Click(btnStratRefresh, new EventArgs());
             }
            
             tmStop.Enabled = true;
@@ -557,6 +558,7 @@ namespace DiceBot
             Lua.RegisterFunction("readadv", this, new dGetInputWithParams(GetInputWithParams).Method);
             Lua.RegisterFunction("alarm", this, new dPlayAlarm(playalarm).Method);
             Lua.RegisterFunction("ching", this, new dPlayChing(PlayChing).Method);
+            Lua.RegisterFunction("resetbuiltin", this, new dPlayChing(Reset).Method);
             DumpLog("constructor done", 8);
         }
         void luaStop()
@@ -929,7 +931,9 @@ namespace DiceBot
 
                         lblWins2.Text = StatsWindows.lblWins.Text = Wins.ToString();
                         StatsWindows.lblWinStreak.Text = BestStreak.ToString();
-                        TimeSpan curtime = DateTime.Now - dtStarted;
+                        //
+                        TimeSpan curtime = TimeSpan.Parse(StatsWindows.lblTime.Text);
+                        //TimeSpan curtime = DateTime.Now - dtStarted;
                         lblBets2.Text = StatsWindows.lblBets.Text = (Wins + Losses).ToString();
                         decimal profpB = 0;
                         if (Wins + Losses > 0)
@@ -940,7 +944,7 @@ namespace DiceBot
                             betsps = (decimal)(Wins + Losses) / (decimal)(curtime.TotalSeconds);
                         decimal profph = 0;
                         if (profpB > 0 && betsps > 0)
-                            profph = (profpB / betsps) * 60.0m * 60.0m;
+                            profph = (profpB * betsps) * 60.0m * 60.0m;
                         StatsWindows.lblProfpb.Text = profpB.ToString("0.00000000");
                         StatsWindows.lblProfitph.Text = (profph.ToString("0.00000000"));
                         StatsWindows.lblProfit24.Text = (profph* 24.0m).ToString("0.00000000");
@@ -1194,49 +1198,50 @@ namespace DiceBot
         bool ResetBet = false;
       private void Reset()
         {
-
-          reset = true;
-          if (rdbMartingale.Checked)
-          {
-              Lastbet = MinBet;
-          }
-          else if (rdbLabEnable.Checked)
-          {
-              string[] ss = GetLabList();
-              LabList = new List<decimal>();
-              foreach (string s in ss)
-              {
-                    decimal tmpval = dparse(s, ref convert);
-                    if (convert)
-                        LabList.Add(tmpval);
-                    else
+            
+                reset = true;
+                if (rdbMartingale.Checked)
+                {
+                    Lastbet = MinBet;
+                }
+                else if (rdbLabEnable.Checked)
+                {
+                    string[] ss = GetLabList();
+                    LabList = new List<decimal>();
+                    foreach (string s in ss)
                     {
-                        MessageBox.Show("Could not parse number: "+s+". Please remove it from the list. (This could be an empty newline character)");
+                        decimal tmpval = dparse(s, ref convert);
+                        if (convert)
+                            LabList.Add(tmpval);
+                        else
+                        {
+                            MessageBox.Show("Could not parse number: " + s + ". Please remove it from the list. (This could be an empty newline character)");
+                        }
                     }
-              }
-              if (LabList.Count == 1)
-                  Lastbet = LabList[0];
-              else if (LabList.Count > 1)
-                  Lastbet = LabList[0] + LabList[LabList.Count - 1];
-          }
-          else if (rdbFibonacci.Checked)
-          {
-              FibonacciLevel = 0;
-              Lastbet = decimal.Parse(lstFibonacci.Items[FibonacciLevel].ToString().Substring(lstFibonacci.Items[FibonacciLevel].ToString().IndexOf(" ") + 1));
-          }
-          else if (rdbAlembert.Checked)
-          {
-              Lastbet = MinBet;
-          }
-          else if (rdbPreset.Checked)
-          {
-              presetLevel = 0;
-              decimal Betval = -1;
-              if (presetLevel < rtbPresetList.Lines.Length)
-              {
-                  SetPresetValues(presetLevel);
-              }
-          }
+                    if (LabList.Count == 1)
+                        Lastbet = LabList[0];
+                    else if (LabList.Count > 1)
+                        Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                }
+                else if (rdbFibonacci.Checked)
+                {
+                    FibonacciLevel = 0;
+                    Lastbet = decimal.Parse(lstFibonacci.Items[FibonacciLevel].ToString().Substring(lstFibonacci.Items[FibonacciLevel].ToString().IndexOf(" ") + 1));
+                }
+                else if (rdbAlembert.Checked)
+                {
+                    Lastbet = MinBet;
+                }
+                else if (rdbPreset.Checked)
+                {
+                    presetLevel = 0;
+                    decimal Betval = -1;
+                    if (presetLevel < rtbPresetList.Lines.Length)
+                    {
+                        SetPresetValues(presetLevel);
+                    }
+                }
+            
         }
         
         void PlaceBet()
@@ -1835,6 +1840,24 @@ namespace DiceBot
                 {
                     Lastbet = (decimal)nudChangeLoseStreakTo.Value;
                 }
+
+                //change chance after a certain losing streak
+                if (chkChangeChanceLose.Checked && (Losestreak == nudChangeChanceLoseStreak.Value))
+                {
+                    try
+                    {
+                        Chance = (decimal)nudChangeChanceLoseTo.Value;
+                        if (!RunningSimulation)
+                            CurrentSite.chance = (decimal)(nudChangeChanceLoseTo.Value);
+
+
+                    }
+                    catch (Exception e)
+                    {
+                        DumpLog(e.Message, 1);
+                        DumpLog(e.StackTrace, 2);
+                    }
+                }
             }
             if (chkPercentage.Checked)
             {
@@ -2250,23 +2273,7 @@ namespace DiceBot
                         }
                     }
 
-                   //change chance after a certain losing streak
-                    if (chkChangeChanceLose.Checked && (Losestreak == nudChangeChanceLoseStreak.Value))
-                    {
-                        try
-                        {
-                            Chance = (decimal)nudChangeChanceLoseTo.Value;
-                            if (!RunningSimulation)
-                                CurrentSite.chance = (decimal)(nudChangeChanceLoseTo.Value);
-                            
-                            
-                        }
-                        catch (Exception e)
-                        {
-                            DumpLog(e.Message, 1);
-                            DumpLog(e.StackTrace, 2);
-                        }
-                    }
+                   
 
                     if (!programmerToolStripMenuItem.Checked || EnableReset)
                     {
@@ -4348,6 +4355,7 @@ namespace DiceBot
             {
                 txtQuickSwitch.Text = fdb.SelectedPath;
             }
+            btnStratRefresh_Click(btnStratRefresh, new EventArgs());
         }
 
         private void btnStratRefresh_Click(object sender, EventArgs e)
@@ -4358,15 +4366,19 @@ namespace DiceBot
             {
                 foreach (string x in Directory.GetFiles(txtQuickSwitch.Text))
                 {
-                    using (StreamReader sr = new StreamReader(x))
+                    try
                     {
-                        string tmptxt = sr.ReadLine();
-                        if (tmptxt.StartsWith("SaveVersion"))
+                        using (StreamReader sr = new StreamReader(x))
                         {
-                            lsbStrats.Items.Add( new FileInfo(x).Name );
-                            cmbStrat.Items.Add(new FileInfo(x).Name);
+                            string tmptxt = sr.ReadLine();
+                            if (tmptxt.StartsWith("SaveVersion"))
+                            {
+                                lsbStrats.Items.Add(new FileInfo(x).Name);
+                                cmbStrat.Items.Add(new FileInfo(x).Name);
+                            }
                         }
                     }
+                    catch { };
                 }
             }
         }
@@ -6272,6 +6284,7 @@ namespace DiceBot
             PSaveNames.Add("QuickSwitchFolder", txtQuickSwitch);
             PSaveNames.Add("SettingsMode", null);
             PSaveNames.Add("Site", null);
+            PSaveNames.Add("QuickSwitch", txtQuickSwitch);
             
         }
 
@@ -6346,6 +6359,11 @@ namespace DiceBot
         private void frequentlyAskedQuestionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://bot.seuntjie.com/faqs.aspx");
+        }
+
+        private void seedsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new SeedInput().Show();
         }
         
     }

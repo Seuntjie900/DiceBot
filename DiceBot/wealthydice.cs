@@ -51,8 +51,9 @@ namespace DiceBot
                 if (accesstoken != "")
                 {
                     lastupdate = DateTime.Now;
-                    
-                    string s = Client.GetAsync("user?accessToken=" + accesstoken+"&coin="+actualcur).Result.RequestMessage.Content.ReadAsStringAsync().Result;
+
+                    string s1 = "user?accessToken=" + accesstoken + "&coin=" + actualcur;
+                    string s = Client.GetStringAsync(s1).Result;
                     bbStats tmpu = json.JsonDeserialize<bbStats>(s);
                     balance = tmpu.balance; //i assume
                     bets = tmpu.total_bets;
@@ -86,7 +87,8 @@ namespace DiceBot
                         {
                             lastupdate = DateTime.Now;
                             string s1 = "user?accessToken=" + accesstoken+"&coin="+actualcur;                    
-                            string s = Client.GetStringAsync(s1).Result;bbStats tmpu = json.JsonDeserialize<bbStats>(s);
+                            string s = Client.GetStringAsync(s1).Result;
+                            bbStats tmpu = json.JsonDeserialize<bbStats>(s);
                             balance = tmpu.balance; //i assume
                             bets = tmpu.total_bets;
                             wagered = tmpu.total_wagered;

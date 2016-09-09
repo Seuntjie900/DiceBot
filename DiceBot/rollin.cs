@@ -431,11 +431,11 @@ namespace DiceBot
             if (amount == 0)
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 1000;
             else if (amount < 0.00000010m)
-                return (DateTime.Now - lastbet).TotalMilliseconds >= 500;
+                return (DateTime.Now - lastbet).TotalMilliseconds >= 750;
             else if (amount < 0.00000100m)
-                return (DateTime.Now - lastbet).TotalMilliseconds >= 300;
+                return (DateTime.Now - lastbet).TotalMilliseconds >= 500;
             else if (amount < 0.00001000m)
-                return (DateTime.Now - lastbet).TotalMilliseconds >= 100;
+                return (DateTime.Now - lastbet).TotalMilliseconds >= 250;
             else
                 return (DateTime.Now - lastbet).TotalMilliseconds >= 10;
         }

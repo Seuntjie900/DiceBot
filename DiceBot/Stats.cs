@@ -36,6 +36,11 @@ namespace DiceBot
         {
 
         }
+
+        private void tabPage7_Click(object sender, EventArgs e)
+        {
+
+        }
         
     }
 }
