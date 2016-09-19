@@ -1,7 +1,11 @@
 DiceBot
 =======
 
-Betting Bot for just-dice.com, PrimeDice.com, Bitdice.me, 999dice.com, safedice.com, primedice.com, pocketrocketscasino.eu, Coinmillions.com, Dadice.com, Rollin.io, Betterbets.io, Moneypot.com (bot.seuntjie.com/mpdb) and Magicaldice.com
+Betting Bot for just-dice.com, PrimeDice.com, Bitdice.me, 999dice.com, safedice.com, primedice.com, pocketrocketscasino.eu, Coinmillions.com, Rollin.io, Betterbets.io, Monerodice.net, Fortunejack.com, crypto-games.net and Moneypot.com (bot.seuntjie.com/mpdb). 
+</br>
+</br>
+No Longer Supported or Active:</br>
+<s>Magicaldice.com</s>, <s>Dadice.com</s>
 <br/>
 <br/>
 Binary downloads for the latest version can be found at: https://bot.seuntjie.com/botpage.aspx<br/>
@@ -36,6 +40,7 @@ array of stats for the current betting session<br/>
 <br/>
 <br/>
 <br/>
-<br/>
 Gambling is gambling no matter what you do or how good your strategy is. The house always wins if you keep playing. Winners know when to stop.<br/>
 Like any human, I make mistakes, and like any program, the bot is bound to have a few bugs. Use the bot at your own risk. Should you come accross a bug, please report it with as much detail as possible to contact@seuntjie.com
+
+[<img align="right" src="http://i64.tinypic.com/106imc4.jpg">](https://twitter.com/SeuntjieDiceBot)
