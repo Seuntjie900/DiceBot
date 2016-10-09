@@ -508,10 +508,16 @@ namespace DiceBot
                 HttpContent cont = new StringContent(post);
                 cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                 string Resp = "";
-                using (var response = Client.PostAsync("accounts/" + UID + "/sites/1/withdraw", cont))
+                using (var response = Client.PutAsync("accounts/" + UID + "/sites/1/withdraw", cont))
                 {
-                    Resp = response.Result.Content.ReadAsStringAsync().Result;
-
+                    while (!response.IsCompleted)
+                    {
+                        Thread.Sleep(100);
+                    }
+                    //if (response.Result.IsSuccessStatusCode)
+                    {
+                        Resp = response.Result.Content.ReadAsStringAsync().Result;
+                    }
                 }
                 string sEmitResponse = "";//new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 

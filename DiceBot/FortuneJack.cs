@@ -390,7 +390,7 @@ namespace DiceBot
 
         Dictionary<string, int> Curs = new Dictionary<string, int>();
         Dictionary<string, int> Rooms = new Dictionary<string, int>();
-        public override void SendTip(string User, decimal amount)
+        public override bool InternalSendTip(string User, decimal amount)
         {
             string sEmitResponse = WebClient.GetStringAsync("games/dice/").Result;
             GetChatToken(sEmitResponse);
@@ -402,7 +402,8 @@ namespace DiceBot
             pairs.Add(new KeyValuePair<string, string>("currency_id", Curs[Currency.ToLower()].ToString() ));
             FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
             sEmitResponse = WebClient.PostAsync("ajax/tip.php", Content).Result.Content.ReadAsStringAsync().Result;
-                
+            return sEmitResponse.Contains("success");
+                //return true;
         }
 
         void Client_DataReceived(object sender, DataReceivedEventArgs e)

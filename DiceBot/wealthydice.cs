@@ -83,7 +83,7 @@ namespace DiceBot
                 {
                     try
                     {
-                        if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
+                        if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 60||ForceUpdateStats))
                         {
                             lastupdate = DateTime.Now;
                             string s1 = "user?accessToken=" + accesstoken+"&coin="+actualcur;                    
@@ -477,7 +477,7 @@ namespace DiceBot
             accesstoken = "";
         }
 
-        public override void SendTip(string User, decimal amount)
+        public override bool InternalSendTip(string User, decimal amount)
         {
             
 
@@ -495,13 +495,15 @@ namespace DiceBot
                     try
                     {
                         responseData = response.Result.Content.ReadAsStringAsync().Result;
+                        return (responseData.Contains("success"));
+                        
                     }
                     catch (AggregateException e)
                     {
                         if (e.InnerException.Message.Contains("ssl"))
                         {
-                            SendTip(User , amount);
-                            return;
+                            return SendTip(User , amount);
+                            
                         }
                     }
                 }
@@ -531,9 +533,10 @@ namespace DiceBot
 
                     string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
                     Parent.updateStatus(sEmitResponse);
-                    
+                    return false;
                 }
             }
+            return false;
         }
 
         void GetRollThread(object _BetID)

@@ -186,7 +186,7 @@ namespace DiceBot
             SendTip("357", Amount);
         }
 
-        public override void SendTip(string User, decimal amount)
+        public override bool InternalSendTip(string User, decimal amount)
         {
 
             int uid = -1;
@@ -197,6 +197,7 @@ namespace DiceBot
                     dicehub.Invoke("tip", uid, amount, "");
                 System.Threading.Thread.Sleep(120);
             }
+            return true;
         }
 
         public override void SetClientSeed(string Seed)
@@ -259,7 +260,7 @@ namespace DiceBot
         string s = "";
         public override void Login(string Username, string Password, string twofa)
         {
-            HttpWebRequest getHeaders = HttpWebRequest.Create("https://betking.io/play/#dice") as HttpWebRequest;
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://betking.io/bitcoindice#dice") as HttpWebRequest;
             if (Prox != null)
                 getHeaders.Proxy = Prox;
             var cookies = new CookieContainer();
@@ -332,7 +333,7 @@ namespace DiceBot
             con.CookieContainer = Cookies;
             try
             {
-                getHeaders = HttpWebRequest.Create("https://betking.io/play/#dice") as HttpWebRequest;
+                getHeaders = HttpWebRequest.Create("https://betking.io/bitcoindice#dice") as HttpWebRequest;
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
                 getHeaders.CookieContainer = Cookies;
@@ -430,7 +431,7 @@ namespace DiceBot
         {
 
 
-            HttpWebRequest getHeaders = HttpWebRequest.Create("https://betking.io/play/#account") as HttpWebRequest;
+            HttpWebRequest getHeaders = HttpWebRequest.Create("https://betking.io/bitcoindice/#account") as HttpWebRequest;
             if (Prox != null)
                 getHeaders.Proxy = Prox;
             var cookies = new CookieContainer();

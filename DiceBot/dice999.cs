@@ -65,7 +65,7 @@ namespace DiceBot
         {
             while (isD999)
             {
-                if (sessionCookie!="" && sessionCookie!=null && (DateTime.Now-Lastbalance).TotalSeconds>=60)
+                if (sessionCookie!="" && sessionCookie!=null && ((DateTime.Now-Lastbalance).TotalSeconds>=60||ForceUpdateStats))
                 {
                      GetBalance();
 
@@ -336,7 +336,14 @@ namespace DiceBot
 
         public override void Donate(decimal Amount)
         {
-            internalWithdraw(Amount, "1BoHcFQsUSot7jkHJcZMh1iUda3tEjzuBW");
+            
+            switch (Currency.ToLower())
+            { 
+                case "btc": internalWithdraw(Amount, "1BoHcFQsUSot7jkHJcZMh1iUda3tEjzuBW");break;
+                case "ltc": internalWithdraw(Amount,"LUzfcpLCy7SdXZbSiJwEmZarvCzgXbfubS");break;
+                case "doge":internalWithdraw(Amount,"DAqsyP2H5vqhc9PTfbjd7nr6r8tCFRWcFJ");break;
+                case "eth":internalWithdraw(Amount,"0x77a4220ca85d4103e008eb88ae15f5ac7da0660d");break;
+            }
         }
 
         protected override bool internalWithdraw(decimal Amount, string Address)
@@ -345,13 +352,15 @@ namespace DiceBot
             pairs.Add(new KeyValuePair<string, string>("a", "Withdraw"));
             pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
             pairs.Add(new KeyValuePair<string, string>("Currency", Currency));
-            pairs.Add(new KeyValuePair<string, string>("Amount", (Amount*100000000).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
+            pairs.Add(new KeyValuePair<string, string>("Amount", (Amount*100000000m).ToString("0",System.Globalization.NumberFormatInfo.InvariantInfo)));
             pairs.Add(new KeyValuePair<string, string>("Address", Address));
 
             FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
             string responseData = "";
             using (var response = Client.PostAsync("", Content))
             {
+                while (!response.IsCompleted)
+                    Thread.Sleep(100);
                 try
                 {
                     responseData = response.Result.Content.ReadAsStringAsync().Result;

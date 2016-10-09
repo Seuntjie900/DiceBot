@@ -32,6 +32,7 @@ namespace DiceBot
             Tip = true;
             TipUsingName = false;
             SiteURL = "https://just-dice.com";
+            
         }
 
         void Instance_OnAddress(Address Address)
@@ -210,17 +211,20 @@ namespace DiceBot
             SendTip("91380", Amount);
         }
 
-        public override void SendTip(string Username, decimal Amount)
+        public override bool InternalSendTip(string Username, decimal Amount)
         {
             int uid = -1;
             if (int.TryParse(Username, out uid))
             {
                 Instance.Chat(string.Format("/tip noconf {0} {1:0.00000000}", uid, Amount));
+                return true;
             }
             else
             {
+                
                 Parent.updateStatus("Invalid UserID");
             }
+            return false;
         }
 
         public override void GetSeed(long BetID)

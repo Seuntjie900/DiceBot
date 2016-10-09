@@ -32,7 +32,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.2.2";
+        private const string vers = "3.2.3";
 
 
         Control[] ControlsToDisable;
@@ -4755,7 +4755,10 @@ namespace DiceBot
                     case "PD": CurrentSite = new PD(this); break;
                     case "rollin": CurrentSite = new rollin(this); break;
                     case "SafeDice": CurrentSite = new SafeDice(this); break;
+                    case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
                 }
+                if (UseProxy)
+                    CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
                 CurrentSite.Currency = curcur;
                 CurrentSite.FinishedLogin -= CurrentSite_FinishedLogin;
                 CurrentSite.FinishedLogin +=CurrentSite_FinishedLogin;
@@ -4789,7 +4792,10 @@ namespace DiceBot
                         case "PD": CurrentSite = new PD(this); break;
                         case "rollin": CurrentSite = new rollin(this); break;
                         case "SafeDice": CurrentSite = new SafeDice(this); break;
+                        case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
                     }
+                    if (UseProxy)
+                        CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
                     CurrentSite.Currency = curcur;
                     EnableNotLoggedInControls(false);
                 }
@@ -4941,19 +4947,19 @@ namespace DiceBot
                 if (decimal.TryParse(Response, out tmpAmount))
                 {
                     string Address = Interaction.InputBox("Bitcoin Address: ", "Withdraw", "", -1, -1);
-                    System.Text.RegularExpressions.Regex txt = null;
+                    /*System.Text.RegularExpressions.Regex txt = null;
 
                     txt = new System.Text.RegularExpressions.Regex(@"^[13][a-km-zA-HJ-NP-Z0-9]{26,33}$");
 
                     bool valid = txt.IsMatch(Address);
-                    if (valid)
+                    if (valid)*/
                     {
 
                         CurrentSite.Withdraw(tmpAmount, Address);
                     }
-                    else
+                    /*else
 
-                        MessageBox.Show("Invalid Address");
+                        MessageBox.Show("Invalid Address");*/
                 }
                 else
                 {
@@ -5330,8 +5336,9 @@ namespace DiceBot
                     case "fortuneJackToolStripMenuItem" : CurrentSite = new FortuneJack(this); siteToolStripMenuItem.Text = "Site (FJ)"; break;
                     case "cryptoGamesToolStripMenuItem" : CurrentSite = new cryptogames(this); siteToolStripMenuItem.Text = "Site (CG)"; break;
                     case "bitslerToolStripMenuItem" : CurrentSite = new Bitsler(this); siteToolStripMenuItem.Text = "Site (BS)"; break;
+                    case "satoshiDiceToolStripMenuItem" : CurrentSite = new SatoshiDice(this); siteToolStripMenuItem.Text = "Site (SatD)"; break;
                 }
-                if (CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
+                if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
                     lblPass.Text = "API key:";
                     lblUsername.Text = "Username:";
@@ -5346,6 +5353,11 @@ namespace DiceBot
                 {
                     lblPass.Text = "Private Key:";
                     lblUsername.Text = "Public Key:";
+                }
+                else if (CurrentSite is SatoshiDice)
+                {
+                    lblUsername.Text = "Email";
+                    lblPass.Text = "Password:";
                 }
                 else
                 {
@@ -5749,6 +5761,7 @@ namespace DiceBot
                             bitslerToolStripMenuItem.Checked?14:
                             dogeToolStripMenuItem.Checked?15:
                             wealthyDiceToolStripMenuItem.Checked?16:
+                            satoshiDiceToolStripMenuItem.Checked?17:
                             1);
                 }
                 else if (c is TextBox)
@@ -5860,7 +5873,8 @@ namespace DiceBot
                         bitslerToolStripMenuItem.Checked = value == 14;
                         dogeToolStripMenuItem.Checked = value == 15;
                         wealthyDiceToolStripMenuItem.Checked = value == 16;
-                        if (value > 16)
+                        satoshiDiceToolStripMenuItem.Checked = value == 17;
+                        if (value > 17)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -5990,6 +6004,7 @@ namespace DiceBot
                         bitslerToolStripMenuItem.Checked = value == "14";
                         dogeToolStripMenuItem.Checked = value == "15";
                         wealthyDiceToolStripMenuItem.Checked = value == "16";
+                        satoshiDiceToolStripMenuItem.Checked = value == "17";
                     }
                     else if (Key == "SettingsMode")
                     {

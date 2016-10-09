@@ -60,7 +60,8 @@ namespace DiceBot
         public bool Tip { get; set; }
         public bool TipUsingName { get; set; }
         public bool GettingSeed { get; set; }
-
+        public bool ForceUpdateStats = false;
+        public bool AutoUpdate = true;
 
         public void PlaceBet(bool High, decimal amount, decimal chance)
         {
@@ -94,7 +95,16 @@ namespace DiceBot
         public bool Withdraw(decimal Amount, string Address)
         {
             Parent.updateStatus(string.Format("Withdrawing {0} {1} to {2}", Amount, currency, Address));
-            return internalWithdraw(Amount, Address);
+            bool res = internalWithdraw(Amount, Address);
+
+            if (res)
+            {
+                if (AutoUpdate)
+                    ForceUpdateStats = true;
+                else
+                    balance -= amount;
+            }
+            return res;
         }
         protected abstract bool internalWithdraw(decimal Amount, string Address);
         
@@ -191,10 +201,23 @@ namespace DiceBot
         {
             Parent.AddChat(Message);
         }
-        public virtual void SendTip(string User, decimal amount)
+        public bool SendTip(string User, decimal Amount)
+        {
+            Parent.updateStatus("Tipping "+Amount+" to "+User);
+            bool res = InternalSendTip(User, Amount);
+            if (res)
+            {
+                if (AutoUpdate)
+                    ForceUpdateStats = true;
+                else
+                    balance -= amount;
+            }
+            return res;
+        }
+        public virtual bool InternalSendTip(string User, decimal amount)
         {
             Parent.updateStatus("Tipping is not enabled for the current site.");
-            
+            return false;
         }
         protected void finishedlogin(bool Success)
         {

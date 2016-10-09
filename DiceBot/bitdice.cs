@@ -34,7 +34,7 @@ namespace DiceBot
             Client.Error += Client_Error;
             Client.Closed += Client_Closed;
             Client.MessageReceived += Client_MessageReceived;*/
-
+            AutoUpdate = false;
             Currencies = new string[] { "btc", "doge", "ltc", "clam", "eth" };
         }
 
@@ -517,9 +517,10 @@ namespace DiceBot
         {
             SendTip("1426", Amount);
         }
-        public override void SendTip(string User, decimal amount)
+        public override bool InternalSendTip(string User, decimal amount)
         {
             SendChatMessage(string.Format("/tip {0} {1:0.00000000}", User, amount));
+            return true;
         }
         string cookie = "";
         string stream = "";

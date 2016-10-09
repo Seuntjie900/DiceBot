@@ -303,13 +303,14 @@ namespace DiceBot
             }
         }
 
-        
 
 
-        public override void SendTip(string User, decimal amount)
+
+        public override bool InternalSendTip(string User, decimal amount)
         {
             Thread t = new Thread(new ParameterizedThreadStart(SendTipThread));
             t.Start(new string[]{User, amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) });
+            return false;
         }
 
         public override decimal GetLucky(string server, string client, int nonce)

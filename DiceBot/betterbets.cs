@@ -38,8 +38,8 @@ namespace DiceBot
             TipUsingName = true;
             SiteURL = "https://betterbets.io/?ref=1304270";
             Currencies = new string[2] { "btc", "rbs" };
-            
 
+            AutoUpdate = true;
         }
 
         protected override void CurrencyChanged()
@@ -79,7 +79,7 @@ namespace DiceBot
                 {
                      try
             {
-                    if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
+                    if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 60 || ForceUpdateStats))
                     {
                         lastupdate = DateTime.Now;
                         string s = Client.GetAsync("user?accessToken=" + accesstoken + "&coin=" + Currency).Result.RequestMessage.Content.ReadAsStringAsync().Result;
@@ -474,7 +474,7 @@ namespace DiceBot
             accesstoken = "";
         }
 
-        public override void SendTip(string User, decimal amount)
+        public override bool InternalSendTip(string User, decimal amount)
         {
             
 
@@ -492,16 +492,18 @@ namespace DiceBot
                     try
                     {
                         responseData = response.Result.Content.ReadAsStringAsync().Result;
+                        return responseData.Contains("success");
                     }
                     catch (AggregateException e)
                     {
                         if (e.InnerException.Message.Contains("ssl"))
                         {
-                            SendTip(User , amount);
-                            return;
+                            return SendTip(User, amount);
+                            
                         }
                     }
                 }
+                return false;
                 /*string post = "accessToken="+ accesstoken +"&uname=" + User+ "&amount=" + (amount * 100000000.0).ToString("");
 
 
@@ -528,9 +530,10 @@ namespace DiceBot
 
                     string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
                     Parent.updateStatus(sEmitResponse);
-                    
+                    return false;
                 }
             }
+            return false;
         }
 
         void GetRollThread(object _BetID)

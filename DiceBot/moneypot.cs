@@ -184,7 +184,7 @@ namespace DiceBot
             next = tmp.hash;
         }
 
-        public override void SendTip(string user, decimal tip)
+        public override bool InternalSendTip(string user, decimal tip)
         {
             MPTipSend Tip = new MPTipSend
             {
@@ -197,6 +197,8 @@ namespace DiceBot
             string Resp = "";
             using (var response = Client.PostAsync("tip?access_token=" + token, cont))
             {
+                while (!response.IsCompleted)
+                    Thread.Sleep(100);
                 Resp = response.Result.Content.ReadAsStringAsync().Result;
             }
 
@@ -206,20 +208,22 @@ namespace DiceBot
                 if (tmp.error.ToLower().Contains("invalid amount"))
                 {
                     MessageBox.Show("Invalid Tip Amount");
-                    return;
+                    return false;
                 }
                 else
                 {
                     Parent.updateStatus(tmp.error);
                 }
-                return;
+                return false;
             }
             else
             {
                 this.balance = this.balance - (tmp.amount / 100000000);
                 Parent.updateBalance(balance);
                 Parent.updateStatus("Sent " + (tmp.amount / 100000000).ToString("F8") + " to " + tmp.to);
+                return true;
             }
+            return false;
         }
 
         public override void SetClientSeed(string Seed)

@@ -38,7 +38,7 @@ namespace DiceBot
                 {
                     try
             {
-                    if (priv != "" && pub != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
+                    if (priv != "" && pub != "" && ((DateTime.Now - lastupdate).TotalSeconds > 60||ForceUpdateStats))
                     {
                         List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                         pairs.Add(new KeyValuePair<string, string>("public_key", pub));

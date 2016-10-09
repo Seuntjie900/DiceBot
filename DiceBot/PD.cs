@@ -37,6 +37,7 @@ namespace DiceBot
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
             SiteURL = "https://primedice.com/?ref=Seuntjie";
+            
         }
 
         
@@ -46,7 +47,7 @@ namespace DiceBot
             {
                 while (ispd)
                 {
-                    if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
+                    if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 60||ForceUpdateStats))
                     {
                         string sEmitResponse2 = Client.GetStringAsync("users/1?api_key=" + accesstoken).Result;
                         pduser tmpu = json.JsonDeserialize<pduser>(sEmitResponse2);
@@ -142,6 +143,7 @@ namespace DiceBot
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://api.primedice.com/api/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+            
             try
             {
 
@@ -500,7 +502,7 @@ namespace DiceBot
             SendTip("seuntjie", Amount);
         }
 
-        public override void SendTip(string User, decimal amount)
+        public override bool InternalSendTip(string User, decimal amount)
         {
             try
             {
@@ -510,6 +512,8 @@ namespace DiceBot
                 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("tip?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                
+                return (sEmitResponse.Contains("user"));
             }
             catch (WebException e)
             {
@@ -521,6 +525,7 @@ namespace DiceBot
                     
                 }
             }
+            return false;
         }
 
         void GetRollThread(object _BetID)

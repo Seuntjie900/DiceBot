@@ -40,7 +40,7 @@ namespace DiceBot
         {
             while (isRollin)
             {
-                if (Token!="" && Token!=null && username!="" && (DateTime.Now - LastBalance).TotalSeconds>15)
+                if (Token!="" && Token!=null && username!="" && ((DateTime.Now - LastBalance).TotalSeconds>15||ForceUpdateStats))
                 {
                     try
                     {
@@ -187,7 +187,7 @@ namespace DiceBot
             SendTip("seuntjie", Amount);
         }
 
-        public override void SendTip(string User, decimal amount)
+        public override bool InternalSendTip(string User, decimal amount)
         {
             try
             {
@@ -198,11 +198,11 @@ namespace DiceBot
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("tipsy/tip", Content).Result.Content.ReadAsStringAsync().Result;
 
-                return;
+                return sEmitResponse.Contains("\"success\":true");
             }
             catch
             {
-                return ;
+                return false ;
             }
         }
 

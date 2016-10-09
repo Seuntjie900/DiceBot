@@ -54,7 +54,7 @@ namespace DiceBot
             {
                 while (iscg)
                 {
-                    if (accesstoken != "" && (DateTime.Now - lastupdate).TotalSeconds > 60)
+                    if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 60||ForceUpdateStats))
                     {
                         try
                         {

@@ -71,7 +71,7 @@ namespace DiceBot
                 {
                     if (accesstoken != "")
                     {
-                        if ((DateTime.Now - lastupdate).TotalSeconds > 60)
+                        if ((DateTime.Now - lastupdate).TotalSeconds > 60 || ForceUpdateStats)
                             {
                             lastupdate = DateTime.Now;
                             try

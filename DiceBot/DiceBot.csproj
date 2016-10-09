@@ -179,6 +179,7 @@
     <Compile Include="BetHistory.Designer.cs">
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="SatoshiDice.cs" />
     <Compile Include="SeedInput.cs">
       <SubType>Form</SubType>
     </Compile>

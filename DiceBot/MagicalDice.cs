@@ -533,7 +533,7 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public override void SendTip(string User, decimal amount)
+        public override bool InternalSendTip(string User, decimal amount)
         {
             
            string s1 = Client.GetStringAsync("ajax.php?a=get_csrf").Result;
@@ -556,6 +556,7 @@ namespace DiceBot
                 Parent.DumpLog(e.InnerException.Message, 3);
                 Parent.DumpLog(e.InnerException.StackTrace, 4);
             }
+            return false;
         }
 
         public override void Donate(decimal Amount)

@@ -42,13 +42,13 @@ namespace DiceBot
             //tChat.Start();
             SiteURL = "https://www.bitsler.com/?ref=seuntjie";
             register = false;
-            
+            AutoUpdate = true;
         }
         void GetBalanceThread()
         {
             while (IsBitsler)
             {
-                if ((DateTime.Now - lastupdate).TotalSeconds > 15)
+                if ((DateTime.Now - lastupdate).TotalSeconds > 60 || ForceUpdateStats)
                 {
                     lastupdate = DateTime.Now;
                     try
@@ -165,7 +165,9 @@ namespace DiceBot
         {
             try
             {
+                
                 PlaceBetObj tmpob = BetObj as PlaceBetObj;
+                LastBetAmount = (double)tmpob.Amount;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 /*access_token
 type:dice
@@ -204,6 +206,8 @@ devise:btc*/
                             else
                                 losses++;
                             bets++;
+                            LastBetAmount = (double)tmpob.Amount;
+                            LastBet = DateTime.Now;
                             FinishedBet(tmp);
                             return;
                         }
@@ -278,6 +282,7 @@ devise:btc*/
             {
                 Parent.updateStatus("Too soon to update seed.");
             }
+            Thread.Sleep(51);
         }
 
         public override void SetClientSeed(string Seed)
@@ -395,10 +400,76 @@ devise:btc*/
         {
             throw new NotImplementedException();
         }
-
+        DateTime LastBet = DateTime.Now;
+        double LastBetAmount = 0;
         public override bool ReadyToBet()
         {
-            return true;
+            int type_delay=0;
+            double amount=LastBetAmount;
+            if (Currency.ToLower() == "btc") {
+                if (amount < 0.00000010)
+                    type_delay = 1;
+                else if (amount < 0.00000100)
+                    type_delay = 2;
+                else if (amount < 0.00000500)
+                    type_delay = 3;
+                else if (amount < 0.00002000)
+                    type_delay = 4;
+                else
+                    type_delay = 5;
+            }
+            else if (Currency.ToLower() == "eth")
+            {
+                if (amount < 0.00001000)
+                    type_delay = 1;
+                else if (amount < 0.00005000)
+                    type_delay = 2;
+                else if (amount < 0.00010000)
+                    type_delay = 3;
+                else if (amount < 0.00025000)
+                    type_delay = 4;
+                else
+                    type_delay = 5;
+            }
+            else if (Currency.ToLower() == "ltc")
+            {
+                if (amount < 0.00010000)
+                    type_delay = 1;
+                else if (amount < 0.00025000)
+                    type_delay = 2;
+                else if (amount < 0.00050000)
+                    type_delay = 3;
+                else if (amount < 0.00200000)
+                    type_delay = 4;
+                else
+                    type_delay = 5;
+            }
+            else if (Currency.ToLower() == "doge")
+            {
+                if (amount < 10)
+                    type_delay = 1;
+                else if (amount < 50)
+                    type_delay = 2;
+                else if (amount < 200)
+                    type_delay = 3;
+                else if (amount < 1000)
+                    type_delay = 4;
+                else
+                    type_delay = 5;
+            }
+            int delay = 0;
+            if (type_delay == 1)
+                delay = 1250;
+            else if (type_delay == 2)
+                delay = 850;
+            else if (type_delay == 3)
+                delay = 450;
+            else if (type_delay == 4)
+                delay = 350;
+            else
+                delay = 50;
+
+            return (DateTime.Now - LastBet).TotalMilliseconds > delay;
         }
 
         public override void Disconnect()

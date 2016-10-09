@@ -173,6 +173,8 @@ namespace DiceBot
                     case "CoinMillions": tmp.Verified = tmp.Roll == (decimal)CoinMillions.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                     case "CryptoGames": tmp.Verified = tmp.Roll == (decimal)cryptogames.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                     case "Bitsler": tmp.Verified = tmp.Roll == (decimal)Bitsler.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "Wealthydice": tmp.Verified = tmp.Roll == (decimal)WD.sGetLucky(tmp.serverseed, tmp.clientseed,(int)tmp.nonce);break;
+                    case "SatoshiDice": tmp.Verified = tmp.Roll == (decimal)SatoshiDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                 }
             }
             return tmp;

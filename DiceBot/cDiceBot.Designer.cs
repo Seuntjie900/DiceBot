@@ -458,6 +458,7 @@
             this.betHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.badStreakTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.luckyNumberVerifierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.seedsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.proxySettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.siteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -481,6 +482,7 @@
             this.cryptoGamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bitslerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wealthyDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.satoshiDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -499,7 +501,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.seedsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
@@ -5857,10 +5858,10 @@
             // 
             // chatToolStripMenuItem
             // 
+            this.chatToolStripMenuItem.Enabled = false;
             this.chatToolStripMenuItem.Name = "chatToolStripMenuItem";
             this.chatToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.chatToolStripMenuItem.Text = "Chat";
-            this.chatToolStripMenuItem.Visible = false;
             this.chatToolStripMenuItem.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // simulationToolStripMenuItem
@@ -5890,6 +5891,13 @@
             this.luckyNumberVerifierToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.luckyNumberVerifierToolStripMenuItem.Text = "Roll Verifier";
             this.luckyNumberVerifierToolStripMenuItem.Click += new System.EventHandler(this.luckyNumberVerifierToolStripMenuItem_Click);
+            // 
+            // seedsToolStripMenuItem
+            // 
+            this.seedsToolStripMenuItem.Name = "seedsToolStripMenuItem";
+            this.seedsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.seedsToolStripMenuItem.Text = "Enter Seed/Hash";
+            this.seedsToolStripMenuItem.Click += new System.EventHandler(this.seedsToolStripMenuItem_Click);
             // 
             // proxySettingsToolStripMenuItem
             // 
@@ -5927,7 +5935,8 @@
             this.fortuneJackToolStripMenuItem,
             this.cryptoGamesToolStripMenuItem,
             this.bitslerToolStripMenuItem,
-            this.wealthyDiceToolStripMenuItem});
+            this.wealthyDiceToolStripMenuItem,
+            this.satoshiDiceToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -5985,6 +5994,7 @@
             // 
             // daDiceToolStripMenuItem
             // 
+            this.daDiceToolStripMenuItem.Enabled = false;
             this.daDiceToolStripMenuItem.Name = "daDiceToolStripMenuItem";
             this.daDiceToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.daDiceToolStripMenuItem.Text = "DaDice";
@@ -6002,6 +6012,7 @@
             // 
             // bitDiceToolStripMenuItem
             // 
+            this.bitDiceToolStripMenuItem.Enabled = false;
             this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
             this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.bitDiceToolStripMenuItem.Text = "BitDice";
@@ -6026,9 +6037,11 @@
             // 
             // coinMillionsToolStripMenuItem
             // 
+            this.coinMillionsToolStripMenuItem.Enabled = false;
             this.coinMillionsToolStripMenuItem.Name = "coinMillionsToolStripMenuItem";
             this.coinMillionsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.coinMillionsToolStripMenuItem.Text = "CoinMillions";
+            this.coinMillionsToolStripMenuItem.Visible = false;
             this.coinMillionsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.coinMillionsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
@@ -6044,6 +6057,7 @@
             // 
             // investdiceToolStripMenuItem
             // 
+            this.investdiceToolStripMenuItem.Enabled = false;
             this.investdiceToolStripMenuItem.Name = "investdiceToolStripMenuItem";
             this.investdiceToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.investdiceToolStripMenuItem.Text = "investdice";
@@ -6053,9 +6067,11 @@
             // 
             // coinichiwaToolStripMenuItem
             // 
+            this.coinichiwaToolStripMenuItem.Enabled = false;
             this.coinichiwaToolStripMenuItem.Name = "coinichiwaToolStripMenuItem";
             this.coinichiwaToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.coinichiwaToolStripMenuItem.Text = "Coinichiwa";
+            this.coinichiwaToolStripMenuItem.Visible = false;
             this.coinichiwaToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.coinichiwaToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
@@ -6098,6 +6114,14 @@
             this.wealthyDiceToolStripMenuItem.Text = "WealthyDice";
             this.wealthyDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.wealthyDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // satoshiDiceToolStripMenuItem
+            // 
+            this.satoshiDiceToolStripMenuItem.Name = "satoshiDiceToolStripMenuItem";
+            this.satoshiDiceToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.satoshiDiceToolStripMenuItem.Text = "Satoshi Dice";
+            this.satoshiDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.satoshiDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // settingsModeToolStripMenuItem
             // 
@@ -6236,17 +6260,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
-            // 
-            // seedsToolStripMenuItem
-            // 
-            this.seedsToolStripMenuItem.Name = "seedsToolStripMenuItem";
-            this.seedsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.seedsToolStripMenuItem.Text = "Enter Seed/Hash";
-            this.seedsToolStripMenuItem.Click += new System.EventHandler(this.seedsToolStripMenuItem_Click);
-            // 
-            // betBindingSource
-            // 
-            this.betBindingSource.DataSource = typeof(DiceBot.Bet);
             // 
             // cDiceBot
             // 
@@ -6917,6 +6930,7 @@
         private System.Windows.Forms.ToolStripMenuItem dogeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wealthyDiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem seedsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem satoshiDiceToolStripMenuItem;
     }
 }
 
