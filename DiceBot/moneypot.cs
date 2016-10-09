@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
+using System.Security.Cryptography;
 
 namespace DiceBot
 {
@@ -15,7 +16,7 @@ namespace DiceBot
     {
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.moneypot.com/v1/") };
         HttpClientHandler ClientHandlr;
-        Random R = new Random();
+        RandomNumberGenerator R = new  System.Security.Cryptography.RNGCryptoServiceProvider();
         public moneypot(cDiceBot Parent)
         {
             NonceBased = false;
@@ -80,7 +81,9 @@ namespace DiceBot
                 bool High = tmp9.High;
                 decimal amount = tmp9.Amount;
                 decimal chance = tmp9.Chance;
-                int client = R.Next(0, int.MaxValue);
+                byte[] bytes = new byte[4];
+                R.GetBytes(bytes);
+                long client = (long)BitConverter.ToUInt32(bytes, 0);
                 decimal tmpchance = High ? maxRoll - chance : chance;
                 MPBetPlace betplace = new MPBetPlace
                 {
@@ -413,7 +416,7 @@ namespace DiceBot
     }
     public class MPBetPlace
     {
-        public int client_seed { get; set; }
+        public long client_seed { get; set; }
         public string hash { get; set; }
         public string cond { get; set; }
         public decimal target { get; set; }

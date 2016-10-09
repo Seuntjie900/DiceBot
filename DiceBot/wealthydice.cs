@@ -19,7 +19,7 @@ namespace DiceBot
         string username = "";
         
         DateTime lastupdate = new DateTime();
-        Random R = new Random();
+        RandomNumberGenerator R = new System.Security.Cryptography.RNGCryptoServiceProvider();
         public static string[] cCurrencies = new string[2] { "btc", "cj" };
         string actualcur = "btc";
         public WD(cDiceBot Parent)
@@ -215,17 +215,25 @@ namespace DiceBot
                 bool High = tmp9.High;
                 decimal amount = tmp9.Amount;
                 decimal chance = tmp9.Chance;
-
+                byte[] bytes = new byte[4];
+                R.GetBytes(bytes);
+                long client = (long)BitConverter.ToUInt32(bytes, 0);
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("wager", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
-                pairs.Add(new KeyValuePair<string, string>("direction", High?"1":"0"));
-                pairs.Add(new KeyValuePair<string, string>("coin", actualcur));
+                pairs.Add(new KeyValuePair<string, string>("direction", High ? "1" : "0"));
+                pairs.Add(new KeyValuePair<string, string>("coin", Currency));
+                pairs.Add(new KeyValuePair<string, string>("clientSeed", client.ToString()));
+                R.GetBytes(bytes);
+                client = (long)BitConverter.ToUInt32(bytes, 0);
+                pairs.Add(new KeyValuePair<string, string>("clientSeedNext", client.ToString()));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string responseData = "";
                 using (var response = Client.PostAsync("betDice/", Content))
                 {
+                    while (!response.IsCompleted)
+                        Thread.Sleep(100);
                     try
                     {
                         responseData = response.Result.Content.ReadAsStringAsync().Result;
@@ -246,7 +254,7 @@ namespace DiceBot
                 }
 
                 bbResult tmp = json.JsonDeserialize<bbResult>(responseData);
-               
+
                 if (tmp.error != 1)
                 {
                     next = tmp.nextServerSeed;
@@ -283,10 +291,10 @@ namespace DiceBot
                 }
                 if (e.Message.Contains("429") || e.Message.Contains("502"))
                 {
-                    Thread .Sleep(200);
+                    Thread.Sleep(200);
                     placebetthread(new PlaceBetObj(High, amount, chance));
                 }
-                
+
 
             }
             catch (Exception e)
@@ -294,7 +302,6 @@ namespace DiceBot
 
             }
         }
-
         protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
             this.High = High;

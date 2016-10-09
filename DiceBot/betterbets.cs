@@ -19,7 +19,7 @@ namespace DiceBot
         string username = "";
         
         DateTime lastupdate = new DateTime();
-        Random R = new Random();
+        RandomNumberGenerator R = new System.Security.Cryptography.RNGCryptoServiceProvider();
         public static string[] cCurrencies = new string[2] { "btc", "rbs" };
         public BB(cDiceBot Parent)
         {
@@ -212,17 +212,25 @@ namespace DiceBot
                 bool High = tmp9.High;
                 decimal amount = tmp9.Amount;
                 decimal chance = tmp9.Chance;
-
+                byte[] bytes = new byte[4];
+                R.GetBytes(bytes);
+                long client = (long)BitConverter.ToUInt32(bytes,0);
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("accessToken", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("wager", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("direction", High?"1":"0"));
                 pairs.Add(new KeyValuePair<string, string>("coin", Currency));
+                pairs.Add(new KeyValuePair<string, string>("clientSeed", client.ToString()));
+                R.GetBytes(bytes);
+                client = (long)BitConverter.ToUInt32(bytes, 0);
+                pairs.Add(new KeyValuePair<string, string>("clientSeedNext", client.ToString()));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string responseData = "";
                 using (var response = Client.PostAsync("betDice/", Content))
                 {
+                    while (!response.IsCompleted)
+                        Thread.Sleep(100);
                     try
                     {
                         responseData = response.Result.Content.ReadAsStringAsync().Result;
@@ -576,10 +584,10 @@ namespace DiceBot
         public decimal wager { get; set; }
         public decimal target { get; set; }
         public decimal result { get; set; }
-        public int clientSeed { get; set; }
+        public long clientSeed { get; set; }
         public string serverSeed { get; set; }
         public string nextServerSeed { get; set; }
-        public long betId { get; set; }
+        public long betID { get; set; }
 
         public Bet toBet()
         {
@@ -592,7 +600,7 @@ namespace DiceBot
                 
                 clientseed = clientSeed.ToString(),
                 serverseed = serverSeed,
-                Id=betId
+                Id=betID
             };
 
             tmp.Chance = tmp.high ? 99.99m - (decimal)target : (decimal)target;
