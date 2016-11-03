@@ -236,7 +236,7 @@ namespace DiceBot
                 decimal amount = tmp5.Amount;
                 decimal chance = tmp5.Chance;
                 bool High = tmp5.High;
-                if ((DateTime.Now - Lastbet).TotalMilliseconds<500)
+                if (amount < 10000 && (DateTime.Now - Lastbet).TotalMilliseconds < 500)
                 {
                     Thread.Sleep((int)(500.0 - (DateTime.Now - Lastbet).TotalMilliseconds));
                 }

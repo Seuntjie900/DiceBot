@@ -184,7 +184,13 @@ devise:btc*/
                 pairs.Add(new KeyValuePair<string, string>("api_key", "0b2edbfe44e98df79665e52896c22987445683e78"));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
-                bsBetBase bsbase = json.JsonDeserialize<bsBetBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
+                bsBetBase bsbase = null;
+                try
+                {
+                    bsbase = json.JsonDeserialize<bsBetBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
+                }
+                catch
+                { }
                 
                 if (bsbase!=null)
                     if (bsbase._return!=null)
@@ -228,7 +234,11 @@ devise:btc*/
                 //
 
             }
-            catch
+            catch (AggregateException e)
+            {
+                Parent.updateStatus("An Unknown error has ocurred.");
+            }
+            catch (Exception e)
             {
                 Parent.updateStatus("An Unknown error has ocurred.");
             }
@@ -404,6 +414,8 @@ devise:btc*/
         double LastBetAmount = 0;
         public override bool ReadyToBet()
         {
+            //return true;
+
             int type_delay=0;
             double amount=LastBetAmount;
             if (Currency.ToLower() == "btc") {
@@ -459,15 +471,16 @@ devise:btc*/
             }
             int delay = 0;
             if (type_delay == 1)
-                delay = 1250;
+                delay = 200;
             else if (type_delay == 2)
-                delay = 850;
+                delay = 200;
             else if (type_delay == 3)
-                delay = 450;
+                delay = 50;
             else if (type_delay == 4)
-                delay = 350;
+                delay = 50;
             else
                 delay = 50;
+
 
             return (DateTime.Now - LastBet).TotalMilliseconds > delay;
         }

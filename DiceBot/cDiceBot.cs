@@ -490,6 +490,22 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
+            foreach (string s in Bitvest.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                bitvestToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -1192,6 +1208,7 @@ namespace DiceBot
                 Losses = tmplosses;
                 StartBalance = tmpStartBalance ;
                 profit = tmpprofit;
+                RunningSimulation = false;
             }
         }
 
@@ -4609,14 +4626,18 @@ namespace DiceBot
 
         public void updateStatus(object Status)
         {
-            if (InvokeRequired)
+            try
             {
-                Invoke(new dupdateControll(updateStatus), Status);
+                if (InvokeRequired)
+                {
+                    Invoke(new dupdateControll(updateStatus), Status);
+                }
+                else
+                {
+                    lblStatus.Text = Status.ToString();
+                }
             }
-            else
-            {
-                lblStatus.Text = Status.ToString();
-            }
+            catch { }
         }
 
         fChat PopoutChat = new fChat("");
@@ -4756,6 +4777,7 @@ namespace DiceBot
                     case "rollin": CurrentSite = new rollin(this); break;
                     case "SafeDice": CurrentSite = new SafeDice(this); break;
                     case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
+                    case "Bitvest": CurrentSite = new Bitvest(this); break;
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -4793,6 +4815,7 @@ namespace DiceBot
                         case "rollin": CurrentSite = new rollin(this); break;
                         case "SafeDice": CurrentSite = new SafeDice(this); break;
                         case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
+                        case "Bitvest": CurrentSite = new Bitvest(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5337,6 +5360,7 @@ namespace DiceBot
                     case "cryptoGamesToolStripMenuItem" : CurrentSite = new cryptogames(this); siteToolStripMenuItem.Text = "Site (CG)"; break;
                     case "bitslerToolStripMenuItem" : CurrentSite = new Bitsler(this); siteToolStripMenuItem.Text = "Site (BS)"; break;
                     case "satoshiDiceToolStripMenuItem" : CurrentSite = new SatoshiDice(this); siteToolStripMenuItem.Text = "Site (SatD)"; break;
+                    case "bitvestToolStripMenuItem": CurrentSite = new Bitvest(this); siteToolStripMenuItem.Text = "Site (BV)"; break;
                 }
                 if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
@@ -5507,6 +5531,7 @@ namespace DiceBot
                         SetLuaVars();
                         LuaRuntime.Run(richTextBox3.Text);
                         GetLuaVars();
+                        
                         Start(false);
                     }
                     catch (Exception ex)
@@ -5762,6 +5787,7 @@ namespace DiceBot
                             dogeToolStripMenuItem.Checked?15:
                             wealthyDiceToolStripMenuItem.Checked?16:
                             satoshiDiceToolStripMenuItem.Checked?17:
+                            bitvestToolStripMenuItem.Checked?18:
                             1);
                 }
                 else if (c is TextBox)
@@ -5874,7 +5900,8 @@ namespace DiceBot
                         dogeToolStripMenuItem.Checked = value == 15;
                         wealthyDiceToolStripMenuItem.Checked = value == 16;
                         satoshiDiceToolStripMenuItem.Checked = value == 17;
-                        if (value > 17)
+                        bitvestToolStripMenuItem.Checked = value == 18;
+                        if (value > 18)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6005,6 +6032,7 @@ namespace DiceBot
                         dogeToolStripMenuItem.Checked = value == "15";
                         wealthyDiceToolStripMenuItem.Checked = value == "16";
                         satoshiDiceToolStripMenuItem.Checked = value == "17";
+                        bitvestToolStripMenuItem.Checked = value == "18";
                     }
                     else if (Key == "SettingsMode")
                     {

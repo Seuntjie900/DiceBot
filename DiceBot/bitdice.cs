@@ -28,7 +28,7 @@ namespace DiceBot
             ChangeSeed = true;
             Name = "BitDice";
             this.Parent = Parent;
-            SiteURL = "https://bitdice.me";
+            SiteURL = "https://www.bitdice.me/?r=82";
             /*Client = new WebSocket("");
             Client.Opened += Client_Opened;
             Client.Error += Client_Error;
@@ -130,7 +130,12 @@ namespace DiceBot
         {
             throw new NotImplementedException();
         }
-
+        static public string EncodeTo64(string toEncode)
+        {
+            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
+            string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
+            return returnValue;
+        }
         protected override bool internalWithdraw(decimal Amount, string Address)
         {
             string s = string.Format("{{\"jsonrpc\":\"2.0\",\"method\":\"user:cashout\",\"params\":{{\"amount\":\"{0:0.00000000}\",\"address\":\"{1}\"}},\"id\":{2}}}", Amount, Address, id++);
@@ -217,72 +222,50 @@ namespace DiceBot
                         break;
                     }
                 }
-                /*betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                betrequest.CookieContainer = Cookies;
 
-                EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
                 string sEmitResponse = WebClient.GetStringAsync("").Result;
-                getcsrf(sEmitResponse);
 
-                cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
-                //betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/users/sign_in");
-                //betrequest.Method = "POST";
-                //betrequest.CookieContainer = Cookies;
+                //create data thing
+                string a = json.JsonSerializer<bitdicedatainfo>(new bitdicedatainfo());
 
-                /*string post = string.Format("
-                 * utf8=%E2%9C%93
-                 * user%5Busername%5D={0}
-                 * user%5Bpassword%5D={1}
-                 * user%5Botp_code%5D=
-                 * button=", Username, Password);
-                username = Username;
-                betrequest.ContentLength = post.Length;
+                //encode
+                a = System.Web.HttpUtility.HtmlEncode(a);
+                a = a.Replace("+", "%20");
+                //unescape
+                a = System.Web.HttpUtility.UrlDecode(a);
 
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                betrequest.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
-                betrequest.Headers.Add("X-CSRF-Token", csrf);
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-                {
+                //base 64 encode
+                a = EncodeTo64(a);
 
-                    writer.Write(post);
-                }
-                EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("utf8", "✓"));
-                pairs.Add(new KeyValuePair<string, string>("user[username]", Username));
+                pairs.Add(new KeyValuePair<string, string>("user[email]", Username));
                 pairs.Add(new KeyValuePair<string, string>("user[password]", Password));
-                pairs.Add(new KeyValuePair<string, string>("user[otp_code]", twofa ));
-                pairs.Add(new KeyValuePair<string, string>("button", ""));
+                pairs.Add(new KeyValuePair<string, string>("user[two_fa]", twofa));
+                pairs.Add(new KeyValuePair<string, string>("data[info]", a));
+                //data[info]
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
+                /*if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
                 {
                     WebClient.DefaultRequestHeaders.Remove("X-CSRF-Token");
                 }
                 WebClient.DefaultRequestHeaders.Add("X-CSRF-Token", csrf);
-                
+                */
                 username = Username;
                 try
                 {
-                    sEmitResponse = WebClient.PostAsync("users/sign_in", Content).Result.Content.ReadAsStringAsync().Result;
+                    sEmitResponse = WebClient.PostAsync("/api/sign_in", Content).Result.Content.ReadAsStringAsync().Result;
                 }
                 catch { finishedlogin(false); }
-                cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
-                if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
+                //cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
+                /*if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
                 {
 
-                }
-                try
+                }*/
+                /*try
                 {
                     ClientHandlr.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
                 }catch
-                { }
+                { }*/
                 /*betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
                 if (Prox != null)
                     betrequest.Proxy = Prox;
@@ -745,5 +728,27 @@ namespace DiceBot
     public class bitNew
     {
         public string secret { get; set; }
+    }
+    public class bitdicedatainfo
+    {
+        public string lang { get; set; }
+        public string platform { get; set; }
+        public int cpu { get; set; }
+        public string size { get; set; }
+        public string webrtc { get; set; }
+        public string timezone { get; set; }
+        public string time { get; set; }
+
+        public bitdicedatainfo()
+        {
+            lang = "en-US, en";
+            platform = "Win32";
+            webrtc = "127.0.0.1";
+            timezone = TimeZone.CurrentTimeZone.StandardName;
+            time = DateTime.Now.ToString();
+            cpu = 4;
+            size = "0";
+
+        }
     }
 }

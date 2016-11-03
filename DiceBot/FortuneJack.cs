@@ -287,12 +287,34 @@ namespace DiceBot
 
                 EmitResponse = (HttpWebResponse)betrequest.GetResponse();
                 sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
-                string sEmitResponse = WebClient.GetStringAsync("").Result;
+                HttpResponseMessage resp1 = WebClient.GetAsync("").Result;
+                if (resp1.IsSuccessStatusCode)
+                {
+                    s1 = resp1.Content.ReadAsStringAsync().Result;
+                }
+                else
+                {
+                    if (resp1.StatusCode == HttpStatusCode.Forbidden)
+                    {
+                        s1 = resp1.Content.ReadAsStringAsync().Result;
+                        //cflevel = 0;
+                        System.Threading.Tasks.Task.Factory.StartNew(() =>
+                        {
+                            System.Windows.Forms.MessageBox.Show("fortunejack.com has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                        });
+                        if (!Cloudflare.doCFThing(s1, WebClient, ClientHandlr, 0, "fortunejack.com"))
+                        {
+                            finishedlogin(false);
+                            return;
+                        }
+
+                    }
+                }
                 string phpsess = "";
                 CookieCollection tmp = ClientHandlr.CookieContainer.GetCookies(new Uri("https://fortunejack.com"));
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                sEmitResponse = WebClient.PostAsync("ajax/time.php", Content).Result.Content.ReadAsStringAsync().Result;
+                string sEmitResponse = WebClient.PostAsync("ajax/time.php", Content).Result.Content.ReadAsStringAsync().Result;
                 //https://fortunejack.com/ajax/gamesSearch.php
                 pairs = new List<KeyValuePair<string, string>>();
                 Content = new FormUrlEncodedContent(pairs);
@@ -370,12 +392,17 @@ namespace DiceBot
                 new Thread(new ThreadStart(KeepAliveThread)).Start();
                 finishedlogin(true);
                 IsLoggedIn = true;
+                return;
                 //Client.Send("67,2");
             }
             catch (AggregateException e)
             {
+                finishedlogin(false);
+                return;
 
             }
+            finishedlogin(false);
+            return;
         }
 
         private void GetChatToken(string sEmitResponse)

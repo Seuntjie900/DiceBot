@@ -17,7 +17,7 @@ namespace DiceBot
         {
             try
             {
-                Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
                 MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
                 T obj = (T)ser.ReadObject(ms);

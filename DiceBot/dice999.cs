@@ -379,13 +379,18 @@ namespace DiceBot
 
         public bool doge999 = false;
         decimal Wagered = 0;
+        int site = 0;
         public override void Login(string Username, string Password, string twofa)
         {
+            string sitea = "";
+            switch (site)
+            {
+                case 0: sitea = "https://www.999dice.com/api/web.aspx"; break;
+                case 1: sitea = "https://www.999doge.com/api/web.aspx"; break;
+                case 2: sitea = "https://www.999-dice.com/api/web.aspx"; break;
+            }
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
-            if (doge999)
-                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999doge.com/api/web.aspx") };
-            else
-                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri(sitea) };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
@@ -407,11 +412,12 @@ namespace DiceBot
                 }
                 catch (AggregateException e)
                 {
-                    if (e.InnerException.Message.Contains("ssl"))
-                    {
+                    if (site++ < 2)
                         Login(Username, Password, twofa);
-                        return;
-                    }
+                    else
+                        finishedlogin(false);
+                    return;
+                    
                 }
             }
             
@@ -689,3 +695,4 @@ namespace DiceBot
     
     
 }
+
