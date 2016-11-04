@@ -236,7 +236,7 @@ namespace DiceBot
 
                 //base 64 encode
                 a = EncodeTo64(a);
-
+                a = "eyJsYW5nIjoiZW4tVVMsIGVuLCBhZiIsInBsYXRmb3JtIjoiV2luMzIiLCJjcHUiOjQsInNpemUiOiIxOTAzeDQyODEgKDE5MjB4MTA4MCkiLCJ3ZWJydGMiOiIxNzIuMTYuMTAxLjczIiwidGltZXpvbmUiOiJBZnJpY2EvSm9oYW5uZXNidXJnIiwidGltZSI6IkZyaSBOb3YgMDQgMjAxNiAxMDo1NzoxOSBHTVQrMDIwMCAoU291dGggQWZyaWNhIFN0YW5kYXJkIFRpbWUpIn0=";
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("user[email]", Username));
                 pairs.Add(new KeyValuePair<string, string>("user[password]", Password));
