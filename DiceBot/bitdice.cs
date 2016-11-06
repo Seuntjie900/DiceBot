@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebSocket4Net;
 using System.Net.Http;
+using System.Net.Sockets;
 
 namespace DiceBot
 {
@@ -229,14 +230,14 @@ namespace DiceBot
                 string a = json.JsonSerializer<bitdicedatainfo>(new bitdicedatainfo());
 
                 //encode
-                a = System.Web.HttpUtility.HtmlEncode(a);
-                a = a.Replace("+", "%20");
+                //a = System.Web.HttpUtility.HtmlEncode(a);
+                //a = a.Replace("+", "%20");
                 //unescape
                 a = System.Web.HttpUtility.UrlDecode(a);
 
                 //base 64 encode
                 a = EncodeTo64(a);
-
+                
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("user[email]", Username));
                 pairs.Add(new KeyValuePair<string, string>("user[password]", Password));
@@ -740,15 +741,36 @@ namespace DiceBot
         public string time { get; set; }
 
         public bitdicedatainfo()
-        {
+        {            
             lang = "en-US, en";
             platform = "Win32";
-            webrtc = "127.0.0.1";
-            timezone = TimeZone.CurrentTimeZone.StandardName;
-            time = DateTime.Now.ToString();
-            cpu = 4;
-            size = "0";
+            webrtc = GetLocalIPAddress();
+            timezone = TimeZoneInfo.Local.DisplayName;
+            time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss \"GMT\"zzz") + " (" + TimeZone.CurrentTimeZone.StandardName+")"; 
+            cpu = Environment.ProcessorCount;
+            string sz = System.Windows.SystemParameters.VirtualScreenWidth + "x" + System.Windows.SystemParameters.VirtualScreenHeight;
+            /*System.Windows.SystemParameters.FullPrimaryScreenHeight
+            System.Windows.SystemParameters.FullPrimaryScreenWidth*/
+                size = sz+=" ("+System.Windows.SystemParameters.PrimaryScreenWidth+"x"+
+                    System.Windows.SystemParameters.PrimaryScreenHeight+")";
 
+        }
+
+        public static string GetLocalIPAddress()
+        {
+            string s = "";
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    if (s != "")
+                        s += ", ";
+                    s+= ip.ToString();
+                }
+            }
+            return s;
+            throw new Exception("Local IP Address Not Found!");
         }
     }
 }

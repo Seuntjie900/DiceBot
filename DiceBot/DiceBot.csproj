@@ -136,6 +136,7 @@
       <HintPath>C:\Users\seunt\Desktop\GitHub\SeuntjieBotGithub\SeuntjieBot\packages\Noesis.Javascript.0.7.1.0\lib\net40\x86\Noesis.Javascript.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="SharpLua">
       <HintPath>..\packages\SharpLua.2.1.1.1\lib\net40\SharpLua.dll</HintPath>
     </Reference>

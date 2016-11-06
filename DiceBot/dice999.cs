@@ -83,7 +83,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("a", "GetBalance"));
                 pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
                 pairs.Add(new KeyValuePair<string, string>("Currency", Currency));
-                
+                pairs.Add(new KeyValuePair<string, string>("Stats", "1"));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string responseData = "";
                 using (var response = Client.PostAsync("", Content))
@@ -103,10 +103,21 @@ namespace DiceBot
                 }
                 try
                 {
-                    balance = (decimal)json.JsonDeserialize<d999Login>(responseData).Balance / 100000000.0m;
+                    d999Login tmplogin = json.JsonDeserialize<d999Login>(responseData);
+                    balance = (decimal)tmplogin.Balance / 100000000.0m;
+                    wagered = Wagered = -(decimal)tmplogin.TotalPayIn / 100000000.0m;
+                    profit = tmplogin.TotalProfit / 100000000.0m; ;
+                    bets = (int)tmplogin.TotalBets;
+                    wins = (int)tmplogin.TotalWins;
+                    losses = (int)tmplogin.TotalLoseCount;
                     if (balance != 0)
                     {
                         Parent.updateBalance((decimal)balance);
+                        Parent.updateBets(bets);
+                        Parent.updateWagered(wagered);
+                        Parent.updateProfit(profit);
+                        Parent.updateWins(wins);
+                        Parent.updateLosses(losses);
                     }
                     
                 }
@@ -322,6 +333,7 @@ namespace DiceBot
         public override void Disconnect()
         {
             isD999 = false;
+            thing = false;
         }
 
         public override void GetSeed(long BetID)
@@ -380,86 +392,98 @@ namespace DiceBot
         public bool doge999 = false;
         decimal Wagered = 0;
         int site = 0;
+        bool thing = false;
         public override void Login(string Username, string Password, string twofa)
         {
-            string sitea = "";
-            switch (site)
+            try
             {
-                case 0: sitea = "https://www.999dice.com/api/web.aspx"; break;
-                case 1: sitea = "https://www.999doge.com/api/web.aspx"; break;
-                case 2: sitea = "https://www.999-dice.com/api/web.aspx"; break;
-            }
-            ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri(sitea) };
-            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-            Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
-            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-            pairs.Add(new KeyValuePair<string, string>("a", "Login"));
-            pairs.Add(new KeyValuePair<string, string>("key", "7a3ada10cb804ec695cda315db6b8789"));
-            if (twofa!="" && twofa!=null)
-            pairs.Add(new KeyValuePair<string, string>("Totp", twofa));
+                string sitea = "";
+                switch (site)
+                {
+                    case 0: sitea = "https://www.999dice.com/api/web.aspx"; break;
+                    case 1: sitea = "https://www.999doge.com/api/web.aspx"; break;
+                    case 2: sitea = "https://www.999-dice.com/api/web.aspx"; break;
+                }
+                ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, Proxy = this.Prox, UseProxy = Prox != null }; ;
+                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri(sitea) };
+                Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+                Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                pairs.Add(new KeyValuePair<string, string>("a", "Login"));
+                pairs.Add(new KeyValuePair<string, string>("key", "7a3ada10cb804ec695cda315db6b8789"));
+                if (twofa != "" && twofa != null)
+                    pairs.Add(new KeyValuePair<string, string>("Totp", twofa));
 
-            pairs.Add(new KeyValuePair<string, string>("Username", Username));
-            pairs.Add(new KeyValuePair<string, string>("Password", Password));
+                pairs.Add(new KeyValuePair<string, string>("Username", Username));
+                pairs.Add(new KeyValuePair<string, string>("Password", Password));
 
-            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-            string responseData = "";
-            using (var response = Client.PostAsync("", Content))
-            {
-                try
+                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                string responseData = "";
+                using (var response = Client.PostAsync("", Content))
                 {
-                    responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    try
+                    {
+                        responseData = response.Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        if (site++ < 2)
+                            Login(Username, Password, twofa);
+                        else
+                            finishedlogin(false);
+                        return;
+
+                    }
                 }
-                catch (AggregateException e)
+
+                d999Login tmpU = json.JsonDeserialize<d999Login>(responseData);
+                if (tmpU.SessionCookie != "" && tmpU.SessionCookie != null)
                 {
-                    if (site++ < 2)
-                        Login(Username, Password, twofa);
-                    else
-                        finishedlogin(false);
-                    return;
-                    
+                    Lastbalance = DateTime.Now;
+                    sessionCookie = tmpU.SessionCookie;
+                    balance = tmpU.Balance / 100000000.0m;
+                    profit = tmpU.Profit / 100000000.0m;
+                    Wagered = tmpU.Wagered / 100000000m;
+                    bets = (int)tmpU.BetCount;
+                    wins = (int)tmpU.BetWinCount;
+                    losses = (int)tmpU.BetLoseCount;
+                    GetBalance();
+                    Parent.updateBalance((decimal)(balance));
+                    Parent.updateBets(tmpU.BetCount);
+                    Parent.updateLosses(tmpU.BetLoseCount);
+                    Parent.updateProfit(profit);
+                    Parent.updateWagered(Wagered);
+                    Parent.updateWins(tmpU.BetWinCount);
+                    Lastbalance = DateTime.Now.AddMinutes(-2);
+                    GetBalance();
+                    try
+                    {
+                        Parent.updateDeposit(tmpU.DepositAddress);
+                    }
+                    catch { }
+                    uid = tmpU.Accountid;
+                }
+                else
+                {
+
+                }
+                if (sessionCookie != "")
+                {
+                    isD999 = true;
+                    Thread t = new Thread(GetBalanceThread);
+                    t.Start();
+
                 }
             }
-            
-            d999Login tmpU = json.JsonDeserialize<d999Login>(responseData);
-            if (tmpU.SessionCookie!="" && tmpU.SessionCookie!=null)
-            {
-                Lastbalance = DateTime.Now;
-                sessionCookie = tmpU.SessionCookie;
-                balance = tmpU.Balance / 100000000.0m;
-                profit = tmpU.Profit/100000000.0m;
-                Wagered = tmpU.Wagered/100000000m;
-                bets = (int)tmpU.BetCount;
-                wins = (int)tmpU.BetWinCount;
-                losses = (int)tmpU.BetLoseCount;
-                GetBalance();
-                Parent.updateBalance((decimal)(balance));
-                Parent.updateBets(tmpU.BetCount);
-                Parent.updateLosses(tmpU.BetLoseCount);
-                Parent.updateProfit(profit);
-                Parent.updateWagered(Wagered);
-                Parent.updateWins(tmpU.BetWinCount);
-                Lastbalance = DateTime.Now.AddMinutes(-2);
-                GetBalance();
-                try
-                {
-                    Parent.updateDeposit(tmpU.DepositAddress);
-                }
-                catch { }
-                uid = tmpU.Accountid;
-            }      
-            else
-            {
-                
+            catch {
+                if (site++ < 2)
+                    Login(Username, Password, twofa);
             }
-            if (sessionCookie!="")
+            if (!thing)
             {
-                isD999 = true;
-                Thread t = new Thread(GetBalanceThread);
-                t.Start();
-                
+                finishedlogin(sessionCookie != "");
+                thing = true;
             }
-            finishedlogin(sessionCookie != "");
         }
         public override bool Register(string username, string password)
         {
@@ -666,6 +690,14 @@ namespace DiceBot
         public decimal BetPayOut { get; set; }
         public decimal Profit { get {return BetPayIn+BetPayOut;} }
         public decimal Wagered { get { return BetPayOut - BetPayIn; } }
+
+        public decimal TotalPayIn { get; set; }
+        public decimal TotalPayOut { get; set; }
+        public decimal TotalProfit { get { return TotalPayIn + TotalPayOut; } }
+
+        public long TotalBets { get; set; }
+        public long TotalWins { get; set; }
+        public long TotalLoseCount { get { return TotalBets - TotalWins; } }
     }
 
     public class d999Hash

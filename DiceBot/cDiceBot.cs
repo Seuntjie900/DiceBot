@@ -802,7 +802,8 @@ namespace DiceBot
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("http://seuntjie.com/Dicebot/vs.html");
+                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("https://seuntjie.com/Dicebot/vs.html");
+                request.UserAgent = "dicebot" + vers;
                 HttpWebResponse EmitResponse = (HttpWebResponse)request.GetResponse();
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 string[] ss = sEmitResponse.Split('|');
