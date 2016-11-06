@@ -789,7 +789,7 @@ namespace DiceBot
                 else
                 {
                     MessageBox.Show("Failed to log in or register new account!", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    updateStatus("Disconnected");
+                    //updateStatus("Disconnected");
                 }
 
             }

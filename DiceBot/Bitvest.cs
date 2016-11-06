@@ -45,7 +45,7 @@ namespace DiceBot
         }
         protected override void CurrencyChanged()
         {
-            
+            ForceUpdateStats = true;
         }
         Random R = new Random();
         string RandomSeed()
@@ -65,7 +65,7 @@ namespace DiceBot
             {
                 while (ispd)
                 {
-                    if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 60||ForceUpdateStats))
+                    if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 10||ForceUpdateStats))
                     {
                         List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                         pairs.Add(new KeyValuePair<string, string>("c", "99999999"));
@@ -73,11 +73,12 @@ namespace DiceBot
                         pairs.Add(new KeyValuePair<string, string>("k", "0"));
                         pairs.Add(new KeyValuePair<string, string>("m", "99999899"));
                         pairs.Add(new KeyValuePair<string, string>("u", "0"));
+                        pairs.Add(new KeyValuePair<string, string>("self_only", "1"));
 
                         FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                         string sEmitResponse = Client.PostAsync("https://bitvest.io/update.php", Content).Result.Content.ReadAsStringAsync().Result;
 
-
+                        ForceUpdateStats = false;
                         bitvestLoginBase tmpbase = json.JsonDeserialize<bitvestLoginBase>(sEmitResponse.Replace("-", "_"));
                         if (tmpbase!=null)
                         {
@@ -128,6 +129,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("k", "0"));
                 pairs.Add(new KeyValuePair<string, string>("m", "99999899"));
                 pairs.Add(new KeyValuePair<string, string>("u", "0"));
+                //pairs.Add(new KeyValuePair<string, string>("self_only", "1"));
 
                 Content = new FormUrlEncodedContent(pairs);
                 sEmitResponse = Client.PostAsync("https://bitvest.io/update.php", Content).Result.Content.ReadAsStringAsync().Result;
@@ -148,6 +150,12 @@ namespace DiceBot
                 Content = new FormUrlEncodedContent(pairs);
                 sEmitResponse = Client.PostAsync("action.php", Content).Result.Content.ReadAsStringAsync().Result;
                 tmpbase = json.JsonDeserialize<bitvestLoginBase>(sEmitResponse);
+                if (!tmpbase.success)
+                {
+                    Parent.updateStatus(tmpbase.msg);
+                    finishedlogin(false);
+                    return false;
+                }
                 accesstoken = tmpbase.data.session_token;
                 secret = tmpbase.account.secret;
                 if (accesstoken == "")
@@ -191,8 +199,9 @@ namespace DiceBot
                 }
 
             }
-            catch
+            catch (Exception e)
             {
+                Parent.updateStatus(e.Message);
                 finishedlogin(false); return false;
             }
 
@@ -223,7 +232,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("k", "0"));
                 pairs.Add(new KeyValuePair<string, string>("m", "99999899"));
                 pairs.Add(new KeyValuePair<string, string>("u", "0"));
-                
+                //pairs.Add(new KeyValuePair<string, string>("self_only", "1"));
                 Content = new FormUrlEncodedContent(pairs);
                 resp = Client.PostAsync("https://bitvest.io/update.php", Content).Result.Content.ReadAsStringAsync().Result;
 
@@ -309,7 +318,7 @@ namespace DiceBot
                 decimal chance = tmp5.Chance;
                 bool High = tmp5.High;
                 
-                decimal tmpchance = High ?maxRoll - chance-0.0001m : chance+0.0001m;
+                decimal tmpchance = High ?maxRoll - chance+0.0001m : chance-0.0001m;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 string seed = RandomSeed();
                 pairs.Add(new KeyValuePair<string, string>("bet", (amount).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
@@ -343,10 +352,11 @@ namespace DiceBot
                             Roll = tmp.game_result.roll,
                             Profit = tmp.game_result.win == 0 ? -amount : tmp.game_result.win-amount,
                             nonce = -1,
-                            Id = bets++,
+                            Id = tmp.game_id,
                             Currency = Currency
 
                         };
+                        bets++;
                         lasthash = tmp.server_hash;
                         bool Win = (((bool)High ? (decimal)tmp.game_result.roll > (decimal)maxRoll - (decimal)(chance) : (decimal)tmp.game_result.roll < (decimal)(chance)));
                         if (Win)
@@ -371,6 +381,13 @@ namespace DiceBot
                     else
                     {
                         Parent.updateStatus(tmp.msg);
+                        if (tmp.msg.ToLower() == "bet rate limit exceeded")
+                        {
+                            Parent.updateStatus(tmp.msg+". Retrying in a second;");
+                            Thread.Sleep(1000);
+                            placebetthread(bet);
+                            return;
+                        }
                     }
                 }
                 catch
@@ -592,6 +609,8 @@ namespace DiceBot
     }
     public class bitvestLoginBase
     {
+        public bool success { get; set; }
+        public string msg { get; set; }
         public bitvestLogin data { get; set; }
         public bitvestAccount account { get; set; }
         public string server_hash { get; set; }
@@ -630,6 +649,7 @@ namespace DiceBot
         public string msg { get; set; }
         public bitvestbetdata data { get; set; }
         public bitvestgameresult game_result { get; set; }
+        public long game_id { get; set; }
         public string result { get; set; }
         public string server_seed { get; set; }
         public string server_hash { get; set; }
