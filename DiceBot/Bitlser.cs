@@ -23,6 +23,7 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         public static string[] sCurrencies = new string[] { "btc","ltc","doge","eth" };
         HttpClientHandler ClientHandlr;
+        
         public Bitsler(cDiceBot Parent)
         {
             Currencies = new string[] { "btc","ltc","doge" };
@@ -255,6 +256,7 @@ devise:btc*/
         {
             //Just wanted to test if this works. It doesn't. Will work with the bitsler team to
             //expand functionality in the future.
+            Thread.Sleep(100);
             try
             {
                 if ((DateTime.Now - LastReset).TotalMinutes >= 3)
@@ -417,54 +419,54 @@ devise:btc*/
             //return true;
 
             int type_delay=0;
-            double amount=LastBetAmount;
+            //double (double)amount=LastBet(double)amount;
             if (Currency.ToLower() == "btc") {
-                if (amount < 0.00000010)
+                if (LastBetAmount< 0.00000010|| (double)amount < 0.00000010 )
                     type_delay = 1;
-                else if (amount < 0.00000100)
+                else if (LastBetAmount< 0.00000100|| (double)amount < 0.00000100)
                     type_delay = 2;
-                else if (amount < 0.00000500)
+                else if (LastBetAmount< 0.00000500|| (double)amount < 0.00000500)
                     type_delay = 3;
-                else if (amount < 0.00002000)
+                else if (LastBetAmount< 0.00002000|| (double)amount < 0.00002000)
                     type_delay = 4;
                 else
                     type_delay = 5;
             }
             else if (Currency.ToLower() == "eth")
             {
-                if (amount < 0.00001000)
+                if (LastBetAmount< 0.00001000|| (double)amount < 0.00001000)
                     type_delay = 1;
-                else if (amount < 0.00005000)
+                else if (LastBetAmount< 0.00005000|| (double)amount < 0.00005000)
                     type_delay = 2;
-                else if (amount < 0.00010000)
+                else if (LastBetAmount< 0.00010000|| (double)amount < 0.00010000)
                     type_delay = 3;
-                else if (amount < 0.00025000)
+                else if (LastBetAmount< 0.00025000|| (double)amount < 0.00025000)
                     type_delay = 4;
                 else
                     type_delay = 5;
             }
             else if (Currency.ToLower() == "ltc")
             {
-                if (amount < 0.00010000)
+                if (LastBetAmount< 0.00010000|| (double)amount < 0.00010000)
                     type_delay = 1;
-                else if (amount < 0.00025000)
+                else if (LastBetAmount< 0.00025000|| (double)amount < 0.00025000)
                     type_delay = 2;
-                else if (amount < 0.00050000)
+                else if (LastBetAmount< 0.00050000|| (double)amount < 0.00050000)
                     type_delay = 3;
-                else if (amount < 0.00200000)
+                else if (LastBetAmount< 0.00200000|| (double)amount < 0.00200000)
                     type_delay = 4;
                 else
                     type_delay = 5;
             }
             else if (Currency.ToLower() == "doge")
             {
-                if (amount < 10)
+                if (LastBetAmount< 10|| (double)amount < 10)
                     type_delay = 1;
-                else if (amount < 50)
+                else if (LastBetAmount< 50|| (double)amount < 50)
                     type_delay = 2;
-                else if (amount < 200)
+                else if (LastBetAmount< 200|| (double)amount < 200)
                     type_delay = 3;
-                else if (amount < 1000)
+                else if (LastBetAmount < 1000 || (double)amount < 1000)
                     type_delay = 4;
                 else
                     type_delay = 5;

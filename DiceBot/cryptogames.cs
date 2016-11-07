@@ -21,7 +21,7 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
         
-        public static string[] sCurrencies = new string[] { "BTC", "Doge", "ETH", "DASH", "GRC", "GAME", "PPC", "PLAY", "LTC" };
+        public static string[] sCurrencies = new string[] { "BTC", "Doge", "ETH", "DASH", "GRC", "GAME", "PPC", "PLAY", "LTC","XMR" };
         public cryptogames(cDiceBot Parent)
         {
             NonceBased = false;
@@ -32,7 +32,7 @@ namespace DiceBot
             ChangeSeed = false;
             edge = 0.8m;
             maxRoll = 99.999m;
-            this.Currencies = new string[] { "BTC", "Doge", "ETH", "DASH", "GRC", "GAME", "PPC", "PLAY", "LTC" };
+            this.Currencies = new string[] { "BTC", "Doge", "ETH", "DASH", "GRC", "GAME", "PPC", "PLAY", "LTC", "XMR" };
             this.Currency = "btc";
             register = false;
             SiteURL = "https://www.crypto-games.net?i=KaSwpL1Bky";

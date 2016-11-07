@@ -6015,6 +6015,7 @@
             // 
             // bitDiceToolStripMenuItem
             // 
+            this.bitDiceToolStripMenuItem.Enabled = false;
             this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
             this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.bitDiceToolStripMenuItem.Text = "BitDice";
@@ -6039,7 +6040,6 @@
             // 
             // coinMillionsToolStripMenuItem
             // 
-            this.coinMillionsToolStripMenuItem.Enabled = false;
             this.coinMillionsToolStripMenuItem.Name = "coinMillionsToolStripMenuItem";
             this.coinMillionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.coinMillionsToolStripMenuItem.Text = "CoinMillions";

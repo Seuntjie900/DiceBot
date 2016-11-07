@@ -32,7 +32,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.2.3";
+        private const string vers = "3.2.4";
 
 
         Control[] ControlsToDisable;
@@ -802,8 +802,9 @@ namespace DiceBot
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("https://seuntjie.com/Dicebot/vs.html");
+                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("https://bot.seuntjie.com/Dicebot/vs.html?vers="+vers);
                 request.UserAgent = "dicebot" + vers;
+                
                 HttpWebResponse EmitResponse = (HttpWebResponse)request.GetResponse();
                 string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
                 string[] ss = sEmitResponse.Split('|');
