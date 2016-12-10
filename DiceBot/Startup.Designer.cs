@@ -38,6 +38,7 @@
             // 
             this.rtbNews.Location = new System.Drawing.Point(12, 12);
             this.rtbNews.Name = "rtbNews";
+            this.rtbNews.ReadOnly = true;
             this.rtbNews.Size = new System.Drawing.Size(260, 206);
             this.rtbNews.TabIndex = 0;
             this.rtbNews.Text = "";

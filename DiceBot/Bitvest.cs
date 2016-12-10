@@ -67,6 +67,7 @@ namespace DiceBot
                 {
                     if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 10||ForceUpdateStats))
                     {
+                        lastupdate = DateTime.Now;
                         List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                         pairs.Add(new KeyValuePair<string, string>("c", "99999999"));
                         pairs.Add(new KeyValuePair<string, string>("g[]", "999999999"));

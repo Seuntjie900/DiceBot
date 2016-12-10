@@ -16,17 +16,18 @@ namespace DiceBot
     class bitdice:DiceSite
     {
 
-        public static string[] cCurrencies = new string[] { "btc", "doge", "ltc", "clam", "eth" };
+        public static string[] cCurrencies = new string[] { "btc", "doge", "ltc", "eth" };
         WebSocket Client;// = new WebSocket("");
         public bitdice(cDiceBot Parent)
         {
             maxRoll = 99.9999m;
-            AutoInvest = true;
+            AutoInvest = false;
             AutoWithdraw = true;
-            AutoInvest = true;
+            
             Tip = true;
-            TipUsingName = false;
-            ChangeSeed = true;
+            TipUsingName = true;
+            ChangeSeed = false;
+            NonceBased = false;
             Name = "BitDice";
             this.Parent = Parent;
             SiteURL = "https://www.bitdice.me/?r=82";
@@ -36,7 +37,7 @@ namespace DiceBot
             Client.Closed += Client_Closed;
             Client.MessageReceived += Client_MessageReceived;*/
             AutoUpdate = false;
-            Currencies = new string[] { "btc", "doge", "ltc", "clam", "eth" };
+            Currencies = new string[] { "btc", "doge", "ltc", "eth" };
         }
 
         void getDeposit(string html)
@@ -47,8 +48,83 @@ namespace DiceBot
 
         void Client_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            socketbase tmp = json.JsonDeserialize<socketbase>(e.Message);
-            if (!string.IsNullOrEmpty(tmp.method))
+            try
+            {
+                Parent.DumpLog(e.Message, 4);
+                string s = e.Message.Replace("\\\"", "\"").Replace("\"{","{").Replace("}\"","}");
+                //Parent.DumpLog("", -1);
+                //Parent.DumpLog("", -1);
+                //Parent.DumpLog(s,-1);
+                bitdicebetbase tmp = json.JsonDeserialize<bitdicebetbase>(s);
+                if (tmp.type == "confirm_subscription")
+                {
+                    switch (tmp.identifier.channel)
+                    {
+                        case "ProfileChannel": Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"ProfileChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"profile\\\"}\"}");
+                            Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"ProfileChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"dashboard\\\"}\"}");
+                            break;
+                        case "WalletChannel": Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"WalletChannel\\\"}\",\"data\":\"{\\\"balance\\\":\\\"profile\\\"}\"}");
+                            break;
+                        case "EventsChannel": Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"EventsChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"events\\\"}\"}"); break;
+                        case "DiceChannel": Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"DiceChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"secret\\\"}\"}"); break;
+                    }
+                    return;
+                }
+                else if (tmp.message.type=="changeCurrency")
+                {
+                    Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"ProfileChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"dashboard\\\"}\"}");
+                    Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"WalletChannel\\\"}\",\"data\":\"{\\\"balance\\\":\\\"profile\\\"}\"}");
+                }
+                else if (tmp.message.type == "balances")
+                {
+                    bitdicebalancedata tmp2 = json.JsonDeserialize<bitdicebalancedata>(s);
+                    switch (tmp2.message.data.active)
+                    {
+                        case "doge": balance = decimal.Parse(tmp2.message.data.wallets.doge.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                        case "btc": balance = decimal.Parse(tmp2.message.data.wallets.btc.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                        case "ltc": balance = decimal.Parse(tmp2.message.data.wallets.ltc.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                        case "eth": balance = decimal.Parse(tmp2.message.data.wallets.eth.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                            
+                    }
+                    Parent.updateBalance(balance);
+                }
+                else if (tmp.message.type == "dashboard" )
+                {
+                    bitdiceprofiledata tmp2 = json.JsonDeserialize<bitdiceprofiledata>(s);
+                    this.bets = (int)tmp2.message.profile.bets;
+                    this.profit = tmp2.message.profile.profit;
+                    this.wagered = tmp2.message.profile.wagered;
+                    Parent.updateBets(bets);
+                    Parent.updateProfit(profit);
+                    Parent.updateWagered(wagered);
+                }
+                else if (tmp.message.type == "dashboard_update")
+                {
+                    bitdiceprofiledata tmp2 = json.JsonDeserialize<bitdiceprofiledata>(s);
+                    this.bets = (int)tmp2.message.update.bets;
+                    this.profit = tmp2.message.update.profit;
+                    this.wagered = tmp2.message.update.wagered;
+                    Parent.updateBets(bets);
+                    Parent.updateProfit(profit);
+                    Parent.updateWagered(wagered);
+                }
+                switch (tmp.identifier.channel)
+                {
+                    case "DiceChannel": ProcessBitdiceBet(tmp); break;
+                    default: break;
+                }
+            }
+            catch (Exception er)
+            {
+                Parent.DumpLog(er.ToString(), 1);
+            }
+
+            
+
+
+            
+            //socketbase tmp = json.JsonDeserialize<socketbase>(e.Message);
+            /*if (!string.IsNullOrEmpty(tmp.method))
             {
                 switch (tmp.method)
                 {
@@ -57,7 +133,43 @@ namespace DiceBot
                     case "stat.user": Client_UserStats(json.JsonDeserialize<bitstatsusersocket>(e.Message.Replace("params", "_params"))._params); break;
                     case "stat.bets": Client_BetResult(json.JsonDeserialize<bitstatsbetsocket>(e.Message.Replace("params", "_params").Replace("\\", "").Replace("\"{", "{").Replace("}\"", "}"))._params); break;
                 }
+            }*/
+        }
+        public long server { get; set; }
+        void ProcessBitdiceBet(bitdicebetbase Bet)
+        {
+            if (Bet.message.type=="secret")
+            {
+                server = Bet.message.secret.id;
             }
+
+            Bet newbet = new Bet()
+            {
+                Id = Bet.message.data.bet.id,
+                 Amount=decimal.Parse(Bet.message.data.bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo),
+                  date=DateTime.Now,
+                Chance = decimal.Parse(Bet.message.data.bet.chance, System.Globalization.NumberFormatInfo.InvariantInfo),
+                Currency = Bet.message.data.bet.currency,
+                  nonce=-1,
+                Roll = decimal.Parse(Bet.message.data.bet.lucky, System.Globalization.NumberFormatInfo.InvariantInfo),
+                Profit = decimal.Parse(Bet.message.data.bet.win, System.Globalization.NumberFormatInfo.InvariantInfo),
+                high = Bet.message.data.bet.high,
+                clientseed = Bet.message.data.old.client,
+                serverhash = Bet.message.data.old.hash,
+                 serverseed = Bet.message.data.old.secret
+
+            };
+            server = Bet.message.data.secret.id;
+            balance = decimal.Parse(Bet.message.data.bet.user.balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+            wagered += newbet.Amount;
+            profit += newbet.Profit;
+            bets++;
+            if (Bet.message.data.bet.result)
+                wins++;
+            else
+                losses++;
+            FinishedBet(newbet);
+
         }
 
         void Client_Closed(object sender, EventArgs e)
@@ -73,6 +185,13 @@ namespace DiceBot
         bool loggedin = false;
         void Client_Opened(object sender, EventArgs e)
         {
+            Client.Send("{\"command\":\"subscribe\",\"identifier\":\"{\\\"channel\\\":\\\"ProfileChannel\\\"}\"}");
+            Client.Send("{\"command\":\"subscribe\",\"identifier\":\"{\\\"channel\\\":\\\"WalletChannel\\\"}\"}");
+            Client.Send("{\"command\":\"subscribe\",\"identifier\":\"{\\\"channel\\\":\\\"EventsChannel\\\"}\"}");
+            Client.Send("{\"command\":\"subscribe\",\"identifier\":\"{\\\"channel\\\":\\\"DiceChannel\\\"}\"}");
+            Client.Send("{\"command\":\"subscribe\",\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\"}\"}");
+            Client.Send("{\"command\":\"subscribe\",\"identifier\":\"{\\\"channel\\\":\\\"EndorphinaChannel\\\"}\"}");
+
             /*if (!loggedin)
             {
                 loggedin = true;
@@ -82,36 +201,24 @@ namespace DiceBot
 
         
 
-        void Client_UserStats(bitstatsbuser User)
-        {
-            balance = User.balance;
-            bets = User.total_bets;
-            wagered = User.wagered;
-            profit = User.profit;
-        }
+        
         string username = "seuntjie";
-        void Client_BetResult(bitstatsbet Bet)
-        {
-            if (Bet.user.username == username)
-            {
-                Bet tmp = new Bet();
-                tmp.Amount = decimal.Parse(Bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo);
-                tmp.date = DateTime.Now;
-                tmp.Id = (decimal)(Bet.id);
-                tmp.Profit = decimal.Parse(Bet.win, System.Globalization.NumberFormatInfo.InvariantInfo);
-                tmp.Roll = decimal.Parse(Bet.lucky, System.Globalization.NumberFormatInfo.InvariantInfo);
-                tmp.high = Bet.high;
-                tmp.Chance = decimal.Parse(Bet.chance, System.Globalization.NumberFormatInfo.InvariantInfo);
-                //tmp.no = decimal.Parse(Bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo);
-                FinishedBet(tmp);
-            }
-        }
+        
 
         int id = 1;
+        Random R = new Random();
         //BitDiceClient Client = new BitDiceClient();
         protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
-            string s = string.Format("{{\"jsonrpc\":\"2.0\",\"method\":\"bets:make\",\"params\":{{\"amount\":\"{0:0.00000000}\",\"chance\":\"{1:0.000000}\",\"type\":\"{2}\"}},\"id\":{3}}}", amount, chance, High?"high":"low",id++);
+            string clientsee = "";
+            while (clientsee.Length<"3ebbd6d21ca843b6".Length-1)
+            {
+                clientsee += R.Next(0, 16 * 16).ToString("X");
+            }
+            //string server = "";
+            string s = string.Format("{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"DiceChannel\\\"}}\",\"data\":\"{{\\\"amount\\\":{0},\\\"chance\\\":\\\"{1}\\\",\\\"type\\\":\\\"{2}\\\",\\\"client\\\":\\\"{4}\\\",\\\"server\\\":{5},\\\"hot_key\\\":false,\\\"manual\\\":true,\\\"number\\\":{3},\\\"action\\\":\\\"bet\\\"}}\"}}",
+                amount, chance, High ? "high" : "low", id++, clientsee.ToLower(), server);
+            Parent.DumpLog(s, 5);
             if (Client.State == WebSocketState.Open)
             {
                 Client.Send(s);
@@ -139,7 +246,7 @@ namespace DiceBot
         }
         protected override bool internalWithdraw(decimal Amount, string Address)
         {
-            string s = string.Format("{{\"jsonrpc\":\"2.0\",\"method\":\"user:cashout\",\"params\":{{\"amount\":\"{0:0.00000000}\",\"address\":\"{1}\"}},\"id\":{2}}}", Amount, Address, id++);
+            string s = string.Format("{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"WalletChannel\\\"}}\",\"data\":\"{{\\\"code\\\":\\\"\\\",\\\"amount\\\":\\\"{0}\\\",\\\"address\\\":\\\"{1}\\\",\\\"number\\\":{2},\\\"action\\\":\\\"withdraw\\\"}}\"}}", Amount, Address, id++);
             if (Client.State == WebSocketState.Open)
             {
                 Client.Send(s);
@@ -171,16 +278,11 @@ namespace DiceBot
                 WebClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
                 WebClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
                 WebClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
-                /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
-                    if (Prox != null)
-                        betrequest.Proxy = Prox;
-                    betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                    betrequest.CookieContainer = Cookies;
-                HttpWebResponse EmitResponse;*/
+               
                 string s1 = "";
                     try
                     {
-                        HttpResponseMessage resp = WebClient.GetAsync("").Result;
+                        /*HttpResponseMessage resp = WebClient.GetAsync("").Result;
                         if (resp.IsSuccessStatusCode)
                         {
                             s1 = resp.Content.ReadAsStringAsync().Result;
@@ -199,15 +301,15 @@ namespace DiceBot
                                 {
                                     finishedlogin(false);
                                     return;
-                                }
+                                }*/
                                 /*if (!Cloudflare.doCFThing(s1, WebClient, ClientHandlr, 0, "www.bitdice.me"))
                                 {
                                     finishedlogin(false);
                                     return;
                                 }*/
-
-                            }
-                        }
+                        
+                            /*}
+                        }*/
                     }
                 catch
                     {
@@ -215,105 +317,21 @@ namespace DiceBot
                         return;
                     }
                     Cookie c = new Cookie();
-                foreach (Cookie tc in ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me")))
-                {
-                    if (tc.Name == "__cfduid")
-                    {
-                        c = tc;
-                        break;
-                    }
-                }
-
-                string sEmitResponse = WebClient.GetStringAsync("").Result;
-
-                //create data thing
-                string a = json.JsonSerializer<bitdicedatainfo>(new bitdicedatainfo());
-
-                //encode
-                //a = System.Web.HttpUtility.HtmlEncode(a);
-                //a = a.Replace("+", "%20");
-                //unescape
-                a = System.Web.HttpUtility.UrlDecode(a);
-
-                //base 64 encode
-                a = EncodeTo64(a);
-                a = "eyJsYW5nIjoiZW4tVVMsIGVuLCBhZiIsInBsYXRmb3JtIjoiV2luMzIiLCJjcHUiOjQsInNpemUiOiIxOTAzeDQyODEgKDE5MjB4MTA4MCkiLCJ3ZWJydGMiOiIxNzIuMTYuMTAxLjczIiwidGltZXpvbmUiOiJBZnJpY2EvSm9oYW5uZXNidXJnIiwidGltZSI6IkZyaSBOb3YgMDQgMjAxNiAxMDo1NzoxOSBHTVQrMDIwMCAoU291dGggQWZyaWNhIFN0YW5kYXJkIFRpbWUpIn0=";
-                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("user[email]", Username));
-                pairs.Add(new KeyValuePair<string, string>("user[password]", Password));
-                pairs.Add(new KeyValuePair<string, string>("user[two_fa]", twofa));
-                pairs.Add(new KeyValuePair<string, string>("data[info]", a));
-                //data[info]
-                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                /*if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
-                {
-                    WebClient.DefaultRequestHeaders.Remove("X-CSRF-Token");
-                }
-                WebClient.DefaultRequestHeaders.Add("X-CSRF-Token", csrf);
-                */
+              
                 username = Username;
-                try
-                {
-                    sEmitResponse = WebClient.PostAsync("/api/sign_in", Content).Result.Content.ReadAsStringAsync().Result;
-                }
-                catch { finishedlogin(false); }
-                //cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
-                /*if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
-                {
-
-                }*/
-                /*try
-                {
-                    ClientHandlr.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
-                }catch
-                { }*/
-                /*betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                betrequest.CookieContainer = Cookies;
-                betrequest.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
-
-                EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
-                try
-                {
-                    sEmitResponse = WebClient.GetStringAsync("").Result;
-
-                }
-                    catch (AggregateException e) 
-                { 
-                        finishedlogin(false); }
-                catch { finishedlogin(false); }
-                getDeposit(sEmitResponse);
-                getcsrf(sEmitResponse);
-                ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value = cookie;
-                //cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
-
-                getstream(sEmitResponse);
-
-                getcsrf(sEmitResponse);
-                getstream(sEmitResponse);
-                if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
-                {
-                    WebClient.DefaultRequestHeaders.Remove("X-CSRF-Token");
-                }
-                WebClient.DefaultRequestHeaders.Add("X-CSRF-Token", csrf);
-                if (Client != null)
-                    Client.Close();
+               
+                stream = "69e5d10445647c4b3aa7271b249dd30d4c4338b92916403a4cc67c4cd1ae0bab482134b3c8b55fa16e4ff4308c30556857fc516a856930200428bbabcfea9d72";
                 
                 List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
-                //headers.Add(new KeyValuePair<string, string>("Cookie", "_csn_session=" + cookie));
                 List<KeyValuePair<string, string>> cookies2 = new List<KeyValuePair<string, string>>();
-                cookies2.Add(new KeyValuePair<string,string>("_csn_session", cookie));
-                cookies2.Add(new KeyValuePair<string, string>("__cfduid", c.Value));
-                headers.Add(new KeyValuePair<string, string>("Origin", "https://www.bitdice.me"));
-                headers.Add(new KeyValuePair<string, string>("Host", "www.bitdice.me"));
-                headers.Add(new KeyValuePair<string, string>("Upgrade", "websocket"));
-                headers.Add(new KeyValuePair<string, string>("Connection", "keep-alive, Upgrade"));
-                headers.Add(new KeyValuePair<string, string>("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"));
+                foreach ( Cookie x in ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me")))
+                {
+                    cookies2.Add(new KeyValuePair<string, string>(x.Name, x.Value));
+                }
+                
+                headers.Add(new KeyValuePair<string, string>("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"));
 
-                Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", cookies2, headers, "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
+                Client = new WebSocket("wss://www.bitdice.me/socket/?token=" + stream, "actioncable-v1-json", cookies2, headers, "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
                     "https://www.bitdice.me", WebSocketVersion.Rfc6455, null, System.Security.Authentication.SslProtocols.Tls| System.Security.Authentication.SslProtocols.Tls11| System.Security.Authentication.SslProtocols.Tls12);
                 
                 
@@ -331,7 +349,7 @@ namespace DiceBot
                 //CurrencyChanged();
                 finishedlogin(Client.State == WebSocketState.Open);
                 loggedin = true;
-                System.Windows.Forms.MessageBox.Show("Due to current limitations of the API, I can't show you your stats until you place a valid bet. Sorry.\n\nAlso, you will need to reselect your currency. If you already selected the currency you want to play in, please select another first, and then switch back.", "Stats Errors", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+                //System.Windows.Forms.MessageBox.Show("Due to current limitations of the API, I can't show you your stats until you place a valid bet. Sorry.\n\nAlso, you will need to reselect your currency. If you already selected the currency you want to play in, please select another first, and then switch back.", "Stats Errors", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
             }
             catch (WebException e)
             {
@@ -346,119 +364,11 @@ namespace DiceBot
             }
         }
 
-        void Client_ChatReceived(bitChatReceived Chat)
-        {
-
-            ReceivedChatMessage(string.Format("{0} {1}{2} {3} {4}", Chat.date, Chat.symbol, Chat.user_id, Chat.username, Chat.message));
-        }
+        
 
         public override bool Register(string Username, string Password)
         {
-            try
-            {
-                HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                betrequest.CookieContainer = new CookieContainer();
-
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                getcsrf(sEmitResponse);
-                getstream(sEmitResponse);
-                cookie = EmitResponse.Cookies["_csn_session"].Value;
-                if (Client != null)
-                    Client.Close();
-                List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
-                headers.Add(new KeyValuePair<string, string>("Cookie", "_csn_session=" + cookie));
-
-                Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", null, headers, "dicebot", "http://bitdice.me", WebSocketVersion.Rfc6455);
-
-                Client.Opened += Client_Opened;
-                Client.Error += Client_Error;
-                Client.Closed += Client_Closed;
-                Client.MessageReceived += Client_MessageReceived;
-                Client.Open();
-
-                while (Client.State == WebSocketState.Connecting)
-                {
-                    Thread.Sleep(100);
-                }
-                if (Client.State == WebSocketState.Open)
-                {
-                    Client.Send("{\"jsonrpc\":\"2.0\",\"method\":\"user:update\",\"params\":{\"username\":\"" + Username + "\",\"user_seed\":\"1256e154283ea05b9538\",\"hide_bets_below\":\"0.0\",\"hide_other_bets\":false},\"id\":1}");
-                }
-                else
-                {
-                    finishedlogin(false);
-                    return false;
-                }
-
-
-                betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/users/password");
-
-
-                betrequest.Method = "POST";
-                betrequest.CookieContainer = new CookieContainer();
-
-                string post = string.Format("user%5Bpassword%5D={0}&user%5Bpassword_confirmation%5D={0}", Password);
-                username = Username;
-                betrequest.ContentLength = post.Length;
-
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                betrequest.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
-                betrequest.Headers.Add("X-CSRF-Token", csrf);
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-                {
-
-                    writer.Write(post);
-                }
-                EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                cookie = EmitResponse.Cookies["_csn_session"].Value;
-
-
-                betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                betrequest.CookieContainer = new CookieContainer();
-                betrequest.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
-
-                EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
-                getDeposit(sEmitResponse);
-                getcsrf(sEmitResponse);
-                cookie = EmitResponse.Cookies["_csn_session"].Value;
-
-                getstream(sEmitResponse);
-
-                getcsrf(sEmitResponse);
-                getstream(sEmitResponse);
-                if (Client != null)
-                    Client.Close();
-                headers = new List<KeyValuePair<string, string>>();
-                headers.Add(new KeyValuePair<string, string>("Cookie", "_csn_session=" + cookie));
-                Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", null, headers, "dicebot", "http://bitdice.me", WebSocketVersion.Rfc6455);
-
-                Client.Opened += Client_Opened;
-                Client.Error += Client_Error;
-                Client.Closed += Client_Closed;
-                Client.MessageReceived += Client_MessageReceived;
-                Client.Open();
-                while (Client.State == WebSocketState.Connecting)
-                {
-                    Thread.Sleep(100);
-                }
-                finishedlogin(Client.State == WebSocketState.Open);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            throw new NotImplementedException();
         }
 
         public override bool ReadyToBet()
@@ -481,21 +391,12 @@ namespace DiceBot
 
         public override void SendChatMessage(string Message)
         {
-            string s = "{\"jsonrpc\":\"2.0\",\"method\":\"chat:post\",\"params\":{\"message\":\""+Message+"\"},\"id\":"+(id++)+"}";
-            if (Client.State == WebSocketState.Open)
-            {
-                Client.Send(s);
-            }
+           
         }
 
         public override bool Invest(decimal Amount)
         {
-            string s = "{\"jsonrpc\":\"2.0\",\"method\":\"invest:invest\",\"params\":{\"amount\":\""+Amount.ToString("0.00000000",System.Globalization.NumberFormatInfo.InvariantInfo) +"\"},\"id\":"+(id++)+"}";
-            if (Client.State == WebSocketState.Open)
-            {
-                Client.Send(s);
-            }
-            return true;
+            throw new NotImplementedException();
         }
         public override void Donate(decimal Amount)
         {
@@ -503,7 +404,11 @@ namespace DiceBot
         }
         public override bool InternalSendTip(string User, decimal amount)
         {
-            SendChatMessage(string.Format("/tip {0} {1:0.00000000}", User, amount));
+            if (Client.State == WebSocketState.Open)
+            {
+                Client.Send(string.Format("{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"ChatChannel\\\"}}\",\"data\":\"{{\\\"message\\\":\\\"/tip {0} {1}\\\",\\\"action\\\":\\\"chat\\\"}}\"}}", User, amount));
+            }
+            //SendChatMessage(string.Format("/tip {0} {1:0.00000000}", User, amount));
             return true;
         }
         string cookie = "";
@@ -511,122 +416,18 @@ namespace DiceBot
         string csrf = "";
         protected override void CurrencyChanged()
         {
-            if (cookie != "")
-            {
-                /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/users/currency");
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.Method = "POST";
-                string post = "wallet%5Bcurrency%5D=" + Currency;
-                betrequest.ContentLength = post.Length;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                betrequest.CookieContainer = new CookieContainer();
-                betrequest.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
-                betrequest.Headers.Add("X-CSRF-Token", csrf);
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-                {
-
-                    writer.Write(post);
-                }
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
-                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("wallet[5Bcurrency]", Currency));
-               
-                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
-                {
-                    WebClient.DefaultRequestHeaders.Remove("X-CSRF-Token");
-                }
-                WebClient.DefaultRequestHeaders.Add("X-CSRF-Token", csrf);
-
-                string sEmitResponse = "";
-                try
-                {
-                    sEmitResponse = WebClient.PostAsync("users/sign_in", Content).Result.Content.ReadAsStringAsync().Result;
-                }
-                catch { finishedlogin(false); }
-
-                cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["_csn_session"].Value;
-                /*betrequest = (HttpWebRequest)HttpWebRequest.Create("https://www.bitdice.me/");
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                betrequest.CookieContainer = new CookieContainer();
-                betrequest.CookieContainer.Add(new Cookie("_csn_session", cookie, "/", "bitdice.me"));
-                EmitResponse = (HttpWebResponse)betrequest.GetResponse();
-                sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
-                sEmitResponse = WebClient.GetStringAsync("").Result;
-                getDeposit(sEmitResponse);
-                getcsrf(sEmitResponse);
-                getstream(sEmitResponse);
-                if (Client != null)
-                    Client.Close();
-                List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
-                //headers.Add(new KeyValuePair<string, string>("Cookie", "_csn_session=" + cookie));
-                List<KeyValuePair<string, string>> cookies2 = new List<KeyValuePair<string, string>>();
-                cookies2.Add(new KeyValuePair<string, string>("_csn_session", cookie));
-                cookies2.Add(new KeyValuePair<string, string>("__cfduid", cookie = ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me"))["__cfduid"].Value));
-                headers.Add(new KeyValuePair<string, string>("Origin", "https://www.bitdice.me"));
-                headers.Add(new KeyValuePair<string, string>("Host", "www.bitdice.me"));
-                headers.Add(new KeyValuePair<string, string>("Upgrade", "websocket"));
-                headers.Add(new KeyValuePair<string, string>("Connection", "keep-alive, Upgrade"));
-                headers.Add(new KeyValuePair<string, string>("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"));
-
-                Client = new WebSocket("wss://www.bitdice.me/stream/" + stream, "", cookies2, headers, "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
-                    "https://www.bitdice.me", WebSocketVersion.Rfc6455, null, System.Security.Authentication.SslProtocols.Tls | System.Security.Authentication.SslProtocols.Tls11 | System.Security.Authentication.SslProtocols.Tls12);
-
-
-                Client.Opened += Client_Opened;
-                Client.Error += Client_Error;
-                Client.Closed += Client_Closed;
-                Client.MessageReceived += Client_MessageReceived;
-
-
-                Client.Open();
-                while (Client.State == WebSocketState.Connecting)
-                {
-                    Thread.Sleep(100);
-                }
-            }
+           if (Client!=null)
+           {
+               if (Client.State == WebSocketState.Open)
+               {
+                   string s = "{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"WalletChannel\\\"}\",\"data\":\"{\\\"currency\\\":\\\"" + Currency + "\\\",\\\"action\\\":\\\"currency\\\"}\"}";
+                   Parent.DumpLog(s, 5);
+                   Client.Send(s);
+               }
+           }
         }
 
-        void getcsrf(string page)
-        {
-            string s = page;
-            bool found = false;
-            while (!found)
-            {
-                try
-                {
-                    s = s.Substring(s.IndexOf("<meta"));
-                    if (s.Substring(0, s.IndexOf(">")).Contains("name=\"csrf-token"))
-                    {
-                        s = s.Substring(0, s.IndexOf(">"));
-                        found=true;
-                        break;
-                    }
-                    s = s.Substring(s.IndexOf(">") + 1);
-                }
-                catch
-                {
-                    break;
-                }
-            }
-            if (found)
-            {
-                string c = s.Substring(s.IndexOf("content=\"")+"content=\"".Length);
-                c = c.Substring(0, c.IndexOf("\""));
-                csrf = c;
-            }
-        }
-        void getstream(string page)
-        {
-            string s = page.Substring(page.IndexOf("<body data-request=\"") + "<body data-request=\"".Length);
-            string stream = s.Substring(0, s.IndexOf("\""));
-            this.stream = stream;
-
-        }
+        
         public override void SetProxy(string host, int port)
         {
             base.SetProxy(host, port);
@@ -641,94 +442,189 @@ namespace DiceBot
         {
             return base.GetLucky(server, client, nonce);
         }
-    }
-    
-    public class socketbase
-    {
-        public string jsonrpc { get; set; }
-        public string method { get; set; }
-        public int id { get; set; }
-        public object result { get; set; }
-        public socketbase()
+        public static bool Enable(string token)
         {
-            id = 1;
+            //data[info=eyJsYW5nIjoiZW4tVVMsIGVuIiwicGxhdGZvcm0iOiJXaW4zMiIsImNwdSI6OCwic2l6ZSI6IjE5MjB4MzY0MyAoMTkyMHgxMDgwKSIsIndlYnJ0YyI6IjE2OS4yNTQuODAuODAsIDE5Mi4xNjguMS4zIiwidGltZXpvbmUiOiJBZnJpY2EvSm9oYW5uZXNidXJnIiwidGltZSI6IlNhdCBEZWMgMDMgMjAxNiAxMDoxMTo0MyBHTVQrMDIwMCAoU291dGggQWZyaWNhIFN0YW5kYXJkIFRpbWUpIn0=
+            //token=017f8216daa8349d55170806c0e02cef66252acc082616dc7be742e6c9b5081d
+            try
+            {
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+       | SecurityProtocolType.Tls11
+       | SecurityProtocolType.Tls12
+       | SecurityProtocolType.Ssl3;
+                CookieContainer cookies = new CookieContainer();
+                {
+                    string Token = "";
+                    HttpWebRequest tmp = (HttpWebRequest)HttpWebRequest.Create(token);
+                    tmp.AllowAutoRedirect = true;
+                    HttpWebResponse myResp = (HttpWebResponse)tmp.GetResponse();
+                    //if (myResp.StatusCode == HttpStatusCode.Redirect)
+                    {
+                        Token = myResp.ResponseUri.Segments[myResp.ResponseUri.Segments.Length-1];
+                        if (Token.Contains("?"))
+                        {
+                            Token = Token.Substring(Token.IndexOf("?")+1);
+                        }
+                        if (Token.Contains("/"))
+                        {
+                            Token = Token.Substring(Token.IndexOf("/") + 1);
+                        }
+                    }
+
+                    using (HttpClientHandler ClientHandlr = new HttpClientHandler
+                    {
+                        UseCookies = true,
+                        CookieContainer = cookies,
+                        AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip
+                        /*Proxy = (IWebProxy)this.Prox,
+                        UseProxy = this.Prox != null*/
+                    })
+                    {
+                        using (HttpClient WebClient = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.bitdice.me/") })
+                        {
+                            WebClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+                            WebClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+                            WebClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
+                            string a = json.JsonSerializer<bitdicedatainfo>(new bitdicedatainfo());
+
+                            //encode
+                            //a = System.Web.HttpUtility.HtmlEncode(a);
+                            //a = a.Replace("+", "%20");
+                            //unescape
+                            a = System.Web.HttpUtility.UrlDecode(a);
+
+                            //base 64 encode
+                            a = EncodeTo64(a);
+                            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                            pairs.Add(new KeyValuePair<string, string>("data[info]", a));
+                            pairs.Add(new KeyValuePair<string, string>("token", Token));
+                            //data[info]
+                            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                            /*if (WebClient.DefaultRequestHeaders.Contains("X-CSRF-Token"))
+                            {
+                                WebClient.DefaultRequestHeaders.Remove("X-CSRF-Token");
+                            }
+                            WebClient.DefaultRequestHeaders.Add("X-CSRF-Token", csrf);
+                            */
+
+
+                            string sEmitResponse = WebClient.PostAsync("api/device_confirm", Content).Result.Content.ReadAsStringAsync().Result;
+                            return sEmitResponse.Contains("\"status\":true");
+                            
+                        }
+                    }
+                }
+            }
+            catch{};
+            return false;
         }
-    }
-    public class bitchatSocket:socketbase
-    {
-        public bitChatReceived _params { get; set; }
-    }
 
-    public class bitChatReceived
-    {
-        public string date { get; set; }
-        public string username { get; set; }
-        public int user_id { get; set; }
-        public string message { get; set; }
-        public int level { get; set; }
-        public string symbol { get; set; }
     }
-
-    public class bitbetreturn:socketbase
-    {
-        new public bitbetmini result { get; set; }
-    }
-    public class bitbetmini
-    {
-        public string bet_amount { get; set; }
-        public string balance { get; set; }
-        public string status { get; set; }
-    }
-    public class bitstatsusersocket : socketbase
-    {
-        public bitstatsbuser _params { get; set; }
-    }
-    public class bitstatsbuser
-    {
-        public decimal balance { get; set; }
-        public int total_bets { get; set; }
-        public decimal wagered { get; set; }
-        public decimal profit { get; set; }
-    }
-    public class bitstatsbetsocket : socketbase
-    {
-        public bitstatsbet _params { get; set; }
-    }
-    public class bitstatsbet
+    public class bitdicebet
     {
         public long id { get; set; }
-        public string created_at { get; set; }
+        public long date { get; set; }
         public string amount { get; set; }
         public string chance { get; set; }
         public bool high { get; set; }
         public string lucky { get; set; }
         public bool result { get; set; }
         public string win { get; set; }
-        public decimal target { get; set; }
-        public decimal mutliplier { get; set; }
-        public bituser user { get; set; }
+        public string target { get; set; }
+        public double multiplier { get; set; }
+        public string currency { get; set; }
+        public string wagered { get; set; }
+        public bitdiceuser user { get; set; }
+        public string game { get; set; }
+        
     }
-    public class bituser
+    public class bitdicebetdata
+    {
+        public bitdicebet bet { get; set; }
+        public biddiceold old { get; set; }
+        public bitdicenew secret { get; set; }
+    }
+    public class biddiceold
+    {
+        public string secret { get; set; }
+        public string client { get; set; }
+        public string hash { get; set; }
+    }
+    public class bitdicenew
+    {
+        public long id { get; set; }
+        public string hash { get; set; }
+    }
+    public class bitdicebetmessage
+    {
+        public bitdicebetdata data { get; set; }
+        public string type { get; set; }
+        public bitdicenew secret { get; set; }
+    }
+    public class bitdicebetbase
+    {
+        public bitdciceBetIdentifier identifier { get; set; }
+        public bitdicebetmessage message { get; set; }
+        public string type { get; set; }
+    }
+   public class bitdciceBetIdentifier
+   {
+       public string channel { get; set; }
+   }
+    public class bitdiceuser
     {
         public string username { get; set; }
+        public double level { get; set; }
+        public string balance { get; set; }
+        
     }
-    public class bitresetseedsocket : socketbase
+
+    public class bitdicebalancedata
     {
-        new public bitresetseed result { get; set; }
+        public bitdicebalances wallets { get; set; }
+        public bitdicebalancedata data { get; set; }
+        public string type0 { get; set; }
+        public bitdicebalancedata message { get; set; }
+        public bitdciceBetIdentifier identifier { get; set; }
+        public string active { get; set; }
     }
-    public class bitresetseed
+
+    public class bitdicebalances
     {
-        public bitOld old { get; set; }
-        public bitNew _new { get; set; }
+        public bitdicewallet btc { get; set; }
+        public bitdicewallet ltc { get; set; }
+        public bitdicewallet doge { get; set; }
+        public bitdicewallet eth { get; set; }
     }
-    public class bitOld
+    public class bitdicewallet
     {
-        public string secret { get; set; }
-        public string secret_hash { get; set; }
+        public string balance { get; set; }
+        public string address { get; set; }
     }
-    public class bitNew
+    //{"identifier":"{\"channel\":\"ProfileChannel\"}","type":"confirm_subscription"}
+    /*{"identifier":"{\"channel\":\"ProfileChannel\"}",
+    "message":{"type":"dashboard",
+    "profile":{"bets":30,"wagered":0.0038544802485028,"profit":2.8000000000000003e-06,"level":0,"progress":91.57,"token_balance":"0.004661955","switch_cap":false}
+}}*/
+    public class bitdiceprofiledata
     {
-        public string secret { get; set; }
+        public bitdiceprofile profile { get; set; }
+        public bitdiceprofiledata message { get; set; }
+        public bitdciceBetIdentifier identifier { get; set; }
+        public string type { get; set; }
+        public bitdiceprofile update { get; set; }
+    }
+
+    public class bitdiceprofile
+    {
+        public long bets { get; set; }
+        public decimal wagered { get; set; }
+        public decimal profit { get; set; }
+        public double level { get; set; }
+        public double progress { get; set; }
+        public string token_balance { get; set; }
+        public bool switch_cap { get; set; }
     }
     public class bitdicedatainfo
     {

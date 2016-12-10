@@ -4780,6 +4780,8 @@ namespace DiceBot
                     case "SafeDice": CurrentSite = new SafeDice(this); break;
                     case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
                     case "Bitvest": CurrentSite = new Bitvest(this); break;
+                    case "KingDice": CurrentSite = new Kingdice(this); break;
+                    case "NitrogenSports": CurrentSite = new NitrogenSports(this);break;
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -4818,6 +4820,8 @@ namespace DiceBot
                         case "SafeDice": CurrentSite = new SafeDice(this); break;
                         case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
                         case "Bitvest": CurrentSite = new Bitvest(this); break;
+                        case "KingDice": CurrentSite = new Kingdice(this); break;
+                        case "NitrogenSports": CurrentSite = new NitrogenSports(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5363,6 +5367,8 @@ namespace DiceBot
                     case "bitslerToolStripMenuItem" : CurrentSite = new Bitsler(this); siteToolStripMenuItem.Text = "Site (BS)"; break;
                     case "satoshiDiceToolStripMenuItem" : CurrentSite = new SatoshiDice(this); siteToolStripMenuItem.Text = "Site (SatD)"; break;
                     case "bitvestToolStripMenuItem": CurrentSite = new Bitvest(this); siteToolStripMenuItem.Text = "Site (BV)"; break;
+                    case "kingDiceToolStripMenuItem": CurrentSite = new Kingdice(this); siteToolStripMenuItem.Text = "Site (KD)"; break;
+                    case "nitorgenSportsToolStripMenuItem": CurrentSite = new NitrogenSports(this); siteToolStripMenuItem.Text = "Site (NS)"; break;
                 }
                 if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
@@ -5790,6 +5796,7 @@ namespace DiceBot
                             wealthyDiceToolStripMenuItem.Checked?16:
                             satoshiDiceToolStripMenuItem.Checked?17:
                             bitvestToolStripMenuItem.Checked?18:
+                            kingDiceToolStripMenuItem.Checked?19:
                             1);
                 }
                 else if (c is TextBox)
@@ -5903,7 +5910,8 @@ namespace DiceBot
                         wealthyDiceToolStripMenuItem.Checked = value == 16;
                         satoshiDiceToolStripMenuItem.Checked = value == 17;
                         bitvestToolStripMenuItem.Checked = value == 18;
-                        if (value > 18)
+                        kingDiceToolStripMenuItem.Checked = value == 19;
+                        if (value > 19)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6035,6 +6043,7 @@ namespace DiceBot
                         wealthyDiceToolStripMenuItem.Checked = value == "16";
                         satoshiDiceToolStripMenuItem.Checked = value == "17";
                         bitvestToolStripMenuItem.Checked = value == "18";
+                        kingDiceToolStripMenuItem.Checked = value == "19";
                     }
                     else if (Key == "SettingsMode")
                     {
@@ -6409,6 +6418,11 @@ namespace DiceBot
         private void seedsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new SeedInput().Show();
+        }
+
+        private void bitdiceActivatorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new BitdiceConfirm().ShowDialog();
         }
         
     }

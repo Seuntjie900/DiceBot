@@ -48,7 +48,7 @@ namespace DiceBot
                 nudNumInput.DecimalPlaces = 8;
                 nudNumInput.Increment = 0.0001m;
             }
-            if (mode == 2)
+            if (mode == 3)
             {
                 nudNumInput.Visible = false;
                 txtTextInput.Visible = true;
