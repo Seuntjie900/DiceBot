@@ -68,7 +68,7 @@ namespace DiceBot
                             wagered = tmpstats.wagered / 100000000m;
                             profit = tmpstats.profit / 100000000m;
                             bets = (int)tmpstats.rolls;
-                            Parent.updateBet(bets);
+                            Parent.updateBets(bets);
                             Parent.updateProfit(profit);
                             Parent.updateWagered(wagered);
                             balance = tmpbal.balance / 100000000m ;
@@ -120,7 +120,7 @@ namespace DiceBot
                             Profit = tmp.roll_profit/100000000m,
                             Roll = tmp.roll_number,
                             high = High,
-                            Chance = High ? 99m - tmp.probability : tmp.probability,
+                            Chance = tmp.probability,
                             nonce = (long)tmp.provablef_serverRoll,
                             serverhash = LastHash,
                             serverseed = tmp.provablef_Hash,
@@ -281,7 +281,7 @@ namespace DiceBot
                             wagered = tmpstats.wagered/100000000m;
                             profit = tmpstats.profit / 100000000m;
                             bets = (int)tmpstats.rolls;
-                            Parent.updateBet(bets);
+                            Parent.updateBets(bets);
                             Parent.updateProfit(profit);
                             Parent.updateWagered(wagered);
                             iskd = true;

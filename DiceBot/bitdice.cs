@@ -310,6 +310,34 @@ namespace DiceBot
                         
                             /*}
                         }*/
+                        //data%5Binfo%5D=eyJsYW5nIjoiZW4tVVMsIGVuIiwicGxhdGZvcm0iOiJXaW4zMiIsImNwdSI6OCwic2l6ZSI6IjE1ODN4NDI1MCAoMTYwMHg5MDApIiwid2VicnRjIjoiMTY5LjI1NC44MC44MCwgMTkyLjE2OC4xLjMiLCJ0aW1lem9uZSI6IkFmcmljYS9Kb2hhbm5lc2J1cmciLCJ0aW1lIjoiU3VuIERlYyAxMSAyMDE2IDExOjQzOjM1IEdNVCswMjAwIChTb3V0aCBBZnJpY2EgU3RhbmRhcmQgVGltZSkifQ%3D%3D&user%5Bemail%5D=seuntjie%40seuntjie.com&user%5Bpassword%5D=qFkIn1q8FZvljdbmytXq&user%5Btwo_fa%5D=
+                        string a = json.JsonSerializer<bitdicedatainfo>(new bitdicedatainfo());
+
+                        //encode
+                        //a = System.Web.HttpUtility.HtmlEncode(a);
+                        //a = a.Replace("+", "%20");
+                        //unescape
+                        a = System.Web.HttpUtility.UrlDecode(a);
+
+                        //base 64 encode
+                        a = EncodeTo64(a);
+                            
+                        List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                        pairs.Add(new KeyValuePair<string, string>("data[info]", a));
+                        pairs.Add(new KeyValuePair<string, string>("user[email]", Username));
+                        pairs.Add(new KeyValuePair<string, string>("user[password]", Password/*==""?"undefined":twofa*/));
+                        pairs.Add(new KeyValuePair<string, string>("user[two_fa]", twofa/*==""?"undefined":twofa*/));
+                        FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                        string sEmitResponse = WebClient.PostAsync("api/sign_in", Content).Result.Content.ReadAsStringAsync().Result;
+                        bitdicelogin login = json.JsonDeserialize<bitdicelogin>(sEmitResponse);
+                        if (login.status)
+                            stream = login.token;
+                        else
+                        {
+                            finishedlogin(false);
+                            return;
+                        }
+
                     }
                 catch
                     {
@@ -320,7 +348,7 @@ namespace DiceBot
               
                 username = Username;
                
-                stream = "69e5d10445647c4b3aa7271b249dd30d4c4338b92916403a4cc67c4cd1ae0bab482134b3c8b55fa16e4ff4308c30556857fc516a856930200428bbabcfea9d72";
+                //
                 
                 List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
                 List<KeyValuePair<string, string>> cookies2 = new List<KeyValuePair<string, string>>();
@@ -356,11 +384,14 @@ namespace DiceBot
                 if (e.Response!=null)
                 {
                     string s = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                    finishedlogin(false);
+                    return;
                 }
             }
             catch
             {
                 finishedlogin(false);
+                return;
             }
         }
 
@@ -520,6 +551,11 @@ namespace DiceBot
             return false;
         }
 
+    }
+    public class bitdicelogin
+    {
+        public bool status { get; set; }
+        public string token { get; set; }
     }
     public class bitdicebet
     {
