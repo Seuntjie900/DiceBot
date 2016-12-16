@@ -229,7 +229,7 @@ namespace DiceBot
                 WebClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("br"));
                 WebClient.DefaultRequestHeaders.Host = "fortunejack.com";
                 WebClient.DefaultRequestHeaders.Add("Origin", "https://fortunejack.com");
-                WebClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36");
+                WebClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0");
                 string tmps = json.ToDateString(DateTime.UtcNow);
                 
                 /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://fortunejack.com/");

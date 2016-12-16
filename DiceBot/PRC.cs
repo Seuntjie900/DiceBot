@@ -387,7 +387,7 @@ namespace DiceBot
                 client = getseed.ClientSeed;
                 serverhash = getseed.ServerHash;
 
-                try
+                /*try
                 {
                     getHeaders = HttpWebRequest.Create("https://betking.io/account/getDepositAddress") as HttpWebRequest;
                     if (Prox != null)
@@ -401,7 +401,7 @@ namespace DiceBot
                 catch
                 {
                     new System.Threading.Thread(GetDeposit).Start();
-                }
+                }*/
                 finishedlogin(true);
                 return;
             }
@@ -413,7 +413,7 @@ namespace DiceBot
             finishedlogin(false);
         }
 
-        void GetDeposit()
+        /*void GetDeposit()
         {
             System.Threading.Thread.Sleep(10000);
             HttpWebRequest getHeaders = HttpWebRequest.Create("https://betking.io/account/getDepositAddress") as HttpWebRequest;
@@ -424,7 +424,7 @@ namespace DiceBot
             string s1 = new StreamReader(Response.GetResponseStream()).ReadToEnd();
             PRCDepost dep = json.JsonDeserialize<PRCDepost>(s1);
             Parent.updateDeposit(dep.Address);
-        }
+        }*/
 
         string client = "", serverhash = "";
         public override bool Register(string Username, string Passwrd)
@@ -547,7 +547,7 @@ namespace DiceBot
                 prcSeed getseed = json.JsonDeserialize<prcSeed>(s1);
                 client = getseed.ClientSeed;
                 serverhash = getseed.ServerHash;*/
-                try
+                /*try
                 {
                     getHeaders = HttpWebRequest.Create("https://betking.io/account/getDepositAddress") as HttpWebRequest;
                     if (Prox != null)
@@ -561,7 +561,7 @@ namespace DiceBot
                 catch
                 {
                     new System.Threading.Thread(GetDeposit).Start();
-                }
+                }*/
                 finishedlogin(true);
                 return true;
             }

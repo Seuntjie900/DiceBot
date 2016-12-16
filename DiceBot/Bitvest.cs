@@ -330,7 +330,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("secret",secret));
                 pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("user_seed",seed));
-                pairs.Add(new KeyValuePair<string, string>("v", "42"));
+                pairs.Add(new KeyValuePair<string, string>("v", "65535"));
                 
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);

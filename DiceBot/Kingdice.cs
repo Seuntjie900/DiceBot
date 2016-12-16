@@ -35,7 +35,7 @@ namespace DiceBot
             this.ChangeSeed = false;
             this.AutoLogin = true;
             this.AutoInvest = true;
-            this.BetURL = "";
+            this.BetURL = "https://kingdice.com/#/welcome?aff=221/";
             this.edge = 1;
             this.Parent = Parent;
             

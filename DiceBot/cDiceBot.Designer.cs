@@ -487,6 +487,7 @@
             this.bitvestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kingDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nitorgenSportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.provabllyIOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4544,9 +4545,10 @@
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
             series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series1.Legend = "Legend1";
             series1.Name = "Profit";
+            series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
             this.chrtEmbeddedLiveChart.Series.Add(series1);
             this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(432, 313);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
@@ -5951,7 +5953,8 @@
             this.satoshiDiceToolStripMenuItem,
             this.bitvestToolStripMenuItem,
             this.kingDiceToolStripMenuItem,
-            this.nitorgenSportsToolStripMenuItem});
+            this.nitorgenSportsToolStripMenuItem,
+            this.provabllyIOToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -6154,12 +6157,20 @@
             // 
             // nitorgenSportsToolStripMenuItem
             // 
-            this.nitorgenSportsToolStripMenuItem.Enabled = false;
             this.nitorgenSportsToolStripMenuItem.Name = "nitorgenSportsToolStripMenuItem";
             this.nitorgenSportsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.nitorgenSportsToolStripMenuItem.Text = "Nitorgen Sports";
             this.nitorgenSportsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.nitorgenSportsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // provabllyIOToolStripMenuItem
+            // 
+            this.provabllyIOToolStripMenuItem.Name = "provabllyIOToolStripMenuItem";
+            this.provabllyIOToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.provabllyIOToolStripMenuItem.Text = "Provablly.IO";
+            this.provabllyIOToolStripMenuItem.Visible = false;
+            this.provabllyIOToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.provabllyIOToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // settingsModeToolStripMenuItem
             // 
@@ -6174,7 +6185,7 @@
             // basicToolStripMenuItem
             // 
             this.basicToolStripMenuItem.Name = "basicToolStripMenuItem";
-            this.basicToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.basicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.basicToolStripMenuItem.Text = "Basic";
             this.basicToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.basicToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6182,7 +6193,7 @@
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.advancedToolStripMenuItem.Text = "Advanced";
             this.advancedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.advancedToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6190,7 +6201,7 @@
             // programmerToolStripMenuItem
             // 
             this.programmerToolStripMenuItem.Name = "programmerToolStripMenuItem";
-            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.programmerToolStripMenuItem.Text = "Programmer";
             this.programmerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.programmerToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6973,6 +6984,7 @@
         private System.Windows.Forms.ToolStripMenuItem kingDiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bitdiceActivatorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nitorgenSportsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem provabllyIOToolStripMenuItem;
     }
 }
 

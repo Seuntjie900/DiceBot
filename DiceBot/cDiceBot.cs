@@ -183,9 +183,11 @@ namespace DiceBot
             PreviousBalance = (decimal)Balance;
             profit += (decimal)bet.Profit;
             Chartprofit += (decimal)bet.Profit;
+            bool Win = (((bool)bet.high ? (decimal)bet.Roll > (decimal)CurrentSite.maxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
+            
             if (!RunningSimulation)
             {
-                AddChartPoint(profit);
+                AddChartPoint(profit, Win);
             }
             if (InvokeRequired)
             {
@@ -198,19 +200,30 @@ namespace DiceBot
             
         }
 
-        delegate void dAddChartPoint(decimal Profit);
-        void AddChartPoint(decimal Profit)
+        delegate void dAddChartPoint(decimal Profit, bool win);
+        void AddChartPoint(decimal Profit, bool win)
         {
 
             if (InvokeRequired)
             {
-                Invoke(new dAddChartPoint(AddChartPoint), profit);
+                Invoke(new dAddChartPoint(AddChartPoint), profit, win);
             }
             else
             {
                 
                 if (chrtEmbeddedLiveChart.Enabled)
-                chrtEmbeddedLiveChart.Series[0].Points.AddY(Chartprofit);
+                {
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint((double)chrtEmbeddedLiveChart.Series[0].Points.Count+1,(double)Chartprofit);
+                    tmp.Color= win? Color.Green:Color.Red;
+                    tmp.BorderColor = win ? Color.Green : Color.Red;
+                    tmp.MarkerColor = win ? Color.Green : Color.Red;
+
+                    tmp.MarkerSize = win? 3 :2;
+                    tmp.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+                    tmp.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+                    tmp.BorderWidth = 1;
+                    chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
+                }
             }
         }
 
@@ -4782,6 +4795,7 @@ namespace DiceBot
                     case "Bitvest": CurrentSite = new Bitvest(this); break;
                     case "KingDice": CurrentSite = new Kingdice(this); break;
                     case "NitrogenSports": CurrentSite = new NitrogenSports(this);break;
+                    //case "ProvablyIO": CurrentSite = new provablyio(this); break;
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -4822,6 +4836,7 @@ namespace DiceBot
                         case "Bitvest": CurrentSite = new Bitvest(this); break;
                         case "KingDice": CurrentSite = new Kingdice(this); break;
                         case "NitrogenSports": CurrentSite = new NitrogenSports(this); break;
+                        //case "ProvablyIO": CurrentSite = new provablyio(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5369,6 +5384,7 @@ namespace DiceBot
                     case "bitvestToolStripMenuItem": CurrentSite = new Bitvest(this); siteToolStripMenuItem.Text = "Site (BV)"; break;
                     case "kingDiceToolStripMenuItem": CurrentSite = new Kingdice(this); siteToolStripMenuItem.Text = "Site (KD)"; break;
                     case "nitorgenSportsToolStripMenuItem": CurrentSite = new NitrogenSports(this); siteToolStripMenuItem.Text = "Site (NS)"; break;
+                    //case "provabllyIOToolStripMenuItem": CurrentSite = new provablyio(this); siteToolStripMenuItem.Text = "Site (PIO)"; break;
                 }
                 if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
@@ -5797,6 +5813,8 @@ namespace DiceBot
                             satoshiDiceToolStripMenuItem.Checked?17:
                             bitvestToolStripMenuItem.Checked?18:
                             kingDiceToolStripMenuItem.Checked?19:
+                            nitorgenSportsToolStripMenuItem.Checked?20:
+                            provabllyIOToolStripMenuItem.Checked?21:
                             1);
                 }
                 else if (c is TextBox)
@@ -5911,7 +5929,9 @@ namespace DiceBot
                         satoshiDiceToolStripMenuItem.Checked = value == 17;
                         bitvestToolStripMenuItem.Checked = value == 18;
                         kingDiceToolStripMenuItem.Checked = value == 19;
-                        if (value > 19)
+                        nitorgenSportsToolStripMenuItem.Checked = value == 20;
+                        provabllyIOToolStripMenuItem.Checked = value == 21;
+                        if (value > 21)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6044,6 +6064,8 @@ namespace DiceBot
                         satoshiDiceToolStripMenuItem.Checked = value == "17";
                         bitvestToolStripMenuItem.Checked = value == "18";
                         kingDiceToolStripMenuItem.Checked = value == "19";
+                        nitorgenSportsToolStripMenuItem.Checked = value == "20";
+                        provabllyIOToolStripMenuItem.Checked = value == "21";
                     }
                     else if (Key == "SettingsMode")
                     {
