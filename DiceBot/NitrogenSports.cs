@@ -83,6 +83,7 @@ namespace DiceBot
             string t = CreateRandomString();
             string s = "[2,\"0." + t + "\",\"game\",{}]";
             Requests.Add(t, 1);
+            NSSocket.Send(s);
         }
 
         void ConnectSocket()
@@ -282,7 +283,7 @@ Sec-WebSocket-Version:13*/
         }
         public override void Donate(decimal Amount)
         {
-            SendTip("701142", Amount);
+            SendTip("1435541", Amount);
         }
 
         void PlaceBetThread(object BetObj)
@@ -317,7 +318,7 @@ Sec-WebSocket-Version:13*/
             string t = CreateRandomString();
             Requests.Add(t, 2);
 
-            NSSocket.Send(string.Format("[2,\"0.{0}\",\"seed\",{{\"clientSeed\":\"{1}\"}]", t, s));
+            NSSocket.Send(string.Format("[2,\"0.{0}\",\"seed\",{{\"clientSeed\":\"{1}\"}}]", t, s));
         }
 
         public override void SetClientSeed(string Seed)

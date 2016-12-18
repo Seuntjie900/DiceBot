@@ -361,15 +361,11 @@
             this.lblPass = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.gbManualBet = new System.Windows.Forms.GroupBox();
-            this.btnWithdrawAlt = new System.Windows.Forms.Button();
-            this.btnDepositAlt = new System.Windows.Forms.Button();
             this.btnMPWithdraw = new System.Windows.Forms.Button();
             this.btnMPDeposit = new System.Windows.Forms.Button();
             this.btnTip = new System.Windows.Forms.Button();
             this.btnInvest = new System.Windows.Forms.Button();
             this.btnWithdraw = new System.Windows.Forms.Button();
-            this.txtApiAddress = new System.Windows.Forms.TextBox();
-            this.label92 = new System.Windows.Forms.Label();
             this.lblApiBetProfit = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.btnApiBetLow = new System.Windows.Forms.Button();
@@ -4465,9 +4461,9 @@
             // 
             this.pnlApiInfo.Controls.Add(this.groupBox6);
             this.pnlApiInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlApiInfo.Location = new System.Drawing.Point(0, 242);
+            this.pnlApiInfo.Location = new System.Drawing.Point(0, 209);
             this.pnlApiInfo.Name = "pnlApiInfo";
-            this.pnlApiInfo.Size = new System.Drawing.Size(438, 552);
+            this.pnlApiInfo.Size = new System.Drawing.Size(438, 585);
             this.pnlApiInfo.TabIndex = 7;
             // 
             // groupBox6
@@ -4476,7 +4472,7 @@
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(0, 0);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(438, 552);
+            this.groupBox6.Size = new System.Drawing.Size(438, 585);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Bets:";
@@ -4498,14 +4494,14 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer1.Size = new System.Drawing.Size(432, 533);
-            this.splitContainer1.SplitterDistance = 313;
+            this.splitContainer1.Size = new System.Drawing.Size(432, 566);
+            this.splitContainer1.SplitterDistance = 332;
             this.splitContainer1.TabIndex = 0;
             // 
             // btnChartReset
             // 
             this.btnChartReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChartReset.Location = new System.Drawing.Point(354, 229);
+            this.btnChartReset.Location = new System.Drawing.Point(354, 248);
             this.btnChartReset.Name = "btnChartReset";
             this.btnChartReset.Size = new System.Drawing.Size(75, 23);
             this.btnChartReset.TabIndex = 3;
@@ -4516,7 +4512,7 @@
             // btnDisable
             // 
             this.btnDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDisable.Location = new System.Drawing.Point(354, 258);
+            this.btnDisable.Location = new System.Drawing.Point(354, 277);
             this.btnDisable.Name = "btnDisable";
             this.btnDisable.Size = new System.Drawing.Size(75, 23);
             this.btnDisable.TabIndex = 2;
@@ -4527,7 +4523,7 @@
             // btnHideLive
             // 
             this.btnHideLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHideLive.Location = new System.Drawing.Point(354, 287);
+            this.btnHideLive.Location = new System.Drawing.Point(354, 306);
             this.btnHideLive.Name = "btnHideLive";
             this.btnHideLive.Size = new System.Drawing.Size(75, 23);
             this.btnHideLive.TabIndex = 1;
@@ -4550,7 +4546,7 @@
             series1.Name = "Profit";
             series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
             this.chrtEmbeddedLiveChart.Series.Add(series1);
-            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(432, 313);
+            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(432, 332);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
             // 
@@ -4572,7 +4568,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(432, 216);
+            this.dataGridView1.Size = new System.Drawing.Size(432, 230);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
@@ -4634,7 +4630,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(438, 242);
+            this.panel5.Size = new System.Drawing.Size(438, 209);
             this.panel5.TabIndex = 4;
             // 
             // gbLogin
@@ -4650,18 +4646,18 @@
             this.gbLogin.Controls.Add(this.lblPass);
             this.gbLogin.Controls.Add(this.lblUsername);
             this.gbLogin.Dock = System.Windows.Forms.DockStyle.Left;
-            this.gbLogin.Location = new System.Drawing.Point(745, 0);
+            this.gbLogin.Location = new System.Drawing.Point(739, 0);
             this.gbLogin.Name = "gbLogin";
-            this.gbLogin.Size = new System.Drawing.Size(265, 225);
+            this.gbLogin.Size = new System.Drawing.Size(265, 192);
             this.gbLogin.TabIndex = 3;
             this.gbLogin.TabStop = false;
             this.gbLogin.Text = "Login/Register";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(6, 175);
+            this.button1.Location = new System.Drawing.Point(87, 133);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(104, 34);
+            this.button1.Size = new System.Drawing.Size(91, 34);
             this.button1.TabIndex = 9;
             this.button1.Text = "View Site";
             this.button1.UseVisualStyleBackColor = true;
@@ -4669,9 +4665,9 @@
             // 
             // btnRegister
             // 
-            this.btnRegister.Location = new System.Drawing.Point(155, 131);
+            this.btnRegister.Location = new System.Drawing.Point(184, 133);
             this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(104, 38);
+            this.btnRegister.Size = new System.Drawing.Size(75, 34);
             this.btnRegister.TabIndex = 8;
             this.btnRegister.Text = "Register";
             this.btnRegister.UseVisualStyleBackColor = true;
@@ -4681,7 +4677,7 @@
             // 
             this.btnLogIn.Location = new System.Drawing.Point(6, 133);
             this.btnLogIn.Name = "btnLogIn";
-            this.btnLogIn.Size = new System.Drawing.Size(104, 37);
+            this.btnLogIn.Size = new System.Drawing.Size(75, 34);
             this.btnLogIn.TabIndex = 7;
             this.btnLogIn.Text = "Log In";
             this.btnLogIn.UseVisualStyleBackColor = true;
@@ -4751,15 +4747,11 @@
             // 
             // gbManualBet
             // 
-            this.gbManualBet.Controls.Add(this.btnWithdrawAlt);
-            this.gbManualBet.Controls.Add(this.btnDepositAlt);
             this.gbManualBet.Controls.Add(this.btnMPWithdraw);
             this.gbManualBet.Controls.Add(this.btnMPDeposit);
             this.gbManualBet.Controls.Add(this.btnTip);
             this.gbManualBet.Controls.Add(this.btnInvest);
             this.gbManualBet.Controls.Add(this.btnWithdraw);
-            this.gbManualBet.Controls.Add(this.txtApiAddress);
-            this.gbManualBet.Controls.Add(this.label92);
             this.gbManualBet.Controls.Add(this.lblApiBetProfit);
             this.gbManualBet.Controls.Add(this.label25);
             this.gbManualBet.Controls.Add(this.btnApiBetLow);
@@ -4771,37 +4763,17 @@
             this.gbManualBet.Controls.Add(this.label23);
             this.gbManualBet.Controls.Add(this.label22);
             this.gbManualBet.Dock = System.Windows.Forms.DockStyle.Left;
-            this.gbManualBet.Location = new System.Drawing.Point(299, 0);
+            this.gbManualBet.Location = new System.Drawing.Point(293, 0);
             this.gbManualBet.Name = "gbManualBet";
-            this.gbManualBet.Size = new System.Drawing.Size(446, 225);
+            this.gbManualBet.Size = new System.Drawing.Size(446, 192);
             this.gbManualBet.TabIndex = 1;
             this.gbManualBet.TabStop = false;
             this.gbManualBet.Text = "Place a bet";
             this.gbManualBet.Enter += new System.EventHandler(this.groupBox5_Enter);
             // 
-            // btnWithdrawAlt
-            // 
-            this.btnWithdrawAlt.Location = new System.Drawing.Point(341, 198);
-            this.btnWithdrawAlt.Name = "btnWithdrawAlt";
-            this.btnWithdrawAlt.Size = new System.Drawing.Size(75, 23);
-            this.btnWithdrawAlt.TabIndex = 18;
-            this.btnWithdrawAlt.Text = "Withdraw Alt";
-            this.btnWithdrawAlt.UseVisualStyleBackColor = true;
-            this.btnWithdrawAlt.Click += new System.EventHandler(this.btnWithdrawAlt_Click);
-            // 
-            // btnDepositAlt
-            // 
-            this.btnDepositAlt.Location = new System.Drawing.Point(260, 198);
-            this.btnDepositAlt.Name = "btnDepositAlt";
-            this.btnDepositAlt.Size = new System.Drawing.Size(75, 23);
-            this.btnDepositAlt.TabIndex = 17;
-            this.btnDepositAlt.Text = "Deposit Alt";
-            this.btnDepositAlt.UseVisualStyleBackColor = true;
-            this.btnDepositAlt.Click += new System.EventHandler(this.btnDepositAlt_Click);
-            // 
             // btnMPWithdraw
             // 
-            this.btnMPWithdraw.Location = new System.Drawing.Point(114, 199);
+            this.btnMPWithdraw.Location = new System.Drawing.Point(364, 159);
             this.btnMPWithdraw.Name = "btnMPWithdraw";
             this.btnMPWithdraw.Size = new System.Drawing.Size(75, 23);
             this.btnMPWithdraw.TabIndex = 16;
@@ -4812,7 +4784,7 @@
             // 
             // btnMPDeposit
             // 
-            this.btnMPDeposit.Location = new System.Drawing.Point(33, 199);
+            this.btnMPDeposit.Location = new System.Drawing.Point(283, 159);
             this.btnMPDeposit.Name = "btnMPDeposit";
             this.btnMPDeposit.Size = new System.Drawing.Size(75, 23);
             this.btnMPDeposit.TabIndex = 15;
@@ -4850,24 +4822,6 @@
             this.btnWithdraw.Text = "Withdraw";
             this.btnWithdraw.UseVisualStyleBackColor = true;
             this.btnWithdraw.Click += new System.EventHandler(this.btnWithdraw_Click);
-            // 
-            // txtApiAddress
-            // 
-            this.txtApiAddress.Location = new System.Drawing.Point(114, 172);
-            this.txtApiAddress.Name = "txtApiAddress";
-            this.txtApiAddress.ReadOnly = true;
-            this.txtApiAddress.Size = new System.Drawing.Size(303, 20);
-            this.txtApiAddress.TabIndex = 11;
-            // 
-            // label92
-            // 
-            this.label92.AutoSize = true;
-            this.label92.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label92.Location = new System.Drawing.Point(30, 167);
-            this.label92.Name = "label92";
-            this.label92.Size = new System.Drawing.Size(78, 24);
-            this.label92.TabIndex = 10;
-            this.label92.Text = "Deposit:";
             // 
             // lblApiBetProfit
             // 
@@ -5031,7 +4985,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Left;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(299, 225);
+            this.groupBox3.Size = new System.Drawing.Size(293, 192);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Basic Stats";
@@ -5924,7 +5878,7 @@
             // 
             this.bitdiceActivatorToolStripMenuItem.Name = "bitdiceActivatorToolStripMenuItem";
             this.bitdiceActivatorToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.bitdiceActivatorToolStripMenuItem.Text = "Bitdice Activator";
+            this.bitdiceActivatorToolStripMenuItem.Text = "Device Verifier";
             this.bitdiceActivatorToolStripMenuItem.Click += new System.EventHandler(this.bitdiceActivatorToolStripMenuItem_Click);
             // 
             // siteToolStripMenuItem
@@ -6185,7 +6139,7 @@
             // basicToolStripMenuItem
             // 
             this.basicToolStripMenuItem.Name = "basicToolStripMenuItem";
-            this.basicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.basicToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.basicToolStripMenuItem.Text = "Basic";
             this.basicToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.basicToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6193,7 +6147,7 @@
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.advancedToolStripMenuItem.Text = "Advanced";
             this.advancedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.advancedToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6201,7 +6155,7 @@
             // programmerToolStripMenuItem
             // 
             this.programmerToolStripMenuItem.Name = "programmerToolStripMenuItem";
-            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.programmerToolStripMenuItem.Text = "Programmer";
             this.programmerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.programmerToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6559,8 +6513,6 @@
         private System.Windows.Forms.Label label91;
         private System.Windows.Forms.Label label90;
         private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.TextBox txtApiAddress;
-        private System.Windows.Forms.Label label92;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chrtEmbeddedLiveChart;
         private System.Windows.Forms.DataGridView dataGridView1;
@@ -6933,13 +6885,11 @@
         private System.Windows.Forms.ToolStripMenuItem moneyPotToolStripMenuItem;
         private System.Windows.Forms.Button btnMPDeposit;
         private System.Windows.Forms.Button btnMPWithdraw;
-        private System.Windows.Forms.Button btnDepositAlt;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.NumericUpDown nudMaximumBet;
         private System.Windows.Forms.NumericUpDown nudMinumumBet;
         private System.Windows.Forms.CheckBox chkMaxBet;
         private System.Windows.Forms.CheckBox chkMinBet;
-        private System.Windows.Forms.Button btnWithdrawAlt;
         private System.Windows.Forms.ToolStripMenuItem coinMillionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem magicalDiceToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;

@@ -190,6 +190,7 @@
     <Compile Include="Bitvest.cs" />
     <Compile Include="Kingdice.cs" />
     <Compile Include="NitrogenSports.cs" />
+    <Compile Include="provablyio.cs" />
     <Compile Include="SatoshiDice.cs" />
     <Compile Include="SeedInput.cs">
       <SubType>Form</SubType>

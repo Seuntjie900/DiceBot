@@ -32,7 +32,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.2.4";
+        private const string vers = "3.3.0";
 
 
         Control[] ControlsToDisable;
@@ -4501,7 +4501,7 @@ namespace DiceBot
             }
             else
             {
-                txtApiAddress.Text = Address.ToString();
+                //txtApiAddress.Text = Address.ToString();
             }
         }
 
@@ -6401,8 +6401,8 @@ namespace DiceBot
 
         private void btnDepositAlt_Click(object sender, EventArgs e)
         {
-            SimpleSwap tmp = new SimpleSwap(ExchangeType.deposit, CurrentSite.Currency, txtApiAddress.Text);
-            tmp.Show();
+            //SimpleSwap tmp = new SimpleSwap(ExchangeType.deposit, CurrentSite.Currency, txtApiAddress.Text);
+            //tmp.Show();
         }
 
         private void lbVariables_SelectedIndexChanged(object sender, EventArgs e)
