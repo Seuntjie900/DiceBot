@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6435,6 +6435,31 @@ namespace DiceBot
         private void frequentlyAskedQuestionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://bot.seuntjie.com/faqs.aspx");
+        }
+
+        private void codeStart_Click(object sender, EventArgs e)
+        {
+            LuaRuntime.SetLua(Lua);
+            try
+            {
+                SetLuaVars();
+                LuaRuntime.Run(richTextBox3.Text);
+                GetLuaVars();
+
+                Start(false);
+            }
+            catch (Exception ex)
+            {
+                WriteConsole("LUA ERROR!!");
+                WriteConsole(ex.Message);
+                DumpLog(ex.Message, 1);
+                DumpLog(ex.StackTrace, 2);
+            }
+        }
+
+        private void codeStop_Click(object sender, EventArgs e)
+        {
+            Stop("stopped");
         }
 
         private void seedsToolStripMenuItem_Click(object sender, EventArgs e)
