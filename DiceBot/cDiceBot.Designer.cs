@@ -503,6 +503,8 @@ namespace DiceBot
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.codeStart = new System.Windows.Forms.Button();
+            this.codeStop = new System.Windows.Forms.Button();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -5621,6 +5623,8 @@ namespace DiceBot
             // tpConsole
             // 
             this.tpConsole.AutoScroll = true;
+            this.tpConsole.Controls.Add(this.codeStop);
+            this.tpConsole.Controls.Add(this.codeStart);
             this.tpConsole.Controls.Add(this.rtbConsole);
             this.tpConsole.Controls.Add(this.txtConsoleIn);
             this.tpConsole.Location = new System.Drawing.Point(4, 22);
@@ -5633,23 +5637,26 @@ namespace DiceBot
             // 
             // rtbConsole
             // 
+            this.rtbConsole.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbConsole.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.rtbConsole.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbConsole.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbConsole.ForeColor = System.Drawing.SystemColors.Control;
             this.rtbConsole.HideSelection = false;
-            this.rtbConsole.Location = new System.Drawing.Point(3, 3);
+            this.rtbConsole.Location = new System.Drawing.Point(0, 0);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
-            this.rtbConsole.Size = new System.Drawing.Size(350, 693);
+            this.rtbConsole.Size = new System.Drawing.Size(354, 657);
             this.rtbConsole.TabIndex = 0;
             this.rtbConsole.Text = "";
             this.rtbConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox1_KeyDown);
             // 
             // txtConsoleIn
             // 
-            this.txtConsoleIn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtConsoleIn.Location = new System.Drawing.Point(3, 696);
+            this.txtConsoleIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtConsoleIn.Location = new System.Drawing.Point(3, 699);
             this.txtConsoleIn.Multiline = true;
             this.txtConsoleIn.Name = "txtConsoleIn";
             this.txtConsoleIn.Size = new System.Drawing.Size(350, 69);
@@ -6269,6 +6276,30 @@ namespace DiceBot
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
+            // 
+            // codeStart
+            // 
+            this.codeStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codeStart.Location = new System.Drawing.Point(3, 663);
+            this.codeStart.Name = "codeStart";
+            this.codeStart.Size = new System.Drawing.Size(203, 30);
+            this.codeStart.TabIndex = 2;
+            this.codeStart.Text = "Start";
+            this.codeStart.UseVisualStyleBackColor = true;
+            this.codeStart.Click += new System.EventHandler(this.codeStart_Click);
+            // 
+            // codeStop
+            // 
+            this.codeStop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codeStop.Location = new System.Drawing.Point(212, 663);
+            this.codeStop.Name = "codeStop";
+            this.codeStop.Size = new System.Drawing.Size(142, 30);
+            this.codeStop.TabIndex = 3;
+            this.codeStop.Text = "Stop";
+            this.codeStop.UseVisualStyleBackColor = true;
+            this.codeStop.Click += new System.EventHandler(this.codeStop_Click);
             // 
             // cDiceBot
             // 
@@ -6941,6 +6972,8 @@ namespace DiceBot
         private System.Windows.Forms.ToolStripMenuItem bitdiceActivatorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nitorgenSportsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem provabllyIOToolStripMenuItem;
+        private System.Windows.Forms.Button codeStop;
+        private System.Windows.Forms.Button codeStart;
     }
 }
 
