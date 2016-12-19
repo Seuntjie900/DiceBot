@@ -1,4 +1,4 @@
-﻿namespace DiceBot
+namespace DiceBot
 {
     partial class cDiceBot
     {
@@ -5608,7 +5608,10 @@
             // richTextBox3
             // 
             this.richTextBox3.AcceptsTab = true;
+            this.richTextBox3.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.richTextBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox3.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox3.ForeColor = System.Drawing.SystemColors.Control;
             this.richTextBox3.Location = new System.Drawing.Point(0, 0);
             this.richTextBox3.Name = "richTextBox3";
             this.richTextBox3.Size = new System.Drawing.Size(348, 375);
@@ -5630,7 +5633,10 @@
             // 
             // rtbConsole
             // 
+            this.rtbConsole.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.rtbConsole.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbConsole.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rtbConsole.ForeColor = System.Drawing.SystemColors.Control;
             this.rtbConsole.HideSelection = false;
             this.rtbConsole.Location = new System.Drawing.Point(3, 3);
             this.rtbConsole.Name = "rtbConsole";
