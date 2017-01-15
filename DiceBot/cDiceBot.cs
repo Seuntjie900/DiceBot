@@ -169,7 +169,7 @@ namespace DiceBot
                 dPreviousBalance = value; 
             }
         }
-
+      
         decimal Chartprofit = 0;
         delegate void dDobet(Bet bet);
         public void GetBetResult(decimal Balance, Bet bet)
@@ -187,7 +187,8 @@ namespace DiceBot
             
             if (!RunningSimulation)
             {
-                AddChartPoint(profit, Win);
+                
+                new Thread(new ParameterizedThreadStart(AddChartPoint)).Start(Win);
             }
             if (InvokeRequired)
             {
@@ -199,21 +200,25 @@ namespace DiceBot
             
             
         }
-
-        delegate void dAddChartPoint(decimal Profit, bool win);
-        void AddChartPoint(decimal Profit, bool win)
+        List<System.Windows.Forms.DataVisualization.Charting.DataPoint> chartpoints = new List<System.Windows.Forms.DataVisualization.Charting.DataPoint>();
+        delegate void dAddChartPoint(object win);
+        void AddChartPoint(object Win)
         {
-
+            bool win = (bool)Win;
             if (InvokeRequired)
             {
-                Invoke(new dAddChartPoint(AddChartPoint), profit, win);
+                Invoke(new dAddChartPoint(AddChartPoint), win);
             }
             else
             {
                 
                 if (chrtEmbeddedLiveChart.Enabled)
                 {
-                    System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint((double)chrtEmbeddedLiveChart.Series[0].Points.Count+1,(double)Chartprofit);
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = null;
+                    if (chrtEmbeddedLiveChart.Series[0].Points.Count>0)
+                    tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint((double)chrtEmbeddedLiveChart.Series[0].Points[chrtEmbeddedLiveChart.Series[0].Points.Count-1].XValue + 1, (double)Chartprofit);
+                    else
+                        tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint( 1.0, (double)Chartprofit);
                     tmp.Color= win? Color.Green:Color.Red;
                     tmp.BorderColor = win ? Color.Green : Color.Red;
                     tmp.MarkerColor = win ? Color.Green : Color.Red;
@@ -222,7 +227,16 @@ namespace DiceBot
                     tmp.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
                     tmp.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
                     tmp.BorderWidth = 1;
-                    chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
+                    chartpoints.Add(tmp);
+                    if (chartpoints.Count > 100)
+                        chartpoints.RemoveAt(0);
+                    
+                    if (chrtEmbeddedLiveChart.DataSource == null)
+                    {
+                        chrtEmbeddedLiveChart.DataSource = chartpoints;
+                        chrtEmbeddedLiveChart.DataBind();
+                    }
+                    //chrtEmbeddedLiveChart.DataBind();
                 }
             }
         }
@@ -272,8 +286,8 @@ namespace DiceBot
             ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow, btnStartHigh2, btnStartLow2, btnMPWithdraw, btnMPDeposit };
             EnableNotLoggedInControls(false);
             basicToolStripMenuItem.Checked = true;
-            chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
-            chrtEmbeddedLiveChart.ChartAreas[0].AxisX.Minimum = 0;
+            //chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
+            //chrtEmbeddedLiveChart.ChartAreas[0].AxisX.Minimum = 0;
             #region tooltip Texts
             ToolTip tt = new ToolTip();
             tt.SetToolTip(gbZigZag , "After every n bets/wins/losses \n(as specified to the right), \nthe bot will switch from \nbetting high to low or vica verca");
@@ -5154,7 +5168,7 @@ namespace DiceBot
         {
             Chartprofit = 0;
             chrtEmbeddedLiveChart.Series[0].Points.Clear();
-            chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
+            //chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
             
         }
 

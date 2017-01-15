@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
             this.pnlAdvanced = new System.Windows.Forms.Panel();
@@ -4533,16 +4532,19 @@
             // 
             // chrtEmbeddedLiveChart
             // 
+            chartArea1.AxisX.IsStartedFromZero = false;
+            chartArea1.AxisY.IsStartedFromZero = false;
+            chartArea1.AxisY.ScaleBreakStyle.Enabled = true;
             chartArea1.Name = "ChartArea1";
             this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chrtEmbeddedLiveChart.Legends.Add(legend1);
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
+            series1.CustomProperties = "IsXAxisQuantitative=True";
+            series1.IsVisibleInLegend = false;
+            series1.IsXValueIndexed = true;
             series1.Name = "Profit";
             series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
             this.chrtEmbeddedLiveChart.Series.Add(series1);

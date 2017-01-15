@@ -310,7 +310,11 @@ namespace DiceBot
                     return;
                 }
             }
-            catch
+            catch (WebException e)
+            {
+                string s = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+            }
+            catch( Exception e)
             {
 
             }
