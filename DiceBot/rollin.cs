@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TwoStepsAuthenticator;
 
 namespace DiceBot
 {
@@ -19,17 +20,19 @@ namespace DiceBot
         Random R = new Random();
         HttpClientHandler ClientHandlr;// = new HttpClientHandler();
         HttpClient Client;
+        TimeAuthenticator mfagenerator = new TimeAuthenticator();
+
         public rollin(cDiceBot Parent)
         {
             maxRoll = 99;
             this.Parent = Parent;
-            AutoWithdraw = true;
+            AutoWithdraw = false;
             AutoInvest = false;
-            Tip = true;
+            Tip = false;
             TipUsingName = true;
             ChangeSeed = true;
             Name = "RollinIO";
-            
+            register = false;
             SiteURL = "https://rollin.io/ref/8c4";
             NonceBased = false;
             
@@ -45,7 +48,8 @@ namespace DiceBot
                     try
                     {
 
-
+                        Client.DefaultRequestHeaders.Remove("X-API-Nonce");
+                        Client.DefaultRequestHeaders.Add("X-API-Nonce", mfagenerator.GetCode(Key));
                         string sEmitResponse2 = Client.GetStringAsync("customer/sync").Result;
                         RollinBet tmpStats2 = json.JsonDeserialize<RollinBet>(sEmitResponse2);
                         if (tmpStats2.success)
@@ -78,14 +82,20 @@ namespace DiceBot
                 decimal tmpchance = High ? maxRoll - chance : chance;
                 string sendchance = tmpchance.ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo);
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
-                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("bet_amount", (amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)));
-                pairs.Add(new KeyValuePair<string, string>("bet_number",sendchance ));
-                pairs.Add(new KeyValuePair<string, string>("prediction", High ? "bigger" : "smaller"));
-                pairs.Add(new KeyValuePair<string, string>("seed", R.Next(int.MaxValue).ToString()));
+               
+                string jsoncontent = json.JsonSerializer<RollinBetPlace>(new RollinBetPlace {
+                    bet_amount = decimal.Parse((amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)),
+                     bet_number = decimal.Parse(sendchance),
+                    prediction = High ? "bigger" : "smaller",
+                    seed = R.Next(int.MaxValue).ToString()
+                });
+                StringContent Content = new StringContent(jsoncontent, Encoding.UTF8, "application/json");
+                Client.DefaultRequestHeaders.Remove("X-API-Nonce");
                 
-                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("games/dice/play", Content).Result.Content.ReadAsStringAsync().Result;
+                string x = mfagenerator.GetCode(Key);
+                Client.DefaultRequestHeaders.Add("X-API-Nonce",x );
+                HttpResponseMessage tmpresp = Client.PostAsync("games/dice/play", Content).Result;
+                string sEmitResponse = tmpresp.Content.ReadAsStringAsync().Result;
                 RollinBet tmp = json.JsonDeserialize<RollinBet>(sEmitResponse);
                 if (tmp.errors != null && tmp.errors.Length>0)
                 {
@@ -138,8 +148,9 @@ namespace DiceBot
 
         public override void ResetSeed()
         {
-            
-            
+
+            Client.DefaultRequestHeaders.Remove("X-API-Nonce");
+            Client.DefaultRequestHeaders.Add("X-API-Nonce", mfagenerator.GetCode(Key));
             string sEmitResponse = Client.GetStringAsync("customer/seed/randomize").Result;
             RollinRandomize rand = json.JsonDeserialize<RollinRandomize>(sEmitResponse);
             if (rand.success)
@@ -158,10 +169,13 @@ namespace DiceBot
         {
             try
             {
+                
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("address", Address));
                 pairs.Add(new KeyValuePair<string, string>("amount", (Amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                Client.DefaultRequestHeaders.Remove("X-API-Nonce");
+                Client.DefaultRequestHeaders.Add("X-API-Nonce", mfagenerator.GetCode(Key));
                 string sEmitResponse = Client.PostAsync("transaction/withdraw", Content).Result.Content.ReadAsStringAsync().Result;
                 return true;
             }
@@ -173,6 +187,8 @@ namespace DiceBot
 
         public void GetDeposit()
         {
+            Client.DefaultRequestHeaders.Remove("X-API-Nonce");
+            Client.DefaultRequestHeaders.Add("X-API-Nonce", mfagenerator.GetCode(Key));
             string sEmitResponse2 = Client.GetStringAsync("customer/address").Result;
             RollinDeposit tmp = json.JsonDeserialize<RollinDeposit>(sEmitResponse2);
             if (tmp.success)
@@ -196,6 +212,8 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("private", "0"));
                 pairs.Add(new KeyValuePair<string, string>("amount", (amount * 1000).ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+                Client.DefaultRequestHeaders.Remove("X-API-Nonce");
+                Client.DefaultRequestHeaders.Add("X-API-Nonce", mfagenerator.GetCode(Key));
                 string sEmitResponse = Client.PostAsync("tipsy/tip", Content).Result.Content.ReadAsStringAsync().Result;
 
                 return sEmitResponse.Contains("\"success\":true");
@@ -209,16 +227,22 @@ namespace DiceBot
         
         CookieContainer Cookies = new CookieContainer();
         string Token = "";
+        string Key = "";
         public override void Login(string Username, string Password, string twofa)
         {
 
             try
             {
                 this.username = Username;
+                Token = Password;
+                Key = twofa;
+                var cookies = new CookieContainer();
+                
+                string csrftoken = "";
                 HttpWebRequest getHeaders = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/ref/8c4");
                 if (Prox != null)
                     getHeaders.Proxy = Prox;
-                var cookies = new CookieContainer();
+                //var cookies = new CookieContainer();
                 getHeaders.CookieContainer = cookies;
 
                 try
@@ -231,15 +255,15 @@ namespace DiceBot
                     }
                     s1 = s1.Substring(s1.IndexOf("<input name=\"_token\" type=\"hidden\""));
                     s1 = s1.Substring("<input name=\"_token\" type=\"hidden\" value=\"".Length);
-                    Token = s1.Substring(0, s1.IndexOf("\""));
+                    csrftoken = s1.Substring(0, s1.IndexOf("\""));
                 }
                 catch
                 {
                     finishedlogin(false);
                     return;
                 }
-
-
+                
+                /*
                 HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://rollin.io/api/customer/login");
                 if (Prox != null)
                     betrequest.Proxy = Prox;
@@ -250,7 +274,7 @@ namespace DiceBot
                 string post = string.Format("username={0}&password={1}&code={2}", Username, Password, twofa);
                 betrequest.ContentLength = post.Length;
                 betrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                betrequest.Headers.Add("X-CSRF-Token", Token);
+                betrequest.Headers.Add("X-API-KEY", Token);
                 using (var writer = new StreamWriter(betrequest.GetRequestStream()))
                 {
 
@@ -280,17 +304,31 @@ namespace DiceBot
                 betrequest2.CookieContainer = cookies;
                 betrequest2.Headers.Add("X-CSRF-Token", Token);
                 EmitResponse2 = (HttpWebResponse)betrequest2.GetResponse();
-                sEmitResponse2 = new StreamReader(EmitResponse2.GetResponseStream()).ReadToEnd();
+                
+                */
+                ClientHandlr = new HttpClientHandler { UseCookies = true, CookieContainer= cookies, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, Proxy = this.Prox, UseProxy = Prox != null }; ;
+                Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
+                Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+                Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+                ClientHandlr.CookieContainer = this.Cookies;
+                Client.DefaultRequestHeaders.Add("Origin", "https://rollin.com");
+                Client.DefaultRequestHeaders.Add("X-API-Key", Token);
+                Client.DefaultRequestHeaders.Add("X-CSRF-Token", csrftoken);
+                /*finishedlogin(true);
+                return;*/
+                Client.DefaultRequestHeaders.Remove("X-API-Nonce");
+                Client.DefaultRequestHeaders.Add("X-API-Nonce", mfagenerator.GetCode(Key));
+                string sEmitResponse2 = Client.GetStringAsync("customer/info?username=" + username).Result;
+                
+                RollinLoginStats tmpStats = json.JsonDeserialize<RollinLoginStats>(sEmitResponse2);
+                Client.DefaultRequestHeaders.Remove("X-API-Nonce");
+                Client.DefaultRequestHeaders.Add("X-API-Nonce", mfagenerator.GetCode(Key));
+                sEmitResponse2 = Client.GetStringAsync("customer/sync").Result;
                 RollinBet tmpStats2 = json.JsonDeserialize<RollinBet>(sEmitResponse2);
-
                 if (tmpStats.success && tmpStats2.success)
                 {
-                    ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
-                    Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };
-                    Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-                    Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
-                    ClientHandlr.CookieContainer = this.Cookies;
-                    Client.DefaultRequestHeaders.Add("X-CSRF-Token", Token);
+                    /*ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
+                    Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://rollin.io/api/") };*/
                     
                     GetDeposit();
                     balance = decimal.Parse(tmpStats2.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m; //i assume
@@ -461,7 +499,7 @@ namespace DiceBot
             Parent.updateStatus("Cannot chat at this moment. Sorry!");
         }
 
-        public override decimal GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int Nonce)
         {
             /*server = "182fb47eb2f00c928b041795faf5bbd5759829086a67a46edc73a54e9505cfb0";
             client = "468538814";*/
@@ -498,7 +536,7 @@ namespace DiceBot
             return t4;
         }
 
-        new public static decimal sGetLucky(string server, string client, int nonce)
+        new public static decimal sGetLucky(string server, string client, int Nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
             List<byte> serverb = new List<byte>();
@@ -626,5 +664,11 @@ namespace DiceBot
         public string address { get; set; }
         public string[] errors { get; set; }
     }
-
+    public class RollinBetPlace
+    {
+        public string prediction { get; set; }
+        public decimal bet_number { get; set; }
+        public decimal bet_amount { get; set; }
+        public string seed { get; set; }
+    }
 }

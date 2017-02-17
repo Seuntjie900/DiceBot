@@ -286,7 +286,7 @@ namespace DiceBot
                     t.Start();
                     finishedlogin(true);
                 }
-                catch
+                catch (Exception e)
                 {
                     finishedlogin(false);
                 }

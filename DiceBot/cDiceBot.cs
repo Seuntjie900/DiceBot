@@ -211,32 +211,19 @@ namespace DiceBot
             }
             else
             {
-                
+
                 if (chrtEmbeddedLiveChart.Enabled)
                 {
-                    System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = null;
-                    if (chrtEmbeddedLiveChart.Series[0].Points.Count>0)
-                    tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint((double)chrtEmbeddedLiveChart.Series[0].Points[chrtEmbeddedLiveChart.Series[0].Points.Count-1].XValue + 1, (double)Chartprofit);
-                    else
-                        tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint( 1.0, (double)Chartprofit);
-                    tmp.Color= win? Color.Green:Color.Red;
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint((double)chrtEmbeddedLiveChart.Series[0].Points.Count + 1, (double)Chartprofit);
+                    tmp.Color = win ? Color.Green : Color.Red;
                     tmp.BorderColor = win ? Color.Green : Color.Red;
                     tmp.MarkerColor = win ? Color.Green : Color.Red;
 
-                    tmp.MarkerSize = win? 3 :2;
+                    tmp.MarkerSize = win ? 3 : 2;
                     tmp.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
                     tmp.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
                     tmp.BorderWidth = 1;
-                    chartpoints.Add(tmp);
-                    if (chartpoints.Count > 100)
-                        chartpoints.RemoveAt(0);
-                    
-                    if (chrtEmbeddedLiveChart.DataSource == null)
-                    {
-                        chrtEmbeddedLiveChart.DataSource = chartpoints;
-                        chrtEmbeddedLiveChart.DataBind();
-                    }
-                    //chrtEmbeddedLiveChart.DataBind();
+                    chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
                 }
             }
         }
@@ -4809,7 +4796,9 @@ namespace DiceBot
                     case "Bitvest": CurrentSite = new Bitvest(this); break;
                     case "KingDice": CurrentSite = new Kingdice(this); break;
                     case "NitrogenSports": CurrentSite = new NitrogenSports(this);break;
-                    //case "ProvablyIO": CurrentSite = new provablyio(this); break;
+                    case "YoloDice": CurrentSite = new YoloDice(this); break;
+                    case "ProvablyIO": CurrentSite = new provablyio(this); break;
+                    case "Bit-Exo": CurrentSite = new BitExo(this); break;
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -4850,7 +4839,9 @@ namespace DiceBot
                         case "Bitvest": CurrentSite = new Bitvest(this); break;
                         case "KingDice": CurrentSite = new Kingdice(this); break;
                         case "NitrogenSports": CurrentSite = new NitrogenSports(this); break;
-                        //case "ProvablyIO": CurrentSite = new provablyio(this); break;
+                        case "ProvablyIO": CurrentSite = new provablyio(this); break;
+                        case "YoloDice": CurrentSite = new YoloDice(this); break;
+                        case "Bit-Exo": CurrentSite = new BitExo(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5398,7 +5389,9 @@ namespace DiceBot
                     case "bitvestToolStripMenuItem": CurrentSite = new Bitvest(this); siteToolStripMenuItem.Text = "Site (BV)"; break;
                     case "kingDiceToolStripMenuItem": CurrentSite = new Kingdice(this); siteToolStripMenuItem.Text = "Site (KD)"; break;
                     case "nitorgenSportsToolStripMenuItem": CurrentSite = new NitrogenSports(this); siteToolStripMenuItem.Text = "Site (NS)"; break;
-                    //case "provabllyIOToolStripMenuItem": CurrentSite = new provablyio(this); siteToolStripMenuItem.Text = "Site (PIO)"; break;
+                    case "yoloDiceToolStripMenuItem": CurrentSite = new YoloDice(this); siteToolStripMenuItem.Text = "Site (YD)"; break;
+                    case "bitExoToolStripMenuItem": CurrentSite = new BitExo(this); siteToolStripMenuItem.Text = "Site (BE)"; break;
+                    case "provabllyIOToolStripMenuItem": CurrentSite = new provablyio(this); siteToolStripMenuItem.Text = "Site (PIO)"; break;
                 }
                 if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
@@ -5829,6 +5822,8 @@ namespace DiceBot
                             kingDiceToolStripMenuItem.Checked?19:
                             nitorgenSportsToolStripMenuItem.Checked?20:
                             provabllyIOToolStripMenuItem.Checked?21:
+                            bitExoToolStripMenuItem.Checked?22:
+                            yoloDiceToolStripMenuItem.Checked?23:
                             1);
                 }
                 else if (c is TextBox)
@@ -5945,7 +5940,9 @@ namespace DiceBot
                         kingDiceToolStripMenuItem.Checked = value == 19;
                         nitorgenSportsToolStripMenuItem.Checked = value == 20;
                         provabllyIOToolStripMenuItem.Checked = value == 21;
-                        if (value > 21)
+                        bitExoToolStripMenuItem.Checked= value ==22;
+                        yoloDiceToolStripMenuItem.Checked = value == 23;
+                        if (value > 23)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6080,6 +6077,8 @@ namespace DiceBot
                         kingDiceToolStripMenuItem.Checked = value == "19";
                         nitorgenSportsToolStripMenuItem.Checked = value == "20";
                         provabllyIOToolStripMenuItem.Checked = value == "21";
+                        bitExoToolStripMenuItem.Checked = value == "22";
+                        yoloDiceToolStripMenuItem.Checked = value == "23";
                     }
                     else if (Key == "SettingsMode")
                     {
@@ -6463,3 +6462,4 @@ namespace DiceBot
         
     }
 }
+

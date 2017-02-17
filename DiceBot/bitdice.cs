@@ -160,7 +160,7 @@ namespace DiceBot
 
             };
             server = Bet.message.data.secret.id;
-            balance = decimal.Parse(Bet.message.data.bet.user.balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+            balance = decimal.Parse(Bet.message.data.balance, System.Globalization.NumberFormatInfo.InvariantInfo);
             wagered += newbet.Amount;
             profit += newbet.Profit;
             bets++;
@@ -310,7 +310,6 @@ namespace DiceBot
                         
                             /*}
                         }*/
-                        //data%5Binfo%5D=eyJsYW5nIjoiZW4tVVMsIGVuIiwicGxhdGZvcm0iOiJXaW4zMiIsImNwdSI6OCwic2l6ZSI6IjE1ODN4NDI1MCAoMTYwMHg5MDApIiwid2VicnRjIjoiMTY5LjI1NC44MC44MCwgMTkyLjE2OC4xLjMiLCJ0aW1lem9uZSI6IkFmcmljYS9Kb2hhbm5lc2J1cmciLCJ0aW1lIjoiU3VuIERlYyAxMSAyMDE2IDExOjQzOjM1IEdNVCswMjAwIChTb3V0aCBBZnJpY2EgU3RhbmRhcmQgVGltZSkifQ%3D%3D&user%5Bemail%5D=seuntjie%40seuntjie.com&user%5Bpassword%5D=qFkIn1q8FZvljdbmytXq&user%5Btwo_fa%5D=
                         string a = json.JsonSerializer<bitdicedatainfo>(new bitdicedatainfo());
 
                         //encode
@@ -580,6 +579,7 @@ namespace DiceBot
         public bitdicebet bet { get; set; }
         public biddiceold old { get; set; }
         public bitdicenew secret { get; set; }
+        public string balance { get; set; }
     }
     public class biddiceold
     {

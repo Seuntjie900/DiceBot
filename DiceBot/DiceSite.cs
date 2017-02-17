@@ -90,7 +90,7 @@ namespace DiceBot
         }
         public virtual void Donate(decimal Amount)
         {
-
+            
         }
         public bool Withdraw(decimal Amount, string Address)
         {

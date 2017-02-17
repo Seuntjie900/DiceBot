@@ -245,6 +245,7 @@ namespace DiceBot
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username", Username));
                 pairs.Add(new KeyValuePair<string, string>("password", Password));
+                pairs.Add(new KeyValuePair<string, string>("sdb", "8043d46408307f3ac9d14931ba27c9015349bf21b7b7"));
                 pairs.Add(new KeyValuePair<string, string>("2facode", twofa/*==""?"undefined":twofa*/));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("login.php", Content).Result.Content.ReadAsStringAsync().Result;

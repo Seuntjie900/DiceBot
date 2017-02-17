@@ -483,6 +483,8 @@
             this.kingDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nitorgenSportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.provabllyIOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.yoloDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bitExoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4534,7 +4536,6 @@
             // 
             chartArea1.AxisX.IsStartedFromZero = false;
             chartArea1.AxisY.IsStartedFromZero = false;
-            chartArea1.AxisY.ScaleBreakStyle.Enabled = true;
             chartArea1.Name = "ChartArea1";
             this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -4542,7 +4543,7 @@
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.CustomProperties = "IsXAxisQuantitative=True";
+            series1.CustomProperties = "IsXAxisQuantitative=False";
             series1.IsVisibleInLegend = false;
             series1.IsXValueIndexed = true;
             series1.Name = "Profit";
@@ -5910,7 +5911,9 @@
             this.bitvestToolStripMenuItem,
             this.kingDiceToolStripMenuItem,
             this.nitorgenSportsToolStripMenuItem,
-            this.provabllyIOToolStripMenuItem});
+            this.provabllyIOToolStripMenuItem,
+            this.yoloDiceToolStripMenuItem,
+            this.bitExoToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -6124,9 +6127,24 @@
             this.provabllyIOToolStripMenuItem.Name = "provabllyIOToolStripMenuItem";
             this.provabllyIOToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.provabllyIOToolStripMenuItem.Text = "Provablly.IO";
-            this.provabllyIOToolStripMenuItem.Visible = false;
             this.provabllyIOToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.provabllyIOToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // yoloDiceToolStripMenuItem
+            // 
+            this.yoloDiceToolStripMenuItem.Name = "yoloDiceToolStripMenuItem";
+            this.yoloDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.yoloDiceToolStripMenuItem.Text = "YoloDice";
+            this.yoloDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.yoloDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // bitExoToolStripMenuItem
+            // 
+            this.bitExoToolStripMenuItem.Name = "bitExoToolStripMenuItem";
+            this.bitExoToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.bitExoToolStripMenuItem.Text = "Bit-Exo";
+            this.bitExoToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.bitExoToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // settingsModeToolStripMenuItem
             // 
@@ -6937,6 +6955,8 @@
         private System.Windows.Forms.ToolStripMenuItem bitdiceActivatorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nitorgenSportsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem provabllyIOToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem yoloDiceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bitExoToolStripMenuItem;
     }
 }
 
