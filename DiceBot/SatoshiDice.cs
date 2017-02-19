@@ -21,6 +21,8 @@ namespace DiceBot
         
         public SatoshiDice(cDiceBot Parent)
         {
+            _UsernameText = "Email: ";
+            
             this.Parent = Parent;
             maxRoll = 99.99m;
             edge = 1.9m;

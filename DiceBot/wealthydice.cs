@@ -24,6 +24,8 @@ namespace DiceBot
         string actualcur = "btc";
         public WD(cDiceBot Parent)
         {
+            _PasswordText = "API Key: ";
+            
             NonceBased = false;
             Currency = "btc";
             register = false;

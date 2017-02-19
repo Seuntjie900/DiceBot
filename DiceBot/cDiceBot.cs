@@ -32,7 +32,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.0";
+        private const string vers = "3.3.1";
 
 
         Control[] ControlsToDisable;
@@ -5393,7 +5393,10 @@ namespace DiceBot
                     case "bitExoToolStripMenuItem": CurrentSite = new BitExo(this); siteToolStripMenuItem.Text = "Site (BE)"; break;
                     case "provabllyIOToolStripMenuItem": CurrentSite = new provablyio(this); siteToolStripMenuItem.Text = "Site (PIO)"; break;
                 }
-                if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
+                lblUsername.Text = CurrentSite.UsernameText;
+                lblPass.Text = CurrentSite.PasswordText;
+                lblMFAText.Text = CurrentSite.MFAText;
+                /*if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
                     lblPass.Text = "API key:";
                     lblUsername.Text = "Username:";
@@ -5414,11 +5417,17 @@ namespace DiceBot
                     lblUsername.Text = "Email";
                     lblPass.Text = "Password:";
                 }
+                else if (CurrentSite is rollin)
+                {
+                    lblPass.Text = "API Key:";
+                    lblUsername.Text = "Username:";
+                    
+                }
                 else
                 {
                     lblPass.Text = "Password:";
                     lblUsername.Text = "Username:";
-                }
+                }*/
                 if (CurrentSite is moneypot)
                 {
                     btnMPDeposit.Visible = btnMPWithdraw.Visible = true;

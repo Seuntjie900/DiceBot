@@ -24,6 +24,28 @@ namespace DiceBot
         string currency = "Btc";
         public string SiteURL { get; set; }
 
+        protected string _UsernameText = "Username: ";
+        public string UsernameText
+        {
+            get { return _UsernameText; }            
+        }
+
+        protected string _PasswordText = "Password: ";
+
+        public string PasswordText
+        {
+            get { return _PasswordText; }
+            
+        }
+        protected string _MFAText = "2FA Code:";
+
+        public string MFAText
+        {
+            get { return _MFAText; }
+            
+        }
+        
+
         private bool _NonceBased=true;
         public bool NonceBased
         {

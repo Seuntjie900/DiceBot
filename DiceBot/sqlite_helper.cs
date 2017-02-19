@@ -47,7 +47,7 @@ namespace DiceBot
                 Command.ExecuteNonQuery();
                  
             
-            sqcon.Close();
+            ////sqcon.close();
         }
 
         static void AddBet(object sqlBetObj)
@@ -126,7 +126,7 @@ namespace DiceBot
 
 
             }
-            sqcon.Close();
+            //sqcon.close();
             */
         }
 
@@ -202,13 +202,13 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    sqcon.Close();
+                    ////sqcon.close();
                     return Bets.ToArray();
                 }
                 catch
                 { 
                 }
-            //sqcon.Close();
+            ////sqcon.close();
             }
             return null;
         }
@@ -233,13 +233,13 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    sqcon.Close();
+                    ////sqcon.close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                //sqcon.Close();
+                ////sqcon.close();
             }
             return null;
         }
@@ -264,13 +264,13 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    //sqcon.Close();
+                    ////sqcon.close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                //sqcon.Close();
+                ////sqcon.close();
             }
             return null;
         }
@@ -296,13 +296,13 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    //sqcon.Close();
+                    ////sqcon.close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                //sqcon.Close();
+                ////sqcon.close();
             }
             return null;
         }
@@ -327,13 +327,13 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    //sqcon.Close();
+                    ////sqcon.close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                //sqcon.Close();
+                ////sqcon.close();
             }
             return null;
         }
@@ -355,13 +355,13 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    //sqcon.Close();
+                    ////sqcon.close();
                     
                 }
                 catch
                 {
                 }
-                //sqcon.Close();
+                ////sqcon.close();
             }
             
         }
@@ -468,13 +468,13 @@ namespace DiceBot
                             Bets.Add(b);
                         }
                     }
-                    //sqcon.Close();
+                    ////sqcon.close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                //sqcon.Close();
+                ////sqcon.close();
 
             }
             return null;
@@ -570,7 +570,7 @@ namespace DiceBot
 
                 try
                 {
-                    sqcon.Open();
+                    //sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand(searchSring, sqcon);
                     
                     SQLiteDataReader Reader = Command.ExecuteReader();
@@ -583,13 +583,13 @@ namespace DiceBot
                             Bets.Add(b);
                         }
                     }
-                    sqcon.Close();
+                    //sqcon.close();
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.close();
                 
             }
             return null;
@@ -602,7 +602,7 @@ namespace DiceBot
             {
                 try
                 {
-                    sqcon.Open();
+                    //sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand(Query, sqcon);
                     
                     SQLiteDataReader Reader = Command.ExecuteReader();
@@ -611,14 +611,14 @@ namespace DiceBot
                     {
                         Bets.Add(BetParser(Reader));
                     }
-                    sqcon.Close();
+                    //sqcon.close();
                     
                     return Bets.ToArray();
                 }
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.close();
             }
             return null;
         }
@@ -632,7 +632,7 @@ namespace DiceBot
                 try
                 {
                     List<long> Bets = new List<long>();
-                    sqcon.Open();
+                    //sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand("select hash from seed where server = ''", sqcon);
                     SQLiteDataReader Reader = Command.ExecuteReader();
 
@@ -651,13 +651,13 @@ namespace DiceBot
                             Bets.Add((long)Reader["betid"]);
                         }
                     }
-                    sqcon.Close();
+                    //sqcon.close();
                     return Bets;
                 }
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.close();
             }
             return null;
         }
@@ -670,7 +670,7 @@ namespace DiceBot
 
                 try
                 {
-                    sqcon.Open();
+                   // sqcon.Open();
                     SQLiteCommand Command = new SQLiteCommand("select hash from bet where betid="+betid+" and site='"+site+"'", sqcon);
                     SQLiteDataReader Reader = Command.ExecuteReader();
                     string hash = "";
@@ -678,13 +678,13 @@ namespace DiceBot
                     {
                         hash = (string)Reader["hash"];
                     }
-                    sqcon.Close();
+                    //sqcon.close();
                     return hash;
                 }
                 catch
                 {
                 }
-                sqcon.Close();
+                //sqcon.close();
             }
             return null;
         }

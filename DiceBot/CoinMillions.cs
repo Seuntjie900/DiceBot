@@ -25,6 +25,7 @@ namespace DiceBot
         public static string[] cCurrencies = new string[] { "btc", "xrp", "ltc" };
         public CoinMillions(cDiceBot Parent)
         {
+            _PasswordText = "API Key: ";
             Currencies = new string[] { "btc", "xrp", "ltc" };
             Currency = "btc";
             

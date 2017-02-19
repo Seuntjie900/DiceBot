@@ -24,6 +24,8 @@ namespace DiceBot
 
         public rollin(cDiceBot Parent)
         {
+            _PasswordText = "API Key: ";
+            _MFAText = " Secret: ";
             maxRoll = 99;
             this.Parent = Parent;
             AutoWithdraw = false;

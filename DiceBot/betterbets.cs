@@ -23,6 +23,7 @@ namespace DiceBot
         public static string[] cCurrencies = new string[2] { "btc", "nxt" };
         public BB(cDiceBot Parent)
         {
+            _PasswordText = "API Key: ";
             NonceBased = false;
             Currency = "btc";
             register = false;

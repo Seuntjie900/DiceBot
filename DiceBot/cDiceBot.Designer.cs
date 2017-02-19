@@ -356,7 +356,7 @@
             this.txtApiPassword = new System.Windows.Forms.TextBox();
             this.txtApiUsername = new System.Windows.Forms.TextBox();
             this.label91 = new System.Windows.Forms.Label();
-            this.label90 = new System.Windows.Forms.Label();
+            this.lblMFAText = new System.Windows.Forms.Label();
             this.lblPass = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.gbManualBet = new System.Windows.Forms.GroupBox();
@@ -4645,7 +4645,7 @@
             this.gbLogin.Controls.Add(this.txtApiPassword);
             this.gbLogin.Controls.Add(this.txtApiUsername);
             this.gbLogin.Controls.Add(this.label91);
-            this.gbLogin.Controls.Add(this.label90);
+            this.gbLogin.Controls.Add(this.lblMFAText);
             this.gbLogin.Controls.Add(this.lblPass);
             this.gbLogin.Controls.Add(this.lblUsername);
             this.gbLogin.Dock = System.Windows.Forms.DockStyle.Left;
@@ -4721,14 +4721,14 @@
             this.label91.TabIndex = 3;
             this.label91.Text = "(Leave blank if disabled)";
             // 
-            // label90
+            // lblMFAText
             // 
-            this.label90.AutoSize = true;
-            this.label90.Location = new System.Drawing.Point(18, 84);
-            this.label90.Name = "label90";
-            this.label90.Size = new System.Drawing.Size(53, 13);
-            this.label90.TabIndex = 2;
-            this.label90.Text = "2fa Code:";
+            this.lblMFAText.AutoSize = true;
+            this.lblMFAText.Location = new System.Drawing.Point(18, 84);
+            this.lblMFAText.Name = "lblMFAText";
+            this.lblMFAText.Size = new System.Drawing.Size(53, 13);
+            this.lblMFAText.TabIndex = 2;
+            this.lblMFAText.Text = "2fa Code:";
             // 
             // lblPass
             // 
@@ -5938,9 +5938,11 @@
             // pocketRocketsCasinoToolStripMenuItem
             // 
             this.pocketRocketsCasinoToolStripMenuItem.CheckOnClick = true;
+            this.pocketRocketsCasinoToolStripMenuItem.Enabled = false;
             this.pocketRocketsCasinoToolStripMenuItem.Name = "pocketRocketsCasinoToolStripMenuItem";
             this.pocketRocketsCasinoToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.pocketRocketsCasinoToolStripMenuItem.Text = "BetKing";
+            this.pocketRocketsCasinoToolStripMenuItem.Visible = false;
             this.pocketRocketsCasinoToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.pocketRocketsCasinoToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
@@ -6140,9 +6142,11 @@
             // 
             // bitExoToolStripMenuItem
             // 
+            this.bitExoToolStripMenuItem.Enabled = false;
             this.bitExoToolStripMenuItem.Name = "bitExoToolStripMenuItem";
             this.bitExoToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.bitExoToolStripMenuItem.Text = "Bit-Exo";
+            this.bitExoToolStripMenuItem.Visible = false;
             this.bitExoToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitExoToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
@@ -6531,7 +6535,7 @@
         private System.Windows.Forms.TextBox txtApiPassword;
         private System.Windows.Forms.TextBox txtApiUsername;
         private System.Windows.Forms.Label label91;
-        private System.Windows.Forms.Label label90;
+        private System.Windows.Forms.Label lblMFAText;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chrtEmbeddedLiveChart;

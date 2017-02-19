@@ -14,14 +14,14 @@ namespace DiceBot
     class YoloDice:DiceSite
     {
 
-         string accesstoken = "";
-        DateTime LastSeedReset = new DateTime();
+        /* string accesstoken = "";
+        DateTime LastSeedReset = new DateTime();*/
         public bool ispd = false;
         string username = "";
         long uid = 0;
         DateTime lastupdate = new DateTime();
-        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        HttpClientHandler ClientHandlr;
+        /*HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
+        HttpClientHandler ClientHandlr;*/
         TcpClient apiclient = new TcpClient();
         SslStream sslStream;
         long id = 0;
@@ -29,7 +29,7 @@ namespace DiceBot
         public YoloDice(cDiceBot Parent)
         {
             maxRoll = 99.9999m;
-            
+            _PasswordText = "API Key: ";
             AutoInvest = false;
             AutoWithdraw = true;
             ChangeSeed = true;
@@ -74,7 +74,7 @@ namespace DiceBot
 
         byte[] ReadBuffer = new byte[256];
         string challenge = "";
-        
+        string privkey = "";
         //long uid = 0;
         public override void Login(string Username, string Password, string twofa)
         {
@@ -161,10 +161,11 @@ namespace DiceBot
                         ispd = true;
                         lastupdate = DateTime.Now;
                         new Thread(new ThreadStart(BalanceThread)).Start();
-                        sslStream.BeginRead(ReadBuffer, 0, 256, ReadTCP, sslStream);
-                        Write("read_current_seed", "{\"selector\":{\"user_id\":" + uid + "}}");
+                        privkey = Password;
+                        new Thread(new ThreadStart(Beginreadthread)).Start();
                         Thread.Sleep(50);
                         finishedlogin(true);
+                        
                         return;
                     }
                     //tmp2.ImportPrivKey(Password, "", false);
@@ -224,6 +225,7 @@ namespace DiceBot
                                     case "read_user_data": ReadUser(response); break;
                                     case "create_bet": ProcessBet(response); break;
                                     case "read_current_seed": read_current_seed(response); break;
+                                    case "read_seed": read_current_seed(response); break;
                                     case "create_seed": create_seed(response); break;
                                     case "patch_seed": patch_seed(response); break;
                                     case "create_withdrawal": create_withdrawal(response); break;
@@ -240,7 +242,10 @@ namespace DiceBot
                 }
                 catch (Exception e)
                 {
-
+                    if (!apiclient.Connected)
+                    {
+                        Auth();
+                    }
                 }
                 ReadBuffer = new byte[256];
                 if (apiclient.Connected)
@@ -252,15 +257,27 @@ namespace DiceBot
                     }
                     catch
                     {
-
+                        if (!apiclient.Connected)
+                        {
+                            Auth();
+                        }
                     }
                 }
             }
             catch (Exception e)
             {
-
+                if (!apiclient.Connected)
+                {
+                    Auth();
+                }
             }
             
+        }
+        void Beginreadthread()
+        {
+            sslStream.BeginRead(ReadBuffer, 0, 256, ReadTCP, sslStream);
+            Write("read_current_seed", "{\"selector\":{\"user_id\":" + uid + "}}");
+                        
         }
         void ReadUser(string response)
         {
@@ -301,8 +318,40 @@ namespace DiceBot
                             Roll = (decimal)tmpbetrespo.rolled / 10000m,
                              nonce = tmpbetrespo.nonce
                 };
+                bool sent = false;
+                DateTime StartWait = DateTime.Now;
+                if (Currentseed == null)
+                {
+                    //while (Currentseed == null && (DateTime.Now-StartWait).TotalSeconds<20)
+                    {
+                        if (!sent)
+                        {
+                            sent = true;
+                            Write("read_seed", "{\"selector\":{\"id\":" + tmpbetrespo.seed_id + "}}");
+                            Parent.updateStatus("Getting seed data. Please wait.");
+                        }
+                        //Thread.Sleep(100);
+                    }
+                }
+                if (Currentseed != null)
+                {
+                    if (Currentseed.id != tmpbetrespo.seed_id)
+                    {
+                        //while (Currentseed.id != tmpbetrespo.seed_id && (DateTime.Now - StartWait).TotalSeconds < 20)
+                        {
+                            if (!sent)
+                            {
+                                sent = true;
+                                Write("read_seed", "{\"selector\":{\"id\":" + tmpbetrespo.seed_id + "}}");
+                                Parent.updateStatus("Getting seed data. Please wait.");
+                            }
+                            //Thread.Sleep(100);
+                        }
+                    }
+                }
                 if (Currentseed!=null)
                 {
+                    
                     tmp.serverhash = Currentseed.secret_hashed;
                     tmp.clientseed = Currentseed.client_seed;
                 }
@@ -379,9 +428,136 @@ namespace DiceBot
                 }
                 catch (Exception e)
                 {
-                    Parent.updateStatus("It seems an error has occured!");
+                    if (apiclient.Connected)
+                        Parent.updateStatus("It seems an error has occured!");
+                    else
+                    {
+                        if (ispd)
+                        {
+                            Parent.updateStatus("Disconnected. Reconnecting... Click start in a few seconds.");
+                            Auth();
+                        }
+                    }
+                    
                 }
             }
+        }
+
+        void Auth()
+        {
+            try
+            {
+                apiclient.Close();
+
+            }
+            catch { }
+            try
+            {
+                apiclient = new TcpClient();
+
+                apiclient.Connect("api.yolodice.com", 4444);
+                if (apiclient.Connected)
+                {
+                    sslStream = new SslStream(apiclient.GetStream());
+                    sslStream.AuthenticateAsClient("https://api.yolodice.com");
+
+                    string frstchallenge = string.Format(basestring, id++, "generate_auth_challenge", "");
+
+                    sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
+                    int bytes = sslStream.Read(ReadBuffer, 0, 256);
+                    challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
+                    YLChallenge tmp = null;
+                    try
+                    {
+                        tmp = json.JsonDeserialize<YLChallenge>(challenge);
+                    }
+                    catch (Exception e)
+                    {
+                        Parent.updateStatus("error: " + challenge);
+                        finishedlogin(false);
+                        return;
+                    }
+                    NBitcoin.Key tmpkey = NBitcoin.Key.Parse(privkey);
+                    string address = tmpkey.ScriptPubKey.GetDestinationAddress(NBitcoin.Network.GetNetwork("Main")).ToString();
+                    string message = tmpkey.SignMessage(tmp.result);
+
+                    frstchallenge = string.Format(basestring, id++, "auth_by_address", ",\"params\":" + json.JsonSerializer<YLAuthSend>(new YLAuthSend { address = address, signature = message }));
+
+                    sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
+                    bytes = sslStream.Read(ReadBuffer, 0, 256);
+                    challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
+                    YLOgin tmologin = null;
+                    try
+                    {
+                        tmologin = json.JsonDeserialize<YLOgin>(challenge);
+                    }
+                    catch (Exception e)
+                    {
+                        Parent.updateStatus("error: " + challenge);
+                        finishedlogin(false);
+                        return;
+                    }
+
+                    uid = tmologin.result.id;
+                    this.username = tmologin.result.name;
+                    frstchallenge = string.Format(basestring, id++, "read_user_data", ",\"params\":{\"selector\":{\"id\":" + uid + "}}");
+                    sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
+                    bytes = sslStream.Read(ReadBuffer, 0, 256);
+                    challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
+                    YLUserStats tmpstats = null;
+                    try
+                    {
+                        tmpstats = json.JsonDeserialize<YLUserStats>(challenge).result;
+                    }
+                    catch (Exception e)
+                    {
+                        Parent.updateStatus("error: " + challenge);
+                        finishedlogin(false);
+                        return;
+                    }
+
+                    if (tmpstats != null)
+                    {
+
+                        balance = (decimal)tmpstats.balance / 100000000m;
+                        bets = (int)tmpstats.bets;
+                        wins = (int)tmpstats.wins;
+                        losses = (int)tmpstats.losses;
+                        profit = (decimal)tmpstats.profit / 100000000m;
+                        wagered = (decimal)tmpstats.wagered / 100000000m;
+                        Parent.updateBalance(balance);
+                        Parent.updateBets(bets);
+                        Parent.updateWins(wins);
+                        Parent.updateLosses(losses);
+                        Parent.updateProfit(profit);
+                        Parent.updateWagered(wagered);
+                        ispd = true;
+                        lastupdate = DateTime.Now;
+                        new Thread(new ThreadStart(BalanceThread)).Start();
+                        new Thread(new ThreadStart(Beginreadthread)).Start(); 
+                        //sslStream.BeginRead(ReadBuffer, 0, 256, ReadTCP, sslStream);
+                        Write("read_current_seed", "{\"selector\":{\"user_id\":" + uid + "}}");
+                        //privkey = Password;
+                        //Thread.Sleep(50);
+                        //finishedlogin(true);
+
+                        return;
+                    }
+                    //tmp2.ImportPrivKey(Password, "", false);
+                    //string message = tmp2.SignMessage(username, tmp.result);
+                    //string message = //FullSignatureTest(tmp.result, new AsymmetricCipherKeyPair("", ""));
+
+
+                    /*ispd = true;
+                    new Thread(new ThreadStart(BalanceThread)).Start();*/
+                }
+
+            }
+            catch (Exception e)
+            {
+
+            }
+            finishedlogin(false);
         }
  
         public override bool Register(string username, string password)

@@ -16,6 +16,8 @@ namespace DiceBot
 
         public MoneroDice(cDiceBot Parent)
         {
+            _PasswordText = "Private Key: ";
+            _UsernameText = "Public Key: ";
             this.Parent = Parent;
             maxRoll = 99.99m;
             AutoInvest = true;

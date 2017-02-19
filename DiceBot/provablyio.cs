@@ -23,6 +23,7 @@ namespace DiceBot
         public string LastHash { get; set; }
         public provablyio(cDiceBot Parent)
         {
+            _PasswordText = "API Key: ";
             Name = "ProvablyIO";
             AutoWithdraw = false;
             Tip = false;

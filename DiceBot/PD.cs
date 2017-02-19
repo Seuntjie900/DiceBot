@@ -23,6 +23,7 @@ namespace DiceBot
         HttpClientHandler ClientHandlr;
         public PD(cDiceBot Parent)
         {
+            _PasswordText = "API Key: ";
             maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = true;

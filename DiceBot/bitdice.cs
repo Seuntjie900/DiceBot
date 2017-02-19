@@ -319,13 +319,25 @@ namespace DiceBot
                         a = System.Web.HttpUtility.UrlDecode(a);
 
                         //base 64 encode
-                        a = EncodeTo64(a);
-                            
+                        /*a = EncodeTo64(a);
+                            user[username]:etaeasdf
+user[two_fa]:
+user[password]:asdfasdfasdf*/
                         List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                        if (Username.Contains("@") && Username.Contains("."))
+                        {
+                            
+                            pairs.Add(new KeyValuePair<string, string>("user[email]", Username));
+                        }
+                        else
+                        {
+                            pairs.Add(new KeyValuePair<string, string>("user[username]", a));
+                        }
                         pairs.Add(new KeyValuePair<string, string>("data[info]", a));
-                        pairs.Add(new KeyValuePair<string, string>("user[email]", Username));
                         pairs.Add(new KeyValuePair<string, string>("user[password]", Password/*==""?"undefined":twofa*/));
                         pairs.Add(new KeyValuePair<string, string>("user[two_fa]", twofa/*==""?"undefined":twofa*/));
+                        
+                        
                         FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                         string sEmitResponse = WebClient.PostAsync("api/sign_in", Content).Result.Content.ReadAsStringAsync().Result;
                         bitdicelogin login = json.JsonDeserialize<bitdicelogin>(sEmitResponse);

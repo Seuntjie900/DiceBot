@@ -393,17 +393,20 @@ namespace DiceBot
         decimal Wagered = 0;
         int site = 0;
         bool thing = false;
+        string[] SiteA = new string[] {"https://www.999dice.com/api/web.aspx" , "https://www.999doge.com/api/web.aspx", "https://www.999-dice.com/api/web.aspx","http://999again.ddns.net:999/"};
+
         public override void Login(string Username, string Password, string twofa)
         {
             try
             {
-                string sitea = "";
-                switch (site)
+                string sitea = SiteA[site];
+                /*switch (site)
                 {
                     case 0: sitea = "https://www.999dice.com/api/web.aspx"; break;
                     case 1: sitea = "https://www.999doge.com/api/web.aspx"; break;
                     case 2: sitea = "https://www.999-dice.com/api/web.aspx"; break;
-                }
+                    case 3: sitea = "http://999again.ddns.net:999/"; break;
+                }*/
                 ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, Proxy = this.Prox, UseProxy = Prox != null }; ;
                 Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri(sitea) };
                 Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
@@ -427,7 +430,7 @@ namespace DiceBot
                     }
                     catch (AggregateException e)
                     {
-                        if (site++ < 2)
+                        if (site++ < SiteA.Length-1)
                             Login(Username, Password, twofa);
                         else
                             finishedlogin(false);

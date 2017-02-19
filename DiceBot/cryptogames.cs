@@ -24,6 +24,7 @@ namespace DiceBot
         public static string[] sCurrencies = new string[] { "BTC", "Doge", "ETH", "DASH", "GRC", "GAME", "PPC", "PLAY", "LTC","XMR" };
         public cryptogames(cDiceBot Parent)
         {
+            _PasswordText = "API Key: ";
             NonceBased = false;
             this.Parent = Parent;
             AutoInvest = false;
