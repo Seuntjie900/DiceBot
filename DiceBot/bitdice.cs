@@ -50,7 +50,7 @@ namespace DiceBot
         {
             try
             {
-                Parent.DumpLog(e.Message, 4);
+                //Parent.DumpLog(e.Message, 4);
                 string s = e.Message.Replace("\\\"", "\"").Replace("\"{","{").Replace("}\"","}");
                 //Parent.DumpLog("", -1);
                 //Parent.DumpLog("", -1);
@@ -63,7 +63,7 @@ namespace DiceBot
                         case "ProfileChannel": Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"ProfileChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"profile\\\"}\"}");
                             Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"ProfileChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"dashboard\\\"}\"}");
                             break;
-                        case "WalletChannel": Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"WalletChannel\\\"}\",\"data\":\"{\\\"balance\\\":\\\"profile\\\"}\"}");
+                        case "WalletChannel": Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"WalletChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"balance\\\"}\"}");
                             break;
                         case "EventsChannel": Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"EventsChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"events\\\"}\"}"); break;
                         case "DiceChannel": Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"DiceChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"secret\\\"}\"}"); break;
@@ -233,6 +233,20 @@ namespace DiceBot
                 Client.Send(s);
             }
         }
+        
+        DateTime lastUpdate = DateTime.Now;
+        void GetBalanceThread()
+        {
+            while (loggedin)
+            {
+                if ((DateTime.Now-lastUpdate).TotalSeconds>30)
+                {
+                    lastUpdate = DateTime.Now;
+                    Client.Send("{\"command\":\"message\",\"identifier\":\"{\\\"channel\\\":\\\"WalletChannel\\\"}\",\"data\":\"{\\\"action\\\":\\\"balance\\\"}\"}");
+                }
+                Thread.Sleep(500);
+            }
+        }
 
         public override void SetClientSeed(string Seed)
         {
@@ -386,6 +400,9 @@ user[password]:asdfasdfasdf*/
                     Thread.Sleep(100);
                 }
                 //CurrencyChanged();
+                loggedin = true;
+                lastUpdate = DateTime.Now;
+                new Thread(new ThreadStart(GetBalanceThread)).Start();
                 finishedlogin(Client.State == WebSocketState.Open);
                 loggedin = true;
                 //System.Windows.Forms.MessageBox.Show("Due to current limitations of the API, I can't show you your stats until you place a valid bet. Sorry.\n\nAlso, you will need to reselect your currency. If you already selected the currency you want to play in, please select another first, and then switch back.", "Stats Errors", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);

@@ -43,7 +43,7 @@ namespace DiceBot
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
             SiteURL = "https://yolodice.com/#r-fexD-GR";
-            
+            _PasswordText = "Private Key";
         }
         protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
@@ -104,12 +104,25 @@ namespace DiceBot
                         finishedlogin(false);
                         return;
                     }
-                    NBitcoin.Key tmpkey = NBitcoin.Key.Parse(Password);
-                    string address = tmpkey.ScriptPubKey.GetDestinationAddress(NBitcoin.Network.GetNetwork("Main")).ToString();
-                    string message = tmpkey.SignMessage(tmp.result);
-
+                    string address = "";
+                    string message = "";
+                    try
+                    {
+                        NBitcoin.Key tmpkey = NBitcoin.Key.Parse(Password);
+                        address = tmpkey.ScriptPubKey.GetDestinationAddress(NBitcoin.Network.GetNetwork("Main")).ToString();
+                        message = tmpkey.SignMessage(tmp.result);
+                    }
+                    catch (Exception e)
+                    {
+                        Parent.updateStatus("API key format error. Are you using your Private key?");
+                        finishedlogin(false);
+                        return;
+                    }
                     frstchallenge = string.Format(basestring, id++, "auth_by_address", ",\"params\":" + json.JsonSerializer<YLAuthSend>(new YLAuthSend { address = address, signature = message }));
-                    
+                    //{"id":1,"method":"auth_by_address","params":{"address":"n3kmufwdR3Zzgk3k6NYeeLBxB9SpHKe5Tc","signature":"H4W6yMaVK6EzrTw/9jqmLh1lvoyFnxCFqRon2g25lJ7FTCAUHGJWWF3UJD5wCzCVafdjIfCmIYH2KyHboodjjcU="}}
+
+                    //{"id":1,"method":"auth_by_address","params":{"address":"1PUgaiHavJrpi7r7JhkhwWj7Kf9Ls68Z6w","signature":"Hz0oh29Nho+bVz7zggS1dqx\/N7VAyD6jsk8k98qW84ild7D71Q9rUbmEE4GIj0a5eKPcK1EjvSEwwa74jBJRyY8="}}
+
                     sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
                     bytes = sslStream.Read(ReadBuffer, 0, 256);
                     challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
@@ -180,6 +193,7 @@ namespace DiceBot
             }
             catch (Exception e)
             {
+                Parent.DumpLog(e.ToString(), 0);
 
             }
             finishedlogin(false);

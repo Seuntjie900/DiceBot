@@ -401,7 +401,7 @@ namespace DiceBot
             MersenneTwister twist = new MersenneTwister(seeds);
             decimal roll = (decimal)twist.Next(1000000)/10000.0m;
 
-            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+            /*List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
             pairs.Add(new KeyValuePair<string, string>("client_seed", client));
             pairs.Add(new KeyValuePair<string, string>("server_seed", server));
             pairs.Add(new KeyValuePair<string, string>("bet_num",nonce.ToString()));
@@ -418,7 +418,7 @@ namespace DiceBot
                     {
                     }
                 }
-
+            */
             return roll;
         }
     }

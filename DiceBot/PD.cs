@@ -237,10 +237,10 @@ namespace DiceBot
                 decimal amount = tmp5.Amount;
                 decimal chance = tmp5.Chance;
                 bool High = tmp5.High;
-                if (amount < 10000 && (DateTime.Now - Lastbet).TotalMilliseconds < 500)
+                /*if (amount < 10000 && (DateTime.Now - Lastbet).TotalMilliseconds < 500)
                 {
                     Thread.Sleep((int)(500.0 - (DateTime.Now - Lastbet).TotalMilliseconds));
-                }
+                }*/
                 decimal tmpchance = High ? 99.99m - chance : chance;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("amount", (amount * 100000000m).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));

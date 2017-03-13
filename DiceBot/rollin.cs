@@ -86,8 +86,8 @@ namespace DiceBot
                 Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
                
                 string jsoncontent = json.JsonSerializer<RollinBetPlace>(new RollinBetPlace {
-                    bet_amount = decimal.Parse((amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo)),
-                     bet_number = decimal.Parse(sendchance),
+                    bet_amount = decimal.Parse((amount * 1000).ToString("0.00000", System.Globalization.NumberFormatInfo.InvariantInfo), System.Globalization.NumberFormatInfo.InvariantInfo),
+                    bet_number = decimal.Parse(sendchance, System.Globalization.NumberFormatInfo.InvariantInfo),
                     prediction = High ? "bigger" : "smaller",
                     seed = R.Next(int.MaxValue).ToString()
                 });

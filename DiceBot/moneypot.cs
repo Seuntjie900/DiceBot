@@ -30,7 +30,7 @@ namespace DiceBot
             TipUsingName = true;
             ChangeSeed = true;
             AutoLogin = false;
-            
+            BetURL = "https://www.moneypot.com/bets/";
             SiteURL = "https://www.moneypot.com/oauth/authorize?app_id="+appid+"&response_type=token";
         }
        protected int appid = 492;
@@ -85,14 +85,15 @@ namespace DiceBot
                 R.GetBytes(bytes);
                 long client = (long)BitConverter.ToUInt32(bytes, 0);
                 decimal tmpchance = High ? maxRoll - chance : chance;
+                long Roundedamount = (long)(Math.Round((amount), 8) * 100000000);
                 MPBetPlace betplace = new MPBetPlace
                 {
                     client_seed = client,
                     cond = High ? ">" : "<",
                     hash = next,
-                    payout = (((decimal)(100.0m - edge) / chance) * (amount * 100000000)),
+                    payout = (((decimal)(100.0m - edge) / chance) * Roundedamount),
                     target = tmpchance,
-                    wager = amount * 100000000
+                    wager = Roundedamount
                 };
                 
                 HttpContent cont = new StringContent(json.JsonSerializer<MPBetPlace>(betplace));
@@ -358,6 +359,12 @@ namespace DiceBot
         }
 
         public override decimal GetLucky(string server, string client, int nonce)
+        {
+            long cl = long.Parse(client);
+            decimal roll = Math.Floor((100.0m / 4294967296.0m) * (decimal)((long)(((decimal)nonce) + cl) % (long)(4294967296)) * (long)100) / (long)100;
+            return roll;
+        }
+        public static decimal sGetLucky(string server, string client, int nonce)
         {
             long cl = long.Parse(client);
             decimal roll = Math.Floor((100.0m / 4294967296.0m) * (decimal)((long)(((decimal)nonce) + cl) % (long)(4294967296)) * (long)100) / (long)100;

@@ -473,16 +473,15 @@ devise:btc*/
             }
             int delay = 0;
             if (type_delay == 1)
-                delay = 200;
+                delay = 700;
             else if (type_delay == 2)
-                delay = 200;
+                delay = 400;
             else if (type_delay == 3)
-                delay = 50;
+                delay = 250;
             else if (type_delay == 4)
-                delay = 50;
+                delay = 150;
             else
                 delay = 50;
-
 
             return (DateTime.Now - LastBet).TotalMilliseconds > delay;
         }

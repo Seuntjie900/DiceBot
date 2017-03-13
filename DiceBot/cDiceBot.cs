@@ -20,6 +20,7 @@ using SharpLua;
 using WMPLib;
 using System.Globalization;
 using System.Reflection;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace DiceBot
 {
@@ -200,8 +201,10 @@ namespace DiceBot
             
             
         }
+        long chartbets = 1;
         List<System.Windows.Forms.DataVisualization.Charting.DataPoint> chartpoints = new List<System.Windows.Forms.DataVisualization.Charting.DataPoint>();
         delegate void dAddChartPoint(object win);
+        int LiveBets = 1000;
         void AddChartPoint(object Win)
         {
             bool win = (bool)Win;
@@ -211,10 +214,20 @@ namespace DiceBot
             }
             else
             {
-
+                chartbets++;
                 if (chrtEmbeddedLiveChart.Enabled)
                 {
-                    System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint((double)chrtEmbeddedLiveChart.Series[0].Points.Count + 1, (double)Chartprofit);
+                    while (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1)
+                    {
+                        chrtEmbeddedLiveChart.Series[0].Points.RemoveAt(0);
+                    }
+                    var axisX = chrtEmbeddedLiveChart.ChartAreas[0].AxisX;
+                    var axisY = chrtEmbeddedLiveChart.ChartAreas[0].AxisY;
+                    axisX.Maximum = chartbets < LiveBets ? chartbets : LiveBets;
+                    axisX.Minimum = 1;// chartbets > 100 ? chartbets - 100 : 0;
+                    //--chrtEmbeddedLiveChart.Series[0].Points.Add()
+
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint(chartbets - 1, (double)Chartprofit);
                     tmp.Color = win ? Color.Green : Color.Red;
                     tmp.BorderColor = win ? Color.Green : Color.Red;
                     tmp.MarkerColor = win ? Color.Green : Color.Red;
@@ -224,6 +237,13 @@ namespace DiceBot
                     tmp.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
                     tmp.BorderWidth = 1;
                     chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
+                    if (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1)
+                    {
+                        double maxy = chrtEmbeddedLiveChart.Series[0].Points.Max<DataPoint>(x => x.YValues[0]);
+                        double miny = chrtEmbeddedLiveChart.Series[0].Points.Min<DataPoint>(x => x.YValues[0]);
+                        axisY.Maximum = maxy * 1.025;
+                        axisY.Minimum = miny * 1.025;
+                    }
                 }
             }
         }
@@ -1287,11 +1307,12 @@ namespace DiceBot
                 if (!CurrentSite.ReadyToBet())
                     return;
 
+                dtLastBet = DateTime.Now;
+                EnableTimer(tmBet, false);
                 CurrentSite.chance = Chance;
                 CurrentSite.PlaceBet(high,Lastbet, Chance);
                     
-                dtLastBet = DateTime.Now;
-                EnableTimer(tmBet, false);
+                
                 
             }
             catch (Exception e)
@@ -2678,7 +2699,7 @@ namespace DiceBot
                 {
                     if (!stop)
                         PlaceBet();
-                    EnableTimer(tmBet, false);
+                    //EnableTimer(tmBet, false);
                 }
                
             }
@@ -4001,7 +4022,7 @@ namespace DiceBot
                         client = rand.Next(0, int.MaxValue).ToString();
                     }
                     else
-                        for (int i = 0; i < 24; i++)
+                        for (int i = 0; i < 12; i++)
                         {
                             client += rand.Next(0, 10).ToString();
                         }
@@ -4799,6 +4820,7 @@ namespace DiceBot
                     case "YoloDice": CurrentSite = new YoloDice(this); break;
                     case "ProvablyIO": CurrentSite = new provablyio(this); break;
                     case "Bit-Exo": CurrentSite = new BitExo(this); break;
+                    case "DiceSeuntjie": CurrentSite = new DiceSeuntjie(this); break;
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -4842,6 +4864,7 @@ namespace DiceBot
                         case "ProvablyIO": CurrentSite = new provablyio(this); break;
                         case "YoloDice": CurrentSite = new YoloDice(this); break;
                         case "Bit-Exo": CurrentSite = new BitExo(this); break;
+                        case "DiceSeuntjie": CurrentSite = new DiceSeuntjie(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5392,6 +5415,7 @@ namespace DiceBot
                     case "yoloDiceToolStripMenuItem": CurrentSite = new YoloDice(this); siteToolStripMenuItem.Text = "Site (YD)"; break;
                     case "bitExoToolStripMenuItem": CurrentSite = new BitExo(this); siteToolStripMenuItem.Text = "Site (BE)"; break;
                     case "provabllyIOToolStripMenuItem": CurrentSite = new provablyio(this); siteToolStripMenuItem.Text = "Site (PIO)"; break;
+                    case "diceSeuntjieComToolStripMenuItem": CurrentSite = new DiceSeuntjie(this); siteToolStripMenuItem.Text = "Site (DSC)"; break;
                 }
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;
@@ -5833,6 +5857,7 @@ namespace DiceBot
                             provabllyIOToolStripMenuItem.Checked?21:
                             bitExoToolStripMenuItem.Checked?22:
                             yoloDiceToolStripMenuItem.Checked?23:
+                            diceSeuntjieComToolStripMenuItem.Checked?24:
                             1);
                 }
                 else if (c is TextBox)
@@ -5951,7 +5976,8 @@ namespace DiceBot
                         provabllyIOToolStripMenuItem.Checked = value == 21;
                         bitExoToolStripMenuItem.Checked= value ==22;
                         yoloDiceToolStripMenuItem.Checked = value == 23;
-                        if (value > 23)
+                        diceSeuntjieComToolStripMenuItem.Checked = value == 24;
+                        if (value > 24)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6088,6 +6114,7 @@ namespace DiceBot
                         provabllyIOToolStripMenuItem.Checked = value == "21";
                         bitExoToolStripMenuItem.Checked = value == "22";
                         yoloDiceToolStripMenuItem.Checked = value == "23";
+                        diceSeuntjieComToolStripMenuItem.Checked = value == "24";
                     }
                     else if (Key == "SettingsMode")
                     {
