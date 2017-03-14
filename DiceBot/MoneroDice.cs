@@ -95,7 +95,7 @@ namespace DiceBot
                     Bet tmp2 = new Bet();
                     tmp2.Amount = decimal.Parse(tmp.bet_data.size, System.Globalization.NumberFormatInfo.InvariantInfo);
                     tmp2.date = DateTime.Now;
-                    tmp2.Id = (decimal)tmp.bet_data.bet_id;
+                    tmp2.Id = tmp.bet_data.bet_id.ToString();
                     tmp2.Profit = (tmp.bet_data.win) ? decimal.Parse(tmp.bet_data.profit, System.Globalization.NumberFormatInfo.InvariantInfo) : -tmp2.Amount;
                     tmp2.Roll = decimal.Parse(tmp.bet_data.roll_result, System.Globalization.NumberFormatInfo.InvariantInfo);
                     tmp2.high = tmp.bet_data.roll_type == "over";

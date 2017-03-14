@@ -268,7 +268,7 @@ namespace DiceBot
                     tmp.clientseed = ClientSeed;
                     tmp.Currency = Currency;
                     tmp.high = High;
-                    tmp.Id = tmpBet.BetId;
+                    tmp.Id = tmpBet.BetId.ToString();
                     tmp.nonce = 0;
                     tmp.Profit = ((decimal)tmpBet.PayOut / 100000000m) - ((decimal)amount);
                     tmp.Roll = tmpBet.Secret / 10000m;

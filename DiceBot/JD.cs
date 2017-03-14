@@ -188,7 +188,7 @@ namespace DiceBot
             Bet tmp = new Bet();
             tmp.Amount = decimal.Parse(curBet.bet, System.Globalization.CultureInfo.InvariantCulture);
             tmp.date = DateTime.Now;
-            tmp.Id = (long)curBet.betid;
+            tmp.Id = curBet.betid.ToString();
             tmp.Profit = decimal.Parse(curBet.this_profit, System.Globalization.CultureInfo.InvariantCulture);
             tmp.Roll = (decimal)curBet.lucky/10000m;
             tmp.high = curBet.high;

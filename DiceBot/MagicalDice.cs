@@ -599,7 +599,7 @@ namespace DiceBot
             Bet tmp = new Bet {
             Amount= (decimal)(bet_amount / 100000000.0m),
             date = DateTime.Parse(bet_time),
-            Id = long.Parse(bet_id),
+            Id = (bet_id),
             Profit = (decimal)(bet_profit/100000000.0m),
             Roll = bet_roll,
             

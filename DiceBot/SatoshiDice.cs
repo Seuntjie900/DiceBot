@@ -101,7 +101,7 @@ namespace DiceBot
                         Chance = decimal.Parse(betresult.bet.probability),
                         clientseed = betresult.clientRoll.ToString(),
                         high = false,
-                        Id = betresult.bet.betID,
+                        Id = betresult.bet.betID.ToString(),
                         nonce = -1,
                         Profit = (decimal)betresult.bet.profitInSatoshis / 100000000m,
                         serverhash = betresult.serverHash,

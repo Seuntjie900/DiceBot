@@ -120,7 +120,7 @@ namespace DiceBot
                           date =DateTime.Now,
                           clientseed=Clients,
                            Currency=Currency,
-                            Id=Response.BetId,
+                        Id = Response.BetId.ToString(),
                              high= Response.Target.Contains(">"),
                               serverhash = CurrenyHash,
                                nonce=-1,

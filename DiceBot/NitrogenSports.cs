@@ -240,7 +240,7 @@ Sec-WebSocket-Version:13*/
         {
             Bet newbet = new Bet
             {
-                Id = long.Parse(tmpbbet.id),
+                Id = tmpbbet.id,
                 Amount = decimal.Parse(tmpbbet.betAmount, System.Globalization.NumberFormatInfo.InvariantInfo),
                 date = DateTime.Now,
                 clientseed = tmpbbet.dice.clientSeed,

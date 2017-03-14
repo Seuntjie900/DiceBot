@@ -353,7 +353,7 @@ namespace DiceBot
                             Roll = tmp.game_result.roll,
                             Profit = tmp.game_result.win == 0 ? -tmp5.Amount : tmp.game_result.win - tmp5.Amount,
                             nonce = -1,
-                            Id = tmp.game_id,
+                            Id = tmp.game_id.ToString(),
                             Currency = Currency
 
                         };

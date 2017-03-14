@@ -661,7 +661,7 @@ devise:btc*/
             {
                 Amount = decimal.Parse(amount, System.Globalization.NumberFormatInfo.InvariantInfo),
                 date = json.ToDateTime2(ts.ToString()),
-                Id = decimal.Parse(id, System.Globalization.CultureInfo.InvariantCulture),
+                Id = id,
                 Profit = decimal.Parse(amount_return, System.Globalization.NumberFormatInfo.InvariantInfo),
                 Roll = (decimal)roll_number,
                 high = condition == ">",

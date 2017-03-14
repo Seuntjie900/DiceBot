@@ -485,6 +485,7 @@
             this.provabllyIOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.yoloDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bitExoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.diceSeuntjieComToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -504,7 +505,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.diceSeuntjieComToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.duckDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -5916,7 +5917,8 @@
             this.provabllyIOToolStripMenuItem,
             this.yoloDiceToolStripMenuItem,
             this.bitExoToolStripMenuItem,
-            this.diceSeuntjieComToolStripMenuItem});
+            this.diceSeuntjieComToolStripMenuItem,
+            this.duckDiceToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -6151,6 +6153,14 @@
             this.bitExoToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitExoToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
+            // diceSeuntjieComToolStripMenuItem
+            // 
+            this.diceSeuntjieComToolStripMenuItem.Name = "diceSeuntjieComToolStripMenuItem";
+            this.diceSeuntjieComToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.diceSeuntjieComToolStripMenuItem.Text = "Dice.Seuntjie.Com";
+            this.diceSeuntjieComToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.diceSeuntjieComToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
             // settingsModeToolStripMenuItem
             // 
             this.settingsModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -6289,13 +6299,13 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
-            // diceSeuntjieComToolStripMenuItem
+            // duckDiceToolStripMenuItem
             // 
-            this.diceSeuntjieComToolStripMenuItem.Name = "diceSeuntjieComToolStripMenuItem";
-            this.diceSeuntjieComToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.diceSeuntjieComToolStripMenuItem.Text = "Dice.Seuntjie.Com";
-            this.diceSeuntjieComToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.diceSeuntjieComToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            this.duckDiceToolStripMenuItem.Name = "duckDiceToolStripMenuItem";
+            this.duckDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.duckDiceToolStripMenuItem.Text = "DuckDice";
+            this.duckDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.duckDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 
@@ -6971,6 +6981,7 @@
         private System.Windows.Forms.ToolStripMenuItem yoloDiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bitExoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem diceSeuntjieComToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem duckDiceToolStripMenuItem;
     }
 }
 

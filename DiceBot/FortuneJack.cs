@@ -486,7 +486,7 @@ namespace DiceBot
                         Bet Result = new Bet
                         {
                             Amount = decimal.Parse(RetObjs[5], System.Globalization.NumberFormatInfo.InvariantInfo),
-                            Id = long.Parse(RetObjs[1]),
+                            Id = long.Parse(RetObjs[1]).ToString(),
                             date = DateTime.Now,
                             Profit = decimal.Parse(RetObjs[6], System.Globalization.NumberFormatInfo.InvariantInfo),
                             Roll = decimal.Parse(RetObjs[9], System.Globalization.NumberFormatInfo.InvariantInfo) / 100m,

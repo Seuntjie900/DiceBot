@@ -86,6 +86,8 @@
             this.lblBets = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.tcStats = new System.Windows.Forms.TabControl();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblWagered = new System.Windows.Forms.Label();
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakLose)).BeginInit();
@@ -361,6 +363,8 @@
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.lblWagered);
+            this.tabPage7.Controls.Add(this.label2);
             this.tabPage7.Controls.Add(this.btnHideStats);
             this.tabPage7.Controls.Add(this.lblLuck);
             this.tabPage7.Controls.Add(this.label69);
@@ -673,6 +677,24 @@
             this.tcStats.Size = new System.Drawing.Size(486, 270);
             this.tcStats.TabIndex = 15;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(306, 56);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 32;
+            this.label2.Text = "Wagered: ";
+            // 
+            // lblWagered
+            // 
+            this.lblWagered.AutoSize = true;
+            this.lblWagered.Location = new System.Drawing.Point(369, 56);
+            this.lblWagered.Name = "lblWagered";
+            this.lblWagered.Size = new System.Drawing.Size(13, 13);
+            this.lblWagered.TabIndex = 33;
+            this.lblWagered.Text = "0";
+            // 
             // Stats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -753,6 +775,8 @@
         public System.Windows.Forms.Label lblBets;
         public System.Windows.Forms.Label label17;
         public System.Windows.Forms.TabControl tcStats;
+        private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.Label lblWagered;
 
     }
 }

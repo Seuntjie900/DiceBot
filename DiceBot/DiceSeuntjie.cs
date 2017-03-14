@@ -271,7 +271,7 @@ namespace DiceBot
                            Chance=chance,
                             high=High,
                              clientseed=ClientSeed,
-                              Id=tmphash.bet_id,
+                         Id = tmphash.bet_id.ToString(),
                                nonce=tmphash.secret,
                                 serverseed=tmphash.salt,
                                  serverhash=OldHash,
@@ -346,6 +346,16 @@ namespace DiceBot
         public override void SendChatMessage(string Message)
         {
             throw new NotImplementedException();
+        }
+
+        public override decimal GetLucky(string server, string client, int nonce)
+        {
+            return moneypot.sGetLucky(server, client, nonce);
+        }
+
+        public static decimal sGetLucky(string server, string client, int nonce)
+        {
+            return moneypot.sGetLucky(server, client, nonce);
         }
     }
     //439[null,{"id":995652266,"bet_id":995652266,"outcome":"31.6029","profit":-100,"secret":1829266922,"salt":"1d6f5decb3098d00e065faa720df7d16","created_at":"2017-03-11T08:13:03.312Z",

@@ -587,7 +587,7 @@ namespace DiceBot
             {
                 Amount=decimal.Parse(game.bet_amount, System.Globalization.CultureInfo.InvariantCulture)/1000m,
                 date = DateTime.Now,
-                Id = game.id,
+                Id = game.id.ToString(),
                 
                 Roll = game.number,
                 high = game.prediction=="bigger",

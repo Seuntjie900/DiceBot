@@ -126,7 +126,7 @@ namespace DiceBot
                 Bet tmpBet = new Bet {
                 Amount = (decimal)amount,
                 date = DateTime.Now,
-                Id = tmp.bet_id,
+                Id = tmp.bet_id.ToString(),
                 Profit = (decimal)tmp.profit/100000000m,
                 Roll = (decimal)tmp.outcome,
                 high = High,

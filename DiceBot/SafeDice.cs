@@ -312,7 +312,7 @@ namespace DiceBot
                 bet.Chance = (!tmpResult.isRollLow ? 100m - (decimal)tmpResult.target / 1000000m * 100m : (decimal)tmpResult.target / 1000000m * 100m);
                 bet.high = !tmpResult.isRollLow;
                 bet.clientseed = client;
-                bet.Id = tmpResult.id;
+                bet.Id = tmpResult.id.ToString();
                 bet.nonce = nonce++;
                 bet.Profit = tmpResult.profit / (curen != 2 ? 100000000m : 1000000000000m);
                 bet.Roll = (decimal)tmpResult.roll / 10000m;

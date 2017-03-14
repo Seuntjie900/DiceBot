@@ -607,7 +607,7 @@ namespace DiceBot
         public long clientSeed { get; set; }
         public string serverSeed { get; set; }
         public string nextServerSeed { get; set; }
-        public long betID { get; set; }
+        public long id { get; set; }
 
         public Bet toBet()
         {
@@ -620,7 +620,7 @@ namespace DiceBot
                 
                 clientseed = clientSeed.ToString(),
                 serverseed = serverSeed,
-                Id=betID
+                Id = id.ToString()
             };
 
             tmp.Chance = tmp.high ? 99.99m - (decimal)target : (decimal)target;

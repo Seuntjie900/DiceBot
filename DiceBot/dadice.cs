@@ -433,7 +433,7 @@ namespace DiceBot
             {
                 Amount = amount,
                 date = json.ToDateTime2(timestamp.ToString()),
-                Id=id,
+                Id = id.ToString(),
                 Profit = profit,
                 Roll = result,
                 high = bet.ToLower().StartsWith("over"),

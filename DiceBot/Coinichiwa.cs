@@ -72,7 +72,7 @@ namespace DiceBot
             tmp.Amount = (decimal)amount;
             tmp.date = DateTime.Now;
             tmp.Roll = (decimal)ReceivedBet.luckyNumber;
-            tmp.Id = ReceivedBet.betid;
+            tmp.Id = ReceivedBet.betid.ToString();
             tmp.Profit = (decimal)ReceivedBet.profit / 100000000m;
             tmp.high = High;
             tmp.Chance = (decimal)chance;

@@ -116,7 +116,7 @@ namespace DiceBot
                         {
                             Amount = amount,
                             date = DateTime.Now,
-                            Id = tmp.roll_id,
+                            Id = tmp.roll_id.ToString(),
                             Profit = tmp.roll_profit/100000000m,
                             Roll = tmp.roll_number,
                             high = High,

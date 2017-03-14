@@ -663,7 +663,7 @@ namespace DiceBot
             {
                 Amount = (decimal)amount / 100000000m, 
                 date = DateTime.Now,
-                Id = decimal.Parse(id, System.Globalization.CultureInfo.InvariantCulture), 
+                Id = id, 
                 Profit=(decimal)profit/100000000m, 
                 Roll=(decimal)roll, 
                 high=condition==">",

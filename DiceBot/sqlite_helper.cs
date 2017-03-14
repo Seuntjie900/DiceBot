@@ -36,7 +36,7 @@ namespace DiceBot
             sqcon.Open();
 
             string seeds = "CREATE TABLE if not exists seed(	hash nvarchar(128) NOT NULL primary key,	server text NOT NULL) ";
-            string bets = "CREATE TABLE if not exists bet(betid bigint NOT NULL ,date datetime NULL,stake decimal(18, 8) NULL,profit decimal(18, 8) NULL,chance decimal(18, 8) NULL,	high smallint NULL,	lucky decimal(18, 8) NULL,	hash nvarchar(128) NULL,	nonce bigint NULL,	uid int NULL,	Client nvarchar(50) NULL, site nvarchar(20), PRIMARY KEY(betid, site) )";
+            string bets = "CREATE TABLE if not exists bet(betid nvarchar(50) NOT NULL ,date datetime NULL,stake decimal(18, 8) NULL,profit decimal(18, 8) NULL,chance decimal(18, 8) NULL,	high smallint NULL,	lucky decimal(18, 8) NULL,	hash nvarchar(128) NULL,	nonce bigint NULL,	uid int NULL,	Client nvarchar(50) NULL, site nvarchar(20), PRIMARY KEY(betid, site) )";
             
             //string[] sites = { "PRCDice", "JustDice", "PrimeDice","Dice999","SAfEDICE" };
             
@@ -139,7 +139,7 @@ namespace DiceBot
                 
                 switch (Reader.GetName(i))
                 {
-                    case "betid": tmp.Id = (long)Reader[i]; break;
+                    case "betid": tmp.Id = (string)Reader[i]; break;
                     case "date": tmp.date = (DateTime)Reader[i]; break;
                     case "stake": tmp.Amount = (decimal)Reader[i]; break;
                     case "profit": tmp.Profit = (decimal)Reader[i]; break;
@@ -177,6 +177,7 @@ namespace DiceBot
                     case "SatoshiDice": tmp.Verified = tmp.Roll == (decimal)SatoshiDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                     case "Bitvest": tmp.Verified = tmp.Roll == (decimal)Bitvest.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                     case "KingDice": tmp.Verified = tmp.Roll == (decimal)Kingdice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "YoloDice": tmp.Verified = tmp.Roll == (decimal)YoloDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                 }
             }
             return tmp;
@@ -316,7 +317,7 @@ namespace DiceBot
                 try
                 {
                   //  sqcon.Open();
-                    SQLiteCommand Command = new SQLiteCommand("select bet.*, seed.server from bet, seed where bet.hash=seed.hash and date>='" + StartDate + "' and date<='" + EndDate + "' ", sqcon);
+                    SQLiteCommand Command = new SQLiteCommand("select bet.*, seed.server from bet, seed where bet.hash=seed.hash and date>='" + StartDate.ToLongDateString() + " " + StartDate.ToLongTimeString() + "' and date<='" + EndDate.ToLongDateString() + " " + EndDate.ToLongTimeString() + "' ", sqcon);
                     if (site != "")
                     {
                         Command.CommandText += " and site = '" + site + "'";

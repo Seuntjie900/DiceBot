@@ -145,7 +145,7 @@ namespace DiceBot
 
             Bet newbet = new Bet()
             {
-                Id = Bet.message.data.bet.id,
+                Id = Bet.message.data.bet.id.ToString(),
                  Amount=decimal.Parse(Bet.message.data.bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo),
                   date=DateTime.Now,
                 Chance = decimal.Parse(Bet.message.data.bet.chance, System.Globalization.NumberFormatInfo.InvariantInfo),

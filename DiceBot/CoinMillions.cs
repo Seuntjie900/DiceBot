@@ -451,7 +451,7 @@ namespace DiceBot
             Bet tmp = new Bet {
                 Amount = decimal.Parse(amount, System.Globalization.NumberFormatInfo.InvariantInfo),
                 date = DateTime.Now,
-                Id = id,
+                Id = id.ToString(),
                 Profit = decimal.Parse(profit, System.Globalization.NumberFormatInfo.InvariantInfo),
                 high = roll_type == "h",
                 Chance = chance,
