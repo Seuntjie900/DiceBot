@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Net.Security;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace DiceBot
 {
@@ -258,6 +259,7 @@ namespace DiceBot
                 {
                     if (!apiclient.Connected)
                     {
+                        if (!inauth)
                         Auth();
                     }
                 }
@@ -273,6 +275,7 @@ namespace DiceBot
                     {
                         if (!apiclient.Connected)
                         {
+                            if (!inauth)
                             Auth();
                         }
                     }
@@ -282,6 +285,7 @@ namespace DiceBot
             {
                 if (!apiclient.Connected)
                 {
+                    if (!inauth)
                     Auth();
                 }
             }
@@ -323,7 +327,7 @@ namespace DiceBot
             {
                 Bet tmp = new Bet()
                 {
-                    Id=tmpbetrespo.id,
+                    Id = tmpbetrespo.id.ToString(),
                      Amount= (decimal)tmpbetrespo.amount/100000000m,
                       date= DateTime.Now,
                        Chance= (decimal)tmpbetrespo.target/10000m,
@@ -449,16 +453,22 @@ namespace DiceBot
                         if (ispd)
                         {
                             Parent.updateStatus("Disconnected. Reconnecting... Click start in a few seconds.");
-                            Auth();
+                            if (!inauth)
+                                Auth();
                         }
                     }
                     
                 }
             }
+            else if (ispd && !inauth)
+            {
+                Auth();
+            }
         }
-
+        bool inauth = false;
         void Auth()
         {
+            inauth = true;
             try
             {
                 apiclient.Close();
@@ -488,8 +498,8 @@ namespace DiceBot
                     catch (Exception e)
                     {
                         Parent.updateStatus("error: " + challenge);
-                        finishedlogin(false);
-                        return;
+                        /*finishedlogin(false);
+                        return;*/
                     }
                     NBitcoin.Key tmpkey = NBitcoin.Key.Parse(privkey);
                     string address = tmpkey.ScriptPubKey.GetDestinationAddress(NBitcoin.Network.GetNetwork("Main")).ToString();
@@ -508,8 +518,8 @@ namespace DiceBot
                     catch (Exception e)
                     {
                         Parent.updateStatus("error: " + challenge);
-                        finishedlogin(false);
-                        return;
+                        /*finishedlogin(false);
+                        return;*/
                     }
 
                     uid = tmologin.result.id;
@@ -526,8 +536,8 @@ namespace DiceBot
                     catch (Exception e)
                     {
                         Parent.updateStatus("error: " + challenge);
-                        finishedlogin(false);
-                        return;
+                        /*finishedlogin(false);
+                        return;*/
                     }
 
                     if (tmpstats != null)
@@ -550,10 +560,11 @@ namespace DiceBot
                         new Thread(new ThreadStart(BalanceThread)).Start();
                         new Thread(new ThreadStart(Beginreadthread)).Start(); 
                         //sslStream.BeginRead(ReadBuffer, 0, 256, ReadTCP, sslStream);
-                        Write("read_current_seed", "{\"selector\":{\"user_id\":" + uid + "}}");
+                        //Write("read_current_seed", "{\"selector\":{\"user_id\":" + uid + "}}");
                         //privkey = Password;
                         //Thread.Sleep(50);
                         //finishedlogin(true);
+                        inauth = false;
 
                         return;
                     }
@@ -571,7 +582,8 @@ namespace DiceBot
             {
 
             }
-            finishedlogin(false);
+            //finishedlogin(false);
+            inauth = false;
         }
  
         public override bool Register(string username, string password)
@@ -597,6 +609,42 @@ namespace DiceBot
                 catch { }
                 apiclient.Close();
             }
+        }
+
+        public virtual decimal GetLucky(string server, string client, int nonce)
+        {
+            return sGetLucky(server, client, nonce);
+        }
+        public static decimal sGetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i += 2)
+            {
+                serverb.Add((byte)int.Parse(server.Substring(i, 2), System.Globalization.NumberStyles.HexNumber));
+            }
+            betgenerator.Key = serverb.ToArray();
+            byte[] hash = betgenerator.ComputeHash(Encoding.UTF8.GetBytes(client + "." + nonce));
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }
+            return 0;
         }
 
         public override void GetSeed(long BetID)
