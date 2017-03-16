@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox19 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.nudLiveBetsNum = new System.Windows.Forms.NumericUpDown();
             this.lblSeedFound = new System.Windows.Forms.Label();
@@ -77,6 +79,7 @@
             this.rdbDonateDont = new System.Windows.Forms.RadioButton();
             this.chkStartup = new System.Windows.Forms.CheckBox();
             this.groupBox19.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLiveBetsNum)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSoundStreak)).BeginInit();
@@ -89,6 +92,8 @@
             // 
             // groupBox19
             // 
+            this.groupBox19.Controls.Add(this.numericUpDown1);
+            this.groupBox19.Controls.Add(this.label4);
             this.groupBox19.Controls.Add(this.label1);
             this.groupBox19.Controls.Add(this.nudLiveBetsNum);
             this.groupBox19.Controls.Add(this.lblSeedFound);
@@ -97,10 +102,41 @@
             this.groupBox19.Controls.Add(this.chkAutoSeeds);
             this.groupBox19.Location = new System.Drawing.Point(442, 44);
             this.groupBox19.Name = "groupBox19";
-            this.groupBox19.Size = new System.Drawing.Size(421, 87);
+            this.groupBox19.Size = new System.Drawing.Size(421, 106);
             this.groupBox19.TabIndex = 62;
             this.groupBox19.TabStop = false;
             this.groupBox19.Text = "Bets";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(229, 72);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(84, 20);
+            this.numericUpDown1.TabIndex = 7;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(9, 72);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(199, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Number of bets to display in sliding chart:";
             // 
             // label1
             // 
@@ -531,7 +567,7 @@
             this.groupBox3.Controls.Add(this.rdbDonateAuto);
             this.groupBox3.Controls.Add(this.rdbDonateDefault);
             this.groupBox3.Controls.Add(this.rdbDonateDont);
-            this.groupBox3.Location = new System.Drawing.Point(442, 137);
+            this.groupBox3.Location = new System.Drawing.Point(442, 156);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(421, 126);
             this.groupBox3.TabIndex = 63;
@@ -634,6 +670,7 @@
             this.Text = "Settings";
             this.groupBox19.ResumeLayout(false);
             this.groupBox19.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLiveBetsNum)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
@@ -701,5 +738,7 @@
         public System.Windows.Forms.RadioButton rdbDonateDefault;
         public System.Windows.Forms.RadioButton rdbDonateDont;
         public System.Windows.Forms.CheckBox chkStartup;
+        private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }

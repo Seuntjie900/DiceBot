@@ -33,7 +33,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.1";
+        private const string vers = "3.3.3";
 
 
         Control[] ControlsToDisable;
@@ -241,11 +241,33 @@ namespace DiceBot
                     chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
                     if (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1)
                     {
-                        double maxy = chrtEmbeddedLiveChart.Series[0].Points.Max<DataPoint>(x => x.YValues[0]);
-                        double miny = chrtEmbeddedLiveChart.Series[0].Points.Min<DataPoint>(x => x.YValues[0]);
-                        double span = maxy - miny;
-                        axisY.Maximum = maxy * 1.025;
-                        axisY.Minimum = miny * 1.025;
+                        decimal maxy = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Max<DataPoint>(x => x.YValues[0]);
+                        decimal miny = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Min<DataPoint>(x => x.YValues[0]);
+                        decimal span = maxy - miny;
+                        if (maxy > (decimal)axisY.Maximum || miny < (decimal)axisY.Minimum || 
+                            (double)maxy < (axisY.Maximum - (double)(span / 2.0m)) || (double)miny > (axisY.Minimum + (double)(span / 2.0m)))
+                        {
+                            
+                            string largespan = (span*100000000).ToString("0");
+                            decimal firstdigit = decimal.Parse((largespan.Substring(0, 1))) + 1;
+                            decimal zeros = (span * 100000000).ToString("0").Length-1;
+                            //double factor = zeros; /// 100000000;
+                            decimal newspan = firstdigit * (decimal)Math.Pow(10, ((double)zeros));
+                            newspan /= 100000000m;
+                            decimal interval = newspan / 5.0m;
+
+                            decimal tmp1 = maxy / (interval);
+
+                            decimal ceiling = Math.Ceiling(tmp1);
+                            decimal floor = Math.Floor(miny / (interval));
+
+                            decimal newmax = ceiling * interval + interval;
+                            decimal newmin = floor * interval - interval;
+                            /*axisY.Maximum = maxy * (maxy > 0 ? 1.025 : 0.975);
+                            axisY.Minimum = miny * (miny < 0 ? 1.025 : 0.975);*/
+                            axisY.Maximum = (double)newmax;
+                            axisY.Minimum = (double)newmin;
+                        }
                     }
                 }
             }
@@ -3479,6 +3501,8 @@ namespace DiceBot
                         autoseeds = getvalue(saveditems, "AutoGetSeed") != "0";
                         maxRows = iparse(getvalue(saveditems, "NumLiveBets"));
                         maxRows = maxRows <= 0 ? 1 : maxRows;
+                        LiveBets = iparse(getvalue(saveditems, "NumChartBets"));
+                        LiveBets = LiveBets <= 10 ? 1000 : LiveBets;                        
                         startupMessage = (getvalue(saveditems, "StartupMessage") == "1" || getvalue(saveditems, "StartupMessage") == "-1");
                         donatePercentage = dparse(getvalue(saveditems, "DonatePercentage"), ref convert);
                         donateMode = iparse(getvalue(saveditems, "DonateMode"));
@@ -3561,6 +3585,7 @@ namespace DiceBot
 
                 sw.WriteLine("AutoGetSeed|"+ (autoseeds?"1":"0"));
                 sw.WriteLine("NumLiveBets|" + TmpSet.nudLiveBetsNum.Value);
+                sw.WriteLine("NumChartBets|" + TmpSet.numericUpDown1.Value);
 
                 sw.WriteLine("DonatePercentage|" +TmpSet.nudDonatePercentage.Value );
                 sw.WriteLine("StartupMessage|" + (TmpSet.chkStartup.Checked?"1":"0"));

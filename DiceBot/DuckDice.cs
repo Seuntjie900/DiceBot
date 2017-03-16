@@ -19,7 +19,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "BTC", "LTC", "DOGE" };
+        public static string[] cCurrencies = new string[] { "BTC","ETH", "LTC", "DOGE" };
         
         
         public DuckDice(cDiceBot Parent)
@@ -39,7 +39,7 @@ namespace DiceBot
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
             SiteURL = "https://duckdice.io/?c=53ea652da4";
-            Currencies = new string[] { "BTC","LTC","DOGE" };
+            Currencies = new string[] { "BTC", "ETH", "LTC", "DOGE" };
             Currency = "BTC";
         }
 
@@ -136,7 +136,8 @@ namespace DiceBot
                     nonce = currentseed.nonce++,
                     Profit = decimal.Parse(newbet.bet.profit, System.Globalization.NumberFormatInfo.InvariantInfo),
                     Roll = newbet.bet.number / 100,
-                    serverhash = currentseed.serverSeedHash
+                    serverhash = currentseed.serverSeedHash,
+                    Id=newbet.bet.hash
 
                 };
                 lastupdate = DateTime.Now;
@@ -182,20 +183,51 @@ namespace DiceBot
 
         protected override bool internalWithdraw(decimal Amount, string Address)
         {
-            StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"symbol\":\"{0}\",\"address\":\"{1}\",\"amount\":\"{2}\"}}", Currency, Address, Amount), Encoding.UTF8, "application/json");
-            string sEmitResponse = Client.PostAsync("withdraw/", Content).Result.Content.ReadAsStringAsync().Result;
-
+            try
+            {
+                string cont = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"symbol\":\"{0}\",\"address\":\"{1}\",\"amount\":\"{2}\", \"otpCode\":\"\"}}", Currency, Address, Amount);
+                StringContent Content = new StringContent(cont, Encoding.UTF8, "application/json");
+                string sEmitResponse = Client.PostAsync("withdraw", Content).Result.Content.ReadAsStringAsync().Result;
+                //{"transaction":{"hash":"7a387e334a","symbol":"BTC","type":"withdrawal","status":"pending_payout","amount":"-0.001","address":"1M1zUqZUZg6AH4KQdq9AUoouQgWHdQzySd","txid":null,"created":1489680398},"user":{"balance":"0.00760117","affBalance":"0","affWithdrawals":"0"},"foreign":null}
+                //Parent.DumpLog(sEmitResponse, -1);
+                QuackWithdraw tmp = json.JsonDeserialize<QuackWithdraw>(sEmitResponse);
+                if (tmp.error==null)
+                {
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Parent.DumpLog(e.ToString(), 0);
+            }
             return false;
         }
 
         public override bool InternalSendTip(string User, decimal amount)
         {
-            StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"comment\":\"DiceBot automated tip.\",\"symbol\":\"{0}\",\"hash\":\"{1}\",\"amount\":\"{2}\"}}", Currency, User, amount), Encoding.UTF8, "application/json");
-            string sEmitResponse = Client.PostAsync("tip/", Content).Result.Content.ReadAsStringAsync().Result;
+            try
+            {
+                string cont = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"text\":\"/tip {1} {2:0.00000000} {0}\",\"room\":\"en\"}}", Currency, User, amount);
+                StringContent Content = new StringContent(cont, Encoding.UTF8, "application/json");
+                string sEmitResponse = Client.PostAsync("chat/send", Content).Result.Content.ReadAsStringAsync().Result;
+                //Parent.DumpLog(sEmitResponse, -1);
+                QuackWithdraw tmp = json.JsonDeserialize<QuackWithdraw>(sEmitResponse);
+                if (tmp.error == null)
+                {
+                    return true;
+                }
 
+            }
+            catch (Exception e)
+            {
+                Parent.DumpLog(e.ToString(),0);
+            }
             return false;
         }
-
+        public override void Donate(decimal Amount)
+        {
+            SendTip("seuntjie",Amount);
+        }
         public override void Login(string Username, string Password, string twofa)
         {
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };
@@ -205,12 +237,7 @@ namespace DiceBot
             Client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
             try
             {
-                //List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                /*pairs.Add(new KeyValuePair<string, string>("username", (amount * 100000000m).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
-                pairs.Add(new KeyValuePair<string, string>("password", tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo)));
-                pairs.Add(new KeyValuePair<string, string>("53ea652da4", High ? ">" : "<"));*/
-
-
+                
                 StringContent Content = new StringContent("{\"username\":\"" + Username + "\",\"password\":\"" + Password + "\",\"campaignHash\":\"53ea652da4\"}", Encoding.UTF8, "application/json");
                 string sEmitResponse = Client.PostAsync("login" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
                 QuackLogin tmplogin = null;
@@ -307,16 +334,7 @@ namespace DiceBot
     }
     public class QuackStats
     {
-        /*
-         {"user":{"hash":"98ab9993ad",
-         * "avatar":"https:\/\/duckdice.io\/storage\/avatars\/54yyGh.jpg",
-         * "username":"Seuntjie",
-         
-         * "balance":"0.00010137",
-         
-         * "session":{"bets":120,"wins":62,"luck":108.89}},
-         * }
-         */
+        
         public QuackStats user { get; set; }
         public string hash { get; set; }
         public string username { get; set; }
@@ -352,33 +370,7 @@ namespace DiceBot
         public string winAmount { get; set; }
         public string profit { get; set; }
         
-        /*{
-         * "bet":
-         * {
-         *  "hash":"a3e66e695a",
-         *  "symbol":"BTC",
-         *  "result":false,
-         *  "isHigh":false,
-         *  "number":9759,
-         *  "threshold":5000,
-         *  "chance":50,
-         *  "payout":0,
-         *  "betAmount":"0.0000001",
-         *  "winAmount":"0",
-         *  "profit":"-0.0000001",
-         *  "created":1489516193
-         *},
-         *"user":
-         *{
-         *  "bets":121,
-         *  "wins":62,
-         *  "luck":107.03,
-         *  "balance":"0.00010127",
-         *  "profit":"-0.00000123",
-         *  "volume":"0.0000216",
-         *  "lockedBalance":false,
-         *  "session":{"bets":121,"wins":62,"luck":107.03,"profit":"-0.00000123","volume":"0.0000216"}
-         *  }}*/
+       
     }
     public class QuackSeed
     {
@@ -386,5 +378,10 @@ namespace DiceBot
         public string clientSeed { get; set; }
         public long nonce { get; set; }
         public string serverSeedHash { get; set; }
+    }
+    public class QuackWithdraw
+    {
+        public string error { get; set; }
+        
     }
 }

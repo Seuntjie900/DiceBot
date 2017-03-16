@@ -149,6 +149,7 @@ namespace DiceBot
                         //Emails.StreakSize = (int)Emails.StreakSize;
                         chkAutoSeeds.Checked = Parent.getvalue(saveditems, "AutoGetSeed") != "0";
                         nudLiveBetsNum.Value = (decimal)Parent.iparse(Parent.getvalue(saveditems, "NumLiveBets"));
+                        numericUpDown1.Value = (decimal)Parent.iparse(Parent.getvalue(saveditems, "NumChartBets"));
                         bool convert = false;
                         nudDonatePercentage.Value = (decimal)Parent.dparse(Parent.getvalue(saveditems, "DonatePercentage"), ref convert);
                         chkStartup.Checked = Parent.getvalue(saveditems, "StartupMessage")=="1";
