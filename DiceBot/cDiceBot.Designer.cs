@@ -486,6 +486,7 @@
             this.yoloDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bitExoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diceSeuntjieComToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.duckDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -505,7 +506,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.duckDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -657,9 +657,9 @@
             this.pnlAdvanced.Controls.Add(this.tcSettings);
             this.pnlAdvanced.Controls.Add(this.panel4);
             this.pnlAdvanced.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlAdvanced.Location = new System.Drawing.Point(563, 0);
+            this.pnlAdvanced.Location = new System.Drawing.Point(265, 0);
             this.pnlAdvanced.Name = "pnlAdvanced";
-            this.pnlAdvanced.Size = new System.Drawing.Size(475, 794);
+            this.pnlAdvanced.Size = new System.Drawing.Size(475, 525);
             this.pnlAdvanced.TabIndex = 2;
             // 
             // tcSettings
@@ -671,7 +671,7 @@
             this.tcSettings.Location = new System.Drawing.Point(0, 0);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
-            this.tcSettings.Size = new System.Drawing.Size(475, 760);
+            this.tcSettings.Size = new System.Drawing.Size(475, 491);
             this.tcSettings.TabIndex = 13;
             // 
             // tabPage3
@@ -681,7 +681,7 @@
             this.tabPage3.Controls.Add(this.Settings);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(467, 734);
+            this.tabPage3.Size = new System.Drawing.Size(467, 465);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Strategies";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -689,7 +689,7 @@
             // btnShowStats
             // 
             this.btnShowStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowStats.Location = new System.Drawing.Point(66, 830);
+            this.btnShowStats.Location = new System.Drawing.Point(66, 561);
             this.btnShowStats.Name = "btnShowStats";
             this.btnShowStats.Size = new System.Drawing.Size(75, 23);
             this.btnShowStats.TabIndex = 14;
@@ -704,7 +704,7 @@
             this.Settings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Settings.Location = new System.Drawing.Point(0, 0);
             this.Settings.Name = "Settings";
-            this.Settings.Size = new System.Drawing.Size(467, 734);
+            this.Settings.Size = new System.Drawing.Size(467, 465);
             this.Settings.TabIndex = 13;
             this.Settings.TabStop = false;
             this.Settings.Text = "Settings";
@@ -721,7 +721,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 46);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(461, 685);
+            this.tabControl1.Size = new System.Drawing.Size(461, 416);
             this.tabControl1.TabIndex = 0;
             // 
             // tbMartingale
@@ -733,7 +733,7 @@
             this.tbMartingale.Location = new System.Drawing.Point(4, 22);
             this.tbMartingale.Name = "tbMartingale";
             this.tbMartingale.Padding = new System.Windows.Forms.Padding(3);
-            this.tbMartingale.Size = new System.Drawing.Size(453, 659);
+            this.tbMartingale.Size = new System.Drawing.Size(453, 390);
             this.tbMartingale.TabIndex = 10;
             this.tbMartingale.Text = "Martingale";
             this.tbMartingale.UseVisualStyleBackColor = true;
@@ -4374,7 +4374,7 @@
             this.panel4.Controls.Add(this.btnStop);
             this.panel4.Controls.Add(this.btnStartHigh);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(0, 760);
+            this.panel4.Location = new System.Drawing.Point(0, 491);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(475, 34);
             this.panel4.TabIndex = 50;
@@ -4466,7 +4466,7 @@
             this.pnlApiInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlApiInfo.Location = new System.Drawing.Point(0, 209);
             this.pnlApiInfo.Name = "pnlApiInfo";
-            this.pnlApiInfo.Size = new System.Drawing.Size(438, 585);
+            this.pnlApiInfo.Size = new System.Drawing.Size(312, 316);
             this.pnlApiInfo.TabIndex = 7;
             // 
             // groupBox6
@@ -4475,7 +4475,7 @@
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(0, 0);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(438, 585);
+            this.groupBox6.Size = new System.Drawing.Size(312, 316);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Bets:";
@@ -4497,14 +4497,14 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer1.Size = new System.Drawing.Size(432, 566);
-            this.splitContainer1.SplitterDistance = 332;
+            this.splitContainer1.Size = new System.Drawing.Size(306, 297);
+            this.splitContainer1.SplitterDistance = 174;
             this.splitContainer1.TabIndex = 0;
             // 
             // btnChartReset
             // 
             this.btnChartReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChartReset.Location = new System.Drawing.Point(354, 248);
+            this.btnChartReset.Location = new System.Drawing.Point(228, 90);
             this.btnChartReset.Name = "btnChartReset";
             this.btnChartReset.Size = new System.Drawing.Size(75, 23);
             this.btnChartReset.TabIndex = 3;
@@ -4515,7 +4515,7 @@
             // btnDisable
             // 
             this.btnDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDisable.Location = new System.Drawing.Point(354, 277);
+            this.btnDisable.Location = new System.Drawing.Point(228, 119);
             this.btnDisable.Name = "btnDisable";
             this.btnDisable.Size = new System.Drawing.Size(75, 23);
             this.btnDisable.TabIndex = 2;
@@ -4526,7 +4526,7 @@
             // btnHideLive
             // 
             this.btnHideLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHideLive.Location = new System.Drawing.Point(354, 306);
+            this.btnHideLive.Location = new System.Drawing.Point(228, 148);
             this.btnHideLive.Name = "btnHideLive";
             this.btnHideLive.Size = new System.Drawing.Size(75, 23);
             this.btnHideLive.TabIndex = 1;
@@ -4551,7 +4551,7 @@
             series1.Name = "Profit";
             series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
             this.chrtEmbeddedLiveChart.Series.Add(series1);
-            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(432, 332);
+            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(306, 174);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
             // 
@@ -4573,7 +4573,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(432, 230);
+            this.dataGridView1.Size = new System.Drawing.Size(306, 119);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
@@ -4635,7 +4635,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(438, 209);
+            this.panel5.Size = new System.Drawing.Size(312, 209);
             this.panel5.TabIndex = 4;
             // 
             // gbLogin
@@ -5141,9 +5141,9 @@
             this.pnlBasic.Controls.Add(this.btnStartLow2);
             this.pnlBasic.Controls.Add(this.btnStartHigh2);
             this.pnlBasic.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlBasic.Location = new System.Drawing.Point(414, 0);
+            this.pnlBasic.Location = new System.Drawing.Point(116, 0);
             this.pnlBasic.Name = "pnlBasic";
-            this.pnlBasic.Size = new System.Drawing.Size(149, 794);
+            this.pnlBasic.Size = new System.Drawing.Size(149, 525);
             this.pnlBasic.TabIndex = 8;
             this.pnlBasic.Paint += new System.Windows.Forms.PaintEventHandler(this.panel8_Paint);
             // 
@@ -5434,8 +5434,8 @@
             this.scMain.Panel2.Controls.Add(this.pnlBasic);
             this.scMain.Panel2.Controls.Add(this.pnlAdvanced);
             this.scMain.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint);
-            this.scMain.Size = new System.Drawing.Size(1484, 796);
-            this.scMain.SplitterDistance = 440;
+            this.scMain.Size = new System.Drawing.Size(1060, 527);
+            this.scMain.SplitterDistance = 314;
             this.scMain.TabIndex = 9;
             // 
             // pnlProgrammer
@@ -5443,9 +5443,9 @@
             this.pnlProgrammer.AutoScroll = true;
             this.pnlProgrammer.Controls.Add(this.tabControl2);
             this.pnlProgrammer.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlProgrammer.Location = new System.Drawing.Point(50, 0);
+            this.pnlProgrammer.Location = new System.Drawing.Point(-248, 0);
             this.pnlProgrammer.Name = "pnlProgrammer";
-            this.pnlProgrammer.Size = new System.Drawing.Size(364, 794);
+            this.pnlProgrammer.Size = new System.Drawing.Size(364, 525);
             this.pnlProgrammer.TabIndex = 9;
             // 
             // tabControl2
@@ -5456,7 +5456,7 @@
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(364, 794);
+            this.tabControl2.Size = new System.Drawing.Size(364, 525);
             this.tabControl2.TabIndex = 0;
             // 
             // tabPage10
@@ -5466,7 +5466,7 @@
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(356, 768);
+            this.tabPage10.Size = new System.Drawing.Size(356, 499);
             this.tabPage10.TabIndex = 0;
             this.tabPage10.Text = "Code";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -5493,8 +5493,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.richTextBox3);
-            this.splitContainer2.Size = new System.Drawing.Size(350, 762);
-            this.splitContainer2.SplitterDistance = 381;
+            this.splitContainer2.Size = new System.Drawing.Size(350, 493);
+            this.splitContainer2.SplitterDistance = 246;
             this.splitContainer2.TabIndex = 9;
             // 
             // btnCodeSave
@@ -5616,7 +5616,7 @@
             this.richTextBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox3.Location = new System.Drawing.Point(0, 0);
             this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(348, 375);
+            this.richTextBox3.Size = new System.Drawing.Size(348, 241);
             this.richTextBox3.TabIndex = 5;
             this.richTextBox3.Text = resources.GetString("richTextBox3.Text");
             // 
@@ -5668,7 +5668,7 @@
             this.donateToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1484, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1060, 24);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -6161,6 +6161,14 @@
             this.diceSeuntjieComToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.diceSeuntjieComToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
+            // duckDiceToolStripMenuItem
+            // 
+            this.duckDiceToolStripMenuItem.Name = "duckDiceToolStripMenuItem";
+            this.duckDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.duckDiceToolStripMenuItem.Text = "DuckDice";
+            this.duckDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.duckDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
             // settingsModeToolStripMenuItem
             // 
             this.settingsModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -6275,10 +6283,10 @@
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2,
             this.lblStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 820);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 551);
             this.statusStrip1.MaximumSize = new System.Drawing.Size(0, 100);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1484, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1060, 22);
             this.statusStrip1.TabIndex = 11;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -6299,19 +6307,11 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
-            // duckDiceToolStripMenuItem
-            // 
-            this.duckDiceToolStripMenuItem.Name = "duckDiceToolStripMenuItem";
-            this.duckDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.duckDiceToolStripMenuItem.Text = "DuckDice";
-            this.duckDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.duckDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
-            // 
             // cDiceBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1484, 842);
+            this.ClientSize = new System.Drawing.Size(1060, 573);
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.statusStrip1);

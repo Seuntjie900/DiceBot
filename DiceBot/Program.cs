@@ -13,10 +13,19 @@ namespace DiceBot
         [STAThread]
         static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new cLogin());
-            Application.Run(new cDiceBot(args));
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                //Application.Run(new cLogin());
+                Application.Run(new cDiceBot(args));
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+
+            }
         }
     }
 }
