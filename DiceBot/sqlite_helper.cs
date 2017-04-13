@@ -36,7 +36,7 @@ namespace DiceBot
             sqcon.Open();
 
             string seeds = "CREATE TABLE if not exists seed(	hash nvarchar(128) NOT NULL primary key,	server text NOT NULL) ";
-            string bets = "CREATE TABLE if not exists bet(betid nvarchar(50) NOT NULL ,date datetime NULL,stake decimal(18, 8) NULL,profit decimal(18, 8) NULL,chance decimal(18, 8) NULL,	high smallint NULL,	lucky decimal(18, 8) NULL,	hash nvarchar(128) NULL,	nonce bigint NULL,	uid int NULL,	Client nvarchar(50) NULL, site nvarchar(20), PRIMARY KEY(betid, site) )";
+            string bets = "CREATE TABLE if not exists bet(betid nvarchar(50) NOT NULL ,date datetime NULL,stake decimal(18, 8) NULL,profit decimal(18, 8) NULL,chance decimal(18, 8) NULL,	high smallint NULL,	lucky decimal(18, 8) NULL,	hash nvarchar(128) NULL,	nonce bigint NULL,	uid int NULL,	Client nvarchar(50) NULL, site nvarchar(20), currency nvarchar(10), PRIMARY KEY(betid, site) )";
             
             //string[] sites = { "PRCDice", "JustDice", "PrimeDice","Dice999","SAfEDICE" };
             
@@ -68,7 +68,7 @@ namespace DiceBot
 
 
                 }
-                Command.CommandText = string.Format("insert into bet(betid, date,stake,profit,chance,high,lucky,hash,nonce,uid,client,site) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{0}')",
+                Command.CommandText = string.Format("insert into bet(betid, date,stake,profit,chance,high,lucky,hash,nonce,uid,client,site,currency) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{0}','{12}')",
                         sitename,
                         curbet.Id,
                         curbet.date,
@@ -79,7 +79,8 @@ namespace DiceBot
                         curbet.Roll,
                         curbet.serverhash,
                         curbet.nonce,
-                        curbet.uid, curbet.clientseed);
+                        curbet.uid, curbet.clientseed,
+                        curbet.Currency);
                 Command.ExecuteNonQuery();
             }
             catch (Exception e)
@@ -152,6 +153,7 @@ namespace DiceBot
                     case "Client": tmp.clientseed = (string)Reader[i]; break;                    
                     case "server": tmp.serverseed = (string)Reader[i]; break;
                     case "site": site = (string)Reader[i]; break;
+                    case "currency": tmp.currency = (string)Reader[i]; break;
                 }
             }
             if (!string.IsNullOrEmpty(tmp.serverseed) && !string.IsNullOrEmpty(tmp.clientseed) && tmp.Roll!=-1 && site!="")
