@@ -238,7 +238,14 @@ namespace DiceBot
             try
             {
                 
-                StringContent Content = new StringContent("{\"username\":\"" + Username + "\",\"password\":\"" + Password + "\",\"campaignHash\":\"53ea652da4\"}", Encoding.UTF8, "application/json");
+                StringContent Content;
+                if (twofa != null)
+                {
+                    Content = new StringContent("{\"username\":\"" + Username + "\",\"password\":\"" + Password + "\",\"code\":\"" + twofa + "\",\"campaignHash\":\"53ea652da4\"}", Encoding.UTF8, "application/json");
+                } else
+                {
+                    Content = new StringContent("{\"username\":\"" + Username + "\",\"password\":\"" + Password + "\",\"campaignHash\":\"53ea652da4\"}", Encoding.UTF8, "application/json");
+                }
                 string sEmitResponse = Client.PostAsync("login" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
                 QuackLogin tmplogin = null;
                 try
