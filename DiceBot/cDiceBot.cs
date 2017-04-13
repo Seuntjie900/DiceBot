@@ -5235,8 +5235,8 @@ namespace DiceBot
             Chartprofit = 0;
             chrtEmbeddedLiveChart.Series[0].Points.Clear();
             chartbets = 0;
-            chrtEmbeddedLiveChart.ChartAreas[0].AxisY.Minimum = 0;
-            chrtEmbeddedLiveChart.ChartAreas[0].AxisY.Maximum = 0;
+            //chrtEmbeddedLiveChart.ChartAreas[0].AxisY.Minimum = 0;
+            //chrtEmbeddedLiveChart.ChartAreas[0].AxisY.Maximum = 0;
             //chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
             
         }
