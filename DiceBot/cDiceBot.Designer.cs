@@ -1490,7 +1490,7 @@
             this.tbLabouchère.Location = new System.Drawing.Point(4, 22);
             this.tbLabouchère.Name = "tbLabouchère";
             this.tbLabouchère.Padding = new System.Windows.Forms.Padding(3);
-            this.tbLabouchère.Size = new System.Drawing.Size(453, 659);
+            this.tbLabouchère.Size = new System.Drawing.Size(453, 390);
             this.tbLabouchère.TabIndex = 9;
             this.tbLabouchère.Text = "Labouchère";
             this.tbLabouchère.UseVisualStyleBackColor = true;
@@ -1615,7 +1615,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(453, 659);
+            this.tabPage1.Size = new System.Drawing.Size(453, 390);
             this.tabPage1.TabIndex = 13;
             this.tabPage1.Text = "Fibonacci";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -1867,7 +1867,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(453, 659);
+            this.tabPage5.Size = new System.Drawing.Size(453, 390);
             this.tabPage5.TabIndex = 14;
             this.tabPage5.Text = "d’Alembert";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -2067,7 +2067,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(453, 659);
+            this.tabPage6.Size = new System.Drawing.Size(453, 390);
             this.tabPage6.TabIndex = 15;
             this.tabPage6.Text = "Preset List";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -2333,7 +2333,7 @@
             this.tbCustom.Location = new System.Drawing.Point(4, 22);
             this.tbCustom.Name = "tbCustom";
             this.tbCustom.Padding = new System.Windows.Forms.Padding(3);
-            this.tbCustom.Size = new System.Drawing.Size(453, 659);
+            this.tbCustom.Size = new System.Drawing.Size(453, 390);
             this.tbCustom.TabIndex = 11;
             this.tbCustom.Text = "Custom";
             this.tbCustom.UseVisualStyleBackColor = true;
@@ -2367,7 +2367,7 @@
             this.gbCustom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbCustom.Location = new System.Drawing.Point(3, 3);
             this.gbCustom.Name = "gbCustom";
-            this.gbCustom.Size = new System.Drawing.Size(447, 653);
+            this.gbCustom.Size = new System.Drawing.Size(447, 384);
             this.gbCustom.TabIndex = 0;
             this.gbCustom.TabStop = false;
             // 
@@ -2738,7 +2738,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(467, 734);
+            this.tabPage4.Size = new System.Drawing.Size(467, 465);
             this.tabPage4.TabIndex = 9;
             this.tabPage4.Text = "Stop Conditions";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -3869,7 +3869,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(467, 734);
+            this.tabPage11.Size = new System.Drawing.Size(467, 465);
             this.tabPage11.TabIndex = 3;
             this.tabPage11.Text = "Advanced Bet Settings";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -5628,7 +5628,7 @@
             this.tpConsole.Location = new System.Drawing.Point(4, 22);
             this.tpConsole.Name = "tpConsole";
             this.tpConsole.Padding = new System.Windows.Forms.Padding(3);
-            this.tpConsole.Size = new System.Drawing.Size(356, 768);
+            this.tpConsole.Size = new System.Drawing.Size(356, 499);
             this.tpConsole.TabIndex = 1;
             this.tpConsole.Text = "Console";
             this.tpConsole.UseVisualStyleBackColor = true;
@@ -5640,7 +5640,7 @@
             this.rtbConsole.Location = new System.Drawing.Point(3, 3);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
-            this.rtbConsole.Size = new System.Drawing.Size(350, 693);
+            this.rtbConsole.Size = new System.Drawing.Size(350, 424);
             this.rtbConsole.TabIndex = 0;
             this.rtbConsole.Text = "";
             this.rtbConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox1_KeyDown);
@@ -5648,7 +5648,7 @@
             // txtConsoleIn
             // 
             this.txtConsoleIn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtConsoleIn.Location = new System.Drawing.Point(3, 696);
+            this.txtConsoleIn.Location = new System.Drawing.Point(3, 427);
             this.txtConsoleIn.Multiline = true;
             this.txtConsoleIn.Name = "txtConsoleIn";
             this.txtConsoleIn.Size = new System.Drawing.Size(350, 69);
@@ -6101,7 +6101,7 @@
             // 
             this.satoshiDiceToolStripMenuItem.Name = "satoshiDiceToolStripMenuItem";
             this.satoshiDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.satoshiDiceToolStripMenuItem.Text = "Satoshi Dice";
+            this.satoshiDiceToolStripMenuItem.Text = "Mega Dice";
             this.satoshiDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.satoshiDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 

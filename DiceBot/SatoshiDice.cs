@@ -30,7 +30,7 @@ namespace DiceBot
             AutoWithdraw = true;
             ChangeSeed = false;
             AutoLogin = true;
-            BetURL = "https://satoshidice.com";
+            BetURL = "https://megadice.com";
             register = false;
             this.Parent = Parent;
             Name = "SatoshiDice";
@@ -166,7 +166,7 @@ namespace DiceBot
         public override void Login(string Username, string Password, string twofa)
         {
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };;
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://session.satoshidice.com/userapi/") };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://session.megadice.com/userapi/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             try

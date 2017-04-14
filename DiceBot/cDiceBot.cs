@@ -5463,7 +5463,7 @@ namespace DiceBot
                     case "fortuneJackToolStripMenuItem" : CurrentSite = new FortuneJack(this); siteToolStripMenuItem.Text = "Site (FJ)"; break;
                     case "cryptoGamesToolStripMenuItem" : CurrentSite = new cryptogames(this); siteToolStripMenuItem.Text = "Site (CG)"; break;
                     case "bitslerToolStripMenuItem" : CurrentSite = new Bitsler(this); siteToolStripMenuItem.Text = "Site (BS)"; break;
-                    case "satoshiDiceToolStripMenuItem" : CurrentSite = new SatoshiDice(this); siteToolStripMenuItem.Text = "Site (SatD)"; break;
+                    case "satoshiDiceToolStripMenuItem" : CurrentSite = new SatoshiDice(this); siteToolStripMenuItem.Text = "Site (MegD)"; break;
                     case "bitvestToolStripMenuItem": CurrentSite = new Bitvest(this); siteToolStripMenuItem.Text = "Site (BV)"; break;
                     case "kingDiceToolStripMenuItem": CurrentSite = new Kingdice(this); siteToolStripMenuItem.Text = "Site (KD)"; break;
                     case "nitorgenSportsToolStripMenuItem": CurrentSite = new NitrogenSports(this); siteToolStripMenuItem.Text = "Site (NS)"; break;
