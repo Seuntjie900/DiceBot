@@ -225,13 +225,16 @@ namespace DiceBot
                     string response = "";
                     
                     response = Encoding.ASCII.GetString(ReadBuffer, 0, 256);
+                    
                     response = response.Replace("\0", "");
+                    Parent.DumpLog(response, 10);
                     if (response != "")
                     {
                         
                         try
                         {
                             response = response.Substring(0, response.IndexOf("\n"));
+                            
                             YLBasicResponse tmprespo = json.JsonDeserialize<YLBasicResponse>(response);
                             if (Requests.ContainsKey(tmprespo.id))
                             {
@@ -245,6 +248,7 @@ namespace DiceBot
                                     case "patch_seed": patch_seed(response); break;
                                     case "create_withdrawal": create_withdrawal(response); break;
                                     case "ping": ping(response); break;
+                                    
                                 }
                                 Requests.Remove(tmprespo.id);
                             }

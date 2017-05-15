@@ -50,9 +50,9 @@ namespace DiceBot
         {
             try
             {
-                //Parent.DumpLog(e.Message, 4);
+                Parent.DumpLog(e.Message, 4);
                 string s = e.Message.Replace("\\\"", "\"").Replace("\"{","{").Replace("}\"","}");
-                //Parent.DumpLog("", -1);
+                Parent.DumpLog(e.Message, -1);
                 //Parent.DumpLog("", -1);
                 //Parent.DumpLog(s,-1);
                 bitdicebetbase tmp = json.JsonDeserialize<bitdicebetbase>(s);
@@ -179,7 +179,7 @@ namespace DiceBot
 
         void Client_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
-            
+            Parent.DumpLog(e.Exception.ToString(), -1);
         }
 
         bool loggedin = false;
@@ -216,6 +216,7 @@ namespace DiceBot
                 clientsee += R.Next(0, 16 * 16).ToString("X");
             }
             //string server = "";
+            //{"command":"message","identifier":"{\"channel\":\"DiceChannel\"}","data":"{\"amount\":0.000001,\"chance\":\"49.5\",\"type\":\"high\",\"client\":\"7423c4d0ded01788\",\"server\":29671274,\"hot_key\":false,\"manual\":true,\"number\":2,\"action\":\"bet\"}"}
             string s = string.Format("{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"DiceChannel\\\"}}\",\"data\":\"{{\\\"amount\\\":{0},\\\"chance\\\":\\\"{1}\\\",\\\"type\\\":\\\"{2}\\\",\\\"client\\\":\\\"{4}\\\",\\\"server\\\":{5},\\\"hot_key\\\":false,\\\"manual\\\":true,\\\"number\\\":{3},\\\"action\\\":\\\"bet\\\"}}\"}}",
                 amount, chance, High ? "high" : "low", id++, clientsee.ToLower(), server);
             Parent.DumpLog(s, 5);
@@ -381,9 +382,9 @@ user[password]:asdfasdfasdf*/
                 {
                     cookies2.Add(new KeyValuePair<string, string>(x.Name, x.Value));
                 }
-                
+                cookies2.Add(new KeyValuePair<string, string>("Authorized", "1"));
                 headers.Add(new KeyValuePair<string, string>("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"));
-
+                    
                 Client = new WebSocket("wss://www.bitdice.me/socket/?token=" + stream, "actioncable-v1-json", cookies2, headers, "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
                     "https://www.bitdice.me", WebSocketVersion.Rfc6455, null, System.Security.Authentication.SslProtocols.Tls| System.Security.Authentication.SslProtocols.Tls11| System.Security.Authentication.SslProtocols.Tls12);
                 

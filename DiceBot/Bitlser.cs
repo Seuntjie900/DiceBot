@@ -26,13 +26,14 @@ namespace DiceBot
         
         public Bitsler(cDiceBot Parent)
         {
+            _MFAText = "2FA code:\r\nRequired";
             Currencies = new string[] { "btc","ltc","doge" };
             maxRoll = 99.999m;
             AutoInvest = false;
             AutoWithdraw = false;
             ChangeSeed = true;
             AutoLogin = true;
-            BetURL = "https://api.primedice.com/bets/";
+            BetURL = "https://www.bitsler.com/?ref=seuntjie/";
             /*Thread t = new Thread(GetBalanceThread);
             t.Start();*/
             this.Parent = Parent;
@@ -184,20 +185,24 @@ devise:btc*/
                 pairs.Add(new KeyValuePair<string, string>("devise", Currency));
                 pairs.Add(new KeyValuePair<string, string>("api_key", "0b2edbfe44e98df79665e52896c22987445683e78"));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
+                HttpResponseMessage tmpmsg = Client.PostAsync("bet", Content).Result;
+                string sEmitResponse = tmpmsg.Content.ReadAsStringAsync().Result;
                 bsBetBase bsbase = null;
                 try
                 {
                     bsbase = json.JsonDeserialize<bsBetBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
                 }
-                catch
-                { }
+                catch (Exception e)
+                {
+
+                }
                 
                 if (bsbase!=null)
                     if (bsbase._return!=null)
                         if (bsbase._return.success == "true")
                         {
                             balance = decimal.Parse(bsbase._return.new_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                            lastupdate = DateTime.Now;
                             Bet tmp = bsbase._return.ToBet();
                             profit += (decimal)tmp.Profit;
                             wagered += (decimal)tmp.Amount;

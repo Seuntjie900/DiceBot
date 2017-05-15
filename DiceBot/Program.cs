@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -22,7 +23,16 @@ namespace DiceBot
             }
             catch (Exception e)
             {
-
+                try
+                {
+                    using (StreamWriter sw = File.AppendText("DICEBOTLOG.txt"))
+                    {
+                        sw.WriteLine("########################################################################################\r\n\r\nFATAL CRASH\r\n");
+                        sw.WriteLine(e.ToString());
+                        sw.WriteLine("########################################################################################");
+                    }
+                }
+                catch { }
                 throw e;
 
             }

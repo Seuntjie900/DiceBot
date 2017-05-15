@@ -4640,6 +4640,7 @@
             // 
             // gbLogin
             // 
+            this.gbLogin.Controls.Add(this.lblMFAText);
             this.gbLogin.Controls.Add(this.button1);
             this.gbLogin.Controls.Add(this.btnRegister);
             this.gbLogin.Controls.Add(this.btnLogIn);
@@ -4647,7 +4648,6 @@
             this.gbLogin.Controls.Add(this.txtApiPassword);
             this.gbLogin.Controls.Add(this.txtApiUsername);
             this.gbLogin.Controls.Add(this.label91);
-            this.gbLogin.Controls.Add(this.lblMFAText);
             this.gbLogin.Controls.Add(this.lblPass);
             this.gbLogin.Controls.Add(this.lblUsername);
             this.gbLogin.Dock = System.Windows.Forms.DockStyle.Left;

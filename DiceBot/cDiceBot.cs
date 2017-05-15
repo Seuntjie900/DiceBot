@@ -33,7 +33,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.3";
+        private const string vers = "3.3.4";
 
 
         Control[] ControlsToDisable;
@@ -209,6 +209,7 @@ namespace DiceBot
         int LiveBets = 1000;
         void AddChartPoint(object Win)
         {
+
             bool win = (bool)Win;
             if (InvokeRequired)
             {
@@ -223,51 +224,69 @@ namespace DiceBot
                     {
                         chrtEmbeddedLiveChart.Series[0].Points.RemoveAt(0);
                     }
-                    var axisX = chrtEmbeddedLiveChart.ChartAreas[0].AxisX;
-                    var axisY = chrtEmbeddedLiveChart.ChartAreas[0].AxisY;
-                    axisX.Maximum = chartbets < LiveBets ? chartbets : LiveBets;
-                    axisX.Minimum = 1;// chartbets > 100 ? chartbets - 100 : 0;
-                    //--chrtEmbeddedLiveChart.Series[0].Points.Add()
-
-                    System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint(chartbets - 1, (double)Chartprofit);
-                    tmp.Color = win ? Color.Green : Color.Red;
-                    tmp.BorderColor = win ? Color.Green : Color.Red;
-                    tmp.MarkerColor = win ? Color.Green : Color.Red;
-
-                    tmp.MarkerSize = win ? 3 : 2;
-                    tmp.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-                    tmp.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-                    tmp.BorderWidth = 1;
-                    chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
-                    if (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1)
+                    try
                     {
-                        decimal maxy = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Max<DataPoint>(x => x.YValues[0]);
-                        decimal miny = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Min<DataPoint>(x => x.YValues[0]);
-                        decimal span = maxy - miny;
-                        if (maxy > (decimal)axisY.Maximum || miny < (decimal)axisY.Minimum || 
-                            (double)maxy < (axisY.Maximum - (double)(span / 2.0m)) || (double)miny > (axisY.Minimum + (double)(span / 2.0m)))
+                        var axisX = chrtEmbeddedLiveChart.ChartAreas[0].AxisX;
+                        var axisY = chrtEmbeddedLiveChart.ChartAreas[0].AxisY;
+                        axisX.Maximum = chartbets < LiveBets ? chartbets : LiveBets;
+                        axisX.Minimum = 1;// chartbets > 100 ? chartbets - 100 : 0;
+                                          //--chrtEmbeddedLiveChart.Series[0].Points.Add()
+
+                        System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint(chartbets - 1, (double)Chartprofit);
+                        tmp.Color = win ? Color.Green : Color.Red;
+                        tmp.BorderColor = win ? Color.Green : Color.Red;
+                        tmp.MarkerColor = win ? Color.Green : Color.Red;
+
+                        tmp.MarkerSize = win ? 3 : 2;
+                        tmp.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+                        tmp.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+                        tmp.BorderWidth = 1;
+                        chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
+                        if (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1)
                         {
-                            
-                            string largespan = (span*100000000).ToString("0");
-                            decimal firstdigit = decimal.Parse((largespan.Substring(0, 1))) + 1;
-                            decimal zeros = (span * 100000000).ToString("0").Length-1;
-                            //double factor = zeros; /// 100000000;
-                            decimal newspan = firstdigit * (decimal)Math.Pow(10, ((double)zeros));
-                            newspan /= 100000000m;
-                            decimal interval = newspan / 5.0m;
+                            decimal maxy = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Max<DataPoint>(x => x.YValues[0]);
+                            decimal miny = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Min<DataPoint>(x => x.YValues[0]);
+                            decimal span = maxy - miny;
+                            if (maxy > (decimal)axisY.Maximum || miny < (decimal)axisY.Minimum ||
+                                (double)maxy < (axisY.Maximum - (double)(span / 2.0m)) || (double)miny > (axisY.Minimum + (double)(span / 2.0m)))
+                            {
+                                /*axisY.Maximum = double.NaN;
+                                axisY.Minimum = double.NaN;*/
+                                if ((miny > 0.0000001m || miny < -0.0000001m) && (maxy > 0.0000001m || maxy < -0.0000001m))
+                                {
+                                    string largespan = (span * 100000000).ToString("0");
+                                    decimal firstdigit = decimal.Parse((largespan.Substring(0, 1))) + 1;
+                                    decimal zeros = (span * 100000000).ToString("0").Length - 1;
+                                    //double factor = zeros; /// 100000000;
+                                    decimal newspan = firstdigit * (decimal)Math.Pow(10, ((double)zeros));
+                                    newspan /= 100000000m;
+                                    decimal interval = newspan / 5.0m;
 
-                            decimal tmp1 = maxy / (interval);
+                                    decimal tmp1 = maxy / (interval);
 
-                            decimal ceiling = Math.Ceiling(tmp1);
-                            decimal floor = Math.Floor(miny / (interval));
+                                    decimal ceiling = Math.Ceiling(tmp1);
+                                    decimal floor = Math.Floor(miny / (interval));
 
-                            decimal newmax = ceiling * interval + interval;
-                            decimal newmin = floor * interval - interval;
-                            /*axisY.Maximum = maxy * (maxy > 0 ? 1.025 : 0.975);
-                            axisY.Minimum = miny * (miny < 0 ? 1.025 : 0.975);*/
-                            axisY.Maximum = (double)newmax;
-                            axisY.Minimum = (double)newmin;
+                                    decimal newmax = ceiling * interval + interval;
+                                    decimal newmin = floor * interval - interval;
+                                    /*axisY.Maximum = maxy * (maxy > 0 ? 1.025 : 0.975);
+                                    axisY.Minimum = miny * (miny < 0 ? 1.025 : 0.975);*/
+                                    if (newmax > newmin && (newmax > 0.0000001m || newmax < -0.0000001m) && (newmin > 0.0000001m || newmin < -0.0000001m))
+                                    {
+                                        axisY.Maximum = (double)newmax;
+                                        axisY.Minimum = (double)newmin;
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        DumpLog(e.ToString(), 1);
                     }
                 }
             }
@@ -784,8 +803,10 @@ namespace DiceBot
             if (stop)
             {
                 LuaRuntime.SetLua(Lua);
-                GetLuaVars();
+                //GetLuaVars();
+                //SetLuaVars();
                 LuaRuntime.Run(richTextBox3.Text);
+                GetLuaVars();
                 SimWindow.nudSimBalance.Value = (decimal)startingbalance;
                 SimWindow.nudSimNumBets.Value = (decimal)bets;
                WriteConsole("Running " + bets + " bets Simulation with starting balance of " + startingbalance);
@@ -5235,10 +5256,10 @@ namespace DiceBot
             Chartprofit = 0;
             chrtEmbeddedLiveChart.Series[0].Points.Clear();
             chartbets = 0;
-            //chrtEmbeddedLiveChart.ChartAreas[0].AxisY.Minimum = 0;
-            //chrtEmbeddedLiveChart.ChartAreas[0].AxisY.Maximum = 0;
+            chrtEmbeddedLiveChart.ChartAreas[0].AxisY.Minimum = double.NaN;
+            chrtEmbeddedLiveChart.ChartAreas[0].AxisY.Maximum = double.NaN;
             //chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
-            
+
         }
 
         private void btnHideLive_Click(object sender, EventArgs e)
@@ -5599,6 +5620,7 @@ namespace DiceBot
                 Lua["currency"] = CurrentSite.Currency;                
                 Lua["enablersc"] = EnableReset;
                 Lua["enablezz"] = EnableProgZigZag;
+                Lua["wagered"] = wagered;
             }
             catch (Exception e)
             {

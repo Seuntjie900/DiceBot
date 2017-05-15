@@ -217,11 +217,12 @@ namespace DiceBot
         void WSClient_Opened(object sender, EventArgs e)
         {
             WSClient.Send("2probe");
+            Parent.DumpLog("opened", -1);
         }
         public int APPId { get; set; }
         void WSClient_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            //Parent.DumpLog(e.Message, -1);
+            Parent.DumpLog(e.Message, 10);
             if (e.Message=="3probe")
             {
                 WSClient.Send("5");
@@ -253,6 +254,20 @@ namespace DiceBot
                     this.profit = tmphash.auth.user.betted_profit / 100000000m;
                     this.wagered = tmphash.auth.user.betted_wagered / 100000000m;
                     this.bets = (int)tmphash.auth.user.betted_count;
+                    Parent.updateBalance(balance);
+                    Parent.updateProfit(profit);
+                    Parent.updateWagered(wagered);
+                    Parent.updateBets(bets);
+                }
+                if (e.Message.Contains("[null,{\"auth\":"))
+                {
+                    string msg = e.Message.Substring(e.Message.IndexOf("{"));
+                    msg = msg.Substring(0, msg.Length - 1);
+                    sdiceauth tmphash = json.JsonDeserialize<sdiceauth>(msg).auth;
+                    this.balance = tmphash.user.balance / 100000000m;
+                    this.profit = tmphash.user.betted_profit / 100000000m;
+                    this.wagered = tmphash.user.betted_wagered / 100000000m;
+                    this.bets = (int)tmphash.user.betted_count;
                     Parent.updateBalance(balance);
                     Parent.updateProfit(profit);
                     Parent.updateWagered(wagered);
@@ -299,7 +314,8 @@ namespace DiceBot
 
         void WSClient_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
-            
+            Parent.DumpLog("error", -1);
+            Parent.DumpLog(e.Exception.ToString(), -1);
         }
 
         void WSClient_DataReceived(object sender, DataReceivedEventArgs e)
@@ -309,7 +325,7 @@ namespace DiceBot
 
         void WSClient_Closed(object sender, EventArgs e)
         {
-            
+            Parent.DumpLog("closed", -1);
         }
         public static string CurrentDate()
         {
@@ -403,5 +419,22 @@ namespace DiceBot
     {
         public string hash { get; set; }
         public string bet_hash { get; set; }
+    }
+
+    public class sdiceauth
+    {
+        public sdiceauth auth {get; set;}
+        public int id { get; set; }
+        public int auth_id { get; set; }
+        public int app_id { get; set; }
+        public SDiceUser user { get; set; }
+        /*435[null,{ "auth":{ 
+            "id":9642,
+            "auth_id":9642,
+            "app_id":926,
+            "user":
+            { "uname":"seuntjie",
+                "balance":1266910.52218771,
+            "unconfirmed_balance":"0","unpaid":"0","betted_count":1511,"betted_wager":19320,"betted_ev":-196.23015987452,"betted_profit":-1650.6125,"role":"member","wager24hour":0,"profit24hour":0,"largestwin":{ "id":995770044,"amt":641.2928999999999,"game":"DICE"},"largestloss":{ "id":995770162,"amt":-640,"game":"DICE"},"ref":null,"refprofit":1146003.082047149,"refpaid":1059050,"open_pm":["NONE"],"level":0}}}]*/
     }
 }
