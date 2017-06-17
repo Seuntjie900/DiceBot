@@ -21,13 +21,13 @@ namespace DiceBot
         long uid = 0;
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        public static string[] sCurrencies = new string[] { "btc","ltc","doge","eth" };
+        public static string[] sCurrencies = new string[] { "btc","ltc","doge","eth", "burst" };
         HttpClientHandler ClientHandlr;
         
         public Bitsler(cDiceBot Parent)
         {
             _MFAText = "2FA code:\r\nRequired";
-            Currencies = new string[] { "btc","ltc","doge" };
+            Currencies = new string[] { "btc","ltc","doge", "burst" };
             maxRoll = 99.999m;
             AutoInvest = false;
             AutoWithdraw = false;
@@ -78,6 +78,10 @@ namespace DiceBot
                                         case "eth": balance = bsstatsbase._return.eth_balance;
                                             profit = bsstatsbase._return.eth_profit;
                                             wagered = bsstatsbase._return.eth_wagered; break;
+                                        case "burst":
+                                            balance = bsstatsbase._return.burst_balance;
+                                            profit = bsstatsbase._return.burst_profit;
+                                            wagered = bsstatsbase._return.burst_wagered; break;
                                     }
                                     bets = int.Parse(bsstatsbase._return.bets);
                                     wins = int.Parse(bsstatsbase._return.wins);
@@ -137,6 +141,10 @@ namespace DiceBot
                                     case "eth": balance = bsstatsbase._return.eth_balance;
                                         profit = bsstatsbase._return.eth_profit;
                                         wagered = bsstatsbase._return.eth_wagered; break;
+                                    case "burst":
+                                        balance = bsstatsbase._return.burst_balance;
+                                        profit = bsstatsbase._return.burst_profit;
+                                        wagered = bsstatsbase._return.burst_wagered; break;
                                 }
                                 bets = int.Parse(bsstatsbase._return.bets);
                                 wins = int.Parse(bsstatsbase._return.wins);
@@ -369,6 +377,10 @@ devise:btc*/
                                             case "eth": balance = bsstatsbase._return.eth_balance;
                                                 profit = bsstatsbase._return.eth_profit;
                                                 wagered = bsstatsbase._return.eth_wagered; break;
+                                            case "burst":
+                                                balance = bsstatsbase._return.burst_balance;
+                                                profit = bsstatsbase._return.burst_profit;
+                                                wagered = bsstatsbase._return.burst_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase._return.bets);
                                         wins = int.Parse(bsstatsbase._return.wins);
@@ -476,17 +488,30 @@ devise:btc*/
                 else
                     type_delay = 5;
             }
+            else if (Currency.ToLower() == "burst")
+            {
+                if (LastBetAmount < 10 || (double)amount < 10)
+                    type_delay = 1;
+                else if (LastBetAmount < 50 || (double)amount < 50)
+                    type_delay = 2;
+                else if (LastBetAmount < 200 || (double)amount < 200)
+                    type_delay = 3;
+                else if (LastBetAmount < 1000 || (double)amount < 1000)
+                    type_delay = 4;
+                else
+                    type_delay = 5;
+            }
             int delay = 0;
             if (type_delay == 1)
-                delay = 700;
+                delay = 800;
             else if (type_delay == 2)
-                delay = 400;
+                delay = 500;
             else if (type_delay == 3)
-                delay = 250;
+                delay = 300;
             else if (type_delay == 4)
-                delay = 150;
+                delay = 200;
             else
-                delay = 50;
+                delay = 100;
 
             return (DateTime.Now - LastBet).TotalMilliseconds > delay;
         }
@@ -626,6 +651,9 @@ devise:btc*/
         public decimal eth_balance { get; set; }
         public decimal eth_wagered { get; set; }
         public decimal eth_profit { get; set; }
+        public decimal burst_balance { get; set; }
+        public decimal burst_wagered { get; set; }
+        public decimal burst_profit { get; set; }
         public string wins { get; set; }
         public string losses { get; set; }
     }

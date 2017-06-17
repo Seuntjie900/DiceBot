@@ -17,9 +17,7 @@ namespace DiceBot
 
 
     public class Bet
-    {
-
-        
+    {        
         public string Currency { get; set; }
         public string Id { get; set; }
         private decimal chance = 0;
@@ -59,7 +57,6 @@ namespace DiceBot
         public int BetType { get; set; }
         public decimal Roll { get; set; }
         public string UserName { get; set; }
-
         public decimal Amount { get; set; }
         public long nonce { get; set; }
         public string serverhash { get; set; }
@@ -67,7 +64,6 @@ namespace DiceBot
         public string clientseed { get; set; }
         public decimal Profit { get; set; }
         public int uid { get; set; }
-
         public bool high
         {
             get { return BetType == 0; }
@@ -76,7 +72,6 @@ namespace DiceBot
                 BetType = value ? 0 : 1;
             }
         }
-
         public Bet()
         {
             serverhash = serverseed = clientseed = "";
@@ -84,7 +79,6 @@ namespace DiceBot
             Roll = -1;
             nonce = -1;
         }
-
         public bool Verified { get; set; }
         public int UserAccountId { get { return uid; } set { uid = value; } }
     }

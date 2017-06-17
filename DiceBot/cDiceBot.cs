@@ -199,8 +199,9 @@ namespace DiceBot
             }
             else
                 DoBet(bet);
-            
-            
+
+
+            //FileInfo tmp = new FileInfo("");
             
         }
         long chartbets = 1;
@@ -4892,7 +4893,8 @@ namespace DiceBot
                     case "Bit-Exo": CurrentSite = new BitExo(this); break;
                     case "DiceSeuntjie": CurrentSite = new DiceSeuntjie(this); break;
                     case "DuckDice": CurrentSite = new DuckDice(this); break;
-
+                    case "EtcBets": CurrentSite = new etcbets(this); break;
+                    case "coinpro": CurrentSite = new coinpro(this);break;
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -4938,6 +4940,8 @@ namespace DiceBot
                         case "Bit-Exo": CurrentSite = new BitExo(this); break;
                         case "DiceSeuntjie": CurrentSite = new DiceSeuntjie(this); break;
                         case "DuckDice": CurrentSite = new DuckDice(this); break;
+                        case "EtcBets": CurrentSite = new etcbets(this); break;
+                        case "coinpro": CurrentSite = new coinpro(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5493,6 +5497,8 @@ namespace DiceBot
                     case "provabllyIOToolStripMenuItem": CurrentSite = new provablyio(this); siteToolStripMenuItem.Text = "Site (PIO)"; break;
                     case "diceSeuntjieComToolStripMenuItem": CurrentSite = new DiceSeuntjie(this); siteToolStripMenuItem.Text = "Site (DSC)"; break;
                     case "duckDiceToolStripMenuItem": CurrentSite = new DuckDice(this); siteToolStripMenuItem.Text = "(Quack)"; break;
+                    case "etcBetsToolStripMenuItem": CurrentSite = new etcbets(this); siteToolStripMenuItem.Text = "(EtcB)"; break;
+                    case "coinProfitToolStripMenuItem": CurrentSite = new coinpro(this); siteToolStripMenuItem.Text = "(CPro)"; break;
                 }
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;

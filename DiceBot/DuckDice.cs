@@ -19,7 +19,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "BTC","ETH", "LTC", "DOGE" };
+        public static string[] cCurrencies = new string[] { "BTC","ETH", "LTC", "DOGE","DASH" };
         
         
         public DuckDice(cDiceBot Parent)
@@ -28,7 +28,7 @@ namespace DiceBot
             maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = true;
-            ChangeSeed = true;
+            ChangeSeed = false;
             AutoLogin = true;
             BetURL = "https://duckdice.io";
             
@@ -39,7 +39,7 @@ namespace DiceBot
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
             SiteURL = "https://duckdice.io/?c=53ea652da4";
-            Currencies = new string[] { "BTC", "ETH", "LTC", "DOGE" };
+            Currencies = new string[] { "BTC", "ETH", "LTC", "DOGE", "DASH" };
             Currency = "BTC";
         }
 
@@ -163,16 +163,23 @@ namespace DiceBot
         Random R = new Random();
         public override void ResetSeed()
         {
-            string alf = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
-            string Clientseed = "";
-            while (Clientseed.Length<R.Next(15,25))
+            try
             {
-                Clientseed += alf[R.Next(0, alf.Length)];
+                string sEmitResponse = Client.GetStringAsync("randomize/").Result;
+                string alf = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+                string Clientseed = "";
+                while (Clientseed.Length < R.Next(15, 25))
+                {
+                    Clientseed += alf[R.Next(0, alf.Length)];
+                }
+                StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"clientseed\":\"{0}\"}}", Clientseed), Encoding.UTF8, "application/json");
+                sEmitResponse = Client.PostAsync("randomize/", Content).Result.Content.ReadAsStringAsync().Result;
+                currentseed = json.JsonDeserialize<QuackSeed>(sEmitResponse);
             }
-            StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"clientseed\":\"{0}\"}}", Clientseed), Encoding.UTF8, "application/json");
-            string sEmitResponse = Client.PostAsync("randomize/", Content).Result.Content.ReadAsStringAsync().Result;
-            currentseed = json.JsonDeserialize<QuackSeed>(sEmitResponse);
-                        
+            catch (Exception e)
+            {
+
+            }
             
         }
 

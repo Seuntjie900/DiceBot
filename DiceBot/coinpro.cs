@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DiceBot
 {
-    class provablyio:DiceSite
+    class coinpro:DiceSite
     {
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
@@ -18,25 +18,26 @@ namespace DiceBot
         string username = "";
         long uid = 0;
         DateTime lastupdate = new DateTime();
-        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
+        HttpClient Client;
         HttpClientHandler ClientHandlr;
         public string LastHash { get; set; }
-        public provablyio(cDiceBot Parent)
+        public coinpro(cDiceBot Parent)
         {
             _PasswordText = "API Key: ";
-            Name = "ProvablyIO";
+            Name = "coinpro";
             AutoWithdraw = false;
             Tip = false;
             TipUsingName = true;
-            this.SiteURL = "https://provably.io/";
+            this.SiteURL = "https://coinpro.fit/";
             this.register = false;
             this.NonceBased = false;
-            this.maxRoll = 99;
+            this.maxRoll = 99.99m;
+
             this.ChangeSeed = false;
             this.AutoLogin = true;
             this.AutoInvest = false;
-            this.BetURL = "https://provably.io/";
-            this.edge = 1;
+            this.BetURL = "https://coinpro.fit/";
+            this.edge = 0.9m;
             this.Parent = Parent;
             
         }
@@ -87,6 +88,11 @@ namespace DiceBot
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
                 PIOBet tmpbet = json.JsonDeserialize<PIOBet>(sEmitResponse);
+                if (tmpbet.error!=null)
+                {
+                    Parent.updateStatus(tmpbet.error);
+                    return;
+                }
                 Bet tmp = new Bet {
                 Amount = (decimal)tmpObj.Amount,
                 date = DateTime.Now,
@@ -142,18 +148,18 @@ namespace DiceBot
         public override void Login(string Username, string Password, string twofa)
         {
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, Proxy = this.Prox, UseProxy = Prox != null };
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://provably.io/api/") };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://coinpro.fit/api/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             Client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
-            Client.DefaultRequestHeaders.Add("Host", "provably.io");
-            Client.DefaultRequestHeaders.Add("Origin", "https://provably.io/");
-            Client.DefaultRequestHeaders.Add("Referer", "https://provably.io/");
+            Client.DefaultRequestHeaders.Add("Host", "coinpro.fit");
+            Client.DefaultRequestHeaders.Add("Origin", "https://coinpro.fit/");
+            Client.DefaultRequestHeaders.Add("Referer", "https://coinpro.fit/");
 
             try
             {
-                //ClientHandlr.CookieContainer.Add(new Cookie("socket", Password,"/","provably.io"));
-                ClientHandlr.CookieContainer.Add(new Cookie("token", Password, "/", "provably.io"));
+                //ClientHandlr.CookieContainer.Add(new Cookie("socket", Password,"/","coinpro.fit"));
+                ClientHandlr.CookieContainer.Add(new Cookie("PHPSESSID", Password, "/", "coinpro.fit"));
                 //string page = Client.GetStringAsync()
                 string Stats = Client.GetStringAsync("userstats").Result;
                 PIOStats tmpstats = json.JsonDeserialize<PIOStats>(Stats);
@@ -204,36 +210,5 @@ namespace DiceBot
         {
             throw new NotImplementedException();
         }
-    }
-    public class PIOBet
-    {
-        public long id { get; set; }
-        public long bet_id { get; set; }
-        public long secret { get; set; }
-        public long balance { get; set; }
-        public long high { get; set; }
-        public decimal outcome { get; set; }
-        public decimal profit { get; set; }
-        public string salt { get; set; }
-        public string created_at { get; set; }
-        public string next_hash { get; set; }
-        public string error { get; set; }
-
-    }
-    public class PIOStats
-    {
-        public int id { get; set; }
-        public int app_id { get; set; }
-        public PIOUser user { get; set; }
-    }
-    public class PIOUser
-    {
-        public string uname { get; set; }
-        public decimal balance { get; set; }
-        public decimal unpaid { get; set; }
-        public decimal betted_count { get; set; }
-        public decimal betted_wager { get; set; }
-        public decimal betted_ev { get; set; }
-        public decimal betted_profit { get; set; }
     }
 }

@@ -349,6 +349,7 @@
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbLogin = new System.Windows.Forms.GroupBox();
+            this.lblMFAText = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.btnRegister = new System.Windows.Forms.Button();
             this.btnLogIn = new System.Windows.Forms.Button();
@@ -356,7 +357,6 @@
             this.txtApiPassword = new System.Windows.Forms.TextBox();
             this.txtApiUsername = new System.Windows.Forms.TextBox();
             this.label91 = new System.Windows.Forms.Label();
-            this.lblMFAText = new System.Windows.Forms.Label();
             this.lblPass = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.gbManualBet = new System.Windows.Forms.GroupBox();
@@ -487,6 +487,7 @@
             this.bitExoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diceSeuntjieComToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.duckDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.etcBetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -506,6 +507,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.coinProfitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -4658,6 +4660,15 @@
             this.gbLogin.TabStop = false;
             this.gbLogin.Text = "Login/Register";
             // 
+            // lblMFAText
+            // 
+            this.lblMFAText.AutoSize = true;
+            this.lblMFAText.Location = new System.Drawing.Point(18, 84);
+            this.lblMFAText.Name = "lblMFAText";
+            this.lblMFAText.Size = new System.Drawing.Size(53, 13);
+            this.lblMFAText.TabIndex = 2;
+            this.lblMFAText.Text = "2fa Code:";
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(87, 133);
@@ -4722,15 +4733,6 @@
             this.label91.Size = new System.Drawing.Size(104, 12);
             this.label91.TabIndex = 3;
             this.label91.Text = "(Leave blank if disabled)";
-            // 
-            // lblMFAText
-            // 
-            this.lblMFAText.AutoSize = true;
-            this.lblMFAText.Location = new System.Drawing.Point(18, 84);
-            this.lblMFAText.Name = "lblMFAText";
-            this.lblMFAText.Size = new System.Drawing.Size(53, 13);
-            this.lblMFAText.TabIndex = 2;
-            this.lblMFAText.Text = "2fa Code:";
             // 
             // lblPass
             // 
@@ -5918,7 +5920,9 @@
             this.yoloDiceToolStripMenuItem,
             this.bitExoToolStripMenuItem,
             this.diceSeuntjieComToolStripMenuItem,
-            this.duckDiceToolStripMenuItem});
+            this.duckDiceToolStripMenuItem,
+            this.etcBetsToolStripMenuItem,
+            this.coinProfitToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -6169,6 +6173,14 @@
             this.duckDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.duckDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
+            // etcBetsToolStripMenuItem
+            // 
+            this.etcBetsToolStripMenuItem.Name = "etcBetsToolStripMenuItem";
+            this.etcBetsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.etcBetsToolStripMenuItem.Text = "EtcBets";
+            this.etcBetsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.etcBetsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
             // settingsModeToolStripMenuItem
             // 
             this.settingsModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -6306,6 +6318,14 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
+            // 
+            // coinProfitToolStripMenuItem
+            // 
+            this.coinProfitToolStripMenuItem.Name = "coinProfitToolStripMenuItem";
+            this.coinProfitToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.coinProfitToolStripMenuItem.Text = "CoinPro.fit";
+            this.coinProfitToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.coinProfitToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 
@@ -6982,6 +7002,8 @@
         private System.Windows.Forms.ToolStripMenuItem bitExoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem diceSeuntjieComToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem duckDiceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem etcBetsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem coinProfitToolStripMenuItem;
     }
 }
 

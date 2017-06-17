@@ -363,8 +363,9 @@ user[password]:asdfasdfasdf*/
                             finishedlogin(false);
                             return;
                         }
+                         sEmitResponse = WebClient.GetAsync("dashboard").Result.Content.ReadAsStringAsync().Result;
 
-                    }
+                }
                 catch
                     {
                         finishedlogin(false);
@@ -378,14 +379,27 @@ user[password]:asdfasdfasdf*/
                 
                 List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
                 List<KeyValuePair<string, string>> cookies2 = new List<KeyValuePair<string, string>>();
+                string cookie = "";
                 foreach ( Cookie x in ClientHandlr.CookieContainer.GetCookies(new Uri("https://www.bitdice.me")))
                 {
-                    cookies2.Add(new KeyValuePair<string, string>(x.Name, x.Value));
+                    if (x.Name.ToLower()=="token")
+                        cookies2.Add(new KeyValuePair<string, string>(x.Name, x.Value.Replace("%3D","=")));
+                    else
+                        cookies2.Add(new KeyValuePair<string, string>(x.Name, x.Value));
+                    
                 }
-                cookies2.Add(new KeyValuePair<string, string>("Authorized", "1"));
+                for (int i=0; i< cookies2.Count;i++)
+                {
+                    if (i != 0)
+                        cookie += "; ";
+                    cookie += cookies2[i].Key + "=" + cookies2[i].Value;
+                }
+                //cookies2.Add(new KeyValuePair<string, string>("Authorized", "1"));
+                
+                
                 headers.Add(new KeyValuePair<string, string>("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"));
                     
-                Client = new WebSocket("wss://www.bitdice.me/socket/?token=" + stream, "actioncable-v1-json", cookies2, headers, "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
+                Client = new WebSocket("wss://www.bitdice.me/socket"/*/?token=" + stream*/, "actioncable-v1-json", cookies2, headers, "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
                     "https://www.bitdice.me", WebSocketVersion.Rfc6455, null, System.Security.Authentication.SslProtocols.Tls| System.Security.Authentication.SslProtocols.Tls11| System.Security.Authentication.SslProtocols.Tls12);
                 
                 

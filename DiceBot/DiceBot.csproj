@@ -192,6 +192,7 @@
     <Compile Include="BetHistory.Designer.cs">
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="etcbets.cs" />
     <Compile Include="BitdiceConfirm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -204,6 +205,7 @@
     <Compile Include="DuckDice.cs" />
     <Compile Include="Kingdice.cs" />
     <Compile Include="NitrogenSports.cs" />
+    <Compile Include="coinpro.cs" />
     <Compile Include="provablyio.cs" />
     <Compile Include="SatoshiDice.cs" />
     <Compile Include="SeedInput.cs">
