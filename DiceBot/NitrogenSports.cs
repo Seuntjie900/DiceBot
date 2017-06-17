@@ -183,7 +183,7 @@ Sec-WebSocket-Version:13*/
         {
             try
             {
-                Parent.DumpLog(e.Message, -1);
+                //Parent.DumpLog(e.Message, -1);
                 if (e.Message.StartsWith("[4"))
                 {
                     //error!

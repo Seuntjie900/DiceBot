@@ -33,7 +33,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.4";
+        private const string vers = "3.3.5";
 
 
         Control[] ControlsToDisable;
@@ -5943,6 +5943,8 @@ namespace DiceBot
                             yoloDiceToolStripMenuItem.Checked?23:
                             diceSeuntjieComToolStripMenuItem.Checked?24:
                             duckDiceToolStripMenuItem.Checked?25:
+                            etcBetsToolStripMenuItem.Checked?26:
+                            coinProfitToolStripMenuItem.Checked?27:
                             1);
                 }
                 else if (c is TextBox)
@@ -6063,7 +6065,9 @@ namespace DiceBot
                         yoloDiceToolStripMenuItem.Checked = value == 23;
                         diceSeuntjieComToolStripMenuItem.Checked = value == 24;
                         duckDiceToolStripMenuItem.Checked = value == 25;
-                        if (value > 25)
+                        etcBetsToolStripMenuItem.Checked = value == 26;
+                        coinProfitToolStripMenuItem.Checked = value == 27 ;
+                        if (value > 27)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6202,6 +6206,8 @@ namespace DiceBot
                         yoloDiceToolStripMenuItem.Checked = value == "23";
                         diceSeuntjieComToolStripMenuItem.Checked = value == "24";
                         duckDiceToolStripMenuItem.Checked = value == "25";
+                        etcBetsToolStripMenuItem.Checked = value == "26";
+                        coinProfitToolStripMenuItem.Checked = value == "27";
                     }
                     else if (Key == "SettingsMode")
                     {

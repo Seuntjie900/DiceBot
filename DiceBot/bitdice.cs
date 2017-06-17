@@ -52,7 +52,7 @@ namespace DiceBot
             {
                 Parent.DumpLog(e.Message, 4);
                 string s = e.Message.Replace("\\\"", "\"").Replace("\"{","{").Replace("}\"","}");
-                Parent.DumpLog(e.Message, -1);
+                //Parent.DumpLog(e.Message, -1);
                 //Parent.DumpLog("", -1);
                 //Parent.DumpLog(s,-1);
                 bitdicebetbase tmp = json.JsonDeserialize<bitdicebetbase>(s);
@@ -518,8 +518,7 @@ user[password]:asdfasdfasdf*/
         }
         public static bool Enable(string token)
         {
-            //data[info=eyJsYW5nIjoiZW4tVVMsIGVuIiwicGxhdGZvcm0iOiJXaW4zMiIsImNwdSI6OCwic2l6ZSI6IjE5MjB4MzY0MyAoMTkyMHgxMDgwKSIsIndlYnJ0YyI6IjE2OS4yNTQuODAuODAsIDE5Mi4xNjguMS4zIiwidGltZXpvbmUiOiJBZnJpY2EvSm9oYW5uZXNidXJnIiwidGltZSI6IlNhdCBEZWMgMDMgMjAxNiAxMDoxMTo0MyBHTVQrMDIwMCAoU291dGggQWZyaWNhIFN0YW5kYXJkIFRpbWUpIn0=
-            //token=017f8216daa8349d55170806c0e02cef66252acc082616dc7be742e6c9b5081d
+            
             try
             {
 
