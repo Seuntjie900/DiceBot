@@ -27,8 +27,9 @@ namespace DiceBot
         public Bitsler(cDiceBot Parent)
         {
             _MFAText = "2FA code:\r\nRequired";
+
             Currencies = new string[] { "btc","ltc","doge", "burst" };
-            maxRoll = 99.999m;
+            maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = false;
             ChangeSeed = true;
