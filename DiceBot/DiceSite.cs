@@ -87,7 +87,7 @@ namespace DiceBot
 
         public void PlaceBet(bool High, decimal amount, decimal chance)
         {
-            Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
+            Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
             internalPlaceBet(High,amount, chance);
         }
         protected void FinishedBet(Bet newBet)
@@ -116,7 +116,7 @@ namespace DiceBot
         }
         public bool Withdraw(decimal Amount, string Address)
         {
-            Parent.updateStatus(string.Format("Withdrawing {0} {1} to {2}", Amount, currency, Address));
+            Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Withdrawing {0} {1} to {2}", Amount, currency, Address));
             bool res = internalWithdraw(Amount, Address);
 
             if (res)

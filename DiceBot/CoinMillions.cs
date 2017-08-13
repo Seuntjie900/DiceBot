@@ -118,7 +118,7 @@ namespace DiceBot
                                     CmChatItem[] chats = json.JsonDeserialize<CmChatItem[]>(s);
                                     foreach (CmChatItem c in chats)
                                     {
-                                        ReceivedChatMessage(string.Format("{0} ({1}) <{2}> {3}", json.ToDateTime2(c.created.ToString()), c.user_id, c.username, c.content));
+                                        ReceivedChatMessage(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{0} ({1}) <{2}> {3}", json.ToDateTime2(c.created.ToString()), c.user_id, c.username, c.content));
                                         
                                     }
                                     lastChatId = chats[chats.Length - 1].msg_id;
@@ -130,7 +130,7 @@ namespace DiceBot
                                     CmChatItem[] chats = json.JsonDeserialize<CmChatItem[]>(s);
                                     foreach (CmChatItem c in chats)
                                     {
-                                        ReceivedChatMessage(string.Format("{0} ({1}) <{2}> {3}", json.ToDateTime2(c.created.ToString()), c.user_id, c.username, c.content));
+                                        ReceivedChatMessage(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{0} ({1}) <{2}> {3}", json.ToDateTime2(c.created.ToString()), c.user_id, c.username, c.content));
 
                                     }
                                     lastChatId = chats[chats.Length - 1].msg_id;

@@ -60,7 +60,7 @@ namespace DiceBot
                 string sitename = (sqlBetObj as sqbet).SiteName;
                 try
                 {
-                    Command.CommandText = string.Format("insert into seed(hash,server) values('{0}','{1}')", curbet.serverhash, curbet.serverseed, sitename);
+                    Command.CommandText = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"insert into seed(hash,server) values('{0}','{1}')", curbet.serverhash, curbet.serverseed, sitename);
                     Command.ExecuteNonQuery();
                 }
                 catch
@@ -68,7 +68,7 @@ namespace DiceBot
 
 
                 }
-                Command.CommandText = string.Format("insert into bet(betid, date,stake,profit,chance,high,lucky,hash,nonce,uid,client,site) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{0}')",
+                Command.CommandText = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"insert into bet(betid, date,stake,profit,chance,high,lucky,hash,nonce,uid,client,site) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{0}')",
                         sitename,
                         curbet.Id,
                         curbet.date.ToString("yyyy-MM-dd HH:mm:ss"),
@@ -99,7 +99,7 @@ namespace DiceBot
                 SQLiteCommand Command = new SQLiteCommand("", sqcon);
                 try
                 {
-                    Command.CommandText = string.Format("insert into seed(hash,server) values('{0}','{1}')", curbet.serverhash, curbet.serverseed, sitename);
+                    Command.CommandText = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"insert into seed(hash,server) values('{0}','{1}')", curbet.serverhash, curbet.serverseed, sitename);
                     Command.ExecuteNonQuery();
                 }
                 catch
@@ -107,7 +107,7 @@ namespace DiceBot
                     
 
                 }
-                Command.CommandText = string.Format("insert into bet(betid, date,stake,profit,chance,high,lucky,hash,nonce,uid,client,site) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{0}')",
+                Command.CommandText = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"insert into bet(betid, date,stake,profit,chance,high,lucky,hash,nonce,uid,client,site) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{0}')",
                     sitename,
                     curbet.Id,
                     curbet.date,

@@ -114,7 +114,7 @@ namespace DiceBot
                 cookies = new CookieContainer();
                 ClientHandlr.CookieContainer = cookies;
                 hash = "";
-                var content = new StringContent(string.Format("{{\"username\":\"{0}\",\"password\":\"{1}\",\"tfa\":\"\",\"captcha\":\"\"}}", username, password), Encoding.UTF8, "application/json");
+                var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{{\"username\":\"{0}\",\"password\":\"{1}\",\"tfa\":\"\",\"captcha\":\"\"}}", username, password), Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = Client.PostAsync("auth/login?hash=" + hash, content).Result;
                 if (response.IsSuccessStatusCode)
@@ -208,7 +208,7 @@ namespace DiceBot
                 decimal tmpchance = High ? 99.99m - chance : chance;
                 try
                 {
-                    var content = new StringContent(string.Format("{{\"amount\":{0:0},\"target\":\"{1:00.00}\",\"condition\":\"{2}\"}}", amount * 100000000.0m, High ? 99.99m - (chance - 1) : chance - 1, High ? ">" : "<"), Encoding.UTF8, "application/json");
+                    var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":{0:0},\"target\":\"{1:00.00}\",\"condition\":\"{2}\"}}", amount * 100000000.0m, High ? 99.99m - (chance - 1) : chance - 1, High ? ">" : "<"), Encoding.UTF8, "application/json");
 
                     HttpResponseMessage Response = Client.PostAsync("games/dice/bet?hash=" + hash, content).Result;
                     if (Response.IsSuccessStatusCode)
@@ -269,7 +269,7 @@ namespace DiceBot
         {
             try
             {
-                var content = new StringContent(string.Format("{{\"address\":\"{0}\",\"amount\":{1:0}}}",Address, Amount * 100000000.0m), Encoding.UTF8, "application/json");
+                var content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"address\":\"{0}\",\"amount\":{1:0}}}",Address, Amount * 100000000.0m), Encoding.UTF8, "application/json");
 
                 HttpResponseMessage Response = Client.PostAsync("users/wallet/withdrawals?hash=" + hash, content).Result;
                 if (Response.IsSuccessStatusCode)
@@ -302,7 +302,7 @@ namespace DiceBot
 
                 if (newuser!=null)
                 {
-                    var content = new StringContent(string.Format("{{\"amount\":{0:0},\"is_public\":true}}", amount * 100000000.0m), Encoding.UTF8, "application/json");
+                    var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{{\"amount\":{0:0},\"is_public\":true}}", amount * 100000000.0m), Encoding.UTF8, "application/json");
 
                     HttpResponseMessage Response = Client.PostAsync("users/" + newuser.id + "/tip?hash=" + hash, content).Result;
                     string result = Response.Content.ReadAsStringAsync().Result;

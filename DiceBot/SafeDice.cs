@@ -116,7 +116,7 @@ namespace DiceBot
                             if (chat.id > lastchat)
                             {
                                 lastchat = chat.id;
-                                ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> {3}", chat.Time, chat.username, chat.accountId, chat.message));
+                                ReceivedChatMessage(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{0:hh:mm} ({1}) <{2}> {3}", chat.Time, chat.username, chat.accountId, chat.message));
                             }
                         }
                     }
@@ -305,7 +305,7 @@ namespace DiceBot
             decimal chance = tmp.Chance;
             try
             {
-                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, (bool)High ? "High" : "Low"));
+                Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, (bool)High ? "High" : "Low"));
                 SafeDiceBet tmpBet = new SafeDiceBet
                 {
                     siteId = curen,
@@ -508,7 +508,7 @@ namespace DiceBot
         {
             try
             {
-                Parent.updateStatus(string.Format("Withdrawing {0:0.00000000} to {1}", Amount, Address));
+                Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Withdrawing {0:0.00000000} to {1}", Amount, Address));
                 /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/1/withdraw");
                 if (Prox != null)
                     loginrequest.Proxy = Prox;
@@ -751,7 +751,7 @@ namespace DiceBot
         {
             try
             {
-                Parent.updateStatus(string.Format("Investing {0:0.00000000}", Amount));
+                Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Investing {0:0.00000000}", Amount));
                 /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + UID + "/sites/1/invest");
                 if (Prox != null)
                     loginrequest.Proxy = Prox;

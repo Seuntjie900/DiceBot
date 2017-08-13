@@ -46,7 +46,7 @@ namespace DiceBot
                     //Client.Send("62");
                     Client.Close();
                     StartSocket();
-                    /*string msg = string.Format("61,{0},{2},{1}", uid, ClientHandlr.CookieContainer.GetCookies(new Uri("https://fortunejack.com"))["PHPSESSID"].Value + "\r\n", Rooms[Currency.ToLower()]);
+                    /*string msg = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"61,{0},{2},{1}", uid, ClientHandlr.CookieContainer.GetCookies(new Uri("https://fortunejack.com"))["PHPSESSID"].Value + "\r\n", Rooms[Currency.ToLower()]);
 
                     Client.Send(msg);*/
                 }
@@ -110,7 +110,7 @@ namespace DiceBot
             chance = High ? 99.99m - chance : chance;
             decimal tmpamount = (decimal)amount;
             decimal tmpchancet = (decimal)chance;
-            string s = string.Format("64,{0:0.00000000},{1},{2},{3}\r\n", tmpamount, (int)(tmpchancet * 100), High ? 1 : 0, 1/*R.Next(0, int.MaxValue-1000000)*/);
+            string s = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"64,{0:0.00000000},{1},{2},{3}\r\n", tmpamount, (int)(tmpchancet * 100), High ? 1 : 0, 1/*R.Next(0, int.MaxValue-1000000)*/);
             string[] Something = s.Split('\n');
             
             Client.Send(Something[0]+"\n");
@@ -122,7 +122,7 @@ namespace DiceBot
         {
             bool High = (bool)_High;
             chance = High ? 99.99m - chance : chance;
-            string s = string.Format("64,{0:0.00000000},{1},{2},{3}\r\n", amount, (int)(chance * 100), High ? 1 : 0, R.Next(0, int.MaxValue));
+            string s = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"64,{0:0.00000000},{1},{2},{3}\r\n", amount, (int)(chance * 100), High ? 1 : 0, R.Next(0, int.MaxValue));
             
             Client.Send(s);
             
@@ -551,7 +551,7 @@ namespace DiceBot
         void Client_Opened(object sender, EventArgs e) 
         {
             
-            string msg = string.Format("61,{0},{2},{1}", uid, ClientHandlr.CookieContainer.GetCookies(new Uri("https://fortunejack.com"))["PHPSESSID"].Value + "\r\n", Rooms[Currency.ToLower()]);
+            string msg = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"61,{0},{2},{1}", uid, ClientHandlr.CookieContainer.GetCookies(new Uri("https://fortunejack.com"))["PHPSESSID"].Value + "\r\n", Rooms[Currency.ToLower()]);
             
             Client.Send(msg);
            

@@ -48,7 +48,7 @@ namespace DiceBot
         }
         protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
         {
-            string bet = string.Format("{{\"attrs\":{0}}}", json.JsonSerializer<YLBetSend>(new YLBetSend{ amount=(long)(amount*100000000), range=High?"hi":"lo", target=(int)(chance*10000)}));
+            string bet = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{{\"attrs\":{0}}}", json.JsonSerializer<YLBetSend>(new YLBetSend{ amount=(long)(amount*100000000), range=High?"hi":"lo", target=(int)(chance*10000)}));
             Write("create_bet", bet);
         }
         Random R = new Random();

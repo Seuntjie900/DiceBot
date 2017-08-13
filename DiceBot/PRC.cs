@@ -44,7 +44,7 @@ namespace DiceBot
 
         void GotChatMessage(string message, string time, string user, string userid, string roomid, string ismod)
         {
-            ReceivedChatMessage(string.Format("{0:hh:mm:ss} ({1}) <{2}> {3}", json.ToDateTime2(time), userid, user, message));
+            ReceivedChatMessage(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{0:hh:mm:ss} ({1}) <{2}> {3}", json.ToDateTime2(time), userid, user, message));
         }
 
 
@@ -61,7 +61,7 @@ namespace DiceBot
             while (retries < 2)
             {
                 retries++;
-                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
+                Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
                 try
                 {
                     await dicehub.Invoke("Bet", High ? 0 : 1, amount, chance);
@@ -70,11 +70,11 @@ namespace DiceBot
                 catch (Exception e)
                 {
                     Thread.Sleep(500);
-                    Parent.updateStatus(string.Format("Bet Failed. Retrying."));
+                    Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Bet Failed. Retrying."));
                 }
             }
             if (retries < 5)
-                Parent.updateStatus(string.Format("Failed to place bets after 3 retries, stopping. Please check network and bot settings."));
+                Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Failed to place bets after 3 retries, stopping. Please check network and bot settings."));
         }
 
         private void DiceBetResult(PRCMYstats tmpStats)
@@ -100,7 +100,7 @@ namespace DiceBot
                 }
             }
             else
-                Parent.updateStatus(string.Format("Failed to place bets, stopping. Please check network and bot settings."));
+                Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Failed to place bets, stopping. Please check network and bot settings."));
         }
 
 
@@ -126,7 +126,7 @@ namespace DiceBot
             getHeaders.CookieContainer = Cookies;
 
             getHeaders.Method = "POST";
-            string post = string.Format("__RequestVerificationToken=" + s);
+            string post = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"__RequestVerificationToken=" + s);
             getHeaders.ContentType = "application/x-www-form-urlencoded";
             getHeaders.ContentLength = post.Length;
             using (var writer = new StreamWriter(getHeaders.GetRequestStream()))
@@ -166,7 +166,7 @@ namespace DiceBot
 
                 getHeaders2.Method = "POST";
                 string tmpClient = r.Next(0, int.MaxValue).ToString();
-                string post2 = string.Format("clientSeed=" + tmpClient + "&__RequestVerificationToken=" + s);
+                string post2 = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"clientSeed=" + tmpClient + "&__RequestVerificationToken=" + s);
                 getHeaders2.ContentType = "application/x-www-form-urlencoded";
                 getHeaders2.ContentLength = post2.Length;
                 using (var writer = new StreamWriter(getHeaders2.GetRequestStream()))
@@ -250,11 +250,11 @@ namespace DiceBot
         }
         void ReceivedChat(string messages, string time, string user, int id, int room, bool ismod)
         {
-            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> {3}", DateTime.Parse(time, System.Globalization.DateTimeFormatInfo.InvariantInfo), user, id, messages));
+            ReceivedChatMessage(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{0:hh:mm} ({1}) <{2}> {3}", DateTime.Parse(time, System.Globalization.DateTimeFormatInfo.InvariantInfo), user, id, messages));
         }
         void ReceivedChat(string messages, string time, string user, int from, bool ismod)
         {
-            ReceivedChatMessage(string.Format("{0:hh:mm} ({1}) <{2}> PM: {3}", DateTime.Parse(time, System.Globalization.DateTimeFormatInfo.InvariantInfo), user, from, messages));
+            ReceivedChatMessage(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{0:hh:mm} ({1}) <{2}> PM: {3}", DateTime.Parse(time, System.Globalization.DateTimeFormatInfo.InvariantInfo), user, from, messages));
         }
 
         string s = "";
@@ -293,7 +293,7 @@ namespace DiceBot
                 getHeaders.CookieContainer.Add(c);
             }
             getHeaders.Method = "POST";
-            string post = string.Format("userName={0}&password={1}&twoFactorCode={2}&__RequestVerificationToken={3}", Username, Password, twofa, rqtoken);
+            string post = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"userName={0}&password={1}&twoFactorCode={2}&__RequestVerificationToken={3}", Username, Password, twofa, rqtoken);
             getHeaders.ContentType = "application/x-www-form-urlencoded";
             getHeaders.ContentLength = post.Length;
             using (var writer = new StreamWriter(getHeaders.GetRequestStream()))
@@ -489,7 +489,7 @@ namespace DiceBot
                 getHeaders.CookieContainer.Add(new Cookie("PRC_Affiliate", "357", "/", "betking.io"));
                 System.Threading.Thread.Sleep(5000);
                 getHeaders.Method = "POST";
-                string post = string.Format("userName={0}&password={1}&confirmPassword={1}&__RequestVerificationToken={2}", Username, Passwrd, rqtoken);
+                string post = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"userName={0}&password={1}&confirmPassword={1}&__RequestVerificationToken={2}", Username, Passwrd, rqtoken);
                 getHeaders.ContentType = "application/x-www-form-urlencoded";
                 getHeaders.ContentLength = post.Length;
                 using (var writer = new StreamWriter(getHeaders.GetRequestStream()))

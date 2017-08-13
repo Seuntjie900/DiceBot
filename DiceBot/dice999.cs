@@ -141,7 +141,7 @@ namespace DiceBot
                 decimal amount = tmp9.Amount;
                 //decimal chance = tmp9.Chance;
 
-                Parent.updateStatus(string.Format("Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, tmp9.Chance, High ? "High" : "Low"));
+                Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, tmp9.Chance, High ? "High" : "Low"));
 
                 decimal chance = (999999.0m) * (tmp9.Chance / 100.0m);
                 //HttpWebResponse EmitResponse;

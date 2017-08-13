@@ -54,7 +54,7 @@ namespace DiceBot
                 {
                     clientseed += chars[R.Next(0, chars.Length)];
                 }
-                string Params = string.Format("m={0}&client_seed={1}&jackpot=0&stake={2}&multiplier={3}&rand={5}&csrf_token={4}",
+                string Params = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"m={0}&client_seed={1}&jackpot=0&stake={2}&multiplier={3}&rand={5}&csrf_token={4}",
                     High?"hi":"lo", clientseed, amount, (100m-edge)/chance,csrf,R.Next(0,9999999 )/ 10000000);
 
                 var betresult = Client.GetAsync("https://freebitco.in/cgi-bin/bet.pl?"+Params).Result;
@@ -99,14 +99,14 @@ namespace DiceBot
                                 clientseed= msgs[7],
                                  high=High,
                                   Id=bets.ToString(),
-                                   Profit= msgs[1]=="w"?decimal.Parse(msgs[4]):-decimal.Parse(msgs[4]),
-                                     nonce = long.Parse(msgs[12]),
+                                   Profit= msgs[1]=="w"?decimal.Parse(msgs[4]):-decimal.Parse(msgs[4], System.Globalization.NumberFormatInfo.InvariantInfo),
+                                     nonce = long.Parse(msgs[12], System.Globalization.NumberFormatInfo.InvariantInfo),
                                       serverhash = msgs[10],
                                        serverseed = msgs[9],
-                                        Roll=decimal.Parse(msgs[2])/100.0m
+                                        Roll=decimal.Parse(msgs[2], System.Globalization.NumberFormatInfo.InvariantInfo) /100.0m
 
                         };
-                        balance = decimal.Parse(msgs[3]);
+                        balance = decimal.Parse(msgs[3], System.Globalization.NumberFormatInfo.InvariantInfo);
                         if (msgs[1] == "w")
                             wins++;
                         else losses++;

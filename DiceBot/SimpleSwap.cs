@@ -182,7 +182,7 @@ namespace DiceBot
             {
                 if (GetQuote())
                 {
-                    DialogResult dr = MessageBox.Show(string.Format("You will get {0} {3} for your {2} {1}", txtReveice.Text, cbFrom.Items[cbFrom.SelectedIndex].ToString(), nudSending.Value, cbTo.Items[cbTo.SelectedIndex].ToString()), "Confirm", MessageBoxButtons.YesNo);
+                    DialogResult dr = MessageBox.Show(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"You will get {0} {3} for your {2} {1}", txtReveice.Text, cbFrom.Items[cbFrom.SelectedIndex].ToString(), nudSending.Value, cbTo.Items[cbTo.SelectedIndex].ToString()), "Confirm", MessageBoxButtons.YesNo);
                     CheckedRate = dr == DialogResult.Yes;
                 }
                 
@@ -202,10 +202,10 @@ namespace DiceBot
         {
             try
             {
-                string _Post = string.Format("pair={0}-{1}&address={2}&amount={3}&apikey={4}", cbFrom.Items[cbFrom.SelectedIndex].ToString(), cbTo.Items[cbTo.SelectedIndex].ToString(), txtReceiving.Text, nudSending.Value, "8368efc68d72206949bbb43e0f96fc1f26baf47b3a1f49f2");
+                string _Post = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"pair={0}-{1}&address={2}&amount={3}&apikey={4}", cbFrom.Items[cbFrom.SelectedIndex].ToString(), cbTo.Items[cbTo.SelectedIndex].ToString(), txtReceiving.Text, nudSending.Value, "8368efc68d72206949bbb43e0f96fc1f26baf47b3a1f49f2");
                 StringContent Post = new StringContent(_Post);
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("pair", string.Format("{0}-{1}", cbFrom.Items[cbFrom.SelectedIndex].ToString(), cbTo.Items[cbTo.SelectedIndex].ToString())));
+                pairs.Add(new KeyValuePair<string, string>("pair", string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{0}-{1}", cbFrom.Items[cbFrom.SelectedIndex].ToString(), cbTo.Items[cbTo.SelectedIndex].ToString())));
                 pairs.Add(new KeyValuePair<string, string>("address", txtReceiving.Text));
                 pairs.Add(new KeyValuePair<string, string>("amount", nudSending.Value.ToString()));
                 pairs.Add(new KeyValuePair<string, string>("apikey", "7ff5666f5b869cfa407ea69bc8c64ef1e9efb709b8cbb32e34"));

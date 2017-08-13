@@ -33,7 +33,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.7";
+        private const string vers = "3.3.8";
 
 
         Control[] ControlsToDisable;
@@ -154,7 +154,7 @@ namespace DiceBot
             lstFibonacci.Items.Clear();
             for (int i =0; i<100; i++)
             {
-                lstFibonacci.Items.Add(string.Format("{0}. {1}", i, Current));
+                lstFibonacci.Items.Add(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{0}. {1}", i, Current));
                 decimal tmp = Current;
                 Current += Previous;
                 Previous = tmp;
@@ -1304,7 +1304,7 @@ namespace DiceBot
             TotalTime += (DateTime.Now - dtStarted);
             if (RunningSimulation)
             {
-                WriteConsole(string.Format("Simulation finished. Bets:{0} Wins:{1} Losses:{2} Balance:{3} Profit:{4} Worst Streak:{5} Best Streak:{6}", 
+                WriteConsole(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Simulation finished. Bets:{0} Wins:{1} Losses:{2} Balance:{3} Profit:{4} Worst Streak:{5} Best Streak:{6}", 
                     Losses+Wins, Wins, Losses, PreviousBalance, profit, Losestreak>WorstStreak?Losestreak:WorstStreak, Winstreak> BestStreak? Winstreak:BestStreak ));
                 Updatetext(SimWindow.lblSimLosses, Losses.ToString());
                 Updatetext(SimWindow.lblSimProfit, profit.ToString("0.00000000"));
@@ -2527,7 +2527,7 @@ namespace DiceBot
 
                 if ((decimal)curtime.TotalHours >= nudStopTimeH.Value && curtime.Minutes >= (decimal)nudStopTimeM.Value && curtime.Seconds >= (decimal)nudStopTimeS.Value && chkStopTime.Checked)
                 {
-                    Stop(string.Format("Time exeeding {0}:{1}:{2}", nudStopTimeH.Value, nudStopTimeM.Value, nudStopTimeS.Value));
+                    Stop(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Time exeeding {0}:{1}:{2}", nudStopTimeH.Value, nudStopTimeM.Value, nudStopTimeS.Value));
                 }
                 
                 if (chkZigZagBets.Checked && (!programmerToolStripMenuItem.Checked || EnableProgZigZag ))
@@ -4006,7 +4006,7 @@ namespace DiceBot
             else if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 TrayIcon.BalloonTipTitle = "DiceBot";
-                TrayIcon.BalloonTipText = string.Format("Balance: {0:0.00000000}\n Profit: {1:0.00000000}\nCurrent Streak: {2}\nWorst Streak: {3}\nTime running: ", PreviousBalance, PreviousBalance - StartBalance, curstreak, WorstStreak) + (TotalTime + (DateTime.Now - dtStarted)).ToString(@"hh\:mm\:ss");
+                TrayIcon.BalloonTipText = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Balance: {0:0.00000000}\n Profit: {1:0.00000000}\nCurrent Streak: {2}\nWorst Streak: {3}\nTime running: ", PreviousBalance, PreviousBalance - StartBalance, curstreak, WorstStreak) + (TotalTime + (DateTime.Now - dtStarted)).ToString(@"hh\:mm\:ss");
                 TrayIcon.BalloonTipIcon = ToolTipIcon.None;
                 TrayIcon.ShowBalloonTip(800);
             }
@@ -5025,7 +5025,7 @@ namespace DiceBot
             }
             else
             {
-                if (MessageBox.Show(string.Format("It looks like {0} does not allow registration through the API. Would you like to open {0} in your browser to register an account?", CurrentSite.Name)) == DialogResult.OK)
+                if (MessageBox.Show(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"It looks like {0} does not allow registration through the API. Would you like to open {0} in your browser to register an account?", CurrentSite.Name)) == DialogResult.OK)
                 {
                     Process.Start(CurrentSite.SiteURL);
                 }

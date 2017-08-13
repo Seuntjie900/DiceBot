@@ -60,7 +60,7 @@ namespace DiceBot
             long client = (long)BitConverter.ToUInt32(bytes, 0);
             ClientSeed = client.ToString();
             long Roundedamount = (long)(Math.Round((amount), 8) * 100000000);
-            string Bet = string.Format("42{0}[\"dice_bet\",{{\"wager\":{1:0},\"client_seed\":{2},\"hash\":\"{3}\",\"cond\":\"{4}\",\"target\":{5:0.0000},\"payout\":{6:0.0000}}}]",
+            string Bet = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"42{0}[\"dice_bet\",{{\"wager\":{1:0},\"client_seed\":{2},\"hash\":\"{3}\",\"cond\":\"{4}\",\"target\":{5:0.0000},\"payout\":{6:0.0000}}}]",
                 id++, Roundedamount, ClientSeed, OldHash, High ? ">" : "<", High ? 100m - chance : chance, (((100m - edge) / chance) * Roundedamount));
             WSClient.Send(Bet);
         }
@@ -195,7 +195,7 @@ namespace DiceBot
         public override bool InternalSendTip(string User, decimal amount)
         {
             //"4210["send_tip",{"uname":"seuntjiebot","amount":100000,"private":false,"type":"BTC"}]";
-            WSClient.Send(string.Format("42{0}[\"send_tip\",{{\"uname\":\"{1}\",\"amount\":{2:0.00000000},\"private\":false,\"type\":\"BTC\"}}]", id++, User, amount*100000000m));
+            WSClient.Send(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"42{0}[\"send_tip\",{{\"uname\":\"{1}\",\"amount\":{2:0.00000000},\"private\":false,\"type\":\"BTC\"}}]", id++, User, amount*100000000m));
             return true;
         }
 
@@ -206,7 +206,7 @@ namespace DiceBot
                 if ((DateTime.Now-lastupdate).TotalSeconds>=30)
                 {
                     lastupdate = DateTime.Now;
-                    string getbalance = string.Format("42{0}[\"access_token_data\",{{\"app_id\":{1},\"access_token\":\"{2}\"}}]", id++, APPId, accesstoken);
+                    string getbalance = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"42{0}[\"access_token_data\",{{\"app_id\":{1},\"access_token\":\"{2}\"}}]", id++, APPId, accesstoken);
                     WSClient.Send(getbalance);
                     WSClient.Send("2");
                 
@@ -227,7 +227,7 @@ namespace DiceBot
             {
                 WSClient.Send("5");
                 WSClient.Send("42"+id++ +"[\"get_hash\",null]");
-                string getbalance = string.Format("42{0}[\"access_token_data\",{{\"app_id\":{1},\"access_token\":\"{2}\"}}]", id++, APPId, accesstoken );
+                string getbalance = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"42{0}[\"access_token_data\",{{\"app_id\":{1},\"access_token\":\"{2}\"}}]", id++, APPId, accesstoken );
                 WSClient.Send(getbalance);
                                
             }

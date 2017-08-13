@@ -217,7 +217,7 @@ namespace DiceBot
             }
             //string server = "";
             //{"command":"message","identifier":"{\"channel\":\"DiceChannel\"}","data":"{\"amount\":0.000001,\"chance\":\"49.5\",\"type\":\"high\",\"client\":\"7423c4d0ded01788\",\"server\":29671274,\"hot_key\":false,\"manual\":true,\"number\":2,\"action\":\"bet\"}"}
-            string s = string.Format("{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"DiceChannel\\\"}}\",\"data\":\"{{\\\"amount\\\":{0},\\\"chance\\\":\\\"{1}\\\",\\\"type\\\":\\\"{2}\\\",\\\"client\\\":\\\"{4}\\\",\\\"server\\\":{5},\\\"hot_key\\\":false,\\\"manual\\\":true,\\\"number\\\":{3},\\\"action\\\":\\\"bet\\\"}}\"}}",
+            string s = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"DiceChannel\\\"}}\",\"data\":\"{{\\\"amount\\\":{0},\\\"chance\\\":\\\"{1}\\\",\\\"type\\\":\\\"{2}\\\",\\\"client\\\":\\\"{4}\\\",\\\"server\\\":{5},\\\"hot_key\\\":false,\\\"manual\\\":true,\\\"number\\\":{3},\\\"action\\\":\\\"bet\\\"}}\"}}",
                 amount, chance, High ? "high" : "low", id++, clientsee.ToLower(), server);
             Parent.DumpLog(s, 5);
             if (Client.State == WebSocketState.Open)
@@ -261,7 +261,7 @@ namespace DiceBot
         }
         protected override bool internalWithdraw(decimal Amount, string Address)
         {
-            string s = string.Format("{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"WalletChannel\\\"}}\",\"data\":\"{{\\\"code\\\":\\\"\\\",\\\"amount\\\":\\\"{0}\\\",\\\"address\\\":\\\"{1}\\\",\\\"number\\\":{2},\\\"action\\\":\\\"withdraw\\\"}}\"}}", Amount, Address, id++);
+            string s = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"WalletChannel\\\"}}\",\"data\":\"{{\\\"code\\\":\\\"\\\",\\\"amount\\\":\\\"{0}\\\",\\\"address\\\":\\\"{1}\\\",\\\"number\\\":{2},\\\"action\\\":\\\"withdraw\\\"}}\"}}", Amount, Address, id++);
             if (Client.State == WebSocketState.Open)
             {
                 Client.Send(s);
@@ -480,9 +480,9 @@ user[password]:asdfasdfasdf*/
         {
             if (Client.State == WebSocketState.Open)
             {
-                Client.Send(string.Format("{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"ChatChannel\\\"}}\",\"data\":\"{{\\\"message\\\":\\\"/tip {0} {1}\\\",\\\"action\\\":\\\"chat\\\"}}\"}}", User, amount));
+                Client.Send(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{{\"command\":\"message\",\"identifier\":\"{{\\\"channel\\\":\\\"ChatChannel\\\"}}\",\"data\":\"{{\\\"message\\\":\\\"/tip {0} {1}\\\",\\\"action\\\":\\\"chat\\\"}}\"}}", User, amount));
             }
-            //SendChatMessage(string.Format("/tip {0} {1:0.00000000}", User, amount));
+            //SendChatMessage(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"/tip {0} {1:0.00000000}", User, amount));
             return true;
         }
         string cookie = "";

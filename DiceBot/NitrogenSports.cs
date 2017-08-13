@@ -295,7 +295,7 @@ Sec-WebSocket-Version:13*/
             decimal tmpchance = High ? maxRoll - chance : chance;
             string t = CreateRandomString();
             this.Requests.Add(t, 0);
-            string s = string.Format("[2,\"0.{0}\",\"bet\",{{\"betAmount\":{1:0.00000000},\"betCondition\":\"{2}\",\"betTarget\":{3:0.00}}}]", t, amount, High ? "H" : "L", tmpchance);
+            string s = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"[2,\"0.{0}\",\"bet\",{{\"betAmount\":{1:0.00000000},\"betCondition\":\"{2}\",\"betTarget\":{3:0.00}}}]", t, amount, High ? "H" : "L", tmpchance);
             NSSocket.Send(s);
         }
 
@@ -318,7 +318,7 @@ Sec-WebSocket-Version:13*/
             string t = CreateRandomString();
             Requests.Add(t, 2);
 
-            NSSocket.Send(string.Format("[2,\"0.{0}\",\"seed\",{{\"clientSeed\":\"{1}\"}}]", t, s));
+            NSSocket.Send(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"[2,\"0.{0}\",\"seed\",{{\"clientSeed\":\"{1}\"}}]", t, s));
         }
 
         public override void SetClientSeed(string Seed)
