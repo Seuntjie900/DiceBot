@@ -20,7 +20,7 @@ namespace DiceBot
         
          bool isD999 = false;
         
-        public static string[] cCurrencies =new string[] { "btc","doge","ltc","eth" };
+        public static string[] cCurrencies =new string[] { "btc","doge","ltc","eth","xmr" };
         HttpClientHandler ClientHandlr;
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://www.999dice.com/api/web.aspx") };
         public dice999(cDiceBot Parent, bool doge999)
