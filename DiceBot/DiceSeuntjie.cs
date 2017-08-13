@@ -226,12 +226,9 @@ namespace DiceBot
             if (e.Message=="3probe")
             {
                 WSClient.Send("5");
-                //4214["access_token_data",{"app_id":2668,"access_token":"49af40dd-5f96-4c67-ab16-6ff05f0d364b"}]
-                //20:421["get_hash",null]
                 WSClient.Send("42"+id++ +"[\"get_hash\",null]");
                 string getbalance = string.Format("42{0}[\"access_token_data\",{{\"app_id\":{1},\"access_token\":\"{2}\"}}]", id++, APPId, accesstoken );
                 WSClient.Send(getbalance);
-                //148:420["chat_init",{"app_id":926,"access_token":"5ed59498-d425-4c63-835e-348f56753d5a","subscriptions":["CHAT","DEPOSITS","BETS"],"room":"ENGLISH_RM"}]
                                
             }
             else

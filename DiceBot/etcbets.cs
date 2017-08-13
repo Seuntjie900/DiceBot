@@ -274,7 +274,7 @@ namespace DiceBot
 
                 bbResult tmp = json.JsonDeserialize<bbResult>(responseData);
                
-                if (tmp.error != 1)
+                if (tmp.error != 1 && tmp.info!=1)
                 {
                     next = tmp.nextServerSeed;
                     lastupdate = DateTime.Now;
@@ -298,7 +298,10 @@ namespace DiceBot
                 }
                 else
                 {
-                    Parent.updateStatus("An error has occured! Betting has stopped for your safety.");
+                    if (tmp.info == 1)
+                        Parent.updateStatus(tmp.infoMsg);
+                    else
+                        Parent.updateStatus("An error has occured! Betting has stopped for your safety.");
                 }
             }
             catch (WebException e)

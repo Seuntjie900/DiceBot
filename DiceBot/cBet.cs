@@ -81,6 +81,15 @@ namespace DiceBot
         }
         public bool Verified { get; set; }
         public int UserAccountId { get { return uid; } set { uid = value; } }
+
+        public bool CheckWin(decimal maxroll)
+        {
+            if ((Roll > maxroll - Chance && high) || (Roll < Chance && !high))
+            {
+                return true;
+            }
+            return false;
+        }
     }
    
 }

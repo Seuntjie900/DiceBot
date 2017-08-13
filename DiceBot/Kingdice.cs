@@ -217,7 +217,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("invest/invest.php?", Content).Result.Content.ReadAsStringAsync().Result;
+                string sEmitResponse = Client.PostAsync("cgi-bin/api.pl?op=invest?", Content).Result.Content.ReadAsStringAsync().Result;
 
                 return sEmitResponse.Contains("SUCCESS");
                 ForceUpdateStats = true;

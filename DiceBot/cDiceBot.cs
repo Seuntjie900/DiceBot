@@ -176,7 +176,7 @@ namespace DiceBot
         delegate void dDobet(Bet bet);
         public void GetBetResult(decimal Balance, Bet bet)
         {
-            DumpLog("received bet result: Balance: "+Balance+", Bet:"+json.JsonSerializer<Bet>(bet) , 6);
+            DumpLog("received bet result: Balance: "+Balance+", Bet:"+json.JsonSerializer<Bet>(bet) , 8);
             if (logging>2)
             using (StreamWriter sw = File.AppendText("log.txt"))
             {
@@ -601,6 +601,22 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
+            /*foreach (string s in OKBets.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                oKBetsToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }*/
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -670,6 +686,7 @@ namespace DiceBot
             Lua.RegisterFunction("alarm", this, new dPlayAlarm(playalarm).Method);
             Lua.RegisterFunction("ching", this, new dPlayChing(PlayChing).Method);
             Lua.RegisterFunction("resetbuiltin", this, new dPlayChing(Reset).Method);
+            Lua.RegisterFunction("exportsim", this, new dPlayChing(ExportSim).Method);
             DumpLog("constructor done", 8);
         }
         void luaStop()
@@ -811,7 +828,7 @@ namespace DiceBot
                 SimWindow.nudSimBalance.Value = (decimal)startingbalance;
                 SimWindow.nudSimNumBets.Value = (decimal)bets;
                WriteConsole("Running " + bets + " bets Simulation with starting balance of " + startingbalance);
-               btnSim_Click(SimWindow.btnSim, new EventArgs());
+               btnSim_Click(null, new EventArgs());
             }
             else
             {
@@ -866,6 +883,7 @@ namespace DiceBot
                 return null;
             }
         }
+        bool register = false;
         void CurrentSite_FinishedLogin(bool LoggedIn)
         {
             if (InvokeRequired)
@@ -885,7 +903,8 @@ namespace DiceBot
                 }
                 else
                 {
-                    MessageBox.Show("Failed to log in or register new account!", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    new LoginFailedForm().ShowDialog(register, CurrentSite);
+                    //MessageBox.Show("Failed to log in or register new account!", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     //updateStatus("Disconnected");
                 }
 
@@ -1286,13 +1305,13 @@ namespace DiceBot
             if (RunningSimulation)
             {
                 WriteConsole(string.Format("Simulation finished. Bets:{0} Wins:{1} Losses:{2} Balance:{3} Profit:{4} Worst Streak:{5} Best Streak:{6}", 
-                    Losses+Wins, Wins, Losses, PreviousBalance, profit, WorstStreak, BestStreak ));
+                    Losses+Wins, Wins, Losses, PreviousBalance, profit, Losestreak>WorstStreak?Losestreak:WorstStreak, Winstreak> BestStreak? Winstreak:BestStreak ));
                 Updatetext(SimWindow.lblSimLosses, Losses.ToString());
                 Updatetext(SimWindow.lblSimProfit, profit.ToString("0.00000000"));
                 Updatetext(SimWindow.lblSimWins, Wins.ToString());
                 Updatetext(SimWindow.lblSimEndBalance, PreviousBalance.ToString("0.00000000"));
-                Updatetext(SimWindow.lblSimLoseStreak, WorstStreak.ToString());
-                Updatetext(SimWindow.lblSimWinStreak, BestStreak.ToString());
+                Updatetext(SimWindow.lblSimLoseStreak, (Losestreak > WorstStreak ? Losestreak : WorstStreak).ToString());
+                Updatetext(SimWindow.lblSimWinStreak, (Winstreak > BestStreak ? Winstreak : BestStreak).ToString());
                 using (StreamWriter sw = File.AppendText(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\tempsim"))
                 {
                     foreach (string tmpbet in tempsim.bets)
@@ -1416,6 +1435,11 @@ namespace DiceBot
                 DumpLog(e.StackTrace, 2);
                 MessageBox.Show("Failed to play CHING, pelase make sure file exists");
             }
+        }
+
+        void ExportSim()
+        {
+            btnExportSim_Click(null, new EventArgs());
         }
 
         void Withdraw()
@@ -2239,8 +2263,9 @@ namespace DiceBot
                         currentprofit += profit;
                         ProfitSinceLastReset += profit;
                         StreakProfitSinceLastReset += profit;
-                        
-                        
+                        DumpLog("currentprofit: " + currentprofit.ToString(), 7);
+                        DumpLog("ProfitSinceLastReset: "+ProfitSinceLastReset.ToString(), 7);
+                        DumpLog("StreakProfitSinceLastReset: "+ StreakProfitSinceLastReset.ToString(), 7);
                         Wins++;
                         Winstreak++;
                         trazelwin++;
@@ -2283,6 +2308,7 @@ namespace DiceBot
                             {
                                 Reset();
                                 ProfitSinceLastReset = 0;
+                                DumpLog("Resetting: " + StreakProfitSinceLastReset.ToString() + ">" + nudResetBtcProfit.Value, 7);
                             }
                             if (Wins >= nudStopWins.Value && chkStopWins.Checked)
                             {
@@ -4196,6 +4222,15 @@ namespace DiceBot
             }
             else
             { 
+                if (sender!=null && programmerToolStripMenuItem.Checked)
+                {
+                    LuaRuntime.SetLua(Lua);
+                    //GetLuaVars();
+                    //SetLuaVars();
+                    LuaRuntime.Run(richTextBox3.Text);
+                    GetLuaVars();
+
+                }
                 bool go = true;
                 if (SimWindow.nudSimNumBets.Value >= 1000000)
                 {
@@ -4859,7 +4894,7 @@ namespace DiceBot
         private void btnLogIn_Click(object sender, EventArgs e)
         {
 
-
+            register = false;
 
             if ((sender as Button).Text == "Log In")
             {
@@ -4895,6 +4930,9 @@ namespace DiceBot
                     case "DuckDice": CurrentSite = new DuckDice(this); break;
                     case "EtcBets": CurrentSite = new etcbets(this); break;
                     case "coinpro": CurrentSite = new coinpro(this);break;
+                    //case "OKBets": CurrentSite = new OKBets(this); break;
+                    case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
+                    case "Stake": CurrentSite = new Stake(this);break;
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -4942,6 +4980,9 @@ namespace DiceBot
                         case "DuckDice": CurrentSite = new DuckDice(this); break;
                         case "EtcBets": CurrentSite = new etcbets(this); break;
                         case "coinpro": CurrentSite = new coinpro(this); break;
+                        //case "OKBets": CurrentSite = new OKBets(this); break;
+                        case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
+                        case "Stake": CurrentSite = new Stake(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -4957,7 +4998,7 @@ namespace DiceBot
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-                
+            register = true;
             if (CurrentSite.register)
             {
                 ConfirmPassword Conf = new ConfirmPassword();
@@ -5499,6 +5540,9 @@ namespace DiceBot
                     case "duckDiceToolStripMenuItem": CurrentSite = new DuckDice(this); siteToolStripMenuItem.Text = "(Quack)"; break;
                     case "etcBetsToolStripMenuItem": CurrentSite = new etcbets(this); siteToolStripMenuItem.Text = "(EtcB)"; break;
                     case "coinProfitToolStripMenuItem": CurrentSite = new coinpro(this); siteToolStripMenuItem.Text = "(CPro)"; break;
+                    //case "oKBetsToolStripMenuItem" : CurrentSite = new OKBets(this); siteToolStripMenuItem.Text = "(OKB)"; break;
+                    case "freebitcoinToolStripMenuItem": CurrentSite = new Freebitcoin(this); siteToolStripMenuItem.Text = "(FBtc)"; break;
+                    case "stakeToolStripMenuItem": CurrentSite = new Stake(this); siteToolStripMenuItem.Text = "(Stake)"; break;
                 }
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;
@@ -5597,7 +5641,7 @@ namespace DiceBot
         {
             if ((sender as ToolStripMenuItem).Checked)
             {
-                CurrentSite.Currency = (sender as ToolStripMenuItem).Text.ToLower();
+                CurrentSite.Currency = (sender as ToolStripMenuItem).Text;//.ToLower();
             }
         }
 
@@ -5606,11 +5650,45 @@ namespace DiceBot
 
         }
 
+        public class SiteDetails
+        {
+            public string name { get; set; }
+            public decimal edge { get; set; }
+            public decimal maxroll { get; set; }
+            public bool cantip { get; set; }
+            public bool tipusingname { get; set; }
+            public bool canwithdraw { get; set; }
+            public bool canresetseed { get; set; }
+            public bool caninvest { get; set; }
+            public string siteurl { get; set; }
 
+            public void SetDetails(DiceSite Site)
+            {
+                name = Site.Name;
+                edge = Site.edge;
+                maxroll = Site.maxRoll;
+                cantip = Site.Tip;
+                tipusingname = Site.TipUsingName;
+                canwithdraw = Site.AutoWithdraw;
+                canresetseed = Site.ChangeSeed;
+                caninvest = Site.AutoInvest;
+                siteurl = Site.SiteURL;
+            }
+        }
+        SiteDetails CurrentSiteDetails = null;
         void SetLuaVars()
         {
             try
             {
+                if (CurrentSiteDetails == null)
+                {
+                    CurrentSiteDetails = new SiteDetails();
+                    CurrentSiteDetails.SetDetails(CurrentSite);
+                }
+                else if (CurrentSiteDetails.name!=CurrentSite.Name)
+                {
+                    CurrentSiteDetails.SetDetails(CurrentSite);
+                }
                 //Lua.clear();
                 Lua["balance"] = PreviousBalance ;                
                 Lua["profit"] = this.profit;
@@ -5627,6 +5705,9 @@ namespace DiceBot
                 Lua["enablersc"] = EnableReset;
                 Lua["enablezz"] = EnableProgZigZag;
                 Lua["wagered"] = wagered;
+                Lua["site"] = CurrentSiteDetails;
+
+                
             }
             catch (Exception e)
             {
@@ -5945,6 +6026,9 @@ namespace DiceBot
                             duckDiceToolStripMenuItem.Checked?25:
                             etcBetsToolStripMenuItem.Checked?26:
                             coinProfitToolStripMenuItem.Checked?27:
+                            oKBetsToolStripMenuItem.Checked?28:
+                            freebitcoinToolStripMenuItem.Checked?29:
+                            stakeToolStripMenuItem.Checked?30:
                             1);
                 }
                 else if (c is TextBox)
@@ -6067,7 +6151,10 @@ namespace DiceBot
                         duckDiceToolStripMenuItem.Checked = value == 25;
                         etcBetsToolStripMenuItem.Checked = value == 26;
                         coinProfitToolStripMenuItem.Checked = value == 27 ;
-                        if (value > 27)
+                        oKBetsToolStripMenuItem.Checked = value == 28;
+                            freebitcoinToolStripMenuItem.Checked = value == 29;
+                        stakeToolStripMenuItem.Checked = value == 30;
+                        if (value > 30)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6208,6 +6295,9 @@ namespace DiceBot
                         duckDiceToolStripMenuItem.Checked = value == "25";
                         etcBetsToolStripMenuItem.Checked = value == "26";
                         coinProfitToolStripMenuItem.Checked = value == "27";
+                        oKBetsToolStripMenuItem.Checked = value == "28";
+                        freebitcoinToolStripMenuItem.Checked = value == "29";
+                        stakeToolStripMenuItem.Checked = value == "30";
                     }
                     else if (Key == "SettingsMode")
                     {

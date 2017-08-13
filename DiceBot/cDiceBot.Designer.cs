@@ -488,6 +488,10 @@
             this.diceSeuntjieComToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.duckDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.etcBetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.coinProfitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.oKBetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.freebitcoinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stakeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -507,7 +511,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.coinProfitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -5558,7 +5561,8 @@
             "currencies:string[], RO. List of currencies available at current site",
             "currency:string, RW. Current betting currency",
             "enablersc: bool, RW",
-            "enablezz: bool, RW"});
+            "enablezz: bool, RW",
+            "site:SiteDetails, RO"});
             this.lbVariables.Location = new System.Drawing.Point(12, 22);
             this.lbVariables.Name = "lbVariables";
             this.lbVariables.Size = new System.Drawing.Size(262, 121);
@@ -5597,7 +5601,8 @@
                 "ontext:string ): Object",
             "alarm():void",
             "ching():void",
-            "resetbuiltin():void"});
+            "resetbuiltin():void",
+            "exportsim():void"});
             this.listBox1.Location = new System.Drawing.Point(11, 170);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(261, 134);
@@ -5922,7 +5927,10 @@
             this.diceSeuntjieComToolStripMenuItem,
             this.duckDiceToolStripMenuItem,
             this.etcBetsToolStripMenuItem,
-            this.coinProfitToolStripMenuItem});
+            this.coinProfitToolStripMenuItem,
+            this.oKBetsToolStripMenuItem,
+            this.freebitcoinToolStripMenuItem,
+            this.stakeToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -6071,6 +6079,7 @@
             // 
             // fortuneJackToolStripMenuItem
             // 
+            this.fortuneJackToolStripMenuItem.Enabled = false;
             this.fortuneJackToolStripMenuItem.Name = "fortuneJackToolStripMenuItem";
             this.fortuneJackToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.fortuneJackToolStripMenuItem.Text = "FortuneJack";
@@ -6180,6 +6189,40 @@
             this.etcBetsToolStripMenuItem.Text = "EtcBets";
             this.etcBetsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.etcBetsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // coinProfitToolStripMenuItem
+            // 
+            this.coinProfitToolStripMenuItem.Name = "coinProfitToolStripMenuItem";
+            this.coinProfitToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.coinProfitToolStripMenuItem.Text = "CoinPro.fit";
+            this.coinProfitToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.coinProfitToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // oKBetsToolStripMenuItem
+            // 
+            this.oKBetsToolStripMenuItem.Enabled = false;
+            this.oKBetsToolStripMenuItem.Name = "oKBetsToolStripMenuItem";
+            this.oKBetsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.oKBetsToolStripMenuItem.Text = "OKBets";
+            this.oKBetsToolStripMenuItem.Visible = false;
+            this.oKBetsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.oKBetsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // freebitcoinToolStripMenuItem
+            // 
+            this.freebitcoinToolStripMenuItem.Name = "freebitcoinToolStripMenuItem";
+            this.freebitcoinToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.freebitcoinToolStripMenuItem.Text = "Freebitco.in";
+            this.freebitcoinToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.freebitcoinToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
+            // stakeToolStripMenuItem
+            // 
+            this.stakeToolStripMenuItem.Name = "stakeToolStripMenuItem";
+            this.stakeToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.stakeToolStripMenuItem.Text = "Stake";
+            this.stakeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.stakeToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // settingsModeToolStripMenuItem
             // 
@@ -6318,14 +6361,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
-            // 
-            // coinProfitToolStripMenuItem
-            // 
-            this.coinProfitToolStripMenuItem.Name = "coinProfitToolStripMenuItem";
-            this.coinProfitToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.coinProfitToolStripMenuItem.Text = "CoinPro.fit";
-            this.coinProfitToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.coinProfitToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 
@@ -7004,6 +7039,9 @@
         private System.Windows.Forms.ToolStripMenuItem duckDiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem etcBetsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem coinProfitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem oKBetsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem freebitcoinToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stakeToolStripMenuItem;
     }
 }
 

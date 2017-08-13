@@ -165,7 +165,7 @@ namespace DiceBot
                         string s = Client.PostAsync(("user"), Content).Result.Content.ReadAsStringAsync().Result;
                     
                         bbStats tmpu = json.JsonDeserialize<bbStats>(s);
-                        if (tmpu.error != 1)
+                        if (tmpu.error != 1 )
                         {
                             balance = tmpu.balance; //i assume
                             bets = tmpu.total_bets;
@@ -272,7 +272,7 @@ namespace DiceBot
 
                 bbResult tmp = json.JsonDeserialize<bbResult>(responseData);
                
-                if (tmp.error != 1)
+                if (tmp.error != 1 && tmp.info!=1)
                 {
                     next = tmp.nextServerSeed;
                     lastupdate = DateTime.Now;
@@ -296,7 +296,11 @@ namespace DiceBot
                 }
                 else
                 {
-                    Parent.updateStatus("An error has occured! Betting has stopped for your safety.");
+                    if (tmp.info==1)
+                        Parent.updateStatus(tmp.infoMsg);
+                    else
+                        Parent.updateStatus("An error has occured! Betting has stopped for your safety.");
+                    
                 }
             }
             catch (WebException e)
@@ -587,6 +591,10 @@ namespace DiceBot
 
     public class bbResult
     {
+        //{"info":1,"infoCode":"BetTooSmall","infoMsg":"Error: Your bet is too small."}
+        public int info { get; set; }
+        public string infoCode { get; set; }
+        public string infoMsg { get; set; }
         public int error { get; set; }
         public int win { get; set; }
         public decimal balanceOrig { get; set; }

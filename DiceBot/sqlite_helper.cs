@@ -71,7 +71,7 @@ namespace DiceBot
                 Command.CommandText = string.Format("insert into bet(betid, date,stake,profit,chance,high,lucky,hash,nonce,uid,client,site) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{0}')",
                         sitename,
                         curbet.Id,
-                        curbet.date,
+                        curbet.date.ToString("yyyy-MM-dd HH:mm:ss"),
                         curbet.Amount,
                         curbet.Profit,
                         curbet.Chance,
@@ -300,8 +300,9 @@ namespace DiceBot
                     ////sqcon.close();
                     return Bets.ToArray();
                 }
-                catch
+                catch (Exception e)
                 {
+
                 }
                 ////sqcon.close();
             }
@@ -317,7 +318,7 @@ namespace DiceBot
                 try
                 {
                   //  sqcon.Open();
-                    SQLiteCommand Command = new SQLiteCommand("select bet.*, seed.server from bet, seed where bet.hash=seed.hash and date>='" + StartDate.ToLongDateString() + " " + StartDate.ToLongTimeString() + "' and date<='" + EndDate.ToLongDateString() + " " + EndDate.ToLongTimeString() + "' ", sqcon);
+                    SQLiteCommand Command = new SQLiteCommand("select bet.*, seed.server from bet, seed where bet.hash=seed.hash and date>='" + StartDate.ToString("yyyy-MM-dd HH:mm:ss") + "' and date<='" + EndDate.ToString("yyyy-MM-dd HH:mm:ss") + "' ", sqcon);
                     if (site != "")
                     {
                         Command.CommandText += " and site = '" + site + "'";

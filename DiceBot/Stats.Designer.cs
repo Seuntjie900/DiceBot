@@ -55,6 +55,8 @@
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.lblWagered = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.btnHideStats = new System.Windows.Forms.Button();
             this.lblLuck = new System.Windows.Forms.Label();
             this.label69 = new System.Windows.Forms.Label();
@@ -86,8 +88,6 @@
             this.lblBets = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.tcStats = new System.Windows.Forms.TabControl();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lblWagered = new System.Windows.Forms.Label();
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakLose)).BeginInit();
@@ -404,6 +404,24 @@
             this.tabPage7.UseVisualStyleBackColor = true;
             this.tabPage7.Click += new System.EventHandler(this.tabPage7_Click);
             // 
+            // lblWagered
+            // 
+            this.lblWagered.AutoSize = true;
+            this.lblWagered.Location = new System.Drawing.Point(369, 56);
+            this.lblWagered.Name = "lblWagered";
+            this.lblWagered.Size = new System.Drawing.Size(13, 13);
+            this.lblWagered.TabIndex = 33;
+            this.lblWagered.Text = "0";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(306, 56);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 32;
+            this.label2.Text = "Wagered: ";
+            // 
             // btnHideStats
             // 
             this.btnHideStats.Location = new System.Drawing.Point(384, 7);
@@ -552,6 +570,7 @@
             this.lblMaxBets.Name = "lblMaxBets";
             this.lblMaxBets.Size = new System.Drawing.Size(0, 13);
             this.lblMaxBets.TabIndex = 23;
+            this.lblMaxBets.Visible = false;
             // 
             // lblProfitph
             // 
@@ -569,6 +588,7 @@
             this.label20.Size = new System.Drawing.Size(77, 13);
             this.label20.TabIndex = 22;
             this.label20.Text = "Maximum bets:";
+            this.label20.Visible = false;
             // 
             // lblProfit24
             // 
@@ -676,24 +696,6 @@
             this.tcStats.SelectedIndex = 0;
             this.tcStats.Size = new System.Drawing.Size(486, 270);
             this.tcStats.TabIndex = 15;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(306, 56);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 13);
-            this.label2.TabIndex = 32;
-            this.label2.Text = "Wagered: ";
-            // 
-            // lblWagered
-            // 
-            this.lblWagered.AutoSize = true;
-            this.lblWagered.Location = new System.Drawing.Point(369, 56);
-            this.lblWagered.Name = "lblWagered";
-            this.lblWagered.Size = new System.Drawing.Size(13, 13);
-            this.lblWagered.TabIndex = 33;
-            this.lblWagered.Text = "0";
             // 
             // Stats
             // 

@@ -350,7 +350,7 @@ namespace DiceBot
        
         public override bool ReadyToBet()
         {
-            if ((amount * 100000000m)<10000 && (DateTime.Now - Lastbet).TotalMilliseconds < 500)
+            if ((amount * 100000000m)<10000 && (DateTime.Now - Lastbet).TotalMilliseconds < 250)
                 return false;
             else
                 return true;

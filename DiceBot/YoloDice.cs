@@ -73,7 +73,7 @@ namespace DiceBot
         }
 
 
-        byte[] ReadBuffer = new byte[384];
+        byte[] ReadBuffer = new byte[512];
         string challenge = "";
         string privkey = "";
         //long uid = 0;
@@ -92,7 +92,7 @@ namespace DiceBot
                     string frstchallenge = string.Format(basestring, id++, "generate_auth_challenge", "");
                     
                     sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
-                    int bytes = sslStream.Read(ReadBuffer, 0, 384);
+                    int bytes = sslStream.Read(ReadBuffer, 0, 512);
                     challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
                     YLChallenge tmp =null;
                     try
@@ -125,7 +125,7 @@ namespace DiceBot
                     //{"id":1,"method":"auth_by_address","params":{"address":"1PUgaiHavJrpi7r7JhkhwWj7Kf9Ls68Z6w","signature":"Hz0oh29Nho+bVz7zggS1dqx\/N7VAyD6jsk8k98qW84ild7D71Q9rUbmEE4GIj0a5eKPcK1EjvSEwwa74jBJRyY8="}}
 
                     sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
-                    bytes = sslStream.Read(ReadBuffer, 0, 384);
+                    bytes = sslStream.Read(ReadBuffer, 0, 512);
                     challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
                      YLOgin tmologin=null;
                     try
@@ -143,7 +143,7 @@ namespace DiceBot
                     this.username = tmologin.result.name;
                     frstchallenge = string.Format(basestring, id++, "read_user_data", ",\"params\":{\"selector\":{\"id\":" + uid + "}}");
                     sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
-                    bytes = sslStream.Read(ReadBuffer, 0, 384);
+                    bytes = sslStream.Read(ReadBuffer, 0, 512);
                     challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
                     YLUserStats tmpstats = null;
                     try
@@ -224,7 +224,7 @@ namespace DiceBot
                 {
                     string response = "";
                     
-                    response = Encoding.ASCII.GetString(ReadBuffer, 0, 384);
+                    response = Encoding.ASCII.GetString(ReadBuffer, 0, 512);
                     
                     response = response.Replace("\0", "");
                     Parent.DumpLog(response, 10);
@@ -267,13 +267,13 @@ namespace DiceBot
                         Auth();
                     }
                 }
-                ReadBuffer = new byte[384];
+                ReadBuffer = new byte[512];
                 if (apiclient.Connected)
                 {
                     try
                     {
                         sslStream.EndRead(result);
-                        sslStream.BeginRead(ReadBuffer, 0, 384, ReadTCP, sslStream);
+                        sslStream.BeginRead(ReadBuffer, 0, 512, ReadTCP, sslStream);
                     }
                     catch
                     {
@@ -297,7 +297,7 @@ namespace DiceBot
         }
         void Beginreadthread()
         {
-            sslStream.BeginRead(ReadBuffer, 0, 384, ReadTCP, sslStream);
+            sslStream.BeginRead(ReadBuffer, 0, 512, ReadTCP, sslStream);
             Write("read_current_seed", "{\"selector\":{\"user_id\":" + uid + "}}");
                         
         }
@@ -492,7 +492,7 @@ namespace DiceBot
                     string frstchallenge = string.Format(basestring, id++, "generate_auth_challenge", "");
 
                     sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
-                    int bytes = sslStream.Read(ReadBuffer, 0, 384);
+                    int bytes = sslStream.Read(ReadBuffer, 0, 512);
                     challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
                     YLChallenge tmp = null;
                     try
@@ -512,7 +512,7 @@ namespace DiceBot
                     frstchallenge = string.Format(basestring, id++, "auth_by_address", ",\"params\":" + json.JsonSerializer<YLAuthSend>(new YLAuthSend { address = address, signature = message }));
 
                     sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
-                    bytes = sslStream.Read(ReadBuffer, 0, 384);
+                    bytes = sslStream.Read(ReadBuffer, 0, 512);
                     challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
                     YLOgin tmologin = null;
                     try
@@ -530,7 +530,7 @@ namespace DiceBot
                     this.username = tmologin.result.name;
                     frstchallenge = string.Format(basestring, id++, "read_user_data", ",\"params\":{\"selector\":{\"id\":" + uid + "}}");
                     sslStream.Write(Encoding.ASCII.GetBytes(frstchallenge));
-                    bytes = sslStream.Read(ReadBuffer, 0, 384);
+                    bytes = sslStream.Read(ReadBuffer, 0, 512);
                     challenge = Encoding.ASCII.GetString(ReadBuffer, 0, bytes);
                     YLUserStats tmpstats = null;
                     try
@@ -563,7 +563,7 @@ namespace DiceBot
                         lastupdate = DateTime.Now;
                         new Thread(new ThreadStart(BalanceThread)).Start();
                         new Thread(new ThreadStart(Beginreadthread)).Start(); 
-                        //sslStream.BeginRead(ReadBuffer, 0, 384, ReadTCP, sslStream);
+                        //sslStream.BeginRead(ReadBuffer, 0, 512, ReadTCP, sslStream);
                         //Write("read_current_seed", "{\"selector\":{\"user_id\":" + uid + "}}");
                         //privkey = Password;
                         //Thread.Sleep(50);

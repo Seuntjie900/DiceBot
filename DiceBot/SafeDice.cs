@@ -170,9 +170,9 @@ namespace DiceBot
                         //cflevel = 0;
                         System.Threading.Tasks.Task.Factory.StartNew(() =>
                         {
-                            System.Windows.Forms.MessageBox.Show("bitdice.me has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                            System.Windows.Forms.MessageBox.Show("safedice.com has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
                         });
-                        if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, "www.bitdice.me"))
+                        if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, "www.safedice.com"))
                         {
                             finishedlogin(false);
                             return;
@@ -231,7 +231,15 @@ namespace DiceBot
                     loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
                     EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
                     sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
-                    sEmitResponse = Client.GetStringAsync("api/accounts/me?token=" + accesstoken).Result;
+                    try
+                    {
+                        sEmitResponse = Client.GetStringAsync("api/accounts/me?token=" + accesstoken).Result;
+                    }
+                    catch
+                    {
+                        finishedlogin(false);
+                        return;
+                    }
                     SafeDicegetUserInfo tmp1 = json.JsonDeserialize<SafeDicegetUserInfo>(sEmitResponse);
 
                     /*loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/accounts/" + tmp1.id + "/sites/" + curen + "/me");
@@ -308,34 +316,7 @@ namespace DiceBot
                     target = ((bool)High) ? (999999m - ((long)(chance * 10000m))).ToString(System.Globalization.NumberFormatInfo.InvariantInfo) : ((long)(chance * 10000m)).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)
                 };
                 string post = json.JsonSerializer<SafeDiceBet>(tmpBet);
-                /*HttpWebRequest betrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/api/dicebets");
-                if (Prox != null)
-                    betrequest.Proxy = Prox;
-                betrequest.Method = "POST";
-                SafeDiceBet tmpBet = new SafeDiceBet
-                {
-                    siteId = curen,
-                    amount = (long)(amount * ( Currency!="2"? 100000000: 1000000000000)),
-                    payout = (decimal)(((long)((99.5 / chance) * (curen != 2 ? 100000000 : 1000000000000))) / (curen != 2 ? 100000000.0 : 1000000000000.0)),
-                    isFixedPayout = false,
-                    isRollLow = !(bool)High,
-                    target = ((bool)High) ? (999999 - ((long)(chance * 10000))).ToString() : ((long)(chance * 10000)).ToString()
-                };
-                string post = json.JsonSerializer<SafeDiceBet>(tmpBet);
-
-                betrequest.ContentLength = post.Length;
-                betrequest.ContentType = " application/json;charset=utf-8";
-                betrequest.Headers.Add("authorization", "Bearer " + accesstoken);
-                betrequest.CookieContainer = new CookieContainer();
-                using (var writer = new StreamWriter(betrequest.GetRequestStream()))
-                {
-
-                    writer.Write(post);
-                    writer.Flush();
-                    writer.Close();
-                }
-                string tmp = betrequest.ToString();
-                HttpWebResponse EmitResponse = (HttpWebResponse)betrequest.GetResponse();*/
+               
                 string sEmitResponse = ""; //new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();
 
                 HttpContent cont = new StringContent(post);
