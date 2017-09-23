@@ -114,7 +114,7 @@ namespace DiceBot
                 cookies = new CookieContainer();
                 ClientHandlr.CookieContainer = cookies;
                 hash = "";
-                var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{{\"username\":\"{0}\",\"password\":\"{1}\",\"tfa\":\"\",\"captcha\":\"\"}}", username, password), Encoding.UTF8, "application/json");
+                var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{{\"username\":\"{0}\",\"password\":\"{1}\",\"tfa\":\"{2}\",\"captcha\":\"\"}}", username, password, ga), Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = Client.PostAsync("auth/login?hash=" + hash, content).Result;
                 if (response.IsSuccessStatusCode)
@@ -208,7 +208,7 @@ namespace DiceBot
                 decimal tmpchance = High ? 99.99m - chance : chance;
                 try
                 {
-                    var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":{0:0},\"target\":\"{1:00.00}\",\"condition\":\"{2}\"}}", amount * 100000000.0m, High ? 99.99m - (chance - 1) : chance - 1, High ? ">" : "<"), Encoding.UTF8, "application/json");
+                    var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":{0:0},\"target\":\"{1:00.00}\",\"condition\":\"{2}\"}}", amount * 100000000.0m, High ? 99.99m - (chance) : chance, High ? ">" : "<"), Encoding.UTF8, "application/json");
 
                     HttpResponseMessage Response = Client.PostAsync("games/dice/bet?hash=" + hash, content).Result;
                     if (Response.IsSuccessStatusCode)

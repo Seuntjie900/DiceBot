@@ -393,7 +393,11 @@ namespace DiceBot
         decimal Wagered = 0;
         int site = 0;
         bool thing = false;
-        string[] SiteA = new string[] {"https://www.999dice.com/api/web.aspx" , "https://www.999doge.com/api/web.aspx", "https://www.999-dice.com/api/web.aspx","http://999again.ddns.net:999/"};
+        string[] SiteA = new string[] {"https://www.999dice.com/api/web.aspx" ,
+            "https://www.999proxy.com/api/web.aspx",
+            "https://www.999doge.com/api/web.aspx",
+            "https://www.999-dice.com/api/web.aspx",
+            "http://999again.ddns.net:999/api/web.aspx" };
 
         public override void Login(string Username, string Password, string twofa)
         {

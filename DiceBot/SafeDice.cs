@@ -22,7 +22,7 @@ namespace DiceBot
         HttpClient Client = null;
         bool ispd = false;
         DateTime LastBalance = DateTime.Now;
-        public static string[] cCurrencies = new string[] { "Btc", "XMR"};
+        public static string[] cCurrencies = new string[] { "Btc", "XMR","BCH" };
         public SafeDice(cDiceBot Parent)
         {
             
@@ -36,7 +36,7 @@ namespace DiceBot
             this.Parent = Parent;
             Name = "SafeDice";
             edge = 0.5m;
-            Currencies = new string[]{"Btc", "XMR"};
+            Currencies = new string[]{"Btc", "XMR", "BCH" };
             Currency = "Btc";
             SiteURL = "https://safedice.com/?r=1050";
         }
@@ -177,6 +177,10 @@ namespace DiceBot
                             finishedlogin(false);
                             return;
                         }
+                    }
+                    else
+                    {
+
                     }
                 }
                         

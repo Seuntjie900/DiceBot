@@ -26,14 +26,14 @@ namespace DiceBot
             _PasswordText = "Password: ";
             maxRoll = 99.99m;
             AutoInvest = false;
-            AutoWithdraw = true;
-            ChangeSeed = true;
-            AutoLogin = true;
+            AutoWithdraw = false;
+            ChangeSeed = false;
+            AutoLogin = false;
             BetURL = "https://freebitco.in/?r=2310118&bet=";
             edge = 5m;
             this.Parent = Parent;
             Name = "FreeBitcoin";
-            Tip = true;
+            Tip = false;
             TipUsingName = true;
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();

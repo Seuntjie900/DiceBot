@@ -21,7 +21,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[2] { "Bitcoins", "Tokens" };
+        public static string[] cCurrencies = new string[] { "bitcoins", "tokens","litecoins","ethers" };
         
         public Bitvest(cDiceBot Parent)
         {
@@ -33,7 +33,7 @@ namespace DiceBot
             BetURL = "https://bitvest.io/results?game=dice&query=";
 
             this.Currencies = cCurrencies;
-            Currency = "Bitcoins";
+            Currency = "bitcoins";
             this.Parent = Parent;
             Name = "Bitvest";
             Tip = true;

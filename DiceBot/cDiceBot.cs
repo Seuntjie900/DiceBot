@@ -1067,7 +1067,16 @@ namespace DiceBot
                         lblWins2.Text = StatsWindows.lblWins.Text = Wins.ToString();
                         StatsWindows.lblWinStreak.Text = BestStreak.ToString();
                         //
-                        TimeSpan curtime = TimeSpan.Parse(StatsWindows.lblTime.Text);
+                        TimeSpan curtime = new TimeSpan(0);
+                        try
+                        {
+                            curtime = TimeSpan.Parse(StatsWindows.lblTime.Text);
+                        }
+                        catch
+                        {
+
+                        }
+                        
                         //TimeSpan curtime = DateTime.Now - dtStarted;
                         lblBets2.Text = StatsWindows.lblBets.Text = (Wins + Losses).ToString();
                         decimal profpB = 0;
@@ -2557,14 +2566,14 @@ namespace DiceBot
                     }
                 }
                 if (!RunningSimulation)
-                if (dPreviousBalance - Lastbet <= LowerLimit && chkLowerLimit.Checked &&(!programmerToolStripMenuItem.Checked))
+                if (dPreviousBalance - Lastbet <= nudLowerLimit.Value && chkLowerLimit.Checked &&(!programmerToolStripMenuItem.Checked))
                 {
                     //TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
-                    TrayIcon.ShowBalloonTip(1000);
+                    //TrayIcon.ShowBalloonTip(1000);
                     Stop("Balance lower than " + nudLowerLimit.Value);
                     if (Sound && SoundLow)
                         playalarm();
-                    TrayIcon.BalloonTipText = "DiceBot has Stopped Betting\nThe next bet will will have put your Balance below your lower limit";
+                    //TrayIcon.BalloonTipText = "DiceBot has Stopped Betting\nThe next bet will will have put your Balance below your lower limit";
 
                     if (Emails.Lower)
                         Emails.SendLowLimit(dPreviousBalance, LowerLimit, Lastbet);
@@ -2676,6 +2685,10 @@ namespace DiceBot
                 LuaRuntime.SetLua(Lua);
                 LuaRuntime.Run("dobet()");
                 GetLuaVars();
+                if ((Wins+Losses)%100==0)
+                {
+                    LuaRuntime.Run("collectgarbage()");
+                }
             }
             catch (LuaException e)
             {
