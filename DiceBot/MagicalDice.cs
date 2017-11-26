@@ -34,10 +34,10 @@ namespace DiceBot
             t.Start();
 
         }
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
 
-            new Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
+            new Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
         DateTime lastupdate = DateTime.Now;
         void getbalanceThread()
@@ -99,7 +99,7 @@ namespace DiceBot
                     if (tmp.error == 0)
                     {
                         Bet tmp2 = tmp.ToBet();
-
+                        tmp2.Guid = tmp9.Guid;
                         balance += (decimal)tmp2.Profit;
                         bets++;
                         if (tmp.bet_win)

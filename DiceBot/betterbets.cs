@@ -231,6 +231,7 @@ namespace DiceBot
                 bool High = tmp9.High;
                 decimal amount = tmp9.Amount;
                 decimal chance = tmp9.Chance;
+                string Guid = tmp9.Guid;
                 byte[] bytes = new byte[4];
                 R.GetBytes(bytes);
                 long client = (long)BitConverter.ToUInt32(bytes,0);
@@ -259,12 +260,12 @@ namespace DiceBot
                     {
                         if (retrycount++ < 3)
                         {
-                            placebetthread(new PlaceBetObj(High, amount, chance));
+                            placebetthread(new PlaceBetObj(High, amount, chance,Guid));
                             return;
                         }
                         if (e.InnerException.Message.Contains("ssl"))
                         {
-                            placebetthread(new PlaceBetObj(High, amount, chance));
+                            placebetthread(new PlaceBetObj(High, amount, chance, Guid));
                             return;
                         }
                     }
@@ -290,7 +291,7 @@ namespace DiceBot
                     tmp2.date = DateTime.Now;
                     tmp2.serverhash = next;
                     next = tmp.nextServerSeed;
-
+                    tmp2.Guid = Guid;
                     FinishedBet(tmp2);
                     retrycount = 0;
                 }
@@ -313,7 +314,7 @@ namespace DiceBot
                 if (e.Message.Contains("429") || e.Message.Contains("502"))
                 {
                     Thread .Sleep(200);
-                    placebetthread(new PlaceBetObj(High, amount, chance));
+                    placebetthread(new PlaceBetObj(High, amount, chance, (BetObj as PlaceBetObj).Guid));
                 }
                 
 
@@ -324,10 +325,10 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
             this.High = High;
-            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance));
+            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
        
@@ -671,5 +672,9 @@ namespace DiceBot
     {
         public string deposit_address { get; set; }
     }
-    
+    public class PRCDepost
+    {
+        public bool Success { get; set; }
+        public string Address { get; set; }
+    }
 }

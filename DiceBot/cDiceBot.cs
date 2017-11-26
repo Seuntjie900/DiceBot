@@ -174,9 +174,20 @@ namespace DiceBot
       
         decimal Chartprofit = 0;
         delegate void dDobet(Bet bet);
+
+        Queue<string> Last10Guids = new Queue<string>();
         public void GetBetResult(decimal Balance, Bet bet)
         {
             DumpLog("received bet result: Balance: "+Balance+", Bet:"+json.JsonSerializer<Bet>(bet) , 8);
+            if (bet.Guid!=LastBetPlaced || Last10Guids.Contains(bet.Guid))
+            {
+                Last10Guids.Enqueue(bet.Guid);
+                Stop("Bet result received does not match last bet placed! Stopping for your safety.");
+                //updateStatus("Bet result received does not match last bet placed!");
+            }
+            while (Last10Guids.Count > 10)
+                Last10Guids.Dequeue();
+
             if (logging>2)
             using (StreamWriter sw = File.AppendText("log.txt"))
             {
@@ -295,7 +306,7 @@ namespace DiceBot
 
         void EnableNotLoggedInControls(bool Enabled)
         {
-            DumpLog("Funushed logging in. Result: " + Enabled, 6);
+            DumpLog("finished logging in. Result: " + Enabled, 6);
             foreach (Control c in ControlsToDisable)
             {
                 c.Enabled = Enabled;
@@ -423,23 +434,6 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
                 
             }
-            foreach (string s in dice999.cCurrencies)
-            {
-                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
-
-                if (frst)
-                {
-                    tmpItem.Checked = true;
-                    frst = false;
-                }
-
-                dogeToolStripMenuItem.DropDown.Items.Add(tmpItem);
-                tmpItem.Click += btcToolStripMenuItem_Click;
-
-                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
-
-            }
-
             foreach (string s in SafeDice.cCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
@@ -500,22 +494,6 @@ namespace DiceBot
                 }
 
                 betterbetsToolStripMenuItem.DropDown.Items.Add(tmpItem);
-                tmpItem.Click += btcToolStripMenuItem_Click;
-
-                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
-
-            }
-            foreach (string s in WD.cCurrencies)
-            {
-                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
-
-                if (frst)
-                {
-                    tmpItem.Checked = true;
-                    frst = false;
-                }
-
-                wealthyDiceToolStripMenuItem.DropDown.Items.Add(tmpItem);
                 tmpItem.Click += btcToolStripMenuItem_Click;
 
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
@@ -633,7 +611,7 @@ namespace DiceBot
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
-            /*foreach (string s in OKBets.cCurrencies)
+            foreach (string s in BetKing.sCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
 
@@ -643,12 +621,12 @@ namespace DiceBot
                     frst = false;
                 }
 
-                oKBetsToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                pocketRocketsCasinoToolStripMenuItem.DropDown.Items.Add(tmpItem);
                 tmpItem.Click += btcToolStripMenuItem_Click;
 
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
-            }*/
+            }
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -1423,7 +1401,8 @@ namespace DiceBot
                 }
             
         }
-        
+
+        string LastBetPlaced = "";
         void PlaceBet()
         {
             try
@@ -1437,7 +1416,8 @@ namespace DiceBot
                 dtLastBet = DateTime.Now;
                 EnableTimer(tmBet, false);
                 CurrentSite.chance = Chance;
-                CurrentSite.PlaceBet(high,Lastbet, Chance);
+                LastBetPlaced = Guid.NewGuid().ToString();
+                CurrentSite.PlaceBet(high,Lastbet, Chance, LastBetPlaced);
                     
                 
                 
@@ -2581,7 +2561,7 @@ namespace DiceBot
                     }
                 }
                 if (!RunningSimulation)
-                if (dPreviousBalance >= Limit && chkLimit.Checked && (!programmerToolStripMenuItem.Checked))
+                if (dPreviousBalance >= Limit && chkLimit.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
                 {
 
                     if (rdbStop.Checked)
@@ -2599,23 +2579,10 @@ namespace DiceBot
 
                     }
                 }
-                if (!RunningSimulation)
-                if (dPreviousBalance - Lastbet <= nudLowerLimit.Value && chkLowerLimit.Checked &&(!programmerToolStripMenuItem.Checked))
-                {
-                    //TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
-                    //TrayIcon.ShowBalloonTip(1000);
-                    Stop("Balance lower than " + nudLowerLimit.Value);
-                    if (Sound && SoundLow)
-                        playalarm();
-                    //TrayIcon.BalloonTipText = "DiceBot has Stopped Betting\nThe next bet will will have put your Balance below your lower limit";
-
-                    if (Emails.Lower)
-                        Emails.SendLowLimit(dPreviousBalance, LowerLimit, Lastbet);
-                }
-
+                
 
                 if (!RunningSimulation)
-                if ( Wins!=0 && Losses!=0 && chkResetSeed.Checked && (!programmerToolStripMenuItem.Checked))
+                if ( Wins!=0 && Losses!=0 && chkResetSeed.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
                 {
                     if ( ((rdbResetSeedBets.Checked && (Wins+Losses) % nudResetSeed.Value == 0) ||
                        (rdbResetSeedWins.Checked && Wins % nudResetSeed.Value == 0 && Losestreak==0)||
@@ -2685,6 +2652,20 @@ namespace DiceBot
                     {
                         Stop("Simulation complete");
                     }
+                    if (!RunningSimulation)
+                        if (dPreviousBalance - Lastbet <= nudLowerLimit.Value && chkLowerLimit.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
+                        {
+                            //TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
+                            //TrayIcon.ShowBalloonTip(1000);
+                            Stop("Balance lower than " + nudLowerLimit.Value);
+                            if (Sound && SoundLow)
+                                playalarm();
+                            //TrayIcon.BalloonTipText = "DiceBot has Stopped Betting\nThe next bet will will have put your Balance below your lower limit";
+
+                            if (Emails.Lower)
+                                Emails.SendLowLimit(dPreviousBalance, LowerLimit, Lastbet);
+                        }
+
                     if (!stop)
                     {
                         if (!RunningSimulation)
@@ -2926,15 +2907,18 @@ namespace DiceBot
                     DonateBox tmp = new DonateBox();
                     if (tmp.ShowDialog(profit, CurrentSite.Currency, donatePercentage) == DialogResult.Yes)
                     {
-                        CurrentSite.Donate(tmp.amount);
-                        Thread.Sleep(200);
+                        if (Amount>=0.00000001m)
+                        { CurrentSite.Donate(tmp.amount);
+                            Thread.Sleep(200);
+                        }
                     }
                     donateMode = (tmp.radioButton3.Checked ? 3 : tmp.radioButton2.Checked ? 1 : 2);
                     donatePercentage = (decimal)tmp.numericUpDown1.Value;
                 }
                 else if (donateMode==3)
                 {
-                    CurrentSite.Donate((donatePercentage / 100.0m) * profit);
+                    if (Amount >= 0.00000001m)
+                        CurrentSite.Donate((donatePercentage / 100.0m) * profit);
                 }
             }
             Stop("");
@@ -3086,7 +3070,7 @@ namespace DiceBot
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
-                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":daDiceToolStripMenuItem.Checked?"5":rollinIOToolStripMenuItem.Checked?"6":bitDiceToolStripMenuItem.Checked?"7":betterbetsToolStripMenuItem.Checked?"8":moneyPotToolStripMenuItem.Checked?"9":"1"));
+                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":/*daDiceToolStripMenuItem.Checked?"5":*/rollinIOToolStripMenuItem.Checked?"6":bitDiceToolStripMenuItem.Checked?"7":betterbetsToolStripMenuItem.Checked?"8":moneyPotToolStripMenuItem.Checked?"9":"1"));
             }
         }
         
@@ -4949,7 +4933,7 @@ namespace DiceBot
                 switch (CurrentSite.GetType().Name)
                 {
                     case "JD": CurrentSite = new JD(this); break;
-                    case "PRC": CurrentSite = new PRC(this); break;
+                    case "PRC": CurrentSite = new BetKing(this); break;
                     case "BB": CurrentSite = new BB(this); break;
                     case "WD": CurrentSite = new WD(this); break;
                     case "bitdice": CurrentSite = new bitdice(this); break;
@@ -4975,7 +4959,7 @@ namespace DiceBot
                     case "Bit-Exo": CurrentSite = new BitExo(this); break;
                     case "DiceSeuntjie": CurrentSite = new DiceSeuntjie(this); break;
                     case "DuckDice": CurrentSite = new DuckDice(this); break;
-                    case "EtcBets": CurrentSite = new etcbets(this); break;
+                    //case "EtcBets": CurrentSite = new etcbets(this); break;
                     case "coinpro": CurrentSite = new coinpro(this);break;
                     //case "OKBets": CurrentSite = new OKBets(this); break;
                     case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
@@ -5000,7 +4984,7 @@ namespace DiceBot
                     switch (CurrentSite.GetType().Name)
                     {
                         case "JD": CurrentSite = new JD(this); break;
-                        case "PRC": CurrentSite = new PRC(this); break;
+                        case "PRC": CurrentSite = new BetKing(this); break;
                         case "BB": CurrentSite = new BB(this); break;
                         case "WD": CurrentSite = new WD(this); break;
                         case "bitdice": CurrentSite = new bitdice(this); break;
@@ -5025,7 +5009,7 @@ namespace DiceBot
                         case "Bit-Exo": CurrentSite = new BitExo(this); break;
                         case "DiceSeuntjie": CurrentSite = new DiceSeuntjie(this); break;
                         case "DuckDice": CurrentSite = new DuckDice(this); break;
-                        case "EtcBets": CurrentSite = new etcbets(this); break;
+                        //case "EtcBets": CurrentSite = new etcbets(this); break;
                         case "coinpro": CurrentSite = new coinpro(this); break;
                         //case "OKBets": CurrentSite = new OKBets(this); break;
                         case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
@@ -5089,6 +5073,7 @@ namespace DiceBot
             }
         }
 
+        
         /// <summary>
         /// place single bet, HIGH
         /// </summary>
@@ -5098,7 +5083,8 @@ namespace DiceBot
         {
             CurrentSite.amount = ((decimal)nudApiBet.Value);
             CurrentSite.chance = (decimal)(nudApiChance.Value);
-            CurrentSite.PlaceBet(true, (decimal)nudApiBet.Value, (decimal)(nudApiChance.Value));
+            LastBetPlaced = Guid.NewGuid().ToString();
+            CurrentSite.PlaceBet(true, (decimal)nudApiBet.Value, (decimal)(nudApiChance.Value), LastBetPlaced);
         }
 
         /// <summary>
@@ -5110,7 +5096,8 @@ namespace DiceBot
         {
             CurrentSite.amount =((decimal)nudApiBet.Value);
             CurrentSite.chance = (decimal)(nudApiChance.Value);
-            CurrentSite.PlaceBet(false, (decimal)nudApiBet.Value,(decimal)(nudApiChance.Value));
+            LastBetPlaced = Guid.NewGuid().ToString();
+            CurrentSite.PlaceBet(false, (decimal)nudApiBet.Value,(decimal)(nudApiChance.Value),LastBetPlaced);
         }
 
         private void nudApiBet_ValueChanged(object sender, EventArgs e)
@@ -5556,7 +5543,7 @@ namespace DiceBot
                 switch ((sender as ToolStripMenuItem).Name)
                 {
                     case "justDiceToolStripMenuItem": CurrentSite = new JD(this); siteToolStripMenuItem.Text = "Site " + "(JD)"; break;
-                    case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new PRC(this); siteToolStripMenuItem.Text = "Site " + "(BK)"; break;                    
+                    case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new BetKing(this); siteToolStripMenuItem.Text = "Site " + "(BK)"; break;                    
                     case "diceToolStripMenuItem": CurrentSite = new dice999(this,false); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     case "dogeToolStripMenuItem": CurrentSite = new dice999(this, true); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
@@ -5585,7 +5572,7 @@ namespace DiceBot
                     case "provabllyIOToolStripMenuItem": CurrentSite = new provablyio(this); siteToolStripMenuItem.Text = "Site (PIO)"; break;
                     case "diceSeuntjieComToolStripMenuItem": CurrentSite = new DiceSeuntjie(this); siteToolStripMenuItem.Text = "Site (DSC)"; break;
                     case "duckDiceToolStripMenuItem": CurrentSite = new DuckDice(this); siteToolStripMenuItem.Text = "(Quack)"; break;
-                    case "etcBetsToolStripMenuItem": CurrentSite = new etcbets(this); siteToolStripMenuItem.Text = "(EtcB)"; break;
+                    //case "etcBetsToolStripMenuItem": CurrentSite = new etcbets(this); siteToolStripMenuItem.Text = "(EtcB)"; break;
                     case "coinProfitToolStripMenuItem": CurrentSite = new coinpro(this); siteToolStripMenuItem.Text = "(CPro)"; break;
                     //case "oKBetsToolStripMenuItem" : CurrentSite = new OKBets(this); siteToolStripMenuItem.Text = "(OKB)"; break;
                     case "freebitcoinToolStripMenuItem": CurrentSite = new Freebitcoin(this); siteToolStripMenuItem.Text = "(FBtc)"; break;
@@ -6050,18 +6037,18 @@ namespace DiceBot
                             pocketRocketsCasinoToolStripMenuItem.Checked ? 2 : 
                             diceToolStripMenuItem.Checked ? 3 : 
                             safediceToolStripMenuItem.Checked ? 4 : 
-                            daDiceToolStripMenuItem.Checked ? 5 : 
+                            //daDiceToolStripMenuItem.Checked ? 5 : 
                             rollinIOToolStripMenuItem.Checked ? 6 : 
                             bitDiceToolStripMenuItem.Checked ? 7: 
                             betterbetsToolStripMenuItem.Checked?8:
                             moneyPotToolStripMenuItem.Checked?9:
                             coinMillionsToolStripMenuItem.Checked ? 10 :
-                            magicalDiceToolStripMenuItem.Checked ? 11 :
+                            //magicalDiceToolStripMenuItem.Checked ? 11 :
                             fortuneJackToolStripMenuItem.Checked? 12:
                             cryptoGamesToolStripMenuItem.Checked?13:
                             bitslerToolStripMenuItem.Checked?14:
-                            dogeToolStripMenuItem.Checked?15:
-                            wealthyDiceToolStripMenuItem.Checked?16:
+                            //dogeToolStripMenuItem.Checked?15:
+                            //wealthyDiceToolStripMenuItem.Checked?16:
                             satoshiDiceToolStripMenuItem.Checked?17:
                             bitvestToolStripMenuItem.Checked?18:
                             kingDiceToolStripMenuItem.Checked?19:
@@ -6071,9 +6058,9 @@ namespace DiceBot
                             yoloDiceToolStripMenuItem.Checked?23:
                             diceSeuntjieComToolStripMenuItem.Checked?24:
                             duckDiceToolStripMenuItem.Checked?25:
-                            etcBetsToolStripMenuItem.Checked?26:
+                            //etcBetsToolStripMenuItem.Checked?26:
                             coinProfitToolStripMenuItem.Checked?27:
-                            oKBetsToolStripMenuItem.Checked?28:
+                            //oKBetsToolStripMenuItem.Checked?28:
                             freebitcoinToolStripMenuItem.Checked?29:
                             stakeToolStripMenuItem.Checked?30:
                             1);
@@ -6175,18 +6162,18 @@ namespace DiceBot
                         pocketRocketsCasinoToolStripMenuItem.Checked = value == 2;
                         diceToolStripMenuItem.Checked = value == 3;
                         safediceToolStripMenuItem.Checked = value == 4;
-                        daDiceToolStripMenuItem.Checked = value == 5;
+                        //daDiceToolStripMenuItem.Checked = value == 5;
                         rollinIOToolStripMenuItem.Checked = value == 6;
                         bitDiceToolStripMenuItem.Checked = value == 7;
                         betterbetsToolStripMenuItem.Checked = value == 8;
                         moneyPotToolStripMenuItem.Checked = value == 9;
                         coinMillionsToolStripMenuItem.Checked = value == 10;
-                        magicalDiceToolStripMenuItem.Checked = value == 11;
+                        //magicalDiceToolStripMenuItem.Checked = value == 11;
                         fortuneJackToolStripMenuItem.Checked = value == 12;
                         cryptoGamesToolStripMenuItem.Checked = value == 13;
                         bitslerToolStripMenuItem.Checked = value == 14;
-                        dogeToolStripMenuItem.Checked = value == 15;
-                        wealthyDiceToolStripMenuItem.Checked = value == 16;
+                        //dogeToolStripMenuItem.Checked = value == 15;
+                        //wealthyDiceToolStripMenuItem.Checked = value == 16;
                         satoshiDiceToolStripMenuItem.Checked = value == 17;
                         bitvestToolStripMenuItem.Checked = value == 18;
                         kingDiceToolStripMenuItem.Checked = value == 19;
@@ -6196,9 +6183,9 @@ namespace DiceBot
                         yoloDiceToolStripMenuItem.Checked = value == 23;
                         diceSeuntjieComToolStripMenuItem.Checked = value == 24;
                         duckDiceToolStripMenuItem.Checked = value == 25;
-                        etcBetsToolStripMenuItem.Checked = value == 26;
+                        //etcBetsToolStripMenuItem.Checked = value == 26;
                         coinProfitToolStripMenuItem.Checked = value == 27 ;
-                        oKBetsToolStripMenuItem.Checked = value == 28;
+                        //oKBetsToolStripMenuItem.Checked = value == 28;
                             freebitcoinToolStripMenuItem.Checked = value == 29;
                         stakeToolStripMenuItem.Checked = value == 30;
                         if (value > 30)
@@ -6319,18 +6306,18 @@ namespace DiceBot
                         pocketRocketsCasinoToolStripMenuItem.Checked = value == "2";
                         diceToolStripMenuItem.Checked = value == "3";
                         safediceToolStripMenuItem.Checked = value == "4";
-                        daDiceToolStripMenuItem.Checked = value == "5";
+                        //daDiceToolStripMenuItem.Checked = value == "5";
                         rollinIOToolStripMenuItem.Checked = value == "6";
                         bitDiceToolStripMenuItem.Checked = value == "7";
                         betterbetsToolStripMenuItem.Checked = value == "8";
                         moneyPotToolStripMenuItem.Checked = value == "9";
                         coinMillionsToolStripMenuItem.Checked = value == "10";
-                        magicalDiceToolStripMenuItem.Checked = value == "11";
+                        //magicalDiceToolStripMenuItem.Checked = value == "11";
                         fortuneJackToolStripMenuItem.Checked = value == "12";
                         cryptoGamesToolStripMenuItem.Checked = value == "13";
                         bitslerToolStripMenuItem.Checked = value == "14";
-                        dogeToolStripMenuItem.Checked = value == "15";
-                        wealthyDiceToolStripMenuItem.Checked = value == "16";
+                        //dogeToolStripMenuItem.Checked = value == "15";
+                        //wealthyDiceToolStripMenuItem.Checked = value == "16";
                         satoshiDiceToolStripMenuItem.Checked = value == "17";
                         bitvestToolStripMenuItem.Checked = value == "18";
                         kingDiceToolStripMenuItem.Checked = value == "19";
@@ -6340,9 +6327,9 @@ namespace DiceBot
                         yoloDiceToolStripMenuItem.Checked = value == "23";
                         diceSeuntjieComToolStripMenuItem.Checked = value == "24";
                         duckDiceToolStripMenuItem.Checked = value == "25";
-                        etcBetsToolStripMenuItem.Checked = value == "26";
+                        //etcBetsToolStripMenuItem.Checked = value == "26";
                         coinProfitToolStripMenuItem.Checked = value == "27";
-                        oKBetsToolStripMenuItem.Checked = value == "28";
+                        //oKBetsToolStripMenuItem.Checked = value == "28";
                         freebitcoinToolStripMenuItem.Checked = value == "29";
                         stakeToolStripMenuItem.Checked = value == "30";
                     }

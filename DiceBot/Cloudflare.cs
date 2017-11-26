@@ -36,6 +36,8 @@ namespace DiceBot
             Script1 = Script1.Substring(0, Script1.IndexOf("f.submit()"));
             Script1 = Script1.Replace("t.length", URI.Length + "");
             Script1 = Script1.Replace("a.value", "var answer");
+            if (Script1.Contains("f.action += location.hash;")|| Script1.Contains("f.action+=location.hash;"))
+                Script1 = Script1.Replace("f.action += location.hash;", "").Replace("f.action+=location.hash;", "");
             JSC.Run(Script1);
             string answer = JSC.GetParameter("answer").ToString();
 

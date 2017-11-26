@@ -321,6 +321,7 @@ namespace DiceBot
                 else
                 {
                     Bet tmp2 = tmp.Tobet((decimal)chance);
+                    tmp2.Guid = tmp9.Guid;
                     tmp2.date = DateTime.Now;
                     //next = tmp.nextServerSeed;
                     lastupdate = DateTime.Now;
@@ -369,10 +370,10 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chacne)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chacne, string guid)
         {
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            t.Start(new PlaceBetObj(High, amount, chacne));
+            t.Start(new PlaceBetObj(High, amount, chacne, guid));
         }
 
         protected override bool internalWithdraw(decimal Amount, string Address)

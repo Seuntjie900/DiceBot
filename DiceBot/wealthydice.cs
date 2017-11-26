@@ -244,12 +244,12 @@ namespace DiceBot
                     {
                         if (retrycount++ < 3)
                         {
-                            placebetthread(new PlaceBetObj(High, amount, chance));
+                            placebetthread(new PlaceBetObj(High, amount, chance, tmp9.Guid));
                             return;
                         }
                         if (e.InnerException.Message.Contains("ssl"))
                         {
-                            placebetthread(new PlaceBetObj(High, amount, chance));
+                            placebetthread(new PlaceBetObj(High, amount, chance, tmp9.Guid));
                             return;
                         }
                     }
@@ -275,7 +275,7 @@ namespace DiceBot
                     tmp2.date = DateTime.Now;
                     tmp2.serverhash = next;
                     next = tmp.nextServerSeed;
-
+                    tmp2.Guid = tmp9.Guid;
                     FinishedBet(tmp2);
                     retrycount = 0;
                 }
@@ -294,7 +294,7 @@ namespace DiceBot
                 if (e.Message.Contains("429") || e.Message.Contains("502"))
                 {
                     Thread.Sleep(200);
-                    placebetthread(new PlaceBetObj(High, amount, chance));
+                    placebetthread(new PlaceBetObj(High, amount, chance, (BetObj as PlaceBetObj).Guid));
                 }
 
 
@@ -304,10 +304,10 @@ namespace DiceBot
 
             }
         }
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
             this.High = High;
-            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance));
+            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
        

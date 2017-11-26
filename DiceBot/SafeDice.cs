@@ -350,7 +350,7 @@ namespace DiceBot
                 bet.serverhash = serverhash;
                 bet.uid = (int)tmpResult.accountId;
                 balance += (decimal)bet.Profit;
-                
+                bet.Guid = tmp.Guid;
                 ++bets;
                 wagered += (decimal)bet.Amount;
                 bool win = false;
@@ -397,10 +397,10 @@ namespace DiceBot
 
         }
 
-        protected override void internalPlaceBet(bool High,decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High,decimal amount, decimal chance, string Guid)
         {
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            t.Start(new PlaceBetObj(High, amount, chance));
+            t.Start(new PlaceBetObj(High, amount, chance, Guid));
 
         }
 

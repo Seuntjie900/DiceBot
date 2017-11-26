@@ -24,7 +24,7 @@ namespace DiceBot
         HttpClientHandler ClientHandlr;
         WebSocket WSClient;// = new WebSocket("");
         RandomNumberGenerator R = new System.Security.Cryptography.RNGCryptoServiceProvider();
-        public static string[] sCurrencies = new string[] { "BTC","LTC","DASH" };
+        public static string[] sCurrencies = new string[] { "BTC" };//,"LTC","DASH" };
         public DiceSeuntjie(cDiceBot Parent)
         {
             Currency = "BTC";
@@ -68,8 +68,10 @@ namespace DiceBot
         long id = 0;
         string OldHash = "";
         string ClientSeed = "";
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        string Guid = "";
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
+            this.Guid = Guid;
             this.High = High;
             ClientSeed = "";
             byte[] bytes = new byte[4];
@@ -109,18 +111,22 @@ namespace DiceBot
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             Client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
-
+            Parent.DumpLog("BE login 1",8);
+                
             try
             {
                 accesstoken = Password;
                 string s1 = "";
                 HttpResponseMessage resp = Client.GetAsync("").Result;
+                Parent.DumpLog("BE login 2", 8);
                 if (resp.IsSuccessStatusCode)
                 {
                     s1 = resp.Content.ReadAsStringAsync().Result;
+                    Parent.DumpLog("BE login 2.1", 7);
                 }
                 else
                 {
+                    Parent.DumpLog("BE login 2.2", 7);
                     if (resp.StatusCode == HttpStatusCode.ServiceUnavailable)
                     {
                         s1 = resp.Content.ReadAsStringAsync().Result;
@@ -137,24 +143,27 @@ namespace DiceBot
                         }
 
                     }
+                    Parent.DumpLog("BE login 2.3", 7);
                 }
                 string response = Client.GetStringAsync("socket.io/?EIO=3&transport=polling&t="+CurrentDate()).Result;
-                
+                Parent.DumpLog("BE login 3", 7);
                 string c = 
                 response.Substring(response.IndexOf("sid\":\"") + "sid\":\"".Length);
                 c = c.Substring(0, c.IndexOf("\""));
-                foreach (Cookie c3 in cookies.GetCookies(new Uri("http://seuntjie.com")))
+                Parent.DumpLog("BE login 4", 7);
+                foreach (Cookie c3 in cookies.GetCookies(new Uri("http://"+ url)))
                 {
                     if (c3.Name == "io")
                         c = c3.Value;
                     /*if (c3.Name == "__cfduid")
                         c2 = c3;*/
                 }
+                Parent.DumpLog("BE login 5", 7);
                 string chatinit = "420[\"chat_init\",{\"app_id\":"+APPId+",\"access_token\":\"" + accesstoken + "\",\"subscriptions\":[\"CHAT\",\"DEPOSITS\",\"BETS\"]}]";
                 chatinit = chatinit.Length + ":" + chatinit;
                 var content = new StringContent(chatinit, Encoding.UTF8, "application/octet-stream");
                 response = Client.PostAsync("socket.io/?EIO=3&transport=polling&t=" + CurrentDate() + "&sid=" + c, content).Result.Content.ReadAsStringAsync().Result;
-                
+                Parent.DumpLog("BE login 5", 7);
                 List<KeyValuePair<string, string>> Cookies = new List<KeyValuePair<string, string>>();
                 List<KeyValuePair<string, string>> Headers = new List<KeyValuePair<string, string>>();
                 Headers.Add(new KeyValuePair<string, string>("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"));
@@ -163,7 +172,8 @@ namespace DiceBot
                     Cookies.Add(new KeyValuePair<string,string>(x.Name, x.Value));
                 }
                 Cookies.Add(new KeyValuePair<string,string>("io",c));
-                WSClient = new WebSocket("wss://"+url+"/socket.io/?EIO=3&transport=websocket&sid=" + c, null, Cookies, Headers, "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36", "https://bit-exo.com", WebSocketVersion.Rfc6455, null, System.Security.Authentication.SslProtocols.Tls | System.Security.Authentication.SslProtocols.Tls11 | System.Security.Authentication.SslProtocols.Tls12);
+                Parent.DumpLog("BE login 6", 7);
+                WSClient = new WebSocket("wss://"+url+"/socket.io/?EIO=3&transport=websocket&sid=" + c, null, Cookies, Headers, "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36", "https://"+url, WebSocketVersion.Rfc6455, null, System.Security.Authentication.SslProtocols.Tls | System.Security.Authentication.SslProtocols.Tls11 | System.Security.Authentication.SslProtocols.Tls12);
                 WSClient.Closed += WSClient_Closed;
                 WSClient.DataReceived += WSClient_DataReceived;
                 WSClient.Error += WSClient_Error;
@@ -174,6 +184,7 @@ namespace DiceBot
                     Thread.Sleep(100);
                 if (WSClient.State == WebSocketState.Open)
                 {
+                    Parent.DumpLog("BE login 7.1", 7);
                     ispd = true;
                     
                     lastupdate = DateTime.Now;
@@ -182,17 +193,20 @@ namespace DiceBot
                 }
                 else
                 {
+                    Parent.DumpLog("BE login 7.2", 7);
                     finishedlogin(false);
                     return;
                 }
             }
             catch (AggregateException ER)
             {
+                Parent.DumpLog(ER.ToString(),-1);
                 finishedlogin(false);
                 return;
             }
             catch (Exception ERR)
             {
+                Parent.DumpLog(ERR.ToString(), -1);
                 finishedlogin(false);
                 return;
             }
@@ -322,7 +336,8 @@ namespace DiceBot
                             serverseed = tmphash.secret,//tmphash.salt,
                             serverhash = OldHash,
                             Profit = tmphash.profit / 100000000m,
-                            Roll = decimal.Parse(tmphash.outcome, System.Globalization.NumberFormatInfo.InvariantInfo)
+                            Roll = decimal.Parse(tmphash.outcome, System.Globalization.NumberFormatInfo.InvariantInfo),
+                            Guid=this.Guid
                         };
                         OldHash = tmphash.next_hash;
                         balance += newbet.Profit;

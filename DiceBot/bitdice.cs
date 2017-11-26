@@ -145,6 +145,7 @@ namespace DiceBot
 
             Bet newbet = new Bet()
             {
+                Guid=this.Guid,
                 Id = Bet.message.data.bet.id.ToString(),
                  Amount=decimal.Parse(Bet.message.data.bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo),
                   date=DateTime.Now,
@@ -207,9 +208,11 @@ namespace DiceBot
 
         int id = 1;
         Random R = new Random();
+        string Guid = "";
         //BitDiceClient Client = new BitDiceClient();
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance,string Guid)
         {
+            this.Guid = Guid;
             string clientsee = "";
             while (clientsee.Length<"3ebbd6d21ca843b6".Length-1)
             {

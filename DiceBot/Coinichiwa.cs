@@ -90,7 +90,7 @@ namespace DiceBot
             wagered += (decimal)tmp.Amount; 
             FinishedBet(tmp);
         }
-        protected override void internalPlaceBet(bool High, decimal chance, decimal amount)
+        protected override void internalPlaceBet(bool High, decimal chance, decimal amount, string guid)
         {
             
             this.High = High;

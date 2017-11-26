@@ -285,10 +285,11 @@ Sec-WebSocket-Version:13*/
         {
             SendTip("1435541", Amount);
         }
-
+        string Guid = "";
         void PlaceBetThread(object BetObj)
         {
             PlaceBetObj obj = BetObj as PlaceBetObj;
+            this.Guid = obj.Guid;
             bool High = obj.High;
             decimal chance = obj.Chance;
             decimal amount = obj.Amount;
@@ -299,9 +300,9 @@ Sec-WebSocket-Version:13*/
             NSSocket.Send(s);
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
-            new Thread(new ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
+            new Thread(new ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
         Random R = new Random();

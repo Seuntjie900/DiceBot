@@ -113,6 +113,7 @@ namespace DiceBot
                 }
                 Bet bet = new Bet()
                     {
+                    Guid= tmp9.Guid,
                         Amount = (decimal)amount,
                         Profit = (decimal)Response.Profit,
                         Roll = (decimal)Response.Roll,
@@ -145,9 +146,9 @@ namespace DiceBot
             { }
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
-            new Thread(new ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
+            new Thread(new ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
         public override void ResetSeed()

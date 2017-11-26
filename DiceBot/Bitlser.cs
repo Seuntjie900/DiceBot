@@ -213,6 +213,7 @@ devise:btc*/
                             balance = decimal.Parse(bsbase._return.new_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
                             lastupdate = DateTime.Now;
                             Bet tmp = bsbase._return.ToBet();
+                            tmp.Guid = tmpob.Guid;
                             profit += (decimal)tmp.Profit;
                             wagered += (decimal)tmp.Amount;
                             tmp.date = DateTime.Now;
@@ -258,10 +259,10 @@ devise:btc*/
                 Parent.updateStatus("An Unknown error has ocurred.");
             }
         }
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
             System.Threading.Thread tBetThread = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            tBetThread.Start(new PlaceBetObj(High, amount, chance));
+            tBetThread.Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
         Random R = new Random();
@@ -383,9 +384,9 @@ devise:btc*/
                                                 profit = bsstatsbase._return.burst_profit;
                                                 wagered = bsstatsbase._return.burst_wagered; break;
                                         }
-                                        bets = int.Parse(bsstatsbase._return.bets);
-                                        wins = int.Parse(bsstatsbase._return.wins);
-                                        losses = int.Parse(bsstatsbase._return.losses);
+                                        bets = int.Parse(bsstatsbase._return.bets==null?"0": bsstatsbase._return.bets);
+                                        wins = int.Parse(bsstatsbase._return.wins == null ? "0" : bsstatsbase._return.wins);
+                                        losses = int.Parse(bsstatsbase._return.losses == null ? "0" : bsstatsbase._return.losses);
 
                                         Parent.updateBalance(balance);
                                         Parent.updateBets(bets);
@@ -419,9 +420,9 @@ devise:btc*/
                         }
 
             }
-            catch 
+            catch (Exception e)
             {
-
+                Parent.DumpLog(e.ToString(), 0);
             }
             finishedlogin(false);
         }

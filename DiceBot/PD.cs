@@ -264,7 +264,9 @@ namespace DiceBot
                     losses = tmp.user.losses;
                     wagered = (decimal)(tmp.user.wagered / 100000000m);
                     profit = (decimal)(tmp.user.profit / 100000000m);
-                    FinishedBet(tmp.bet.toBet());
+                    Bet tmpbet = tmp.bet.toBet();
+                    tmpbet.Guid = tmp5.Guid;
+                    FinishedBet(tmpbet);
                     retrycount = 0;
                 }
                 catch
@@ -277,13 +279,13 @@ namespace DiceBot
                 if (retrycount++ < 3)
                 {
                     Thread.Sleep(500);
-                    placebetthread(new PlaceBetObj(High, amount, chance));
+                    placebetthread(new PlaceBetObj(High, amount, chance, (bet as PlaceBetObj).Guid));
                     return;
                 }
                 if (e.InnerException.Message.Contains("429") || e.InnerException.Message.Contains("502"))
                 {
                     Thread .Sleep(500);
-                    placebetthread(new PlaceBetObj(High, amount, chance));
+                    placebetthread(new PlaceBetObj(High, amount, chance, (bet as PlaceBetObj).Guid));
                 }
                 
 
@@ -294,10 +296,10 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
             this.High = High;
-            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance));
+            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
        

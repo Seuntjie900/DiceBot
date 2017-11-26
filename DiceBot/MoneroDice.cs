@@ -93,6 +93,7 @@ namespace DiceBot
                 if (tmp.bet_data.error == null)
                 {
                     Bet tmp2 = new Bet();
+                    tmp2.Guid = tmp9.Guid;
                     tmp2.Amount = decimal.Parse(tmp.bet_data.size, System.Globalization.NumberFormatInfo.InvariantInfo);
                     tmp2.date = DateTime.Now;
                     tmp2.Id = tmp.bet_data.bet_id.ToString();
@@ -122,9 +123,9 @@ namespace DiceBot
             catch { }
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
-            new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
+            new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
         public override void ResetSeed()

@@ -24,7 +24,7 @@ namespace DiceBot
         {
             _UsernameText = "Email:";
             _PasswordText = "Password: ";
-            maxRoll = 99.99m;
+            maxRoll = 100m;
             AutoInvest = false;
             AutoWithdraw = false;
             ChangeSeed = false;
@@ -93,6 +93,7 @@ namespace DiceBot
                             24. Bonus account balance after bet
                          */
                         Bet tmp = new Bet {
+                            Guid = tmp9.Guid,
                              Amount=amount,
                               date=DateTime.Now,
                                Chance=chance,
@@ -146,10 +147,10 @@ namespace DiceBot
             
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
             Thread T = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            T.Start(new PlaceBetObj(High, amount, chance));
+            T.Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
         public override void ResetSeed()
@@ -168,23 +169,30 @@ namespace DiceBot
             {
                 if ((DateTime.Now - lastupdate).TotalSeconds > 30)
                 {
-                    lastupdate = DateTime.Now;
-                    string s = Client.GetStringAsync("https://freebitco.in/cgi-bin/api.pl?op=get_user_stats").Result;
-                    FreebtcStats stats = json.JsonDeserialize<FreebtcStats>(s);
-                    if (stats != null)
+                    try
                     {
-                        this.balance = stats.balance/100000000m;
-                        bets = (int)stats.rolls_played;
-                        wins = losses = 0;
-                        profit = stats.dice_profit / 100000000m;
-                        wagered = stats.wagered / 100000000m;
-                        Parent.updateBalance(balance);
-                        Parent.updateBets(bets);
-                        Parent.updateWins(wins);
-                        Parent.updateLosses(losses);
-                        Parent.updateWagered(wagered);
-                        Parent.updateProfit(profit);
-                        
+                        lastupdate = DateTime.Now;
+                        string s = Client.GetStringAsync("https://freebitco.in/cgi-bin/api.pl?op=get_user_stats").Result;
+                        FreebtcStats stats = json.JsonDeserialize<FreebtcStats>(s);
+                        if (stats != null)
+                        {
+                            this.balance = stats.balance / 100000000m;
+                            bets = (int)stats.rolls_played;
+                            //wins = losses = 0;
+                            profit = stats.dice_profit / 100000000m;
+                            wagered = stats.wagered / 100000000m;
+                            Parent.updateBalance(balance);
+                            Parent.updateBets(bets);
+                            Parent.updateWins(wins);
+                            Parent.updateLosses(losses);
+                            Parent.updateWagered(wagered);
+                            Parent.updateProfit(profit);
+
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Parent.DumpLog(e.ToString(), -1);
                     }
                 }
                 Thread.Sleep(1000);

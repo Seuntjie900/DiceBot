@@ -79,6 +79,14 @@ namespace DiceBot
                 }
             }
         }
+        public static string CurrentDate()
+        {
+            TimeSpan dt = DateTime.UtcNow - DateTime.Parse("1970/01/01 00:00:00", System.Globalization.CultureInfo.InvariantCulture);
+            double mili = dt.TotalMilliseconds;
+            return ((long)mili).ToString();
+
+        }
+
 
     }
 

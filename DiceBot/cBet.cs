@@ -17,7 +17,8 @@ namespace DiceBot
 
 
     public class Bet
-    {        
+    {
+        public string Guid { get; set; }
         public string Currency { get; set; }
         public string Id { get; set; }
         private decimal chance = 0;

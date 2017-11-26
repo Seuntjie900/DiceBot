@@ -188,10 +188,10 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
             this.High = High;
-            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance));
+            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
         int retrycount = 0;
@@ -208,7 +208,7 @@ namespace DiceBot
                 decimal tmpchance = High ? 99.99m - chance : chance;
                 try
                 {
-                    var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":{0:0},\"target\":\"{1:00.00}\",\"condition\":\"{2}\"}}", amount * 100000000.0m, High ? 99.99m - (chance) : chance, High ? ">" : "<"), Encoding.UTF8, "application/json");
+                    var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":{0:0},\"target\":\"{1:00.00}\",\"guess\":\"{2}\"}}", amount * 100000000.0m, High ? 99.99m - (chance) : chance, High ? ">" : "<"), Encoding.UTF8, "application/json");
 
                     HttpResponseMessage Response = Client.PostAsync("games/dice/bet?hash=" + hash, content).Result;
                     if (Response.IsSuccessStatusCode)
@@ -223,16 +223,17 @@ namespace DiceBot
                                 {
                                     Amount = tmpresult.bet.amount / 100000000m,
                                     Chance = chance,
-                                    clientseed = tmpresult.bet.seed_id,
+                                    clientseed = tmpresult.bet.clientSeedId,
                                     Currency = "btc",
                                     date = DateTime.Now,
                                     high = High,
                                     Id = tmpresult.bet.iid.ToString(),
-                                    Profit = tmpresult.bet.profit / 100000000m,
-                                    Roll = (decimal)tmpresult.bet.info.result,
-                                        
+                                    Profit = tmpresult.bet.state.profit / 100000000m,
+                                    Roll = (decimal)tmpresult.bet.state.result,
+                                    Guid=tmp5.Guid
+                                    
                                 };
-                                balance = (decimal)(tmpresult.user.balances.available_balance / 100000000.0);
+                                balance = (decimal)(tmpresult.userBalance / 100000000.0m);
                                 bets++;
                                 if ((Tmp.high && Tmp.Roll > maxRoll - Tmp.Chance) || (!Tmp.high && Tmp.Roll < Tmp.Chance))
                                 {
@@ -727,8 +728,14 @@ namespace DiceBot
     public class StakeDiceInfo
     {
         public double target { get; set; }
-        public string condition { get; set; }
+        public string guess { get; set; }
         public double result { get; set; }
+        public double roll { get; set; }
+        public decimal amount { get; set; }
+        public decimal profit { get; set; }
+        public bool win { get; set; }
+
+
     }
 
     public class StakeDiceBet
@@ -744,14 +751,16 @@ namespace DiceBot
         public string player { get; set; }
         public double payout { get; set; }
         public long iid { get; set; }
-        public string seed_id { get; set; }
-        public StakeDiceInfo info { get; set; }
+        public string clientSeedId { get; set; }
+        public string serverSeedId { get; set; }
+        public StakeDiceInfo state { get; set; }
     }
 
     public class StakeDiceBetResult
     {
         public StakeDiceBet bet { get; set; }
         public StakeUser user { get; set; }
+        public decimal userBalance { get; set; }
     }
 
     public class StakeWithdrawal

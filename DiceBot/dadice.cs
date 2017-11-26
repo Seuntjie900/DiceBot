@@ -97,7 +97,7 @@ namespace DiceBot
 
 
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
             t.Start(High);

@@ -104,9 +104,10 @@ namespace DiceBot
 
         bool IsFJ = false;
         bool IsLoggedIn = false;
-
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        string Guid = "";
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
+            this.Guid = Guid;
             chance = High ? 99.99m - chance : chance;
             decimal tmpamount = (decimal)amount;
             decimal tmpchancet = (decimal)chance;
@@ -493,8 +494,8 @@ namespace DiceBot
                             serverseed = (RetObjs[10]),
                             clientseed = (RetObjs[11]),
                             high = RetObjs[8] == "1",
-                            uid = int.Parse(RetObjs[3])
-                            
+                            uid = int.Parse(RetObjs[3]),
+                            Guid=this.Guid
                         };
                         decimal tmpChance = decimal.Parse(RetObjs[7], System.Globalization.NumberFormatInfo.InvariantInfo) / 100m;
                         Result.Chance = Result.high ? (decimal)maxRoll - tmpChance : tmpChance;

@@ -262,6 +262,7 @@ namespace DiceBot
 
                     profit += -(amount) + (decimal)(tmpBet.PayOut / 100000000m);
                     Bet tmp = new Bet();
+                    tmp.Guid = tmp9.Guid;
                     tmp.Amount = (decimal)amount;
                     tmp.date = DateTime.Now;
                     tmp.Chance = ((decimal)chance * 100m) / 999999m;
@@ -305,11 +306,11 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string guid)
         {
             this.High = High;
             Thread t = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            t.Start(new PlaceBetObj(High, amount, chance));
+            t.Start(new PlaceBetObj(High, amount, chance, guid));
         }
 
         public override void ResetSeed()

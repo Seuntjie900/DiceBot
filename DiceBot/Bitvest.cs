@@ -85,14 +85,40 @@ namespace DiceBot
                         {
                             if (tmpbase.data!=null)
                             {
-                                if (Currency.ToLower() == "bitcoins")
+                                switch (Currency.ToLower())
+                                {
+                                    case "bitcoins":
+                                        balance = decimal.Parse(tmpbase.data.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                                    case "ethereum":
+                                        balance = decimal.Parse(tmpbase.data.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                                    case "litecoin":
+                                        balance = decimal.Parse(tmpbase.data.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                                    default:
+                                        balance = decimal.Parse(tmpbase.data.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                                }
+                                /*if (Currency.ToLower() == "bitcoins")
                                 {
                                     balance = decimal.Parse(tmpbase.data.balance, System.Globalization.NumberFormatInfo.InvariantInfo);
                                 }
                                 else
                                 {
                                     balance = decimal.Parse(tmpbase.data.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
-                                }
+                                }if (Currency.ToLower() == "bitcoins")
+                    {
+                        balance = decimal.Parse(tmplogin.balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    }
+                    else if (Currency.ToLower() == "ethereum")
+                    {
+                        balance = decimal.Parse(tmplogin.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    }
+                    else if (Currency.ToLower() == "litecoin")
+                    {
+                        balance = decimal.Parse(tmplogin.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    }
+                    else
+                    {
+                        balance = decimal.Parse(tmplogin.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    }*/
                                 Parent.updateBalance(balance);
                             }
                         }
@@ -169,15 +195,29 @@ namespace DiceBot
                     {
                         balance = decimal.Parse(tmplogin.balance, System.Globalization.NumberFormatInfo.InvariantInfo);
                     }
+                    else if (Currency.ToLower() == "ethereum")
+                    {
+                        balance = decimal.Parse(tmplogin.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    }
+                    else if (Currency.ToLower() == "litecoin")
+                    {
+                        balance = decimal.Parse(tmplogin.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    }
                     else
                     {
                         balance = decimal.Parse(tmplogin.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
                     }
                     accesstoken = tmplogin.session_token;
                     secret = tmpblogin.account.secret;
-                    wagered = 0;
-                    profit = 0;
-                    bets = 0;
+                    wagered = (decimal)(Currency.ToLower() == "bitcoins"? tmplogin.total_bet:
+                        Currency.ToLower() == "ethereum" ? tmplogin.ether_total_bet :
+                        Currency.ToLower() == "litecoin" ? tmplogin.litecoin_total_bet :
+                        tmplogin.token_total_bet) ;
+                    profit = (decimal)(Currency.ToLower() == "bitcoins" ? tmplogin.total_profit :
+                        Currency.ToLower() == "ethereum" ? tmplogin.ether_total_profit :
+                        Currency.ToLower() == "litecoin" ? tmplogin.litecoin_total_profit :
+                        tmplogin.token_total_bet);
+                    bets = tmplogin.bets;
                     wins = 0;
                     losses = 0;
                     Parent.updateBalance(balance);
@@ -357,6 +397,7 @@ namespace DiceBot
                             Currency = Currency
 
                         };
+                        resbet.Guid = tmp5.Guid;
                         bets++;
                         lasthash = tmp.server_hash;
                         bool Win = (((bool)High ? (decimal)tmp.game_result.roll > (decimal)maxRoll - (decimal)(chance) : (decimal)tmp.game_result.roll < (decimal)(chance)));
@@ -401,13 +442,13 @@ namespace DiceBot
                 if (retrycount++ < 3)
                 {
                     Thread.Sleep(500);
-                    placebetthread(new PlaceBetObj(High, amount, chance));
+                    placebetthread(new PlaceBetObj(High, amount, chance, (bet as PlaceBetObj).Guid));
                     return;
                 }
                 if (e.InnerException.Message.Contains("429") || e.InnerException.Message.Contains("502"))
                 {
                     Thread .Sleep(500);
-                    placebetthread(new PlaceBetObj(High, amount, chance));
+                    placebetthread(new PlaceBetObj(High, amount, chance, (bet as PlaceBetObj).Guid));
                 }
                 
 
@@ -418,10 +459,10 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
             this.High = High;
-            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance));
+            new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
        
@@ -617,11 +658,34 @@ namespace DiceBot
         public string server_hash { get; set; }
         public bitvesttip tip { get; set; }
     }
+    /*{"data":{"self-user-id":46534,"self-username":"Seuntjie",
+      "balance":0.00586720655,
+      "token_balance":39775.605,
+      "ether_balance":0.0001,
+      "litecoin_balance":0.0001,"pending":0,"ether_pending":0,"litecoin_pending":0,"address":"12Nfe1Dp9VAFRqKLKE9vgrP28qJH3Aaad4",
+      "ether_address":"0x3e10685213a68b3321d6b65352ac9cc94da559f1",
+      "litecoin_address":"LQe1t6YCiteYfVJ9n1BXHdXopzmp94CMWd",
+      "total_bet":0.01493638,
+      "total_won":0.0082235001,
+      "total_profit":-0.0067128799,
+      "token_total_bet":811453,
+      "token_total_won":761301.63,
+      "token_total_profit":-50151.37,
+      "ether_total_bet":0,
+      "ether_total_won":0,
+      "ether_total_profit":0,
+      "litecoin_total_bet":0,
+      "litecoin_total_won":0,
+      "litecoin_total_profit":0,
+      "bets":2272,
+      "server_hash":"30e01c8a1385bd3bd7cf8a2856e73bf639807eccced705159538b074582839a9"}}
+      */
     public class bitvestLogin
     {
         
         public string balance { get; set; }
         public string token_balance { get; set; }
+        public string litecoin_balance { get; set; }
         public string self_username { get; set; }
         public string self_user_id { get; set; }
         public string self_ref_count { get; set; }
@@ -631,6 +695,31 @@ namespace DiceBot
         public string self_total_bets_dice { get; set; }
         public string session_token { get; set; }
         
+        public double ether_balance { get; set; }
+        public decimal pending { get; set; }
+        public decimal ether_pending { get; set; }
+        public decimal litecoin_pending { get; set; }
+        public string address { get; set; }
+        public string ether_address { get; set; }
+        public string litecoin_address { get; set; }
+        public decimal total_bet { get; set; }
+        public decimal total_won { get; set; }
+        public decimal total_profit { get; set; }
+        public decimal token_total_bet { get; set; }
+        public decimal token_total_won { get; set; }
+        public decimal token_total_profit { get; set; }
+        public decimal ether_total_bet { get; set; }
+        public decimal ether_total_won { get; set; }
+        public decimal ether_total_profit { get; set; }
+        public decimal litecoin_total_bet { get; set; }
+        public decimal litecoin_total_won { get; set; }
+        public decimal litecoin_total_profit { get; set; }
+        public int bets { get; set; }
+        public string server_hash { get; set; }
+
+
+
+
     }
     public class bitvesttip
     {
@@ -660,6 +749,8 @@ namespace DiceBot
         public string balance { get; set; }
         public string pending { get; set; }
         public string token_balance { get; set; }
+        public string litecoin_balance { get; set; }
+        public string ether_address { get; set; }
         public string self_username { get; set; }
         public string self_user_id { get; set; }
         

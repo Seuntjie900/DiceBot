@@ -88,6 +88,7 @@ namespace DiceBot
                 string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
                 PIOBet tmpbet = json.JsonDeserialize<PIOBet>(sEmitResponse);
                 Bet tmp = new Bet {
+                    Guid=tmpObj.Guid,
                 Amount = (decimal)tmpObj.Amount,
                 date = DateTime.Now,
                 Id = tmpbet.bet_id.ToString(),
@@ -119,9 +120,9 @@ namespace DiceBot
                 Parent.updateStatus("An unknown error has occured while placing a bet.");
             }
         }
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
-            new Thread(new ParameterizedThreadStart(Placebetthread)).Start(new PlaceBetObj(High, amount, chance));
+            new Thread(new ParameterizedThreadStart(Placebetthread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
         public override void ResetSeed()

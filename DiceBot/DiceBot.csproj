@@ -192,6 +192,7 @@
     <Compile Include="BetHistory.Designer.cs">
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="BetKing.cs" />
     <Compile Include="etcbets.cs" />
     <Compile Include="BitdiceConfirm.cs">
       <SubType>Form</SubType>
@@ -293,7 +294,6 @@
     <Compile Include="MoneroDice.cs" />
     <Compile Include="moneypot.cs" />
     <Compile Include="PD.cs" />
-    <Compile Include="PRC.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxy.cs">

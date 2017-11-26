@@ -46,8 +46,11 @@ namespace DiceBot
             SiteURL = "https://yolodice.com/#r-fexD-GR";
             _PasswordText = "Private Key";
         }
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        string Guid = "";
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
+            this.Guid = Guid;
+
             string bet = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"{{\"attrs\":{0}}}", json.JsonSerializer<YLBetSend>(new YLBetSend{ amount=(long)(amount*100000000), range=High?"hi":"lo", target=(int)(chance*10000)}));
             Write("create_bet", bet);
         }
@@ -331,6 +334,7 @@ namespace DiceBot
             {
                 Bet tmp = new Bet()
                 {
+                    Guid=this.Guid,
                     Id = tmpbetrespo.id.ToString(),
                      Amount= (decimal)tmpbetrespo.amount/100000000m,
                       date= DateTime.Now,

@@ -106,7 +106,8 @@ namespace DiceBot
                         Profit = (decimal)betresult.bet.profitInSatoshis / 100000000m,
                         serverhash = betresult.serverHash,
                         serverseed = betresult.serverRoll + "-" + betresult.serverSalt,
-                        Roll = decimal.Parse(betresult.bet.rollInPercent)
+                        Roll = decimal.Parse(betresult.bet.rollInPercent),
+                        Guid = obj.Guid
                     };
                     balance = betresult.userBalanceInSatoshis / 100000000.0m;
                     bets++;
@@ -131,9 +132,9 @@ namespace DiceBot
             }
         }
 
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
-            new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance));
+            new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(PlaceBetThread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
         public override void ResetSeed()

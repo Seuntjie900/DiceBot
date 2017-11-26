@@ -106,6 +106,7 @@ namespace DiceBot
                 else
                 {
                     Bet tmp2 = tmp.ToBet();
+                    tmp2.Guid = tmp9.Guid;
                     tmp2.serverhash = server_hash;
                     server_hash = tmp.customer.server_hash;
                     balance = decimal.Parse(tmp.customer.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / 1000.0m;
@@ -141,11 +142,11 @@ namespace DiceBot
             }
 
         }
-        protected override void internalPlaceBet(bool High, decimal amount, decimal chance)
+        protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
 
             Thread T = new Thread(new ParameterizedThreadStart(PlaceBetThread));
-            T.Start(new PlaceBetObj(High, amount, chance));
+            T.Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
         public override void ResetSeed()
