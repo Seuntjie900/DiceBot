@@ -155,9 +155,9 @@ namespace DiceBot
                 Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://safedice.com/") };
                 Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
                 Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
-
+                Client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
                 string s1 = "";
-                HttpResponseMessage resp = Client.GetAsync("").Result;
+                /*HttpResponseMessage resp = Client.GetAsync("").Result;
                 if (resp.IsSuccessStatusCode)
                 {
                     s1 = resp.Content.ReadAsStringAsync().Result;
@@ -182,7 +182,7 @@ namespace DiceBot
                     {
 
                     }
-                }
+                }*/
                         
        /*if (!Cloudflare.doCFThing(s1, WebClient, ClientHandlr, 0, "www.bitdice.me"))
        {

@@ -33,8 +33,8 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.9";
-
+        private const string vers = "3.3.10";
+        
 
         Control[] ControlsToDisable;
         
@@ -254,7 +254,7 @@ namespace DiceBot
                         tmp.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
                         tmp.BorderWidth = 1;
                         chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
-                        if (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1)
+                        if (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1 || chrtEmbeddedLiveChart.Series[0].Points.Count%10==0)
                         {
                             decimal maxy = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Max<DataPoint>(x => x.YValues[0]);
                             decimal miny = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Min<DataPoint>(x => x.YValues[0]);
@@ -1617,6 +1617,7 @@ namespace DiceBot
                 if (RunningSimulation)
                 {
                     setInterval(tmBet, 1);
+                    LastBetPlaced = Guid.NewGuid().ToString();
                     Simbet();
                 }
                 else
@@ -2811,6 +2812,7 @@ namespace DiceBot
 
                 if (RunningSimulation)
                 {
+                    LastBetPlaced = Guid.NewGuid().ToString();
                     Simbet();
                 }
                 else
@@ -4127,6 +4129,7 @@ namespace DiceBot
             dtLastBet = DateTime.Now;
             EnableTimer(tmBet, false);
             Bet tmp = new Bet();
+            tmp.Guid = this.LastBetPlaced;
             if (Wins + Losses < numSimBets)
             {
                 string betstring = (Wins + Losses).ToString() + ",";

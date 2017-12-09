@@ -31,7 +31,7 @@ namespace DiceBot
             this.SiteURL = "https://provably.io/";
             this.register = false;
             this.NonceBased = false;
-            this.maxRoll = 99;
+            this.maxRoll = 99.99m;
             this.ChangeSeed = false;
             this.AutoLogin = true;
             this.AutoInvest = false;
@@ -52,10 +52,10 @@ namespace DiceBot
                         lastupdate = DateTime.Now;
                         string Stats = Client.GetStringAsync("userstats").Result;
                         PIOStats tmpstats = json.JsonDeserialize<PIOStats>(Stats);
-                        this.balance = ((decimal)tmpstats.user.balance) / 100000000m;
-                        this.bets = (int)tmpstats.user.betted_count;
-                        this.wagered = ((decimal)tmpstats.user.betted_wager) / 100000000m;
-                        this.profit = ((decimal)tmpstats.user.betted_profit) / 100000000m;
+                        this.balance = ((decimal)tmpstats.user.balances.btc) / 100000000m;
+                        this.bets = (int)tmpstats.user.stats.btc.bets;
+                        this.wagered = ((decimal)tmpstats.user.stats.btc.wagered) / 100000000m;
+                        this.profit = ((decimal)tmpstats.user.stats.btc.profit) / 100000000m;
                         Parent.updateBalance(balance);
                         Parent.updateBets(bets);
                         Parent.updateWagered(wagered);
@@ -86,7 +86,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("clientSeed", seed));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
-                PIOBet tmpbet = json.JsonDeserialize<PIOBet>(sEmitResponse);
+                CoinProBet tmpbet = json.JsonDeserialize<CoinProBet>(sEmitResponse);
                 Bet tmp = new Bet {
                     Guid=tmpObj.Guid,
                 Amount = (decimal)tmpObj.Amount,
@@ -159,10 +159,10 @@ namespace DiceBot
                 string Stats = Client.GetStringAsync("userstats").Result;
                 PIOStats tmpstats = json.JsonDeserialize<PIOStats>(Stats);
                 accesstoken = Password;
-                this.balance = (tmpstats.user.balance) / 100000000m;
-                this.bets = (int)tmpstats.user.betted_count;
-                this.wagered = (tmpstats.user.betted_wager) / 100000000m;
-                this.profit = (tmpstats.user.betted_profit) / 100000000m;
+                this.balance = (tmpstats.user.balances.btc) / 100000000m;
+                this.bets = (int)tmpstats.user.stats.btc.bets;
+                this.wagered = (tmpstats.user.stats.btc.wagered) / 100000000m;
+                this.profit = (tmpstats.user.stats.btc.profit) / 100000000m;
                 Parent.updateBalance(balance);
                 Parent.updateBets(bets);
                 Parent.updateWagered(wagered);
@@ -230,11 +230,50 @@ namespace DiceBot
     public class PIOUser
     {
         public string uname { get; set; }
-        public decimal balance { get; set; }
-        public decimal unpaid { get; set; }
-        public decimal betted_count { get; set; }
-        public decimal betted_wager { get; set; }
-        public decimal betted_ev { get; set; }
-        public decimal betted_profit { get; set; }
+        public string role { get; set; }
+        public PIOBalances balances { get; set; }
+        public PIOUnconfirmed unconfirmed { get; set; }
+        public PIOStats2 stats { get; set; }
+    }
+    public class PIOBalances
+    {
+        public decimal btc { get; set; }
+        public decimal ltc { get; set; }
+        public decimal dash { get; set; }
+    }
+
+    public class PIOUnconfirmed
+    {
+        public decimal btc { get; set; }
+        public decimal ltc { get; set; }
+        public decimal dash { get; set; }
+    }
+
+    public class PIOBtc
+    {
+        public decimal wagered { get; set; }
+        public decimal bets { get; set; }
+        public decimal profit { get; set; }
+    }
+
+    public class PIOLtc
+    {
+        public decimal wagered { get; set; }
+        public decimal bets { get; set; }
+        public decimal profit { get; set; }
+    }
+
+    public class PIODash
+    {
+        public decimal wagered { get; set; }
+        public decimal bets { get; set; }
+        public decimal profit { get; set; }
+    }
+
+    public class PIOStats2
+    {
+        public PIOBtc btc { get; set; }
+        public PIOLtc ltc { get; set; }
+        public PIODash dash { get; set; }
     }
 }

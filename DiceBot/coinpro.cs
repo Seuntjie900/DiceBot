@@ -53,10 +53,10 @@ namespace DiceBot
                         lastupdate = DateTime.Now;
                         string Stats = Client.GetStringAsync("userstats").Result;
                         PIOStats tmpstats = json.JsonDeserialize<PIOStats>(Stats);
-                        this.balance = ((decimal)tmpstats.user.balance) / 100000000m;
-                        this.bets = (int)tmpstats.user.betted_count;
-                        this.wagered = ((decimal)tmpstats.user.betted_wager) / 100000000m;
-                        this.profit = ((decimal)tmpstats.user.betted_profit) / 100000000m;
+                        this.balance = ((decimal)tmpstats.user.balances.btc) / 100000000m;
+                        this.bets = (int)tmpstats.user.stats.btc.bets;
+                        this.wagered = ((decimal)tmpstats.user.stats.btc.wagered) / 100000000m;
+                        this.profit = ((decimal)tmpstats.user.stats.btc.profit) / 100000000m;
                         Parent.updateBalance(balance);
                         Parent.updateBets(bets);
                         Parent.updateWagered(wagered);
@@ -87,7 +87,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("clientSeed", seed));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("bet", Content).Result.Content.ReadAsStringAsync().Result;
-                PIOBet tmpbet = json.JsonDeserialize<PIOBet>(sEmitResponse);
+                CoinProBet tmpbet = json.JsonDeserialize<CoinProBet>(sEmitResponse);
                 if (tmpbet.error!=null)
                 {
                     Parent.updateStatus(tmpbet.error);
@@ -165,10 +165,10 @@ namespace DiceBot
                 string Stats = Client.GetStringAsync("userstats").Result;
                 PIOStats tmpstats = json.JsonDeserialize<PIOStats>(Stats);
                 accesstoken = Password;
-                this.balance = (tmpstats.user.balance) / 100000000m;
-                this.bets = (int)tmpstats.user.betted_count;
-                this.wagered = (tmpstats.user.betted_wager) / 100000000m;
-                this.profit = (tmpstats.user.betted_profit) / 100000000m;
+                this.balance = (tmpstats.user.balances.btc) / 100000000m;
+                this.bets = (int)tmpstats.user.stats.btc.bets;
+                this.wagered = (tmpstats.user.stats.btc.wagered) / 100000000m;
+                this.profit = (tmpstats.user.stats.btc.profit) / 100000000m;
                 Parent.updateBalance(balance);
                 Parent.updateBets(bets);
                 Parent.updateWagered(wagered);
@@ -211,5 +211,24 @@ namespace DiceBot
         {
             throw new NotImplementedException();
         }
+
+
+    }
+
+    public class CoinProBet
+    {
+        public string id { get; set; }
+        public string bet_id { get; set; }
+        public decimal outcome { get; set; }
+        public decimal profit { get; set; }
+        public string secret { get; set; }
+        public string salt { get; set; }
+        public string created_at { get; set; }
+        public string next_hash { get; set; }
+        public long raw_outcome { get; set; }
+        public decimal balance { get; set; }
+        public decimal high { get; set; }
+        public string betRow { get; set; }
+        public string error { get; set; }
     }
 }

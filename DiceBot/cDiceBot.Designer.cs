@@ -5968,6 +5968,7 @@
             this.rollinIOToolStripMenuItem.Name = "rollinIOToolStripMenuItem";
             this.rollinIOToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.rollinIOToolStripMenuItem.Text = "Rollin.IO";
+            this.rollinIOToolStripMenuItem.Visible = false;
             this.rollinIOToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.rollinIOToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
