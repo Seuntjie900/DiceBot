@@ -29,7 +29,7 @@ namespace DiceBot
             maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = false;
-            ChangeSeed = false;
+            ChangeSeed = true;
             AutoLogin = true;
             BetURL = "https://duckdice.io";
             
@@ -166,16 +166,15 @@ namespace DiceBot
         {
             try
             {
-                string sEmitResponse = Client.GetStringAsync("randomize/").Result;
                 string alf = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
                 string Clientseed = "";
                 while (Clientseed.Length < R.Next(15, 25))
                 {
                     Clientseed += alf[R.Next(0, alf.Length)];
                 }
-                StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"clientseed\":\"{0}\"}}", Clientseed), Encoding.UTF8, "application/json");
-                sEmitResponse = Client.PostAsync("randomize/" + "?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
-                currentseed = json.JsonDeserialize<QuackSeed>(sEmitResponse);
+                StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"clientSeed\":\"{0}\"}}", Clientseed), Encoding.UTF8, "application/json");
+                string sEmitResponse = Client.PostAsync("randomize/" + "?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                currentseed = json.JsonDeserialize<QuackSeed>(sEmitResponse).current;
             }
             catch (Exception e)
             {
