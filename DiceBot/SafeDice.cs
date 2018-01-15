@@ -151,13 +151,14 @@ namespace DiceBot
                 };
 
                 ClientHandlr.CookieContainer = new CookieContainer();
-                ClientHandlr.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
+                //ClientHandlr.CookieContainer.Add(new Cookie("token", accesstoken, "/", "safedice.com"));
                 Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://safedice.com/") };
                 Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
                 Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
-                Client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+                Client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
+                
                 string s1 = "";
-                /*HttpResponseMessage resp = Client.GetAsync("").Result;
+                HttpResponseMessage resp = Client.GetAsync("").Result;
                 if (resp.IsSuccessStatusCode)
                 {
                     s1 = resp.Content.ReadAsStringAsync().Result;
@@ -182,41 +183,56 @@ namespace DiceBot
                     {
 
                     }
+                }
+
+                /*if (!Cloudflare.doCFThing(s1, WebClient, ClientHandlr, 0, "www.bitdice.me"))
+                {
+                    finishedlogin(false);
+                    return;
                 }*/
-                        
-       /*if (!Cloudflare.doCFThing(s1, WebClient, ClientHandlr, 0, "www.bitdice.me"))
-       {
-           finishedlogin(false);
-           return;
-       }*/
 
-       /*}
-   }*/
+                /*}
+            }*/
 
-       /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/auth/local");
-       if (Prox != null)
-           loginrequest.Proxy = Prox;
-       loginrequest.Method = "POST";
-       string post = "username=" + Username + "&password=" + Password + "&code=" + twofa;
-       loginrequest.ContentLength = post.Length;
-       loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-       loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
-       using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
-       {
+                /*HttpWebRequest loginrequest = (HttpWebRequest)HttpWebRequest.Create("https://safedice.com/auth/local");
+                if (Prox != null)
+                    loginrequest.Proxy = Prox;
+                loginrequest.Method = "POST";
+                string post = "username=" + Username + "&password=" + Password + "&code=" + twofa;
+                loginrequest.ContentLength = post.Length;
+                loginrequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                loginrequest.Headers.Add("authorization", "Bearer " + accesstoken);
+                using (var writer = new StreamWriter(loginrequest.GetRequestStream()))
+                {
 
-           writer.Write(post);
-       }
-       HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
-       string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
+                    writer.Write(post);
+                }
+                HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();
+                string sEmitResponse = new StreamReader(EmitResponse.GetResponseStream()).ReadToEnd();*/
 
-       List < KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("username", Username));
-                pairs.Add(new KeyValuePair<string, string>("password", Password/*==""?"undefined":twofa*/));
-                pairs.Add(new KeyValuePair<string, string>("code", twofa/*==""?"undefined":twofa*/));
+                //List < KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+                //         pairs.Add(new KeyValuePair<string, string>("username", Username));
+                //         pairs.Add(new KeyValuePair<string, string>("captcha", ""));
 
+                //         pairs.Add(new KeyValuePair<string, string>("password", Password/*==""?"undefined":twofa*/));
+                //         pairs.Add(new KeyValuePair<string, string>("code", twofa/*==""?"undefined":twofa*/));
 
-                FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("auth/local", Content).Result.Content.ReadAsStringAsync().Result;
+                string loginjson = json.JsonSerializer<SafeDiceLoginPost>(new SafeDiceLoginPost() {
+                    username=Username,
+                    password=Password,
+                    code=twofa,
+                    captcha=""
+                });//string.Format("{{username:\"{0}\",password:\"{1}\",code:\"{2}\",captcha:\"{3}\"}}",Username,Password,twofa,"");
+
+                HttpContent cont = new StringContent(loginjson);
+                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                HttpResponseMessage resp2 = Client.PostAsync("https://safedice.com/auth/local", cont).Result;
+                
+                if (resp2.IsSuccessStatusCode)
+                {
+
+                }
+                string sEmitResponse = resp2.Content.ReadAsStringAsync().Result;
                 SafeDiceLogin tmp = json.JsonDeserialize<SafeDiceLogin>(sEmitResponse);
                 accesstoken = tmp.token;
                 if (accesstoken == "")
@@ -287,7 +303,7 @@ namespace DiceBot
             {
                 if (e.Response != null)
                 {
-
+                    Parent.DumpLog(e.ToString(),-1);
                     string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
                     Parent.updateStatus(sEmitResponse);
                     if (e.Message.Contains("401"))
@@ -298,6 +314,11 @@ namespace DiceBot
                 }
                 finishedlogin(false);
 
+            }
+            catch (Exception e)
+            {
+                Parent.DumpLog(e.ToString(), -1);
+                finishedlogin(false);
             }
         }
         int retrycount = 0;
@@ -904,7 +925,13 @@ namespace DiceBot
     {
         public string token { get; set; }
     }
-
+    public class SafeDiceLoginPost
+    {
+        public string username { get; set; }
+        public string password { get; set; }
+        public string code { get; set; }
+        public string captcha { get; set; }
+    }
 
     public class SafeDicegetUserInfo
     {

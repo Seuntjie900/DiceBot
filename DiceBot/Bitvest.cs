@@ -78,6 +78,35 @@ namespace DiceBot
                         pairs.Add(new KeyValuePair<string, string>("u", "0"));
                         pairs.Add(new KeyValuePair<string, string>("self_only", "1"));
 
+                        HttpResponseMessage resp1 = Client.GetAsync("").Result;
+                        string s1 = "";
+                        if (resp1.IsSuccessStatusCode)
+                        {
+                            s1 = resp1.Content.ReadAsStringAsync().Result;
+                            //Parent.DumpLog("BE login 2.1", 7);
+                        }
+                        else
+                        {
+                            //Parent.DumpLog("BE login 2.2", 7);
+                            if (resp1.StatusCode == HttpStatusCode.ServiceUnavailable)
+                            {
+                                s1 = resp1.Content.ReadAsStringAsync().Result;
+                                //cflevel = 0;
+                                System.Threading.Tasks.Task.Factory.StartNew(() =>
+                                {
+                                    System.Windows.Forms.MessageBox.Show("Bitvest.io has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                                });
+                                if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, "bitvest.io"))
+                                {
+
+                                    finishedlogin(false);
+                                    return;
+                                }
+
+                            }
+                            //Parent.DumpLog("BE login 2.3", 7);
+                        }
+
                         FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                         string sEmitResponse = Client.PostAsync("https://bitvest.io/update.php", Content).Result.Content.ReadAsStringAsync().Result;
                         sEmitResponse = sEmitResponse.Replace("r-", "r_").Replace("n-", "n_");
@@ -281,8 +310,8 @@ namespace DiceBot
                 Content = new FormUrlEncodedContent(pairs);
                 resp = Client.PostAsync("https://bitvest.io/update.php", Content).Result.Content.ReadAsStringAsync().Result;
 
-
-                 tmpblogin = json.JsonDeserialize<bitvestLoginBase>(resp.Replace("-", "_"));
+                string tmpresp = resp.Replace("-", "_");
+                 tmpblogin = json.JsonDeserialize<bitvestLoginBase>(tmpresp);
                  tmplogin = tmpblogin.data;
                 if (tmplogin.session_token!=null)
                 {
@@ -295,7 +324,8 @@ namespace DiceBot
                     pairs.Add(new KeyValuePair<string, string>("secret", secret));
                     Content = new FormUrlEncodedContent(pairs);
                     resp = Client.PostAsync("https://bitvest.io/login.php", Content).Result.Content.ReadAsStringAsync().Result;
-                    tmpblogin = json.JsonDeserialize<bitvestLoginBase>(resp.Replace("-", "_"));
+                    tmpresp = resp.Replace("-", "_");
+                    tmpblogin = json.JsonDeserialize<bitvestLoginBase>(tmpresp);
                     tmplogin = tmpblogin.data;
                     if (Currency.ToLower() == "bitcoins")
                     {

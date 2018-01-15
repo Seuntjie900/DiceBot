@@ -10,7 +10,7 @@ using System.Net;
 
 namespace DiceBot
 {
-    class Cloudflare
+    public class Cloudflare
     {
         public static bool doCFThing(string Response, HttpClient Client, HttpClientHandler ClientHandlr, int cflevel, string URI)
         {

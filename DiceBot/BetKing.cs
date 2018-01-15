@@ -24,7 +24,21 @@ namespace DiceBot
         CookieContainer cookies = new CookieContainer();
         string clientseed = "";
         Random R = new Random();
-        public static string[] sCurrencies = new string[] { "Btc", "Eth", "BKB", "Ltc" };
+        public static string[] sCurrencies = new string[] { "Btc", "Eth", "BKB", "Ltc","OmiseGo",
+"TRON",
+"EOS",
+"Status",
+"Populous",
+"Golem",
+"Augur",
+"Veritaseum",
+"SALT",
+"Basic Attention Token",
+"FunFair",
+"Power Ledger",
+"TenX",
+"0x",
+"CIVIC" };
         Dictionary<string, int> Curs = new Dictionary<string, int>();
         public BetKing(cDiceBot Parent)
         {
@@ -51,6 +65,21 @@ namespace DiceBot
             Curs.Add("Eth", 1);
             Curs.Add("Ltc", 3);
             Curs.Add("BKB", 6);
+            Curs.Add("OmiseGo", 7);
+            Curs.Add("TRON", 8);
+            Curs.Add("EOS", 9);
+            Curs.Add("Status", 11);
+            Curs.Add("Populous", 12);
+            Curs.Add("Golem", 13);
+            Curs.Add("Augur", 15);
+            Curs.Add("Veritaseum", 16);
+            Curs.Add("SALT", 17);
+            Curs.Add("Basic Attention Token", 18);
+            Curs.Add("FunFair", 19);
+            Curs.Add("Power Ledger", 21);
+            Curs.Add("TenX", 24);
+            Curs.Add("0x", 25);
+            Curs.Add("CIVIC",28);
         }
         protected override void CurrencyChanged()
         {

@@ -181,10 +181,12 @@ namespace DiceBot
             DumpLog("received bet result: Balance: "+Balance+", Bet:"+json.JsonSerializer<Bet>(bet) , 8);
             if (bet.Guid!=LastBetPlaced || Last10Guids.Contains(bet.Guid))
             {
-                Last10Guids.Enqueue(bet.Guid);
+                
                 Stop("Bet result received does not match last bet placed! Stopping for your safety.");
                 //updateStatus("Bet result received does not match last bet placed!");
             }
+            if (!Last10Guids.Contains(bet.Guid))
+                Last10Guids.Enqueue(bet.Guid);
             while (Last10Guids.Count > 10)
                 Last10Guids.Dequeue();
 
@@ -622,6 +624,22 @@ namespace DiceBot
                 }
 
                 pocketRocketsCasinoToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
+            foreach(string s in YoloDice.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                yoloDiceToolStripMenuItem.DropDown.Items.Add(tmpItem);
                 tmpItem.Click += btcToolStripMenuItem_Click;
 
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
@@ -1315,6 +1333,8 @@ namespace DiceBot
 
         private void Stop(string Reason)
         {
+            DumpLog(Reason+", stopping", 8);
+
             updateStatus(Reason+", stopping");
             TrayIcon.BalloonTipText = Reason + ", stopping";
             TrayIcon.ShowBalloonTip(1000);
@@ -5698,7 +5718,12 @@ namespace DiceBot
             public bool canresetseed { get; set; }
             public bool caninvest { get; set; }
             public string siteurl { get; set; }
-
+            public long Wins { get; set; }
+            public long Losses { get; set; }
+            public decimal Profit { get; set; }
+            public decimal Wagered { get; set; }
+            public decimal Balance { get; set; }
+            public long Bets { get; set; }
             public void SetDetails(DiceSite Site)
             {
                 name = Site.Name;
@@ -5710,6 +5735,15 @@ namespace DiceBot
                 canresetseed = Site.ChangeSeed;
                 caninvest = Site.AutoInvest;
                 siteurl = Site.SiteURL;
+            }
+            public void UpdateUserDetails(DiceSite Site)
+            {
+                Wins = Site.GetWins();
+                Losses = Site.GetLosses();
+                Bets = Site.GetBets();
+                Profit = Site.GetProfit();
+                Wagered = Site.GetWagered();
+                Balance = Site.balance;
             }
         }
         SiteDetails CurrentSiteDetails = null;
@@ -5726,6 +5760,7 @@ namespace DiceBot
                 {
                     CurrentSiteDetails.SetDetails(CurrentSite);
                 }
+                CurrentSiteDetails.UpdateUserDetails(CurrentSite);
                 //Lua.clear();
                 Lua["balance"] = PreviousBalance ;                
                 Lua["profit"] = this.profit;

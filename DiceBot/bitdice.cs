@@ -16,7 +16,7 @@ namespace DiceBot
     class bitdice:DiceSite
     {
 
-        public static string[] cCurrencies = new string[] { "btc", "doge", "ltc", "eth" };
+        public static string[] cCurrencies = new string[] { "btc", "doge", "ltc", "eth","csno" };
         WebSocket Client;// = new WebSocket("");
         public bitdice(cDiceBot Parent)
         {
@@ -37,7 +37,7 @@ namespace DiceBot
             Client.Closed += Client_Closed;
             Client.MessageReceived += Client_MessageReceived;*/
             AutoUpdate = false;
-            Currencies = new string[] { "btc", "doge", "ltc", "eth" };
+            Currencies = new string[] { "btc", "doge", "ltc", "eth", "csno" };
         }
 
         void getDeposit(string html)
@@ -84,7 +84,8 @@ namespace DiceBot
                         case "btc": balance = decimal.Parse(tmp2.message.data.wallets.btc.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
                         case "ltc": balance = decimal.Parse(tmp2.message.data.wallets.ltc.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
                         case "eth": balance = decimal.Parse(tmp2.message.data.wallets.eth.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-                            
+                        case "csno": balance = decimal.Parse(tmp2.message.data.wallets.eth.balance, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+
                     }
                     Parent.updateBalance(balance);
                 }
@@ -678,6 +679,7 @@ user[password]:asdfasdfasdf*/
         public bitdicewallet ltc { get; set; }
         public bitdicewallet doge { get; set; }
         public bitdicewallet eth { get; set; }
+        public bitdicewallet csno { get; set; }
     }
     public class bitdicewallet
     {

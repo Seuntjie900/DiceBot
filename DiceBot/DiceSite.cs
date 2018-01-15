@@ -85,6 +85,27 @@ namespace DiceBot
         public bool ForceUpdateStats = false;
         public bool AutoUpdate = true;
 
+        public int GetWins()
+        {
+            return wins;
+        }
+        public decimal GetProfit()
+        {
+            return profit;
+        }
+        public decimal GetWagered()
+        {
+            return wagered;
+        }
+        public int GetLosses()
+        {
+            return losses;
+        }
+        public int GetBets()
+        {
+            return bets;
+        }
+        
         public void PlaceBet(bool High, decimal amount, decimal chance, string BetGuid)
         {
             Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
