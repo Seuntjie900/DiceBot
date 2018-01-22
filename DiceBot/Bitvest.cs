@@ -282,6 +282,9 @@ namespace DiceBot
             return false;
         }
 
+        bitvestCurWeight Weights = null;
+        double[] Limits = new double[0];
+
         public override void Login(string Username, string Password, string otp)
         {
             //accept-encoding:gzip, deflate,
@@ -298,7 +301,7 @@ namespace DiceBot
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 resp = Client.PostAsync("https://bitvest.io/login.php", Content).Result.Content.ReadAsStringAsync().Result;
                 bitvestLoginBase tmpblogin = json.JsonDeserialize<bitvestLoginBase>(resp.Replace("-", "_"));
-                bitvestLogin tmplogin = tmpblogin.data;
+               bitvestLogin tmplogin = tmpblogin.data;
                 secret = tmpblogin.account.secret;
                 pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("c", "99999999"));
@@ -326,6 +329,9 @@ namespace DiceBot
                     resp = Client.PostAsync("https://bitvest.io/login.php", Content).Result.Content.ReadAsStringAsync().Result;
                     tmpresp = resp.Replace("-", "_");
                     tmpblogin = json.JsonDeserialize<bitvestLoginBase>(tmpresp);
+                    Weights = tmpblogin.currency_weight;
+                    Limits = tmpblogin.rate_limits;
+
                     tmplogin = tmpblogin.data;
                     if (Currency.ToLower() == "bitcoins")
                     {
@@ -530,6 +536,33 @@ namespace DiceBot
        
         public override bool ReadyToBet()
         {
+            decimal weight = 1;
+            if (Currency.ToLower() == "bitcoins")
+            {
+                switch (Currency.ToLower())
+                {
+                    case "bitcoins":weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo);break;
+                    case "tokens": weight = decimal.Parse(Weights.TOK, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "litecoins": weight = decimal.Parse(Weights.LTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "ethers": weight = decimal.Parse(Weights.ETH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+
+                    default: weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                }
+            }
+            
+
+            for (int i = Limits.Length-1; i>=0;i--)
+            {
+                if (i == Limits.Length-1 && (amount*weight)>=(decimal)Limits[i]*0.00000001m)
+                {
+                    return true;
+                }
+                else if ((amount * weight) >= (decimal)Limits[i] * 0.00000001m)
+                {
+                    return ((DateTime.Now - Lastbet).TotalSeconds > 1.0 / (i + 1.0));                    
+                }
+            }
+            
             return true;
         }
         string pw = "";
@@ -706,6 +739,15 @@ namespace DiceBot
         public bitvestAccount account { get; set; }
         public string server_hash { get; set; }
         public bitvesttip tip { get; set; }
+        public bitvestCurWeight currency_weight { get; set; }
+        public double[] rate_limits { get; set; }
+    }
+    public class bitvestCurWeight
+    {
+        public string BTC { get; set; }
+        public string ETH { get; set; }
+        public string LTC { get; set; }
+        public string TOK { get; set; }
     }
     /*{"data":{"self-user-id":46534,"self-username":"Seuntjie",
       "balance":0.00586720655,
