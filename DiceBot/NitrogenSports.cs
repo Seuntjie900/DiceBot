@@ -247,7 +247,7 @@ Sec-WebSocket-Version:13*/
                 high = tmpbbet.betCondition == "H",
                 Chance = tmpbbet.betCondition == "H" ? maxRoll - decimal.Parse(tmpbbet.betTarget, System.Globalization.NumberFormatInfo.InvariantInfo) : decimal.Parse(tmpbbet.betTarget, System.Globalization.NumberFormatInfo.InvariantInfo),
                 nonce = tmpbbet.nonce,
-                
+                Guid=this.Guid,
                 Roll = decimal.Parse(tmpbbet.roll, System.Globalization.NumberFormatInfo.InvariantInfo),
                 serverhash = tmpbbet.dice.serverSeedHash
             };

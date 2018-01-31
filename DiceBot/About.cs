@@ -16,7 +16,7 @@ namespace DiceBot
             InitializeComponent();
             rtbAbout.Text = "DiceBot\n";
             rtbAbout.Text += "Programmer: Seuntjie\n";
-            rtbAbout.Text += "vs 3.3.11\n";
+            rtbAbout.Text += "vs 3.3.12\n";
             rtbAbout.Text += "\n";
             /*rtbAbout.Text += "This bot uses the Martingale method to automatically gamble at http://just-dice.com. All values specified for the martingale method can be se on the bot, this includes starting bet, multiplier, chance of winning.";
             rtbAbout.Text += "You can also set a maximum amount of time the bet will me multiplied, or decrease the size of the mutliplier every so many bets.\n\n";

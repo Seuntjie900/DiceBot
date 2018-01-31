@@ -33,7 +33,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.11";
+        private const string vers = "3.3.12";
         
 
         Control[] ControlsToDisable;
@@ -4090,8 +4090,10 @@ namespace DiceBot
         decimal tmpStartBalance = 0;
         decimal tmpwagered = 0;
         int numSimBets = 0;
+        int RunSimBets = 0;
         void runsim()
         {
+            RunSimBets = 0;
             numSimBets = (int)SimWindow.nudSimNumBets.Value;
             tmpbalance = PreviousBalance;
             tmpwins = Wins;
@@ -4146,13 +4148,14 @@ namespace DiceBot
 
         void Simbet()
          {
+            RunSimBets++;
             dtLastBet = DateTime.Now;
             EnableTimer(tmBet, false);
             Bet tmp = new Bet();
             tmp.Guid = this.LastBetPlaced;
-            if (Wins + Losses < numSimBets)
+            if (RunSimBets < numSimBets)
             {
-                string betstring = (Wins + Losses).ToString() + ",";
+                string betstring = (RunSimBets).ToString() + ",";
                 if (!CurrentSite.NonceBased)
                 {
                     string chars = "0123456789abcdef";
@@ -4184,7 +4187,7 @@ namespace DiceBot
                     }
                     this.server = sserver;
                 }
-                decimal number = CurrentSite.GetLucky(server, client, Wins + Losses);
+                decimal number = CurrentSite.GetLucky(server, client, RunSimBets);
                 tmp.Roll = (decimal)number;
                 tmp.Chance = (decimal)Chance;
                 tmp.Amount = (decimal)Lastbet;
@@ -4228,7 +4231,7 @@ namespace DiceBot
                 betstring += PreviousBalance + ",";
                 betstring += profit;
                 tempsim.bets.Add(betstring);
-                int bets = Wins + Losses;
+                int bets = RunSimBets;
                 if (bets % 1000 == 0)
                 {
                     Updatetext(SimWindow.lblSimProgress, ((decimal)bets / (decimal)numSimBets * 100.00m).ToString("00.00") + "%");
