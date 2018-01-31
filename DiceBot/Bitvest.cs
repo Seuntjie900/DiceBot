@@ -692,9 +692,13 @@ namespace DiceBot
             try
             {
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("message", string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"/tip {0} {1}", User, amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo))));
-                pairs.Add(new KeyValuePair<string, string>("act", "chat"));
-                pairs.Add(new KeyValuePair<string, string>("room", "1"));
+                pairs.Add(new KeyValuePair<string, string>("currency",(Currency=="bitcoins"?"btc":
+                    Currency == "litecoins" ? "ltc" :
+                    Currency == "ethers" ? "eth" :
+                    Currency == "tokens" ? "tok":"tok")));
+                pairs.Add(new KeyValuePair<string, string>("username", User));
+                pairs.Add(new KeyValuePair<string, string>("quantity", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
+                pairs.Add(new KeyValuePair<string, string>("act", "send_tip"));
                 pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("c", "99999999"));
                 pairs.Add(new KeyValuePair<string, string>("secret", secret));

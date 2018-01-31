@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
             this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
@@ -503,6 +503,8 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.lblXtraControl = new System.Windows.Forms.Label();
+            this.txtExtraBox = new System.Windows.Forms.TextBox();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -4533,21 +4535,21 @@
             // 
             // chrtEmbeddedLiveChart
             // 
-            chartArea1.AxisX.IsStartedFromZero = false;
-            chartArea1.AxisY.IsStartedFromZero = false;
-            chartArea1.Name = "ChartArea1";
-            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
+            chartArea3.AxisX.IsStartedFromZero = false;
+            chartArea3.AxisY.IsStartedFromZero = false;
+            chartArea3.Name = "ChartArea1";
+            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea3);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.CustomProperties = "IsXAxisQuantitative=False";
-            series1.IsVisibleInLegend = false;
-            series1.IsXValueIndexed = true;
-            series1.Name = "Profit";
-            series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
-            this.chrtEmbeddedLiveChart.Series.Add(series1);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.CustomProperties = "IsXAxisQuantitative=False";
+            series3.IsVisibleInLegend = false;
+            series3.IsXValueIndexed = true;
+            series3.Name = "Profit";
+            series3.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
+            this.chrtEmbeddedLiveChart.Series.Add(series3);
             this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(306, 174);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
@@ -4637,6 +4639,8 @@
             // 
             // gbLogin
             // 
+            this.gbLogin.Controls.Add(this.txtExtraBox);
+            this.gbLogin.Controls.Add(this.lblXtraControl);
             this.gbLogin.Controls.Add(this.lblMFAText);
             this.gbLogin.Controls.Add(this.button1);
             this.gbLogin.Controls.Add(this.btnRegister);
@@ -4666,7 +4670,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(87, 133);
+            this.button1.Location = new System.Drawing.Point(87, 148);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 34);
             this.button1.TabIndex = 9;
@@ -4676,7 +4680,7 @@
             // 
             // btnRegister
             // 
-            this.btnRegister.Location = new System.Drawing.Point(184, 133);
+            this.btnRegister.Location = new System.Drawing.Point(184, 148);
             this.btnRegister.Name = "btnRegister";
             this.btnRegister.Size = new System.Drawing.Size(75, 34);
             this.btnRegister.TabIndex = 8;
@@ -4686,7 +4690,7 @@
             // 
             // btnLogIn
             // 
-            this.btnLogIn.Location = new System.Drawing.Point(6, 133);
+            this.btnLogIn.Location = new System.Drawing.Point(6, 148);
             this.btnLogIn.Name = "btnLogIn";
             this.btnLogIn.Size = new System.Drawing.Size(75, 34);
             this.btnLogIn.TabIndex = 7;
@@ -5956,6 +5960,7 @@
             // 
             // safediceToolStripMenuItem
             // 
+            this.safediceToolStripMenuItem.Enabled = false;
             this.safediceToolStripMenuItem.Name = "safediceToolStripMenuItem";
             this.safediceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.safediceToolStripMenuItem.Text = "SafeDice";
@@ -6271,6 +6276,25 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
+            // 
+            // lblXtraControl
+            // 
+            this.lblXtraControl.AutoSize = true;
+            this.lblXtraControl.Location = new System.Drawing.Point(18, 120);
+            this.lblXtraControl.Name = "lblXtraControl";
+            this.lblXtraControl.Size = new System.Drawing.Size(53, 13);
+            this.lblXtraControl.TabIndex = 10;
+            this.lblXtraControl.Text = "2fa Code:";
+            this.lblXtraControl.Visible = false;
+            // 
+            // txtExtraBox
+            // 
+            this.txtExtraBox.Location = new System.Drawing.Point(77, 117);
+            this.txtExtraBox.Name = "txtExtraBox";
+            this.txtExtraBox.Size = new System.Drawing.Size(174, 20);
+            this.txtExtraBox.TabIndex = 11;
+            this.txtExtraBox.Visible = false;
+            this.txtExtraBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtApiUsername_KeyDown);
             // 
             // cDiceBot
             // 
@@ -6944,6 +6968,8 @@
         private System.Windows.Forms.ToolStripMenuItem coinProfitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem freebitcoinToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stakeToolStripMenuItem;
+        private System.Windows.Forms.TextBox txtExtraBox;
+        private System.Windows.Forms.Label lblXtraControl;
     }
 }
 

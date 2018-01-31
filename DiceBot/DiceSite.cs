@@ -44,7 +44,21 @@ namespace DiceBot
             get { return _MFAText; }
             
         }
-        
+        private string xtraText="2FA Code:";
+
+        public string XtraText
+        {
+            get { return xtraText; }
+            set { xtraText = value; }
+        }
+        private bool showXtra=false;
+
+        public bool ShowXtra
+        {
+            get { return showXtra; }
+            set { showXtra = value; }
+        }
+
 
         private bool _NonceBased=true;
         public bool NonceBased

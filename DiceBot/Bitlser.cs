@@ -21,14 +21,16 @@ namespace DiceBot
         long uid = 0;
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        public static string[] sCurrencies = new string[] { "btc","ltc","doge","eth", "burst" };
+        public static string[] sCurrencies = new string[] { "btc", "ltc", "doge", "burst", "dash", "zec", "bch" };
         HttpClientHandler ClientHandlr;
         
         public Bitsler(cDiceBot Parent)
         {
-            _MFAText = "2FA code:\r\nRequired";
+            _MFAText = "API Key";
+            ShowXtra = true;
+            
 
-            Currencies = new string[] { "btc","ltc","doge", "burst" };
+            Currencies = sCurrencies;
             maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = false;
@@ -83,6 +85,19 @@ namespace DiceBot
                                             balance = bsstatsbase._return.burst_balance;
                                             profit = bsstatsbase._return.burst_profit;
                                             wagered = bsstatsbase._return.burst_wagered; break;
+                                        case "dash":
+                                            balance = bsstatsbase._return.dash_balance;
+                                            profit = bsstatsbase._return.dash_profit;
+                                            wagered = bsstatsbase._return.dash_wagered; break;
+                                        case "zac":
+                                            balance = bsstatsbase._return.zec_balance;
+                                            profit = bsstatsbase._return.zec_profit;
+                                            wagered = bsstatsbase._return.zec_wagered; break;
+                                        case "bch":
+                                            balance = bsstatsbase._return.bch_balance;
+                                            profit = bsstatsbase._return.bch_profit;
+                                            wagered = bsstatsbase._return.bch_wagered; break;
+
                                     }
                                     bets = int.Parse(bsstatsbase._return.bets);
                                     wins = int.Parse(bsstatsbase._return.wins);
@@ -146,6 +161,18 @@ namespace DiceBot
                                         balance = bsstatsbase._return.burst_balance;
                                         profit = bsstatsbase._return.burst_profit;
                                         wagered = bsstatsbase._return.burst_wagered; break;
+                                    case "dash":
+                                        balance = bsstatsbase._return.dash_balance;
+                                        profit = bsstatsbase._return.dash_profit;
+                                        wagered = bsstatsbase._return.dash_wagered; break;
+                                    case "zac":
+                                        balance = bsstatsbase._return.zec_balance;
+                                        profit = bsstatsbase._return.zec_profit;
+                                        wagered = bsstatsbase._return.zec_wagered; break;
+                                    case "bch":
+                                        balance = bsstatsbase._return.bch_balance;
+                                        profit = bsstatsbase._return.bch_profit;
+                                        wagered = bsstatsbase._return.bch_wagered; break;
                                 }
                                 bets = int.Parse(bsstatsbase._return.bets);
                                 wins = int.Parse(bsstatsbase._return.wins);
@@ -329,20 +356,31 @@ devise:btc*/
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.bitsler.com/api/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+            Client.DefaultRequestHeaders.Add("User-Agent", "DiceBot");
+
             try
             {
-
+                string actual2fa = "";
+                if (twofa.Contains("&"))
+                {
+                    string[] pars = twofa.Split('&');
+                    actual2fa = pars[1];
+                    twofa = pars[0];
+                }
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username", Username));
                 pairs.Add(new KeyValuePair<string, string>("password", Password));
-                pairs.Add(new KeyValuePair<string, string>("api_key", "0b2edbfe44e98df79665e52896c22987445683e78"));
-                //if (!string.IsNullOrWhiteSpace(twofa))
+                //pairs.Add(new KeyValuePair<string, string>("api_key", "0b2edbfe44e98df79665e52896c22987445683e78"));
+                if (!string.IsNullOrWhiteSpace(actual2fa))
                 {
-                    pairs.Add(new KeyValuePair<string, string>("twofactor", twofa));
+                    pairs.Add(new KeyValuePair<string, string>("twofactor", actual2fa));
                 }
-
+                pairs.Add(new KeyValuePair<string, string>("api_key", twofa));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                string sEmitResponse = Client.PostAsync("login", Content).Result.Content.ReadAsStringAsync().Result;
+                HttpResponseMessage tmpresp = Client.PostAsync("login", Content).Result;
+
+                byte[] bytes = tmpresp.Content.ReadAsByteArrayAsync().Result;
+                string sEmitResponse = tmpresp.Content.ReadAsStringAsync().Result;
                 
                 //getuserstats 
                 bsloginbase bsbase = json.JsonDeserialize<bsloginbase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
@@ -383,6 +421,18 @@ devise:btc*/
                                                 balance = bsstatsbase._return.burst_balance;
                                                 profit = bsstatsbase._return.burst_profit;
                                                 wagered = bsstatsbase._return.burst_wagered; break;
+                                            case "dash":
+                                                balance = bsstatsbase._return.dash_balance;
+                                                profit = bsstatsbase._return.dash_profit;
+                                                wagered = bsstatsbase._return.dash_wagered; break;
+                                            case "zac":
+                                                balance = bsstatsbase._return.zec_balance;
+                                                profit = bsstatsbase._return.zec_profit;
+                                                wagered = bsstatsbase._return.zec_wagered; break;
+                                            case "bch":
+                                                balance = bsstatsbase._return.bch_balance;
+                                                profit = bsstatsbase._return.bch_profit;
+                                                wagered = bsstatsbase._return.bch_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase._return.bets==null?"0": bsstatsbase._return.bets);
                                         wins = int.Parse(bsstatsbase._return.wins == null ? "0" : bsstatsbase._return.wins);
@@ -438,82 +488,76 @@ devise:btc*/
             //return true;
 
             int type_delay=0;
-            //double (double)amount=LastBet(double)amount;
+            
             if (Currency.ToLower() == "btc") {
-                if (LastBetAmount< 0.00000010|| (double)amount < 0.00000010 )
+                if (LastBetAmount<= 0.00000005|| (double)amount <= 0.00000005 )
                     type_delay = 1;
-                else if (LastBetAmount< 0.00000100|| (double)amount < 0.00000100)
+                else 
                     type_delay = 2;
-                else if (LastBetAmount< 0.00000500|| (double)amount < 0.00000500)
-                    type_delay = 3;
-                else if (LastBetAmount< 0.00002000|| (double)amount < 0.00002000)
-                    type_delay = 4;
-                else
-                    type_delay = 5;
             }
             else if (Currency.ToLower() == "eth")
             {
-                if (LastBetAmount< 0.00001000|| (double)amount < 0.00001000)
+                if (LastBetAmount<= 0.00000250|| (double)amount <= 0.00000250)
                     type_delay = 1;
-                else if (LastBetAmount< 0.00005000|| (double)amount < 0.00005000)
+                else 
                     type_delay = 2;
-                else if (LastBetAmount< 0.00010000|| (double)amount < 0.00010000)
-                    type_delay = 3;
-                else if (LastBetAmount< 0.00025000|| (double)amount < 0.00025000)
-                    type_delay = 4;
-                else
-                    type_delay = 5;
+               
             }
             else if (Currency.ToLower() == "ltc")
             {
-                if (LastBetAmount< 0.00010000|| (double)amount < 0.00010000)
+                if (LastBetAmount<= 0.00001000 || (double)amount <= 0.00001000)
                     type_delay = 1;
-                else if (LastBetAmount< 0.00025000|| (double)amount < 0.00025000)
+                else 
                     type_delay = 2;
-                else if (LastBetAmount< 0.00050000|| (double)amount < 0.00050000)
-                    type_delay = 3;
-                else if (LastBetAmount< 0.00200000|| (double)amount < 0.00200000)
-                    type_delay = 4;
-                else
-                    type_delay = 5;
+                
             }
             else if (Currency.ToLower() == "doge")
             {
-                if (LastBetAmount< 10|| (double)amount < 10)
+                if (LastBetAmount<= 5.00000000 || (double)amount <= 5.00000000)
                     type_delay = 1;
-                else if (LastBetAmount< 50|| (double)amount < 50)
-                    type_delay = 2;
-                else if (LastBetAmount< 200|| (double)amount < 200)
-                    type_delay = 3;
-                else if (LastBetAmount < 1000 || (double)amount < 1000)
-                    type_delay = 4;
                 else
-                    type_delay = 5;
+                    type_delay = 2;
+
             }
             else if (Currency.ToLower() == "burst")
             {
-                if (LastBetAmount < 10 || (double)amount < 10)
+                if (LastBetAmount <= 5.00000000 || (double)amount <= 5.00000000)
                     type_delay = 1;
-                else if (LastBetAmount < 50 || (double)amount < 50)
+                else 
                     type_delay = 2;
-                else if (LastBetAmount < 200 || (double)amount < 200)
-                    type_delay = 3;
-                else if (LastBetAmount < 1000 || (double)amount < 1000)
-                    type_delay = 4;
+                
+            }
+            else if (Currency.ToLower() == "bch")
+            {
+                if (LastBetAmount <= 0.00000025 || (double)amount <= 0.00000025)
+                    type_delay = 1;
                 else
-                    type_delay = 5;
+                    type_delay = 2;
+
+            }
+            else if (Currency.ToLower() == "dash")
+            {
+                if (LastBetAmount <= 0.00000025 || (double)amount <= 0.00000025)
+                    type_delay = 1;
+                else
+                    type_delay = 2;
+
+            }
+            else if (Currency.ToLower() == "zec")
+            {
+                if (LastBetAmount <= 0.00000025 || (double)amount <= 0.00000025)
+                    type_delay = 1;
+                else
+                    type_delay = 2;
+
             }
             int delay = 0;
             if (type_delay == 1)
-                delay = 1000;
-            else if (type_delay == 2)
-                delay = 700;
-            else if (type_delay == 3)
-                delay = 500;
-            else if (type_delay == 4)
                 delay = 300;
+            else if (type_delay == 2)
+                delay = 200;            
             else
-                delay = 150;
+                delay = 200;
 
             return (DateTime.Now - LastBet).TotalMilliseconds > delay;
         }
@@ -635,6 +679,7 @@ devise:btc*/
         public bsLogin _return { get; set; }
     }
     //"{\"return\":{\"success\":\"true\",\"balance\":1.0e-5,\"wagered\":0,\"profit\":0,\"bets\":\"0\",\"wins\":\"0\",\"losses\":\"0\"}}"
+    //{"return":{"success":"true","bets":0,"wins":0,"losses":0,"btc_profit":"0.00000000","btc_wagered":"0.00000000","btc_balance":"0.00000000","eth_profit":"0.00000000","eth_wagered":"0.00000000","eth_balance":"0.00000000","ltc_profit":"0.00000000","ltc_wagered":"0.00000000","ltc_balance":"0.00000000","bch_profit":"0.00000000","bch_wagered":"0.00000000","bch_balance":"0.00000000","doge_profit":"0.00000000","doge_wagered":"0.00000000","doge_balance":"0.00000000","dash_profit":"0.00000000","dash_wagered":"0.00000000","dash_balance":"0.00000000","zec_profit":"0.00000000","zec_wagered":"0.00000000","zec_balance":"0.00000000","burst_profit":"0.00000000","burst_wagered":"0.00000000","burst_balance":"0.00000000"}}
     public class bsStats
     {
         public string success { get; set; }
@@ -655,6 +700,15 @@ devise:btc*/
         public decimal eth_profit { get; set; }
         public decimal burst_balance { get; set; }
         public decimal burst_wagered { get; set; }
+        public decimal zec_profit { get; set; }
+        public decimal zec_balance { get; set; }
+        public decimal zec_wagered { get; set; }
+        public decimal bch_profit { get; set; }
+        public decimal bch_balance { get; set; }
+        public decimal bch_wagered { get; set; }
+        public decimal dash_profit { get; set; }
+        public decimal dash_balance { get; set; }
+        public decimal dash_wagered { get; set; }
         public decimal burst_profit { get; set; }
         public string wins { get; set; }
         public string losses { get; set; }

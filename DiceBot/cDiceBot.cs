@@ -4993,9 +4993,11 @@ namespace DiceBot
                 CurrentSite.Currency = curcur;
                 CurrentSite.FinishedLogin -= CurrentSite_FinishedLogin;
                 CurrentSite.FinishedLogin +=CurrentSite_FinishedLogin;
-                
-                CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text);
-                
+                if (txtExtraBox.Text != "")
+                    CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text + "&"+ txtExtraBox.Text);
+                else
+                    CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text);
+
             }
             else
             {
@@ -5045,6 +5047,7 @@ namespace DiceBot
                 }
             }
             txtApi2fa.Text = "";
+            txtExtraBox.Text = "";
         }
 
 
@@ -5604,6 +5607,9 @@ namespace DiceBot
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;
                 lblMFAText.Text = CurrentSite.MFAText;
+                lblXtraControl.Text = CurrentSite.XtraText;
+                lblXtraControl.Visible = CurrentSite.ShowXtra;
+                txtExtraBox.Visible = CurrentSite.ShowXtra;
                 /*if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
                     lblPass.Text = "API key:";
