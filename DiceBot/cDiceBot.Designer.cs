@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(cDiceBot));
             this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.tcSettings = new System.Windows.Forms.TabControl();
@@ -349,6 +349,8 @@
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbLogin = new System.Windows.Forms.GroupBox();
+            this.txtExtraBox = new System.Windows.Forms.TextBox();
+            this.lblXtraControl = new System.Windows.Forms.Label();
             this.lblMFAText = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.btnRegister = new System.Windows.Forms.Button();
@@ -503,8 +505,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.lblXtraControl = new System.Windows.Forms.Label();
-            this.txtExtraBox = new System.Windows.Forms.TextBox();
+            this.nitrodiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -4535,21 +4536,21 @@
             // 
             // chrtEmbeddedLiveChart
             // 
-            chartArea3.AxisX.IsStartedFromZero = false;
-            chartArea3.AxisY.IsStartedFromZero = false;
-            chartArea3.Name = "ChartArea1";
-            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea3);
+            chartArea1.AxisX.IsStartedFromZero = false;
+            chartArea1.AxisY.IsStartedFromZero = false;
+            chartArea1.Name = "ChartArea1";
+            this.chrtEmbeddedLiveChart.ChartAreas.Add(chartArea1);
             this.chrtEmbeddedLiveChart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chrtEmbeddedLiveChart.Location = new System.Drawing.Point(0, 0);
             this.chrtEmbeddedLiveChart.Name = "chrtEmbeddedLiveChart";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.CustomProperties = "IsXAxisQuantitative=False";
-            series3.IsVisibleInLegend = false;
-            series3.IsXValueIndexed = true;
-            series3.Name = "Profit";
-            series3.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
-            this.chrtEmbeddedLiveChart.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.CustomProperties = "IsXAxisQuantitative=False";
+            series1.IsVisibleInLegend = false;
+            series1.IsXValueIndexed = true;
+            series1.Name = "Profit";
+            series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
+            this.chrtEmbeddedLiveChart.Series.Add(series1);
             this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(306, 174);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
@@ -4658,6 +4659,25 @@
             this.gbLogin.TabIndex = 3;
             this.gbLogin.TabStop = false;
             this.gbLogin.Text = "Login/Register";
+            // 
+            // txtExtraBox
+            // 
+            this.txtExtraBox.Location = new System.Drawing.Point(77, 117);
+            this.txtExtraBox.Name = "txtExtraBox";
+            this.txtExtraBox.Size = new System.Drawing.Size(174, 20);
+            this.txtExtraBox.TabIndex = 11;
+            this.txtExtraBox.Visible = false;
+            this.txtExtraBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtApiUsername_KeyDown);
+            // 
+            // lblXtraControl
+            // 
+            this.lblXtraControl.AutoSize = true;
+            this.lblXtraControl.Location = new System.Drawing.Point(18, 120);
+            this.lblXtraControl.Name = "lblXtraControl";
+            this.lblXtraControl.Size = new System.Drawing.Size(53, 13);
+            this.lblXtraControl.TabIndex = 10;
+            this.lblXtraControl.Text = "2fa Code:";
+            this.lblXtraControl.Visible = false;
             // 
             // lblMFAText
             // 
@@ -5918,7 +5938,8 @@
             this.duckDiceToolStripMenuItem,
             this.coinProfitToolStripMenuItem,
             this.freebitcoinToolStripMenuItem,
-            this.stakeToolStripMenuItem});
+            this.stakeToolStripMenuItem,
+            this.nitrodiceToolStripMenuItem});
             this.siteToolStripMenuItem.Name = "siteToolStripMenuItem";
             this.siteToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.siteToolStripMenuItem.Text = "Site";
@@ -6277,24 +6298,13 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
-            // lblXtraControl
+            // nitrodiceToolStripMenuItem
             // 
-            this.lblXtraControl.AutoSize = true;
-            this.lblXtraControl.Location = new System.Drawing.Point(18, 120);
-            this.lblXtraControl.Name = "lblXtraControl";
-            this.lblXtraControl.Size = new System.Drawing.Size(53, 13);
-            this.lblXtraControl.TabIndex = 10;
-            this.lblXtraControl.Text = "2fa Code:";
-            this.lblXtraControl.Visible = false;
-            // 
-            // txtExtraBox
-            // 
-            this.txtExtraBox.Location = new System.Drawing.Point(77, 117);
-            this.txtExtraBox.Name = "txtExtraBox";
-            this.txtExtraBox.Size = new System.Drawing.Size(174, 20);
-            this.txtExtraBox.TabIndex = 11;
-            this.txtExtraBox.Visible = false;
-            this.txtExtraBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtApiUsername_KeyDown);
+            this.nitrodiceToolStripMenuItem.Name = "nitrodiceToolStripMenuItem";
+            this.nitrodiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.nitrodiceToolStripMenuItem.Text = "Nitrodice";
+            this.nitrodiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.nitrodiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 
@@ -6970,6 +6980,7 @@
         private System.Windows.Forms.ToolStripMenuItem stakeToolStripMenuItem;
         private System.Windows.Forms.TextBox txtExtraBox;
         private System.Windows.Forms.Label lblXtraControl;
+        private System.Windows.Forms.ToolStripMenuItem nitrodiceToolStripMenuItem;
     }
 }
 

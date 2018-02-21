@@ -212,6 +212,7 @@
     <Compile Include="LoginFailedForm.Designer.cs">
       <DependentUpon>LoginFailedForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="NitroDice.cs" />
     <Compile Include="NitrogenSports.cs" />
     <Compile Include="coinpro.cs" />
     <Compile Include="provablyio.cs" />

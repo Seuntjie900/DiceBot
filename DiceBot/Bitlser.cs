@@ -21,7 +21,7 @@ namespace DiceBot
         long uid = 0;
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        public static string[] sCurrencies = new string[] { "btc", "ltc", "doge", "burst", "dash", "zec", "bch" };
+        public static string[] sCurrencies = new string[] { "btc", "ltc", "doge", "eth", "burst", "dash", "zec", "bch" };
         HttpClientHandler ClientHandlr;
         
         public Bitsler(cDiceBot Parent)
@@ -89,7 +89,7 @@ namespace DiceBot
                                             balance = bsstatsbase._return.dash_balance;
                                             profit = bsstatsbase._return.dash_profit;
                                             wagered = bsstatsbase._return.dash_wagered; break;
-                                        case "zac":
+                                        case "zec":
                                             balance = bsstatsbase._return.zec_balance;
                                             profit = bsstatsbase._return.zec_profit;
                                             wagered = bsstatsbase._return.zec_wagered; break;
@@ -165,7 +165,7 @@ namespace DiceBot
                                         balance = bsstatsbase._return.dash_balance;
                                         profit = bsstatsbase._return.dash_profit;
                                         wagered = bsstatsbase._return.dash_wagered; break;
-                                    case "zac":
+                                    case "zec":
                                         balance = bsstatsbase._return.zec_balance;
                                         profit = bsstatsbase._return.zec_profit;
                                         wagered = bsstatsbase._return.zec_wagered; break;
@@ -425,7 +425,7 @@ devise:btc*/
                                                 balance = bsstatsbase._return.dash_balance;
                                                 profit = bsstatsbase._return.dash_profit;
                                                 wagered = bsstatsbase._return.dash_wagered; break;
-                                            case "zac":
+                                            case "zec":
                                                 balance = bsstatsbase._return.zec_balance;
                                                 profit = bsstatsbase._return.zec_profit;
                                                 wagered = bsstatsbase._return.zec_wagered; break;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -467,6 +468,52 @@ namespace DiceBot
             }
             return false;
 
+        }
+
+        public static decimal sGetLucky(string server, string client, int nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+
+            int charstouse = 5;
+            List<byte> serverb = new List<byte>();
+            server = nonce.ToString() + ":" + server + ":" + nonce.ToString();
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            betgenerator.Key = serverb.ToArray();
+
+            List<byte> buffer = new List<byte>();
+            string msg = nonce.ToString() + ":" + client + ":" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+
+            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                if (lucky < 1000000)
+                    return lucky / 10000;
+            }
+            return 0;
+
+        }
+
+        public override decimal GetLucky(string server, string client, int nonce)
+        {
+            return sGetLucky(server, client, nonce);
         }
     }
     public class BKAccount

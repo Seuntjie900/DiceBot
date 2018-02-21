@@ -33,7 +33,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.12";
+        private const string vers = "3.3.13";
         
 
         Control[] ControlsToDisable;
@@ -4990,6 +4990,7 @@ namespace DiceBot
                     //case "OKBets": CurrentSite = new OKBets(this); break;
                     case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
                     case "Stake": CurrentSite = new Stake(this);break;
+                    case "NitroDice": CurrentSite = new NitroDice(this);break;
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5042,6 +5043,7 @@ namespace DiceBot
                         //case "OKBets": CurrentSite = new OKBets(this); break;
                         case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
                         case "Stake": CurrentSite = new Stake(this); break;
+                        case "NitroDice": CurrentSite = new NitroDice(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5606,6 +5608,7 @@ namespace DiceBot
                     //case "oKBetsToolStripMenuItem" : CurrentSite = new OKBets(this); siteToolStripMenuItem.Text = "(OKB)"; break;
                     case "freebitcoinToolStripMenuItem": CurrentSite = new Freebitcoin(this); siteToolStripMenuItem.Text = "(FBtc)"; break;
                     case "stakeToolStripMenuItem": CurrentSite = new Stake(this); siteToolStripMenuItem.Text = "(Stake)"; break;
+                    case "nitrodiceToolStripMenuItem": CurrentSite = new NitroDice(this); siteToolStripMenuItem.Text = "(ND)"; break;
                 }
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;
@@ -6110,6 +6113,7 @@ namespace DiceBot
                             //oKBetsToolStripMenuItem.Checked?28:
                             freebitcoinToolStripMenuItem.Checked?29:
                             stakeToolStripMenuItem.Checked?30:
+                            nitrodiceToolStripMenuItem.Checked?31:
                             1);
                 }
                 else if (c is TextBox)
@@ -6235,7 +6239,9 @@ namespace DiceBot
                         //oKBetsToolStripMenuItem.Checked = value == 28;
                             freebitcoinToolStripMenuItem.Checked = value == 29;
                         stakeToolStripMenuItem.Checked = value == 30;
-                        if (value > 30)
+                        nitrodiceToolStripMenuItem.Checked = value == 31;
+                            
+                        if (value > 31)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6379,6 +6385,7 @@ namespace DiceBot
                         //oKBetsToolStripMenuItem.Checked = value == "28";
                         freebitcoinToolStripMenuItem.Checked = value == "29";
                         stakeToolStripMenuItem.Checked = value == "30";
+                        nitrodiceToolStripMenuItem.Checked = value == "31";
                     }
                     else if (Key == "SettingsMode")
                     {

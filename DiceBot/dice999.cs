@@ -42,8 +42,8 @@ namespace DiceBot
             t.Start();*/
             this.Parent = Parent;
             Name = "999Dice";
-            Tip = false;
-            TipUsingName = true;
+            Tip = true;
+            TipUsingName = false;
             Currency = "btc";
             Currencies = cCurrencies;
             /*Thread tChat = new Thread(GetMessagesThread);
@@ -349,14 +349,45 @@ namespace DiceBot
 
         public override void Donate(decimal Amount)
         {
-            
-            switch (Currency.ToLower())
+            InternalSendTip("20073598", Amount);
+            /*switch (Currency.ToLower())
             { 
                 case "btc": internalWithdraw(Amount, "1BoHcFQsUSot7jkHJcZMh1iUda3tEjzuBW");break;
                 case "ltc": internalWithdraw(Amount,"LUzfcpLCy7SdXZbSiJwEmZarvCzgXbfubS");break;
                 case "doge":internalWithdraw(Amount,"DAqsyP2H5vqhc9PTfbjd7nr6r8tCFRWcFJ");break;
                 case "eth":internalWithdraw(Amount,"0x77a4220ca85d4103e008eb88ae15f5ac7da0660d");break;
+            }*/
+        }
+
+        public override bool InternalSendTip(string User, decimal amount)
+        {
+            List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
+            pairs.Add(new KeyValuePair<string, string>("a", "Withdraw"));
+            pairs.Add(new KeyValuePair<string, string>("s", sessionCookie));
+            pairs.Add(new KeyValuePair<string, string>("Currency", Currency));
+            pairs.Add(new KeyValuePair<string, string>("Amount", (amount * 100000000m).ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo)));
+            pairs.Add(new KeyValuePair<string, string>("Address", User));
+
+            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+            string responseData = "";
+            using (var response = Client.PostAsync("", Content))
+            {
+                while (!response.IsCompleted)
+                    Thread.Sleep(100);
+                try
+                {
+                    responseData = response.Result.Content.ReadAsStringAsync().Result;
+                }
+                catch (AggregateException e)
+                {
+                    if (e.InnerException.Message.Contains("ssl"))
+                    {
+                        return InternalSendTip(User, amount);
+                    }
+                }
             }
+
+            return true;
         }
 
         protected override bool internalWithdraw(decimal Amount, string Address)
