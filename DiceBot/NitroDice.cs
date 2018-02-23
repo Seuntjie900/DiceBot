@@ -247,8 +247,8 @@ namespace DiceBot
 
                 string jsoncontent = json.JsonSerializer<NDPlaceBet>(new NDPlaceBet()
                 {
-                    amount = amount.ToString("0.00000000"),
-                    perc = chance.ToString("0.0000"),
+                    amount = amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo),
+                    perc = chance.ToString("0.0000", System.Globalization.NumberFormatInfo.InvariantInfo),
                     pos = High ? "hi" : "lo",
                     times = 1,
                     cseed = clientseed
@@ -256,40 +256,48 @@ namespace DiceBot
                 StringContent Content = new StringContent(jsoncontent, Encoding.UTF8, "application/json");
                 string Response = Client.PostAsync("api/bet", Content).Result.Content.ReadAsStringAsync().Result;
                 NDGetBet BetResult = json.JsonDeserialize<NDGetBet>(Response);
-                Bet tmp = new Bet
+                if (BetResult.info == null)
                 {
-                    Amount = BetResult.amount,
-                    date = DateTime.Now,
-                    Chance = chance,
-                    clientseed = clientseed
-                        , serverhash = lastHash,
-                    Guid = tmp5.Guid,
-                    high = High,
-                    Id = BetResult.n.ToString(),
-                    nonce = BetResult.index,
-                    Roll = BetResult.n/10000m,
-                    serverseed = BetResult.sseed,
-                               
-                };
-                sqlite_helper.InsertSeed(tmp.serverhash, tmp.serverseed);
+                    Bet tmp = new Bet
+                    {
+                        Amount = BetResult.amount,
+                        date = DateTime.Now,
+                        Chance = chance,
+                        clientseed = clientseed
+                            ,
+                        serverhash = lastHash,
+                        Guid = tmp5.Guid,
+                        high = High,
+                        Id = BetResult.n.ToString(),
+                        nonce = BetResult.index,
+                        Roll = BetResult.n / 10000m,
+                        serverseed = BetResult.sseed,
+                        Profit = BetResult.amount
+                    };
+                    sqlite_helper.InsertSeed(tmp.serverhash, tmp.serverseed);
 
-                lastHash = BetResult.sshash;
-                bets++;
-                bool win = (tmp.Roll > 99.99m - tmp.Chance && High) || (tmp.Roll < tmp.Chance && !High);
-                balance = BetResult.balance;
-                wagered += amount;
-                profit += BetResult.amount;
-                if (win)
-                {
-                    wins++;
-                    
+                    lastHash = BetResult.sshash;
+                    bets++;
+                    bool win = (tmp.Roll > 99.99m - tmp.Chance && High) || (tmp.Roll < tmp.Chance && !High);
+                    balance = BetResult.balance;
+                    wagered += amount;
+                    profit += BetResult.amount;
+                    if (win)
+                    {
+                        wins++;
+
+                    }
+                    else
+                    {
+                        losses++;
+                    }
+
+                    FinishedBet(tmp);
                 }
                 else
                 {
-                    losses++;
+                    Parent.updateStatus(BetResult.info);
                 }
-                
-                FinishedBet(tmp);
             }
             catch (Exception Ex)
             {
@@ -349,6 +357,7 @@ namespace DiceBot
         public long no { get; set; }
         public decimal amount { get; set; }
         public string sshash { get; set; }
+        public string info { get; set; }
     }
     public class NDGetHash
     {
