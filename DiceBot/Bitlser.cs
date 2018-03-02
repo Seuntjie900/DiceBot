@@ -61,7 +61,7 @@ namespace DiceBot
                         List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                         pairs.Add(new KeyValuePair<string, string>("access_token", accesstoken));
                         FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                        string sEmitResponse = Client.PostAsync("getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
+                        string sEmitResponse = Client.PostAsync("api/getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
                         bsStatsBase bsstatsbase = json.JsonDeserialize<bsStatsBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
                         if (bsstatsbase != null)
                             if (bsstatsbase._return != null)
@@ -137,7 +137,7 @@ namespace DiceBot
                     List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                     pairs.Add(new KeyValuePair<string, string>("access_token", accesstoken));
                     FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                    string sEmitResponse = Client.PostAsync("getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
+                    string sEmitResponse = Client.PostAsync("api/getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
                     bsStatsBase bsstatsbase = json.JsonDeserialize<bsStatsBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
                     if (bsstatsbase != null)
                         if (bsstatsbase._return != null)
@@ -221,7 +221,7 @@ devise:btc*/
                 pairs.Add(new KeyValuePair<string, string>("devise", Currency));
                 pairs.Add(new KeyValuePair<string, string>("api_key", "0b2edbfe44e98df79665e52896c22987445683e78"));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                HttpResponseMessage tmpmsg = Client.PostAsync("bet", Content).Result;
+                HttpResponseMessage tmpmsg = Client.PostAsync("api/bet", Content).Result;
                 string sEmitResponse = tmpmsg.Content.ReadAsStringAsync().Result;
                 bsBetBase bsbase = null;
                 try
@@ -308,7 +308,7 @@ devise:btc*/
                     pairs.Add(new KeyValuePair<string, string>("username", username));
                     pairs.Add(new KeyValuePair<string, string>("seed_client", R.Next(0, int.MaxValue).ToString()));
                     FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                    string sEmitResponse = Client.PostAsync("change-seeds", Content).Result.Content.ReadAsStringAsync().Result;
+                    string sEmitResponse = Client.PostAsync("api/change-seeds", Content).Result.Content.ReadAsStringAsync().Result;
                     bsResetSeedBase bsbase = json.JsonDeserialize<bsResetSeedBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
                     //sqlite_helper.InsertSeed(bsbase._return.last_seeds_revealed.seed_server_hashed, bsbase._return.last_seeds_revealed.seed_server_revealed);
                     sqlite_helper.InsertSeed(bsbase._return.last_seeds_revealed.seed_server, bsbase._return.last_seeds_revealed.seed_server_revealed);
@@ -353,7 +353,7 @@ devise:btc*/
         {
             string error = "";
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, Proxy = this.Prox, UseProxy = Prox != null };
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.bitsler.com/api/") };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.bitsler.com/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             Client.DefaultRequestHeaders.Add("User-Agent", "DiceBot");
@@ -367,6 +367,33 @@ devise:btc*/
                     actual2fa = pars[1];
                     twofa = pars[0];
                 }
+                HttpResponseMessage resp = Client.GetAsync("https://www.bitsler.com").Result;
+                string s1 = "";
+
+                if (resp.IsSuccessStatusCode)
+                {
+                    s1 = resp.Content.ReadAsStringAsync().Result;
+                }
+                else
+                {
+                    if (resp.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    {
+                        s1 = resp.Content.ReadAsStringAsync().Result;
+                        //cflevel = 0;
+                        System.Threading.Tasks.Task.Factory.StartNew(() =>
+                        {
+                            System.Windows.Forms.MessageBox.Show(Name+ " has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                        });
+                        if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, "www.bitsler.com"))
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username", Username));
                 pairs.Add(new KeyValuePair<string, string>("password", Password));
@@ -377,7 +404,7 @@ devise:btc*/
                 }
                 pairs.Add(new KeyValuePair<string, string>("api_key", twofa));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                HttpResponseMessage tmpresp = Client.PostAsync("login", Content).Result;
+                HttpResponseMessage tmpresp = Client.PostAsync("api/login", Content).Result;
 
                 byte[] bytes = tmpresp.Content.ReadAsByteArrayAsync().Result;
                 string sEmitResponse = tmpresp.Content.ReadAsStringAsync().Result;
@@ -397,7 +424,7 @@ devise:btc*/
                             pairs = new List<KeyValuePair<string, string>>();
                             pairs.Add(new KeyValuePair<string, string>("access_token", accesstoken));
                             Content = new FormUrlEncodedContent(pairs);
-                            sEmitResponse = Client.PostAsync("getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
+                            sEmitResponse = Client.PostAsync("api/getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
                             bsStatsBase bsstatsbase = json.JsonDeserialize<bsStatsBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
                             if (bsstatsbase != null)
                                 if (bsstatsbase._return != null)

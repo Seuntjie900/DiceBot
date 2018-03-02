@@ -36,7 +36,7 @@ namespace DiceBot
             Tip = false;
             TipUsingName = true;
             NonceBased = false;
-            SiteURL = "https://nitrodice.com/?ref=Seuntjie";
+            SiteURL = "http://www.nitrodice.com/?EEqWBD442qC2oxjpmA1g";
 
         }
 

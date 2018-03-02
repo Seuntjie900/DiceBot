@@ -22,7 +22,7 @@ namespace DiceBot
             string jschl_vc = s1.Substring(s1.IndexOf("jschl_vc"));
             jschl_vc = jschl_vc.Substring(jschl_vc.IndexOf("value=\"") + "value=\"".Length);
             jschl_vc = jschl_vc.Substring(0, jschl_vc.IndexOf("\""));
-            string pass = s1.Substring(s1.IndexOf("pass"));
+            string pass = s1.Substring(s1.IndexOf("\"pass\""));
             pass = pass.Substring(pass.IndexOf("value=\"") + "value=\"".Length);
             pass = pass.Substring(0, pass.IndexOf("\""));
 
