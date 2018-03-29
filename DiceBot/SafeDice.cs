@@ -216,12 +216,12 @@ namespace DiceBot
 
                 //         pairs.Add(new KeyValuePair<string, string>("password", Password/*==""?"undefined":twofa*/));
                 //         pairs.Add(new KeyValuePair<string, string>("code", twofa/*==""?"undefined":twofa*/));
-
+                Thread.Sleep(1000);
                 string loginjson = json.JsonSerializer<SafeDiceLoginPost>(new SafeDiceLoginPost() {
                     username=Username,
                     password=Password,
-                    code=twofa,
-                    captcha=""
+                    code=twofa/*,
+                    captcha=""*/
                 });//string.Format("{{username:\"{0}\",password:\"{1}\",code:\"{2}\",captcha:\"{3}\"}}",Username,Password,twofa,"");
 
                 HttpContent cont = new StringContent(loginjson);
@@ -930,7 +930,7 @@ namespace DiceBot
         public string username { get; set; }
         public string password { get; set; }
         public string code { get; set; }
-        public string captcha { get; set; }
+       // public string captcha { get; set; }
     }
 
     public class SafeDicegetUserInfo

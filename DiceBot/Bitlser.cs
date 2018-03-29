@@ -21,7 +21,7 @@ namespace DiceBot
         long uid = 0;
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        public static string[] sCurrencies = new string[] { "btc", "ltc", "doge", "eth", "burst", "dash", "zec", "bch" };
+        public static string[] sCurrencies = new string[] { "btc", "ltc", "doge", "eth", "burst", "dash", "zec", "bch","xmr","etc" };
         HttpClientHandler ClientHandlr;
         
         public Bitsler(cDiceBot Parent)
@@ -97,7 +97,14 @@ namespace DiceBot
                                             balance = bsstatsbase._return.bch_balance;
                                             profit = bsstatsbase._return.bch_profit;
                                             wagered = bsstatsbase._return.bch_wagered; break;
-
+                                        case "xmr":
+                                            balance = bsstatsbase._return.xmr_balance;
+                                            profit = bsstatsbase._return.xmr_profit;
+                                            wagered = bsstatsbase._return.xmr_wagered; break;
+                                        case "etc":
+                                            balance = bsstatsbase._return.etc_balance;
+                                            profit = bsstatsbase._return.etc_profit;
+                                            wagered = bsstatsbase._return.etc_wagered; break;
                                     }
                                     bets = int.Parse(bsstatsbase._return.bets);
                                     wins = int.Parse(bsstatsbase._return.wins);
@@ -173,6 +180,14 @@ namespace DiceBot
                                         balance = bsstatsbase._return.bch_balance;
                                         profit = bsstatsbase._return.bch_profit;
                                         wagered = bsstatsbase._return.bch_wagered; break;
+                                    case "xmr":
+                                        balance = bsstatsbase._return.xmr_balance;
+                                        profit = bsstatsbase._return.xmr_profit;
+                                        wagered = bsstatsbase._return.xmr_wagered; break;
+                                    case "etc":
+                                        balance = bsstatsbase._return.etc_balance;
+                                        profit = bsstatsbase._return.etc_profit;
+                                        wagered = bsstatsbase._return.etc_wagered; break;
                                 }
                                 bets = int.Parse(bsstatsbase._return.bets);
                                 wins = int.Parse(bsstatsbase._return.wins);
@@ -460,6 +475,14 @@ devise:btc*/
                                                 balance = bsstatsbase._return.bch_balance;
                                                 profit = bsstatsbase._return.bch_profit;
                                                 wagered = bsstatsbase._return.bch_wagered; break;
+                                            case "xmr":
+                                                balance = bsstatsbase._return.xmr_balance;
+                                                profit = bsstatsbase._return.xmr_profit;
+                                                wagered = bsstatsbase._return.xmr_wagered; break;
+                                            case "etc":
+                                                balance = bsstatsbase._return.etc_balance;
+                                                profit = bsstatsbase._return.etc_profit;
+                                                wagered = bsstatsbase._return.etc_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase._return.bets==null?"0": bsstatsbase._return.bets);
                                         wins = int.Parse(bsstatsbase._return.wins == null ? "0" : bsstatsbase._return.wins);
@@ -571,6 +594,22 @@ devise:btc*/
 
             }
             else if (Currency.ToLower() == "zec")
+            {
+                if (LastBetAmount <= 0.00000025 || (double)amount <= 0.00000025)
+                    type_delay = 1;
+                else
+                    type_delay = 2;
+
+            }
+            else if (Currency.ToLower() == "xmr")
+            {
+                if (LastBetAmount <= 0.00000025 || (double)amount <= 0.00000025)
+                    type_delay = 1;
+                else
+                    type_delay = 2;
+
+            }
+            else if (Currency.ToLower() == "etc")
             {
                 if (LastBetAmount <= 0.00000025 || (double)amount <= 0.00000025)
                     type_delay = 1;
@@ -737,6 +776,14 @@ devise:btc*/
         public decimal dash_balance { get; set; }
         public decimal dash_wagered { get; set; }
         public decimal burst_profit { get; set; }
+        public decimal etc_balance { get; set; }
+        public decimal etc_wagered { get; set; }
+        public decimal etc_profit { get; set; }
+
+        public decimal xmr_balance { get; set; }
+        public decimal xmr_wagered { get; set; }
+        public decimal xmr_profit { get; set; }
+
         public string wins { get; set; }
         public string losses { get; set; }
     }

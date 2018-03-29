@@ -27,7 +27,7 @@ namespace DiceBot
         SslStream sslStream;
         long id = 0;
         string basestring = "{{\"id\":{0},\"method\":\"{1}\"{2}}}\r\n";
-        public static string[] cCurrencies = new string[] { "Btc", "Ltc" };
+        public static string[] cCurrencies = new string[] { "Btc", "Ltc","Eth" };
         public YoloDice(cDiceBot Parent)
         {
             Currencies = cCurrencies;

@@ -21,6 +21,7 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
         Random r = new Random();
+        public static string[] sCurrencies = new string[] {"Bch","Btc","Doge" };
         public NitroDice(cDiceBot Parent)
         {
             
@@ -30,14 +31,14 @@ namespace DiceBot
             ChangeSeed = false;
             AutoLogin = true;
             BetURL = "https://NitroDice.com/bets/";
-
+            Currencies = sCurrencies;
             this.Parent = Parent;
             Name = "NitroDice";
             Tip = false;
             TipUsingName = true;
             NonceBased = false;
-            SiteURL = "http://www.nitrodice.com/?EEqWBD442qC2oxjpmA1g";
-
+            SiteURL = "http://www.nitrodice.com/?ref=EEqWBD442qC2oxjpmA1g";
+            Currency = "Bch";
         }
 
         public override void Disconnect()
@@ -50,6 +51,26 @@ namespace DiceBot
         {
             throw new NotImplementedException();
         }
+
+        protected override void CurrencyChanged()
+        {
+            if (accesstoken != "")
+            {
+                try
+                {
+                    string jsoncontent = json.JsonSerializer<NDChangeCoin>(new NDChangeCoin() { coin = Currency });
+                    StringContent Content = new StringContent(jsoncontent, Encoding.UTF8, "application/json");
+                    string Response = Client.PostAsync("api/changeCoin", Content).Result.Content.ReadAsStringAsync().Result;
+                    NDChangeCoin getauth = json.JsonDeserialize<NDChangeCoin>(Response);
+                    ForceUpdateStats = true;
+                }
+                catch (Exception e)
+                {
+                    Parent.DumpLog(e.ToString(), -1);
+                }
+            }
+        }
+
         void GetBalanceThread()
         {
             try
@@ -58,11 +79,13 @@ namespace DiceBot
                 {
                     if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 60 || ForceUpdateStats))
                     {
+                        ForceUpdateStats = false;
+                        lastupdate = DateTime.Now;
                         string sEmitResponse2 = Client.GetStringAsync("api/balance").Result;
                         NDGetBalance tmpu = json.JsonDeserialize<NDGetBalance>(sEmitResponse2);
                         balance = tmpu.balance;
                         Parent.updateBalance((balance));
-                        lastupdate = DateTime.Now;
+                        
 
                     }
                     Thread.Sleep(1000);
@@ -95,7 +118,7 @@ namespace DiceBot
                         Client.DefaultRequestHeaders.Add("x-token", getauth.token);
                         Client.DefaultRequestHeaders.Add("x-user", Username);
                         accesstoken = getauth.token;
-
+                        CurrencyChanged();
                         string sEmitResponse2 = Client.GetStringAsync("api/stats").Result;
                         NDGetBalance tmpu = json.JsonDeserialize<NDGetBalance>(sEmitResponse2);
                         try
@@ -363,5 +386,5 @@ namespace DiceBot
     {
         public string sshash { get; set; }
     }
-
+    public class NDChangeCoin { public string coin { get; set; } }
 }

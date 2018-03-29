@@ -297,8 +297,9 @@ namespace DiceBot
                     FinishedBet(tmp);
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Parent.DumpLog(e.ToString(),-1);
                 if (err != "")
                     Parent.updateStatus(err);
                 else

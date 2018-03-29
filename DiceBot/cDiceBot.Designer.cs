@@ -486,6 +486,7 @@
             this.coinProfitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.freebitcoinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stakeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nitrodiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.basicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -505,7 +506,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.nitrodiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -5981,7 +5981,6 @@
             // 
             // safediceToolStripMenuItem
             // 
-            this.safediceToolStripMenuItem.Enabled = false;
             this.safediceToolStripMenuItem.Name = "safediceToolStripMenuItem";
             this.safediceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.safediceToolStripMenuItem.Text = "SafeDice";
@@ -6160,6 +6159,14 @@
             this.stakeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.stakeToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
+            // nitrodiceToolStripMenuItem
+            // 
+            this.nitrodiceToolStripMenuItem.Name = "nitrodiceToolStripMenuItem";
+            this.nitrodiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.nitrodiceToolStripMenuItem.Text = "Nitrodice";
+            this.nitrodiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
+            this.nitrodiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
+            // 
             // settingsModeToolStripMenuItem
             // 
             this.settingsModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -6297,14 +6304,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
-            // 
-            // nitrodiceToolStripMenuItem
-            // 
-            this.nitrodiceToolStripMenuItem.Name = "nitrodiceToolStripMenuItem";
-            this.nitrodiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.nitrodiceToolStripMenuItem.Text = "Nitrodice";
-            this.nitrodiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.nitrodiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // cDiceBot
             // 

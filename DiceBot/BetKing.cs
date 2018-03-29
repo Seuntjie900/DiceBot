@@ -245,10 +245,20 @@ namespace DiceBot
                     sEmitResponse = RespMsg.Content.ReadAsStringAsync().Result;
                     if (RespMsg.Headers.Location!=null)
                     {
-                        accesstoken = RespMsg.Headers.Location.OriginalString;
+                        /*accesstoken = RespMsg.Headers.Location.OriginalString;
                         accesstoken = accesstoken.Substring(accesstoken.IndexOf("=") + 1);
                         accesstoken = accesstoken.Substring(0, accesstoken.IndexOf("&"));
                         Client.DefaultRequestHeaders.Add("authorization", "Bearer " + accesstoken);
+                        */
+                        foreach (Cookie x in cookies.GetCookies(new Uri("http://betking.io/bet")))
+                        {
+                            if (x.Name == "token")
+                            {
+                                accesstoken = x.Value;
+                                Client.DefaultRequestHeaders.Add("authorization", "Bearer " + accesstoken);
+
+                            }
+                        }
                         while (RespMsg.Headers.Location != null)
                         {
                             RespMsg = Client.GetAsync(RespMsg.Headers.Location.OriginalString).Result;
@@ -428,7 +438,7 @@ namespace DiceBot
         {
             PlaceBetObj bet = BetObj as PlaceBetObj;
             this.Guid = bet.Guid;
-            string cont = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"appId\":{0},\"chance\":{1:0.0000},\"betAmount\":{2:0.00000000},\"target\":{3},\"currency\":{4}}}", 0, chance, amount, High ? 0 : 1, Curs[Currency]);
+            string cont = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"appId\":{0},\"chance\":{1:0.0000},\"betAmount\":{2:0.00000000},\"target\":{3},\"currency\":{4}}}", 0, bet.Chance, bet.Amount, bet.High ? 0 : 1, Curs[Currency]);
             var content = new StringContent(cont, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = Client.PostAsync("https://api.betking.io/api/dice/bet", content).Result;
