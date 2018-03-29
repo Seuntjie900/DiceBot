@@ -61,71 +61,107 @@ namespace DiceBot
                         List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                         pairs.Add(new KeyValuePair<string, string>("access_token", accesstoken));
                         FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                        string sEmitResponse = Client.PostAsync("api/getuserstats", Content).Result.Content.ReadAsStringAsync().Result;
-                        bsStatsBase bsstatsbase = json.JsonDeserialize<bsStatsBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
-                        if (bsstatsbase != null)
-                            if (bsstatsbase._return != null)
-                                if (bsstatsbase._return.success == "true")
+                        HttpResponseMessage resp = Client.PostAsync("api/getuserstats", Content).Result;
+
+                        string s1 = "";
+                        string sEmitResponse = "";// resp.Content.ReadAsStringAsync().Result;
+
+                        if (resp.IsSuccessStatusCode)
+                        {
+                            sEmitResponse = resp.Content.ReadAsStringAsync().Result;
+                        }
+                        else
+                        {
+                            sEmitResponse = "";
+                            if (resp.StatusCode == HttpStatusCode.ServiceUnavailable)
+                            {
+                                s1 = resp.Content.ReadAsStringAsync().Result;
+                                //cflevel = 0;
+                                System.Threading.Tasks.Task.Factory.StartNew(() =>
                                 {
-                                    switch (Currency.ToLower())
-                                    {
-                                        case "btc": balance = bsstatsbase._return.btc_balance;
-                                            profit = bsstatsbase._return.btc_profit;
-                                            wagered = bsstatsbase._return.btc_wagered; break;
-                                        case "ltc": balance = bsstatsbase._return.ltc_balance;
-                                            profit = bsstatsbase._return.ltc_profit;
-                                            wagered = bsstatsbase._return.ltc_wagered; break;
-                                        case "doge": balance = bsstatsbase._return.doge_balance;
-                                            profit = bsstatsbase._return.doge_profit;
-                                            wagered = bsstatsbase._return.doge_wagered; break;
-                                        case "eth": balance = bsstatsbase._return.eth_balance;
-                                            profit = bsstatsbase._return.eth_profit;
-                                            wagered = bsstatsbase._return.eth_wagered; break;
-                                        case "burst":
-                                            balance = bsstatsbase._return.burst_balance;
-                                            profit = bsstatsbase._return.burst_profit;
-                                            wagered = bsstatsbase._return.burst_wagered; break;
-                                        case "dash":
-                                            balance = bsstatsbase._return.dash_balance;
-                                            profit = bsstatsbase._return.dash_profit;
-                                            wagered = bsstatsbase._return.dash_wagered; break;
-                                        case "zec":
-                                            balance = bsstatsbase._return.zec_balance;
-                                            profit = bsstatsbase._return.zec_profit;
-                                            wagered = bsstatsbase._return.zec_wagered; break;
-                                        case "bch":
-                                            balance = bsstatsbase._return.bch_balance;
-                                            profit = bsstatsbase._return.bch_profit;
-                                            wagered = bsstatsbase._return.bch_wagered; break;
-                                        case "xmr":
-                                            balance = bsstatsbase._return.xmr_balance;
-                                            profit = bsstatsbase._return.xmr_profit;
-                                            wagered = bsstatsbase._return.xmr_wagered; break;
-                                        case "etc":
-                                            balance = bsstatsbase._return.etc_balance;
-                                            profit = bsstatsbase._return.etc_profit;
-                                            wagered = bsstatsbase._return.etc_wagered; break;
-                                    }
-                                    bets = int.Parse(bsstatsbase._return.bets);
-                                    wins = int.Parse(bsstatsbase._return.wins);
-                                    losses = int.Parse(bsstatsbase._return.losses);
-
-                                    Parent.updateBalance(balance);
-                                    Parent.updateBets(bets);
-                                    Parent.updateLosses(losses);
-                                    Parent.updateProfit(profit);
-                                    Parent.updateWagered(wagered);
-                                    Parent.updateWins(wins);
-                                }
-                                else
+                                    System.Windows.Forms.MessageBox.Show(Name + " has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                                });
+                                if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, "www.bitsler.com"))
                                 {
-                                    if (bsstatsbase._return.value != null)
-                                    {
-
-                                        Parent.updateStatus(bsstatsbase._return.value);
-
-                                    }
+                                    //return;
                                 }
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        if (sEmitResponse != "")
+                        {
+                            bsStatsBase bsstatsbase = json.JsonDeserialize<bsStatsBase>(sEmitResponse.Replace("\"return\":", "\"_return\":"));
+                            if (bsstatsbase != null)
+                                if (bsstatsbase._return != null)
+                                    if (bsstatsbase._return.success == "true")
+                                    {
+                                        switch (Currency.ToLower())
+                                        {
+                                            case "btc":
+                                                balance = bsstatsbase._return.btc_balance;
+                                                profit = bsstatsbase._return.btc_profit;
+                                                wagered = bsstatsbase._return.btc_wagered; break;
+                                            case "ltc":
+                                                balance = bsstatsbase._return.ltc_balance;
+                                                profit = bsstatsbase._return.ltc_profit;
+                                                wagered = bsstatsbase._return.ltc_wagered; break;
+                                            case "doge":
+                                                balance = bsstatsbase._return.doge_balance;
+                                                profit = bsstatsbase._return.doge_profit;
+                                                wagered = bsstatsbase._return.doge_wagered; break;
+                                            case "eth":
+                                                balance = bsstatsbase._return.eth_balance;
+                                                profit = bsstatsbase._return.eth_profit;
+                                                wagered = bsstatsbase._return.eth_wagered; break;
+                                            case "burst":
+                                                balance = bsstatsbase._return.burst_balance;
+                                                profit = bsstatsbase._return.burst_profit;
+                                                wagered = bsstatsbase._return.burst_wagered; break;
+                                            case "dash":
+                                                balance = bsstatsbase._return.dash_balance;
+                                                profit = bsstatsbase._return.dash_profit;
+                                                wagered = bsstatsbase._return.dash_wagered; break;
+                                            case "zec":
+                                                balance = bsstatsbase._return.zec_balance;
+                                                profit = bsstatsbase._return.zec_profit;
+                                                wagered = bsstatsbase._return.zec_wagered; break;
+                                            case "bch":
+                                                balance = bsstatsbase._return.bch_balance;
+                                                profit = bsstatsbase._return.bch_profit;
+                                                wagered = bsstatsbase._return.bch_wagered; break;
+                                            case "xmr":
+                                                balance = bsstatsbase._return.xmr_balance;
+                                                profit = bsstatsbase._return.xmr_profit;
+                                                wagered = bsstatsbase._return.xmr_wagered; break;
+                                            case "etc":
+                                                balance = bsstatsbase._return.etc_balance;
+                                                profit = bsstatsbase._return.etc_profit;
+                                                wagered = bsstatsbase._return.etc_wagered; break;
+                                        }
+                                        bets = int.Parse(bsstatsbase._return.bets);
+                                        wins = int.Parse(bsstatsbase._return.wins);
+                                        losses = int.Parse(bsstatsbase._return.losses);
+
+                                        Parent.updateBalance(balance);
+                                        Parent.updateBets(bets);
+                                        Parent.updateLosses(losses);
+                                        Parent.updateProfit(profit);
+                                        Parent.updateWagered(wagered);
+                                        Parent.updateWins(wins);
+                                    }
+                                    else
+                                    {
+                                        if (bsstatsbase._return.value != null)
+                                        {
+
+                                            Parent.updateStatus(bsstatsbase._return.value);
+
+                                        }
+                                    }
+                        }
                     }
                     catch { }
                 }

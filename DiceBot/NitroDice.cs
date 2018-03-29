@@ -81,11 +81,29 @@ namespace DiceBot
                     {
                         ForceUpdateStats = false;
                         lastupdate = DateTime.Now;
-                        string sEmitResponse2 = Client.GetStringAsync("api/balance").Result;
+                        string sEmitResponse2 = Client.GetStringAsync("api/stats").Result;
                         NDGetBalance tmpu = json.JsonDeserialize<NDGetBalance>(sEmitResponse2);
+                        try
+                        {
+                            sEmitResponse2 = Client.GetStringAsync("sshash").Result;
+                            NDGetHash tmpHash = json.JsonDeserialize<NDGetHash>(sEmitResponse2);
+                            lastHash = tmpHash.sshash;
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
                         balance = tmpu.balance;
+                        profit = tmpu.amountLost + tmpu.amountLost;
+                        wins = (int)tmpu.totWins;
+                        losses = (int)tmpu.totLosses;
+                        bets = (int)tmpu.totBets;
                         Parent.updateBalance((balance));
-                        
+                        Parent.updateBets(bets);
+                        Parent.updateWins(wins);
+                        Parent.updateLosses(losses);
+                        Parent.updateProfit(profit);
+
 
                     }
                     Thread.Sleep(1000);
