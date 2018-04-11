@@ -894,4 +894,8 @@ namespace DiceBot
         public decimal total_bet { get; set; }
         public decimal multiplier { get; set; }
     }
+    public class pdDeposit
+    {
+        public string address { get; set; }
+    }
 }

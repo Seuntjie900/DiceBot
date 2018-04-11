@@ -278,6 +278,12 @@ namespace DiceBot
         }
         protected void finishedlogin(bool Success)
         {
+            Parent.updateBalance(balance);
+            Parent.updateWagered(wagered);
+            Parent.updateProfit(profit);
+            Parent.updateBets(bets);
+            Parent.updateWins(wins);
+            Parent.updateLosses(losses);
             if (FinishedLogin!=null)
                 FinishedLogin(Success);
         }

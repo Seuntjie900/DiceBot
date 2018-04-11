@@ -94,7 +94,7 @@ namespace DiceBot
 
                         }
                         balance = tmpu.balance;
-                        profit = tmpu.amountLost + tmpu.amountLost;
+                        profit = tmpu.amountLost + tmpu.amountWon;
                         wins = (int)tmpu.totWins;
                         losses = (int)tmpu.totLosses;
                         bets = (int)tmpu.totBets;
@@ -150,7 +150,7 @@ namespace DiceBot
 
                         }
                         balance = tmpu.balance;
-                        profit = tmpu.amountLost + tmpu.amountLost;
+                        profit = tmpu.amountLost + tmpu.amountWon;
                         wins = (int)tmpu.totWins;
                         losses = (int)tmpu.totLosses;
                         bets = (int)tmpu.totBets;
@@ -301,7 +301,7 @@ namespace DiceBot
                 {
                     Bet tmp = new Bet
                     {
-                        Amount = BetResult.amount,
+                        Amount = amount,
                         date = DateTime.Now,
                         Chance = chance,
                         clientseed = clientseed

@@ -33,7 +33,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.15";
+        private const string vers = "3.3.16";
         
 
         Control[] ControlsToDisable;
@@ -4908,7 +4908,7 @@ namespace DiceBot
                 {
                     sw.WriteLine(json.JsonSerializer<Bet>(_Bet));
                 }
-                dataGridView1.Rows.Insert(0, _Bet.Id, _Bet.date, _Bet.Amount, _Bet.high, _Bet.Chance, _Bet.Roll,_Bet.Profit,_Bet.nonce );
+                dataGridView1.Rows.Insert(0, _Bet.Id, _Bet.date, _Bet.Amount.ToString("0.00000000#######"), _Bet.high, _Bet.Chance, _Bet.Roll,_Bet.Profit.ToString("0.00000000#######"), _Bet.nonce );
                 if ( dataGridView1.Rows.Count >0 )
                 {
                     

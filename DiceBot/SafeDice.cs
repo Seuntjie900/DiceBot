@@ -43,7 +43,11 @@ namespace DiceBot
         long curen = 1;
         protected override void CurrencyChanged()
         {
-            curen = Currency.ToLower() == "btc" ? 1 : 2;
+            curen = Currency.ToLower() == "btc" ? 1 : Currency.ToLower() == "xmr"? 2:3;
+            if (curen == 3)
+                edge = 0.9m;
+            else
+                edge = 0.5m;
             try
             {
                 if (accesstoken != "" && accesstoken != null)
@@ -220,8 +224,8 @@ namespace DiceBot
                 string loginjson = json.JsonSerializer<SafeDiceLoginPost>(new SafeDiceLoginPost() {
                     username=Username,
                     password=Password,
-                    code=twofa/*,
-                    captcha=""*/
+                    code=twofa,
+                    captcha= "094t3y8e47byegr"
                 });//string.Format("{{username:\"{0}\",password:\"{1}\",code:\"{2}\",captcha:\"{3}\"}}",Username,Password,twofa,"");
 
                 HttpContent cont = new StringContent(loginjson);
@@ -334,8 +338,8 @@ namespace DiceBot
                 SafeDiceBet tmpBet = new SafeDiceBet
                 {
                     siteId = curen,
-                    amount = (long)(amount * (curen != 2 ? 100000000m : 1000000000000m)),
-                    payout = (decimal)(((long)((99.5m / chance) * (curen != 2 ? 100000000m : 1000000000000m))) / (curen != 2 ? 100000000.0m : 1000000000000.0m)),
+                    amount = (long)(amount * (curen == 2 ?  1000000000000m: 100000000m)),
+                    payout = (decimal)(((long)(((100m-edge) / chance) * (curen == 2 ? 1000000000000m : 100000000m))) / (curen == 2 ? 1000000000000m : 100000000m)),
                     isFixedPayout = false,
                     isRollLow = !(bool)High,
                     target = ((bool)High) ? (999999m - ((long)(chance * 10000m))).ToString(System.Globalization.NumberFormatInfo.InvariantInfo) : ((long)(chance * 10000m)).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)
@@ -347,9 +351,9 @@ namespace DiceBot
                 HttpContent cont = new StringContent(post);
                 cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                 string Resp = "";
-                using (var response = Client.PostAsync("api/dicebets", cont))
+                using (var response = Client.PostAsync("api/dicebets", cont).Result)
                 {
-                    Resp = response.Result.Content.ReadAsStringAsync().Result;
+                    Resp = response.Content.ReadAsStringAsync().Result;
                     if (Resp == "{}")
                     {
                         Parent.updateStatus("Something went wrong! Please check your bet size.");
@@ -359,14 +363,14 @@ namespace DiceBot
 
                 SafeDiceBetResult tmpResult = json.JsonDeserialize<SafeDiceBetResult>(Resp);
                 Bet bet = new Bet();
-                bet.Amount = (decimal)tmpResult.amount / (curen != 2 ? 100000000m : 1000000000000m);
+                bet.Amount = (decimal)tmpResult.amount / (curen == 2 ? 1000000000000m : 100000000m);
                 bet.date = DateTime.Now;
                 bet.Chance = (!tmpResult.isRollLow ? 100m - (decimal)tmpResult.target / 1000000m * 100m : (decimal)tmpResult.target / 1000000m * 100m);
                 bet.high = !tmpResult.isRollLow;
                 bet.clientseed = client;
                 bet.Id = tmpResult.id.ToString();
                 bet.nonce = nonce++;
-                bet.Profit = tmpResult.profit / (curen != 2 ? 100000000m : 1000000000000m);
+                bet.Profit = tmpResult.profit / (curen == 2 ? 1000000000000m : 100000000m);
                 bet.Roll = (decimal)tmpResult.roll / 10000m;
                 bet.serverhash = serverhash;
                 bet.uid = (int)tmpResult.accountId;
@@ -685,10 +689,10 @@ namespace DiceBot
                     Parent.updateLosses(tmp2.lose);
                     wins = (int)tmp2.win;
                     losses = (int)tmp2.lose;
-                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (curen != 2 ? 100000000.0m : 1000000000000.0m));
-                    profit = (tmp2.amountWin - tmp2.amountLose) / (curen != 2 ? 100000000.0m : 1000000000000.0m);
-                    Parent.updateWagered(tmp2.wagered / (curen != 2 ? 100000000.0m : 1000000000000.0m));
-                    wagered = tmp2.wagered / (curen != 2 ? 100000000.0m : 1000000000000.0m);
+                    Parent.updateProfit((tmp2.amountWin - tmp2.amountLose) / (curen == 2 ? 1000000000000m : 100000000m));
+                    profit = (tmp2.amountWin - tmp2.amountLose) / (curen == 2 ? 1000000000000m : 100000000m);
+                    Parent.updateWagered(tmp2.wagered / (curen == 2 ? 1000000000000m : 100000000m));
+                    wagered = tmp2.wagered / (curen == 2 ? 1000000000000m : 100000000m);
                     Parent.updateWins(tmp2.win);
                     Parent.updateStatus("Logged in");
                     serverhash = tmp1.serverSeedHash;
@@ -799,7 +803,7 @@ namespace DiceBot
                     writer.Close();
                 }
                 HttpWebResponse EmitResponse = (HttpWebResponse)loginrequest.GetResponse();*/
-                string post = json.JsonSerializer<SDSendInvest>(new SDSendInvest { amount = (long)(Amount * 100000000) });
+                string post = json.JsonSerializer<SDSendInvest>(new SDSendInvest { amount = (long)(Amount * (curen == 2 ? 1000000000000m : 100000000m)) });
                 HttpContent cont = new StringContent(post);
                 cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                 string Resp = "";
@@ -930,7 +934,7 @@ namespace DiceBot
         public string username { get; set; }
         public string password { get; set; }
         public string code { get; set; }
-       // public string captcha { get; set; }
+        public string captcha { get; set; }
     }
 
     public class SafeDicegetUserInfo
