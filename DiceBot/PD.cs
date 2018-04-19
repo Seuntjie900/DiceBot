@@ -51,8 +51,9 @@ namespace DiceBot
             {
                 while (ispd)
                 {
-                    if (userid != null)
+                    if (userid != null && (DateTime.Now- lastupdate).TotalSeconds>=30)
                     {
+                        lastupdate = DateTime.Now;
                         GraphQLRequest LoginReq = new GraphQLRequest
                         {
                             Query = "query{user {activeSeed { serverSeedHash clientSeed nonce} id balances{available{currency amount value}} throttles{key value ttl type refType refId} statistic {bets wins losses amount profit currency value}}}"
@@ -220,7 +221,7 @@ namespace DiceBot
                 }*/
                 decimal tmpchance = High ? 99.99m - chance : chance;
 
-                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{rollDice(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("00.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:btc) { id iid nonce currency amount value payout result target condition createdAt seed{serverSeedHash serverSeed clientSeed nonce} user{balances{available{amount currency}} statistic{bets wins losses amount profit currency}}}}" }).Result;
+                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{rollDice(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:btc) { id iid nonce currency amount value payout result target condition createdAt seed{serverSeedHash serverSeed clientSeed nonce} user{balances{available{amount currency}} statistic{bets wins losses amount profit currency}}}}" }).Result;
                 RollDice tmp = betresult.GetDataFieldAs<RollDice>("rollDice");
 
 

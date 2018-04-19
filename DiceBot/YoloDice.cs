@@ -106,7 +106,7 @@ namespace DiceBot
                 if (apiclient.Connected)
                 {
                     sslStream = new SslStream(apiclient.GetStream());
-                    sslStream.AuthenticateAsClient("https://api.yolodice.com");
+                    sslStream.AuthenticateAsClient("api.yolodice.com");//, null, System.Security.Authentication.SslProtocols.Ssl2| System.Security.Authentication.SslProtocols.Ssl3| System.Security.Authentication.SslProtocols.Tls11|System.Security.Authentication.SslProtocols.Tls12, false);
                     
                     string frstchallenge = string.Format(basestring, id++, "generate_auth_challenge", "");
                     
