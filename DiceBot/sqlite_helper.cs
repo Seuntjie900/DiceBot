@@ -256,7 +256,7 @@ namespace DiceBot
                 try
                 {
                   //  sqcon.Open();
-                    SQLiteCommand Command = new SQLiteCommand("select betid, profit, stake from bet where date>='" + StartDate + "' and date <= '" + EndDate + "'", sqcon);
+                    SQLiteCommand Command = new SQLiteCommand("select betid, profit, stake from bet where date>='" + StartDate.ToString("yyyy-MM-dd HH:mm:ss") + "' and date <= '" + EndDate.ToString("yyyy-MM-dd HH:mm:ss") + "'", sqcon);
                     if (site != "")
                     {
                         Command.CommandText += " and site = '" + site + "'";

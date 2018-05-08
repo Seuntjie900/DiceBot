@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Net.Http;
 using GraphQL.Common.Request;
 using GraphQL.Common.Response;
+using System.Globalization;
 
 namespace DiceBot
 {
@@ -156,7 +157,16 @@ namespace DiceBot
                 {
                     Query = "mutation{loginUser(name:\"" + Username + "\", password:\"" + Password + "\"" + (string.IsNullOrWhiteSpace(otp) ? "" : ",tfaToken:\"" + otp + "\"") + ") {activeSeed { serverSeedHash clientSeed nonce} id balances{available{currency amount value}} throttles{key value ttl type refType refId} statistic {bets wins losses amount profit currency value}}}"
                 };
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
+                if (Resp.Errors.Length>0)
+                {
+                    Parent.DumpLog(Resp.Errors[0].Message, -1);
+                    Parent.updateStatus(Resp.Errors[0].Message);
+                    finishedlogin(false);
+                    return;
+                }
                 pdUser user = Resp.GetDataFieldAs<pdUser>("loginUser");
                 userid = user.id;
                 if (string.IsNullOrWhiteSpace(userid))
@@ -201,6 +211,7 @@ namespace DiceBot
             }
             catch (Exception e)
             {
+                Parent.DumpLog(e.ToString(),-1);
                 finishedlogin(false);
             }
         }
@@ -215,49 +226,54 @@ namespace DiceBot
                 decimal amount = tmp5.Amount;
                 decimal chance = tmp5.Chance;
                 bool High = tmp5.High;
-                /*if (amount < 10000 && (DateTime.Now - Lastbet).TotalMilliseconds < 500)
-                {
-                    Thread.Sleep((int)(500.0 - (DateTime.Now - Lastbet).TotalMilliseconds));
-                }*/
+                
                 decimal tmpchance = High ? 99.99m - chance : chance;
 
                 GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{rollDice(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:btc) { id iid nonce currency amount value payout result target condition createdAt seed{serverSeedHash serverSeed clientSeed nonce} user{balances{available{amount currency}} statistic{bets wins losses amount profit currency}}}}" }).Result;
-                RollDice tmp = betresult.GetDataFieldAs<RollDice>("rollDice");
-
-
-                Lastbet = DateTime.Now;
-                try
+                if (betresult.Errors.Length > 0)
                 {
-                   
-                    lastupdate = DateTime.Now;
-                    foreach (Statistic x in tmp.user.statistic)
-                    {
-                        if (x.currency.ToLower() == Currency.ToLower())
-                        {
-                            this.bets = (int)x.bets;
-                            this.wins = (int)x.wins;
-                            this.losses = (int)x.losses;
-                            this.profit = (decimal)x.profit;
-                            this.wagered = (decimal)x.amount;
-                            break;
-                        }
-                    }
-                    foreach (Balance x in tmp.user.balances)
-                    {
-                        if (x.available.currency.ToLower() == Currency.ToLower())
-                        {
-                            balance = (decimal)x.available.amount;
-                            break;
-                        }
-                    }
-                    Bet tmpbet = tmp.ToBet();
-                    tmpbet.Guid = tmp5.Guid;
-                    FinishedBet(tmpbet);
-                    retrycount = 0;
+                    Parent.updateStatus(betresult.Errors[0].Message);
                 }
-                catch
+                else
                 {
-                    Parent.updateStatus("Some kind of error happened. I don't really know graphql, so your guess as to what went wrong is as good as mine.");
+                    RollDice tmp = betresult.GetDataFieldAs<RollDice>("rollDice");
+
+
+                    Lastbet = DateTime.Now;
+                    try
+                    {
+
+                        lastupdate = DateTime.Now;
+                        foreach (Statistic x in tmp.user.statistic)
+                        {
+                            if (x.currency.ToLower() == Currency.ToLower())
+                            {
+                                this.bets = (int)x.bets;
+                                this.wins = (int)x.wins;
+                                this.losses = (int)x.losses;
+                                this.profit = (decimal)x.profit;
+                                this.wagered = (decimal)x.amount;
+                                break;
+                            }
+                        }
+                        foreach (Balance x in tmp.user.balances)
+                        {
+                            if (x.available.currency.ToLower() == Currency.ToLower())
+                            {
+                                balance = (decimal)x.available.amount;
+                                break;
+                            }
+                        }
+                        Bet tmpbet = tmp.ToBet();
+                        tmpbet.Guid = tmp5.Guid;
+                        FinishedBet(tmpbet);
+                        retrycount = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        Parent.DumpLog(e.ToString(), -1);
+                        Parent.updateStatus("Some kind of error happened. I don't really know graphql, so your guess as to what went wrong is as good as mine.");
+                    }
                 }
             }
             catch (AggregateException e)
@@ -311,10 +327,10 @@ namespace DiceBot
        
         public override bool ReadyToBet()
         {
-            /*if ((amount * 100000000m)<=100000 && (DateTime.Now - Lastbet).TotalMilliseconds < 500)
+            if ((amount * 100000000m)<=100000 && (DateTime.Now - Lastbet).TotalMilliseconds < 350)
                 return false;
             else
-                return true;*/
+                return true;
             return true;
         }
 

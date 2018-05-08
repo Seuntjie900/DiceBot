@@ -20,9 +20,11 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
         CookieContainer cookies = new CookieContainer();
-
+        public static string[] sCurrencies = new string[] {"Btc","Eth" };
         public Stake(cDiceBot Parent)
         {
+            this.Currencies = sCurrencies;
+            this.Currency = "Btc";
             _PasswordText = "Password: ";
             maxRoll = 99.99m;
             AutoInvest = false;
@@ -50,6 +52,10 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
+        protected override void CurrencyChanged()
+        {
+            ForceUpdateStats = true;
+        }
 
         void GetBalanceThread()
         {
@@ -60,9 +66,10 @@ namespace DiceBot
                     if (CrrentLogin != null && ((DateTime.Now - lastupdate).TotalSeconds > 60 || ForceUpdateStats))
                     {
                         lastupdate = DateTime.Now;
+                        ForceUpdateStats = false;
                         try
                         {
-                            string result = Client.GetStringAsync("auth/me?hash=" + hash).Result;
+                            string result = Client.GetStringAsync("auth/me?currency="+Currency.ToLower()+"&hash=" + hash).Result;
                             StakeLogin newlogin = json.JsonDeserialize<StakeLogin>(result);
                             if (newlogin != null)
                             {
@@ -70,7 +77,7 @@ namespace DiceBot
                                 {
                                     CrrentLogin.user = newlogin.user;
                                     CrrentLogin.user = newlogin.user;
-                                    balance = (decimal)(CrrentLogin.user.balances.available_balance / 100000000.0);
+                                    balance = (decimal)((Currency.ToLower()=="btc"? CrrentLogin.user.balances.btc.available_balance: Currency.ToLower() == "eth"? CrrentLogin.user.balances.eth.available_balance: CrrentLogin.user.balances.btc.available_balance)) / 100000000.0m;
                                     bets = (int)CrrentLogin.user.stats.dice.bets;
                                     wins = (int)CrrentLogin.user.stats.dice.wins;
                                     losses = (int)CrrentLogin.user.stats.dice.losses;
@@ -129,7 +136,7 @@ namespace DiceBot
 
 
 
-                        balance = (decimal)(login.user.balances.available_balance / 100000000.0);
+                        balance = (decimal)((Currency.ToLower() == "btc" ? CrrentLogin.user.balances.btc.available_balance : Currency.ToLower() == "eth" ? CrrentLogin.user.balances.eth.available_balance : CrrentLogin.user.balances.btc.available_balance) ) / 100000000.0m;
                         bets = (int)login.user.stats.dice.bets;
                         wins = (int)login.user.stats.dice.wins;
                         losses = (int)login.user.stats.dice.losses;
@@ -208,7 +215,8 @@ namespace DiceBot
                 decimal tmpchance = High ? 99.99m - chance : chance;
                 try
                 {
-                    var content = new StringContent(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":{0:0},\"target\":\"{1:00.00}\",\"guess\":\"{2}\"}}", amount * 100000000.0m, High ? 99.99m - (chance) : chance, High ? ">" : "<"), Encoding.UTF8, "application/json");
+                    string jsons = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":{0:0},\"target\":\"{1:00.00}\",\"guess\":\"{2}\",\"currency\":\"{3}\"}}", amount * 100000000.0m, High ? 99.99m - (chance) : chance, High ? ">" : "<", Currency.ToLower());
+                    var content = new StringContent(jsons, Encoding.UTF8, "application/json");
 
                     HttpResponseMessage Response = Client.PostAsync("games/dice/bet?hash=" + hash, content).Result;
                     if (Response.IsSuccessStatusCode)
@@ -233,7 +241,14 @@ namespace DiceBot
                                     Guid=tmp5.Guid
                                     
                                 };
-                                balance = (decimal)(tmpresult.userBalance / 100000000.0m);
+                                foreach (StakeBetBalance x in tmpresult.balances)
+                                {
+                                    if (x.currency.ToLower()==Currency.ToLower())
+                                    {
+                                        balance = x.balance / 100000000.0m;
+                                    }
+                                }
+                                //balance = (decimal)(tmpresult.userBalance / 100000000.0m);
                                 bets++;
                                 if ((Tmp.high && Tmp.Roll > maxRoll - Tmp.Chance) || (!Tmp.high && Tmp.Roll < Tmp.Chance))
                                 {
@@ -252,6 +267,8 @@ namespace DiceBot
                         string x = Response.Content.ReadAsStringAsync().Result;
                         if (x.ToLower().Contains("valid amount"))
                             Parent.updateStatus("Invalid Bet amount");
+                        else if (x.ToLower().Contains("funds"))
+                            Parent.updateStatus("Insufficient Funds, probably.");
                         Parent.updateStatus(x);
                     }
                 }
@@ -610,8 +627,7 @@ namespace DiceBot
         public bool notification_highrollers { get; set; }
         public bool notification_announcements { get; set; }
     }
-
-    public class StakeBalances
+    public class StakeBalanceDetails
     {
         public double available_balance { get; set; }
         public decimal in_play_balance { get; set; }
@@ -626,6 +642,11 @@ namespace DiceBot
         public decimal given_tips_balance { get; set; }
         public decimal received_tips_balance { get; set; }
         public decimal affiliate_balance { get; set; }
+    }
+    public class StakeBalances
+    {
+        public StakeBalanceDetails btc { get; set; }
+        public StakeBalanceDetails eth { get; set; }
     }
 
     public class StakeUser
@@ -760,9 +781,13 @@ namespace DiceBot
     {
         public StakeDiceBet bet { get; set; }
         public StakeUser user { get; set; }
-        public decimal userBalance { get; set; }
+        public StakeBetBalance[] balances { get; set; }
     }
-
+    public class StakeBetBalance
+    {
+        public string currency { get; set; }
+        public decimal balance { get; set; }
+    }
     public class StakeWithdrawal
     {
         public string id { get; set; }
