@@ -16,6 +16,7 @@ namespace DiceBot
 {
     public class PD : DiceSite
     {
+        public static string[] sCurrencies = new string[] { "Btc", "Ltc" };
         GraphQL.Client.GraphQLClient GQLClient = new GraphQL.Client.GraphQLClient("https://api.primedice.com/graphql");
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
@@ -34,7 +35,8 @@ namespace DiceBot
             ChangeSeed = true;
             AutoLogin = true;
             BetURL = "https://api.primedice.com/bets/";
-            
+            this.Currencies = sCurrencies;
+            this.Currency = "Btc";
             this.Parent = Parent;
             Name = "PrimeDice";
             this.Tip = true;
@@ -45,15 +47,22 @@ namespace DiceBot
             
         }
         string userid = "";
-        
+
+        protected override void CurrencyChanged()
+        {
+            ForceUpdateStats = true;
+        }
+
+
         void GetBalanceThread()
         {
             try
             {
                 while (ispd)
                 {
-                    if (userid != null && (DateTime.Now- lastupdate).TotalSeconds>=30)
+                    if (userid != null && ((DateTime.Now- lastupdate).TotalSeconds>=30 || ForceUpdateStats))
                     {
+                        ForceUpdateStats = false;
                         lastupdate = DateTime.Now;
                         GraphQLRequest LoginReq = new GraphQLRequest
                         {
@@ -160,12 +169,15 @@ namespace DiceBot
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
-                if (Resp.Errors.Length>0)
+                if (Resp.Errors != null)
                 {
-                    Parent.DumpLog(Resp.Errors[0].Message, -1);
-                    Parent.updateStatus(Resp.Errors[0].Message);
-                    finishedlogin(false);
-                    return;
+                    if (Resp.Errors.Length > 0)
+                    {
+                        Parent.DumpLog(Resp.Errors[0].Message, -1);
+                        Parent.updateStatus(Resp.Errors[0].Message);
+                        finishedlogin(false);
+                        return;
+                    }
                 }
                 pdUser user = Resp.GetDataFieldAs<pdUser>("loginUser");
                 userid = user.id;
@@ -195,6 +207,9 @@ namespace DiceBot
                     }
 
                     finishedlogin(true);
+                    ispd = true;
+                    Thread t = new Thread(GetBalanceThread);
+                    t.Start();
                     return;
                 }
                
@@ -229,10 +244,11 @@ namespace DiceBot
                 
                 decimal tmpchance = High ? 99.99m - chance : chance;
 
-                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{rollDice(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:btc) { id iid nonce currency amount value payout result target condition createdAt seed{serverSeedHash serverSeed clientSeed nonce} user{balances{available{amount currency}} statistic{bets wins losses amount profit currency}}}}" }).Result;
-                if (betresult.Errors.Length > 0)
+                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{rollDice(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:"+Currency.ToLower()+") { id iid nonce currency amount value payout result target condition createdAt seed{serverSeedHash serverSeed clientSeed nonce} user{balances{available{amount currency}} statistic{bets wins losses amount profit currency}}}}" }).Result;
+                if (betresult.Errors!=null)
                 {
-                    Parent.updateStatus(betresult.Errors[0].Message);
+                    if (betresult.Errors.Length > 0)
+                        Parent.updateStatus(betresult.Errors[0].Message);
                 }
                 else
                 {

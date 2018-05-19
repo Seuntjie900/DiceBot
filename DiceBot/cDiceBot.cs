@@ -420,6 +420,22 @@ namespace DiceBot
                 primeDiceToolStripMenuItem.Checked = true;
 
                 bool frst = true;
+            foreach (string s in PD.sCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                primeDiceToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
             foreach (string s in dice999.cCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem{ Text=s};
@@ -1445,7 +1461,6 @@ namespace DiceBot
                 else if (rdbPreset.Checked)
                 {
                     presetLevel = 0;
-                    decimal Betval = -1;
                     if (presetLevel < rtbPresetList.Lines.Length)
                     {
                         SetPresetValues(presetLevel);
