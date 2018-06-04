@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,7 +14,7 @@ namespace DiceBot
 {
     class BetKing : DiceSite
     {
-        WebSocket Sock;
+        //WebSocket Sock;
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
         public bool ispd = false;
@@ -25,21 +26,23 @@ namespace DiceBot
         CookieContainer cookies = new CookieContainer();
         string clientseed = "";
         Random R = new Random();
-        public static string[] sCurrencies = new string[] { "Btc", "Eth", "BKB", "Ltc","OmiseGo",
-"TRON",
+        bkGetCurrencies Currs = null;
+        BKCurrency CurrentCurrency = null;
+        public static string[] sCurrencies = new string[] { "Btc", "Eth", "BKB", "Ltc","OMG",
+"TRX",
 "EOS",
-"Status",
-"Populous",
-"Golem",
-"Augur",
-"Veritaseum",
+"SNT",
+"PPT",
+"GNT",
+"REP",
+"VERI",
 "SALT",
-"Basic Attention Token",
-"FunFair",
-"Power Ledger",
-"TenX",
-"0x",
-"CIVIC" };
+"BAT",
+"FUN",
+"POWR",
+"PAY",
+"ZRX",
+"CVC" };
         Dictionary<string, int> Curs = new Dictionary<string, int>();
         public BetKing(cDiceBot Parent)
         {
@@ -84,13 +87,24 @@ namespace DiceBot
         }
         protected override void CurrencyChanged()
         {
-            ForceUpdateStats = true;
+            if (Currs != null)
+            {
+                foreach (BKCurrency x in Currs.currencies)
+                {
+                    if (x.symbol.ToLower() == Currency.ToLower())
+                    {
+                        CurrentCurrency = x;
+                        break;
+                    }
+                }
+                ForceUpdateStats = true;
+            }
         }
 
         public override void Disconnect()
         {
             ispd = false;
-            if (Sock != null)
+            /*if (Sock != null)
             {
                 if (Sock.State== WebSocketState.Open)
                 
@@ -101,7 +115,7 @@ namespace DiceBot
                     catch
                     { }
             }
-            
+            */
         }
 
         public override void GetSeed(long BetID)
@@ -122,7 +136,7 @@ namespace DiceBot
                     lastupdate = DateTime.Now;
                     GetBalance();
                     GetStats();
-                    Sock.Send("2");
+                    //Sock.Send("2");
                 }
                 Thread.Sleep(1000);
             }
@@ -132,16 +146,23 @@ namespace DiceBot
         {
             if (clientseed == null)
                 clientseed = R.Next(0, int.MaxValue).ToString();
-            HttpResponseMessage Msg = Client.GetAsync(string.Format("https://api.betking.io/api/app/loadstate?currency={0}&appId={1}&clientSeed=FV5CCoio666H6XDmz0o", Curs[Currency], 0, clientseed)).Result;
+            HttpResponseMessage Msg = Client.GetAsync("api/wallet/balances").Result;
             if (Msg.IsSuccessStatusCode)
             {
                 string Response = Msg.Content.ReadAsStringAsync().Result;
-                BKGetBalance tmp = json.JsonDeserialize<BKGetBalance>(Response);
-                this.balance = tmp.Balance;
-                 this.clientseed = tmp.ClientSeed;
-                nonce = tmp.Nonce;
-                serverseedhash = tmp.ServerSeedHash;
-                this.username = tmp.UserName;
+                bkGetBalances tmp = json.JsonDeserialize<bkGetBalances>(Response);
+                foreach (var x in tmp.balances)
+                {
+                   
+                    if (CurrentCurrency.id==x.currency && CurrentCurrency.symbol.ToLower()==Currency.ToLower())
+                    {
+                        this.balance = decimal.Parse(x.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / (decimal)CurrentCurrency.EffectiveScale;
+                        
+                    }
+                    
+                        
+                }
+                
                 Parent.updateBalance(balance);
                 Parent.updateProfit(profit);
                 Parent.updateBets(bets);
@@ -155,23 +176,32 @@ namespace DiceBot
         
         void GetStats()
         {
-            HttpResponseMessage Msg = Client.GetAsync(string.Format("https://api.betking.io/api/stats/getuserstats?appId={0}&userName={1}",  0, username)).Result;
+            HttpResponseMessage Msg = Client.GetAsync("https://socket.betking.io/api/stats/my-stats").Result;
             if (Msg.IsSuccessStatusCode)
             {
                 string Response = Msg.Content.ReadAsStringAsync().Result;
                 
-                BKGetStats tmp = json.JsonDeserialize<BKGetStats>(Response);
-                foreach (BKStat x in tmp.stats)
+                BKStat[] tmp = json.JsonDeserialize<BKStat[]>(Response);
+                foreach (BKStat x in tmp)
                 {
-                    if (x.currency == Curs[Currency])
+                    foreach (BKCurrency y in Currs.currencies)
                     {
-                        this.profit = x.profit;
-                        this.bets = x.numBets;
-                        this.wagered =x.wagered;
-                        
-
+                        if (CurrentCurrency.id==x.currency && CurrentCurrency.symbol.ToLower()==Currency.ToLower())
+                        {
+                            this.profit = decimal.Parse(x.profit, System.Globalization.NumberFormatInfo.InvariantInfo) /(decimal)CurrentCurrency.EffectiveScale;
+                            this.bets = int.Parse(x.num_bets, System.Globalization.NumberFormatInfo.InvariantInfo);
+                            this.wagered = decimal.Parse(x.wagered, System.Globalization.NumberFormatInfo.InvariantInfo) / (decimal)CurrentCurrency.EffectiveScale;
+                        }
                     }
+                    
                 }
+                string LoadState = Client.GetStringAsync("api/dice/load-state?clientSeed=" + R.Next(0, int.MaxValue) + "&currency=0").Result;
+                bkLoadSTate TmpState = json.JsonDeserialize<bkLoadSTate>(LoadState);
+                nonce = TmpState.nonce;
+                clientseed = TmpState.clientSeed;
+                serverseedhash = TmpState.serverSeedHash;
+                
+
                 Parent.updateProfit(profit);
                 Parent.updateBets(bets);
                 Parent.updateWagered(wagered);
@@ -184,7 +214,7 @@ namespace DiceBot
         {
             try
             {
-                ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, AllowAutoRedirect=false };
+                ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, AllowAutoRedirect=true };
                 Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://betking.io/") };
                 Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
                 Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
@@ -218,70 +248,72 @@ namespace DiceBot
 
                     }
                 }
-                string LoginPage = Client.GetStringAsync("").Result;
-                LoginPage = Client.GetStringAsync("bet/login").Result;
-                LoginPage = LoginPage.Substring(LoginPage.IndexOf("<input type=\"hidden\" name=\"_csrf\" value=\"") + "<input type=\"hidden\" name=\"_csrf\" value=\"".Length);
-                string csrf = LoginPage.Substring(0, LoginPage.IndexOf("\""));
+                resp = Client.GetAsync("").Result;
+                s1 = resp.Content.ReadAsStringAsync().Result;
+
+                s1 = s1.Substring(s1.IndexOf("window.settings"));
+                s1 = s1.Substring(s1.IndexOf("\"csrfToken\":\"") + "\"csrfToken\":\"".Length);
                 
+                string csrf = s1.Substring(0, s1.IndexOf("\""));
+                Client.DefaultRequestHeaders.Add("csrf-token", csrf);
 
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                pairs.Add(new KeyValuePair<string, string>("_csrf", csrf));
-                pairs.Add(new KeyValuePair<string, string>("client_id", "0"));
-                pairs.Add(new KeyValuePair<string, string>("fingerprint", ""));
-                pairs.Add(new KeyValuePair<string, string>("loginvia", Username.Contains("@")?"email": "username"));
+               // pairs.Add(new KeyValuePair<string, string>("_csrf", csrf));
+                //pairs.Add(new KeyValuePair<string, string>("client_id", "0"));
+                pairs.Add(new KeyValuePair<string, string>("fingerprint", "DiceBot-"+Process.GetCurrentProcess().Id));
+                pairs.Add(new KeyValuePair<string, string>("loginmethod", Username.Contains("@")?"email": "username"));
                 pairs.Add(new KeyValuePair<string, string>("password", Password));
-                pairs.Add(new KeyValuePair<string, string>("redirect_uri", "https://betking.io/bet"));
-                pairs.Add(new KeyValuePair<string, string>("twoFactorCode", twofa));
-                pairs.Add(new KeyValuePair<string, string>("username", Username));
+                //pairs.Add(new KeyValuePair<string, string>("redirect_uri", "https://betking.io/bet"));
+                pairs.Add(new KeyValuePair<string, string>("otp", twofa));
+                pairs.Add(new KeyValuePair<string, string>("rememberme", "false"));
+                pairs.Add(new KeyValuePair<string, string>(Username.Contains("@") ? "email" : "username", Username));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
-                HttpResponseMessage RespMsg = Client.PostAsync("bet/login", Content).Result;
+                HttpResponseMessage RespMsg = Client.PostAsync("api/auth/login", Content).Result;
                 string responseUri = RespMsg.RequestMessage.RequestUri.ToString();
                 string sEmitResponse = RespMsg.Content.ReadAsStringAsync().Result;
                 
                 if (!sEmitResponse.ToLower().Contains("error"))
                 {
-                    
-                    RespMsg = Client.GetAsync(RespMsg.Headers.Location.OriginalString).Result;
-                    sEmitResponse = RespMsg.Content.ReadAsStringAsync().Result;
-                    if (RespMsg.Headers.Location!=null)
-                    {
-                        /*accesstoken = RespMsg.Headers.Location.OriginalString;
-                        accesstoken = accesstoken.Substring(accesstoken.IndexOf("=") + 1);
-                        accesstoken = accesstoken.Substring(0, accesstoken.IndexOf("&"));
-                        Client.DefaultRequestHeaders.Add("authorization", "Bearer " + accesstoken);
-                        */
-                        foreach (Cookie x in cookies.GetCookies(new Uri("http://betking.io/bet")))
-                        {
-                            if (x.Name == "token")
-                            {
-                                accesstoken = x.Value;
-                                Client.DefaultRequestHeaders.Add("authorization", "Bearer " + accesstoken);
-
-                            }
-                        }
-                        while (RespMsg.Headers.Location != null)
-                        {
-                            RespMsg = Client.GetAsync(RespMsg.Headers.Location.OriginalString).Result;
-
-                        }
-                    }
-                    string r = Client.GetStringAsync("https://betking.io/bet/dice").Result;
-                    sEmitResponse = Client.GetStringAsync("https://api.betking.io/api/stats/gethousestats?appId=0").Result;
-                    sEmitResponse = Client.GetStringAsync("https://betking.io/bet/api/account/current-profile").Result;
-
+                    BKAccount tmpAccount = json.JsonDeserialize<BKAccount>(sEmitResponse);
                     this.username = Username;
-                    if (ConnectSocket())
+                    
+                    sEmitResponse = Client.GetStringAsync("api/wallet/currencies").Result;
+                    Currs = json.JsonDeserialize<bkGetCurrencies>(sEmitResponse);
+                    
+                    if (Currs == null)
                     {
-                        lastupdate = DateTime.Now;
-                        ispd = true;
-                        new Thread(new ThreadStart(GetBlanaceThread)).Start();
-                        GetBalance();
-                        GetStats();
-                        finishedlogin(true);
-                    }
-                    else
+                        Parent.DumpLog("Failed to get currencies", 0);
                         finishedlogin(false);
+                        return;
+                    }
+                    foreach (BKCurrency x in Currs.currencies)
+                    {
+                        if (x.symbol.ToLower() == Currency.ToLower())
+                        {
+                            CurrentCurrency = x;
+                        }
+                    }
+                    resp = Client.GetAsync("bet/dice").Result;
+                    s1 = resp.Content.ReadAsStringAsync().Result;
+
+                    s1 = s1.Substring(s1.IndexOf("window.settings"));
+                    s1 = s1.Substring(s1.IndexOf("\"csrfToken\":\"") + "\"csrfToken\":\"".Length);
+
+                    csrf = s1.Substring(0, s1.IndexOf("\""));
+                    Client.DefaultRequestHeaders.Remove("csrf-token");
+                    Client.DefaultRequestHeaders.Add("csrf-token", csrf);
+                    GetBalance();
+                    GetStats();
+                    
+
+                    string LoadState = Client.GetStringAsync("api/dice/load-state?clientSeed="+ R.Next(0, int.MaxValue)+ "&currency=0").Result;
+                    bkLoadSTate TmpState = json.JsonDeserialize<bkLoadSTate>(LoadState);
+                    nonce = TmpState.nonce;
+                    clientseed = TmpState.clientSeed;
+                    serverseedhash = TmpState.serverSeedHash;
+                    finishedlogin(true);
                     return;
+
                 }
 
             }
@@ -292,121 +324,6 @@ namespace DiceBot
                 return;
             }
             finishedlogin(false);
-        }
-
-        bool ConnectSocket()
-        {
-            string sid = "";
-            string s = Client.GetStringAsync(string.Format("https://socket.betking.io/socket.io/?appId={0}&token={1}&EIO=3&transport=polling&t={2}",0,accesstoken,json.CurrentDate())).Result;
-            List<KeyValuePair<string, string>> Cookies = new List<KeyValuePair<string, string>>();
-           
-            foreach (Cookie x in cookies.GetCookies(new Uri("https://socket.betking.io")))
-            {
-                if (x.Name=="io")
-                {
-                    sid = x.Value;
-                    Cookies.Add(new KeyValuePair<string, string>("io", sid));
-                }
-            }
-            
-            s = Client.GetStringAsync(string.Format("https://socket.betking.io/socket.io/?appId={0}&token={1}&EIO=3&transport=polling&t={2}&sid={3}", 0, accesstoken, json.CurrentDate(), sid)).Result;
-
-            string address = string.Format("wss://socket.betking.io/socket.io/?appId={0}&token={1}&EIO=3&transport=websocket&sid={2}",0, accesstoken, sid);
-            Sock = new WebSocket(address, null, Cookies);
-            Sock.Closed += Sock_Closed;
-            Sock.Error += Sock_Error;
-            Sock.MessageReceived += Sock_MessageReceived;
-            Sock.Opened += Sock_Opened;
-            Sock.Open();
-
-            while (Sock.State == WebSocketState.Connecting)
-                Thread.Sleep(10);
-
-            return(Sock.State == WebSocketState.Open);
-            
-        }
-
-        private void Sock_Opened(object sender, EventArgs e)
-        {
-            Sock.Send("2probe");
-
-        }
-        long id = 0;
-        private void Sock_MessageReceived(object sender, MessageReceivedEventArgs e)
-        {
-            
-            if (e.Message == "3probe")
-            {
-                Sock.Send("5");
-            }
-            Parent.DumpLog(e.Message, 7);
-            
-            if (e.Message.StartsWith("42[\"showDiceBet\""))
-            {
-                string x = e.Message.Substring(e.Message.IndexOf(",") + 1);
-                x = x.Substring(0, x.Length - 1);
-                BKBet tmpbet = json.JsonDeserialize<BKBet>(x);
-                if (tmpbet!=null)
-                {
-                    if (tmpbet.userName == username && id!=tmpbet.id)
-                    {
-                        id = tmpbet.id;
-                        Bet NewBet = new Bet()
-                        {
-                            Guid = this.Guid,
-                            Amount = tmpbet.betAmount,
-                            date = DateTime.Now,
-                            Chance = tmpbet.chance,
-                            clientseed = clientseed,
-                            Currency = tmpbet.currency.ToString(),
-                            high = tmpbet.target == 0,
-                            Id = tmpbet.id.ToString(),
-                            Profit = tmpbet.profit,
-                            Roll = tmpbet.roll,
-                            serverhash = serverseedhash,
-                            nonce = nonce     
-                        };
-                        this.wagered += NewBet.Amount;
-                        this.profit += NewBet.Profit;
-                        this.bets++;
-                        bool win = (NewBet.Roll > 99.99m - NewBet.Chance && High) || (NewBet.Roll < NewBet.Chance && !High);
-                        if (win)
-                            wins++;
-                        else
-                            losses++;
-                        FinishedBet(NewBet);
-                    }
-                }
-            }
-            if (e.Message.StartsWith("42[\"diceBetResult\","))
-            {
-                string x = e.Message.Substring(e.Message.IndexOf(",") + 1);
-                x = x.Substring(0, x.Length - 1);
-                BKBet2 tmpbet = json.JsonDeserialize<BKBet2>(x);
-                if (tmpbet!=null)
-                {
-                    this.nonce = tmpbet.nonce;
-                    this.balance = tmpbet.balance;
-
-                }
-
-            }
-
-        }
-
-        private void Sock_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
-       {
-            
-        }
-
-        private void Sock_DataReceived(object sender, DataReceivedEventArgs e)
-        {
-            
-        }
-
-        private void Sock_Closed(object sender, EventArgs e)
-        {
-            
         }
 
         public override bool ReadyToBet()
@@ -436,14 +353,70 @@ namespace DiceBot
         string Guid = "";
         void PlaceBetThread(object BetObj)
         {
-            PlaceBetObj bet = BetObj as PlaceBetObj;
-            this.Guid = bet.Guid;
-            string cont = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"appId\":{0},\"chance\":{1:0.0000},\"betAmount\":{2:0.00000000},\"target\":{3},\"currency\":{4}}}", 0, bet.Chance, bet.Amount, bet.High ? 0 : 1, Curs[Currency]);
-            var content = new StringContent(cont, Encoding.UTF8, "application/json");
+            try
+            {
+                PlaceBetObj tmpob = BetObj as PlaceBetObj;
+                //LastBetAmount = (double)tmpob.Amount;
+                List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
 
-            HttpResponseMessage response = Client.PostAsync("https://api.betking.io/api/dice/bet", content).Result;
+                pairs.Add(new KeyValuePair<string, string>("betAmount", "\"" + (amount * (decimal)CurrentCurrency.EffectiveScale).ToString("0") + "\""));
+                pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString("0.#####")));
+                pairs.Add(new KeyValuePair<string, string>("currency", CurrentCurrency.id.ToString()));
+                pairs.Add(new KeyValuePair<string, string>("target", tmpob.High ? "1" : "0"));
+                string loginjson = "{\"betAmount\":\""+ (amount * (decimal)CurrentCurrency.EffectiveScale).ToString("0") + 
+                    "\",\"currency\":"+CurrentCurrency.id.ToString()+
+                    ",\"target\":"+(tmpob.High ? "1" : "0")+",\"chance\":"+ chance.ToString("0.#####")+"}";//string.Format("{{username:\"{0}\",password:\"{1}\",code:\"{2}\",captcha:\"{3}\"}}",Username,Password,twofa,"");
 
-            
+                HttpContent cont = new StringContent(loginjson);
+                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                
+                HttpResponseMessage tmpmsg = Client.PostAsync("api/dice/bet", cont).Result;
+                string sEmitResponse = tmpmsg.Content.ReadAsStringAsync().Result;
+                bkPlaceBet tmpBet = json.JsonDeserialize<bkPlaceBet>(sEmitResponse);
+                this.balance = decimal.Parse(tmpBet.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / CurrentCurrency.EffectiveScale;
+                Bet newBet = new Bet
+                {
+                    Amount = tmpob.Amount,
+                    date = DateTime.Now,
+                    Chance = tmpob.Chance,
+                    Guid = tmpob.Guid,
+                    Currency = Currency,
+                    high = tmpob.High,
+                    nonce = tmpBet.nextNonce - 1,
+                    Roll = (decimal)tmpBet.game_details.roll,
+                    UserName = username,
+                    Id = tmpBet.id,
+                    serverhash = serverseedhash,
+                    clientseed = clientseed
+                };
+                bool win = false;
+                if ((newBet.Roll > maxRoll - newBet.Chance && tmpob.High) || (newBet.Roll < newBet.Chance && !tmpob.High))
+                {
+                    win = true;
+                    
+                }
+                if (win)
+                {
+                    newBet.Profit = (newBet.Amount * (((100m - edge) / chance) - 1));
+                    
+                    wins++;
+                }
+                else
+                {
+                    newBet.Profit -= newBet.Amount;
+                    losses++;
+                }
+                profit += newBet.Profit;
+                wagered += newBet.Amount;
+                bets++;
+                FinishedBet(newBet);
+                return;
+            }
+            catch (Exception e)
+            {
+                Parent.DumpLog(e.ToString(), -1);
+            }
+
         }
         protected override void internalPlaceBet(bool High, decimal amount, decimal chance, string Guid)
         {
@@ -457,7 +430,7 @@ namespace DiceBot
 
         public override bool InternalSendTip(string User, decimal amount)
         {
-            try
+           /* try
             {
                 string x = Client.GetStringAsync(string.Format("https://api.betking.io/api/stats/getuserstats?appId={0}&userName={1}", 0, User)).Result;
                 BKGetStats y = json.JsonDeserialize<BKGetStats>(x);
@@ -475,7 +448,7 @@ namespace DiceBot
             catch (Exception e)
             {
                 Parent.DumpLog(e.ToString(), -1);
-            }
+            }*/
             return false;
 
         }
@@ -525,66 +498,89 @@ namespace DiceBot
         {
             return sGetLucky(server, client, nonce);
         }
+
+
+       
+
+
     }
     public class BKAccount
     {
+
         public string id { get; set; }
         public string username { get; set; }
-        public string creationDate { get; set; }
-    }
+        public string email { get; set; }
 
+    }
     public class BKStat
     {
-        public string id { get; set; }
+        public string num_bets { get; set; }
+        public string wagered { get; set; }
+        public string profit { get; set; }
         public int currency { get; set; }
-        public int appId { get; set; }
-        public int numBets { get; set; }
-        public decimal profit { get; set; }
-        public decimal wagered { get; set; }
     }
-    
-public class BKGetStats
+    public class bkGameDetails
     {
-        public BKAccount account { get; set; }
-        public List<BKStat> stats { get; set; }
-    }
-
-    public class BKGetBalance
-    {
-        public decimal Balance { get; set; }
-        public string UserName { get; set; }
-        public int MaxWin { get; set; }
-        public decimal Wagered { get; set; }
-        public decimal Profit { get; set; }
-        public int NumBets { get; set; }
-        public string ServerSeedHash { get; set; }
-        public string ClientSeed { get; set; }
-        public int Nonce { get; set; }
-        public bool IsBettingDisabled { get; set; }
-        public bool AreBetsAndStatsHidden { get; set; }
-    }
-
-    public class BKBet
-    {
-        public string userName { get; set; }
-        public decimal betAmount { get; set; }
-        public decimal chance { get; set; }
+        public double roll { get; set; }
+        public double chance { get; set; }
         public int target { get; set; }
-        public decimal roll { get; set; }
-        public decimal profit { get; set; }
+    }
+
+    public class bkPlaceBet
+    {
+        public string id { get; set; }
         public string date { get; set; }
+        public string bet_amount { get; set; }
+        public int currency { get; set; }
+        public string profit { get; set; }
+        public bkGameDetails game_details { get; set; }
+        public string game_type { get; set; }
+        public string balance { get; set; }
+        public int nextNonce { get; set; }
+    }
+    public class BKCurrency
+    {
         public int id { get; set; }
+        public string symbol { get; set; }
+        public string name { get; set; }
+        public int scale { get; set; }
+        public string max_withdraw_limit { get; set; }
+        public string min_withdraw_limit { get; set; }
+        public string withdrawal_fee { get; set; }
+        public string no_throttle_amount { get; set; }
+        public string min_tip { get; set; }
+        public string address_type { get; set; }
+
+        public decimal EffectiveScale
+        {
+            get
+            {
+                return (decimal)Math.Pow(10.0, (double)scale);
+            }
+        }
+    }
+
+    public class bkGetCurrencies
+    {
+        public List<BKCurrency> currencies { get; set; }
+    }
+    public class bkBalance
+    {
+        public string balance { get; set; }
         public int currency { get; set; }
     }
-    public class BKBet2
-    { 
-        public string id { get; set; }
-        public decimal balance { get; set; }
+
+    public class bkGetBalances
+    {
+        public List<bkBalance> balances { get; set; }
+    }
+    public class bkLoadSTate
+    {
+        public string clientSeed { get; set; }
+        public string serverSeedHash { get; set; }
         public int nonce { get; set; }
-        public int currency { get; set; }
-        public int appId { get; set; }
-        public decimal profit { get; set; }
-        public decimal betAmount { get; set; }
-        public decimal roll { get; set; }
+        public string maxWin { get; set; }
+        public string minBetAmount { get; set; }
+        public bool isBettingDisabled { get; set; }
     }
 }

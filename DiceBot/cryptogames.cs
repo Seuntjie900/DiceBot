@@ -200,9 +200,15 @@ namespace DiceBot
                 finishedlogin(true);
             }
             catch (AggregateException e)
-            { finishedlogin(false); }
+            {
+                Parent.DumpLog(e.ToString(),-1);
+                finishedlogin(false);
+            }
             catch (Exception e)
-            { finishedlogin(false); }
+            {
+                Parent.DumpLog(e.ToString(), -1);
+                finishedlogin(false);
+            }
         }
 
         public override bool Register(string username, string password)

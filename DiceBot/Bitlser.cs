@@ -149,9 +149,9 @@ namespace DiceBot
                                                 profit = bsstatsbase._return.strat_profit;
                                                 wagered = bsstatsbase._return.strat_wagered; break;
                                         }
-                                        bets = int.Parse(bsstatsbase._return.bets);
-                                        wins = int.Parse(bsstatsbase._return.wins);
-                                        losses = int.Parse(bsstatsbase._return.losses);
+                                        bets = int.Parse(bsstatsbase._return.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                        wins = int.Parse(bsstatsbase._return.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                        losses = int.Parse(bsstatsbase._return.losses, System.Globalization.NumberFormatInfo.InvariantInfo);
 
                                         Parent.updateBalance(balance);
                                         Parent.updateBets(bets);
@@ -241,9 +241,9 @@ namespace DiceBot
                                         profit = bsstatsbase._return.strat_profit;
                                         wagered = bsstatsbase._return.strat_wagered; break;
                                 }
-                                bets = int.Parse(bsstatsbase._return.bets);
-                                wins = int.Parse(bsstatsbase._return.wins);
-                                losses = int.Parse(bsstatsbase._return.losses);
+                                bets = int.Parse(bsstatsbase._return.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                wins = int.Parse(bsstatsbase._return.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                losses = int.Parse(bsstatsbase._return.losses, System.Globalization.NumberFormatInfo.InvariantInfo);
 
                                 Parent.updateBalance(balance);
                                 Parent.updateBets(bets);
@@ -544,9 +544,9 @@ devise:btc*/
                                                 profit = bsstatsbase._return.strat_profit;
                                                 wagered = bsstatsbase._return.strat_wagered; break;
                                         }
-                                        bets = int.Parse(bsstatsbase._return.bets==null?"0": bsstatsbase._return.bets);
-                                        wins = int.Parse(bsstatsbase._return.wins == null ? "0" : bsstatsbase._return.wins);
-                                        losses = int.Parse(bsstatsbase._return.losses == null ? "0" : bsstatsbase._return.losses);
+                                        bets = int.Parse(bsstatsbase._return.bets==null?"0": bsstatsbase._return.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                        wins = int.Parse(bsstatsbase._return.wins == null ? "0" : bsstatsbase._return.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                        losses = int.Parse(bsstatsbase._return.losses == null ? "0" : bsstatsbase._return.losses, System.Globalization.NumberFormatInfo.InvariantInfo);
 
                                         Parent.updateBalance(balance);
                                         Parent.updateBets(bets);

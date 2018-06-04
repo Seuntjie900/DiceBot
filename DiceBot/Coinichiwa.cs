@@ -266,7 +266,7 @@ namespace DiceBot
                 int id = 0;
                 if (parts.Length > 1)
                 {
-                    if (int.TryParse(parts[0], out id) && parts[1] == "ok")
+                    if (int.TryParse(parts[0], System.Globalization.NumberStyles.Any, System.Globalization.NumberFormatInfo.InvariantInfo, out id) && parts[1] == "ok")
                     {
                         if (Requests.ContainsKey(id))
                         {
@@ -276,20 +276,20 @@ namespace DiceBot
                             {
                                 case "dice": ReceivedBet(new CoinichiwaBet
                                 {
-                                    delay = int.Parse(parts[2]),
-                                    betid = long.Parse(parts[3]),
+                                    delay = int.Parse(parts[2], System.Globalization.NumberFormatInfo.InvariantInfo),
+                                    betid = long.Parse(parts[3], System.Globalization.NumberFormatInfo.InvariantInfo),
                                     result = parts[4],
                                     luckyNumber = decimal.Parse(parts[5], System.Globalization.NumberFormatInfo.InvariantInfo),
-                                    seedIncrement = int.Parse(parts[6]),
+                                    seedIncrement = int.Parse(parts[6], System.Globalization.NumberFormatInfo.InvariantInfo),
                                     profit = decimal.Parse(parts[7], System.Globalization.NumberFormatInfo.InvariantInfo),
-                                    jackpot = int.Parse(parts[8]),
+                                    jackpot = int.Parse(parts[8], System.Globalization.NumberFormatInfo.InvariantInfo),
                                     balance = decimal.Parse(parts[9], System.Globalization.NumberFormatInfo.InvariantInfo)
                                 }); break;
-                                case "info": info(new CoinichiwaInfo { username = parts[2], clientSeed = parts[3], nonce = int.Parse(parts[4]), hash = parts[5] }); break;
+                                case "info": info(new CoinichiwaInfo { username = parts[2], clientSeed = parts[3], nonce = int.Parse(parts[4], System.Globalization.NumberFormatInfo.InvariantInfo), hash = parts[5] }); break;
                                 case "stats": stats(new CoinichiwatStat { balance = decimal.Parse(parts[2], System.Globalization.NumberFormatInfo.InvariantInfo), 
-                                    bets = int.Parse(parts[3]), 
-                                    wins = int.Parse(parts[4]), 
-                                    losses = int.Parse(parts[5]), 
+                                    bets = int.Parse(parts[3], System.Globalization.NumberFormatInfo.InvariantInfo), 
+                                    wins = int.Parse(parts[4], System.Globalization.NumberFormatInfo.InvariantInfo), 
+                                    losses = int.Parse(parts[5], System.Globalization.NumberFormatInfo.InvariantInfo), 
                                     wagered = decimal.Parse(parts[6], System.Globalization.NumberFormatInfo.InvariantInfo), 
                                     profit = decimal.Parse(parts[7], System.Globalization.NumberFormatInfo.InvariantInfo) }); break;
                                 case "deposit": deposit(new CoinichiwaDepost { address = parts[2] }); break;

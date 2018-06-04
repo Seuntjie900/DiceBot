@@ -33,7 +33,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.17";
+        private const string vers = "3.3.18";
         
 
         Control[] ControlsToDisable;
