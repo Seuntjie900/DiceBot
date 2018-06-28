@@ -350,7 +350,7 @@ user[password]:asdfasdfasdf*/
                         }
                         else
                         {
-                            pairs.Add(new KeyValuePair<string, string>("user[username]", a));
+                            pairs.Add(new KeyValuePair<string, string>("user[username]", Username));
                         }
                         pairs.Add(new KeyValuePair<string, string>("data[info]", a));
                         pairs.Add(new KeyValuePair<string, string>("user[password]", Password/*==""?"undefined":twofa*/));

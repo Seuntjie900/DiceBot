@@ -176,7 +176,7 @@ namespace DiceBot
         
         void GetStats()
         {
-            HttpResponseMessage Msg = Client.GetAsync("https://socket.betking.io/api/stats/my-stats").Result;
+            HttpResponseMessage Msg = Client.GetAsync("https://betking.io/socket-api/stats/my-stats").Result;
             if (Msg.IsSuccessStatusCode)
             {
                 string Response = Msg.Content.ReadAsStringAsync().Result;
@@ -373,7 +373,21 @@ namespace DiceBot
                 HttpResponseMessage tmpmsg = Client.PostAsync("api/dice/bet", cont).Result;
                 string sEmitResponse = tmpmsg.Content.ReadAsStringAsync().Result;
                 bkPlaceBet tmpBet = json.JsonDeserialize<bkPlaceBet>(sEmitResponse);
+                if (tmpBet.error != null)
+                {
+                    Parent.DumpLog(tmpBet.error, 1);
+                    if (tmpBet.error==("MIN_BET_AMOUNT_FOR_CURRENCYNAME_IS"))
+                    {
+                        
+                        Parent.updateStatus("Bet too small");
+                    }
+                    else
+                    {
+                        Parent.updateStatus("Bet too small");
+                    }
+                }
                 this.balance = decimal.Parse(tmpBet.balance, System.Globalization.NumberFormatInfo.InvariantInfo) / CurrentCurrency.EffectiveScale;
+
                 Bet newBet = new Bet
                 {
                     Amount = tmpob.Amount,
@@ -537,6 +551,7 @@ namespace DiceBot
         public string game_type { get; set; }
         public string balance { get; set; }
         public int nextNonce { get; set; }
+        public string error { get; set; }
     }
     public class BKCurrency
     {

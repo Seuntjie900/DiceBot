@@ -16,7 +16,7 @@ namespace DiceBot
 {
     public class PD : DiceSite
     {
-        public static string[] sCurrencies = new string[] { "Btc", "Ltc" };
+        public static string[] sCurrencies = new string[] { "Btc", "Ltc","Eth" };
         GraphQL.Client.GraphQLClient GQLClient = new GraphQL.Client.GraphQLClient("https://api.primedice.com/graphql");
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
@@ -478,7 +478,7 @@ namespace DiceBot
             try
             {
                 //mutation{sendTip(userId:"", amount:0, currency:btc,isPublic:true,chatId:""){id currency amount}}
-                string userid = "";
+                string userid = GetUid(User);
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
                     Query = "mutation{sendTip(userId:\""+userid+"\", amount:"+amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)+", currency:"+Currency.ToLower()+ ",isPublic:true,chatId:\"14939265-52a4-404e-8a0c-6e3e10d915b4\"){id currency amount}}"
@@ -486,20 +486,42 @@ namespace DiceBot
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 return Resp.Data.sendTip.id.Value != null;
             }
-            catch (WebException e)
+            catch (Exception e)
             {
-                if (e.Response != null)
+                /*if (e.Response != null)
                 {
 
                     string sEmitResponse = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
                     Parent.updateStatus(sEmitResponse);
                     
-                }
+                }*/
             }
             return false;
         }
+        public string GetUid(string username)
+        {
+            try
+            {
+                string userid = "";
 
-    
+                
+                GraphQLRequest LoginReq = new GraphQLRequest
+                {
+                    Query = "query { user(name:\""+ username + "\"){id}}"
+                };
+                GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
+                return Resp.Data.user.id.Value;
+                
+                
+            }
+            catch (Exception ex)
+            {
+
+                //ChatBot.DumpLog(ex.ToString());
+                return null;
+            }
+        }
+
 
 
 

@@ -21,7 +21,7 @@ namespace DiceBot
         long uid = 0;
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        public static string[] sCurrencies = new string[] { "btc", "ltc", "doge", "eth", "burst", "dash", "zec", "bch","xmr","etc","neo","strat" };
+        public static string[] sCurrencies = new string[] { "btc", "ltc", "doge", "eth", "burst", "dash", "zec", "bch","xmr","etc","neo","strat","kmd","xrp" };
         HttpClientHandler ClientHandlr;
         
         public Bitsler(cDiceBot Parent)
@@ -148,6 +148,14 @@ namespace DiceBot
                                                 balance = bsstatsbase._return.strat_balance;
                                                 profit = bsstatsbase._return.strat_profit;
                                                 wagered = bsstatsbase._return.strat_wagered; break;
+                                            case "kmd":
+                                                balance = bsstatsbase._return.kmd_balance;
+                                                profit = bsstatsbase._return.kmd_profit;
+                                                wagered = bsstatsbase._return.kmd_wagered; break;
+                                            case "xrp":
+                                                balance = bsstatsbase._return.xrp_balance;
+                                                profit = bsstatsbase._return.xrp_profit;
+                                                wagered = bsstatsbase._return.xrp_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase._return.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                         wins = int.Parse(bsstatsbase._return.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -240,6 +248,14 @@ namespace DiceBot
                                         balance = bsstatsbase._return.strat_balance;
                                         profit = bsstatsbase._return.strat_profit;
                                         wagered = bsstatsbase._return.strat_wagered; break;
+                                    case "kmd":
+                                        balance = bsstatsbase._return.kmd_balance;
+                                        profit = bsstatsbase._return.kmd_profit;
+                                        wagered = bsstatsbase._return.kmd_wagered; break;
+                                    case "xrp":
+                                        balance = bsstatsbase._return.xrp_balance;
+                                        profit = bsstatsbase._return.xrp_profit;
+                                        wagered = bsstatsbase._return.xrp_wagered; break;
                                 }
                                 bets = int.Parse(bsstatsbase._return.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                 wins = int.Parse(bsstatsbase._return.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -443,7 +459,7 @@ devise:btc*/
                 }
                 else
                 {
-                    if (resp.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    if (resp.StatusCode == HttpStatusCode.ServiceUnavailable || resp.StatusCode== HttpStatusCode.Forbidden)
                     {
                         s1 = resp.Content.ReadAsStringAsync().Result;
                         //cflevel = 0;
@@ -543,6 +559,14 @@ devise:btc*/
                                                 balance = bsstatsbase._return.strat_balance;
                                                 profit = bsstatsbase._return.strat_profit;
                                                 wagered = bsstatsbase._return.strat_wagered; break;
+                                            case "kmd":
+                                                balance = bsstatsbase._return.kmd_balance;
+                                                profit = bsstatsbase._return.kmd_profit;
+                                                wagered = bsstatsbase._return.kmd_wagered; break;
+                                            case "xrp":
+                                                balance = bsstatsbase._return.xrp_balance;
+                                                profit = bsstatsbase._return.xrp_profit;
+                                                wagered = bsstatsbase._return.xrp_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase._return.bets==null?"0": bsstatsbase._return.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                         wins = int.Parse(bsstatsbase._return.wins == null ? "0" : bsstatsbase._return.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -686,6 +710,22 @@ devise:btc*/
 
             }
             else if (Currency.ToLower() == "strat")
+            {
+                if (LastBetAmount <= 0.00000025 || (double)amount <= 0.00000025)
+                    type_delay = 1;
+                else
+                    type_delay = 2;
+
+            }
+            else if (Currency.ToLower() == "kmd")
+            {
+                if (LastBetAmount <= 0.00000025 || (double)amount <= 0.00000025)
+                    type_delay = 1;
+                else
+                    type_delay = 2;
+
+            }
+            else if (Currency.ToLower() == "xrp")
             {
                 if (LastBetAmount <= 0.00000025 || (double)amount <= 0.00000025)
                     type_delay = 1;
@@ -867,6 +907,14 @@ devise:btc*/
         public decimal strat_balance { get; set; }
         public decimal strat_wagered { get; set; }
         public decimal strat_profit { get; set; }
+
+        public decimal kmd_balance { get; set; }
+        public decimal kmd_wagered { get; set; }
+        public decimal kmd_profit { get; set; }
+
+        public decimal xrp_balance { get; set; }
+        public decimal xrp_wagered { get; set; }
+        public decimal xrp_profit { get; set; }
 
         public string wins { get; set; }
         public string losses { get; set; }

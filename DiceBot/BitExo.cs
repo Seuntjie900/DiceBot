@@ -13,7 +13,7 @@ namespace DiceBot
     class BitExo:DiceSeuntjie
     {
 
-        new public static string[] sCurrencies = new string[] { "BTC","LTC","DASH","ADK","GRLC","FLASH" };
+        new public static string[] sCurrencies = new string[] { "BTC","LTC","DASH","ADK","GRLC","FLASH","ETH" };
 
         public BitExo(cDiceBot Parent):base(Parent)
         {
