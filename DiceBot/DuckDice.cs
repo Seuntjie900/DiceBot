@@ -153,6 +153,7 @@ namespace DiceBot
             catch (Exception e)
             {
                 Parent.updateStatus("There was an error placing your bet.");
+                Parent.DumpLog(e.ToString(), -1);
             }
         }
 
@@ -222,16 +223,47 @@ namespace DiceBot
         {
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };
+            ClientHandlr.CookieContainer = new CookieContainer();
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://duckdice.io/api/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             Client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
+            //Client.DefaultRequestHeaders.Add("origin", "https://duckdice.io");
             try
             {
                 
                 accesstoken =Password;
                 //Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer",accesstoken);
                 accesstoken = Password;
+
+                /*string s1 = "";
+                HttpResponseMessage resp = Client.GetAsync("https://duckdice.io/api/play").Result;
+                if (resp.IsSuccessStatusCode)
+                {
+                    s1 = resp.Content.ReadAsStringAsync().Result;
+                }
+                else
+                {
+                    if (resp.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    {
+                        s1 = resp.Content.ReadAsStringAsync().Result;
+                        //cflevel = 0;
+                        System.Threading.Tasks.Task.Factory.StartNew(() =>
+                        {
+                            System.Windows.Forms.MessageBox.Show("Duckdice.io has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                        });
+                        if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, "www.duckdice.io"))
+                        {
+                            finishedlogin(false);
+                            return;
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }*/
+
                 string sEmitResponse = Client.GetStringAsync("load/"+Currency+"?api_key="+accesstoken).Result;
                         Quackbalance balance = json.JsonDeserialize<Quackbalance>(sEmitResponse);
                         sEmitResponse = Client.GetStringAsync("stat/" + Currency + "?api_key=" + accesstoken).Result;

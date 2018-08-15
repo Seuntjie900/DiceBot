@@ -16,8 +16,10 @@ namespace DiceBot
 {
     public class PD : DiceSite
     {
+        protected string URL = "https://api.primedice.com/graphql";
+        protected string RolName = "primediceRoll";
         public static string[] sCurrencies = new string[] { "Btc", "Ltc","Eth" };
-        GraphQL.Client.GraphQLClient GQLClient = new GraphQL.Client.GraphQLClient("https://api.primedice.com/graphql");
+        GraphQL.Client.GraphQLClient GQLClient;
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
         public bool ispd = false;
@@ -66,7 +68,7 @@ namespace DiceBot
                         lastupdate = DateTime.Now;
                         GraphQLRequest LoginReq = new GraphQLRequest
                         {
-                            Query = "query{user {activeSeed { serverSeedHash clientSeed nonce} id balances{available{currency amount value}} throttles{key value ttl type refType refId} statistic {bets wins losses amount profit currency value}}}"
+                            Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {bets wins losses amount profit currency}}}"
                         };
                         GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                         pdUser user = Resp.GetDataFieldAs<pdUser>("user");
@@ -161,10 +163,10 @@ namespace DiceBot
         {
             try
             {
-
+                GQLClient = new GraphQL.Client.GraphQLClient(URL);
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "mutation{loginUser(name:\"" + Username + "\", password:\"" + Password + "\"" + (string.IsNullOrWhiteSpace(otp) ? "" : ",tfaToken:\"" + otp + "\"") + ") {activeSeed { serverSeedHash clientSeed nonce} id balances{available{currency amount value}} throttles{key value ttl type refType refId} statistic {bets wins losses amount profit currency value}}}"
+                    Query = "mutation{loginUser(name:\"" + Username + "\", password:\"" + Password + "\"" + (string.IsNullOrWhiteSpace(otp) ? "" : ",tfaToken:\"" + otp + "\"") + ") {activeServerSeed { seedHash seed nonce} activeClientSeed {seed} id statistic {bets wins losses amount profit currency} balances{available{currency amount}} }}"
                 };
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
@@ -244,7 +246,7 @@ namespace DiceBot
                 
                 decimal tmpchance = High ? 99.99m - chance : chance;
 
-                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{rollDice(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:"+Currency.ToLower()+") { id iid nonce currency amount value payout result target condition createdAt seed{serverSeedHash serverSeed clientSeed nonce} user{balances{available{amount currency}} statistic{bets wins losses amount profit currency}}}}" }).Result;
+                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{"+RolName+"(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:"+Currency.ToLower()+ ") { id iid nonce currency amount payout state { ... on BetGamePrimedice { result target condition } } createdAt serverSeed{seedHash seed nonce} clientSeed{seed} user{balances{available{amount currency}} statistic{bets wins losses amount profit currency}}}}" }).Result;
                 if (betresult.Errors!=null)
                 {
                     if (betresult.Errors.Length > 0)
@@ -252,7 +254,7 @@ namespace DiceBot
                 }
                 else
                 {
-                    RollDice tmp = betresult.GetDataFieldAs<RollDice>("rollDice");
+                    RollDice tmp = betresult.GetDataFieldAs<RollDice>(RolName);
 
 
                     Lastbet = DateTime.Now;
@@ -326,11 +328,11 @@ namespace DiceBot
         {
             GraphQLRequest LoginReq = new GraphQLRequest
             {
-                Query = "mutation{rotateSeed(clientSeed:\":" + R.Next().ToString() + "\" ){ clientSeed serverSeedHash nonce }}"
+                Query = "mutation{rotateServerSeed{ seed seedHash nonce } changeClientSeed(seed:\""+R.Next(0, int.MaxValue).ToString()+"\"){seed}}"
             };
             GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
-            pdSeed user = Resp.GetDataFieldAs<pdSeed>("rotateSeed");
-
+            pdSeed user = Resp.GetDataFieldAs<pdSeed>("rotateServerSeed");
+            
         }
 
         public override void SetClientSeed(string Seed)
@@ -357,7 +359,7 @@ namespace DiceBot
                 
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "mutation{createWithdrawal(currency:"+Currency.ToLower()+", address:\""+Address+"\",amount:"+amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)+"){id name address hash amount userFee walletFee createdAt status currency}}"
+                    Query = "mutation{createWithdrawal(currency:"+Currency.ToLower()+", address:\""+Address+"\",amount:"+amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)+"){id name address hash amount walletFee createdAt status currency}}"
                 };
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 return Resp.Data.createWithdrawal.id.Value != null;
@@ -590,9 +592,8 @@ namespace DiceBot
         }
         public class pdSeed
         {
-            public string serverSeedHash { get; set; }
-            public object serverSeed { get; set; }
-            public string clientSeed { get; set; }
+            public string seedHash { get; set; }
+            public string seed { get; set; }            
             public int nonce { get; set; }
         }
         public class pdUser
@@ -604,7 +605,8 @@ namespace DiceBot
             public Balance balance { get; set; }
             public Balance[] balances { get; set; }
             public List<Statistic> statistic { get; set; }
-            public pdSeed activeSeed { get; set; }
+            public pdSeed activeServerSeed { get; set; }
+            public pdSeed activeClientSeed { get; set; }
         }
 
         public class ChatMessages
@@ -629,36 +631,42 @@ namespace DiceBot
             public pdUser user { get; set; }
             public string __typename { get; set; }
         }
+        public class DiceState
+        {
+            public double result { get; set; }
+            public double target { get; set; }
+            public string condition { get; set; }
+
+        }
         public class RollDice
         {
             public string id { get; set; }
             public string iid { get; set; }
-            public double result { get; set; }
-            public decimal payoutMultiplier { get; set; }
+             public decimal payoutMultiplier { get; set; }
             public double amount { get; set; }
             public double payout { get; set; }
             public string createdAt { get; set; }
-            public double target { get; set; }
-            public string condition { get; set; }
-            public string currency { get; set; }
+             public string currency { get; set; }
+            public DiceState state { get; set; }
             public pdUser user { get; set; }
             public string __typename { get; set; }
-            public pdSeed seed { get; set; }
+            public pdSeed serverSeed { get; set; }
+            public pdSeed clientSeed { get; set; }
             public int nonce { get; set; }
             public Bet ToBet()
             {
                 Bet bet = new Bet
                 {
                     Amount = (decimal)amount,
-                    Chance = condition.ToLower() == "above" ? 99.99m - (decimal)target : (decimal)target,
-                    high = condition.ToLower() == "above",
+                    Chance = state.condition.ToLower() == "above" ? 99.99m - (decimal)state.target : (decimal)state.target,
+                    high = state.condition.ToLower() == "above",
                     Currency = currency,
                     date = DateTime.Now,
                     Id = iid,
-                    Roll = (decimal)result,
+                    Roll = (decimal)state.result,
                     UserName = user.name,
-                    clientseed = seed.clientSeed,
-                    serverhash = seed.serverSeedHash,
+                    clientseed = clientSeed.seed,
+                    serverhash = serverSeed.seedHash,
                     nonce = nonce
                 };
                 //User tmpu = User.FindUser(bet.UserName);

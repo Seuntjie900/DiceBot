@@ -20,8 +20,8 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
         CookieContainer cookies = new CookieContainer();
-        public static string[] sCurrencies = new string[] {"Btc","Eth" };
-        public Stake(cDiceBot Parent)
+        public static string[] sCurrencies = new string[] { "Btc", "Eth" };
+        public Stake(cDiceBot Parent)/*:base(Parent)*/
         {
             this.Currencies = sCurrencies;
             this.Currency = "Btc";
@@ -38,8 +38,9 @@ namespace DiceBot
             edge = 2;
             Tip = true;
             TipUsingName = true;
-            SiteURL = "https://stake.com/?code=seuntjie";
-
+            //SiteURL = "https://stake.com/?code=seuntjie";
+            //URL = "https://api.stake.com/graphql/";
+            //RolName = "diceRoll";
         }
         public override void Disconnect()
         {
@@ -816,4 +817,5 @@ namespace DiceBot
         public StakeWithdrawal withdrawal { get; set; }
         public StakeUser user { get; set; }
     }
+    
 }

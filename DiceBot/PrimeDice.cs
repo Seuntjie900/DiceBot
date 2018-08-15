@@ -10,7 +10,7 @@ namespace DiceBot
 {
     class PrimeDice : DiceSite
     {
-        GraphQLClient Client = new GraphQLClient("https://api.primedice.com/graphql");
+        GraphQLClient Client = new GraphQLClient("https://stake.primebrais.com/api/graphql");
         public override void Disconnect()
         {
             throw new NotImplementedException();

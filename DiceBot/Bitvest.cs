@@ -425,11 +425,12 @@ namespace DiceBot
                 string sEmitResponse = Client.PostAsync("action.php", Content).Result.Content.ReadAsStringAsync().Result;
                 Lastbet = DateTime.Now;
                 try
-                {
+                {                    
                     string x = sEmitResponse.Replace("f-", "f_").Replace("n-", "n_").Replace("ce-", "ce_").Replace("r-", "r_");
                     bitvestbet tmp = json.JsonDeserialize<bitvestbet>(x);
                     if (tmp.success)
                     {
+                        lastupdate = DateTime.Now;
                         Bet resbet = new Bet
                         {
                             Amount = tmp5.Amount,
@@ -494,23 +495,13 @@ namespace DiceBot
             }
             catch (AggregateException e)
             {
-                if (retrycount++ < 3)
-                {
-                    Thread.Sleep(500);
-                    placebetthread(new PlaceBetObj(High, amount, chance, (bet as PlaceBetObj).Guid));
-                    return;
-                }
-                if (e.InnerException.Message.Contains("429") || e.InnerException.Message.Contains("502"))
-                {
-                    Thread .Sleep(500);
-                    placebetthread(new PlaceBetObj(High, amount, chance, (bet as PlaceBetObj).Guid));
-                }
+                Parent.DumpLog(e.ToString(),-1);
                 
 
             }
             catch (Exception e2)
             {
-
+                Parent.DumpLog(e2.ToString(), -1);
             }
         }
 
