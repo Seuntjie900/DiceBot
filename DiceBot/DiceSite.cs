@@ -12,6 +12,11 @@ namespace DiceBot
 {
     public abstract class DiceSite
     {
+        public event EventHandler<RequireCaptchaEventArgs> OnRequireCaptcha;
+        protected void RequireCaptcha(RequireCaptchaEventArgs e)
+        {
+            OnRequireCaptcha?.Invoke(this, e);
+        }
         bool reg = true;
         public bool register { get { return reg; } set { reg = value; } }
         protected string prox_host = "";
@@ -321,5 +326,11 @@ namespace DiceBot
         public decimal Chance { get; set; }
         public string Guid { get; set; }
     }
-
+    public class RequireCaptchaEventArgs:EventArgs
+    {
+        public string PublicKey { get; set; }
+        public string RequestValue { get; set; }
+        public string ResponseValue { get; set; }
+        public string Domain { get; set; }
+    }
 }

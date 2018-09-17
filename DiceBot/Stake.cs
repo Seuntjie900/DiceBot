@@ -9,7 +9,35 @@ using System.Threading.Tasks;
 
 namespace DiceBot
 {
-    class Stake : DiceSite
+    class Stake: PD
+    {
+        public static string[] sCurrencies = new string[] { "Btc", "Eth", "Ltc" };
+
+        public Stake(cDiceBot Parent):base(Parent)/*:base(Parent)*/
+        {
+            this.Currencies = sCurrencies;
+            this.Currency = "Btc";
+            _PasswordText = "API Key: ";
+            maxRoll = 99.99m;
+            AutoInvest = false;
+            AutoWithdraw = true;
+            ChangeSeed = true;
+            AutoLogin = true;
+            BetURL = "https://api.stake.com/bets/";
+            register = false;
+            this.Parent = Parent;
+            Name = "Stake";
+            edge = 2;
+            Tip = true;
+            TipUsingName = true;
+            SiteURL = "https://stake.com/?code=seuntjie";
+            URL = "https://api.stake.com/graphql/";
+            RolName = "diceRoll";
+            CaptchaKey = "6Ld1gjkUAAAAAJW4iRQd5p4seCm0Tqg3ou-kMFVQ";
+            GameName = "BetGameDice";
+        }
+    }
+    /*class Stake : DiceSite
     {
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
@@ -21,7 +49,7 @@ namespace DiceBot
         HttpClientHandler ClientHandlr;
         CookieContainer cookies = new CookieContainer();
         public static string[] sCurrencies = new string[] { "Btc", "Eth" };
-        public Stake(cDiceBot Parent)/*:base(Parent)*/
+        public Stake(cDiceBot Parent)/*:base(Parent)* /
         {
             this.Currencies = sCurrencies;
             this.Currency = "Btc";
@@ -816,6 +844,7 @@ namespace DiceBot
     {
         public StakeWithdrawal withdrawal { get; set; }
         public StakeUser user { get; set; }
-    }
-    
+    }*/
+
+
 }

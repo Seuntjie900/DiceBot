@@ -136,7 +136,28 @@ namespace DiceBot
         List<decimal> LabList = new List<decimal>();
         #endregion
 
-        DiceSite CurrentSite;
+        DiceSite currentsite;
+        DiceSite CurrentSite
+        {
+            get
+            {
+                return currentsite;
+            }
+            set
+            {
+                currentsite = value;
+                currentsite.OnRequireCaptcha -= Currentsite_OnRequireCaptcha;
+                currentsite.OnRequireCaptcha += Currentsite_OnRequireCaptcha;
+            }
+        }
+
+        private void Currentsite_OnRequireCaptcha(object sender, RequireCaptchaEventArgs e)
+        {
+            //ShowCaptcha tmp = new ShowCaptcha(e);
+           // tmp.ShowDialog();
+
+        }
+
         private decimal dPreviousBalance;
         delegate void dpopFibonacci();
         void populateFiboNacci()
