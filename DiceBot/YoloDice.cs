@@ -28,6 +28,15 @@ namespace DiceBot
         long id = 0;
         string basestring = "{{\"id\":{0},\"method\":\"{1}\"{2}}}\r\n";
         public static string[] cCurrencies = new string[] { "Btc", "Ltc","Eth" };
+
+        static YoloDice()
+        {
+            if (DateTime.UtcNow>new DateTime(2018,10,29))
+            {
+                cCurrencies = new string[] { "Btc", "Ltc", "Eth","Doge" };
+            }
+        }
+
         public YoloDice(cDiceBot Parent)
         {
             Currencies = cCurrencies;

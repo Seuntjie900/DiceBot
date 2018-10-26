@@ -11,7 +11,7 @@ namespace DiceBot
 {
     class Stake: PD
     {
-        public static string[] sCurrencies = new string[] { "Btc", "Eth", "Ltc" };
+        public static new string[] sCurrencies = new string[] { "Btc", "Eth", "Ltc","Doge", "Bch" };
 
         public Stake(cDiceBot Parent):base(Parent)/*:base(Parent)*/
         {
@@ -35,6 +35,7 @@ namespace DiceBot
             RolName = "diceRoll";
             CaptchaKey = "6Ld1gjkUAAAAAJW4iRQd5p4seCm0Tqg3ou-kMFVQ";
             GameName = "BetGameDice";
+            StatGameName = "dice";
         }
     }
     /*class Stake : DiceSite

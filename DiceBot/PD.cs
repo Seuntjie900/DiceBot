@@ -20,7 +20,8 @@ namespace DiceBot
         protected string RolName = "primediceRoll";
         protected string GameName = "BetGamePrimedice";
         protected string CaptchaKey = "6LdXCWoUAAAAAEiWih-AFu1G-Uqnslks1v0-4pVv";
-        public static string[] sCurrencies = new string[] { "Btc", "Ltc","Eth" };
+        protected string StatGameName = "primedice";
+        public static string[] sCurrencies = new string[] { "Btc", "Ltc","Eth","Doge","Bch" };
         GraphQL.Client.GraphQLClient GQLClient;
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
@@ -44,7 +45,7 @@ namespace DiceBot
             this.Currency = "Btc";
             this.Parent = Parent;
             Name = "PrimeDice";
-            this.Tip = true;
+            this.Tip = false;
             TipUsingName = true;
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
@@ -71,13 +72,13 @@ namespace DiceBot
                         lastupdate = DateTime.Now;
                         GraphQLRequest LoginReq = new GraphQLRequest
                         {
-                            Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {bets wins losses amount profit currency}}}"
+                            Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses amount profit currency}}}"
                         };
                         GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                         pdUser user = Resp.GetDataFieldAs<pdUser>("user");
                         foreach (Statistic x in user.statistic)
                         {
-                            if (x.currency.ToLower() == Currency.ToLower())
+                            if (x.currency.ToLower() == Currency.ToLower() && x.game==StatGameName)
                             {
                                 this.bets = (int)x.bets;
                                 this.wins = (int)x.wins;
@@ -191,7 +192,7 @@ namespace DiceBot
                 GQLClient.DefaultRequestHeaders.Add("x-access-token", Password);
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {bets wins losses amount profit currency}}}"
+                    Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses amount profit currency}}}"
                 };
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 pdUser user = Resp.GetDataFieldAs<pdUser>("user");
@@ -203,7 +204,7 @@ namespace DiceBot
                 {
                     foreach (Statistic x in user.statistic)
                     {
-                        if (x.currency.ToLower() == Currency.ToLower())
+                        if (x.currency.ToLower() == Currency.ToLower() && x.game == StatGameName)
                         {
                             this.bets = (int)x.bets;
                             this.wins = (int)x.wins;
@@ -260,7 +261,7 @@ namespace DiceBot
                 
                 decimal tmpchance = High ? 99.99m - chance : chance;
 
-                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{"+RolName+"(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:"+Currency.ToLower()+ ") { id iid nonce currency amount payout state { ... on "+GameName+" { result target condition } } createdAt serverSeed{seedHash seed nonce} clientSeed{seed} user{balances{available{amount currency}} statistic{bets wins losses amount profit currency}}}}" }).Result;
+                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{"+RolName+"(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:"+Currency.ToLower()+ ") { id iid nonce currency amount payout state { ... on "+GameName+" { result target condition } } createdAt serverSeed{seedHash seed nonce} clientSeed{seed} user{balances{available{amount currency}} statistic{game bets wins losses amount profit currency}}}}" }).Result;
                 if (betresult.Errors!=null)
                 {
                     if (betresult.Errors.Length > 0)
@@ -278,7 +279,7 @@ namespace DiceBot
                         lastupdate = DateTime.Now;
                         foreach (Statistic x in tmp.user.statistic)
                         {
-                            if (x.currency.ToLower() == Currency.ToLower())
+                            if (x.currency.ToLower() == Currency.ToLower() && x.game==StatGameName)
                             {
                                 this.bets = (int)x.bets;
                                 this.wins = (int)x.wins;
@@ -695,6 +696,7 @@ namespace DiceBot
         }
         public class Statistic
         {
+            public string game { get; set; }
             public decimal bets { get; set; }
             public decimal wins { get; set; }
             public decimal losses { get; set; }

@@ -21,7 +21,7 @@ namespace DiceBot
         long uid = 0;
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        public static string[] sCurrencies = new string[] { "btc", "ltc", "doge", "eth", "burst", "dash", "zec", "bch","xmr","etc","neo","strat","kmd","xrp" };
+        public static string[] sCurrencies = new string[] { "BTC","ETH","LTC","BCH","XRP","DOGE","DASH","ZEC","ETC","NEO","KMD","BTG","LSK","DGB","QTUM","STRAT","WAVES","BURST" };
         HttpClientHandler ClientHandlr;
         
         public Bitsler(cDiceBot Parent)
@@ -156,6 +156,26 @@ namespace DiceBot
                                                 balance = bsstatsbase._return.xrp_balance;
                                                 profit = bsstatsbase._return.xrp_profit;
                                                 wagered = bsstatsbase._return.xrp_wagered; break;
+                                            case "btg":
+                                                balance = bsstatsbase._return.btg_balance;
+                                                profit = bsstatsbase._return.btg_profit;
+                                                wagered = bsstatsbase._return.btg_wagered; break;
+                                            case "qtum":
+                                                balance = bsstatsbase._return.qtum_balance;
+                                                profit = bsstatsbase._return.qtum_profit;
+                                                wagered = bsstatsbase._return.qtum_wagered; break;
+                                            case "lsk":
+                                                balance = bsstatsbase._return.lsk_balance;
+                                                profit = bsstatsbase._return.lsk_profit;
+                                                wagered = bsstatsbase._return.lsk_wagered; break;
+                                            case "dgb":
+                                                balance = bsstatsbase._return.dgb_balance;
+                                                profit = bsstatsbase._return.dgb_profit;
+                                                wagered = bsstatsbase._return.dgb_wagered; break;
+                                            case "waves":
+                                                balance = bsstatsbase._return.waves_balance;
+                                                profit = bsstatsbase._return.waves_profit;
+                                                wagered = bsstatsbase._return.waves_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase._return.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                         wins = int.Parse(bsstatsbase._return.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -256,6 +276,26 @@ namespace DiceBot
                                         balance = bsstatsbase._return.xrp_balance;
                                         profit = bsstatsbase._return.xrp_profit;
                                         wagered = bsstatsbase._return.xrp_wagered; break;
+                                    case "btg":
+                                        balance = bsstatsbase._return.btg_balance;
+                                        profit = bsstatsbase._return.btg_profit;
+                                        wagered = bsstatsbase._return.btg_wagered; break;
+                                    case "qtum":
+                                        balance = bsstatsbase._return.qtum_balance;
+                                        profit = bsstatsbase._return.qtum_profit;
+                                        wagered = bsstatsbase._return.qtum_wagered; break;
+                                    case "lsk":
+                                        balance = bsstatsbase._return.lsk_balance;
+                                        profit = bsstatsbase._return.lsk_profit;
+                                        wagered = bsstatsbase._return.lsk_wagered; break;
+                                    case "dgb":
+                                        balance = bsstatsbase._return.dgb_balance;
+                                        profit = bsstatsbase._return.dgb_profit;
+                                        wagered = bsstatsbase._return.dgb_wagered; break;
+                                    case "waves":
+                                        balance = bsstatsbase._return.waves_balance;
+                                        profit = bsstatsbase._return.waves_profit;
+                                        wagered = bsstatsbase._return.waves_wagered; break;
                                 }
                                 bets = int.Parse(bsstatsbase._return.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                 wins = int.Parse(bsstatsbase._return.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -567,6 +607,26 @@ devise:btc*/
                                                 balance = bsstatsbase._return.xrp_balance;
                                                 profit = bsstatsbase._return.xrp_profit;
                                                 wagered = bsstatsbase._return.xrp_wagered; break;
+                                            case "btg":
+                                                balance = bsstatsbase._return.btg_balance;
+                                                profit = bsstatsbase._return.btg_profit;
+                                                wagered = bsstatsbase._return.btg_wagered; break;
+                                            case "qtum":
+                                                balance = bsstatsbase._return.qtum_balance;
+                                                profit = bsstatsbase._return.qtum_profit;
+                                                wagered = bsstatsbase._return.qtum_wagered; break;
+                                            case "lsk":
+                                                balance = bsstatsbase._return.lsk_balance;
+                                                profit = bsstatsbase._return.lsk_profit;
+                                                wagered = bsstatsbase._return.lsk_wagered; break;
+                                            case "dgb":
+                                                balance = bsstatsbase._return.dgb_balance;
+                                                profit = bsstatsbase._return.dgb_profit;
+                                                wagered = bsstatsbase._return.dgb_wagered; break;
+                                            case "waves":
+                                                balance = bsstatsbase._return.waves_balance;
+                                                profit = bsstatsbase._return.waves_profit;
+                                                wagered = bsstatsbase._return.waves_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase._return.bets==null?"0": bsstatsbase._return.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                         wins = int.Parse(bsstatsbase._return.wins == null ? "0" : bsstatsbase._return.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -915,6 +975,26 @@ devise:btc*/
         public decimal xrp_balance { get; set; }
         public decimal xrp_wagered { get; set; }
         public decimal xrp_profit { get; set; }
+
+        public decimal btg_balance { get; set; }
+        public decimal btg_wagered { get; set; }
+        public decimal btg_profit { get; set; }
+
+        public decimal lsk_balance { get; set; }
+        public decimal lsk_wagered { get; set; }
+        public decimal lsk_profit { get; set; }
+
+        public decimal dgb_balance { get; set; }
+        public decimal dgb_wagered { get; set; }
+        public decimal dgb_profit { get; set; }
+
+        public decimal qtum_balance { get; set; }
+        public decimal qtum_wagered { get; set; }
+        public decimal qtum_profit { get; set; }
+
+        public decimal waves_balance { get; set; }
+        public decimal waves_wagered { get; set; }
+        public decimal waves_profit { get; set; }
 
         public string wins { get; set; }
         public string losses { get; set; }

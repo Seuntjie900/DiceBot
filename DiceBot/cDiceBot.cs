@@ -5059,6 +5059,7 @@ namespace DiceBot
                     case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
                     case "Stake": CurrentSite = new Stake(this);break;
                     case "NitroDice": CurrentSite = new NitroDice(this);break;
+                    case "EtherCrash": CurrentSite = new EtherCrash(this); break;
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5112,6 +5113,7 @@ namespace DiceBot
                         case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
                         case "Stake": CurrentSite = new Stake(this); break;
                         case "NitroDice": CurrentSite = new NitroDice(this); break;
+                        case "EtherCrash": CurrentSite = new EtherCrash(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5654,10 +5656,10 @@ namespace DiceBot
                     case "wealthyDiceToolStripMenuItem": CurrentSite = new WD(this); siteToolStripMenuItem.Text = "Site (WD)"; break;
                     case "moneyPotToolStripMenuItem" : CurrentSite = new moneypot(this); siteToolStripMenuItem.Text = "Site (MP)"; break;
                        
-                    case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site(CM)"; break;
-                    case "magicalDiceToolStripMenuItem": CurrentSite = new MagicalDice(this); siteToolStripMenuItem.Text = "Site(MD)"; break;
+                    case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site (CM)"; break;
+                    case "magicalDiceToolStripMenuItem": CurrentSite = new MagicalDice(this); siteToolStripMenuItem.Text = "Site (MD)"; break;
                     //case "investdiceToolStripMenuItem": CurrentSite = new InvestDice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
-                    case "coinichiwaToolStripMenuItem": CurrentSite = new Coinichiwa(this); siteToolStripMenuItem.Text = "Site(CW)"; break;
+                    case "coinichiwaToolStripMenuItem": CurrentSite = new Coinichiwa(this); siteToolStripMenuItem.Text = "Site (CW)"; break;
                     case "moneroDiceToolStripMenuItem": CurrentSite=new MoneroDice(this); siteToolStripMenuItem.Text="Site (MonD)"; break;
                     case "fortuneJackToolStripMenuItem" : CurrentSite = new FortuneJack(this); siteToolStripMenuItem.Text = "Site (FJ)"; break;
                     case "cryptoGamesToolStripMenuItem" : CurrentSite = new cryptogames(this); siteToolStripMenuItem.Text = "Site (CG)"; break;
@@ -5670,13 +5672,14 @@ namespace DiceBot
                     case "bitExoToolStripMenuItem": CurrentSite = new BitExo(this); siteToolStripMenuItem.Text = "Site (BE)"; break;
                     case "provabllyIOToolStripMenuItem": CurrentSite = new provablyio(this); siteToolStripMenuItem.Text = "Site (PIO)"; break;
                     case "diceSeuntjieComToolStripMenuItem": CurrentSite = new DiceSeuntjie(this); siteToolStripMenuItem.Text = "Site (DSC)"; break;
-                    case "duckDiceToolStripMenuItem": CurrentSite = new DuckDice(this); siteToolStripMenuItem.Text = "(Quack)"; break;
+                    case "duckDiceToolStripMenuItem": CurrentSite = new DuckDice(this); siteToolStripMenuItem.Text = "Site (Quack)"; break;
                     //case "etcBetsToolStripMenuItem": CurrentSite = new etcbets(this); siteToolStripMenuItem.Text = "(EtcB)"; break;
-                    case "coinProfitToolStripMenuItem": CurrentSite = new coinpro(this); siteToolStripMenuItem.Text = "(CPro)"; break;
+                    case "coinProfitToolStripMenuItem": CurrentSite = new coinpro(this); siteToolStripMenuItem.Text = "Site (CPro)"; break;
                     //case "oKBetsToolStripMenuItem" : CurrentSite = new OKBets(this); siteToolStripMenuItem.Text = "(OKB)"; break;
-                    case "freebitcoinToolStripMenuItem": CurrentSite = new Freebitcoin(this); siteToolStripMenuItem.Text = "(FBtc)"; break;
-                    case "stakeToolStripMenuItem": CurrentSite = new Stake(this); siteToolStripMenuItem.Text = "(Stake)"; break;
-                    case "nitrodiceToolStripMenuItem": CurrentSite = new NitroDice(this); siteToolStripMenuItem.Text = "(ND)"; break;
+                    case "freebitcoinToolStripMenuItem": CurrentSite = new Freebitcoin(this); siteToolStripMenuItem.Text = "Site (FBtc)"; break;
+                    case "stakeToolStripMenuItem": CurrentSite = new Stake(this); siteToolStripMenuItem.Text = "Site (Stake)"; break;
+                    case "nitrodiceToolStripMenuItem": CurrentSite = new NitroDice(this); siteToolStripMenuItem.Text = "Site (ND)"; break;
+                    case "etherCrashToolStripMenuItem": currentsite = new EtherCrash(this); siteToolStripMenuItem.Text = "Site (EC)";break;
                 }
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;
@@ -6182,6 +6185,7 @@ namespace DiceBot
                             freebitcoinToolStripMenuItem.Checked?29:
                             stakeToolStripMenuItem.Checked?30:
                             nitrodiceToolStripMenuItem.Checked?31:
+                            etherCrashToolStripMenuItem.Checked?32:
                             1);
                 }
                 else if (c is TextBox)
@@ -6308,8 +6312,10 @@ namespace DiceBot
                             freebitcoinToolStripMenuItem.Checked = value == 29;
                         stakeToolStripMenuItem.Checked = value == 30;
                         nitrodiceToolStripMenuItem.Checked = value == 31;
-                            
-                        if (value > 31)
+                        etherCrashToolStripMenuItem.Checked = value == 32;
+
+
+                        if (value > 32)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6454,6 +6460,7 @@ namespace DiceBot
                         freebitcoinToolStripMenuItem.Checked = value == "29";
                         stakeToolStripMenuItem.Checked = value == "30";
                         nitrodiceToolStripMenuItem.Checked = value == "31";
+                        etherCrashToolStripMenuItem.Checked = value == "32";
                     }
                     else if (Key == "SettingsMode")
                     {
