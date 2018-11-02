@@ -316,7 +316,7 @@ namespace DiceBot
                             high = true,
                             Currency = Currency,
                             date = DateTime.Now,
-                            Id = Guid.NewGuid().ToString(),
+                            Id = GameId != "" ? GameId : Guid.NewGuid().ToString(),
                             Roll = (100 - chance)+0.00001m,
                             UserName = username,
                             nonce = -1,
@@ -421,7 +421,7 @@ namespace DiceBot
                 decimal returna = payout*100;
                 Sock.Send("42"+(reqid++).ToString() +"[\"place_bet\","+(amount*100000000).ToString("0")+","+ returna.ToString("0") + "]");
                 this.guid = BetGuid;
-                Parent.updateStatus(string.Format("Game starting - Betting {0:0.00000000} at {1:0.00}x", amount,payout));
+                Parent.updateStatus(string.Format("Game Starting - Betting {0:0.00000000} at {1:0.00}x", amount,payout));
             }
         }
 

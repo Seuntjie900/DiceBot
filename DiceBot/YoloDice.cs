@@ -31,7 +31,7 @@ namespace DiceBot
 
         static YoloDice()
         {
-            if (DateTime.UtcNow>new DateTime(2018,10,29))
+            if (DateTime.UtcNow>new DateTime(2018,11,3))
             {
                 cCurrencies = new string[] { "Btc", "Ltc", "Eth","Doge" };
             }

@@ -33,7 +33,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.3.21";
+        private const string vers = "3.3.22";
         
 
         Control[] ControlsToDisable;
@@ -1090,6 +1090,18 @@ namespace DiceBot
         {
             
             testInputs();
+            if (pnlBasic.Visible)
+            {
+                scMain.SplitterDistance = (scMain.Width - pnlBasic.Width) - 3;
+            }
+            else if (pnlAdvanced.Visible)
+            {
+                scMain.SplitterDistance = (scMain.Width - pnlAdvanced.Width) - 3;
+            }
+            else if (pnlProgrammer.Visible)
+            {
+                scMain.SplitterDistance = (scMain.Width - pnlProgrammer.Width) - 3;
+            }
         }
 
         //Statistics
@@ -4075,6 +4087,18 @@ namespace DiceBot
                     TrayIcon.ShowBalloonTip(500);
                     this.Hide();
                 }
+            }
+            if (pnlBasic.Visible)
+            {
+                scMain.SplitterDistance = (scMain.Width - pnlBasic.Width) - 3;
+            }
+            else if (pnlAdvanced.Visible)
+            {
+                scMain.SplitterDistance = (scMain.Width - pnlAdvanced.Width) - 3;
+            }
+            else if (pnlProgrammer.Visible)
+            {
+                scMain.SplitterDistance = (scMain.Width - pnlProgrammer.Width) - 3;
             }
         }
 
