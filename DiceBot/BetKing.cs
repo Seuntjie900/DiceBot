@@ -28,7 +28,7 @@ namespace DiceBot
         Random R = new Random();
         bkGetCurrencies Currs = null;
         BKCurrency CurrentCurrency = null;
-        public static string[] sCurrencies = new string[] { "Btc", "Eth", "BKB", "Ltc","OMG",
+        public static string[] sCurrencies = new string[] { "Btc", "Eth", "BKB", "Ltc"/*,"OMG",
 "TRX",
 "EOS",
 "SNT",
@@ -42,7 +42,7 @@ namespace DiceBot
 "POWR",
 "PAY",
 "ZRX",
-"CVC" };
+"CVC" */};
         Dictionary<string, int> Curs = new Dictionary<string, int>();
         public BetKing(cDiceBot Parent)
         {
@@ -69,7 +69,7 @@ namespace DiceBot
             Curs.Add("Eth", 1);
             Curs.Add("Ltc", 3);
             Curs.Add("BKB", 6);
-            Curs.Add("OmiseGo", 7);
+            /*Curs.Add("OmiseGo", 7);
             Curs.Add("TRON", 8);
             Curs.Add("EOS", 9);
             Curs.Add("Status", 11);
@@ -83,7 +83,7 @@ namespace DiceBot
             Curs.Add("Power Ledger", 21);
             Curs.Add("TenX", 24);
             Curs.Add("0x", 25);
-            Curs.Add("CIVIC",28);
+            Curs.Add("CIVIC",28);*/
         }
         protected override void CurrencyChanged()
         {

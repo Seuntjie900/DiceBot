@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Net.Http;
 using GraphQL.Common.Request;
 using GraphQL.Common.Response;
+//using GraphQL.Client.Http;
 using System.Globalization;
 
 namespace DiceBot
@@ -190,6 +191,12 @@ namespace DiceBot
                 }
                 pdUser user = Resp.GetDataFieldAs<pdUser>("loginUser");*/
                 GQLClient.DefaultRequestHeaders.Add("x-access-token", Password);
+               /* 
+                var subscriptionResult = GQLClient.SendSubscribeAsync(@"subscription { chatMessages(chatId: "14939265 - 52a4 - 404e-8a0c - 6e3e10d915b4") { id chat { id name isPublic } createdAt user { id name roles { name } } data { ... on ChatMessageDataBot { message } ... on ChatMessageDataText { message } ... on ChatMessageDataTip { tip { id amount currency sender: sendBy { id name } receiver: user { id name } } } } } } ").Result;
+                subscriptionResult.OnReceive += (res) => { Console.WriteLine(res.Data.messageAdded.content); };
+                */
+
+
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
                     Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses amount profit currency}}}"
@@ -267,7 +274,7 @@ namespace DiceBot
                     if (betresult.Errors.Length > 0)
                         Parent.updateStatus(betresult.Errors[0].Message);
                 }
-                else
+                if (betresult.Data!=null)
                 {
                     RollDice tmp = betresult.GetDataFieldAs<RollDice>(RolName);
 
@@ -360,10 +367,10 @@ namespace DiceBot
        
         public override bool ReadyToBet()
         {
-            if ((amount * 100000000m)<=100000 && (DateTime.Now - Lastbet).TotalMilliseconds < 350)
-                return false;
-            else
-                return true;
+            //if ((amount * 100000000m)<=100000 && (DateTime.Now - Lastbet).TotalMilliseconds < 350)
+               // return false;
+            //else
+            //    return true;
             return true;
         }
 

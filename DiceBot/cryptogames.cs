@@ -56,10 +56,10 @@ namespace DiceBot
                 while (iscg)
                 {
                     if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 60||ForceUpdateStats))
-                    {
+                    { lastupdate = DateTime.Now;
                         try
                         {
-                            lastupdate = DateTime.Now;
+                           
                             string sEmitResponse = Client.GetStringAsync("user/" + Currency + "/" + accesstoken).Result;
                             cgUser tmpBal = json.JsonDeserialize<cgUser>(sEmitResponse);
                             this.balance = tmpBal.Balance;

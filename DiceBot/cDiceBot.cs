@@ -1750,7 +1750,8 @@ namespace DiceBot
                     {
                         if (!retriedbet && !WaitForInput)
                         {
-                            retriedbet = true;
+
+                            dtLastBet = DateTime.Now;
                             EnableTimer(tmBet, true);
 
                         }
@@ -4090,15 +4091,18 @@ namespace DiceBot
             }
             if (pnlBasic.Visible)
             {
-                scMain.SplitterDistance = (scMain.Width - pnlBasic.Width) - 3;
+                if ((scMain.Width - pnlBasic.Width) - 3>0)
+                    scMain.SplitterDistance = (scMain.Width - pnlBasic.Width) - 3;
             }
             else if (pnlAdvanced.Visible)
             {
-                scMain.SplitterDistance = (scMain.Width - pnlAdvanced.Width) - 3;
+                if ((scMain.Width - pnlAdvanced.Width) - 3 > 0)
+                    scMain.SplitterDistance = (scMain.Width - pnlAdvanced.Width) - 3;
             }
             else if (pnlProgrammer.Visible)
             {
-                scMain.SplitterDistance = (scMain.Width - pnlProgrammer.Width) - 3;
+                if ((scMain.Width - pnlProgrammer.Width) - 3 > 0)
+                    scMain.SplitterDistance = (scMain.Width - pnlProgrammer.Width) - 3;
             }
         }
 

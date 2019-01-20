@@ -21,8 +21,9 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "bitcoins", "tokens","litecoins","ethers" };
-        
+        public static string[] cCurrencies = new string[] { "bitcoins", "tokens","litecoins","ethers","dogecoins", "bcash" };
+
+
         public Bitvest(cDiceBot Parent)
         {
             maxRoll = 99.9999m;
@@ -124,6 +125,10 @@ namespace DiceBot
                                         balance = tmpbase.data.ether_balance; break;
                                     case "litecoins":
                                         balance = tmpbase.data.litecoin_balance; break;
+                                    case "dogecoins":
+                                        balance = tmpbase.data.balance_dogecoin;break;
+                                    case "bcash":
+                                        balance = tmpbase.data.balance_bcash; break;
                                     default:
                                         balance = tmpbase.data.token_balance; break;
                                 }
@@ -345,6 +350,14 @@ namespace DiceBot
                     {
                         balance = decimal.Parse(tmplogin.balance_litecoin, System.Globalization.NumberFormatInfo.InvariantInfo);
                     }
+                    else if (Currency.ToLower() == "dogecoins")
+                    {
+                        balance = decimal.Parse(tmplogin.balance_dogecoin, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    }
+                    else if (Currency.ToLower()=="bcash")
+                    {
+                        balance = decimal.Parse(tmplogin.balance_bcash, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    }
                     else
                     {
                         balance = decimal.Parse(tmplogin.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -460,7 +473,9 @@ namespace DiceBot
                             Currency.ToLower()=="bitcoins"?
                                 tmp.data.balance:
                                 Currency.ToLower()=="ethers"? tmp.data.balance_ether
-                                : Currency.ToLower()=="litecoins"?tmp.data.balance_litecoin: tmp.data.token_balance, 
+                                : Currency.ToLower()=="litecoins"?tmp.data.balance_litecoin:
+                                Currency.ToLower() == "dogecoins" ? tmp.data.balance_dogecoin :
+                                Currency.ToLower() == "bcash" ? tmp.data.balance_bcash : tmp.data.token_balance, 
                             System.Globalization.NumberFormatInfo.InvariantInfo);
                         /*tmp.bet.client = tmp.user.client;
                         tmp.bet.serverhash = tmp.user.server;
@@ -536,6 +551,8 @@ namespace DiceBot
                     case "tokens": weight = decimal.Parse(Weights.TOK, System.Globalization.NumberFormatInfo.InvariantInfo); break;
                     case "litecoins": weight = decimal.Parse(Weights.LTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
                     case "ethers": weight = decimal.Parse(Weights.ETH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "dogecoins": weight = decimal.Parse(Weights.DOGE, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "bcash": weight = decimal.Parse(Weights.BCH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
 
                     default: weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
                 }
@@ -674,7 +691,7 @@ namespace DiceBot
 
         public override void Donate(decimal Amount)
         {
-            if (Currency.ToLower()=="bitcoins")
+            if (Currency.ToLower()!="tokens")
                 SendTip("seuntjie", Amount);
         }
 
@@ -686,7 +703,9 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("currency",(Currency=="bitcoins"?"btc":
                     Currency == "litecoins" ? "ltc" :
                     Currency == "ethers" ? "eth" :
-                    Currency == "tokens" ? "tok":"tok")));
+                    Currency == "tokens" ? "tok":
+                    Currency == "dogecoins"? "doge":
+                    Currency == "bcash"?"bch":"tok")));
                 pairs.Add(new KeyValuePair<string, string>("username", User));
                 pairs.Add(new KeyValuePair<string, string>("quantity", amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("act", "send_tip"));
@@ -743,6 +762,8 @@ namespace DiceBot
         public string ETH { get; set; }
         public string LTC { get; set; }
         public string TOK { get; set; }
+        public string DOGE { get; set; }
+        public string BCH { get; set; }
     }
     /*{"data":{"self-user-id":46534,"self-username":"Seuntjie",
       "balance":0.00586720655,
@@ -772,6 +793,8 @@ namespace DiceBot
         public string balance { get; set; }
         public string token_balance { get; set; }
         public string balance_litecoin { get; set; }
+        public string balance_dogecoin { get; set; }
+        public string balance_bcash { get; set; }
         public string self_username { get; set; }
         public string self_user_id { get; set; }
         public string self_ref_count { get; set; }
@@ -800,6 +823,12 @@ namespace DiceBot
         public decimal litecoin_total_bet { get; set; }
         public decimal litecoin_total_won { get; set; }
         public decimal litecoin_total_profit { get; set; }
+        public decimal dogecoin_total_bet { get; set; }
+        public decimal dogecoin_total_won { get; set; }
+        public decimal dogecoin_total_profit { get; set; }
+        public decimal bcash_total_bet { get; set; }
+        public decimal bcash_total_won { get; set; }
+        public decimal bcash_total_profit { get; set; }
         public int bets { get; set; }
         public string server_hash { get; set; }
 
@@ -816,6 +845,8 @@ namespace DiceBot
         public decimal token_balance { get; set; }
         public decimal ether_balance { get; set; }
         public decimal litecoin_balance { get; set; }
+        public decimal balance_dogecoin { get; set; }
+        public decimal balance_bcash { get; set; }
         public decimal pending { get; set; }
         public decimal ether_pending { get; set; }
         public decimal litecoin_pending { get; set; }
@@ -834,6 +865,12 @@ namespace DiceBot
         public decimal litecoin_total_bet { get; set; }
         public decimal litecoin_total_won { get; set; }
         public decimal litecoin_total_profit { get; set; }
+        public decimal dogecoin_total_bet { get; set; }
+        public decimal dogecoin_total_won { get; set; }
+        public decimal dogecoin_total_profit { get; set; }
+        public decimal bcash_total_bet { get; set; }
+        public decimal bcash_total_won { get; set; }
+        public decimal bcash_total_profit { get; set; }
         public decimal bets { get; set; }
         public string server_hash { get; set; }
     }
@@ -873,6 +910,8 @@ namespace DiceBot
         public string balance_ether { get; set; }
         public string token_balance { get; set; }
         public string balance_litecoin { get; set; }
+        public string balance_dogecoin { get; set; }
+        public string balance_bcash { get; set; }
         public string self_username { get; set; }
         public string self_user_id { get; set; }
         

@@ -27,7 +27,7 @@ namespace DiceBot
             register = false;
             this.Parent = Parent;
             Name = "Stake";
-            edge = 2;
+            edge = 1;
             Tip = true;
             TipUsingName = true;
             SiteURL = "https://stake.com/?code=seuntjie";
