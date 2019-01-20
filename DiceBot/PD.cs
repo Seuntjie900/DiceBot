@@ -266,7 +266,7 @@ namespace DiceBot
                 decimal chance = tmp5.Chance;
                 bool High = tmp5.High;
                 
-                decimal tmpchance = High ? 99.99m - chance : chance;
+                decimal tmpchance = High ? maxRoll - chance : chance;
 
                 GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{"+RolName+"(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:"+Currency.ToLower()+ ") { id iid nonce currency amount payout state { ... on "+GameName+" { result target condition } } createdAt serverSeed{seedHash seed nonce} clientSeed{seed} user{balances{available{amount currency}} statistic{game bets wins losses amount profit currency}}}}" }).Result;
                 if (betresult.Errors!=null)

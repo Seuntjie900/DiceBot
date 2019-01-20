@@ -18,7 +18,7 @@ namespace DiceBot
             this.Currencies = sCurrencies;
             this.Currency = "Btc";
             _PasswordText = "API Key: ";
-            maxRoll = 99.99m;
+            maxRoll = 100m;
             AutoInvest = false;
             AutoWithdraw = true;
             ChangeSeed = true;
