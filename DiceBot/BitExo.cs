@@ -45,6 +45,7 @@ namespace DiceBot
             //tChat.Start();
             SiteURL = "https://bit-exo.com/?ref=seuntjie ";
             Currency = "BTC";
+            _PasswordText = "API Token";
         }
         protected override void CurrencyChanged()
         {

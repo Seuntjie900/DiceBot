@@ -714,8 +714,13 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("secret", secret));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("action.php", Content).Result.Content.ReadAsStringAsync().Result;
-                
-                return (sEmitResponse.Contains("true"));
+                if (sEmitResponse.Contains("true"))
+                    return true;
+                else
+                {
+                    Parent.DumpLog(sEmitResponse, 1);
+                    return false;
+                }
             }
             catch (WebException e)
             {
