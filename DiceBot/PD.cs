@@ -304,7 +304,7 @@ namespace DiceBot
                                 break;
                             }
                         }
-                        Bet tmpbet = tmp.ToBet();
+                        Bet tmpbet = tmp.ToBet(maxRoll);
                         tmpbet.Guid = tmp5.Guid;
                         FinishedBet(tmpbet);
                         retrycount = 0;
@@ -675,12 +675,12 @@ namespace DiceBot
             public pdSeed serverSeed { get; set; }
             public pdSeed clientSeed { get; set; }
             public int nonce { get; set; }
-            public Bet ToBet()
+            public Bet ToBet(decimal maxroll)
             {
                 Bet bet = new Bet
                 {
                     Amount = (decimal)amount,
-                    Chance = state.condition.ToLower() == "above" ? 99.99m - (decimal)state.target : (decimal)state.target,
+                    Chance = state.condition.ToLower() == "above" ? maxroll - (decimal)state.target : (decimal)state.target,
                     high = state.condition.ToLower() == "above",
                     Currency = currency,
                     date = DateTime.Now,
@@ -696,7 +696,7 @@ namespace DiceBot
                     bet.uid = 0;
                 else
                     bet.uid = (int)tmpu.Uid;*/
-                bool win = (((bool)bet.high ? (decimal)bet.Roll > (decimal)99.99 - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
+                bool win = (((bool)bet.high ? (decimal)bet.Roll > maxroll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
                 bet.Profit = win ? ((decimal)(payout - amount)) : ((decimal)-amount);
                 return bet;
             }

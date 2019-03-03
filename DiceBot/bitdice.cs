@@ -35,7 +35,7 @@ namespace DiceBot
             NonceBased = false;
             Name = "BitDice";
             this.Parent = Parent;
-            SiteURL = "https://www.bitdice.me/?r=82";
+            SiteURL = "https://www.bitdice.me/?r=65";
             /*Client = new WebSocket("");
             Client.Opened += Client_Opened;
             Client.Error += Client_Error;
@@ -63,7 +63,7 @@ namespace DiceBot
       | SecurityProtocolType.Tls12
       | SecurityProtocolType.Ssl3;
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, Proxy = this.Prox, UseProxy = Prox != null }; ;
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://stage.bitdice.me/api/") };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.bitdice.me/api/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             APIKey = Password;
@@ -136,13 +136,25 @@ namespace DiceBot
                 var curBet = BetObject as PlaceBetObj;
                 string ClientSeed = R.Next(0, int.MaxValue).ToString();
                 string Highlow = curBet.High ? "high" : "low";
-                string request = $"dice?api_key={APIKey}&currency={Currency}&amount={curBet.Amount}&chance={curBet.Chance}&type={Highlow}&client={ClientSeed}&secret={CurrentSeed.id}";
+                string request = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo ,"dice?api_key={0}&currency={1}&amount={2}&chance={3}&type={4}&client={5}&secret={6}",
+                    APIKey,
+                    Currency,
+                    curBet.Amount,
+                    curBet.Chance,
+                    Highlow,
+                    ClientSeed,
+                    CurrentSeed.id);
                 var BetResponse = Client.PostAsync(request, new StringContent("")).Result;
                 string sbetresult = BetResponse.Content.ReadAsStringAsync().Result;
 
                 BDBetResponse NewBet = json.JsonDeserialize<BDBetResponse>(sbetresult);
                 try
                 {
+                    if (!string.IsNullOrWhiteSpace(NewBet.error))
+                    {
+                        Parent.updateStatus(NewBet.error);
+                        return;
+                    }
                     Bet result = new Bet
                     {
                         Amount = NewBet.bet.amount,
@@ -285,6 +297,7 @@ namespace DiceBot
 
     public class BDBetResponse
     {
+        public string error { get; set; }
         public decimal balance { get; set; }
         public BDBet bet { get; set; }
         public BDJackpot jackpot { get; set; }
