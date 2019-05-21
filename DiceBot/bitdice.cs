@@ -27,7 +27,7 @@ namespace DiceBot
         {
             maxRoll = 99.9999m;
             AutoInvest = false;
-            AutoWithdraw = true;
+            AutoWithdraw = false;
             _PasswordText = "API Key";
             Tip = true;
             TipUsingName = true;

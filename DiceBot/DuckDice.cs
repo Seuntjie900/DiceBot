@@ -20,7 +20,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "BTC","ETH", "LTC", "DOGE","DASH","BCH","XMR","XRP","ETC","BTG","XLM","ZEC" };
+        public static string[] cCurrencies = new string[] { "BTC","ETH", "LTC", "DOGE","DASH","BCH","XMR","XRP","ETC","BTG","XLM","ZEC","USDT" };
         
         
         public DuckDice(cDiceBot Parent)

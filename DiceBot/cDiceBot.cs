@@ -199,29 +199,43 @@ namespace DiceBot
         Queue<string> Last10Guids = new Queue<string>();
         public void GetBetResult(decimal Balance, Bet bet)
         {
-            DumpLog("received bet result: Balance: "+Balance+", Bet:"+json.JsonSerializer<Bet>(bet) , 8);
-            if (bet.Guid!=LastBetPlaced || Last10Guids.Contains(bet.Guid))
+            try
             {
-                
-                Stop("Bet result received does not match last bet placed! Stopping for your safety.");
-                //updateStatus("Bet result received does not match last bet placed!");
-            }
-            if (!Last10Guids.Contains(bet.Guid))
-                Last10Guids.Enqueue(bet.Guid);
-            while (Last10Guids.Count > 10)
-                Last10Guids.Dequeue();
+                DumpLog("received bet result: Balance: " + Balance + ", Bet:" + json.JsonSerializer<Bet>(bet), 8);
+                if (bet.Guid != LastBetPlaced || Last10Guids.Contains(bet.Guid))
+                {
 
-            if (logging>2)
-            using (StreamWriter sw = File.AppendText("log.txt"))
-            {
-                sw.WriteLine(json.JsonSerializer<Bet>(bet));
+                    Stop("Bet result received does not match last bet placed! Stopping for your safety.");
+                    //updateStatus("Bet result received does not match last bet placed!");
+                }
+                if (!Last10Guids.Contains(bet.Guid))
+                    Last10Guids.Enqueue(bet.Guid);
+                while (Last10Guids.Count > 10)
+                    Last10Guids.Dequeue();
+
+                if (LogLevel > 2)
+                    using (StreamWriter sw = File.AppendText("log.txt"))
+                    {
+                        sw.WriteLine(json.JsonSerializer<Bet>(bet));
+                    }
             }
-            PreviousBalance = (decimal)Balance;
-            profit += (decimal)bet.Profit;
-            Chartprofit += (decimal)bet.Profit;
-            wagered += (decimal)bet.Amount;
+            catch (Exception e)
+            {
+
+            }
+            try
+            {
+                PreviousBalance = (decimal)Balance;
+                profit += (decimal)bet.Profit;
+                Chartprofit += (decimal)bet.Profit;
+                wagered += (decimal)bet.Amount;
+                
+            }
+            catch (Exception e)
+            {
+
+            }
             bool Win = (((bool)bet.high ? (decimal)bet.Roll > (decimal)CurrentSite.maxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
-            
             if (!RunningSimulation)
             {
                 
@@ -244,86 +258,92 @@ namespace DiceBot
         int LiveBets = 1000;
         void AddChartPoint(object Win)
         {
-
-            bool win = (bool)Win;
-            if (InvokeRequired)
+            try
             {
-                Invoke(new dAddChartPoint(AddChartPoint), win);
-            }
-            else
-            {
-                chartbets++;
-                if (chrtEmbeddedLiveChart.Enabled)
+                bool win = (bool)Win;
+                if (InvokeRequired)
                 {
-                    while (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1)
+                    Invoke(new dAddChartPoint(AddChartPoint), win);
+                }
+                else
+                {
+                    chartbets++;
+                    if (chrtEmbeddedLiveChart.Enabled)
                     {
-                        chrtEmbeddedLiveChart.Series[0].Points.RemoveAt(0);
-                    }
-                    try
-                    {
-                        var axisX = chrtEmbeddedLiveChart.ChartAreas[0].AxisX;
-                        var axisY = chrtEmbeddedLiveChart.ChartAreas[0].AxisY;
-                        axisX.Maximum = chartbets < LiveBets ? chartbets : LiveBets;
-                        axisX.Minimum = 1;// chartbets > 100 ? chartbets - 100 : 0;
-                                          //--chrtEmbeddedLiveChart.Series[0].Points.Add()
-
-                        System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint(chartbets - 1, (double)Chartprofit);
-                        tmp.Color = win ? Color.Green : Color.Red;
-                        tmp.BorderColor = win ? Color.Green : Color.Red;
-                        tmp.MarkerColor = win ? Color.Green : Color.Red;
-
-                        tmp.MarkerSize = win ? 3 : 2;
-                        tmp.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-                        tmp.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-                        tmp.BorderWidth = 1;
-                        chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
-                        if (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1 || chrtEmbeddedLiveChart.Series[0].Points.Count%10==0)
+                        while (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1)
                         {
-                            decimal maxy = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Max<DataPoint>(x => x.YValues[0]);
-                            decimal miny = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Min<DataPoint>(x => x.YValues[0]);
-                            decimal span = maxy - miny;
-                            if (maxy > (decimal)axisY.Maximum || miny < (decimal)axisY.Minimum ||
-                                (double)maxy < (axisY.Maximum - (double)(span / 2.0m)) || (double)miny > (axisY.Minimum + (double)(span / 2.0m)))
+                            chrtEmbeddedLiveChart.Series[0].Points.RemoveAt(0);
+                        }
+                        try
+                        {
+                            var axisX = chrtEmbeddedLiveChart.ChartAreas[0].AxisX;
+                            var axisY = chrtEmbeddedLiveChart.ChartAreas[0].AxisY;
+                            axisX.Maximum = chartbets < LiveBets ? chartbets : LiveBets;
+                            axisX.Minimum = 1;// chartbets > 100 ? chartbets - 100 : 0;
+                                              //--chrtEmbeddedLiveChart.Series[0].Points.Add()
+
+                            System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint(chartbets - 1, (double)Chartprofit);
+                            tmp.Color = win ? Color.Green : Color.Red;
+                            tmp.BorderColor = win ? Color.Green : Color.Red;
+                            tmp.MarkerColor = win ? Color.Green : Color.Red;
+
+                            tmp.MarkerSize = win ? 3 : 2;
+                            tmp.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+                            tmp.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+                            tmp.BorderWidth = 1;
+                            chrtEmbeddedLiveChart.Series[0].Points.Add(tmp);
+                            if (chrtEmbeddedLiveChart.Series[0].Points.Count > LiveBets - 1 || chrtEmbeddedLiveChart.Series[0].Points.Count % 10 == 0)
                             {
-                                /*axisY.Maximum = double.NaN;
-                                axisY.Minimum = double.NaN;*/
-                                if ((miny > 0.0000001m || miny < -0.0000001m) && (maxy > 0.0000001m || maxy < -0.0000001m))
+                                decimal maxy = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Max<DataPoint>(x => x.YValues[0]);
+                                decimal miny = (decimal)chrtEmbeddedLiveChart.Series[0].Points.Min<DataPoint>(x => x.YValues[0]);
+                                decimal span = maxy - miny;
+                                if (maxy > (decimal)axisY.Maximum || miny < (decimal)axisY.Minimum ||
+                                    (double)maxy < (axisY.Maximum - (double)(span / 2.0m)) || (double)miny > (axisY.Minimum + (double)(span / 2.0m)))
                                 {
-                                    string largespan = (span * 100000000).ToString("0");
-                                    decimal firstdigit = decimal.Parse((largespan.Substring(0, 1))) + 1;
-                                    decimal zeros = (span * 100000000).ToString("0").Length - 1;
-                                    //double factor = zeros; /// 100000000;
-                                    decimal newspan = firstdigit * (decimal)Math.Pow(10, ((double)zeros));
-                                    newspan /= 100000000m;
-                                    decimal interval = newspan / 5.0m;
-
-                                    decimal tmp1 = maxy / (interval);
-
-                                    decimal ceiling = Math.Ceiling(tmp1);
-                                    decimal floor = Math.Floor(miny / (interval));
-
-                                    decimal newmax = ceiling * interval + interval;
-                                    decimal newmin = floor * interval - interval;
-                                    /*axisY.Maximum = maxy * (maxy > 0 ? 1.025 : 0.975);
-                                    axisY.Minimum = miny * (miny < 0 ? 1.025 : 0.975);*/
-                                    if (newmax > newmin && (newmax > 0.0000001m || newmax < -0.0000001m) && (newmin > 0.0000001m || newmin < -0.0000001m))
+                                    /*axisY.Maximum = double.NaN;
+                                    axisY.Minimum = double.NaN;*/
+                                    if ((miny > 0.0000001m || miny < -0.0000001m) && (maxy > 0.0000001m || maxy < -0.0000001m))
                                     {
-                                        axisY.Maximum = (double)newmax;
-                                        axisY.Minimum = (double)newmin;
-                                    }
-                                    else
-                                    {
+                                        string largespan = (span * 100000000).ToString("0");
+                                        decimal firstdigit = decimal.Parse((largespan.Substring(0, 1))) + 1;
+                                        decimal zeros = (span * 100000000).ToString("0").Length - 1;
+                                        //double factor = zeros; /// 100000000;
+                                        decimal newspan = firstdigit * (decimal)Math.Pow(10, ((double)zeros));
+                                        newspan /= 100000000m;
+                                        decimal interval = newspan / 5.0m;
 
+                                        decimal tmp1 = maxy / (interval);
+
+                                        decimal ceiling = Math.Ceiling(tmp1);
+                                        decimal floor = Math.Floor(miny / (interval));
+
+                                        decimal newmax = ceiling * interval + interval;
+                                        decimal newmin = floor * interval - interval;
+                                        /*axisY.Maximum = maxy * (maxy > 0 ? 1.025 : 0.975);
+                                        axisY.Minimum = miny * (miny < 0 ? 1.025 : 0.975);*/
+                                        if (newmax > newmin && (newmax > 0.0000001m || newmax < -0.0000001m) && (newmin > 0.0000001m || newmin < -0.0000001m))
+                                        {
+                                            axisY.Maximum = (double)newmax;
+                                            axisY.Minimum = (double)newmin;
+                                        }
+                                        else
+                                        {
+
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        DumpLog(e.ToString(), 1);
+                        catch (Exception e)
+                        {
+                            DumpLog(e.ToString(), 1);
+                        }
                     }
                 }
+            }
+            catch(Exception e)
+            {
+
             }
         }
 
@@ -936,27 +956,35 @@ namespace DiceBot
         void luaResetSeed()
         {
             WriteConsole("Resetting Seed!");
-            if (CurrentSite.ChangeSeed)
-                CurrentSite.ResetSeed();
+            ResetSeed();
         }
         void luaWithdraw(decimal amount, string address)
         {
             WriteConsole("Withdrawing " +amount + " to " + address);
-            if (CurrentSite.AutoWithdraw)
-                CurrentSite.Withdraw(amount, address);
+            Withdraw(Amount, address);
+
+            /*if (CurrentSite.AutoWithdraw)
+                CurrentSite.Withdraw(amount, address);*/
         }
 
         void luainvest(decimal amount)
         {
             WriteConsole("investing " + amount);
-            if (CurrentSite.AutoInvest)
-                CurrentSite.Invest(amount);
+            Invest(amount);
         }
         void luatip(string username, decimal amount)
         {
-            WriteConsole("Tipping "+ amount + " to "+username);
-            if (CurrentSite.Tip)
-                CurrentSite.SendTip(username, amount);
+            try
+            {
+                WriteConsole("Tipping " + amount + " to " + username);
+                if (CurrentSite.Tip)
+                    CurrentSite.SendTip(username, amount);
+            }
+            catch (Exception e)
+            {
+                DumpLog(e.ToString(), -1);
+                updateStatus("Tip Failed");
+            }
         }
 
         delegate Bet[] dluagethistory();
@@ -1565,75 +1593,97 @@ namespace DiceBot
             btnExportSim_Click(null, new EventArgs());
         }
 
-        void Withdraw()
+        void Withdraw(decimal Amount, string Address)
         {
-            
-            if (CurrentSite.AutoWithdraw)
-                if (CurrentSite.Withdraw((decimal)(nudAmount.Value), txtTo.Text))
-                {
+            try
+            {
+                if (CurrentSite.AutoWithdraw)
+                    if (CurrentSite.Withdraw(Amount,Address))
+                    {
 
-                    
-                    TrayIcon.BalloonTipText = "Withdraw " + nudAmount.Value + " Complete\nRestarting Bets";
-                    TrayIcon.ShowBalloonTip(1000);
-                    try
-                    {
-                        if (Sound && SoundWithdraw)
+
+                        TrayIcon.BalloonTipText = "Withdraw " +Amount + " Complete\nRestarting Bets";
+                        TrayIcon.ShowBalloonTip(1000);
+                        try
                         {
-                            PlayChing();
+                            if (Sound && SoundWithdraw)
+                            {
+                                PlayChing();
+                            }
                         }
+                        catch (Exception e)
+                        {
+                            DumpLog(e.Message, 1);
+                            DumpLog(e.StackTrace, 2);
+                            MessageBox.Show("Failed to play CHING, pelase make sure file exists");
+                        }
+
+                        Emails.SendWithdraw(Amount, PreviousBalance - Amount, Address);
+                        StartBalance -= Amount;
+                        //Start(true);
                     }
-                    catch (Exception e)
-                    {
-                        DumpLog(e.Message, 1);
-                        DumpLog(e.StackTrace, 2);
-                        MessageBox.Show("Failed to play CHING, pelase make sure file exists");
-                    }
-                    
-                    Emails.SendWithdraw(Amount, PreviousBalance - Amount, txtTo.Text);
-                    StartBalance -= Amount;
-                    //Start(true);
-                }
+            }
+            catch (Exception e)
+            {
+                DumpLog(e.ToString(), -1);
+                updateStatus("Withdrawal Failed");
+            }
         }
 
-        void Invest()
+        void Invest(decimal Amount)
         {
-
-            if (CurrentSite.AutoInvest)
+            try
             {
-                if (CurrentSite.Invest((decimal)(nudAmount.Value)))
+                if (CurrentSite.AutoInvest)
                 {
-                    //invest = false;
-                    TrayIcon.BalloonTipText = "Invest " + nudAmount.Value + "Complete\nRestarting Bets";
-                    TrayIcon.ShowBalloonTip(1000);
-                    try
+                    if (CurrentSite.Invest((decimal)(Amount)))
                     {
-                        if (Sound && SoundWithdraw)
+                        //invest = false;
+                        TrayIcon.BalloonTipText = "Invest " + Amount + "Complete\nRestarting Bets";
+                        TrayIcon.ShowBalloonTip(1000);
+                        try
                         {
-                            PlayChing();
+                            if (Sound && SoundWithdraw)
+                            {
+                                PlayChing();
+                            }
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        DumpLog(e.Message, 1);
-                        DumpLog(e.StackTrace, 2);
-                        MessageBox.Show("Failed to play CHING, pelase make sure file exists");
-                    }
-                    
-                    Emails.SendInvest(Amount, CurrentSite.balance, dparse("-0", ref convert));
-                    StartBalance -= Amount;
-                    
-                }
+                        catch (Exception e)
+                        {
+                            DumpLog(e.Message, 1);
+                            DumpLog(e.StackTrace, 2);
+                            MessageBox.Show("Failed to play CHING, pelase make sure file exists");
+                        }
 
+                        Emails.SendInvest(Amount, CurrentSite.balance, dparse("-0", ref convert));
+                        StartBalance -= Amount;
+
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                DumpLog(e.ToString(), -1);
+                updateStatus("Invest failed");
             }
         }
 
         void ResetSeed()
         {
-            if (CurrentSite.ChangeSeed)
+            try
             {
+                if (CurrentSite.ChangeSeed)
+                {
 
-                CurrentSite.ResetSeed();
+                    CurrentSite.ResetSeed();
 
+                }
+            }
+            catch (Exception e  )
+            {
+                DumpLog(e.ToString(), -1);
+                updateStatus("Error resetting seed");
             }
         }
 
@@ -1774,11 +1824,11 @@ namespace DiceBot
                 }
                 if (withdraw)
                 {
-                    Withdraw();
+                    Withdraw(nudAmount.Value, txtTo.Text);
                 }
                 if (invest)
                 {
-                    Invest();
+                    Invest(nudAmount.Value);
                 }
                 /*if (reset)
                 {
@@ -2348,443 +2398,450 @@ namespace DiceBot
         bool EnableProgZigZag = false;
         public void DoBet(Bet bet)
         {
-            bool Win = (((bool)bet.high ? (decimal)bet.Roll> (decimal)CurrentSite.maxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
-            if (!Win)
+            try
             {
-
-            }
-            decimal profit = (decimal)bet.Profit;
-            retriedbet = false;
-            if (!stop)
-            {
-                if (Win)
+                bool Win = (((bool)bet.high ? (decimal)bet.Roll > (decimal)CurrentSite.maxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
+                if (!Win)
                 {
-                    if (LargestWin < profit)
-                        LargestWin = profit;
+
                 }
-                else
+                decimal profit = (decimal)bet.Profit;
+                retriedbet = false;
+                if (!stop)
                 {
-                    if (LargestLoss < -profit)
-                        LargestLoss = -profit;
-                }
-
-                if (LargestBet < Lastbet)
-                    LargestBet = Lastbet;
-
-                //if its a win
-                if (Win)
-                {
-
-                    if (PreviousBalance != 0)
+                    if (Win)
                     {
-                       
-                        if (Winstreak == 0)
+                        if (LargestWin < profit)
+                            LargestWin = profit;
+                    }
+                    else
+                    {
+                        if (LargestLoss < -profit)
+                            LargestLoss = -profit;
+                    }
+
+                    if (LargestBet < Lastbet)
+                        LargestBet = Lastbet;
+
+                    //if its a win
+                    if (Win)
+                    {
+
+                        if (PreviousBalance != 0)
+                        {
+
+                            if (Winstreak == 0)
+                            {
+                                currentprofit = 0;
+                                StreakProfitSinceLastReset = 0;
+                                StreakLossSinceLastReset = 0;
+                            }
+
+                            currentprofit += profit;
+                            ProfitSinceLastReset += profit;
+                            StreakProfitSinceLastReset += profit;
+                            DumpLog("currentprofit: " + currentprofit.ToString(), 7);
+                            DumpLog("ProfitSinceLastReset: " + ProfitSinceLastReset.ToString(), 7);
+                            DumpLog("StreakProfitSinceLastReset: " + StreakProfitSinceLastReset.ToString(), 7);
+                            Wins++;
+                            Winstreak++;
+                            trazelwin++;
+                            CalculateLuck(true);
+
+                            if (StatsWindows != null)
+                                if (!StatsWindows.IsDisposed)
+                                {
+                                    if (Winstreak >= StatsWindows.nudLastStreakWin.Value)
+                                        laststreakwin = Winstreak;
+                                }
+
+                            if (!programmerToolStripMenuItem.Checked || EnableReset)
+                            {
+                                if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
+                                {
+                                    Reset();
+                                }
+                                if (currentprofit >= ((decimal)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
+                                {
+                                    Stop("Made " + currentprofit + " profit in a row");
+
+                                }
+                                if (Winstreak >= nudStopWinStreak.Value && chkStopWinStreak.Checked)
+                                {
+                                    Stop("Won " + Winstreak + " bets in a row");
+
+                                }
+                                if (this.profit >= (decimal)nudStopWinBtc.Value && chkStopWinBtc.Checked)
+                                {
+                                    Stop("Made " + this.profit + " profit");
+
+                                }
+                                if (StreakProfitSinceLastReset >= (decimal)nudResetBtcStreakProfit.Value && chkResetBtcStreakProfit.Checked)
+                                {
+                                    Reset();
+                                    StreakProfitSinceLastReset = 0;
+                                }
+                                if (ProfitSinceLastReset > (decimal)nudResetBtcProfit.Value && chkResetBtcProfit.Checked)
+                                {
+                                    Reset();
+                                    ProfitSinceLastReset = 0;
+                                    DumpLog("Resetting: " + StreakProfitSinceLastReset.ToString() + ">" + nudResetBtcProfit.Value, 7);
+                                }
+                                if (Wins >= nudStopWins.Value && chkStopWins.Checked)
+                                {
+                                    Stop("More than " + nudStopLosses.Value + " Wins (" + Wins + "). Reset stats before restarting bot");
+                                }
+                                if (Wins - winsAtLastReset >= nudResetWins2.Value && chkResetWins.Checked)
+                                {
+                                    Reset();
+                                    winsAtLastReset = Wins;
+                                }
+                            }
+                            if (Losestreak != 0)
+                            {
+                                decimal avglosecalc = avgloss * numlosesreaks;
+                                avglosecalc += Losestreak;
+                                avglosecalc /= ++numlosesreaks;
+                                avgloss = avglosecalc;
+                                decimal avgbetcalc = avgstreak * numstreaks;
+                                avgbetcalc -= Losestreak;
+                                avgbetcalc /= ++numstreaks;
+                                avgstreak = avgbetcalc;
+                                if (Losestreak > WorstStreak3)
+                                {
+                                    WorstStreak3 = Losestreak;
+                                    if (Losestreak > WorstStreak2)
+                                    {
+                                        WorstStreak3 = WorstStreak2;
+                                        WorstStreak2 = Losestreak;
+                                        if (Losestreak > WorstStreak)
+                                        {
+                                            WorstStreak2 = WorstStreak;
+                                            WorstStreak = Losestreak;
+                                        }
+                                    }
+                                }
+
+                            }
+                            Losestreak = 0;
+                        }
+
+                        if (stoponwin)
+                        {
+                            Stop("Stop on win clicked, bet won");
+
+                        }
+                        iMultiplyCounter = 0;
+                        Multiplier = (decimal)(nudMultiplier.Value);
+                        if ((!programmerToolStripMenuItem.Checked) || EnableProgZigZag)
+                        {
+                            if (chkZigZagWins.Checked && Wins % (int)nudZigZagWins.Value == 0 && Wins != 0)
+                            {
+
+                                high = !high;
+
+                            }
+                            if (chkZigZagWinsStreak.Checked && Winstreak % (int)nudZigZagWinsStreak.Value == 0 && Winstreak != 0)
+                            {
+                                high = !high;
+                            }
+                        }
+                    }
+
+                    //if its a loss
+                    else if (!Win)
+                    {
+
+                        //do i use this line?
+                        iMultiplyCounter++;
+
+                        //reset current profit when switching from a winning streak to a losing streak
+                        if (Losestreak == 0)
                         {
                             currentprofit = 0;
                             StreakProfitSinceLastReset = 0;
                             StreakLossSinceLastReset = 0;
-                        }                        
-                        
-                        currentprofit += profit;
-                        ProfitSinceLastReset += profit;
-                        StreakProfitSinceLastReset += profit;
-                        DumpLog("currentprofit: " + currentprofit.ToString(), 7);
-                        DumpLog("ProfitSinceLastReset: "+ProfitSinceLastReset.ToString(), 7);
-                        DumpLog("StreakProfitSinceLastReset: "+ StreakProfitSinceLastReset.ToString(), 7);
-                        Wins++;
-                        Winstreak++;
-                        trazelwin++;
-                        CalculateLuck(true);
+                        }
 
+                        //adjust profit
+                        currentprofit -= Lastbet;
+                        ProfitSinceLastReset -= Lastbet;
+
+                        StreakLossSinceLastReset -= Lastbet;
+                        //increase losses and losestreak
+                        Losses++;
+                        Losestreak++;
+
+                        CalculateLuck(false);
+
+                        //update last losing streak if it is above the specified value to show in the stats
                         if (StatsWindows != null)
                             if (!StatsWindows.IsDisposed)
+                                if (Losestreak >= StatsWindows.nudLastStreakLose.Value)
+                                    laststreaklose = Losestreak;
+
+                        //switch high low if applied in the zig zag tab
+                        if ((!programmerToolStripMenuItem.Checked) || EnableProgZigZag)
+                        {
+                            if (chkZigZagLoss.Checked && Losses % (int)nudZigZagLoss.Value == 0 && Losses != 0)
                             {
-                                if (Winstreak >= StatsWindows.nudLastStreakWin.Value)
-                                    laststreakwin = Winstreak;
+
+                                high = !high;
+
                             }
-                        
+                            if (chkZigZagLossStreak.Checked && Losestreak % (int)nudZigZagLossStreak.Value == 0 && Losestreak != 0)
+                            {
+                                high = !high;
+                            }
+                        }
+
+
+
                         if (!programmerToolStripMenuItem.Checked || EnableReset)
                         {
-                            if (chkResetBetWins.Checked && Winstreak % nudResetWins.Value == 0)
+                            if (chkResetBetLoss.Checked && Losestreak % nudResetBetLoss.Value == 0)
                             {
                                 Reset();
                             }
-                            if (currentprofit >= ((decimal)nudStopWinBtcStreak.Value) && chkStopWinBtcStreak.Checked)
+                            //stop conditions:
+                            //stop if lose streak is higher than specified
+                            if (Losestreak >= nudStopLossStreak.Value && chkStopLossStreak.Checked)
                             {
-                                Stop("Made " + currentprofit + " profit in a row");
-                                
+                                Stop("Lost " + Losestreak + "bets in a row");
                             }
-                            if (Winstreak >= nudStopWinStreak.Value && chkStopWinStreak.Checked)
+
+                            //stop if current profit drops below specified value/ loss is larger than specified value
+                            if (currentprofit <= (0.0m - (decimal)nudStopLossBtcStreal.Value) && chkStopLossBtcStreak.Checked)
                             {
-                                Stop("Won "+ Winstreak + " bets in a row");
-                                
+                                Stop("Lost " + currentprofit + " " + CurrentSite.Currency + " in a row");
                             }
-                            if (this.profit >= (decimal)nudStopWinBtc.Value && chkStopWinBtc.Checked)
+
+                            // stop if total profit/total loss is below/above certain value
+                            if (this.profit <= 0.0m - (decimal)nudStopLossBtc.Value && chkStopLossBtc.Checked)
                             {
-                                Stop("Made " + this.profit + " profit");
-                                
+                                Stop("Lost " + this.profit + " " + CurrentSite.Currency);
                             }
-                            if (StreakProfitSinceLastReset >= (decimal)nudResetBtcStreakProfit.Value && chkResetBtcStreakProfit.Checked)
+                            if (StreakLossSinceLastReset <= -(decimal)nudResetBtcStreakLoss.Value && chkResetBtcStreakLoss.Checked)
                             {
                                 Reset();
-                                StreakProfitSinceLastReset = 0;
+                                StreakLossSinceLastReset = 0;
                             }
-                            if (ProfitSinceLastReset> (decimal)nudResetBtcProfit.Value && chkResetBtcProfit.Checked)
+                            if (ProfitSinceLastReset < -(decimal)nudResetBtcLoss.Value && chkResetBtcLoss.Checked)
                             {
                                 Reset();
                                 ProfitSinceLastReset = 0;
-                                DumpLog("Resetting: " + StreakProfitSinceLastReset.ToString() + ">" + nudResetBtcProfit.Value, 7);
                             }
-                            if (Wins >= nudStopWins.Value && chkStopWins.Checked)
+                            if (Losses >= nudStopLosses.Value && chkStopLosses.Checked)
                             {
-                                Stop("More than " + nudStopLosses.Value + " Wins (" + Wins + "). Reset stats before restarting bot");
+                                Stop("More than " + nudStopLosses.Value + " losses (" + Losses + "). Reset stats before restarting bot");
                             }
-                            if (Wins - winsAtLastReset >= nudResetWins2.Value && chkResetWins.Checked)
+                            if (Losses - lossesAtLastReset >= nudResetLosses.Value && chkResetLosses.Checked)
                             {
                                 Reset();
-                                winsAtLastReset = Wins;
+                                lossesAtLastReset = Losses;
                             }
                         }
-                        if (Losestreak != 0)
+                        //when switching from win streak to lose streak, calculate some stats
+                        if (Winstreak != 0)
                         {
-                            decimal avglosecalc = avgloss * numlosesreaks;
-                            avglosecalc += Losestreak;
-                            avglosecalc /= ++numlosesreaks;
-                            avgloss = avglosecalc;
+                            decimal avgwincalc = avgwin * numwinstreasks;
+                            avgwincalc += Winstreak;
+                            avgwincalc /= ++numwinstreasks;
+                            avgwin = avgwincalc;
                             decimal avgbetcalc = avgstreak * numstreaks;
-                            avgbetcalc -= Losestreak;
+                            avgbetcalc += Winstreak;
                             avgbetcalc /= ++numstreaks;
                             avgstreak = avgbetcalc;
-                            if (Losestreak > WorstStreak3)
-                           {
-                                WorstStreak3 = Losestreak;
-                                if (Losestreak > WorstStreak2)
+                            if (Winstreak > BestStreak3)
+                            {
+                                BestStreak3 = Winstreak;
+                                if (Winstreak > BestStreak2)
                                 {
-                                    WorstStreak3 = WorstStreak2;
-                                    WorstStreak2 = Losestreak;
-                                    if (Losestreak > WorstStreak)
+                                    BestStreak3 = BestStreak2;
+                                    BestStreak2 = Winstreak;
+                                    if (Winstreak > BestStreak)
                                     {
-                                        WorstStreak2 = WorstStreak;
-                                        WorstStreak = Losestreak;
+                                        BestStreak2 = BestStreak;
+                                        BestStreak = Winstreak;
                                     }
                                 }
                             }
-                            
                         }
-                        Losestreak = 0;
+
+                        //reset win streak
+                        Winstreak = 0;
+
+                        //sounds
+                        if (!RunningSimulation)
+                            if (Sound && SoundStreak && Losestreak > SoundStreakCount)
+                                playalarm();
+                        //email
+                        if (!RunningSimulation && Emails != null)
+                            if (Emails.Streak && Losestreak > Emails.StreakSize)
+                                Emails.SendStreak(Losestreak, Emails.StreakSize, dPreviousBalance);
+
+
+                        //update worst streaks
+                        /*if (!RunningSimulation)
+                        if (Losestreak > WorstStreak)
+                            WorstStreak = Losestreak;*/
+
+                        //reset win multplier
+                        WinMultiplier = (decimal)(nudWinMultiplier.Value);
+
                     }
-                    
-                    if (stoponwin)
+
+                    if (Wins + Losses >= nudStopBets.Value && chkStopBets.Checked)
                     {
-                        Stop("Stop on win clicked, bet won");
-                        
+                        Stop("Bets exeeding " + nudStopBets.Value + "(stop after x bets)");
                     }
-                    iMultiplyCounter = 0;                    
-                    Multiplier = (decimal)(nudMultiplier.Value);
-                    if ((!programmerToolStripMenuItem.Checked) || EnableProgZigZag)
+                    if (Wins + Losses - betsAtLastReset >= nudResetBets.Value && chkResetBets.Checked)
                     {
-                        if (chkZigZagWins.Checked && Wins% (int)nudZigZagWins.Value==0 && Wins!=0)
-                        {
-                             
-                                high = !high;
-                            
-                        }
-                        if (chkZigZagWinsStreak.Checked && Winstreak % (int)nudZigZagWinsStreak.Value ==0 && Winstreak!=0)
+                        Reset();
+                        betsAtLastReset = Wins + Losses;
+                    }
+                    TimeSpan curtime = DateTime.Now - dtStarted;
+
+                    if ((decimal)curtime.TotalHours >= nudStopTimeH.Value && curtime.Minutes >= (decimal)nudStopTimeM.Value && curtime.Seconds >= (decimal)nudStopTimeS.Value && chkStopTime.Checked)
+                    {
+                        Stop(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "Time exeeding {0}:{1}:{2}", nudStopTimeH.Value, nudStopTimeM.Value, nudStopTimeS.Value));
+                    }
+
+                    if (chkZigZagBets.Checked && (!programmerToolStripMenuItem.Checked || EnableProgZigZag))
+                    {
+                        if ((Wins + Losses) % (int)nudZigZagBets.Value == 0 && (Wins + Losses) != 0)
                         {
                             high = !high;
                         }
                     }
-                }
-
-                    //if its a loss
-                else if (!Win)
-                {
-                    
-                    //do i use this line?
-                    iMultiplyCounter++;
-
-                    //reset current profit when switching from a winning streak to a losing streak
-                    if (Losestreak == 0)
-                    {
-                        currentprofit = 0;
-                        StreakProfitSinceLastReset = 0;
-                        StreakLossSinceLastReset = 0;
-                    }
-                    
-                    //adjust profit
-                    currentprofit -= Lastbet;
-                    ProfitSinceLastReset -= Lastbet;
-                    
-                    StreakLossSinceLastReset -= Lastbet;
-                    //increase losses and losestreak
-                    Losses++;
-                    Losestreak++;
-                    
-                    CalculateLuck(false);
-                    
-                    //update last losing streak if it is above the specified value to show in the stats
-                    if (StatsWindows != null)
-                        if (!StatsWindows.IsDisposed)
-                            if (Losestreak >= StatsWindows.nudLastStreakLose.Value)
-                                laststreaklose = Losestreak;
-
-                    //switch high low if applied in the zig zag tab
-                    if ((!programmerToolStripMenuItem.Checked) || EnableProgZigZag)
-                    {
-                        if (chkZigZagLoss.Checked && Losses % (int)nudZigZagLoss.Value == 0 && Losses != 0)
+                    if (!RunningSimulation)
+                        if (dPreviousBalance >= Limit && chkLimit.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
                         {
 
-                            high = !high;
-
-                        }
-                        if (chkZigZagLossStreak.Checked && Losestreak % (int)nudZigZagLossStreak.Value == 0 && Losestreak != 0)
-                        {
-                            high = !high;
-                        }
-                    }
-
-                   
-
-                    if (!programmerToolStripMenuItem.Checked || EnableReset)
-                    {
-                        if (chkResetBetLoss.Checked && Losestreak %nudResetBetLoss.Value == 0)
-                        {
-                            Reset();
-                        }
-                        //stop conditions:
-                        //stop if lose streak is higher than specified
-                        if (Losestreak >= nudStopLossStreak.Value && chkStopLossStreak.Checked)
-                        {
-                            Stop("Lost " +Losestreak + "bets in a row");
-                        }
-
-                        //stop if current profit drops below specified value/ loss is larger than specified value
-                        if (currentprofit <= (0.0m - (decimal)nudStopLossBtcStreal.Value) && chkStopLossBtcStreak.Checked)
-                        {
-                            Stop("Lost " + currentprofit+ " " + CurrentSite.Currency+" in a row");
-                        }
-
-                        // stop if total profit/total loss is below/above certain value
-                        if (this.profit <= 0.0m - (decimal)nudStopLossBtc.Value && chkStopLossBtc.Checked)
-                        {
-                            Stop("Lost " + this.profit + " " + CurrentSite.Currency);
-                        }
-                        if (StreakLossSinceLastReset <= -(decimal)nudResetBtcStreakLoss.Value && chkResetBtcStreakLoss.Checked)
-                        {
-                            Reset();
-                            StreakLossSinceLastReset = 0;
-                        }
-                        if (ProfitSinceLastReset < -(decimal)nudResetBtcLoss.Value && chkResetBtcLoss.Checked)
-                        {
-                            Reset();
-                            ProfitSinceLastReset = 0;
-                        }
-                        if (Losses>= nudStopLosses.Value && chkStopLosses.Checked)
-                        {
-                            Stop("More than " + nudStopLosses.Value + " losses ("+Losses+"). Reset stats before restarting bot");
-                        }
-                        if (Losses-lossesAtLastReset >= nudResetLosses.Value && chkResetLosses.Checked)
-                        {
-                            Reset();
-                            lossesAtLastReset = Losses;
-                        }
-                    }
-                    //when switching from win streak to lose streak, calculate some stats
-                    if (Winstreak != 0)
-                    {
-                        decimal avgwincalc = avgwin * numwinstreasks;
-                        avgwincalc += Winstreak;
-                        avgwincalc /= ++numwinstreasks;
-                        avgwin = avgwincalc;
-                        decimal avgbetcalc = avgstreak * numstreaks;
-                        avgbetcalc += Winstreak;
-                        avgbetcalc /= ++numstreaks;
-                        avgstreak = avgbetcalc;
-                        if (Winstreak > BestStreak3)
-                        {
-                            BestStreak3 = Winstreak;
-                            if (Winstreak > BestStreak2)
+                            if (rdbStop.Checked)
                             {
-                                BestStreak3 = BestStreak2;
-                                BestStreak2 = Winstreak;
-                                if (Winstreak > BestStreak)
-                                {
-                                    BestStreak2 = BestStreak;
-                                    BestStreak = Winstreak;
-                                }
+                                Stop("Balance larger than " + Limit + " (limit)");
+                            }
+                            else if (rdbWithdraw.Checked)
+                            {
+                                Withdraw(nudAmount.Value, txtTo.Text);
+
+                            }
+                            else if (rdbInvest.Checked)
+                            {
+                                Invest(nudAmount.Value);
+
                             }
                         }
-                    }
 
-                    //reset win streak
-                    Winstreak = 0;
 
-                    //sounds
                     if (!RunningSimulation)
-                    if (Sound && SoundStreak && Losestreak > SoundStreakCount)
-                        playalarm();
-                    //email
-                    if (!RunningSimulation && Emails!=null)
-                    if (Emails.Streak && Losestreak > Emails.StreakSize)
-                        Emails.SendStreak(Losestreak, Emails.StreakSize, dPreviousBalance);
-
-                    
-                    //update worst streaks
-                    /*if (!RunningSimulation)
-                    if (Losestreak > WorstStreak)
-                        WorstStreak = Losestreak;*/
-
-                    //reset win multplier
-                    WinMultiplier = (decimal)(nudWinMultiplier.Value);
-
-                }
-
-                if (Wins + Losses >= nudStopBets.Value && chkStopBets.Checked)
-                {
-                    Stop("Bets exeeding " + nudStopBets.Value +"(stop after x bets)");
-                }
-                if ( Wins+Losses-betsAtLastReset >= nudResetBets.Value && chkResetBets.Checked)
-                {
-                    Reset();
-                    betsAtLastReset = Wins + Losses;
-                }
-                TimeSpan curtime = DateTime.Now - dtStarted;
-
-                if ((decimal)curtime.TotalHours >= nudStopTimeH.Value && curtime.Minutes >= (decimal)nudStopTimeM.Value && curtime.Seconds >= (decimal)nudStopTimeS.Value && chkStopTime.Checked)
-                {
-                    Stop(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Time exeeding {0}:{1}:{2}", nudStopTimeH.Value, nudStopTimeM.Value, nudStopTimeS.Value));
-                }
-                
-                if (chkZigZagBets.Checked && (!programmerToolStripMenuItem.Checked || EnableProgZigZag ))
-                {
-                    if ((Wins+Losses) % (int)nudZigZagBets.Value == 0 && (Wins+Losses)!=0 )
-                    {
-                        high = !high;
-                    }
-                }
-                if (!RunningSimulation)
-                if (dPreviousBalance >= Limit && chkLimit.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
-                {
-
-                    if (rdbStop.Checked)
-                    {
-                        Stop("Balance larger than "+Limit+" (limit)");
-                    }
-                    else if (rdbWithdraw.Checked)
-                    {
-                        Withdraw();
-
-                    }
-                    else if (rdbInvest.Checked)
-                    {
-                        Invest();
-
-                    }
-                }
-                
-
-                if (!RunningSimulation)
-                if ( Wins!=0 && Losses!=0 && chkResetSeed.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
-                {
-                    if ( ((rdbResetSeedBets.Checked && (Wins+Losses) % nudResetSeed.Value == 0) ||
-                       (rdbResetSeedWins.Checked && Wins % nudResetSeed.Value == 0 && Losestreak==0)||
-                       (rdbResetSeedLosses.Checked && Losses % nudResetSeed.Value == 0 && Winstreak == 0)) && !withdrew)
-                    {
-                        
-                   
-                        ResetSeed();
-                    }
-                    
-                }
-
-                try
-                {
-                   if (!RunningSimulation)
-                    UpdateStats();
-                }
-                catch (Exception e)
-                {
-                    DumpLog(e.Message, 1);
-                    DumpLog(e.StackTrace, 2);
-                }
-                if (RunningSimulation && (Wins + Losses > numSimBets || Lastbet > PreviousBalance))
-                {
-                    Stop("Simulation complete");
-                }
-                
-                if (!(stop || withdraw ||invest))
-                {
-                    if (programmerToolStripMenuItem.Checked)
-                    {
-                        parseScript(bet);
-                    }
-                    else if (!reset)
-                    {
-                        if (rdbMartingale.Checked)
+                        if (Wins != 0 && Losses != 0 && chkResetSeed.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
                         {
-                            martingale(Win);
-                        }
-                        else if (rdbLabEnable.Checked)
-                        {
-                            Labouchere(Win);
-                        }
-                        else if (rdbFibonacci.Checked)
-                        {
-                            Fibonacci(Win);
-                        }
-                        else if (rdbAlembert.Checked)
-                        {
-                            Alembert(Win);
-                        }
-                        else if (rdbPreset.Checked)
-                        {
-                            PresetList(Win);
-                        }
-                    }
-                    if (chkMinBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet< (decimal)nudMinumumBet.Value)
-                    {
-                        Lastbet = (decimal)nudMinumumBet.Value;
+                            if (((rdbResetSeedBets.Checked && (Wins + Losses) % nudResetSeed.Value == 0) ||
+                               (rdbResetSeedWins.Checked && Wins % nudResetSeed.Value == 0 && Losestreak == 0) ||
+                               (rdbResetSeedLosses.Checked && Losses % nudResetSeed.Value == 0 && Winstreak == 0)) && !withdrew)
+                            {
 
-                    }
-                    if (chkMaxBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet > (decimal)nudMaximumBet.Value)
+
+                                ResetSeed();
+                            }
+
+                        }
+
+                    try
                     {
-                        Lastbet = (decimal)nudMaximumBet.Value;
+                        if (!RunningSimulation)
+                            UpdateStats();
                     }
-                    if (RunningSimulation && Lastbet > dPreviousBalance)
+                    catch (Exception e)
+                    {
+                        DumpLog(e.Message, 1);
+                        DumpLog(e.StackTrace, 2);
+                    }
+                    if (RunningSimulation && (Wins + Losses > numSimBets || Lastbet > PreviousBalance))
                     {
                         Stop("Simulation complete");
                     }
-                    if (!RunningSimulation)
-                        if (dPreviousBalance - Lastbet <= nudLowerLimit.Value && chkLowerLimit.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
-                        {
-                            //TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
-                            //TrayIcon.ShowBalloonTip(1000);
-                            Stop("Balance lower than " + nudLowerLimit.Value);
-                            if (Sound && SoundLow)
-                                playalarm();
-                            //TrayIcon.BalloonTipText = "DiceBot has Stopped Betting\nThe next bet will will have put your Balance below your lower limit";
 
-                            if (Emails.Lower)
-                                Emails.SendLowLimit(dPreviousBalance, LowerLimit, Lastbet);
-                        }
-
-                    if (!stop)
+                    if (!(stop || withdraw || invest))
                     {
+                        if (programmerToolStripMenuItem.Checked)
+                        {
+                            parseScript(bet);
+                        }
+                        else if (!reset)
+                        {
+                            if (rdbMartingale.Checked)
+                            {
+                                martingale(Win);
+                            }
+                            else if (rdbLabEnable.Checked)
+                            {
+                                Labouchere(Win);
+                            }
+                            else if (rdbFibonacci.Checked)
+                            {
+                                Fibonacci(Win);
+                            }
+                            else if (rdbAlembert.Checked)
+                            {
+                                Alembert(Win);
+                            }
+                            else if (rdbPreset.Checked)
+                            {
+                                PresetList(Win);
+                            }
+                        }
+                        if (chkMinBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet < (decimal)nudMinumumBet.Value)
+                        {
+                            Lastbet = (decimal)nudMinumumBet.Value;
+
+                        }
+                        if (chkMaxBet.Checked && (!programmerToolStripMenuItem.Checked || EnableReset) && Lastbet > (decimal)nudMaximumBet.Value)
+                        {
+                            Lastbet = (decimal)nudMaximumBet.Value;
+                        }
+                        if (RunningSimulation && Lastbet > dPreviousBalance)
+                        {
+                            Stop("Simulation complete");
+                        }
                         if (!RunningSimulation)
-                        WriteConsole("Betting " + Lastbet + " at " + Chance +"% chance to win, "+ (high?"high":"low"));
-                        EnableTimer(tmBet, true);
+                            if (dPreviousBalance - Lastbet <= nudLowerLimit.Value && chkLowerLimit.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
+                            {
+                                //TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
+                                //TrayIcon.ShowBalloonTip(1000);
+                                Stop("Balance lower than " + nudLowerLimit.Value);
+                                if (Sound && SoundLow)
+                                    playalarm();
+                                //TrayIcon.BalloonTipText = "DiceBot has Stopped Betting\nThe next bet will will have put your Balance below your lower limit";
 
-                        withdrew = false;
+                                if (Emails.Lower)
+                                    Emails.SendLowLimit(dPreviousBalance, LowerLimit, Lastbet);
+                            }
+
+                        if (!stop)
+                        {
+                            if (!RunningSimulation)
+                                WriteConsole("Betting " + Lastbet + " at " + Chance + "% chance to win, " + (high ? "high" : "low"));
+                            EnableTimer(tmBet, true);
+
+                            withdrew = false;
+                        }
                     }
+
+
                 }
-
-
+                if (RunningSimulation && stop)
+                {
+                    RunningSimulation = false;
+                }
+                reset = false;
             }
-            if (RunningSimulation && stop)
+            catch (Exception e)
             {
-                RunningSimulation = false;
+
             }
-            reset = false;
         }
 
         System.Collections.ArrayList Vars = new System.Collections.ArrayList();
@@ -4309,7 +4366,7 @@ namespace DiceBot
                 {
                     betstring += "win,";
                     betstring += Lastbet + ",";
-                    betProfit = (Lastbet * 99 / Chance) - Lastbet;
+                    betProfit = (Lastbet * (100m-CurrentSite.edge) / Chance) - Lastbet;
                     betstring += betProfit  + ",";
                     tmp.Profit = (decimal)betProfit;    
 

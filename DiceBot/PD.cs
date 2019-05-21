@@ -348,13 +348,29 @@ namespace DiceBot
         Random R = new Random();
         public override void ResetSeed()
         {
-            GraphQLRequest LoginReq = new GraphQLRequest
+            try
             {
-                Query = "mutation{rotateServerSeed{ seed seedHash nonce } changeClientSeed(seed:\""+R.Next(0, int.MaxValue).ToString()+"\"){seed}}"
-            };
-            GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
-            pdSeed user = Resp.GetDataFieldAs<pdSeed>("rotateServerSeed");
-            
+                GraphQLRequest LoginReq = new GraphQLRequest
+                {
+                    Query = "mutation{rotateServerSeed{ seed seedHash nonce } changeClientSeed(seed:\"" + R.Next(0, int.MaxValue).ToString() + "\"){seed}}"
+                };
+                GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
+                if (Resp.Data != null)
+                {
+                    pdSeed user = Resp.GetDataFieldAs<pdSeed>("rotateServerSeed");
+                }
+                else if (Resp.Errors!=null && Resp.Errors.Length>0)
+                {
+                    foreach (var x in Resp.Errors)
+                    {
+                        Parent.DumpLog("GRAPHQL ERROR PD RESETSEED: "+x.Message,1);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Parent.updateStatus("Failed to reset seed.");
+            }
         }
 
         public override void SetClientSeed(string Seed)

@@ -28,9 +28,8 @@ namespace DiceBot
         Random R = new Random();
         bkGetCurrencies Currs = null;
         BKCurrency CurrentCurrency = null;
-        public static string[] sCurrencies = new string[] { "Btc", "Eth", "BKB", "Ltc"/*,"OMG",
+        public static string[] sCurrencies = new string[] { "Btc", "Eth", "BKT", "Ltc","EOS"/*,"OMG",
 "TRX",
-"EOS",
 "SNT",
 "PPT",
 "GNT",
@@ -68,7 +67,8 @@ namespace DiceBot
             Curs.Add("Btc", 0);
             Curs.Add("Eth", 1);
             Curs.Add("Ltc", 3);
-            Curs.Add("BKB", 6);
+            Curs.Add("BKB", 35);
+            Curs.Add("EOS", 9);
             /*Curs.Add("OmiseGo", 7);
             Curs.Add("TRON", 8);
             Curs.Add("EOS", 9);

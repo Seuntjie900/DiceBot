@@ -182,7 +182,7 @@ namespace DiceBot
             finishedlogin(false);
             return;
         }
-        public enum ReqType { balance,bet,hash }
+        public enum ReqType { balance,bet,hash,tip }
         Dictionary<long, ReqType> Requests = new Dictionary<long, ReqType>();
         private void GetBalanceThread()
         {
@@ -190,7 +190,7 @@ namespace DiceBot
             {
                 try
                 {                    
-                    if (WSClient.State == WebSocketState.Open && ((DateTime.Now - lastupdate).TotalSeconds>30 || ForceUpdateStats))
+                    if (WSClient.State == WebSocketState.Open && ((DateTime.Now - lastupdate).TotalSeconds>15 || ForceUpdateStats))
                     {
                         ForceUpdateStats = false;
                         lastupdate = DateTime.Now;
@@ -290,6 +290,21 @@ namespace DiceBot
                 }
             }
 
+        }
+
+        public override bool InternalSendTip(string User, decimal amount)
+        {
+            long tmpid = id++;
+            Requests.Add(tmpid, ReqType.tip);
+            //426["send_tip",{"uname":"professor","amount":1000,"private":false,"type":"BTC"}]
+            string request = string.Format("42{3}[\"send_tip\",{{\"uname\":\"{0}\",\"amount\":{1},\"private\":false,\"type\":\"{2}\"}}]",
+               User,
+                Math.Floor(amount * 100000000m),                
+                Currency,
+                tmpid);
+            WSClient.Send(request);
+            ForceUpdateStats = true;
+            return true;
         }
 
         void ProcessBalance(string Res)
