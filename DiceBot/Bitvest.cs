@@ -379,7 +379,7 @@ namespace DiceBot
                     Parent.updateBets(bets);
                     Parent.updateWins(wins);
                     Parent.updateLosses(losses);
-                    Parent.updateDeposit(tmpblogin.account.address);
+                    //Parent.updateDeposit(tmpblogin.account.address);
                     lastupdate = DateTime.Now;
                     ispd = true;
                     pw = Password;

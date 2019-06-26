@@ -11,6 +11,17 @@ namespace DiceBot
 {
     class Stake: PD
     {
+        static Stake()
+        {
+            if (DateTime.UtcNow>new DateTime(2019,06,29))
+            {
+                sCurrencies = new string[] { "Btc", "Eth", "Ltc", "Doge", "Bch","Xlm" };
+            }
+            else
+            {
+                sCurrencies = new string[] { "Btc", "Eth", "Ltc", "Doge", "Bch" };
+            }
+        }
         public static new string[] sCurrencies = new string[] { "Btc", "Eth", "Ltc","Doge", "Bch" };
 
         public Stake(cDiceBot Parent):base(Parent)/*:base(Parent)*/
@@ -33,8 +44,8 @@ namespace DiceBot
             SiteURL = "https://stake.com/?code=seuntjie";
             URL = "https://api.stake.com/graphql/";
             RolName = "diceRoll";
-            CaptchaKey = "6Ld1gjkUAAAAAJW4iRQd5p4seCm0Tqg3ou-kMFVQ";
-            GameName = "BetGameDice";
+            
+            GameName = "CasinoGameDice";
             StatGameName = "dice";
         }
     }

@@ -43,7 +43,7 @@ namespace DiceBot
             TipUsingName = true;
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
-            SiteURL = "https://bit-exo.com/?ref=seuntjie ";
+            SiteURL = "https://bit-exo.com/?ref=seuntjie";
             Currency = "BTC";
             _PasswordText = "API Token";
         }

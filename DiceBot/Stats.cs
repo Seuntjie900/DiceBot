@@ -9,19 +9,15 @@ using System.Windows.Forms;
 
 namespace DiceBot
 {
-    public partial class Stats : Form
+    public partial class Stats : UserControl
     {
         public Stats()
         {
             InitializeComponent();
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            this.Hide();
-            e.Cancel = true;
-            base.OnClosing(e);
-        }
+        public bool ShowHideButtons { get { return btnHideStats.Visible; } set { btnHideStats.Visible = button2.Visible = value; } }
+
         private void btnResetStats_Click(object sender, EventArgs e)
         {
 
@@ -29,7 +25,7 @@ namespace DiceBot
 
         private void btnHideStats_Click_1(object sender, EventArgs e)
         {
-            this.Hide();
+            this.FindForm().Close();
         }
 
         private void label37_Click(object sender, EventArgs e)
