@@ -39,9 +39,16 @@
             this.Settings = new System.Windows.Forms.GroupBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tbMartingale = new System.Windows.Forms.TabPage();
-            this.btnHelpMartingale = new System.Windows.Forms.Button();
-            this.rdbMartingale = new System.Windows.Forms.RadioButton();
+            this.tabControl3 = new System.Windows.Forms.TabControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.rdbDevider = new System.Windows.Forms.RadioButton();
+            this.rdbConstant = new System.Windows.Forms.RadioButton();
+            this.rdbMaxMultiplier = new System.Windows.Forms.RadioButton();
+            this.rdbReduce = new System.Windows.Forms.RadioButton();
+            this.nudPercIncreaseLoss = new System.Windows.Forms.NumericUpDown();
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.nudStretchLoss = new System.Windows.Forms.NumericUpDown();
@@ -58,16 +65,20 @@
             this.nudNbets = new System.Windows.Forms.NumericUpDown();
             this.nudMaxMultiplies = new System.Windows.Forms.NumericUpDown();
             this.nudMultiplier = new System.Windows.Forms.NumericUpDown();
-            this.rdbReduce = new System.Windows.Forms.RadioButton();
             this.lblMultiplier = new System.Windows.Forms.Label();
             this.lblDevider = new System.Windows.Forms.Label();
-            this.rdbMaxMultiplier = new System.Windows.Forms.RadioButton();
-            this.rdbDevider = new System.Windows.Forms.RadioButton();
             this.lblAfter2 = new System.Windows.Forms.Label();
-            this.rdbConstant = new System.Windows.Forms.RadioButton();
             this.lblAfter = new System.Windows.Forms.Label();
             this.lblMaxMultiplier = new System.Windows.Forms.Label();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.nudPercIncreaseWin = new System.Windows.Forms.NumericUpDown();
+            this.label35 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.rdbWinMaxMultiplier = new System.Windows.Forms.RadioButton();
+            this.rdbWinConstant = new System.Windows.Forms.RadioButton();
+            this.rdbWinReduce = new System.Windows.Forms.RadioButton();
+            this.rdbWinDevider = new System.Windows.Forms.RadioButton();
             this.label18 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.nudStretchWin = new System.Windows.Forms.NumericUpDown();
@@ -84,15 +95,14 @@
             this.nudWinNBets = new System.Windows.Forms.NumericUpDown();
             this.nudWinMaxMultiplies = new System.Windows.Forms.NumericUpDown();
             this.nudWinMultiplier = new System.Windows.Forms.NumericUpDown();
-            this.rdbWinReduce = new System.Windows.Forms.RadioButton();
             this.label44 = new System.Windows.Forms.Label();
             this.label45 = new System.Windows.Forms.Label();
-            this.rdbWinMaxMultiplier = new System.Windows.Forms.RadioButton();
-            this.rdbWinDevider = new System.Windows.Forms.RadioButton();
             this.label46 = new System.Windows.Forms.Label();
-            this.rdbWinConstant = new System.Windows.Forms.RadioButton();
             this.label47 = new System.Windows.Forms.Label();
             this.label54 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.rdbMartingale = new System.Windows.Forms.RadioButton();
+            this.btnHelpMartingale = new System.Windows.Forms.Button();
             this.tbLabouchère = new System.Windows.Forms.TabPage();
             this.btnHelpLabouchere = new System.Windows.Forms.Button();
             this.panel7 = new System.Windows.Forms.Panel();
@@ -221,6 +231,7 @@
             this.lblLowLimit = new System.Windows.Forms.Label();
             this.chkLimit = new System.Windows.Forms.CheckBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.rdbLimitTip = new System.Windows.Forms.RadioButton();
             this.rdbInvest = new System.Windows.Forms.RadioButton();
             this.rdbStop = new System.Windows.Forms.RadioButton();
             this.rdbWithdraw = new System.Windows.Forms.RadioButton();
@@ -387,9 +398,9 @@
             this.label19 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.pnlBasic = new System.Windows.Forms.Panel();
             this.nudChance2 = new System.Windows.Forms.NumericUpDown();
             this.label118 = new System.Windows.Forms.Label();
@@ -420,9 +431,20 @@
             this.pnlProgrammer = new System.Windows.Forms.Panel();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.pnlLoadProgrammer = new System.Windows.Forms.Panel();
+            this.btnOpenCode = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.btnCodeSave = new System.Windows.Forms.Button();
             this.tpConsole = new System.Windows.Forms.TabPage();
             this.rtbConsole = new System.Windows.Forms.RichTextBox();
             this.txtConsoleIn = new System.Windows.Forms.TextBox();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.lbVariables = new System.Windows.Forms.ListBox();
+            this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.pnlControlProgrammer = new System.Windows.Forms.Panel();
+            this.btnStopProgrammer = new System.Windows.Forms.Button();
+            this.btnStartProgrammer = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -433,8 +455,10 @@
             this.chartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loginPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualBettingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.statsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.embeddedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.popupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sessionLiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sessionStaticToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -498,37 +522,17 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.embeddedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.popupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rdbLimitTip = new System.Windows.Forms.RadioButton();
-            this.pnlControlProgrammer = new System.Windows.Forms.Panel();
-            this.btnStartProgrammer = new System.Windows.Forms.Button();
-            this.btnStopProgrammer = new System.Windows.Forms.Button();
-            this.tabPage8 = new System.Windows.Forms.TabPage();
-            this.tabPage9 = new System.Windows.Forms.TabPage();
-            this.lbVariables = new System.Windows.Forms.ListBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.pnlLoadProgrammer = new System.Windows.Forms.Panel();
-            this.btnOpenCode = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.btnCodeSave = new System.Windows.Forms.Button();
-            this.tabControl3 = new System.Windows.Forms.TabControl();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.nudPercIncreaseLoss = new System.Windows.Forms.NumericUpDown();
-            this.label34 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label35 = new System.Windows.Forms.Label();
-            this.nudPercIncreaseWin = new System.Windows.Forms.NumericUpDown();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.Settings.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbMartingale.SuspendLayout();
+            this.tabControl3.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.groupBox9.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercIncreaseLoss)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStretchLoss)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).BeginInit();
@@ -538,7 +542,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudNbets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxMultiplies)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).BeginInit();
+            this.tabPage7.SuspendLayout();
             this.groupBox8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercIncreaseWin)).BeginInit();
+            this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudStretchWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinTo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinStreak)).BeginInit();
@@ -548,6 +555,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudWinNBets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWinMaxMultiplies)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier)).BeginInit();
+            this.panel3.SuspendLayout();
             this.tbLabouchère.SuspendLayout();
             this.panel7.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -657,22 +665,14 @@
             this.pnlProgrammer.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage10.SuspendLayout();
+            this.pnlLoadProgrammer.SuspendLayout();
             this.tpConsole.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.tabPage9.SuspendLayout();
+            this.pnlControlProgrammer.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).BeginInit();
-            this.pnlControlProgrammer.SuspendLayout();
-            this.tabPage8.SuspendLayout();
-            this.tabPage9.SuspendLayout();
-            this.pnlLoadProgrammer.SuspendLayout();
-            this.tabControl3.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.tabPage7.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPercIncreaseLoss)).BeginInit();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPercIncreaseWin)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlAdvanced
@@ -760,28 +760,27 @@
             this.tbMartingale.Text = "Martingale";
             this.tbMartingale.UseVisualStyleBackColor = true;
             // 
-            // btnHelpMartingale
+            // tabControl3
             // 
-            this.btnHelpMartingale.Location = new System.Drawing.Point(303, 3);
-            this.btnHelpMartingale.Name = "btnHelpMartingale";
-            this.btnHelpMartingale.Size = new System.Drawing.Size(141, 23);
-            this.btnHelpMartingale.TabIndex = 4;
-            this.btnHelpMartingale.Text = "What Is martingale?";
-            this.btnHelpMartingale.UseVisualStyleBackColor = true;
-            this.btnHelpMartingale.Click += new System.EventHandler(this.btnHelpMartingale_Click);
+            this.tabControl3.Controls.Add(this.tabPage2);
+            this.tabControl3.Controls.Add(this.tabPage7);
+            this.tabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl3.Location = new System.Drawing.Point(3, 34);
+            this.tabControl3.Name = "tabControl3";
+            this.tabControl3.SelectedIndex = 0;
+            this.tabControl3.Size = new System.Drawing.Size(447, 353);
+            this.tabControl3.TabIndex = 5;
             // 
-            // rdbMartingale
+            // tabPage2
             // 
-            this.rdbMartingale.AutoSize = true;
-            this.rdbMartingale.Checked = true;
-            this.rdbMartingale.Location = new System.Drawing.Point(3, 3);
-            this.rdbMartingale.Name = "rdbMartingale";
-            this.rdbMartingale.Size = new System.Drawing.Size(96, 17);
-            this.rdbMartingale.TabIndex = 3;
-            this.rdbMartingale.TabStop = true;
-            this.rdbMartingale.Text = "Use Martingale";
-            this.rdbMartingale.UseVisualStyleBackColor = true;
-            this.rdbMartingale.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
+            this.tabPage2.Controls.Add(this.groupBox9);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(439, 327);
+            this.tabPage2.TabIndex = 0;
+            this.tabPage2.Text = "On Loss";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // groupBox9
             // 
@@ -816,6 +815,98 @@
             this.groupBox9.TabIndex = 2;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Multiplier on Loss";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(40, 44);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(62, 13);
+            this.label34.TabIndex = 133;
+            this.label34.Text = "% Increase:";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.rdbDevider);
+            this.groupBox2.Controls.Add(this.rdbConstant);
+            this.groupBox2.Controls.Add(this.rdbMaxMultiplier);
+            this.groupBox2.Controls.Add(this.rdbReduce);
+            this.groupBox2.Location = new System.Drawing.Point(199, 16);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(111, 100);
+            this.groupBox2.TabIndex = 131;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Multiplier Mode";
+            // 
+            // rdbDevider
+            // 
+            this.rdbDevider.AutoSize = true;
+            this.rdbDevider.Location = new System.Drawing.Point(7, 37);
+            this.rdbDevider.Name = "rdbDevider";
+            this.rdbDevider.Size = new System.Drawing.Size(63, 17);
+            this.rdbDevider.TabIndex = 81;
+            this.rdbDevider.Text = "Variable";
+            this.rdbDevider.UseVisualStyleBackColor = true;
+            this.rdbDevider.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // rdbConstant
+            // 
+            this.rdbConstant.AutoSize = true;
+            this.rdbConstant.Checked = true;
+            this.rdbConstant.Location = new System.Drawing.Point(7, 19);
+            this.rdbConstant.Name = "rdbConstant";
+            this.rdbConstant.Size = new System.Drawing.Size(67, 17);
+            this.rdbConstant.TabIndex = 82;
+            this.rdbConstant.TabStop = true;
+            this.rdbConstant.Text = "Constant";
+            this.rdbConstant.UseVisualStyleBackColor = true;
+            this.rdbConstant.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // rdbMaxMultiplier
+            // 
+            this.rdbMaxMultiplier.AutoSize = true;
+            this.rdbMaxMultiplier.Location = new System.Drawing.Point(7, 73);
+            this.rdbMaxMultiplier.Name = "rdbMaxMultiplier";
+            this.rdbMaxMultiplier.Size = new System.Drawing.Size(45, 17);
+            this.rdbMaxMultiplier.TabIndex = 80;
+            this.rdbMaxMultiplier.Text = "Max";
+            this.rdbMaxMultiplier.UseVisualStyleBackColor = true;
+            this.rdbMaxMultiplier.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // rdbReduce
+            // 
+            this.rdbReduce.AutoSize = true;
+            this.rdbReduce.Location = new System.Drawing.Point(7, 55);
+            this.rdbReduce.Name = "rdbReduce";
+            this.rdbReduce.Size = new System.Drawing.Size(91, 17);
+            this.rdbReduce.TabIndex = 88;
+            this.rdbReduce.Text = "Change Once";
+            this.rdbReduce.UseVisualStyleBackColor = true;
+            this.rdbReduce.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // nudPercIncreaseLoss
+            // 
+            this.nudPercIncreaseLoss.DecimalPlaces = 5;
+            this.nudPercIncreaseLoss.Location = new System.Drawing.Point(106, 42);
+            this.nudPercIncreaseLoss.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudPercIncreaseLoss.Minimum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            -2147483648});
+            this.nudPercIncreaseLoss.Name = "nudPercIncreaseLoss";
+            this.nudPercIncreaseLoss.Size = new System.Drawing.Size(87, 20);
+            this.nudPercIncreaseLoss.TabIndex = 132;
+            this.nudPercIncreaseLoss.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudPercIncreaseLoss.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged_1);
             // 
             // label17
             // 
@@ -1049,17 +1140,6 @@
             0});
             this.nudMultiplier.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
-            // rdbReduce
-            // 
-            this.rdbReduce.AutoSize = true;
-            this.rdbReduce.Location = new System.Drawing.Point(7, 55);
-            this.rdbReduce.Name = "rdbReduce";
-            this.rdbReduce.Size = new System.Drawing.Size(91, 17);
-            this.rdbReduce.TabIndex = 88;
-            this.rdbReduce.Text = "Change Once";
-            this.rdbReduce.UseVisualStyleBackColor = true;
-            this.rdbReduce.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
             // lblMultiplier
             // 
             this.lblMultiplier.AutoSize = true;
@@ -1078,28 +1158,6 @@
             this.lblDevider.TabIndex = 87;
             this.lblDevider.Text = "Times Multiplier by:";
             // 
-            // rdbMaxMultiplier
-            // 
-            this.rdbMaxMultiplier.AutoSize = true;
-            this.rdbMaxMultiplier.Location = new System.Drawing.Point(7, 73);
-            this.rdbMaxMultiplier.Name = "rdbMaxMultiplier";
-            this.rdbMaxMultiplier.Size = new System.Drawing.Size(45, 17);
-            this.rdbMaxMultiplier.TabIndex = 80;
-            this.rdbMaxMultiplier.Text = "Max";
-            this.rdbMaxMultiplier.UseVisualStyleBackColor = true;
-            this.rdbMaxMultiplier.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // rdbDevider
-            // 
-            this.rdbDevider.AutoSize = true;
-            this.rdbDevider.Location = new System.Drawing.Point(7, 37);
-            this.rdbDevider.Name = "rdbDevider";
-            this.rdbDevider.Size = new System.Drawing.Size(63, 17);
-            this.rdbDevider.TabIndex = 81;
-            this.rdbDevider.Text = "Variable";
-            this.rdbDevider.UseVisualStyleBackColor = true;
-            this.rdbDevider.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
             // lblAfter2
             // 
             this.lblAfter2.AutoSize = true;
@@ -1108,19 +1166,6 @@
             this.lblAfter2.Size = new System.Drawing.Size(28, 13);
             this.lblAfter2.TabIndex = 86;
             this.lblAfter2.Text = "Bets";
-            // 
-            // rdbConstant
-            // 
-            this.rdbConstant.AutoSize = true;
-            this.rdbConstant.Checked = true;
-            this.rdbConstant.Location = new System.Drawing.Point(7, 19);
-            this.rdbConstant.Name = "rdbConstant";
-            this.rdbConstant.Size = new System.Drawing.Size(67, 17);
-            this.rdbConstant.TabIndex = 82;
-            this.rdbConstant.TabStop = true;
-            this.rdbConstant.Text = "Constant";
-            this.rdbConstant.UseVisualStyleBackColor = true;
-            this.rdbConstant.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // lblAfter
             // 
@@ -1139,6 +1184,17 @@
             this.lblMaxMultiplier.Size = new System.Drawing.Size(76, 13);
             this.lblMaxMultiplier.TabIndex = 84;
             this.lblMaxMultiplier.Text = "Max Multiplies:";
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.groupBox8);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(439, 327);
+            this.tabPage7.TabIndex = 1;
+            this.tabPage7.Text = "On Win";
+            this.tabPage7.UseVisualStyleBackColor = true;
             // 
             // groupBox8
             // 
@@ -1173,6 +1229,93 @@
             this.groupBox8.TabIndex = 1;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Multiplier on Win";
+            // 
+            // nudPercIncreaseWin
+            // 
+            this.nudPercIncreaseWin.DecimalPlaces = 5;
+            this.nudPercIncreaseWin.Location = new System.Drawing.Point(110, 42);
+            this.nudPercIncreaseWin.Maximum = new decimal(new int[] {
+            -727379968,
+            232,
+            0,
+            0});
+            this.nudPercIncreaseWin.Minimum = new decimal(new int[] {
+            -727379968,
+            232,
+            0,
+            -2147483648});
+            this.nudPercIncreaseWin.Name = "nudPercIncreaseWin";
+            this.nudPercIncreaseWin.Size = new System.Drawing.Size(86, 20);
+            this.nudPercIncreaseWin.TabIndex = 145;
+            this.nudPercIncreaseWin.ValueChanged += new System.EventHandler(this.nudPercIncreaseWin_ValueChanged);
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(44, 44);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(62, 13);
+            this.label35.TabIndex = 144;
+            this.label35.Text = "% Increase:";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.rdbWinMaxMultiplier);
+            this.groupBox4.Controls.Add(this.rdbWinConstant);
+            this.groupBox4.Controls.Add(this.rdbWinReduce);
+            this.groupBox4.Controls.Add(this.rdbWinDevider);
+            this.groupBox4.Location = new System.Drawing.Point(202, 16);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(111, 100);
+            this.groupBox4.TabIndex = 143;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Multiplier Mode";
+            // 
+            // rdbWinMaxMultiplier
+            // 
+            this.rdbWinMaxMultiplier.AutoSize = true;
+            this.rdbWinMaxMultiplier.Location = new System.Drawing.Point(10, 76);
+            this.rdbWinMaxMultiplier.Name = "rdbWinMaxMultiplier";
+            this.rdbWinMaxMultiplier.Size = new System.Drawing.Size(45, 17);
+            this.rdbWinMaxMultiplier.TabIndex = 93;
+            this.rdbWinMaxMultiplier.Text = "Max";
+            this.rdbWinMaxMultiplier.UseVisualStyleBackColor = true;
+            this.rdbWinMaxMultiplier.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // rdbWinConstant
+            // 
+            this.rdbWinConstant.AutoSize = true;
+            this.rdbWinConstant.Checked = true;
+            this.rdbWinConstant.Location = new System.Drawing.Point(10, 19);
+            this.rdbWinConstant.Name = "rdbWinConstant";
+            this.rdbWinConstant.Size = new System.Drawing.Size(67, 17);
+            this.rdbWinConstant.TabIndex = 95;
+            this.rdbWinConstant.TabStop = true;
+            this.rdbWinConstant.Text = "Constant";
+            this.rdbWinConstant.UseVisualStyleBackColor = true;
+            this.rdbWinConstant.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // rdbWinReduce
+            // 
+            this.rdbWinReduce.AutoSize = true;
+            this.rdbWinReduce.Location = new System.Drawing.Point(10, 57);
+            this.rdbWinReduce.Name = "rdbWinReduce";
+            this.rdbWinReduce.Size = new System.Drawing.Size(91, 17);
+            this.rdbWinReduce.TabIndex = 101;
+            this.rdbWinReduce.Text = "Change Once";
+            this.rdbWinReduce.UseVisualStyleBackColor = true;
+            this.rdbWinReduce.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // rdbWinDevider
+            // 
+            this.rdbWinDevider.AutoSize = true;
+            this.rdbWinDevider.Location = new System.Drawing.Point(10, 38);
+            this.rdbWinDevider.Name = "rdbWinDevider";
+            this.rdbWinDevider.Size = new System.Drawing.Size(63, 17);
+            this.rdbWinDevider.TabIndex = 94;
+            this.rdbWinDevider.Text = "Variable";
+            this.rdbWinDevider.UseVisualStyleBackColor = true;
+            this.rdbWinDevider.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // label18
             // 
@@ -1408,17 +1551,6 @@
             0});
             this.nudWinMultiplier.ValueChanged += new System.EventHandler(this.txtChance_Leave);
             // 
-            // rdbWinReduce
-            // 
-            this.rdbWinReduce.AutoSize = true;
-            this.rdbWinReduce.Location = new System.Drawing.Point(10, 57);
-            this.rdbWinReduce.Name = "rdbWinReduce";
-            this.rdbWinReduce.Size = new System.Drawing.Size(91, 17);
-            this.rdbWinReduce.TabIndex = 101;
-            this.rdbWinReduce.Text = "Change Once";
-            this.rdbWinReduce.UseVisualStyleBackColor = true;
-            this.rdbWinReduce.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
             // label44
             // 
             this.label44.AutoSize = true;
@@ -1437,28 +1569,6 @@
             this.label45.TabIndex = 100;
             this.label45.Text = "Times Multiplier by:";
             // 
-            // rdbWinMaxMultiplier
-            // 
-            this.rdbWinMaxMultiplier.AutoSize = true;
-            this.rdbWinMaxMultiplier.Location = new System.Drawing.Point(10, 76);
-            this.rdbWinMaxMultiplier.Name = "rdbWinMaxMultiplier";
-            this.rdbWinMaxMultiplier.Size = new System.Drawing.Size(45, 17);
-            this.rdbWinMaxMultiplier.TabIndex = 93;
-            this.rdbWinMaxMultiplier.Text = "Max";
-            this.rdbWinMaxMultiplier.UseVisualStyleBackColor = true;
-            this.rdbWinMaxMultiplier.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // rdbWinDevider
-            // 
-            this.rdbWinDevider.AutoSize = true;
-            this.rdbWinDevider.Location = new System.Drawing.Point(10, 38);
-            this.rdbWinDevider.Name = "rdbWinDevider";
-            this.rdbWinDevider.Size = new System.Drawing.Size(63, 17);
-            this.rdbWinDevider.TabIndex = 94;
-            this.rdbWinDevider.Text = "Variable";
-            this.rdbWinDevider.UseVisualStyleBackColor = true;
-            this.rdbWinDevider.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
             // label46
             // 
             this.label46.AutoSize = true;
@@ -1467,19 +1577,6 @@
             this.label46.Size = new System.Drawing.Size(28, 13);
             this.label46.TabIndex = 99;
             this.label46.Text = "Bets";
-            // 
-            // rdbWinConstant
-            // 
-            this.rdbWinConstant.AutoSize = true;
-            this.rdbWinConstant.Checked = true;
-            this.rdbWinConstant.Location = new System.Drawing.Point(10, 19);
-            this.rdbWinConstant.Name = "rdbWinConstant";
-            this.rdbWinConstant.Size = new System.Drawing.Size(67, 17);
-            this.rdbWinConstant.TabIndex = 95;
-            this.rdbWinConstant.TabStop = true;
-            this.rdbWinConstant.Text = "Constant";
-            this.rdbWinConstant.UseVisualStyleBackColor = true;
-            this.rdbWinConstant.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // label47
             // 
@@ -1498,6 +1595,39 @@
             this.label54.Size = new System.Drawing.Size(76, 13);
             this.label54.TabIndex = 97;
             this.label54.Text = "Max Multiplies:";
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.rdbMartingale);
+            this.panel3.Controls.Add(this.btnHelpMartingale);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(3, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(447, 31);
+            this.panel3.TabIndex = 6;
+            // 
+            // rdbMartingale
+            // 
+            this.rdbMartingale.AutoSize = true;
+            this.rdbMartingale.Checked = true;
+            this.rdbMartingale.Location = new System.Drawing.Point(3, 3);
+            this.rdbMartingale.Name = "rdbMartingale";
+            this.rdbMartingale.Size = new System.Drawing.Size(96, 17);
+            this.rdbMartingale.TabIndex = 3;
+            this.rdbMartingale.TabStop = true;
+            this.rdbMartingale.Text = "Use Martingale";
+            this.rdbMartingale.UseVisualStyleBackColor = true;
+            this.rdbMartingale.CheckedChanged += new System.EventHandler(this.rdbPreset_CheckedChanged);
+            // 
+            // btnHelpMartingale
+            // 
+            this.btnHelpMartingale.Location = new System.Drawing.Point(303, 3);
+            this.btnHelpMartingale.Name = "btnHelpMartingale";
+            this.btnHelpMartingale.Size = new System.Drawing.Size(141, 23);
+            this.btnHelpMartingale.TabIndex = 4;
+            this.btnHelpMartingale.Text = "What Is martingale?";
+            this.btnHelpMartingale.UseVisualStyleBackColor = true;
+            this.btnHelpMartingale.Click += new System.EventHandler(this.btnHelpMartingale_Click);
             // 
             // tbLabouchère
             // 
@@ -3044,6 +3174,17 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(307, 26);
             this.panel2.TabIndex = 87;
+            // 
+            // rdbLimitTip
+            // 
+            this.rdbLimitTip.AutoSize = true;
+            this.rdbLimitTip.Location = new System.Drawing.Point(80, 3);
+            this.rdbLimitTip.Name = "rdbLimitTip";
+            this.rdbLimitTip.Size = new System.Drawing.Size(40, 17);
+            this.rdbLimitTip.TabIndex = 3;
+            this.rdbLimitTip.TabStop = true;
+            this.rdbLimitTip.Text = "Tip";
+            this.rdbLimitTip.UseVisualStyleBackColor = true;
             // 
             // rdbInvest
             // 
@@ -5131,16 +5272,6 @@
             this.label5.TabIndex = 15;
             this.label5.Text = "Total Bets:";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(34, 64);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 24);
-            this.label4.TabIndex = 14;
-            this.label4.Text = "Losses:";
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -5160,6 +5291,16 @@
             this.label2.Size = new System.Drawing.Size(83, 24);
             this.label2.TabIndex = 12;
             this.label2.Text = "Balance:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(34, 64);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(74, 24);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Losses:";
             // 
             // pnlBasic
             // 
@@ -5519,6 +5660,48 @@
             this.tabPage10.Text = "Code";
             this.tabPage10.UseVisualStyleBackColor = true;
             // 
+            // pnlLoadProgrammer
+            // 
+            this.pnlLoadProgrammer.Controls.Add(this.btnOpenCode);
+            this.pnlLoadProgrammer.Controls.Add(this.button3);
+            this.pnlLoadProgrammer.Controls.Add(this.btnCodeSave);
+            this.pnlLoadProgrammer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlLoadProgrammer.Location = new System.Drawing.Point(3, 3);
+            this.pnlLoadProgrammer.Name = "pnlLoadProgrammer";
+            this.pnlLoadProgrammer.Size = new System.Drawing.Size(977, 34);
+            this.pnlLoadProgrammer.TabIndex = 10;
+            // 
+            // btnOpenCode
+            // 
+            this.btnOpenCode.Location = new System.Drawing.Point(4, 3);
+            this.btnOpenCode.Name = "btnOpenCode";
+            this.btnOpenCode.Size = new System.Drawing.Size(75, 23);
+            this.btnOpenCode.TabIndex = 9;
+            this.btnOpenCode.Text = "Open";
+            this.btnOpenCode.UseVisualStyleBackColor = true;
+            this.btnOpenCode.Click += new System.EventHandler(this.btnOpenCode_Click);
+            // 
+            // button3
+            // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.Location = new System.Drawing.Point(892, 5);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 8;
+            this.button3.Text = "Help!";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
+            // btnCodeSave
+            // 
+            this.btnCodeSave.Location = new System.Drawing.Point(85, 3);
+            this.btnCodeSave.Name = "btnCodeSave";
+            this.btnCodeSave.Size = new System.Drawing.Size(75, 23);
+            this.btnCodeSave.TabIndex = 10;
+            this.btnCodeSave.Text = "Save";
+            this.btnCodeSave.UseVisualStyleBackColor = true;
+            this.btnCodeSave.Click += new System.EventHandler(this.btnCodeSave_Click);
+            // 
             // tpConsole
             // 
             this.tpConsole.AutoScroll = true;
@@ -5527,7 +5710,7 @@
             this.tpConsole.Location = new System.Drawing.Point(4, 22);
             this.tpConsole.Name = "tpConsole";
             this.tpConsole.Padding = new System.Windows.Forms.Padding(3);
-            this.tpConsole.Size = new System.Drawing.Size(356, 464);
+            this.tpConsole.Size = new System.Drawing.Size(983, 464);
             this.tpConsole.TabIndex = 1;
             this.tpConsole.Text = "Console";
             this.tpConsole.UseVisualStyleBackColor = true;
@@ -5539,7 +5722,7 @@
             this.rtbConsole.Location = new System.Drawing.Point(3, 3);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
-            this.rtbConsole.Size = new System.Drawing.Size(350, 389);
+            this.rtbConsole.Size = new System.Drawing.Size(977, 389);
             this.rtbConsole.TabIndex = 0;
             this.rtbConsole.Text = "";
             this.rtbConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox1_KeyDown);
@@ -5550,10 +5733,130 @@
             this.txtConsoleIn.Location = new System.Drawing.Point(3, 392);
             this.txtConsoleIn.Multiline = true;
             this.txtConsoleIn.Name = "txtConsoleIn";
-            this.txtConsoleIn.Size = new System.Drawing.Size(350, 69);
+            this.txtConsoleIn.Size = new System.Drawing.Size(977, 69);
             this.txtConsoleIn.TabIndex = 1;
             this.txtConsoleIn.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             this.txtConsoleIn.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtConsoleIn_KeyUp);
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.Controls.Add(this.lbVariables);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(983, 464);
+            this.tabPage8.TabIndex = 2;
+            this.tabPage8.Text = "Variables";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // lbVariables
+            // 
+            this.lbVariables.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbVariables.FormattingEnabled = true;
+            this.lbVariables.Items.AddRange(new object[] {
+            "balance:decimal, RO",
+            "win:bool, RO",
+            "profit:decimal, RO",
+            "currentprofit:decimal, RO",
+            "currentstreak:decimal, RO",
+            "previousbet:decimal, RO",
+            "bets:int, RO",
+            "wins:int, RO",
+            "losses:int, RO",
+            "nextbet:decimal, RW",
+            "chance:decimal, RW",
+            "bethigh:bool, RW",
+            "lastBet:Bet, RO",
+            "currencies:string[], RO. List of currencies available at current site",
+            "currency:string, RW. Current betting currency",
+            "enablersc: bool, RW",
+            "enablezz: bool, RW",
+            "site:SiteDetails, RO"});
+            this.lbVariables.Location = new System.Drawing.Point(3, 3);
+            this.lbVariables.Name = "lbVariables";
+            this.lbVariables.Size = new System.Drawing.Size(977, 458);
+            this.lbVariables.TabIndex = 3;
+            // 
+            // tabPage9
+            // 
+            this.tabPage9.Controls.Add(this.listBox1);
+            this.tabPage9.Location = new System.Drawing.Point(4, 22);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage9.Size = new System.Drawing.Size(983, 464);
+            this.tabPage9.TabIndex = 3;
+            this.tabPage9.Text = "Functions/Methods";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // listBox1
+            // 
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.HorizontalScrollbar = true;
+            this.listBox1.Items.AddRange(new object[] {
+            "withdraw(amount:decimal, bitcoinaddress:string)",
+            "invest(amount:decimal)",
+            "tip(username/userid:string, amount:decimal)",
+            "stop()",
+            "resetseed();",
+            "print(messagetoprint:string)",
+            "getHistory(): Bet[]",
+            "getHistoryByDate(FromDateTime:string (inclusive), UntillDateTime:string (exclusiv" +
+                "e)): Bet[]",
+            "getHistoryByQuery(SQLiteQuery:string): Bet[]",
+            "martingale(win:boolean):decimal",
+            "labouchere(win:boolean):decimal",
+            "fibonacci(win:bool):decimal",
+            "dalembert(win:bool):decimal",
+            "presetlist(win:bool):decimal",
+            "resetstats(): void",
+            "setvalueint(name:string, value:int): void",
+            "setvaluestring(name:string, value:string): void",
+            "setvaluedecimal(name:string, value:decimal): void",
+            "setvaluebool(name:string, value:bool): void",
+            "getvalue(name:string): object",
+            "loadstrategy(file:string): bool",
+            "read(prompt:string, type:int): object --0: bool, 1:int, 2:decimal, 3:string",
+            "readadv(prompt:string, type:int, formtext:string, cancelbuttontext:string, okbutt" +
+                "ontext:string ): Object",
+            "alarm():void",
+            "ching():void",
+            "resetbuiltin():void",
+            "exportsim():void"});
+            this.listBox1.Location = new System.Drawing.Point(3, 3);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(977, 458);
+            this.listBox1.TabIndex = 8;
+            // 
+            // pnlControlProgrammer
+            // 
+            this.pnlControlProgrammer.Controls.Add(this.btnStopProgrammer);
+            this.pnlControlProgrammer.Controls.Add(this.btnStartProgrammer);
+            this.pnlControlProgrammer.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlControlProgrammer.Location = new System.Drawing.Point(0, 490);
+            this.pnlControlProgrammer.Name = "pnlControlProgrammer";
+            this.pnlControlProgrammer.Size = new System.Drawing.Size(991, 35);
+            this.pnlControlProgrammer.TabIndex = 1;
+            // 
+            // btnStopProgrammer
+            // 
+            this.btnStopProgrammer.Location = new System.Drawing.Point(122, 7);
+            this.btnStopProgrammer.Name = "btnStopProgrammer";
+            this.btnStopProgrammer.Size = new System.Drawing.Size(112, 23);
+            this.btnStopProgrammer.TabIndex = 1;
+            this.btnStopProgrammer.Text = "Stop";
+            this.btnStopProgrammer.UseVisualStyleBackColor = true;
+            this.btnStopProgrammer.Click += new System.EventHandler(this.btnStopProgrammer_Click);
+            // 
+            // btnStartProgrammer
+            // 
+            this.btnStartProgrammer.Location = new System.Drawing.Point(4, 7);
+            this.btnStartProgrammer.Name = "btnStartProgrammer";
+            this.btnStartProgrammer.Size = new System.Drawing.Size(112, 23);
+            this.btnStartProgrammer.TabIndex = 0;
+            this.btnStartProgrammer.Text = "Start";
+            this.btnStartProgrammer.UseVisualStyleBackColor = true;
+            this.btnStartProgrammer.Click += new System.EventHandler(this.btnStartProgrammer_Click);
             // 
             // menuStrip1
             // 
@@ -5637,7 +5940,7 @@
             this.chartToolStripMenuItem.CheckOnClick = true;
             this.chartToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chartToolStripMenuItem.Name = "chartToolStripMenuItem";
-            this.chartToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.chartToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.chartToolStripMenuItem.Text = "Live Chart";
             this.chartToolStripMenuItem.CheckedChanged += new System.EventHandler(this.chartToolStripMenuItem_CheckedChanged);
             // 
@@ -5647,7 +5950,7 @@
             this.loginPanelToolStripMenuItem.CheckOnClick = true;
             this.loginPanelToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.loginPanelToolStripMenuItem.Name = "loginPanelToolStripMenuItem";
-            this.loginPanelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loginPanelToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.loginPanelToolStripMenuItem.Text = "Login Panel";
             this.loginPanelToolStripMenuItem.CheckedChanged += new System.EventHandler(this.loginPanelToolStripMenuItem_CheckedChanged);
             // 
@@ -5657,15 +5960,10 @@
             this.manualBettingToolStripMenuItem.CheckOnClick = true;
             this.manualBettingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.manualBettingToolStripMenuItem.Name = "manualBettingToolStripMenuItem";
-            this.manualBettingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.manualBettingToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.manualBettingToolStripMenuItem.Text = "Manual Betting";
             this.manualBettingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.manualBettingToolStripMenuItem_CheckedChanged);
             this.manualBettingToolStripMenuItem.Click += new System.EventHandler(this.manualBettingToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // statsToolStripMenuItem
             // 
@@ -5673,8 +5971,29 @@
             this.embeddedToolStripMenuItem,
             this.popupToolStripMenuItem});
             this.statsToolStripMenuItem.Name = "statsToolStripMenuItem";
-            this.statsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.statsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.statsToolStripMenuItem.Text = "Stats";
+            // 
+            // embeddedToolStripMenuItem
+            // 
+            this.embeddedToolStripMenuItem.CheckOnClick = true;
+            this.embeddedToolStripMenuItem.Name = "embeddedToolStripMenuItem";
+            this.embeddedToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.embeddedToolStripMenuItem.Text = "Embedded";
+            this.embeddedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.embeddedToolStripMenuItem_CheckedChanged);
+            this.embeddedToolStripMenuItem.Click += new System.EventHandler(this.embeddedToolStripMenuItem_Click);
+            // 
+            // popupToolStripMenuItem
+            // 
+            this.popupToolStripMenuItem.Name = "popupToolStripMenuItem";
+            this.popupToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.popupToolStripMenuItem.Text = "Popup";
+            this.popupToolStripMenuItem.Click += new System.EventHandler(this.popupToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
             // 
             // chartsToolStripMenuItem
             // 
@@ -5685,7 +6004,7 @@
             this.allTimeStaticToolStripMenuItem,
             this.customToolStripMenuItem});
             this.chartsToolStripMenuItem.Name = "chartsToolStripMenuItem";
-            this.chartsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.chartsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.chartsToolStripMenuItem.Text = "Charts";
             // 
             // sessionLiveToolStripMenuItem
@@ -5727,7 +6046,7 @@
             // 
             this.chatToolStripMenuItem.Enabled = false;
             this.chatToolStripMenuItem.Name = "chatToolStripMenuItem";
-            this.chatToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.chatToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.chatToolStripMenuItem.Text = "Chat";
             this.chatToolStripMenuItem.Visible = false;
             this.chatToolStripMenuItem.Click += new System.EventHandler(this.button4_Click_1);
@@ -5735,56 +6054,56 @@
             // simulationToolStripMenuItem
             // 
             this.simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
-            this.simulationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.simulationToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.simulationToolStripMenuItem.Text = "Simulate";
             this.simulationToolStripMenuItem.Click += new System.EventHandler(this.simulationToolStripMenuItem_Click);
             // 
             // betHistoryToolStripMenuItem
             // 
             this.betHistoryToolStripMenuItem.Name = "betHistoryToolStripMenuItem";
-            this.betHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.betHistoryToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.betHistoryToolStripMenuItem.Text = "Bet History";
             this.betHistoryToolStripMenuItem.Click += new System.EventHandler(this.btnBetHistory_Click);
             // 
             // badStreakTableToolStripMenuItem
             // 
             this.badStreakTableToolStripMenuItem.Name = "badStreakTableToolStripMenuItem";
-            this.badStreakTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.badStreakTableToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.badStreakTableToolStripMenuItem.Text = "Bad Streak Table";
             this.badStreakTableToolStripMenuItem.Click += new System.EventHandler(this.btnStreakTable_Click);
             // 
             // luckyNumberVerifierToolStripMenuItem
             // 
             this.luckyNumberVerifierToolStripMenuItem.Name = "luckyNumberVerifierToolStripMenuItem";
-            this.luckyNumberVerifierToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.luckyNumberVerifierToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.luckyNumberVerifierToolStripMenuItem.Text = "Roll Verifier";
             this.luckyNumberVerifierToolStripMenuItem.Click += new System.EventHandler(this.luckyNumberVerifierToolStripMenuItem_Click);
             // 
             // seedsToolStripMenuItem
             // 
             this.seedsToolStripMenuItem.Name = "seedsToolStripMenuItem";
-            this.seedsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.seedsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.seedsToolStripMenuItem.Text = "Enter Seed/Hash";
             this.seedsToolStripMenuItem.Click += new System.EventHandler(this.seedsToolStripMenuItem_Click);
             // 
             // proxySettingsToolStripMenuItem
             // 
             this.proxySettingsToolStripMenuItem.Name = "proxySettingsToolStripMenuItem";
-            this.proxySettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.proxySettingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.proxySettingsToolStripMenuItem.Text = "Proxy settings";
             this.proxySettingsToolStripMenuItem.Click += new System.EventHandler(this.proxySettingsToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
             // bitdiceActivatorToolStripMenuItem
             // 
             this.bitdiceActivatorToolStripMenuItem.Name = "bitdiceActivatorToolStripMenuItem";
-            this.bitdiceActivatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitdiceActivatorToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.bitdiceActivatorToolStripMenuItem.Text = "Device Verifier";
             this.bitdiceActivatorToolStripMenuItem.Click += new System.EventHandler(this.bitdiceActivatorToolStripMenuItem_Click);
             // 
@@ -5826,7 +6145,7 @@
             // justDiceToolStripMenuItem
             // 
             this.justDiceToolStripMenuItem.Name = "justDiceToolStripMenuItem";
-            this.justDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.justDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.justDiceToolStripMenuItem.Text = "Just-Dice";
             this.justDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.justDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5835,7 +6154,7 @@
             // 
             this.primeDiceToolStripMenuItem.CheckOnClick = true;
             this.primeDiceToolStripMenuItem.Name = "primeDiceToolStripMenuItem";
-            this.primeDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.primeDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.primeDiceToolStripMenuItem.Text = "Prime Dice";
             this.primeDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.primeDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5844,7 +6163,7 @@
             // 
             this.pocketRocketsCasinoToolStripMenuItem.CheckOnClick = true;
             this.pocketRocketsCasinoToolStripMenuItem.Name = "pocketRocketsCasinoToolStripMenuItem";
-            this.pocketRocketsCasinoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pocketRocketsCasinoToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.pocketRocketsCasinoToolStripMenuItem.Text = "BetKing";
             this.pocketRocketsCasinoToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.pocketRocketsCasinoToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5853,7 +6172,7 @@
             // 
             this.diceToolStripMenuItem.CheckOnClick = true;
             this.diceToolStripMenuItem.Name = "diceToolStripMenuItem";
-            this.diceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.diceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.diceToolStripMenuItem.Text = "999Dice";
             this.diceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.diceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5861,7 +6180,7 @@
             // safediceToolStripMenuItem
             // 
             this.safediceToolStripMenuItem.Name = "safediceToolStripMenuItem";
-            this.safediceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.safediceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.safediceToolStripMenuItem.Text = "SafeDice";
             this.safediceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.safediceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5870,7 +6189,7 @@
             // 
             this.rollinIOToolStripMenuItem.Enabled = false;
             this.rollinIOToolStripMenuItem.Name = "rollinIOToolStripMenuItem";
-            this.rollinIOToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rollinIOToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.rollinIOToolStripMenuItem.Text = "Rollin.IO";
             this.rollinIOToolStripMenuItem.Visible = false;
             this.rollinIOToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
@@ -5879,7 +6198,7 @@
             // bitDiceToolStripMenuItem
             // 
             this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
-            this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.bitDiceToolStripMenuItem.Text = "BitDice";
             this.bitDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5887,7 +6206,7 @@
             // betterbetsToolStripMenuItem
             // 
             this.betterbetsToolStripMenuItem.Name = "betterbetsToolStripMenuItem";
-            this.betterbetsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.betterbetsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.betterbetsToolStripMenuItem.Text = "BetterBets.io";
             this.betterbetsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.betterbetsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5896,7 +6215,7 @@
             // 
             this.moneyPotToolStripMenuItem.Enabled = false;
             this.moneyPotToolStripMenuItem.Name = "moneyPotToolStripMenuItem";
-            this.moneyPotToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.moneyPotToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.moneyPotToolStripMenuItem.Text = "MoneyPot";
             this.moneyPotToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.moneyPotToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5904,7 +6223,7 @@
             // coinMillionsToolStripMenuItem
             // 
             this.coinMillionsToolStripMenuItem.Name = "coinMillionsToolStripMenuItem";
-            this.coinMillionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.coinMillionsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.coinMillionsToolStripMenuItem.Text = "CoinMillions";
             this.coinMillionsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.coinMillionsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5912,7 +6231,7 @@
             // moneroDiceToolStripMenuItem
             // 
             this.moneroDiceToolStripMenuItem.Name = "moneroDiceToolStripMenuItem";
-            this.moneroDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.moneroDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.moneroDiceToolStripMenuItem.Text = "MoneroDice";
             this.moneroDiceToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.moneroDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5921,7 +6240,7 @@
             // 
             this.fortuneJackToolStripMenuItem.Enabled = false;
             this.fortuneJackToolStripMenuItem.Name = "fortuneJackToolStripMenuItem";
-            this.fortuneJackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fortuneJackToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.fortuneJackToolStripMenuItem.Text = "FortuneJack";
             this.fortuneJackToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.fortuneJackToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5929,7 +6248,7 @@
             // cryptoGamesToolStripMenuItem
             // 
             this.cryptoGamesToolStripMenuItem.Name = "cryptoGamesToolStripMenuItem";
-            this.cryptoGamesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cryptoGamesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.cryptoGamesToolStripMenuItem.Text = "Crypto-Games";
             this.cryptoGamesToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.cryptoGamesToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5937,7 +6256,7 @@
             // bitslerToolStripMenuItem
             // 
             this.bitslerToolStripMenuItem.Name = "bitslerToolStripMenuItem";
-            this.bitslerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitslerToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.bitslerToolStripMenuItem.Text = "Bitsler";
             this.bitslerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitslerToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5945,7 +6264,7 @@
             // satoshiDiceToolStripMenuItem
             // 
             this.satoshiDiceToolStripMenuItem.Name = "satoshiDiceToolStripMenuItem";
-            this.satoshiDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.satoshiDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.satoshiDiceToolStripMenuItem.Text = "Mega Dice";
             this.satoshiDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.satoshiDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5953,7 +6272,7 @@
             // bitvestToolStripMenuItem
             // 
             this.bitvestToolStripMenuItem.Name = "bitvestToolStripMenuItem";
-            this.bitvestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitvestToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.bitvestToolStripMenuItem.Text = "Bitvest";
             this.bitvestToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitvestToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5961,7 +6280,7 @@
             // kingDiceToolStripMenuItem
             // 
             this.kingDiceToolStripMenuItem.Name = "kingDiceToolStripMenuItem";
-            this.kingDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.kingDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.kingDiceToolStripMenuItem.Text = "KingDice";
             this.kingDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.kingDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5969,7 +6288,7 @@
             // nitorgenSportsToolStripMenuItem
             // 
             this.nitorgenSportsToolStripMenuItem.Name = "nitorgenSportsToolStripMenuItem";
-            this.nitorgenSportsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nitorgenSportsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.nitorgenSportsToolStripMenuItem.Text = "Nitorgen Sports";
             this.nitorgenSportsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.nitorgenSportsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5977,7 +6296,7 @@
             // provabllyIOToolStripMenuItem
             // 
             this.provabllyIOToolStripMenuItem.Name = "provabllyIOToolStripMenuItem";
-            this.provabllyIOToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.provabllyIOToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.provabllyIOToolStripMenuItem.Text = "Provablly.IO";
             this.provabllyIOToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.provabllyIOToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5985,7 +6304,7 @@
             // yoloDiceToolStripMenuItem
             // 
             this.yoloDiceToolStripMenuItem.Name = "yoloDiceToolStripMenuItem";
-            this.yoloDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.yoloDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.yoloDiceToolStripMenuItem.Text = "YoloDice";
             this.yoloDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.yoloDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -5993,7 +6312,7 @@
             // bitExoToolStripMenuItem
             // 
             this.bitExoToolStripMenuItem.Name = "bitExoToolStripMenuItem";
-            this.bitExoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitExoToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.bitExoToolStripMenuItem.Text = "Bit-Exo";
             this.bitExoToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitExoToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6001,7 +6320,7 @@
             // diceSeuntjieComToolStripMenuItem
             // 
             this.diceSeuntjieComToolStripMenuItem.Name = "diceSeuntjieComToolStripMenuItem";
-            this.diceSeuntjieComToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.diceSeuntjieComToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.diceSeuntjieComToolStripMenuItem.Text = "Dice.Seuntjie.Com";
             this.diceSeuntjieComToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.diceSeuntjieComToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6009,7 +6328,7 @@
             // duckDiceToolStripMenuItem
             // 
             this.duckDiceToolStripMenuItem.Name = "duckDiceToolStripMenuItem";
-            this.duckDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.duckDiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.duckDiceToolStripMenuItem.Text = "DuckDice";
             this.duckDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.duckDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6017,7 +6336,7 @@
             // coinProfitToolStripMenuItem
             // 
             this.coinProfitToolStripMenuItem.Name = "coinProfitToolStripMenuItem";
-            this.coinProfitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.coinProfitToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.coinProfitToolStripMenuItem.Text = "CoinPro.fit";
             this.coinProfitToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.coinProfitToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6025,7 +6344,7 @@
             // freebitcoinToolStripMenuItem
             // 
             this.freebitcoinToolStripMenuItem.Name = "freebitcoinToolStripMenuItem";
-            this.freebitcoinToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.freebitcoinToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.freebitcoinToolStripMenuItem.Text = "Freebitco.in";
             this.freebitcoinToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.freebitcoinToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6033,7 +6352,7 @@
             // stakeToolStripMenuItem
             // 
             this.stakeToolStripMenuItem.Name = "stakeToolStripMenuItem";
-            this.stakeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stakeToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.stakeToolStripMenuItem.Text = "Stake";
             this.stakeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.stakeToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6041,7 +6360,7 @@
             // nitrodiceToolStripMenuItem
             // 
             this.nitrodiceToolStripMenuItem.Name = "nitrodiceToolStripMenuItem";
-            this.nitrodiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nitrodiceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.nitrodiceToolStripMenuItem.Text = "Nitrodice";
             this.nitrodiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.nitrodiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6049,7 +6368,7 @@
             // etherCrashToolStripMenuItem
             // 
             this.etherCrashToolStripMenuItem.Name = "etherCrashToolStripMenuItem";
-            this.etherCrashToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.etherCrashToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.etherCrashToolStripMenuItem.Text = "EtherCrash";
             this.etherCrashToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.etherCrashToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6067,7 +6386,7 @@
             // basicToolStripMenuItem
             // 
             this.basicToolStripMenuItem.Name = "basicToolStripMenuItem";
-            this.basicToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.basicToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.basicToolStripMenuItem.Text = "Basic";
             this.basicToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.basicToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6075,7 +6394,7 @@
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.advancedToolStripMenuItem.Text = "Advanced";
             this.advancedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.advancedToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6083,7 +6402,7 @@
             // programmerToolStripMenuItem
             // 
             this.programmerToolStripMenuItem.Name = "programmerToolStripMenuItem";
-            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.programmerToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.programmerToolStripMenuItem.Text = "Programmer";
             this.programmerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.programmerToolStripMenuItem.Click += new System.EventHandler(this.basicToolStripMenuItem_Click);
@@ -6192,322 +6511,6 @@
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
             // 
-            // embeddedToolStripMenuItem
-            // 
-            this.embeddedToolStripMenuItem.CheckOnClick = true;
-            this.embeddedToolStripMenuItem.Name = "embeddedToolStripMenuItem";
-            this.embeddedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.embeddedToolStripMenuItem.Text = "Embedded";
-            this.embeddedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.embeddedToolStripMenuItem_CheckedChanged);
-            this.embeddedToolStripMenuItem.Click += new System.EventHandler(this.embeddedToolStripMenuItem_Click);
-            // 
-            // popupToolStripMenuItem
-            // 
-            this.popupToolStripMenuItem.Name = "popupToolStripMenuItem";
-            this.popupToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.popupToolStripMenuItem.Text = "Popup";
-            this.popupToolStripMenuItem.Click += new System.EventHandler(this.popupToolStripMenuItem_Click);
-            // 
-            // rdbLimitTip
-            // 
-            this.rdbLimitTip.AutoSize = true;
-            this.rdbLimitTip.Location = new System.Drawing.Point(80, 3);
-            this.rdbLimitTip.Name = "rdbLimitTip";
-            this.rdbLimitTip.Size = new System.Drawing.Size(40, 17);
-            this.rdbLimitTip.TabIndex = 3;
-            this.rdbLimitTip.TabStop = true;
-            this.rdbLimitTip.Text = "Tip";
-            this.rdbLimitTip.UseVisualStyleBackColor = true;
-            // 
-            // pnlControlProgrammer
-            // 
-            this.pnlControlProgrammer.Controls.Add(this.btnStopProgrammer);
-            this.pnlControlProgrammer.Controls.Add(this.btnStartProgrammer);
-            this.pnlControlProgrammer.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlControlProgrammer.Location = new System.Drawing.Point(0, 490);
-            this.pnlControlProgrammer.Name = "pnlControlProgrammer";
-            this.pnlControlProgrammer.Size = new System.Drawing.Size(991, 35);
-            this.pnlControlProgrammer.TabIndex = 1;
-            // 
-            // btnStartProgrammer
-            // 
-            this.btnStartProgrammer.Location = new System.Drawing.Point(4, 7);
-            this.btnStartProgrammer.Name = "btnStartProgrammer";
-            this.btnStartProgrammer.Size = new System.Drawing.Size(112, 23);
-            this.btnStartProgrammer.TabIndex = 0;
-            this.btnStartProgrammer.Text = "Start";
-            this.btnStartProgrammer.UseVisualStyleBackColor = true;
-            this.btnStartProgrammer.Click += new System.EventHandler(this.btnStartProgrammer_Click);
-            // 
-            // btnStopProgrammer
-            // 
-            this.btnStopProgrammer.Location = new System.Drawing.Point(122, 7);
-            this.btnStopProgrammer.Name = "btnStopProgrammer";
-            this.btnStopProgrammer.Size = new System.Drawing.Size(112, 23);
-            this.btnStopProgrammer.TabIndex = 1;
-            this.btnStopProgrammer.Text = "Stop";
-            this.btnStopProgrammer.UseVisualStyleBackColor = true;
-            this.btnStopProgrammer.Click += new System.EventHandler(this.btnStopProgrammer_Click);
-            // 
-            // tabPage8
-            // 
-            this.tabPage8.Controls.Add(this.lbVariables);
-            this.tabPage8.Location = new System.Drawing.Point(4, 22);
-            this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(356, 464);
-            this.tabPage8.TabIndex = 2;
-            this.tabPage8.Text = "Variables";
-            this.tabPage8.UseVisualStyleBackColor = true;
-            // 
-            // tabPage9
-            // 
-            this.tabPage9.Controls.Add(this.listBox1);
-            this.tabPage9.Location = new System.Drawing.Point(4, 22);
-            this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(356, 464);
-            this.tabPage9.TabIndex = 3;
-            this.tabPage9.Text = "Functions/Methods";
-            this.tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // lbVariables
-            // 
-            this.lbVariables.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbVariables.FormattingEnabled = true;
-            this.lbVariables.Items.AddRange(new object[] {
-            "balance:decimal, RO",
-            "win:bool, RO",
-            "profit:decimal, RO",
-            "currentprofit:decimal, RO",
-            "currentstreak:decimal, RO",
-            "previousbet:decimal, RO",
-            "bets:int, RO",
-            "wins:int, RO",
-            "losses:int, RO",
-            "nextbet:decimal, RW",
-            "chance:decimal, RW",
-            "bethigh:bool, RW",
-            "lastBet:Bet, RO",
-            "currencies:string[], RO. List of currencies available at current site",
-            "currency:string, RW. Current betting currency",
-            "enablersc: bool, RW",
-            "enablezz: bool, RW",
-            "site:SiteDetails, RO"});
-            this.lbVariables.Location = new System.Drawing.Point(3, 3);
-            this.lbVariables.Name = "lbVariables";
-            this.lbVariables.Size = new System.Drawing.Size(350, 458);
-            this.lbVariables.TabIndex = 3;
-            // 
-            // listBox1
-            // 
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.HorizontalScrollbar = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "withdraw(amount:decimal, bitcoinaddress:string)",
-            "invest(amount:decimal)",
-            "tip(username/userid:string, amount:decimal)",
-            "stop()",
-            "resetseed();",
-            "print(messagetoprint:string)",
-            "getHistory(): Bet[]",
-            "getHistoryByDate(FromDateTime:string (inclusive), UntillDateTime:string (exclusiv" +
-                "e)): Bet[]",
-            "getHistoryByQuery(SQLiteQuery:string): Bet[]",
-            "martingale(win:boolean):decimal",
-            "labouchere(win:boolean):decimal",
-            "fibonacci(win:bool):decimal",
-            "dalembert(win:bool):decimal",
-            "presetlist(win:bool):decimal",
-            "resetstats(): void",
-            "setvalueint(name:string, value:int): void",
-            "setvaluestring(name:string, value:string): void",
-            "setvaluedecimal(name:string, value:decimal): void",
-            "setvaluebool(name:string, value:bool): void",
-            "getvalue(name:string): object",
-            "loadstrategy(file:string): bool",
-            "read(prompt:string, type:int): object --0: bool, 1:int, 2:decimal, 3:string",
-            "readadv(prompt:string, type:int, formtext:string, cancelbuttontext:string, okbutt" +
-                "ontext:string ): Object",
-            "alarm():void",
-            "ching():void",
-            "resetbuiltin():void",
-            "exportsim():void"});
-            this.listBox1.Location = new System.Drawing.Point(3, 3);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(350, 458);
-            this.listBox1.TabIndex = 8;
-            // 
-            // pnlLoadProgrammer
-            // 
-            this.pnlLoadProgrammer.Controls.Add(this.btnOpenCode);
-            this.pnlLoadProgrammer.Controls.Add(this.button3);
-            this.pnlLoadProgrammer.Controls.Add(this.btnCodeSave);
-            this.pnlLoadProgrammer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlLoadProgrammer.Location = new System.Drawing.Point(3, 3);
-            this.pnlLoadProgrammer.Name = "pnlLoadProgrammer";
-            this.pnlLoadProgrammer.Size = new System.Drawing.Size(977, 34);
-            this.pnlLoadProgrammer.TabIndex = 10;
-            // 
-            // btnOpenCode
-            // 
-            this.btnOpenCode.Location = new System.Drawing.Point(4, 3);
-            this.btnOpenCode.Name = "btnOpenCode";
-            this.btnOpenCode.Size = new System.Drawing.Size(75, 23);
-            this.btnOpenCode.TabIndex = 9;
-            this.btnOpenCode.Text = "Open";
-            this.btnOpenCode.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(892, 5);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "Help!";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // btnCodeSave
-            // 
-            this.btnCodeSave.Location = new System.Drawing.Point(85, 3);
-            this.btnCodeSave.Name = "btnCodeSave";
-            this.btnCodeSave.Size = new System.Drawing.Size(75, 23);
-            this.btnCodeSave.TabIndex = 10;
-            this.btnCodeSave.Text = "Save";
-            this.btnCodeSave.UseVisualStyleBackColor = true;
-            // 
-            // tabControl3
-            // 
-            this.tabControl3.Controls.Add(this.tabPage2);
-            this.tabControl3.Controls.Add(this.tabPage7);
-            this.tabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl3.Location = new System.Drawing.Point(3, 34);
-            this.tabControl3.Name = "tabControl3";
-            this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(447, 353);
-            this.tabControl3.TabIndex = 5;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.groupBox9);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(439, 327);
-            this.tabPage2.TabIndex = 0;
-            this.tabPage2.Text = "On Loss";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.Controls.Add(this.groupBox8);
-            this.tabPage7.Location = new System.Drawing.Point(4, 22);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(439, 327);
-            this.tabPage7.TabIndex = 1;
-            this.tabPage7.Text = "On Win";
-            this.tabPage7.UseVisualStyleBackColor = true;
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.rdbMartingale);
-            this.panel3.Controls.Add(this.btnHelpMartingale);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(3, 3);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(447, 31);
-            this.panel3.TabIndex = 6;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.rdbDevider);
-            this.groupBox2.Controls.Add(this.rdbConstant);
-            this.groupBox2.Controls.Add(this.rdbMaxMultiplier);
-            this.groupBox2.Controls.Add(this.rdbReduce);
-            this.groupBox2.Location = new System.Drawing.Point(199, 16);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(111, 100);
-            this.groupBox2.TabIndex = 131;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Multiplier Mode";
-            // 
-            // nudPercIncreaseLoss
-            // 
-            this.nudPercIncreaseLoss.DecimalPlaces = 5;
-            this.nudPercIncreaseLoss.Location = new System.Drawing.Point(106, 42);
-            this.nudPercIncreaseLoss.Maximum = new decimal(new int[] {
-            100000000,
-            0,
-            0,
-            0});
-            this.nudPercIncreaseLoss.Minimum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            -2147483648});
-            this.nudPercIncreaseLoss.Name = "nudPercIncreaseLoss";
-            this.nudPercIncreaseLoss.Size = new System.Drawing.Size(87, 20);
-            this.nudPercIncreaseLoss.TabIndex = 132;
-            this.nudPercIncreaseLoss.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nudPercIncreaseLoss.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged_1);
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(40, 44);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(62, 13);
-            this.label34.TabIndex = 133;
-            this.label34.Text = "% Increase:";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.rdbWinMaxMultiplier);
-            this.groupBox4.Controls.Add(this.rdbWinConstant);
-            this.groupBox4.Controls.Add(this.rdbWinReduce);
-            this.groupBox4.Controls.Add(this.rdbWinDevider);
-            this.groupBox4.Location = new System.Drawing.Point(202, 16);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(111, 100);
-            this.groupBox4.TabIndex = 143;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Multiplier Mode";
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(44, 44);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(62, 13);
-            this.label35.TabIndex = 144;
-            this.label35.Text = "% Increase:";
-            // 
-            // nudPercIncreaseWin
-            // 
-            this.nudPercIncreaseWin.DecimalPlaces = 5;
-            this.nudPercIncreaseWin.Location = new System.Drawing.Point(110, 42);
-            this.nudPercIncreaseWin.Maximum = new decimal(new int[] {
-            -727379968,
-            232,
-            0,
-            0});
-            this.nudPercIncreaseWin.Minimum = new decimal(new int[] {
-            -727379968,
-            232,
-            0,
-            -2147483648});
-            this.nudPercIncreaseWin.Name = "nudPercIncreaseWin";
-            this.nudPercIncreaseWin.Size = new System.Drawing.Size(86, 20);
-            this.nudPercIncreaseWin.TabIndex = 145;
-            this.nudPercIncreaseWin.ValueChanged += new System.EventHandler(this.nudPercIncreaseWin_ValueChanged);
-            // 
             // cDiceBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -6529,8 +6532,13 @@
             this.Settings.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tbMartingale.ResumeLayout(false);
+            this.tabControl3.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercIncreaseLoss)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStretchLoss)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseTo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceLoseStreak)).EndInit();
@@ -6540,8 +6548,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudNbets)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxMultiplies)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).EndInit();
+            this.tabPage7.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPercIncreaseWin)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudStretchWin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinTo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChangeChanceWinStreak)).EndInit();
@@ -6551,6 +6563,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudWinNBets)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWinMaxMultiplies)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWinMultiplier)).EndInit();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.tbLabouchère.ResumeLayout(false);
             this.tbLabouchère.PerformLayout();
             this.panel7.ResumeLayout(false);
@@ -6688,28 +6702,17 @@
             this.pnlProgrammer.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage10.ResumeLayout(false);
+            this.pnlLoadProgrammer.ResumeLayout(false);
             this.tpConsole.ResumeLayout(false);
             this.tpConsole.PerformLayout();
+            this.tabPage8.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
+            this.pnlControlProgrammer.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.betBindingSource)).EndInit();
-            this.pnlControlProgrammer.ResumeLayout(false);
-            this.tabPage8.ResumeLayout(false);
-            this.tabPage9.ResumeLayout(false);
-            this.pnlLoadProgrammer.ResumeLayout(false);
-            this.tabControl3.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage7.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPercIncreaseLoss)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPercIncreaseWin)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
