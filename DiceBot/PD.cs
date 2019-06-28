@@ -304,6 +304,22 @@ namespace DiceBot
                             }
                         }
                         Bet tmpbet = tmp.ToBet(maxRoll);
+                        bool getid = true;
+                        if (getid)
+                        {
+                            GraphQLResponse betresult2 = GQLClient.PostAsync(new GraphQLRequest { Query = " query{bet(betId:\"" + tmpbet.Id + "\"){iid}}" }).Result;
+
+                            if (betresult2.Data != null)
+                            {
+                                //RollDice tmp2 = betresult2.GetDataFieldAs<RollDice>(RolName);
+
+                                //tmpbet.Id = tmp2.iid;
+                                tmpbet.Id = betresult2.Data.bet.iid;
+                                if (tmpbet.Id.Contains("house:"))
+                                    tmpbet.Id = tmpbet.Id.Substring("house:".Length);
+                            }
+                        }
+
                         tmpbet.Guid = tmp5.Guid;
                         FinishedBet(tmpbet);
                         retrycount = 0;
@@ -678,7 +694,7 @@ namespace DiceBot
         public class RollDice
         {
             public string id { get; set; }
-            //public string iid { get; set; }
+            public string iid { get; set; }
              public decimal payoutMultiplier { get; set; }
             public double amount { get; set; }
             public double payout { get; set; }
