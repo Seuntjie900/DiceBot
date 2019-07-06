@@ -5221,6 +5221,8 @@ end";
                     case "Stake": CurrentSite = new Stake(this);break;
                     case "NitroDice": CurrentSite = new NitroDice(this);break;
                     case "EtherCrash": CurrentSite = new EtherCrash(this); break;
+                    case "WinDice":currentsite = new WinDice(this);break;
+
                 }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5275,6 +5277,7 @@ end";
                         case "Stake": CurrentSite = new Stake(this); break;
                         case "NitroDice": CurrentSite = new NitroDice(this); break;
                         case "EtherCrash": CurrentSite = new EtherCrash(this); break;
+                        case "WinDice": currentsite = new WinDice(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5841,6 +5844,7 @@ end";
                     case "stakeToolStripMenuItem": CurrentSite = new Stake(this); siteToolStripMenuItem.Text = "Site (Stake)"; break;
                     case "nitrodiceToolStripMenuItem": CurrentSite = new NitroDice(this); siteToolStripMenuItem.Text = "Site (ND)"; break;
                     case "etherCrashToolStripMenuItem": currentsite = new EtherCrash(this); siteToolStripMenuItem.Text = "Site (EC)";break;
+                        case "winDiceToolStripMenuItem":CurrentSite = new WinDice(this); siteToolStripMenuItem.Text = "Site (WD)"; break;
                 }
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;
