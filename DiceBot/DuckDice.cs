@@ -21,8 +21,9 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
         public static string[] cCurrencies = new string[] { "BTC","ETH", "LTC", "DOGE","DASH","BCH","XMR","XRP","ETC","BTG","XLM","ZEC","USDT" };
-        
-        
+        string[] mirrors = new string[] {"https://duckdice.io/", "https://duckdice.me", "https://duckdice.net" };
+
+
         public DuckDice(cDiceBot Parent)
         {
             _PasswordText = "Api Key: ";
@@ -219,12 +220,13 @@ namespace DiceBot
         {
             SendTip("seuntjie",Amount);
         }
+        int site = 0;
         public override void Login(string Username, string Password, string twofa)
         {
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression= DecompressionMethods.Deflate| DecompressionMethods.GZip, Proxy= this.Prox, UseProxy=Prox!=null };
             ClientHandlr.CookieContainer = new CookieContainer();
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://duckdice.io/api/") };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri( mirrors[site]+ "/api/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             Client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
@@ -263,34 +265,51 @@ namespace DiceBot
 
                     }
                 }*/
+                string sEmitResponse="";
+                using (var response = Client.GetAsync("load/" + Currency + "?api_key=" + accesstoken).Result)
+                {
+                    try
+                    {
+                        sEmitResponse = response.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        if (site++ < mirrors.Length - 1)
+                            Login(Username, Password, twofa);
+                        else
+                            finishedlogin(false);
+                        return;
 
-                string sEmitResponse = Client.GetStringAsync("load/"+Currency+"?api_key="+accesstoken).Result;
-                        Quackbalance balance = json.JsonDeserialize<Quackbalance>(sEmitResponse);
-                        sEmitResponse = Client.GetStringAsync("stat/" + Currency + "?api_key=" + accesstoken).Result;
-                        QuackStatsDetails Stats = json.JsonDeserialize<QuackStatsDetails>(sEmitResponse);
-                        sEmitResponse = Client.GetStringAsync("randomize" + "?api_key=" + accesstoken).Result;
-                        currentseed = json.JsonDeserialize<QuackSeed>(sEmitResponse).current;
-                        if (balance!=null && Stats!=null)
-                        {
-                            this.balance = decimal.Parse(balance.user.balance, System.Globalization.NumberFormatInfo.InvariantInfo);
-                            this.profit = decimal.Parse(Stats.profit, System.Globalization.NumberFormatInfo.InvariantInfo);
-                            this.wagered = decimal.Parse(Stats.volume, System.Globalization.NumberFormatInfo.InvariantInfo);
-                            bets = Stats.bets;
-                            wins = Stats.wins;
-                            losses = bets - wins;
-                            Parent.updateBalance(this.balance);
-                            Parent.updateProfit(this.profit);
-                            Parent.updateBets(this.bets);
-                            Parent.updateLosses(losses);
-                            Parent.updateWagered(wagered);
-                            Parent.updateWins(wins);
+                    }
+                };
+
+                
+                Quackbalance balance = json.JsonDeserialize<Quackbalance>(sEmitResponse);
+                sEmitResponse = Client.GetStringAsync("stat/" + Currency + "?api_key=" + accesstoken).Result;
+                QuackStatsDetails Stats = json.JsonDeserialize<QuackStatsDetails>(sEmitResponse);
+                sEmitResponse = Client.GetStringAsync("randomize" + "?api_key=" + accesstoken).Result;
+                currentseed = json.JsonDeserialize<QuackSeed>(sEmitResponse).current;
+                if (balance!=null && Stats!=null)
+                {
+                    this.balance = decimal.Parse(balance.user.balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    this.profit = decimal.Parse(Stats.profit, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    this.wagered = decimal.Parse(Stats.volume, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    bets = Stats.bets;
+                    wins = Stats.wins;
+                    losses = bets - wins;
+                    Parent.updateBalance(this.balance);
+                    Parent.updateProfit(this.profit);
+                    Parent.updateBets(this.bets);
+                    Parent.updateLosses(losses);
+                    Parent.updateWagered(wagered);
+                    Parent.updateWins(wins);
                             
-                            ispd = true;
-                            lastupdate = DateTime.Now;
-                            new Thread(new ThreadStart(GetBalanceThread)).Start();
-                            finishedlogin(true);
-                            return;
-                        }
+                    ispd = true;
+                    lastupdate = DateTime.Now;
+                    new Thread(new ThreadStart(GetBalanceThread)).Start();
+                    finishedlogin(true);
+                    return;
+                }
                     /*}
                 }*/
             }

@@ -31,7 +31,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
-        
+        bool getid = true;
         public PD(cDiceBot Parent)
         {
             _PasswordText = "API Key: ";
@@ -50,7 +50,8 @@ namespace DiceBot
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
             SiteURL = "https://primedice.com/?c=Seuntjie";
-            
+            if (File.Exists("fast") || File.Exists("fast.txt"))
+                getid = false;
         }
         string userid = "";
 
@@ -304,7 +305,7 @@ namespace DiceBot
                             }
                         }
                         Bet tmpbet = tmp.ToBet(maxRoll);
-                        bool getid = true;
+                        
                         if (getid)
                         {
                             GraphQLResponse betresult2 = GQLClient.PostAsync(new GraphQLRequest { Query = " query{bet(betId:\"" + tmpbet.Id + "\"){iid}}" }).Result;
