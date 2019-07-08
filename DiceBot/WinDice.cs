@@ -43,7 +43,7 @@ namespace DiceBot
             TipUsingName = true;
             SiteURL = "https://windice.io/?r=08406hjdd";
             NonceBased = false;
-
+            _PasswordText = "API Key";
         }
         protected override void CurrencyChanged()
         {
