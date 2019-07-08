@@ -754,6 +754,22 @@ end";
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
+            foreach (string s in WinDice.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                winDiceToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+
+            }
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -6356,6 +6372,7 @@ end";
                             stakeToolStripMenuItem.Checked?30:
                             nitrodiceToolStripMenuItem.Checked?31:
                             etherCrashToolStripMenuItem.Checked?32:
+                            winDiceToolStripMenuItem.Checked?33:
                             1);
                     if (key=="Currency")
                     {
@@ -6487,7 +6504,7 @@ end";
                         stakeToolStripMenuItem.Checked = value == 30;
                         nitrodiceToolStripMenuItem.Checked = value == 31;
                         etherCrashToolStripMenuItem.Checked = value == 32;
-
+                        winDiceToolStripMenuItem.Checked = value == 33;
 
                         if (value > 32)
                         {
@@ -6636,6 +6653,7 @@ end";
                         stakeToolStripMenuItem.Checked = value == "30";
                         nitrodiceToolStripMenuItem.Checked = value == "31";
                         etherCrashToolStripMenuItem.Checked = value == "32";
+                        winDiceToolStripMenuItem.Checked = value == "33";
                     }
                     else if (Key == "SettingsMode")
                     {
@@ -7046,7 +7064,7 @@ end";
                 StatsForm = new StatsForm();
             StatsWindows.Parent = StatsForm;
             StatsWindows.ShowHideButtons = true;
-            StatsForm.stats1 = StatsWindows;
+            StatsForm.AddStatsWindow(StatsWindows);
             StatsForm.Show();
         }
         
