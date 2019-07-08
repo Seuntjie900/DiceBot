@@ -1805,6 +1805,22 @@ end";
                         Lastbet = MinBet;
                         if (!programmerToolStripMenuItem.Checked)
                         Chance = (decimal)nudChance.Value;
+                        if (rdbLabEnable.Checked)
+                        {
+                            if (LabList.Count > 0)
+                            {
+                                if (LabList.Count == 1)
+                                    Lastbet = LabList[0];
+                                else
+                                    Lastbet = LabList[0] + LabList[LabList.Count - 1];
+                            }
+                            else
+                            {
+                                MessageBox.Show("Please enter a list of bets into the bet box on the labouchere tab, 1 bet per line.");
+                                Stop("No bets in labouchere bet list");
+                                return;
+                            }
+                        }
                     }
                     else
                     {
@@ -1814,26 +1830,9 @@ end";
                         }
                         if (Chance==0)
                         {
-
                             WriteConsole("Please set starting chance using chance = yy.yyyy");
                         }
-                    }
-                    if (rdbLabEnable.Checked)
-                    {
-                        if (LabList.Count > 0)
-                        {
-                            if (LabList.Count == 1)
-                                Lastbet = LabList[0];
-                            else
-                                Lastbet = LabList[0] + LabList[LabList.Count - 1];
-                        }
-                        else
-                        {
-                            MessageBox.Show("Please enter a list of bets into the bet box on the labouchere tab, 1 bet per line.");
-                            Stop("No bets in labouchere bet list");
-                            return;
-                        }
-                    }
+                    }                    
                     if (nudMutawaMultiplier.Value != 0)
                     {
                         mutawaprev = (decimal)nudChangeWinStreakTo.Value / (decimal)nudMutawaMultiplier.Value;
