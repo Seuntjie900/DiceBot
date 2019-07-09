@@ -79,7 +79,8 @@ namespace DiceBot
                     getstats();
                     getseed();
                     ispd = true;
-                    
+                    lastupdate = DateTime.Now;
+                        
                     new Thread(new ThreadStart(GetBalanceThread)).Start();
                     //lasthash = tmpblogin.server_hash;
                     finishedlogin(true);
@@ -104,6 +105,7 @@ namespace DiceBot
                 {
                     decimal balance = (decimal)tmp.GetValue(tmpBalance.data.balance);
                     this.balance = balance;
+                    Parent.updateBalance(balance);
                 }
             }
             return tmpBalance.status=="success";
@@ -120,12 +122,18 @@ namespace DiceBot
                     {
                         this.wagered = x.bet;
                         this.profit = x.profit;
+                        Parent.updateWagered(wagered);
+                        Parent.updateProfit(profit);
+                        
                         break;
                     }
                 }
                 this.bets = tmpBalance.data.stats.bets;
                 this.wins = tmpBalance.data.stats.wins;
                 this.losses = tmpBalance.data.stats.loses;
+                Parent.updateBets(bets);
+                Parent.updateWins(wins);
+                Parent.updateLosses(losses);
             }
             return tmpBalance.status == "success";
         }
@@ -145,9 +153,10 @@ namespace DiceBot
             {
                 try
                 {
-                    if (accesstoken != "" && ((DateTime.Now - lastupdate).TotalSeconds > 30 || ForceUpdateStats))
+                    if (((DateTime.Now - lastupdate).TotalSeconds > 30 || ForceUpdateStats))
                     {
-                        ForceUpdateStats = false;
+                        lastupdate = DateTime.Now;
+                           ForceUpdateStats = false;
                         getbalance();
                         getstats();
                     }
