@@ -129,9 +129,9 @@ namespace DiceBot
         bool high = true;
         bool starthigh = true;
         private bool withdrew;
-        DateTime dtStarted = new DateTime();
-        DateTime dtLastBet = new DateTime();
-        TimeSpan TotalTime = new TimeSpan(0, 0, 0);
+        DateTime dtStarted = DateTime.Now;
+        DateTime dtLastBet = DateTime.Now;
+        TimeSpan TotalTime = new TimeSpan();
         Simulation lastsim;
 
         //labouchere
@@ -1245,18 +1245,9 @@ end";
 
                         lblWins2.Text = StatsWindows.lblWins.Text = Wins.ToString();
                         StatsWindows.lblWinStreak.Text = BestStreak.ToString();
-                        //
-                        TimeSpan curtime = new TimeSpan(0);
-                        try
-                        {
-                            curtime = TimeSpan.Parse(StatsWindows.lblTime.Text);
-                        }
-                        catch
-                        {
-
-                        }
                         
-                        //TimeSpan curtime = DateTime.Now - dtStarted;
+                        
+                        TimeSpan curtime =TotalTime+(DateTime.Now - dtStarted);
                         lblBets2.Text = StatsWindows.lblBets.Text = (Wins + Losses).ToString();
                         decimal profpB = 0;
                         if (Wins + Losses > 0)
@@ -1490,6 +1481,8 @@ end";
             //tmBetting.Enabled = false;
             WriteConsole("Betting Stopped!");
             decimal dBalance = CurrentSite.balance;
+            if (!stop && !RunningSimulation)
+                btnResume.Enabled = true;
             stop = true;
             TotalTime += (DateTime.Now - dtStarted);
             if (RunningSimulation)
@@ -1779,7 +1772,7 @@ end";
             }
             if (testInputs())
             {
-                if (!programmerToolStripMenuItem.Checked)
+                if (!programmerToolStripMenuItem.Checked && !Continue)
                     Reset();
                 reset = false;
                 stop = false;
@@ -1820,6 +1813,10 @@ end";
                                 Stop("No bets in labouchere bet list");
                                 return;
                             }
+                        }
+                        else if (rdbPreset.Checked)
+                        {
+                            SetPresetValues(0);
                         }
                     }
                     else
@@ -2481,7 +2478,11 @@ end";
                 }
                 decimal profit = (decimal)bet.Profit;
                 retriedbet = false;
-                if (!stop)
+                if (stop)
+                {
+
+                }
+                //if (!stop)
                 {
                     if (Win)
                     {
@@ -2515,7 +2516,7 @@ end";
                             ProfitSinceLastReset += profit;
                             StreakProfitSinceLastReset += profit;
                             DumpLog("currentprofit: " + currentprofit.ToString(), 7);
-                            DumpLog("ProfitSinceLastReset: " + ProfitSinceLastReset.ToString(), 7);
+                            DumpLog("##ProfitSinceLastReset: " + ProfitSinceLastReset.ToString(), 7);
                             DumpLog("StreakProfitSinceLastReset: " + StreakProfitSinceLastReset.ToString(), 7);
                             Wins++;
                             Winstreak++;
@@ -2559,7 +2560,7 @@ end";
                                 {
                                     Reset();
                                     ProfitSinceLastReset = 0;
-                                    DumpLog("Resetting: " + StreakProfitSinceLastReset.ToString() + ">" + nudResetBtcProfit.Value, 7);
+                                    DumpLog("Resetting: " + ProfitSinceLastReset.ToString() + ">" + nudResetBtcProfit.Value, 7);
                                 }
                                 if (Wins >= nudStopWins.Value && chkStopWins.Checked)
                                 {
@@ -2642,6 +2643,9 @@ end";
                         ProfitSinceLastReset -= Lastbet;
 
                         StreakLossSinceLastReset -= Lastbet;
+                        DumpLog("currentprofit: " + currentprofit.ToString(), 7);
+                        DumpLog("##ProfitSinceLastReset: " + ProfitSinceLastReset.ToString(), 7);
+                        DumpLog("StreakProfitSinceLastReset: " + StreakProfitSinceLastReset.ToString(), 7);
                         //increase losses and losestreak
                         Losses++;
                         Losestreak++;
@@ -2842,13 +2846,13 @@ end";
                         Stop("Simulation complete");
                     }
 
-                    if (!(stop || withdraw || invest))
+                    if (!(withdraw || invest))
                     {
-                        if (programmerToolStripMenuItem.Checked)
+                        if (programmerToolStripMenuItem.Checked && !stop)
                         {
                             parseScript(bet);
                         }
-                        else if (!reset)
+                        else if (!reset && !programmerToolStripMenuItem.Checked)
                         {
                             if (rdbMartingale.Checked)
                             {
@@ -2884,7 +2888,7 @@ end";
                         {
                             Stop("Simulation complete");
                         }
-                        if (!RunningSimulation)
+                        if (!RunningSimulation && !stop)
                             if (dPreviousBalance - Lastbet <= nudLowerLimit.Value && chkLowerLimit.Checked && (!programmerToolStripMenuItem.Checked || EnableReset))
                             {
                                 //TrayIcon.BalloonTipText = "Balance lower than " + nudLowerLimit.Value + "\nStopping Bets...";
@@ -4035,6 +4039,7 @@ end";
             {
                 if ((sender as NumericUpDown).Value != nudChance2.Value)
                     nudChance2.Value = (sender as NumericUpDown).Value;
+                nudPayout.Value = (100m - CurrentSite.edge )/ nudChance.Value;
             }
 
             testInputs();
@@ -4337,6 +4342,7 @@ end";
         int RunSimBets = 0;
         void runsim()
         {
+            btnResume.Enabled = false;
             RunSimBets = 0;
             numSimBets = (int)SimWindow.nudSimNumBets.Value;
             tmpbalance = PreviousBalance;
@@ -4637,7 +4643,7 @@ end";
         #endregion
 
         void resetstats()
-        {
+        {   
             Wins = 0;
             Losses = 0;
             bool success = false;
@@ -4647,8 +4653,9 @@ end";
                 StartBalance = tmp;
             Winstreak = Losestreak = BestStreak = WorstStreak = laststreaklose = laststreakwin =   BestStreak2 = WorstStreak2 = BestStreak3 = WorstStreak3 = numstreaks = numwinstreasks = numlosesreaks = 0;
             avgloss = avgstreak = LargestBet = LargestLoss = LargestWin = avgwin = 0.0m;
-            TotalTime += (DateTime.Now - dtStarted);
+            TotalTime = new TimeSpan();
             dtStarted = DateTime.Now;
+            ProfitSinceLastReset = StreakProfitSinceLastReset = StreakLossSinceLastReset = 0;
             UpdateStats();
             wagered = 0;
         }
@@ -7131,6 +7138,17 @@ end";
         {
             if (nudWinMultiplier.Value != (nudPercIncreaseWin.Value + 100m) / 100m)
                 nudWinMultiplier.Value = (nudPercIncreaseWin.Value + 100m) / 100m;
+        }
+
+        private void nudPayout_ValueChanged(object sender, EventArgs e)
+        {
+            if (nudChance.Value != (100 - CurrentSite.edge) / nudPayout.Value)
+                nudChance.Value = (100 - CurrentSite.edge) / nudPayout.Value;
+        }
+
+        private void btnResume_Click(object sender, EventArgs e)
+        {
+            Start(true);
         }
 
         private void seedsToolStripMenuItem_Click(object sender, EventArgs e)

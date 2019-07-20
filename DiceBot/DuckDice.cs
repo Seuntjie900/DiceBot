@@ -238,52 +238,39 @@ namespace DiceBot
                 //Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer",accesstoken);
                 accesstoken = Password;
 
-                /*string s1 = "";
-                HttpResponseMessage resp = Client.GetAsync("https://duckdice.io/api/play").Result;
-                if (resp.IsSuccessStatusCode)
+                
+                string sEmitResponse="";
+                try
                 {
-                    s1 = resp.Content.ReadAsStringAsync().Result;
-                }
-                else
-                {
-                    if (resp.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    using (var response = Client.GetAsync("load/" + Currency + "?api_key=" + accesstoken).Result)
                     {
-                        s1 = resp.Content.ReadAsStringAsync().Result;
-                        //cflevel = 0;
-                        System.Threading.Tasks.Task.Factory.StartNew(() =>
+                        if (response.IsSuccessStatusCode)
+                        {  
+                            sEmitResponse = response.Content.ReadAsStringAsync().Result;
+                            Parent.DumpLog(sEmitResponse, 2);
+                        }
+                        else
                         {
-                            System.Windows.Forms.MessageBox.Show("Duckdice.io has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
-                        });
-                        if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, "www.duckdice.io"))
-                        {
-                            finishedlogin(false);
+                            //Parent.DumpLog(e.ToString(), -1);
+                            if (site++ < mirrors.Length - 1)
+                                Login(Username, Password, twofa);
+                            else
+                                finishedlogin(false);
                             return;
                         }
-                    }
-                    else
-                    {
-
-                    }
-                }*/
-                string sEmitResponse="";
-                using (var response = Client.GetAsync("load/" + Currency + "?api_key=" + accesstoken).Result)
+                    };
+                }
+                catch (AggregateException e)
                 {
-                    try
-                    {
-                        sEmitResponse = response.Content.ReadAsStringAsync().Result;
-                    }
-                    catch (AggregateException e)
-                    {
-                        if (site++ < mirrors.Length - 1)
-                            Login(Username, Password, twofa);
-                        else
-                            finishedlogin(false);
-                        return;
+                    Parent.DumpLog(e.ToString(), -1);
+                    if (site++ < mirrors.Length - 1)
+                        Login(Username, Password, twofa);
+                    else
+                        finishedlogin(false);
+                    return;
 
-                    }
-                };
+                }
 
-                
                 Quackbalance balance = json.JsonDeserialize<Quackbalance>(sEmitResponse);
                 sEmitResponse = Client.GetStringAsync("stat/" + Currency + "?api_key=" + accesstoken).Result;
                 QuackStatsDetails Stats = json.JsonDeserialize<QuackStatsDetails>(sEmitResponse);
@@ -315,7 +302,11 @@ namespace DiceBot
             }
             catch (Exception e)
             {
-                finishedlogin(false);
+                Parent.DumpLog(e.ToString(), -1);
+                if (site++ < mirrors.Length - 1)
+                    Login(Username, Password, twofa);
+                else
+                    finishedlogin(false);
                 return;
             }
             finishedlogin(false);
