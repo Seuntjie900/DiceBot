@@ -17,7 +17,7 @@ namespace DiceBot
     {
         bool isbitdice = false;
 
-        public static string[] cCurrencies = new string[] { "btc", "doge", "ltc", "eth", "csno" };
+        public static string[] cCurrencies = new string[] { "btc", "doge", "ltc", "eth", "csno","eos" };
         HttpClient Client;
         HttpClientHandler ClientHandlr;
         string APIKey = "";
@@ -42,7 +42,7 @@ namespace DiceBot
             Client.Closed += Client_Closed;
             Client.MessageReceived += Client_MessageReceived;*/
             AutoUpdate = false;
-            Currencies = new string[] { "btc", "doge", "ltc", "eth", "csno" };
+            Currencies = new string[] { "btc", "doge", "ltc", "eth", "csno","eos" };
             Currency = "BTC";
         }
 

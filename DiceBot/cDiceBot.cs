@@ -34,7 +34,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.4.2";
+        private const string vers = "3.4.3";
         
 
         Control[] ControlsToDisable;
@@ -770,6 +770,20 @@ end";
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
+            /*foreach (string s in WolfBet.cCurrencies)
+            {
+                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
+
+                if (frst)
+                {
+                    tmpItem.Checked = true;
+                    frst = false;
+                }
+
+                wolfBetToolStripMenuItem.DropDown.Items.Add(tmpItem);
+                tmpItem.Click += btcToolStripMenuItem_Click;
+                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
+            }*/
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -5244,6 +5258,7 @@ end";
                     case "NitroDice": CurrentSite = new NitroDice(this);break;
                     case "EtherCrash": CurrentSite = new EtherCrash(this); break;
                     case "WinDice":currentsite = new WinDice(this);break;
+                    //case "WolfBet": currentsite = new WolfBet(this); break;
 
                 }
                 if (UseProxy)
@@ -5300,6 +5315,7 @@ end";
                         case "NitroDice": CurrentSite = new NitroDice(this); break;
                         case "EtherCrash": CurrentSite = new EtherCrash(this); break;
                         case "WinDice": currentsite = new WinDice(this); break;
+                       // case "WolfBet": currentsite = new WolfBet(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5866,7 +5882,8 @@ end";
                     case "stakeToolStripMenuItem": CurrentSite = new Stake(this); siteToolStripMenuItem.Text = "Site (Stake)"; break;
                     case "nitrodiceToolStripMenuItem": CurrentSite = new NitroDice(this); siteToolStripMenuItem.Text = "Site (ND)"; break;
                     case "etherCrashToolStripMenuItem": currentsite = new EtherCrash(this); siteToolStripMenuItem.Text = "Site (EC)";break;
-                        case "winDiceToolStripMenuItem":CurrentSite = new WinDice(this); siteToolStripMenuItem.Text = "Site (WD)"; break;
+                    case "winDiceToolStripMenuItem":CurrentSite = new WinDice(this); siteToolStripMenuItem.Text = "Site (WD)"; break;
+                    //case "wolfBetToolStripMenuItem":CurrentSite = new WolfBet(this); siteToolStripMenuItem.Text = "Site (Awoo!)"; break;
                 }
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;
@@ -6379,6 +6396,7 @@ end";
                             nitrodiceToolStripMenuItem.Checked?31:
                             etherCrashToolStripMenuItem.Checked?32:
                             winDiceToolStripMenuItem.Checked?33:
+                            wolfBetToolStripMenuItem.Checked?34:
                             1);
                     if (key=="Currency")
                     {
@@ -6511,8 +6529,9 @@ end";
                         nitrodiceToolStripMenuItem.Checked = value == 31;
                         etherCrashToolStripMenuItem.Checked = value == 32;
                         winDiceToolStripMenuItem.Checked = value == 33;
+                        wolfBetToolStripMenuItem.Checked = value == 34;
 
-                        if (value > 32)
+                        if (value > 34)
                         {
                             primeDiceToolStripMenuItem.Checked = true; ;
                         }
@@ -6660,6 +6679,7 @@ end";
                         nitrodiceToolStripMenuItem.Checked = value == "31";
                         etherCrashToolStripMenuItem.Checked = value == "32";
                         winDiceToolStripMenuItem.Checked = value == "33";
+                        wolfBetToolStripMenuItem.Checked = value == "34";
                     }
                     else if (Key == "SettingsMode")
                     {

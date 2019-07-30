@@ -42,7 +42,7 @@ namespace DiceBot
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
             SiteURL = "https://bitvest.io?r=46534";
-            NonceBased = false;
+            NonceBased = true;
         }
         protected override void CurrencyChanged()
         {
@@ -412,11 +412,12 @@ namespace DiceBot
         int retrycount = 0;
         DateTime Lastbet = DateTime.Now;
         string secret = "";
-
+        string seed = "";
         string lasthash = "";
         void placebetthread(object bet)
         {
-            
+            if (string.IsNullOrWhiteSpace(seed))
+                seed = RandomSeed();
             try
             {
                 PlaceBetObj tmp5 = bet as PlaceBetObj;
@@ -426,7 +427,7 @@ namespace DiceBot
                 
                 decimal tmpchance = High ?maxRoll - chance+0.0001m : chance-0.0001m;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
-                string seed = RandomSeed();
+                //string seed = RandomSeed();
                 pairs.Add(new KeyValuePair<string, string>("bet", (amount).ToString(System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("target", tmpchance.ToString("0.0000", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("side", High ? "high" : "low"));
@@ -435,7 +436,7 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("secret",secret));
                 pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
                 pairs.Add(new KeyValuePair<string, string>("user_seed",seed));
-                pairs.Add(new KeyValuePair<string, string>("v", "65535"));
+                pairs.Add(new KeyValuePair<string, string>("v", "101"));
                 
 
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
@@ -455,18 +456,18 @@ namespace DiceBot
                             Chance = tmp5.Chance,
                             high = tmp5.High,
                             clientseed = seed,
-                            serverhash = lasthash,
+                            serverhash = tmp.server_hash,
                             serverseed = tmp.server_seed,
                             Roll = tmp.game_result.roll,
                             Profit = tmp.game_result.win == 0 ? -tmp5.Amount : tmp.game_result.win - tmp5.Amount,
-                            nonce = -1,
+                            nonce = long.Parse(tmp.player_seed.Substring(tmp.player_seed.IndexOf("|") + 1)),
                             Id = tmp.game_id.ToString(),
                             Currency = Currency
 
                         };
                         resbet.Guid = tmp5.Guid;
                         bets++;
-                        lasthash = tmp.server_hash;
+                        //lasthash = tmp.server_hash;
                         bool Win = (((bool)High ? (decimal)tmp.game_result.roll > (decimal)maxRoll - (decimal)(chance) : (decimal)tmp.game_result.roll < (decimal)(chance)));
                         if (Win)
                             wins++;
@@ -533,7 +534,9 @@ namespace DiceBot
        
         public override void ResetSeed()
         {
-            
+            string request = $"token={accesstoken}&secret=0&act=new_server_seed";
+            //{"success":true,"server_seed":"b10982af50874add19b6dc54c8e76ccb2e1f5b86b6047730ddfb4cdee2fd8fbf","server_hash":"d6de3617918df1d6c5d34f36833a02733e595c6a58a7088fa7a7e9aebc2fbe1e"}
+            seed = RandomSeed();
         }
 
         public override void SetClientSeed(string Seed)
@@ -911,6 +914,7 @@ namespace DiceBot
         public string result { get; set; }
         public string server_seed { get; set; }
         public string server_hash { get; set; }
+        public string player_seed { get; set; }
     }
     public class bitvestbetdata
     {

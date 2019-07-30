@@ -205,7 +205,7 @@ namespace DiceBot
             
         }
 
-        public static decimal sGetLucky(string server, string client, int nonce)
+        public static new decimal sGetLucky(string server, string client, int nonce)
         {
             SHA512 betgenerator = SHA512.Create();
 
@@ -233,7 +233,7 @@ namespace DiceBot
 
                 decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
-                    return lucky / 10000;
+                    return lucky % 10000;
             }
             return 0;
         }
