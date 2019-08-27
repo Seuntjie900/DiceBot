@@ -180,6 +180,8 @@ namespace DiceBot
                     case "YoloDice": tmp.Verified = tmp.Roll == (decimal)YoloDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                     case "DuckDice": tmp.Verified = tmp.Roll == (decimal)DuckDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce);break;
                     case "NitroDice": tmp.Verified = tmp.Roll == (decimal)NitroDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "WolfBet": tmp.Verified = tmp.Roll == (decimal)WolfBet.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce);break;
+                    case "WinDice": tmp.Verified = tmp.Roll == (decimal)WinDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
                 }
             }
             return tmp;

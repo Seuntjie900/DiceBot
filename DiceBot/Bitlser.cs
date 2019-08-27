@@ -855,74 +855,17 @@ currency:btc*/
 
         public static decimal sGetLucky(string server, string client, int nonce)
         {
-            SHA1 betgenerator = SHA1.Create();
-            string Seed = server + "-" + client + "-" + nonce;
-            byte[] serverb = new byte[Seed.Length];
+            SHA512 betgenerator = SHA512.Create();
 
-            for (int i = 0; i < Seed.Length; i++)
-            {
-                serverb[i] = Convert.ToByte(Seed[i]);
-            }
-            decimal Lucky = 0;
-            do
-            {
-                serverb = betgenerator.ComputeHash(serverb.ToArray());
-                StringBuilder hex = new StringBuilder(serverb.Length * 2);
-                foreach (byte b in serverb)
-                    hex.AppendFormat("{0:x2}", b);
-
-                string s = hex.ToString().Substring(0, 8);
-                Lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
-            } while (Lucky > 4294960000);
-            Lucky = (Lucky % 10000.0m) / 100.0m;
-            if (Lucky < 0)
-                return -Lucky;
-            return Lucky;
-        }
-
-        public override decimal GetLucky(string server, string client, int nonce)
-        {
-            
-            SHA1 betgenerator = SHA1.Create();
-            string Seed = server+"-"+client+"-"+nonce;
-            byte[] serverb = new byte[Seed.Length];
-
-            for (int i = 0; i < Seed.Length; i++)
-            {
-                serverb[i] = Convert.ToByte(Seed[i]);
-            }
-            decimal Lucky = 0;
-            do
-            {
-                serverb = betgenerator.ComputeHash(serverb.ToArray());
-                StringBuilder hex = new StringBuilder(serverb.Length * 2);
-                foreach (byte b in serverb)
-                    hex.AppendFormat("{0:x2}", b);
-
-                string s = hex.ToString().Substring(0, 8);
-                Lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
-            } while (Lucky > 4294960000);
-            Lucky = (Lucky % 10000.0m) / 100.0m;
-            if (Lucky < 0)
-                return -Lucky;
-            return Lucky;
-            /*
             int charstouse = 5;
-            List<byte> serverb = new List<byte>();
-
-            for (int i = 0; i < server.Length; i++)
-            {
-                serverb.Add(Convert.ToByte(server[i]));
-            }
-
-            betgenerator.Key = serverb.ToArray();
-
+            
             List<byte> buffer = new List<byte>();
-            string msg = /*nonce.ToString() + ":" + client + ":" + nonce.ToString();
+            string msg =server+","+ client + "," + nonce.ToString();
             foreach (char c in msg)
             {
                 buffer.Add(Convert.ToByte(c));
             }
+            
 
             byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
 
@@ -938,9 +881,15 @@ currency:btc*/
 
                 decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
-                    return lucky / 10000;
-            }*/
+                    return (lucky % 10000/100m);
+            }
             return 0;
+        }
+
+        public override decimal GetLucky(string server, string client, int nonce)
+        {
+
+            return sGetLucky(server, client, nonce);
         }
     }
 

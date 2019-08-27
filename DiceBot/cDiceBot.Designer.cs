@@ -1844,6 +1844,11 @@
             // nudFiboLeve
             // 
             this.nudFiboLeve.Location = new System.Drawing.Point(96, 1);
+            this.nudFiboLeve.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudFiboLeve.Name = "nudFiboLeve";
             this.nudFiboLeve.Size = new System.Drawing.Size(47, 20);
             this.nudFiboLeve.TabIndex = 32;
@@ -1911,8 +1916,13 @@
             // nudFiboWinIncrement
             // 
             this.nudFiboWinIncrement.Location = new System.Drawing.Point(89, 17);
+            this.nudFiboWinIncrement.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudFiboWinIncrement.Minimum = new decimal(new int[] {
-            100,
+            1000000000,
             0,
             0,
             -2147483648});
@@ -1983,8 +1993,13 @@
             // nudFiboLossIncrement
             // 
             this.nudFiboLossIncrement.Location = new System.Drawing.Point(89, 17);
+            this.nudFiboLossIncrement.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudFiboLossIncrement.Minimum = new decimal(new int[] {
-            100,
+            1000000000,
             0,
             0,
             -2147483648});
@@ -2058,6 +2073,11 @@
             // nudAlembertStretchWin
             // 
             this.nudAlembertStretchWin.Location = new System.Drawing.Point(102, 57);
+            this.nudAlembertStretchWin.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudAlembertStretchWin.Name = "nudAlembertStretchWin";
             this.nudAlembertStretchWin.Size = new System.Drawing.Size(64, 20);
             this.nudAlembertStretchWin.TabIndex = 27;
@@ -2098,8 +2118,13 @@
             0,
             327680});
             this.nudAlembertIncrementWin.Location = new System.Drawing.Point(102, 21);
+            this.nudAlembertIncrementWin.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudAlembertIncrementWin.Minimum = new decimal(new int[] {
-            100,
+            1000000000,
             0,
             0,
             -2147483648});
@@ -2139,6 +2164,11 @@
             // nudAlembertStretchLoss
             // 
             this.nudAlembertStretchLoss.Location = new System.Drawing.Point(102, 57);
+            this.nudAlembertStretchLoss.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudAlembertStretchLoss.Name = "nudAlembertStretchLoss";
             this.nudAlembertStretchLoss.Size = new System.Drawing.Size(64, 20);
             this.nudAlembertStretchLoss.TabIndex = 27;
@@ -2179,8 +2209,13 @@
             0,
             327680});
             this.nudAlembertIncrementLoss.Location = new System.Drawing.Point(102, 21);
+            this.nudAlembertIncrementLoss.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudAlembertIncrementLoss.Minimum = new decimal(new int[] {
-            100,
+            1000000000,
             0,
             0,
             -2147483648});
@@ -2257,6 +2292,11 @@
             // nudPresetEndStep
             // 
             this.nudPresetEndStep.Location = new System.Drawing.Point(61, 59);
+            this.nudPresetEndStep.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudPresetEndStep.Minimum = new decimal(new int[] {
             1,
             0,
@@ -2380,8 +2420,13 @@
             // nudPresetWinStep
             // 
             this.nudPresetWinStep.Location = new System.Drawing.Point(61, 27);
+            this.nudPresetWinStep.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudPresetWinStep.Minimum = new decimal(new int[] {
-            100,
+            1000000000,
             0,
             0,
             -2147483648});
@@ -2452,8 +2497,13 @@
             // nudPresetLossStep
             // 
             this.nudPresetLossStep.Location = new System.Drawing.Point(61, 27);
+            this.nudPresetLossStep.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudPresetLossStep.Minimum = new decimal(new int[] {
-            100,
+            1000000000,
             0,
             0,
             -2147483648});
@@ -2565,6 +2615,11 @@
             0,
             131072});
             this.nudMKDecrement.Location = new System.Drawing.Point(166, 220);
+            this.nudMKDecrement.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudMKDecrement.Name = "nudMKDecrement";
             this.nudMKDecrement.Size = new System.Drawing.Size(94, 20);
             this.nudMKDecrement.TabIndex = 44;
@@ -2578,6 +2633,11 @@
             0,
             131072});
             this.nudMKIncrement.Location = new System.Drawing.Point(166, 197);
+            this.nudMKIncrement.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudMKIncrement.Name = "nudMKIncrement";
             this.nudMKIncrement.Size = new System.Drawing.Size(94, 20);
             this.nudMKIncrement.TabIndex = 43;
@@ -2613,6 +2673,11 @@
             // nudMutawaWins
             // 
             this.nudMutawaWins.Location = new System.Drawing.Point(314, 54);
+            this.nudMutawaWins.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudMutawaWins.Name = "nudMutawaWins";
             this.nudMutawaWins.Size = new System.Drawing.Size(40, 20);
             this.nudMutawaWins.TabIndex = 39;
@@ -2689,6 +2754,11 @@
             // 
             this.nudTrazelMultiplier.DecimalPlaces = 3;
             this.nudTrazelMultiplier.Location = new System.Drawing.Point(144, 153);
+            this.nudTrazelMultiplier.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.nudTrazelMultiplier.Name = "nudTrazelMultiplier";
             this.nudTrazelMultiplier.Size = new System.Drawing.Size(60, 20);
             this.nudTrazelMultiplier.TabIndex = 33;
@@ -4533,7 +4603,7 @@
             this.nudBotSpeed.DecimalPlaces = 3;
             this.nudBotSpeed.Location = new System.Drawing.Point(97, 16);
             this.nudBotSpeed.Maximum = new decimal(new int[] {
-            5,
+            50,
             0,
             0,
             0});
@@ -6431,7 +6501,6 @@
             this.wolfBetToolStripMenuItem.Name = "wolfBetToolStripMenuItem";
             this.wolfBetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.wolfBetToolStripMenuItem.Text = "Wolf.Bet";
-            this.wolfBetToolStripMenuItem.Visible = false;
             this.wolfBetToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.wolfBetToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 

@@ -770,7 +770,7 @@ end";
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
-            /*foreach (string s in WolfBet.cCurrencies)
+            foreach (string s in WolfBet.cCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
 
@@ -783,7 +783,7 @@ end";
                 wolfBetToolStripMenuItem.DropDown.Items.Add(tmpItem);
                 tmpItem.Click += btcToolStripMenuItem_Click;
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
-            }*/
+            }
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer."+
@@ -5258,7 +5258,7 @@ end";
                     case "NitroDice": CurrentSite = new NitroDice(this);break;
                     case "EtherCrash": CurrentSite = new EtherCrash(this); break;
                     case "WinDice":currentsite = new WinDice(this);break;
-                    //case "WolfBet": currentsite = new WolfBet(this); break;
+                    case "WolfBet": currentsite = new WolfBet(this); break;
 
                 }
                 if (UseProxy)
@@ -5315,7 +5315,7 @@ end";
                         case "NitroDice": CurrentSite = new NitroDice(this); break;
                         case "EtherCrash": CurrentSite = new EtherCrash(this); break;
                         case "WinDice": currentsite = new WinDice(this); break;
-                       // case "WolfBet": currentsite = new WolfBet(this); break;
+                        case "WolfBet": currentsite = new WolfBet(this); break;
                     }
                     if (UseProxy)
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
@@ -5883,7 +5883,7 @@ end";
                     case "nitrodiceToolStripMenuItem": CurrentSite = new NitroDice(this); siteToolStripMenuItem.Text = "Site (ND)"; break;
                     case "etherCrashToolStripMenuItem": currentsite = new EtherCrash(this); siteToolStripMenuItem.Text = "Site (EC)";break;
                     case "winDiceToolStripMenuItem":CurrentSite = new WinDice(this); siteToolStripMenuItem.Text = "Site (WD)"; break;
-                    //case "wolfBetToolStripMenuItem":CurrentSite = new WolfBet(this); siteToolStripMenuItem.Text = "Site (Awoo!)"; break;
+                    case "wolfBetToolStripMenuItem":CurrentSite = new WolfBet(this); siteToolStripMenuItem.Text = "Site (Awoo!)"; break;
                 }
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;

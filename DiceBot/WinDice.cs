@@ -233,7 +233,7 @@ namespace DiceBot
 
                 decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
-                    return lucky % 10000;
+                    return lucky % 10000/100m;
             }
             return 0;
         }

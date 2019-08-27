@@ -359,13 +359,13 @@ namespace DiceBot
                 //LastBetAmount = (double)tmpob.Amount;
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
 
-                pairs.Add(new KeyValuePair<string, string>("betAmount", "\"" + (amount * (decimal)CurrentCurrency.EffectiveScale).ToString("0") + "\""));
-                pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString("0.#####")));
+                pairs.Add(new KeyValuePair<string, string>("betAmount", "\"" + (amount * (decimal)CurrentCurrency.EffectiveScale).ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo) + "\""));
+                pairs.Add(new KeyValuePair<string, string>("chance", chance.ToString("0.#####", System.Globalization.NumberFormatInfo.InvariantInfo)));
                 pairs.Add(new KeyValuePair<string, string>("currency", CurrentCurrency.id.ToString()));
                 pairs.Add(new KeyValuePair<string, string>("target", tmpob.High ? "1" : "0"));
-                string loginjson = "{\"betAmount\":\""+ (amount * (decimal)CurrentCurrency.EffectiveScale).ToString("0") + 
+                string loginjson = "{\"betAmount\":\""+ (amount * (decimal)CurrentCurrency.EffectiveScale).ToString("0", System.Globalization.NumberFormatInfo.InvariantInfo) + 
                     "\",\"currency\":"+CurrentCurrency.id.ToString()+
-                    ",\"target\":"+(tmpob.High ? "1" : "0")+",\"chance\":"+ chance.ToString("0.#####")+"}";//string.Format("{{username:\"{0}\",password:\"{1}\",code:\"{2}\",captcha:\"{3}\"}}",Username,Password,twofa,"");
+                    ",\"target\":"+(tmpob.High ? "1" : "0")+",\"chance\":"+ chance.ToString("0.#####", System.Globalization.NumberFormatInfo.InvariantInfo) +"}";//string.Format("{{username:\"{0}\",password:\"{1}\",code:\"{2}\",captcha:\"{3}\"}}",Username,Password,twofa,"");
 
                 HttpContent cont = new StringContent(loginjson);
                 cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");

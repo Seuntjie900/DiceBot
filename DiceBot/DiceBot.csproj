@@ -384,6 +384,7 @@
       <DependentUpon>Verify.cs</DependentUpon>
     </Compile>
     <Compile Include="WinDice.cs" />
+    <Compile Include="WolfBet.cs" />
     <Compile Include="YoloDice.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
