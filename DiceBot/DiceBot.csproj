@@ -216,7 +216,6 @@
     <Compile Include="BitdiceConfirm.Designer.cs">
       <DependentUpon>BitdiceConfirm.cs</DependentUpon>
     </Compile>
-    <Compile Include="DiceSeuntjie.cs" />
     <Compile Include="BitExo.cs" />
     <Compile Include="Bitvest.cs" />
     <Compile Include="DuckDice.cs" />
@@ -231,8 +230,6 @@
     </Compile>
     <Compile Include="NitroDice.cs" />
     <Compile Include="NitrogenSports.cs" />
-    <Compile Include="coinpro.cs" />
-    <Compile Include="provablyio.cs" />
     <Compile Include="SatoshiDice.cs" />
     <Compile Include="SeedInput.cs">
       <SubType>Form</SubType>
@@ -247,8 +244,6 @@
     <Compile Include="StatsForm.Designer.cs">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="wealthydice.cs" />
-    <Compile Include="betterbets.cs" />
     <Compile Include="bitdice.cs" />
     <Compile Include="Bitlser.cs" />
     <Compile Include="cDiceBot.cs">
@@ -259,8 +254,6 @@
     </Compile>
     <Compile Include="cBet.cs" />
     <Compile Include="Cloudflare.cs" />
-    <Compile Include="Coinichiwa.cs" />
-    <Compile Include="CoinMillions.cs" />
     <Compile Include="cryptogames.cs" />
     <Compile Include="Custom Chart.cs">
       <SubType>Form</SubType>
@@ -268,7 +261,6 @@
     <Compile Include="Custom Chart.Designer.cs">
       <DependentUpon>Custom Chart.cs</DependentUpon>
     </Compile>
-    <Compile Include="dadice.cs" />
     <Compile Include="Donate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -306,7 +298,6 @@
     <Compile Include="imgur.cs" />
     <Compile Include="JD.cs" />
     <Compile Include="json.cs" />
-    <Compile Include="MagicalDice.cs" />
     <Compile Include="Mersenne.cs" />
     <Compile Include="Messagehelpr.cs" />
     <Compile Include="MiniBrowser.cs">
@@ -315,7 +306,6 @@
     <Compile Include="MiniBrowser.Designer.cs">
       <DependentUpon>MiniBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="MoneroDice.cs" />
     <Compile Include="moneypot.cs" />
     <Compile Include="PD.cs" />
     <Compile Include="Program.cs" />
@@ -325,9 +315,6 @@
     </Compile>
     <Compile Include="Proxy.Designer.cs">
       <DependentUpon>Proxy.cs</DependentUpon>
-    </Compile>
-    <Compile Include="rollin.cs">
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="SafeDice.cs" />
     <Compile Include="SavedItem.cs" />

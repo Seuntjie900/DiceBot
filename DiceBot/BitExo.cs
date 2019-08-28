@@ -182,6 +182,9 @@ namespace DiceBot
             finishedlogin(false);
             return;
         }
+
+
+
         public enum ReqType { balance,bet,hash,tip }
         Dictionary<long, ReqType> Requests = new Dictionary<long, ReqType>();
         private void GetBalanceThread()

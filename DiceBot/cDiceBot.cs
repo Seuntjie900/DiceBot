@@ -545,39 +545,7 @@ end";
 
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
-            }
-            foreach (string s in CoinMillions.cCurrencies)
-            {
-                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
-
-                if (frst)
-                {
-                    tmpItem.Checked = true;
-                    frst = false;
-                }
-
-                coinMillionsToolStripMenuItem.DropDown.Items.Add(tmpItem);
-                tmpItem.Click += btcToolStripMenuItem_Click;
-
-                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
-
-            }
-            foreach (string s in BB.cCurrencies)
-            {
-                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
-
-                if (frst)
-                {
-                    tmpItem.Checked = true;
-                    frst = false;
-                }
-
-                betterbetsToolStripMenuItem.DropDown.Items.Add(tmpItem);
-                tmpItem.Click += btcToolStripMenuItem_Click;
-
-                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
-
-            }
+            }           
             foreach (string s in FortuneJack.cCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
@@ -674,22 +642,7 @@ end";
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
-            foreach (string s in DiceSeuntjie.sCurrencies)
-            {
-                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
-
-                if (frst)
-                {
-                    tmpItem.Checked = true;
-                    frst = false;
-                }
-
-                diceSeuntjieComToolStripMenuItem.DropDown.Items.Add(tmpItem);
-                tmpItem.Click += btcToolStripMenuItem_Click;
-
-                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
-
-            }
+            
             foreach (string s in BetKing.sCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
@@ -3326,7 +3279,7 @@ end";
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
-                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":/*daDiceToolStripMenuItem.Checked?"5":*/rollinIOToolStripMenuItem.Checked?"6":bitDiceToolStripMenuItem.Checked?"7":betterbetsToolStripMenuItem.Checked?"8":moneyPotToolStripMenuItem.Checked?"9":"1"));
+                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":/*daDiceToolStripMenuItem.Checked?"5":*/"1"));
             }
         }
         
@@ -5225,34 +5178,21 @@ end";
                 {
                     case "JD": CurrentSite = new JD(this); break;
                     case "PRC": CurrentSite = new BetKing(this); break;
-                    case "BB": CurrentSite = new BB(this); break;
-                    case "WD": CurrentSite = new WD(this); break;
                     case "bitdice": CurrentSite = new bitdice(this); break;
-                    case "Coinichiwa": CurrentSite = new Coinichiwa(this); break;
-                    case "CoinMillions": CurrentSite = new CoinMillions(this); break;
                     case "cryptogames": CurrentSite = new cryptogames(this); break;
-                    case "dadice": CurrentSite = new dadice(this); break;
                     case "dice999": CurrentSite = new dice999(this, (CurrentSite as dice999).doge999); break;
                     case "doge999": CurrentSite = new dice999(this, true); break;
                     case "FortuneJack": CurrentSite = new FortuneJack(this); break;
-                    case "MagicalDice": CurrentSite = new MagicalDice(this); break;
-                    case "MoneroDice": CurrentSite = new MoneroDice(this); break;
                     case "moneypot": CurrentSite = new moneypot(this); break;
                     case "PD": CurrentSite = new PD(this); break;
-                    case "rollin": CurrentSite = new rollin(this); break;
                     case "SafeDice": CurrentSite = new SafeDice(this); break;
                     case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
                     case "Bitvest": CurrentSite = new Bitvest(this); break;
                     case "KingDice": CurrentSite = new Kingdice(this); break;
                     case "NitrogenSports": CurrentSite = new NitrogenSports(this);break;
                     case "YoloDice": CurrentSite = new YoloDice(this); break;
-                    case "ProvablyIO": CurrentSite = new provablyio(this); break;
                     case "Bit-Exo": CurrentSite = new BitExo(this); break;
-                    case "DiceSeuntjie": CurrentSite = new DiceSeuntjie(this); break;
                     case "DuckDice": CurrentSite = new DuckDice(this); break;
-                    //case "EtcBets": CurrentSite = new etcbets(this); break;
-                    case "coinpro": CurrentSite = new coinpro(this);break;
-                    //case "OKBets": CurrentSite = new OKBets(this); break;
                     case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
                     case "Stake": CurrentSite = new Stake(this);break;
                     case "NitroDice": CurrentSite = new NitroDice(this);break;
@@ -5283,33 +5223,21 @@ end";
                     {
                         case "JD": CurrentSite = new JD(this); break;
                         case "PRC": CurrentSite = new BetKing(this); break;
-                        case "BB": CurrentSite = new BB(this); break;
-                        case "WD": CurrentSite = new WD(this); break;
                         case "bitdice": CurrentSite = new bitdice(this); break;
-                        case "Coinichiwa": CurrentSite = new Coinichiwa(this); break;
-                        case "CoinMillions": CurrentSite = new CoinMillions(this); break;
                         case "cryptogames": CurrentSite = new cryptogames(this); break;
                         case "dice999": CurrentSite = new dice999(this, false); break;
                         case "doge999": CurrentSite = new dice999(this, true); break;
                         case "FortuneJack": CurrentSite = new FortuneJack(this); break;
-                        case "MagicalDice": CurrentSite = new MagicalDice(this); break;
-                        case "MoneroDice": CurrentSite = new MoneroDice(this); break;
                         case "moneypot": CurrentSite = new moneypot(this); break;
                         case "PD": CurrentSite = new PD(this); break;
-                        case "rollin": CurrentSite = new rollin(this); break;
                         case "SafeDice": CurrentSite = new SafeDice(this); break;
                         case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
                         case "Bitvest": CurrentSite = new Bitvest(this); break;
                         case "KingDice": CurrentSite = new Kingdice(this); break;
                         case "NitrogenSports": CurrentSite = new NitrogenSports(this); break;
-                        case "ProvablyIO": CurrentSite = new provablyio(this); break;
                         case "YoloDice": CurrentSite = new YoloDice(this); break;
                         case "Bit-Exo": CurrentSite = new BitExo(this); break;
-                        case "DiceSeuntjie": CurrentSite = new DiceSeuntjie(this); break;
                         case "DuckDice": CurrentSite = new DuckDice(this); break;
-                        //case "EtcBets": CurrentSite = new etcbets(this); break;
-                        case "coinpro": CurrentSite = new coinpro(this); break;
-                        //case "OKBets": CurrentSite = new OKBets(this); break;
                         case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
                         case "Stake": CurrentSite = new Stake(this); break;
                         case "NitroDice": CurrentSite = new NitroDice(this); break;
@@ -5851,18 +5779,8 @@ end";
                     case "dogeToolStripMenuItem": CurrentSite = new dice999(this, true); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
                     case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
-                    case "daDiceToolStripMenuItem": CurrentSite = new dadice(this); siteToolStripMenuItem.Text = "Site (DAD)"; break;
-                    case "rollinIOToolStripMenuItem": CurrentSite = new rollin(this); siteToolStripMenuItem.Text = "Site (RIO)"; break;
                     case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
-                    case "betterbetsToolStripMenuItem": CurrentSite = new BB(this); siteToolStripMenuItem.Text = "Site (BB)"; break;
-                    case "wealthyDiceToolStripMenuItem": CurrentSite = new WD(this); siteToolStripMenuItem.Text = "Site (WD)"; break;
-                    case "moneyPotToolStripMenuItem" : CurrentSite = new moneypot(this); siteToolStripMenuItem.Text = "Site (MP)"; break;
-                       
-                    case "coinMillionsToolStripMenuItem": CurrentSite = new CoinMillions(this); siteToolStripMenuItem.Text = "Site (CM)"; break;
-                    case "magicalDiceToolStripMenuItem": CurrentSite = new MagicalDice(this); siteToolStripMenuItem.Text = "Site (MD)"; break;
-                    //case "investdiceToolStripMenuItem": CurrentSite = new InvestDice(this); siteToolStripMenuItem.Text = "Site(ID)"; break;
-                    case "coinichiwaToolStripMenuItem": CurrentSite = new Coinichiwa(this); siteToolStripMenuItem.Text = "Site (CW)"; break;
-                    case "moneroDiceToolStripMenuItem": CurrentSite=new MoneroDice(this); siteToolStripMenuItem.Text="Site (MonD)"; break;
+                    case "moneyPotToolStripMenuItem" : CurrentSite = new moneypot(this); siteToolStripMenuItem.Text = "Site (MP)"; break;   
                     case "fortuneJackToolStripMenuItem" : CurrentSite = new FortuneJack(this); siteToolStripMenuItem.Text = "Site (FJ)"; break;
                     case "cryptoGamesToolStripMenuItem" : CurrentSite = new cryptogames(this); siteToolStripMenuItem.Text = "Site (CG)"; break;
                     case "bitslerToolStripMenuItem" : CurrentSite = new Bitsler(this); siteToolStripMenuItem.Text = "Site (BS)"; break;
@@ -5872,12 +5790,7 @@ end";
                     case "nitorgenSportsToolStripMenuItem": CurrentSite = new NitrogenSports(this); siteToolStripMenuItem.Text = "Site (NS)"; break;
                     case "yoloDiceToolStripMenuItem": CurrentSite = new YoloDice(this); siteToolStripMenuItem.Text = "Site (YD)"; break;
                     case "bitExoToolStripMenuItem": CurrentSite = new BitExo(this); siteToolStripMenuItem.Text = "Site (BE)"; break;
-                    case "provabllyIOToolStripMenuItem": CurrentSite = new provablyio(this); siteToolStripMenuItem.Text = "Site (PIO)"; break;
-                    case "diceSeuntjieComToolStripMenuItem": CurrentSite = new DiceSeuntjie(this); siteToolStripMenuItem.Text = "Site (DSC)"; break;
                     case "duckDiceToolStripMenuItem": CurrentSite = new DuckDice(this); siteToolStripMenuItem.Text = "Site (Quack)"; break;
-                    //case "etcBetsToolStripMenuItem": CurrentSite = new etcbets(this); siteToolStripMenuItem.Text = "(EtcB)"; break;
-                    case "coinProfitToolStripMenuItem": CurrentSite = new coinpro(this); siteToolStripMenuItem.Text = "Site (CPro)"; break;
-                    //case "oKBetsToolStripMenuItem" : CurrentSite = new OKBets(this); siteToolStripMenuItem.Text = "(OKB)"; break;
                     case "freebitcoinToolStripMenuItem": CurrentSite = new Freebitcoin(this); siteToolStripMenuItem.Text = "Site (FBtc)"; break;
                     case "stakeToolStripMenuItem": CurrentSite = new Stake(this); siteToolStripMenuItem.Text = "Site (Stake)"; break;
                     case "nitrodiceToolStripMenuItem": CurrentSite = new NitroDice(this); siteToolStripMenuItem.Text = "Site (ND)"; break;
@@ -6367,30 +6280,17 @@ end";
                             pocketRocketsCasinoToolStripMenuItem.Checked ? 2 : 
                             diceToolStripMenuItem.Checked ? 3 : 
                             safediceToolStripMenuItem.Checked ? 4 : 
-                            //daDiceToolStripMenuItem.Checked ? 5 : 
-                            rollinIOToolStripMenuItem.Checked ? 6 : 
                             bitDiceToolStripMenuItem.Checked ? 7: 
-                            betterbetsToolStripMenuItem.Checked?8:
-                            moneyPotToolStripMenuItem.Checked?9:
-                            coinMillionsToolStripMenuItem.Checked ? 10 :
-                            //magicalDiceToolStripMenuItem.Checked ? 11 :
                             fortuneJackToolStripMenuItem.Checked? 12:
                             cryptoGamesToolStripMenuItem.Checked?13:
                             bitslerToolStripMenuItem.Checked?14:
-                            //dogeToolStripMenuItem.Checked?15:
-                            //wealthyDiceToolStripMenuItem.Checked?16:
                             satoshiDiceToolStripMenuItem.Checked?17:
                             bitvestToolStripMenuItem.Checked?18:
                             kingDiceToolStripMenuItem.Checked?19:
                             nitorgenSportsToolStripMenuItem.Checked?20:
-                            provabllyIOToolStripMenuItem.Checked?21:
                             bitExoToolStripMenuItem.Checked?22:
                             yoloDiceToolStripMenuItem.Checked?23:
-                            diceSeuntjieComToolStripMenuItem.Checked?24:
                             duckDiceToolStripMenuItem.Checked?25:
-                            //etcBetsToolStripMenuItem.Checked?26:
-                            coinProfitToolStripMenuItem.Checked?27:
-                            //oKBetsToolStripMenuItem.Checked?28:
                             freebitcoinToolStripMenuItem.Checked?29:
                             stakeToolStripMenuItem.Checked?30:
                             nitrodiceToolStripMenuItem.Checked?31:
@@ -6500,31 +6400,18 @@ end";
                         pocketRocketsCasinoToolStripMenuItem.Checked = value == 2;
                         diceToolStripMenuItem.Checked = value == 3;
                         safediceToolStripMenuItem.Checked = value == 4;
-                        //daDiceToolStripMenuItem.Checked = value == 5;
-                        rollinIOToolStripMenuItem.Checked = value == 6;
                         bitDiceToolStripMenuItem.Checked = value == 7;
-                        betterbetsToolStripMenuItem.Checked = value == 8;
-                        moneyPotToolStripMenuItem.Checked = value == 9;
-                        coinMillionsToolStripMenuItem.Checked = value == 10;
-                        //magicalDiceToolStripMenuItem.Checked = value == 11;
                         fortuneJackToolStripMenuItem.Checked = value == 12;
                         cryptoGamesToolStripMenuItem.Checked = value == 13;
                         bitslerToolStripMenuItem.Checked = value == 14;
-                        //dogeToolStripMenuItem.Checked = value == 15;
-                        //wealthyDiceToolStripMenuItem.Checked = value == 16;
                         satoshiDiceToolStripMenuItem.Checked = value == 17;
                         bitvestToolStripMenuItem.Checked = value == 18;
                         kingDiceToolStripMenuItem.Checked = value == 19;
                         nitorgenSportsToolStripMenuItem.Checked = value == 20;
-                        provabllyIOToolStripMenuItem.Checked = value == 21;
                         bitExoToolStripMenuItem.Checked= value ==22;
                         yoloDiceToolStripMenuItem.Checked = value == 23;
-                        diceSeuntjieComToolStripMenuItem.Checked = value == 24;
                         duckDiceToolStripMenuItem.Checked = value == 25;
-                        //etcBetsToolStripMenuItem.Checked = value == 26;
-                        coinProfitToolStripMenuItem.Checked = value == 27 ;
-                        //oKBetsToolStripMenuItem.Checked = value == 28;
-                            freebitcoinToolStripMenuItem.Checked = value == 29;
+                        freebitcoinToolStripMenuItem.Checked = value == 29;
                         stakeToolStripMenuItem.Checked = value == 30;
                         nitrodiceToolStripMenuItem.Checked = value == 31;
                         etherCrashToolStripMenuItem.Checked = value == 32;
@@ -6641,8 +6528,6 @@ end";
                 if (c == null)
                 {
 
-                    //sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked ? "0" : advancedToolStripMenuItem.Checked ? "1" : "2"));
-                    //sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked ? "0" : primeDiceToolStripMenuItem.Checked ? "1" : pocketRocketsCasinoToolStripMenuItem.Checked ? "2" : diceToolStripMenuItem.Checked ? "3" : safediceToolStripMenuItem.Checked ? "4" : daDiceToolStripMenuItem.Checked ? "5" : rollinIOToolStripMenuItem.Checked ? "6" : bitDiceToolStripMenuItem.Checked ? "7" : "1"));
                     if (Key == "Site")
                     {
                         justDiceToolStripMenuItem.Checked = value == "0";
@@ -6650,30 +6535,17 @@ end";
                         pocketRocketsCasinoToolStripMenuItem.Checked = value == "2";
                         diceToolStripMenuItem.Checked = value == "3";
                         safediceToolStripMenuItem.Checked = value == "4";
-                        //daDiceToolStripMenuItem.Checked = value == "5";
-                        rollinIOToolStripMenuItem.Checked = value == "6";
                         bitDiceToolStripMenuItem.Checked = value == "7";
-                        betterbetsToolStripMenuItem.Checked = value == "8";
-                        moneyPotToolStripMenuItem.Checked = value == "9";
-                        coinMillionsToolStripMenuItem.Checked = value == "10";
-                        //magicalDiceToolStripMenuItem.Checked = value == "11";
                         fortuneJackToolStripMenuItem.Checked = value == "12";
                         cryptoGamesToolStripMenuItem.Checked = value == "13";
                         bitslerToolStripMenuItem.Checked = value == "14";
-                        //dogeToolStripMenuItem.Checked = value == "15";
-                        //wealthyDiceToolStripMenuItem.Checked = value == "16";
                         satoshiDiceToolStripMenuItem.Checked = value == "17";
                         bitvestToolStripMenuItem.Checked = value == "18";
                         kingDiceToolStripMenuItem.Checked = value == "19";
                         nitorgenSportsToolStripMenuItem.Checked = value == "20";
-                        provabllyIOToolStripMenuItem.Checked = value == "21";
                         bitExoToolStripMenuItem.Checked = value == "22";
                         yoloDiceToolStripMenuItem.Checked = value == "23";
-                        diceSeuntjieComToolStripMenuItem.Checked = value == "24";
                         duckDiceToolStripMenuItem.Checked = value == "25";
-                        //etcBetsToolStripMenuItem.Checked = value == "26";
-                        coinProfitToolStripMenuItem.Checked = value == "27";
-                        //oKBetsToolStripMenuItem.Checked = value == "28";
                         freebitcoinToolStripMenuItem.Checked = value == "29";
                         stakeToolStripMenuItem.Checked = value == "30";
                         nitrodiceToolStripMenuItem.Checked = value == "31";
