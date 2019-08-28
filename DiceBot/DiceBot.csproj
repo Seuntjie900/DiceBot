@@ -134,7 +134,7 @@
       <HintPath>..\packages\GraphQL.Common.1.0.3\lib\netstandard1.0\GraphQL.Common.dll</HintPath>
     </Reference>
     <Reference Include="JDCAPI">
-      <HintPath>..\..\jdcapi\jdcapi\bin\Debug\JDCAPI.dll</HintPath>
+      <HintPath>..\PrivateReferences\JDCAPI.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Client.2.3.0\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
