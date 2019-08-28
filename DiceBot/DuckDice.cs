@@ -338,12 +338,12 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-        public virtual decimal GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             
             return sGetLucky(server,client,nonce);
         }
-        public static decimal sGetLucky(string server, string client, int nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
             SHA512 betgenerator = SHA512.Create();
 

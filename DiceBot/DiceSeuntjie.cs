@@ -416,7 +416,7 @@ namespace DiceBot
             return moneypot.sGetLucky(server, client, nonce);
         }
 
-        public static decimal sGetLucky(string server, string client, int nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
             return moneypot.sGetLucky(server, client, nonce);
         }

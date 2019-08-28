@@ -422,7 +422,7 @@ namespace DiceBot
             }
             return 0;
         }
-        new public static decimal sGetLucky(string server, string client, int nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
 

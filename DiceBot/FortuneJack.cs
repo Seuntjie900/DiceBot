@@ -621,7 +621,7 @@ namespace DiceBot
             return 0;
         }
 
-        public static decimal sGetLucky(string server, string client, int Nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
             SHA512 HashGen = SHA512.Create();
             string seed = server + client;

@@ -253,10 +253,10 @@ namespace DiceBot
 
             return res;
         }
-        public static decimal sGetLucky(string server, string Client, int nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
             decimal dserver = decimal.Parse(server.Substring(0,server.IndexOf("-")), System.Globalization.NumberFormatInfo.InvariantInfo);
-            decimal dclient = decimal.Parse(Client, System.Globalization.NumberFormatInfo.InvariantInfo);
+            decimal dclient = decimal.Parse(client, System.Globalization.NumberFormatInfo.InvariantInfo);
             decimal res = ((dserver + dclient) % 65536m);
             res = (res / 65535.0m)* 100m;
             res = (decimal)(int)((res) * 1000);

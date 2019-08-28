@@ -207,7 +207,21 @@ namespace DiceBot
                 Thread.Sleep(1000);
             }
         }
-
+        public override decimal GetLucky(string server, string client, int nonce)
+        {
+            return sGetLucky(server, client, nonce);
+        }
+        public static new decimal sGetLucky(string server, string client, long nonce)
+        {
+            long cl = long.Parse(client);
+            decimal serverseed = decimal.Parse(server.Substring(0, server.IndexOf("-")), System.Globalization.NumberFormatInfo.InvariantInfo);
+            decimal rollb = ((serverseed) + cl) % (long)(4294967296);
+            rollb = (100.0m / 4294967296.0m) * (decimal)((long)rollb);
+            rollb = rollb * (long)10000;
+            decimal roll = Math.Floor(rollb);
+            roll = roll / (long)10000;
+            return roll;
+        }
         private void WSClient_Opened(object sender, EventArgs e)
         {
             WSClient.Send("2probe");

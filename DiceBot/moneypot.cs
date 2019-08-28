@@ -365,7 +365,7 @@ namespace DiceBot
             decimal roll = Math.Floor((100.0m / 4294967296.0m) * (decimal)((long)(((decimal)nonce) + cl) % (long)(4294967296)) * (long)100) / (long)100;
             return roll;
         }
-        public static decimal sGetLucky(string server, string client, int nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
             long cl = long.Parse(client);
             decimal roll = Math.Floor((100.0m / 4294967296.0m) * (decimal)((long)(((decimal)nonce) + cl) % (long)(4294967296)) * (long)100) / (long)100;

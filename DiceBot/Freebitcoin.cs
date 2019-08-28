@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -153,6 +154,50 @@ namespace DiceBot
             T.Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
+        public override decimal GetLucky(string server, string client, int nonce)
+        {
+            return sGetLucky(server, client, nonce);
+        }
+        public static new decimal sGetLucky(string server, string client, long nonce)
+        {
+            HMACSHA512 betgenerator = new HMACSHA512();
+            server = nonce + ":" + server + ":" + nonce;
+            string msg = nonce + ":" + client + ":" + nonce;
+            int charstouse = 8;
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+            
+            List<byte> buffer = new List<byte>();            
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+            betgenerator.Key = buffer.ToArray();
+            byte[] hash = betgenerator.ComputeHash(serverb.ToArray());
+
+            StringBuilder hex = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+                hex.AppendFormat("{0:x2}", b);
+
+
+            for (int i = 0; i < hex.Length; i += charstouse)
+            {
+
+                string s = hex.ToString().Substring(i, charstouse);
+
+                decimal lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
+                /*if (lucky < 1000000)
+                    return lucky / 10000;*/
+                lucky = Math.Round(lucky / 429496.7295m);
+                return lucky / 100;
+            }
+            return 0;
+        }
         public override void ResetSeed()
         {
             throw new NotImplementedException();

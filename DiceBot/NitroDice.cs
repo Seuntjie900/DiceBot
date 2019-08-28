@@ -208,7 +208,7 @@ namespace DiceBot
             new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance, BetGuid));
         }
 
-        public static decimal sGetLucky(string server, string client, int nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
             SHA512 betgenerator = SHA512.Create();
 

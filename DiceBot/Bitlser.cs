@@ -853,7 +853,7 @@ currency:btc*/
             throw new NotImplementedException();
         }
 
-        public static decimal sGetLucky(string server, string client, int nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
             SHA512 betgenerator = SHA512.Create();
 

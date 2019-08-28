@@ -158,31 +158,34 @@ namespace DiceBot
             {
                 switch (site)
                 {
-                    case "JustDice": tmp.Verified = tmp.Roll == (decimal)DiceSite.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "PrimeDice": tmp.Verified = tmp.Roll == (decimal)PD.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "999Dice": tmp.Verified = tmp.Roll== (decimal)dice999.sGetLucky(tmp.serverseed, (tmp.clientseed), (int)tmp.nonce, /*(long)(tmp.Roll*10000m),*/ tmp.serverhash); break;
-                    case "SafeDice": tmp.Verified = tmp.Roll == (decimal)SafeDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "BetKing": tmp.Verified = tmp.Roll == (decimal)BetKing.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "RollinIO": tmp.Verified = tmp.Roll == (decimal)rollin.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "BitDice": tmp.Verified = tmp.Roll == (decimal)bitdice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "BetterBets": tmp.Verified = tmp.Roll == (decimal)BB.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "MoneyPot": tmp.Verified = tmp.Roll == (decimal)moneypot.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "MoneroDice": tmp.Verified = tmp.Roll == (decimal)MoneroDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "FortuneJack": tmp.Verified = tmp.Roll == (decimal)FortuneJack.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "Coinichiwa": tmp.Verified = tmp.Roll == (decimal)Coinichiwa.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "CoinMillions": tmp.Verified = tmp.Roll == (decimal)CoinMillions.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "CryptoGames": tmp.Verified = tmp.Roll == (decimal)cryptogames.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "Bitsler": tmp.Verified = tmp.Roll == (decimal)Bitsler.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "Wealthydice": tmp.Verified = tmp.Roll == (decimal)WD.sGetLucky(tmp.serverseed, tmp.clientseed,(int)tmp.nonce);break;
-                    case "SatoshiDice": tmp.Verified = tmp.Roll == (decimal)SatoshiDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "Bitvest": tmp.Verified = tmp.Roll == (decimal)Bitvest.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "KingDice": tmp.Verified = tmp.Roll == (decimal)Kingdice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "YoloDice": tmp.Verified = tmp.Roll == (decimal)YoloDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "DuckDice": tmp.Verified = tmp.Roll == (decimal)DuckDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce);break;
-                    case "NitroDice": tmp.Verified = tmp.Roll == (decimal)NitroDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
-                    case "WolfBet": tmp.Verified = tmp.Roll == (decimal)WolfBet.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce);break;
-                    case "WinDice": tmp.Verified = tmp.Roll == (decimal)WinDice.sGetLucky(tmp.serverseed, tmp.clientseed, (int)tmp.nonce); break;
+                    case "JustDice": tmp.Verified = tmp.Roll == (decimal)DiceSite.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "PrimeDice": tmp.Verified = tmp.Roll == (decimal)PD.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "999Dice": tmp.Verified = tmp.Roll== (decimal)dice999.sGetLucky(tmp.serverseed, (tmp.clientseed), tmp.nonce, /*(long)(tmp.Roll*10000m),*/ tmp.serverhash); break;
+                    case "SafeDice": tmp.Verified = tmp.Roll == (decimal)SafeDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "BetKing": tmp.Verified = tmp.Roll == (decimal)BetKing.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "RollinIO": tmp.Verified = tmp.Roll == (decimal)rollin.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "BitDice": tmp.Verified = tmp.Roll == (decimal)bitdice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "BetterBets": tmp.Verified = tmp.Roll == (decimal)BB.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "MoneyPot": tmp.Verified = tmp.Roll == (decimal)moneypot.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "MoneroDice": tmp.Verified = tmp.Roll == (decimal)MoneroDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "FortuneJack": tmp.Verified = tmp.Roll == (decimal)FortuneJack.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "Coinichiwa": tmp.Verified = tmp.Roll == (decimal)Coinichiwa.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "CoinMillions": tmp.Verified = tmp.Roll == (decimal)CoinMillions.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "CryptoGames": tmp.Verified = tmp.Roll == (decimal)cryptogames.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "Bitsler": tmp.Verified = tmp.Roll == (decimal)Bitsler.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "Wealthydice": tmp.Verified = tmp.Roll == (decimal)WD.sGetLucky(tmp.serverseed, tmp.clientseed,tmp.nonce);break;
+                    case "SatoshiDice": tmp.Verified = tmp.Roll == (decimal)SatoshiDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "Bitvest": tmp.Verified = tmp.Roll == (decimal)Bitvest.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "KingDice": tmp.Verified = tmp.Roll == (decimal)Kingdice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "YoloDice": tmp.Verified = tmp.Roll == (decimal)YoloDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "DuckDice": tmp.Verified = tmp.Roll == (decimal)DuckDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce);break;
+                    case "NitroDice": tmp.Verified = tmp.Roll == (decimal)NitroDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "WolfBet": tmp.Verified = tmp.Roll == (decimal)WolfBet.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce);break;
+                    case "WinDice": tmp.Verified = tmp.Roll == (decimal)WinDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "Bit-Exo": tmp.Verified = tmp.Roll == (decimal)BitExo.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "FreeBitcoin": tmp.Verified = tmp.Roll == (decimal)Freebitcoin.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                 }
+                
             }
             return tmp;
         }

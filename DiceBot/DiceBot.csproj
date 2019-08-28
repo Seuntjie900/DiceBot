@@ -210,7 +210,6 @@
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
     <Compile Include="BetKing.cs" />
-    <Compile Include="etcbets.cs" />
     <Compile Include="BitdiceConfirm.cs">
       <SubType>Form</SubType>
     </Compile>

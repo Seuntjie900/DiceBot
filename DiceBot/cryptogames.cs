@@ -238,42 +238,11 @@ namespace DiceBot
 
         public override decimal GetLucky(string server, string client, int nonce)
         {
-            SHA512 betgenerator = SHA512.Create();
-
-            int charstouse = 5;
-
-
-            List<byte> buffer = new List<byte>();
-            string msg = server + client;
-            foreach (char c in msg)
-            {
-                buffer.Add(Convert.ToByte(c));
-            }
-
-            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
-
-            StringBuilder hex = new StringBuilder(hash.Length * 2);
-            foreach (byte b in hash)
-                hex.AppendFormat("{0:x2}", b);
-
-
-            for (int i = 0; i < hex.Length; i += charstouse)
-            {
-
-                string s = hex.ToString().Substring(i, charstouse);
-
-                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
-                if (lucky < 1000000m)
-                {
-                    string tmps = lucky.ToString("000000").Substring(lucky.ToString("000000").Length - 5);
-                    return decimal.Parse(tmps) / 1000.0m;
-                }
-            }
-            return 0;
+            return sGetLucky(server, client, nonce);
 
         }
         
-        public static decimal sGetLucky(string server, string client, int nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
             SHA512 betgenerator = SHA512.Create();
 

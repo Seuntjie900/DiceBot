@@ -610,10 +610,26 @@ namespace DiceBot
 
         public override decimal GetLucky(string server, string client, int nonce)
         {
-            SHA512 betgenerator = SHA512.Create();
+            HMACSHA512 betgenerator = new HMACSHA512();
+
             int charstouse = 5;
-            string source = server + "|" + client;
-            byte[] hash = betgenerator.ComputeHash(Encoding.UTF8.GetBytes(source));
+            List<byte> serverb = new List<byte>();
+
+            for (int i = 0; i < server.Length; i++)
+            {
+                serverb.Add(Convert.ToByte(server[i]));
+            }
+
+
+            List<byte> buffer = new List<byte>();
+            string msg = /*nonce.ToString() + ":" + */client + "|" + nonce.ToString();
+            foreach (char c in msg)
+            {
+                buffer.Add(Convert.ToByte(c));
+            }
+            betgenerator.Key = buffer.ToArray();
+
+            byte[] hash = betgenerator.ComputeHash(serverb.ToArray());
 
             StringBuilder hex = new StringBuilder(hash.Length * 2);
             foreach (byte b in hash)
@@ -631,28 +647,9 @@ namespace DiceBot
             }
             return 0;
         }
-        new public static decimal sGetLucky(string server, string client, int nonce)
+        new public static decimal sGetLucky(string server, string client, long nonce)
         {
-            SHA512 betgenerator = SHA512.Create();
-            int charstouse = 5;
-            string source = server + "|" + client;
-            byte[] hash = betgenerator.ComputeHash(Encoding.UTF8.GetBytes(source));
-
-            StringBuilder hex = new StringBuilder(hash.Length * 2);
-            foreach (byte b in hash)
-                hex.AppendFormat("{0:x2}", b);
-
-
-            for (int i = 0; i < hex.Length; i += charstouse)
-            {
-
-                string s = hex.ToString().Substring(i, charstouse);
-
-                decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
-                if (lucky < 1000000)
-                    return lucky / 10000m;
-            }
-            return 0;
+            return sGetLucky(server, client, nonce);
         }
 
         public string getDepositAddress()

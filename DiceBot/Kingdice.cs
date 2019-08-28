@@ -397,9 +397,9 @@ namespace DiceBot
             
             return (decimal)toll;
         }
-        public static decimal sGetLucky(string server, string client, int nonce)
+        public static new decimal sGetLucky(string server, string client, long nonce)
         {
-            int toll = (int.Parse(client) + nonce) % ((int)99 + 1);
+            long toll = (long.Parse(client) + nonce) % ((long)99 + (long)1);
 
 
             return (decimal)toll;
