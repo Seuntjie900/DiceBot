@@ -219,9 +219,9 @@ namespace DiceBot
             long cl = long.Parse(client);
             decimal serverseed = decimal.Parse(server.Substring(0, server.IndexOf("-")), System.Globalization.NumberFormatInfo.InvariantInfo);
             decimal rollb = ((serverseed) + cl) % (long)(4294967296);
-            rollb = (100.0m / 4294967296.0m) * (decimal)((long)rollb);
-            rollb = rollb * (long)10000;
-            decimal roll = Math.Floor(rollb);
+            decimal roll = rollb / (Decimal)Math.Pow(2, 32) * 99.9999m;           
+            roll = roll * (long)10000;
+            roll = Math.Floor(roll);
             roll = roll / (long)10000;
             return roll;
         }

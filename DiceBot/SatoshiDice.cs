@@ -33,7 +33,7 @@ namespace DiceBot
             BetURL = "https://megadice.com";
             register = false;
             this.Parent = Parent;
-            Name = "SatoshiDice";
+            Name = "MegaDice";
             Tip = false;
             TipUsingName = true;
             //Thread tChat = new Thread(GetMessagesThread);
@@ -241,17 +241,7 @@ namespace DiceBot
 
         public override decimal GetLucky(string server, string client, int nonce)
         {
-            //return base.GetLucky(server, client, nonce);
-            decimal dserver = decimal.Parse(server.Substring(0, server.IndexOf("-")), System.Globalization.NumberFormatInfo.InvariantInfo);
-            decimal dclient = decimal.Parse(client, System.Globalization.NumberFormatInfo.InvariantInfo);
-            decimal res = ((dserver + dclient) % 65536m);
-            res = (res / 65535.0m) * 100m;
-            res = (decimal)(int)((res) * 1000);
-            res /= 1000m;
-            res = Math.Round(res, 2);
-            res = decimal.Parse(Math.Round(res, 2).ToString("00.00", System.Globalization.NumberFormatInfo.InvariantInfo), System.Globalization.NumberFormatInfo.InvariantInfo);
-
-            return res;
+            return sGetLucky(server, client, nonce);
         }
         public static new decimal sGetLucky(string server, string client, long nonce)
         {

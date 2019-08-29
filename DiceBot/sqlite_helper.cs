@@ -164,11 +164,11 @@ namespace DiceBot
                     case "SafeDice": tmp.Verified = tmp.Roll == (decimal)SafeDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "BetKing": tmp.Verified = tmp.Roll == (decimal)BetKing.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "BitDice": tmp.Verified = tmp.Roll == (decimal)bitdice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
-                    case "MoneyPot": tmp.Verified = tmp.Roll == (decimal)moneypot.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "FortuneJack": tmp.Verified = tmp.Roll == (decimal)FortuneJack.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "CryptoGames": tmp.Verified = tmp.Roll == (decimal)cryptogames.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "Bitsler": tmp.Verified = tmp.Roll == (decimal)Bitsler.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
-                    case "SatoshiDice": tmp.Verified = tmp.Roll == (decimal)SatoshiDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    case "SatoshiDice":
+                    case "MegaDice": tmp.Verified = tmp.Roll == (decimal)SatoshiDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "Bitvest": tmp.Verified = tmp.Roll == (decimal)Bitvest.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "KingDice": tmp.Verified = tmp.Roll == (decimal)Kingdice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "YoloDice": tmp.Verified = tmp.Roll == (decimal)YoloDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;

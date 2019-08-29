@@ -638,7 +638,7 @@ namespace DiceBot
             }
         }
 
-        public virtual decimal GetLucky(string server, string client, int nonce)
+        public override decimal GetLucky(string server, string client, int nonce)
         {
             return sGetLucky(server, client, nonce);
         }

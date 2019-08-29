@@ -5183,7 +5183,6 @@ end";
                     case "dice999": CurrentSite = new dice999(this, (CurrentSite as dice999).doge999); break;
                     case "doge999": CurrentSite = new dice999(this, true); break;
                     case "FortuneJack": CurrentSite = new FortuneJack(this); break;
-                    case "moneypot": CurrentSite = new moneypot(this); break;
                     case "PD": CurrentSite = new PD(this); break;
                     case "SafeDice": CurrentSite = new SafeDice(this); break;
                     case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
@@ -5228,7 +5227,6 @@ end";
                         case "dice999": CurrentSite = new dice999(this, false); break;
                         case "doge999": CurrentSite = new dice999(this, true); break;
                         case "FortuneJack": CurrentSite = new FortuneJack(this); break;
-                        case "moneypot": CurrentSite = new moneypot(this); break;
                         case "PD": CurrentSite = new PD(this); break;
                         case "SafeDice": CurrentSite = new SafeDice(this); break;
                         case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
@@ -5779,8 +5777,7 @@ end";
                     case "dogeToolStripMenuItem": CurrentSite = new dice999(this, true); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
                     case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
-                    case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
-                    case "moneyPotToolStripMenuItem" : CurrentSite = new moneypot(this); siteToolStripMenuItem.Text = "Site (MP)"; break;   
+                    case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break; 
                     case "fortuneJackToolStripMenuItem" : CurrentSite = new FortuneJack(this); siteToolStripMenuItem.Text = "Site (FJ)"; break;
                     case "cryptoGamesToolStripMenuItem" : CurrentSite = new cryptogames(this); siteToolStripMenuItem.Text = "Site (CG)"; break;
                     case "bitslerToolStripMenuItem" : CurrentSite = new Bitsler(this); siteToolStripMenuItem.Text = "Site (BS)"; break;
@@ -5836,14 +5833,7 @@ end";
                     lblPass.Text = "Password:";
                     lblUsername.Text = "Username:";
                 }*/
-                if (CurrentSite is moneypot)
-                {
-                    btnMPDeposit.Visible = btnMPWithdraw.Visible = true;
-                }
-                else
-                {
-                    btnMPDeposit.Visible = btnMPWithdraw.Visible = false;
-                }
+               
                 rdbInvest.Enabled = CurrentSite.AutoInvest;
                 if (!rdbInvest.Enabled)
                     rdbInvest.Checked = false;
@@ -6879,11 +6869,7 @@ end";
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            if (CurrentSite is moneypot)
-            {
-                (CurrentSite as moneypot).ShowMPDeposit();
-                
-            }
+            
         }
 
         private void button1_Click_2(object sender, EventArgs e)
@@ -6905,11 +6891,7 @@ end";
 
         private void btnMPWithdraw_Click(object sender, EventArgs e)
         {
-            if (CurrentSite is moneypot)
-            {
-                (CurrentSite as moneypot).ShowMPWithdraw();
-
-            }
+           
         }
 
         private void btnDepositAlt_Click(object sender, EventArgs e)

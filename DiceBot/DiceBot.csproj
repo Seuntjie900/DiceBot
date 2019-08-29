@@ -306,7 +306,6 @@
     <Compile Include="MiniBrowser.Designer.cs">
       <DependentUpon>MiniBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="moneypot.cs" />
     <Compile Include="PD.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

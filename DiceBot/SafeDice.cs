@@ -728,52 +728,7 @@ namespace DiceBot
 
         public override decimal GetLucky(string server, string client, int nonce)
         {
-            string comb = nonce + ":" + client + server + ":" + nonce;
-
-            SHA512 betgenerator = SHA512.Create();
-
-
-            int charstouse = 5;
-
-            List<byte> buffer = new List<byte>();
-
-            foreach (char c in comb)
-            {
-                buffer.Add(Convert.ToByte(c));
-            }
-
-            //compute first hash
-            byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
-
-            StringBuilder hex = new StringBuilder(hash.Length * 2);
-            foreach (byte b in hash)
-                hex.AppendFormat("{0:x2}", b);
-
-            comb = hex.ToString();
-            buffer = new List<byte>();
-
-            //convert hash to new byte array
-            foreach (char c in comb)
-            {
-                buffer.Add(Convert.ToByte(c));
-            }
-
-            hash = betgenerator.ComputeHash(buffer.ToArray());
-
-            hex = new StringBuilder(hash.Length * 2);
-            foreach (byte b in hash)
-                hex.AppendFormat("{0:x2}", b);
-
-            for (int i = 0; i < hex.Length; i += charstouse)
-            {
-
-                string s = hex.ToString().Substring(i, charstouse);
-
-                decimal lucky = long.Parse(s, System.Globalization.NumberStyles.HexNumber);
-                if (lucky < 1000000)
-                    return lucky / 10000;
-            }
-            return 0;
+            return sGetLucky(server, client, nonce);
         }
 
         public override bool Invest(decimal Amount)
