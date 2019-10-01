@@ -23,7 +23,7 @@ namespace DiceBot
 
         public WolfBet(cDiceBot Parent)
         {
-            maxRoll = 100m;
+            maxRoll = 99.99m;
             AutoInvest = false;
             AutoWithdraw = true;
             ChangeSeed = true;
@@ -68,7 +68,8 @@ namespace DiceBot
             Client.DefaultRequestHeaders.Add("UserAgent", "DiceBot");
             try
             {
-                string LoginString = $"{{\"login\":\"{Username}\",\"password\":\"{Password}\"}}";
+                string mfa = twofa==""?"": $",\"code\":\"{twofa}\"";
+                string LoginString = $"{{\"login\":\"{Username}\",\"password\":\"{Password}\"{mfa}}}";
                 HttpContent cont = new StringContent(LoginString);
                 cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                 HttpResponseMessage resp2 = Client.PostAsync("login", cont).Result;
@@ -84,28 +85,37 @@ namespace DiceBot
                     Client.DefaultRequestHeaders.Add("authorization", "Bearer " + LoginResponse.access_token);
                 }
                 sEmitResponse = Client.GetStringAsync("user/profile").Result;
-                WolfBetProfile tmpProfile = json.JsonDeserialize<WolfBetProfile>(sEmitResponse);
-                if (tmpProfile.user!=null)
+                try
                 {
-                    //set balance here
-                    foreach (Balance x in tmpProfile.user.balances)
+                    WolfBetProfile tmpProfile = json.JsonDeserialize<WolfBetProfile>(sEmitResponse);
+                    if (tmpProfile.user != null)
                     {
-                        if (x.currency.ToLower()==Currency.ToLower())
+                        //set balance here
+                        foreach (Balance x in tmpProfile.user.balances)
                         {
-                            this.balance =decimal.Parse(x.amount, System.Globalization.NumberFormatInfo.InvariantInfo);
-                            Parent.updateBalance(balance);
+                            if (x.currency.ToLower() == Currency.ToLower())
+                            {
+                                this.balance = decimal.Parse(x.amount, System.Globalization.NumberFormatInfo.InvariantInfo);
+                                Parent.updateBalance(balance);
+                            }
                         }
+                        //get stats
+                        //set stats
+                        sEmitResponse = Client.GetStringAsync("user/stats/bets").Result;
+                        WolfBetStats tmpStats = json.JsonDeserialize<WolfBetStats>(sEmitResponse);
+                        UpdateStats(tmpStats);
+                        ispd = true;
+                        lastupdate = DateTime.Now;
+                        new Thread(new ThreadStart(GetBalanceThread)).Start();
+                        this.finishedlogin(true);
+                        return;
                     }
-                    //get stats
-                    //set stats
-                    sEmitResponse = Client.GetStringAsync("user/stats/bets").Result;
-                    WolfBetStats tmpStats = json.JsonDeserialize<WolfBetStats>(sEmitResponse);
-                    UpdateStats(tmpStats);
-                    ispd = true;
-                    lastupdate = DateTime.Now;
-                    new Thread(new ThreadStart(GetBalanceThread)).Start();
-                    this.finishedlogin(true);
-                    return;
+                }
+                catch (Exception e)
+                {
+                    Parent.DumpLog(e.ToString(), -1);
+                    Parent.DumpLog(sEmitResponse, -1);
+                    Parent.updateStatus("Error: " + sEmitResponse);
                 }
             }
             catch (Exception e)
@@ -149,7 +159,7 @@ namespace DiceBot
                 }
                 catch (Exception e)
                 {
-
+                    Parent.DumpLog(e.ToString(),-1);
                 }
                 Thread.Sleep(100);
             }
@@ -164,7 +174,7 @@ namespace DiceBot
                 WBStat stat = tmp.GetValue(Stats.dice) as WBStat;
                 if (stat != null)
                 {
-                    this.bets = stat.total_bets;
+                    this.bets = (int)stat.total_bets;
                     this.wins = int.Parse(stat.win);
                     this.losses = int.Parse(stat.lose);
                     this.wagered = decimal.Parse(stat.waggered, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -233,32 +243,41 @@ namespace DiceBot
 
                 }
                 string sEmitResponse = resp2.Content.ReadAsStringAsync().Result;
-                WolfBetResult result = json.JsonDeserialize<WolfBetResult>(sEmitResponse);
-                if (result.bet!=null)
+                try
                 {
-                    Bet tmpRsult = new Bet()
+                    WolfBetResult result = json.JsonDeserialize<WolfBetResult>(sEmitResponse);
+                    if (result.bet != null)
                     {
-                        Amount = decimal.Parse(result.bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo),
-                        Chance = (100m - edge) / (decimal.Parse(result.bet.multiplier, System.Globalization.NumberFormatInfo.InvariantInfo)),
-                        clientseed = result.bet.user_seed,
-                        date = DateTime.Now,
-                        Currency = Currency,
-                        Guid = tmp5.Guid,
-                        nonce = result.bet.nonce,
-                        Id = result.bet.hash,
-                        high = result.bet.rule == "over",
-                        Roll = decimal.Parse(result.bet.result_value, System.Globalization.NumberFormatInfo.InvariantInfo),
-                        Profit = decimal.Parse(result.bet.profit, System.Globalization.NumberFormatInfo.InvariantInfo),
-                        serverhash = result.bet.server_seed_hashed
-                    };
-                    bool Win = (((bool)High ? tmpRsult.Roll > (decimal)maxRoll - (decimal)(chance) : (decimal)tmpRsult.Roll < (decimal)(chance)));
-                    if (Win)
-                        wins++;
-                    else losses++;
-                    wagered += amount;
-                    profit += tmpRsult.Profit;
-                    this.balance = decimal.Parse(result.userBalance.amount, System.Globalization.NumberFormatInfo.InvariantInfo);
-                    FinishedBet(tmpRsult);
+                        Bet tmpRsult = new Bet()
+                        {
+                            Amount = decimal.Parse(result.bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo),
+                            Chance = (100m - edge) / (decimal.Parse(result.bet.multiplier, System.Globalization.NumberFormatInfo.InvariantInfo)),
+                            clientseed = result.bet.user_seed,
+                            date = DateTime.Now,
+                            Currency = Currency,
+                            Guid = tmp5.Guid,
+                            nonce = result.bet.nonce,
+                            Id = result.bet.hash,
+                            high = result.bet.rule == "over",
+                            Roll = decimal.Parse(result.bet.result_value, System.Globalization.NumberFormatInfo.InvariantInfo),
+                            Profit = decimal.Parse(result.bet.profit, System.Globalization.NumberFormatInfo.InvariantInfo),
+                            serverhash = result.bet.server_seed_hashed
+                        };
+                        bool Win = (((bool)High ? tmpRsult.Roll > (decimal)maxRoll - (decimal)(chance) : (decimal)tmpRsult.Roll < (decimal)(chance)));
+                        if (Win)
+                            wins++;
+                        else losses++;
+                        wagered += amount;
+                        profit += tmpRsult.Profit;
+                        this.balance = decimal.Parse(result.userBalance.amount, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        FinishedBet(tmpRsult);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Parent.DumpLog(e.ToString(), -1);
+                    Parent.DumpLog(sEmitResponse,-1);
+                    Parent.updateStatus("Error: "+ sEmitResponse);
                 }
             }
             catch (Exception e)
@@ -370,25 +389,19 @@ namespace DiceBot.WolfBetClasses
         public string seed { get; set; }
         public string channel { get; set; }
         public string joined { get; set; }
-        public Preferences preferences { get; set; }
+       
         public List<Balance> balances { get; set; }
-        public object tradeurl { get; set; }
-        public List<object> wallets { get; set; }
         public List<Game> games { get; set; }
     }
 
-    public class Faucet
-    {
-        public int faucetRemaining { get; set; }
-        public object delayUntil { get; set; }
-    }
+  
 
     public class History
     {
         public string amount { get; set; }
         public string currency { get; set; }
         public int step { get; set; }
-        public int published_at { get; set; }
+        public long published_at { get; set; }
     }
 
     public class Values
@@ -403,7 +416,7 @@ namespace DiceBot.WolfBetClasses
 
     public class Next
     {
-        public int step { get; set; }
+        public decimal step { get; set; }
         public Values values { get; set; }
     }
 
@@ -416,12 +429,11 @@ namespace DiceBot.WolfBetClasses
     public class WolfBetProfile
     {
         public User user { get; set; }
-        public Faucet faucet { get; set; }
        
     }
     public class WBStat
     {
-        public int total_bets { get; set; }
+        public long total_bets { get; set; }
         public string win { get; set; }
         public string lose { get; set; }
         public string waggered { get; set; }

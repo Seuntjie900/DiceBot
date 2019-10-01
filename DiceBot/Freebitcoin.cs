@@ -41,12 +41,13 @@ namespace DiceBot
             SiteURL = "https://freebitco.in/?r=2310118";
 
         }
-        string clientseed = "";
+        
         void PlaceBetThread(object _High)
         {
             try
             {
                 PlaceBetObj tmp9 = _High as PlaceBetObj;
+                string clientseed = "";
                 bool High = tmp9.High;
                 decimal amount = tmp9.Amount;
                 decimal chance = tmp9.Chance;
