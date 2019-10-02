@@ -168,24 +168,42 @@ namespace DiceBot
 
         void UpdateStats(WolfBetStats Stats)
         {
-            PropertyInfo tmp = typeof(Dice).GetProperty(Currency.ToLower());
-            if (tmp != null)
+            try
             {
-                WBStat stat = tmp.GetValue(Stats.dice) as WBStat;
-                if (stat != null)
+                PropertyInfo tmp = typeof(Dice).GetProperty(Currency.ToLower());
+                if (tmp != null)
                 {
-                    this.bets = (int)stat.total_bets;
-                    this.wins = int.Parse(stat.win);
-                    this.losses = int.Parse(stat.lose);
-                    this.wagered = decimal.Parse(stat.waggered, System.Globalization.NumberFormatInfo.InvariantInfo);
-                    this.profit = decimal.Parse(stat.profit, System.Globalization.NumberFormatInfo.InvariantInfo);
-                    Parent.updateBets(bets);
-                    Parent.updateWins(wins);
-                    Parent.updateLosses(losses);
-                    Parent.updateWagered(wagered);
-                    Parent.updateProfit(profit);
+                    WBStat stat = tmp.GetValue(Stats.dice) as WBStat;
+                    if (stat != null)
+                    {
+                        this.bets = (int)stat.total_bets;
+                        this.wins = int.Parse(stat.win);
+                        this.losses = int.Parse(stat.lose);
+                        this.wagered = decimal.Parse(stat.waggered, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        this.profit = decimal.Parse(stat.profit, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        Parent.updateBets(bets);
+                        Parent.updateWins(wins);
+                        Parent.updateLosses(losses);
+                        Parent.updateWagered(wagered);
+                        Parent.updateProfit(profit);
+                    }
                 }
+
             }
+            catch
+            {
+                this.bets = 0;
+                this.wins = 0;
+                this.losses = 0;
+                this.wagered =0;
+                this.profit = 0;
+                Parent.updateBets(bets);
+                Parent.updateWins(wins);
+                Parent.updateLosses(losses);
+                Parent.updateWagered(wagered);
+                Parent.updateProfit(profit);
+            }
+
         }
 
         public override bool ReadyToBet()
