@@ -25,7 +25,7 @@ namespace DiceBot
         HttpClientHandler ClientHandlr;
         WebSocket WSClient;// = new WebSocket("");
         Random R = new Random();        
-        new public static string[] sCurrencies = new string[] { "BTC", "BXO", "CLAM", "DOGE", "LTC" };
+        new public static string[] sCurrencies = new string[] { "BTC", "BXO", "CLAM", "DOGE", "LTC","ETH" };
         string url = "bit-exo.com";
         public BitExo(cDiceBot Parent)
         {

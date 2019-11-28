@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -20,12 +21,12 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
         public static string[] cCurrencies = new string[] { "btc", "eth", "ltc", "trx", "bch","doge" };
-
+        string URL = "https://wolf.bet";
         public WolfBet(cDiceBot Parent)
         {
             maxRoll = 99.99m;
             AutoInvest = false;
-            AutoWithdraw = true;
+            AutoWithdraw = false;
             ChangeSeed = true;
             AutoLogin = true;
             BetURL = "https://wolf.bet/";
@@ -38,6 +39,14 @@ namespace DiceBot
             TipUsingName = true;
             SiteURL = "https://wolf.bet/";
             NonceBased = true;
+            if (File.Exists("wolf.txt"))
+            {
+                URL = File.ReadAllText("wolf.txt").TrimEnd(new char[]{ ' ', '\r', '\n', '\t' });
+            }
+            else if (File.Exists("wolf"))
+            {
+                URL = File.ReadAllText("wolf.txt").TrimEnd(new char[] { ' ', '\r', '\n', '\t' });
+            }
         }
 
         public override void Disconnect()
@@ -62,10 +71,10 @@ namespace DiceBot
       | SecurityProtocolType.Tls12
       | SecurityProtocolType.Ssl3;
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, Proxy = this.Prox, UseProxy = Prox != null };
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://wolf.bet/api/v1/") };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri(URL+"api/v1/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
-            Client.DefaultRequestHeaders.Add("UserAgent", "DiceBot");
+            Client.DefaultRequestHeaders.Add("UserAgent", Parent.UserAgent);
             try
             {
                 string mfa = twofa==""?"": $",\"code\":\"{twofa}\"";
@@ -218,7 +227,19 @@ namespace DiceBot
 
         public override void ResetSeed()
         {
-            throw new NotImplementedException();
+            try
+            {
+                HttpContent cont = new StringContent("{\"game\":\"dice\"}");
+                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                string Result = Client.PostAsync("game/seed/refresh", cont).Result.Content.ReadAsStringAsync().Result;
+                cont = new StringContent("");
+                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                Result = Client.PostAsync("user/seed/refresh", cont).Result.Content.ReadAsStringAsync().Result;
+            }
+            catch
+            {
+
+            }
         }
 
         public override void SendChatMessage(string Message)
@@ -247,8 +268,8 @@ namespace DiceBot
                     amount = tmp5.Amount.ToString(System.Globalization.NumberFormatInfo.InvariantInfo),
                     currency = Currency,
                     rule = tmp5.High ? "over" : "under",
-                    multiplier = ((100m - edge) / tmp5.Chance).ToString(System.Globalization.NumberFormatInfo.InvariantInfo),
-                    bet_value = (High ? maxRoll - tmp5.Chance : tmp5.Chance).ToString(System.Globalization.NumberFormatInfo.InvariantInfo),
+                    multiplier = ((100m - edge) / tmp5.Chance).ToString("0.####",System.Globalization.NumberFormatInfo.InvariantInfo),
+                    bet_value = (High ? maxRoll - tmp5.Chance : tmp5.Chance).ToString("0.##",System.Globalization.NumberFormatInfo.InvariantInfo),
                     game = "dice"
                 };
                 string LoginString = json.JsonSerializer<WolfPlaceBet>(tmp);
@@ -287,7 +308,7 @@ namespace DiceBot
                         else losses++;
                         wagered += amount;
                         profit += tmpRsult.Profit;
-                        this.balance = decimal.Parse(result.userBalance.amount, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        this.balance = result.userBalance.amount;
                         FinishedBet(tmpRsult);
                     }
                 }
@@ -506,7 +527,7 @@ namespace DiceBot.WolfBetClasses
 
     public class UserBalance
     {
-        public string amount { get; set; }
+        public decimal amount { get; set; }
         public string currency { get; set; }
         public string withdraw_fee { get; set; }
         public string withdraw_minimum_amount { get; set; }

@@ -480,7 +480,6 @@
             this.siteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.justDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.primeDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pocketRocketsCasinoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.safediceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bitDiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -6217,7 +6216,6 @@
             this.siteToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.justDiceToolStripMenuItem,
             this.primeDiceToolStripMenuItem,
-            this.pocketRocketsCasinoToolStripMenuItem,
             this.diceToolStripMenuItem,
             this.safediceToolStripMenuItem,
             this.bitDiceToolStripMenuItem,
@@ -6257,15 +6255,6 @@
             this.primeDiceToolStripMenuItem.Text = "Prime Dice";
             this.primeDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.primeDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
-            // 
-            // pocketRocketsCasinoToolStripMenuItem
-            // 
-            this.pocketRocketsCasinoToolStripMenuItem.CheckOnClick = true;
-            this.pocketRocketsCasinoToolStripMenuItem.Name = "pocketRocketsCasinoToolStripMenuItem";
-            this.pocketRocketsCasinoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.pocketRocketsCasinoToolStripMenuItem.Text = "BetKing";
-            this.pocketRocketsCasinoToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
-            this.pocketRocketsCasinoToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
             // 
             // diceToolStripMenuItem
             // 
@@ -6886,7 +6875,6 @@
         private System.Windows.Forms.ToolStripMenuItem siteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem justDiceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem primeDiceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pocketRocketsCasinoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem diceToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;

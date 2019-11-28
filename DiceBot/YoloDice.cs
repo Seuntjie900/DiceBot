@@ -637,7 +637,7 @@ namespace DiceBot
                 apiclient.Close();
             }
         }
-
+        
         public override decimal GetLucky(string server, string client, int nonce)
         {
             return sGetLucky(server, client, nonce);

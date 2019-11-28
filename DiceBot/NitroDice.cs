@@ -25,7 +25,7 @@ namespace DiceBot
         public NitroDice(cDiceBot Parent)
         {
             
-            maxRoll = 99.99m;
+            maxRoll = 99.9999m;
             AutoInvest = false;
             AutoWithdraw = false;
             ChangeSeed = false;

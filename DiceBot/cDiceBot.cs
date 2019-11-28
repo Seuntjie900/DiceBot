@@ -25,7 +25,7 @@ using FastColoredTextBoxNS;
 
 namespace DiceBot
 {
-    
+
     public partial class cDiceBot : Form
     {
         #region saving and loading strat vars
@@ -34,8 +34,17 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        private const string vers = "3.4.5";
-        
+        public const string vers = "3.4.6";
+        public string UserAgent
+        {
+            get {
+                string windows = Environment.OSVersion.VersionString;
+                bool is64 = Environment.Is64BitOperatingSystem;
+
+                string agent = $"DiceBot/{ cDiceBot.vers} (+http://bot.seuntjie.com)";
+                    return agent;
+            }
+        }
 
         Control[] ControlsToDisable;
         
@@ -643,22 +652,7 @@ end";
 
             }
             
-            foreach (string s in BetKing.sCurrencies)
-            {
-                ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
-
-                if (frst)
-                {
-                    tmpItem.Checked = true;
-                    frst = false;
-                }
-
-                pocketRocketsCasinoToolStripMenuItem.DropDown.Items.Add(tmpItem);
-                tmpItem.Click += btcToolStripMenuItem_Click;
-
-                tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
-
-            }
+            
             foreach(string s in YoloDice.cCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
@@ -3279,7 +3273,7 @@ end";
                 sw.WriteLine("ResetSeedValue|" + nudResetSeed.Value.ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
                 sw.WriteLine("QuickSwitchFolder|" + txtQuickSwitch.Text);
                 sw.WriteLine("SettingsMode|" + (basicToolStripMenuItem.Checked?"0":advancedToolStripMenuItem.Checked?"1":"2"));
-                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1":pocketRocketsCasinoToolStripMenuItem.Checked?"2": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":/*daDiceToolStripMenuItem.Checked?"5":*/"1"));
+                sw.WriteLine("Site|" + (justDiceToolStripMenuItem.Checked?"0":primeDiceToolStripMenuItem.Checked?"1": diceToolStripMenuItem.Checked?"3":safediceToolStripMenuItem.Checked?"4":/*daDiceToolStripMenuItem.Checked?"5":*/"1"));
             }
         }
         
@@ -4325,7 +4319,7 @@ end";
             
             
             string chars = "0123456789abcdef";
-            if (! (CurrentSite is dice999))
+            if (! (CurrentSite is dice999 || CurrentSite is YoloDice))
             {
                 chars += "ghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
             }
@@ -6267,7 +6261,6 @@ end";
                     if (key == "Site")
                         return (justDiceToolStripMenuItem.Checked ? 0 : 
                             primeDiceToolStripMenuItem.Checked ? 1 : 
-                            pocketRocketsCasinoToolStripMenuItem.Checked ? 2 : 
                             diceToolStripMenuItem.Checked ? 3 : 
                             safediceToolStripMenuItem.Checked ? 4 : 
                             bitDiceToolStripMenuItem.Checked ? 7: 
@@ -6387,7 +6380,6 @@ end";
                     {
                         justDiceToolStripMenuItem.Checked = value == 0;
                         primeDiceToolStripMenuItem.Checked = value == 1;
-                        pocketRocketsCasinoToolStripMenuItem.Checked = value == 2;
                         diceToolStripMenuItem.Checked = value == 3;
                         safediceToolStripMenuItem.Checked = value == 4;
                         bitDiceToolStripMenuItem.Checked = value == 7;
@@ -6522,7 +6514,6 @@ end";
                     {
                         justDiceToolStripMenuItem.Checked = value == "0";
                         primeDiceToolStripMenuItem.Checked = value == "1";
-                        pocketRocketsCasinoToolStripMenuItem.Checked = value == "2";
                         diceToolStripMenuItem.Checked = value == "3";
                         safediceToolStripMenuItem.Checked = value == "4";
                         bitDiceToolStripMenuItem.Checked = value == "7";
