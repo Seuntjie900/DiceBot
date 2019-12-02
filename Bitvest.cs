@@ -552,19 +552,21 @@ namespace DiceBot
       
 
        
-        public override bool ReadyToBet()
+	        public override bool ReadyToBet()
         {
             decimal weight = 1;
-            switch (Currency.ToLower())
+            if (Currency.ToLower() == "bitcoins")
             {
-                case "bitcoins":weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo);break;
-                case "tokens": weight = decimal.Parse(Weights.TOK, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-                case "litecoins": weight = decimal.Parse(Weights.LTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-                case "ethers": weight = decimal.Parse(Weights.ETH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-                case "dogecoins": weight = decimal.Parse(Weights.DOGE, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-                case "bcash": weight = decimal.Parse(Weights.BCH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-
-                default: weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                switch (Currency.ToLower())
+                {
+                    case "bitcoins":weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo);break;
+                    case "tokens": weight = decimal.Parse(Weights.TOK, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "litecoins": weight = decimal.Parse(Weights.LTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "ethers": weight = decimal.Parse(Weights.ETH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "dogecoins": weight = decimal.Parse(Weights.DOGE, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "bcash": weight = decimal.Parse(Weights.BCH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    default: weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                }
             }
             
             
