@@ -13,7 +13,7 @@ namespace DiceBot
     class Stake: PD
     {
        
-        public static new string[] sCurrencies = new string[] { "Btc", "Eth", "Ltc","Doge", "Bch","Xrp" };
+        public static new string[] sCurrencies = new string[] { "Btc", "Eth", "Ltc","Doge", "Bch","Xrp", "Trx" };
 
         public Stake(cDiceBot Parent):base(Parent)/*:base(Parent)*/
         {
