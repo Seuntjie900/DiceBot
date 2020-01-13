@@ -207,7 +207,7 @@ namespace DiceBot
             this.High = High;
             new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance, BetGuid));
         }
-
+        long nonce = -1;
         public static new decimal sGetLucky(string server, string client, long nonce)
         {
             SHA512 betgenerator = SHA512.Create();
@@ -259,7 +259,13 @@ namespace DiceBot
             string hexres = "";
             for (int i =0; i<r.Length;i++)
             {
-                hexres+= r[i]=="0"?"00": r[i];
+                string tmp = r[i];
+                if (tmp.Length<2)
+                {
+
+                }
+
+                hexres += tmp.Length < 2 ? "0" + tmp : tmp;
             }
             long Lucky = long.Parse(hexres, System.Globalization.NumberStyles.HexNumber);
             decimal result = ((decimal)(Lucky % 1000000)) / 10000m;
@@ -296,9 +302,19 @@ namespace DiceBot
                 });
                 StringContent Content = new StringContent(jsoncontent, Encoding.UTF8, "application/json");
                 string Response = Client.PostAsync("api/bet", Content).Result.Content.ReadAsStringAsync().Result;
+                
                 NDGetBet BetResult = json.JsonDeserialize<NDGetBet>(Response);
+                
+                
                 if (BetResult.info == null)
                 {
+                    if (nonce == -1)
+                        nonce = BetResult.index;
+                    else if (nonce != BetResult.index - 1)
+                    {
+                        Parent.DumpLog("123 NONCE SKIPPED!!!!!! 12345!!!!", -1);
+                    }
+                    nonce = BetResult.index;
                     Bet tmp = new Bet
                     {
                         Amount = amount,
@@ -309,7 +325,7 @@ namespace DiceBot
                         serverhash = lastHash,
                         Guid = tmp5.Guid,
                         high = High,
-                        Id = BetResult.n.ToString(),
+                        Id = BetResult.no.ToString(),
                         nonce = BetResult.index,
                         Roll = BetResult.n / 10000m,
                         serverseed = BetResult.sseed,

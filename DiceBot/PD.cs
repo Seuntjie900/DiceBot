@@ -21,7 +21,7 @@ namespace DiceBot
         protected string RolName = "primediceRoll";
         protected string GameName = "CasinoGamePrimedice";
         protected string StatGameName = "primedice";
-        public static string[] sCurrencies = new string[] { "Btc", "Ltc","Eth","Doge","Bch", "XRP" };
+        public static string[] sCurrencies = new string[] { "Btc", "Ltc","Eth","Doge","Bch", "XRP","TRX" };
         GraphQL.Client.GraphQLClient GQLClient;
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
@@ -52,6 +52,7 @@ namespace DiceBot
             SiteURL = "https://primedice.com/?c=Seuntjie";
             if (File.Exists("fast") || File.Exists("fast.txt"))
                 getid = false;
+            
         }
         string userid = "";
 

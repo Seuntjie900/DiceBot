@@ -53,7 +53,7 @@ namespace DiceBot
         {
             string s = "";
             string chars = "0123456789abcdef";
-            while (s.Length<20)
+            while (s.Length<60)
             {
                 s += chars[R.Next(0, chars.Length)];
             }
@@ -381,6 +381,7 @@ namespace DiceBot
                     Parent.updateLosses(losses);
                     //Parent.updateDeposit(tmpblogin.account.address);
                     lastupdate = DateTime.Now;
+                    seed = tmpblogin.last_user_seed;
                     ispd = true;
                     pw = Password;
                     new Thread(new ThreadStart(GetBalanceThread)).Start();
@@ -550,20 +551,20 @@ namespace DiceBot
         public override bool ReadyToBet()
         {
             decimal weight = 1;
-            switch (Currency.ToLower())
+            if (Currency.ToLower() == "bitcoins")
             {
-                case "bitcoins":weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo);break;
-                case "tokens": weight = decimal.Parse(Weights.TOK, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-                case "litecoins": weight = decimal.Parse(Weights.LTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-                case "ethers": weight = decimal.Parse(Weights.ETH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-                case "dogecoins": weight = decimal.Parse(Weights.DOGE, System.Globalization.NumberFormatInfo.InvariantInfo); break;
-                case "bcash": weight = decimal.Parse(Weights.BCH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                switch (Currency.ToLower())
+                {
+                    case "bitcoins": weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "tokens": weight = decimal.Parse(Weights.TOK, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "litecoins": weight = decimal.Parse(Weights.LTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "ethers": weight = decimal.Parse(Weights.ETH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "dogecoins": weight = decimal.Parse(Weights.DOGE, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    case "bcash": weight = decimal.Parse(Weights.BCH, System.Globalization.NumberFormatInfo.InvariantInfo); break;
 
-                default: weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                    default: weight = decimal.Parse(Weights.BTC, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                }
             }
-            
-            
-
             for (int i = Limits.Length-1; i>=0;i--)
             {
                 if (i == Limits.Length-1 && (amount*weight)>=(decimal)Limits[i]*0.00000001m)
@@ -762,6 +763,7 @@ namespace DiceBot
         public bitvesttip tip { get; set; }
         public bitvestCurWeight currency_weight { get; set; }
         public double[] rate_limits { get; set; }
+        public string last_user_seed { get; set; }
     }
     public class bitvestCurWeight
     {

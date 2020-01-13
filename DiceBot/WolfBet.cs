@@ -18,7 +18,7 @@ namespace DiceBot
         string accesstoken = "";        
         public bool ispd = false;
         DateTime lastupdate = new DateTime();
-        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
+        HttpClient Client;
         HttpClientHandler ClientHandlr;
         public static string[] cCurrencies = new string[] { "btc", "eth", "ltc", "trx", "bch","doge" };
         string URL = "https://wolf.bet";
@@ -74,9 +74,41 @@ namespace DiceBot
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri(URL+"/api/v1/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
-            Client.DefaultRequestHeaders.Add("UserAgent", Parent.UserAgent);
+            Client.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36");
+            Client.DefaultRequestHeaders.Add("Origin", "https://wolf.bet");
+            Client.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
             try
             {
+
+                HttpResponseMessage resp1 = Client.GetAsync("").Result;
+                string s1 = "";
+                if (resp1.IsSuccessStatusCode)
+                {
+                    s1 = resp1.Content.ReadAsStringAsync().Result;
+                    //Parent.DumpLog("BE login 2.1", 7);
+                }
+                else
+                {
+                    //Parent.DumpLog("BE login 2.2", 7);
+                    if (resp1.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    {
+                        s1 = resp1.Content.ReadAsStringAsync().Result;
+                        //cflevel = 0;
+                        System.Threading.Tasks.Task.Factory.StartNew(() =>
+                        {
+                            System.Windows.Forms.MessageBox.Show($"{Name} has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
+                        });
+                        if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, URL.Replace("https://","")))
+                        {
+
+                            finishedlogin(false);
+                            return;
+                        }
+
+                    }
+                    //Parent.DumpLog("BE login 2.3", 7);
+                }
+                Client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
                 string mfa = twofa==""?"": $",\"code\":\"{twofa}\"";
                 string LoginString = $"{{\"login\":\"{Username}\",\"password\":\"{Password}\"{mfa}}}";
                 HttpContent cont = new StringContent(LoginString);
@@ -265,7 +297,7 @@ namespace DiceBot
                 PlaceBetObj tmp5 = obj as PlaceBetObj;
                 WolfPlaceBet tmp = new WolfPlaceBet
                 {
-                    amount = tmp5.Amount.ToString(System.Globalization.NumberFormatInfo.InvariantInfo),
+                    amount = tmp5.Amount.ToString("0.00000000",System.Globalization.NumberFormatInfo.InvariantInfo),
                     currency = Currency,
                     rule = tmp5.High ? "over" : "under",
                     multiplier = ((100m - edge) / tmp5.Chance).ToString("0.####",System.Globalization.NumberFormatInfo.InvariantInfo),
@@ -290,7 +322,7 @@ namespace DiceBot
                         Bet tmpRsult = new Bet()
                         {
                             Amount = decimal.Parse(result.bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo),
-                            Chance = (100m - edge) / (decimal.Parse(result.bet.multiplier, System.Globalization.NumberFormatInfo.InvariantInfo)),
+                            Chance = decimal.Parse(result.bet.bet_value, System.Globalization.NumberFormatInfo.InvariantInfo),
                             clientseed = result.bet.user_seed,
                             date = DateTime.Now,
                             Currency = Currency,
