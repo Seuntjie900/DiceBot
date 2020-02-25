@@ -322,7 +322,7 @@ namespace DiceBot
                         Bet tmpRsult = new Bet()
                         {
                             Amount = decimal.Parse(result.bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo),
-                            Chance = decimal.Parse(result.bet.bet_value, System.Globalization.NumberFormatInfo.InvariantInfo),
+                            Chance = result.bet.rule == "over" ? maxRoll - decimal.Parse(result.bet.bet_value, System.Globalization.NumberFormatInfo.InvariantInfo): decimal.Parse(result.bet.bet_value, System.Globalization.NumberFormatInfo.InvariantInfo),
                             clientseed = result.bet.user_seed,
                             date = DateTime.Now,
                             Currency = Currency,

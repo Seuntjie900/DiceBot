@@ -156,6 +156,12 @@ namespace DiceBot
                         Parent.updateStatus(NewBet.error);
                         return;
                     }
+                    if (CurrentSeed.id!=NewBet.bet.data.secret)
+                    {
+                        string SecretResponse = Client.GetStringAsync($"dice/secret?api_key={APIKey}").Result;
+                        BDSeed tmpSeed = json.JsonDeserialize<BDSeed>(SecretResponse);
+                        CurrentSeed = tmpSeed;
+                    }
                     Bet result = new Bet
                     {
                         Amount = NewBet.bet.amount,
@@ -166,15 +172,15 @@ namespace DiceBot
                         Currency = Currency,
                         high = NewBet.bet.data.high,
                         Id = NewBet.bet.id.ToString(),
-                        nonce = -1,
+                        nonce = NewBet.bet.data.nonce,
                         Profit = NewBet.bet.profit,
                         Roll = NewBet.bet.data.lucky,
                         serverhash = CurrentSeed.hash,
-                        serverseed = NewBet.old.secret
+                        //serverseed = NewBet.old.secret
                     };
 
 
-                    CurrentSeed = new BDSeed { hash = NewBet.secret.hash, id = NewBet.secret.id };
+                    //CurrentSeed = new BDSeed { hash = NewBet.secret.hash, id = NewBet.secret.id };
                     bool win = NewBet.bet.data.result;
                     if (win)
                         wins++;
@@ -306,6 +312,7 @@ namespace DiceBot
         public long secret { get; set; }
         public decimal target { get; set; }
         public BDUser user { get; set; }
+        public long nonce { get; set; }
     }
 
     public class BDBet
@@ -318,6 +325,7 @@ namespace DiceBot
         public long id { get; set; }
         public decimal profit { get; set; }
         public decimal wagered { get; set; }
+        
     }
 
     public class BDJackpot

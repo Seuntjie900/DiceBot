@@ -31,7 +31,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
-        bool getid = true;
+        bool getid = false;
         public PD(cDiceBot Parent)
         {
             _PasswordText = "API Key: ";
@@ -50,8 +50,8 @@ namespace DiceBot
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
             SiteURL = "https://primedice.com/?c=Seuntjie";
-            if (File.Exists("fast") || File.Exists("fast.txt"))
-                getid = false;
+            if (File.Exists("slow") || File.Exists("slow.txt"))
+                getid = true;
             
         }
         string userid = "";
@@ -74,7 +74,7 @@ namespace DiceBot
                         lastupdate = DateTime.Now;
                         GraphQLRequest LoginReq = new GraphQLRequest
                         {
-                            Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses amount profit currency}}}"
+                            Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
                         };
                         GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                         pdUser user = Resp.GetDataFieldAs<pdUser>("user");
@@ -86,7 +86,7 @@ namespace DiceBot
                                 this.wins = (int)x.wins;
                                 this.losses = (int)x.losses;
                                 this.profit = (decimal)x.profit;
-                                this.wagered = (decimal)x.amount;
+                                this.wagered = (decimal)x.betAmount;
                                 break;
                             }
                         }
@@ -200,7 +200,7 @@ namespace DiceBot
 
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses amount profit currency}}}"
+                    Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
                 };
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 pdUser user = Resp.GetDataFieldAs<pdUser>("user");
@@ -218,7 +218,7 @@ namespace DiceBot
                             this.wins = (int)x.wins;
                             this.losses = (int)x.losses;
                             this.profit = (decimal)x.profit;
-                            this.wagered = (decimal)x.amount;
+                            this.wagered = (decimal)x.betAmount;
                             break;
                         }
                     }
@@ -269,7 +269,7 @@ namespace DiceBot
                 
                 decimal tmpchance = High ? maxRoll - chance : chance;
 
-                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{"+RolName+"(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:"+Currency.ToLower()+ ") { id nonce currency amount payout state { ... on "+GameName+" { result target condition } } createdAt serverSeed{seedHash seed nonce} clientSeed{seed} user{balances{available{amount currency}} statistic{game bets wins losses amount profit currency}}}}" }).Result;
+                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{"+RolName+"(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:"+Currency.ToLower()+ ") { id nonce currency amount payout state { ... on "+GameName+ " { result target condition } } createdAt serverSeed{seedHash seed nonce} clientSeed{seed} user{balances{available{amount currency}} statistic{game bets wins losses betAmount profit currency}}}}" }).Result;
                 if (betresult.Errors!=null)
                 {
                     if (betresult.Errors.Length > 0)
@@ -293,7 +293,7 @@ namespace DiceBot
                                 this.wins = (int)x.wins;
                                 this.losses = (int)x.losses;
                                 this.profit = (decimal)x.profit;
-                                this.wagered = (decimal)x.amount;
+                                this.wagered = (decimal)x.betAmount;
                                 break;
                             }
                         }
@@ -705,7 +705,7 @@ namespace DiceBot
             public decimal bets { get; set; }
             public decimal wins { get; set; }
             public decimal losses { get; set; }
-            public double amount { get; set; }
+            public double betAmount { get; set; }
             public double profit { get; set; }
             public string currency { get; set; }
             public string __typename { get; set; }

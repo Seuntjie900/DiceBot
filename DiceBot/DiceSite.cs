@@ -336,6 +336,7 @@ namespace DiceBot
 
     public class Random
     {
+        
         RandomNumberGenerator r = RandomNumberGenerator.Create();
         const string chars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
         public virtual uint Next(uint max)

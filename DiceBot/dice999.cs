@@ -213,15 +213,16 @@ namespace DiceBot
                     }
                     catch (AggregateException e)
                     {
+                        Parent.updateStatus(e.InnerException.Message);
                         Parent.DumpLog(e.InnerException.Message, 0);
                         if (retrycount++ < 3)
                         {
-                            PlaceBetThread(High);
+                            //PlaceBetThread(High);
                             return;
                         }
                         if (e.InnerException.Message.Contains("ssl"))
                         {
-                            PlaceBetThread(High);
+                            //PlaceBetThread(High);
                             return;
                         }
                         else
