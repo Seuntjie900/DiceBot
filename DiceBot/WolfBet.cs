@@ -30,7 +30,7 @@ namespace DiceBot
             ChangeSeed = true;
             AutoLogin = true;
             BetURL = "https://wolf.bet/";
-
+            _PasswordText = "API Key";
             this.Currencies = cCurrencies;
             Currency = "btc";
             this.Parent = Parent;
@@ -80,7 +80,7 @@ namespace DiceBot
             try
             {
 
-                HttpResponseMessage resp1 = Client.GetAsync("").Result;
+                /*HttpResponseMessage resp1 = Client.GetAsync("").Result;
                 string s1 = "";
                 if (resp1.IsSuccessStatusCode)
                 {
@@ -120,12 +120,12 @@ namespace DiceBot
 
                 }
                 string sEmitResponse = resp2.Content.ReadAsStringAsync().Result;
-                WolfBetLogin LoginResponse = json.JsonDeserialize<WolfBetLogin>(sEmitResponse);
-                if (LoginResponse.access_token!=null)
+                WolfBetLogin LoginResponse = json.JsonDeserialize<WolfBetLogin>(sEmitResponse);*/
+                if (Password!=null)
                 {
-                    Client.DefaultRequestHeaders.Add("authorization", "Bearer " + LoginResponse.access_token);
+                    Client.DefaultRequestHeaders.Add("authorization", "Bearer " + Password);
                 }
-                sEmitResponse = Client.GetStringAsync("user/profile").Result;
+                string sEmitResponse = Client.GetStringAsync("user/profile").Result;
                 try
                 {
                     WolfBetProfile tmpProfile = json.JsonDeserialize<WolfBetProfile>(sEmitResponse);

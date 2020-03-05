@@ -584,10 +584,10 @@ namespace DiceBot
         public BEStats stats { get; set; }        
         
         public string last_claim_time { get; set; }
-        public int last_claim_betted_wager { get; set; }
-        public int total_claims { get; set; }
+        public double last_claim_betted_wager { get; set; }
+        public double total_claims { get; set; }
         public string token { get; set; }
-        public int level { get; set; }
+        public double level { get; set; }
         public double levelwager { get; set; }
     }
 
