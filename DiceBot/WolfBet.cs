@@ -78,61 +78,19 @@ namespace DiceBot
             Client.DefaultRequestHeaders.Add("Origin", "https://wolf.bet");
             Client.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
             try
-            {
-
-                /*HttpResponseMessage resp1 = Client.GetAsync("").Result;
-                string s1 = "";
-                if (resp1.IsSuccessStatusCode)
-                {
-                    s1 = resp1.Content.ReadAsStringAsync().Result;
-                    //Parent.DumpLog("BE login 2.1", 7);
-                }
-                else
-                {
-                    //Parent.DumpLog("BE login 2.2", 7);
-                    if (resp1.StatusCode == HttpStatusCode.ServiceUnavailable)
-                    {
-                        s1 = resp1.Content.ReadAsStringAsync().Result;
-                        //cflevel = 0;
-                        System.Threading.Tasks.Task.Factory.StartNew(() =>
-                        {
-                            System.Windows.Forms.MessageBox.Show($"{Name} has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
-                        });
-                        if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, URL.Replace("https://","")))
-                        {
-
-                            finishedlogin(false);
-                            return;
-                        }
-
-                    }
-                    //Parent.DumpLog("BE login 2.3", 7);
-                }
-                Client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
-                string mfa = twofa==""?"": $",\"code\":\"{twofa}\"";
-                string LoginString = $"{{\"login\":\"{Username}\",\"password\":\"{Password}\"{mfa}}}";
-                HttpContent cont = new StringContent(LoginString);
-                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                HttpResponseMessage resp2 = Client.PostAsync("login", cont).Result;
-
-                if (resp2.IsSuccessStatusCode)
-                {
-
-                }
-                string sEmitResponse = resp2.Content.ReadAsStringAsync().Result;
-                WolfBetLogin LoginResponse = json.JsonDeserialize<WolfBetLogin>(sEmitResponse);*/
+            {                
                 if (Password!=null)
                 {
                     Client.DefaultRequestHeaders.Add("authorization", "Bearer " + Password);
                 }
-                string sEmitResponse = Client.GetStringAsync("user/profile").Result;
+                string sEmitResponse = Client.GetStringAsync("user/balances").Result;
                 try
                 {
                     WolfBetProfile tmpProfile = json.JsonDeserialize<WolfBetProfile>(sEmitResponse);
-                    if (tmpProfile.user != null)
+                    if (tmpProfile.balances!= null)
                     {
                         //set balance here
-                        foreach (Balance x in tmpProfile.user.balances)
+                        foreach (Balance x in tmpProfile.balances)
                         {
                             if (x.currency.ToLower() == Currency.ToLower())
                             {
@@ -176,7 +134,7 @@ namespace DiceBot
                     {
                         lastupdate = DateTime.Now;
                         ForceUpdateStats = false;
-                        string  sEmitResponse = Client.GetStringAsync("user/profile").Result;
+                        string  sEmitResponse = Client.GetStringAsync("user/balances").Result;
                         WolfBetProfile tmpProfile = json.JsonDeserialize<WolfBetProfile>(sEmitResponse);
                         if (tmpProfile.user != null)
                         {
@@ -217,7 +175,7 @@ namespace DiceBot
                     WBStat stat = tmp.GetValue(Stats.dice) as WBStat;
                     if (stat != null)
                     {
-                        this.bets = (int)stat.total_bets;
+                        this.bets = int.Parse(stat.total_bets);
                         this.wins = int.Parse(stat.win);
                         this.losses = int.Parse(stat.lose);
                         this.wagered = decimal.Parse(stat.waggered, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -261,12 +219,11 @@ namespace DiceBot
         {
             try
             {
+                string Result = Client.GetAsync("game/seed/refresh").Result.Content.ReadAsStringAsync().Result;
                 HttpContent cont = new StringContent("{\"game\":\"dice\"}");
                 cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                string Result = Client.PostAsync("game/seed/refresh", cont).Result.Content.ReadAsStringAsync().Result;
-                cont = new StringContent("");
-                cont.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                Result = Client.PostAsync("user/seed/refresh", cont).Result.Content.ReadAsStringAsync().Result;
+                Result = Client.PostAsync("game/seed/refresh", cont).Result.Content.ReadAsStringAsync().Result;
+                
             }
             catch
             {
@@ -322,19 +279,19 @@ namespace DiceBot
                         Bet tmpRsult = new Bet()
                         {
                             Amount = decimal.Parse(result.bet.amount, System.Globalization.NumberFormatInfo.InvariantInfo),
-                            Chance = result.bet.rule == "over" ? maxRoll - decimal.Parse(result.bet.bet_value, System.Globalization.NumberFormatInfo.InvariantInfo): decimal.Parse(result.bet.bet_value, System.Globalization.NumberFormatInfo.InvariantInfo),
+                            Chance = tmp5.High ? maxRoll - decimal.Parse(result.bet.bet_value, System.Globalization.NumberFormatInfo.InvariantInfo): decimal.Parse(result.bet.bet_value, System.Globalization.NumberFormatInfo.InvariantInfo),
                             clientseed = result.bet.user_seed,
                             date = DateTime.Now,
                             Currency = Currency,
                             Guid = tmp5.Guid,
                             nonce = result.bet.nonce,
                             Id = result.bet.hash,
-                            high = result.bet.rule == "over",
+                            high = tmp5.High,
                             Roll = decimal.Parse(result.bet.result_value, System.Globalization.NumberFormatInfo.InvariantInfo),
                             Profit = decimal.Parse(result.bet.profit, System.Globalization.NumberFormatInfo.InvariantInfo),
                             serverhash = result.bet.server_seed_hashed
                         };
-                        bool Win = (((bool)High ? tmpRsult.Roll > (decimal)maxRoll - (decimal)(chance) : (decimal)tmpRsult.Roll < (decimal)(chance)));
+                        bool Win = (((bool)High ? tmpRsult.Roll > (decimal)maxRoll - (decimal)(tmpRsult.Chance) : (decimal)tmpRsult.Roll < (decimal)(tmpRsult.Chance)));
                         if (Win)
                             wins++;
                         else losses++;
@@ -500,11 +457,12 @@ namespace DiceBot.WolfBetClasses
     public class WolfBetProfile
     {
         public User user { get; set; }
-       
+        public List<Balance> balances { get; set; }
+
     }
     public class WBStat
     {
-        public long total_bets { get; set; }
+        public string total_bets { get; set; }
         public string win { get; set; }
         public string lose { get; set; }
         public string waggered { get; set; }
@@ -547,9 +505,6 @@ namespace DiceBot.WolfBetClasses
         public string multiplier { get; set; }
         public string bet_value { get; set; }
         public string result_value { get; set; }
-        public string rule { get; set; }
-        public string created_at { get; set; }
-        public string price_usd { get; set; }
         public string state { get; set; }
         public int published_at { get; set; }
         public string server_seed_hashed { get; set; }
