@@ -21,7 +21,7 @@ namespace DiceBot
         long uid = 0;
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        public static string[] sCurrencies = new string[] { "BTC","ETH","LTC","BCH","XRP","DOGE","DASH", "BSV", "ZEC","ETC","NEO","KMD","BTG","LSK","DGB","QTUM","STRAT","WAVES","BURST","BTSLR","BSV","XLM" };
+        public static string[] sCurrencies = new string[] { "BTC","ETH","LTC","BCH","XRP","DOGE","DASH", "BSV", "ZEC","ETC","NEO","KMD","BTG","LSK","DGB","QTUM","STRAT","WAVES","BURST","BTSLR","BSV","XLM","USDT" };
         HttpClientHandler ClientHandlr;
         
         public Bitsler(cDiceBot Parent)
@@ -188,6 +188,10 @@ namespace DiceBot
                                                 balance = bsstatsbase.xlm_balance;
                                                 profit = bsstatsbase.xlm_profit;
                                                 wagered = bsstatsbase.xlm_wagered; break;
+                                            case "usdt":
+                                                balance = bsstatsbase.xlm_balance;
+                                                profit = bsstatsbase.xlm_profit;
+                                                wagered = bsstatsbase.xlm_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                         wins = int.Parse(bsstatsbase.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -317,6 +321,10 @@ namespace DiceBot
                                         profit = bsstatsbase.bsv_profit;
                                         wagered = bsstatsbase.bsv_wagered; break;
                                     case "xlm":
+                                        balance = bsstatsbase.xlm_balance;
+                                        profit = bsstatsbase.xlm_profit;
+                                        wagered = bsstatsbase.xlm_wagered; break;
+                                    case "usdt":
                                         balance = bsstatsbase.xlm_balance;
                                         profit = bsstatsbase.xlm_profit;
                                         wagered = bsstatsbase.xlm_wagered; break;
@@ -495,8 +503,7 @@ currency:btc*/
         }
 
         public override void Login(string Username, string Password, string twofa)
-        {
-            string error = "";
+        {            
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, Proxy = this.Prox, UseProxy = Prox != null };
             Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://www.bitsler.com/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
@@ -515,30 +522,7 @@ currency:btc*/
                 HttpResponseMessage resp = Client.GetAsync("https://www.bitsler.com").Result;
                 string s1 = "";
 
-                if (resp.IsSuccessStatusCode)
-                {
-                    s1 = resp.Content.ReadAsStringAsync().Result;
-                }
-                else
-                {
-                    if (resp.StatusCode == HttpStatusCode.ServiceUnavailable || resp.StatusCode== HttpStatusCode.Forbidden)
-                    {
-                        s1 = resp.Content.ReadAsStringAsync().Result;
-                        //cflevel = 0;
-                        System.Threading.Tasks.Task.Factory.StartNew(() =>
-                        {
-                            System.Windows.Forms.MessageBox.Show(Name+ " has their cloudflare protection on HIGH\n\nThis will cause a slight delay in logging in. Please allow up to a minute.");
-                        });
-                        if (!Cloudflare.doCFThing(s1, Client, ClientHandlr, 0, "www.bitsler.com"))
-                        {
-                            return;
-                        }
-                    }
-                    else
-                    {
-
-                    }
-                }
+                
                 List<KeyValuePair<string, string>> pairs = new List<KeyValuePair<string, string>>();
                 pairs.Add(new KeyValuePair<string, string>("username", Username));
                 pairs.Add(new KeyValuePair<string, string>("password", Password));
@@ -658,6 +642,10 @@ currency:btc*/
                                                 profit = bsstatsbase.bsv_profit;
                                                 wagered = bsstatsbase.bsv_wagered; break;
                                             case "xlm":
+                                                balance = bsstatsbase.xlm_balance;
+                                                profit = bsstatsbase.xlm_profit;
+                                                wagered = bsstatsbase.xlm_wagered; break;
+                                            case "usdt":
                                                 balance = bsstatsbase.xlm_balance;
                                                 profit = bsstatsbase.xlm_profit;
                                                 wagered = bsstatsbase.xlm_wagered; break;
@@ -987,6 +975,9 @@ currency:btc*/
         public decimal xlm_balance { get; set; }
         public decimal xlm_wagered { get; set; }
         public decimal xlm_profit { get; set; }
+        public decimal usdt_balance { get; set; }
+        public decimal usdt_wagered { get; set; }
+        public decimal usdt_profit { get; set; }
 
         public string wins { get; set; }
         public string losses { get; set; }

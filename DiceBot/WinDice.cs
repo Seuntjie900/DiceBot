@@ -14,8 +14,8 @@ namespace DiceBot
 {
     class WinDice: DiceSite
     {
-
-        
+        string[] SiteA = new string[] { "https://windice.io", "https://windice1.io" };
+        int site = 0;
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
         public bool ispd = false;
@@ -24,7 +24,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "btc","eth","ltc","doge" };
+        public static string[] cCurrencies = new string[] { "btc","eth","ltc","doge","bch","xrp" };
         Random R = new Random();
         public WinDice(cDiceBot Parent)
         {
@@ -62,12 +62,13 @@ namespace DiceBot
 
         public override void Login(string Username, string Password, string twofa)
         {
+            string sitea = SiteA[site];
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
       | SecurityProtocolType.Tls11
       | SecurityProtocolType.Tls12
       | SecurityProtocolType.Ssl3;
             ClientHandlr = new HttpClientHandler { UseCookies = true, AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip, Proxy = this.Prox, UseProxy = Prox != null };
-            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri("https://windice.io/api/v1/api/") };
+            Client = new HttpClient(ClientHandlr) { BaseAddress = new Uri(sitea+"/api/v1/api/") };
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             Client.DefaultRequestHeaders.Add("UserAgent", "DiceBot");
@@ -89,8 +90,13 @@ namespace DiceBot
             }
             catch (Exception e)
             {
-                Parent.DumpLog(e.ToString(), -1);
-                this.finishedlogin(false);
+                if (++site < SiteA.Length)
+                    Login(username, Password, twofa);
+                else
+                {
+                    Parent.DumpLog(e.ToString(), -1);
+                    this.finishedlogin(false);
+                }
             }
         }
         WDGetSeed currentseed;
@@ -356,6 +362,8 @@ namespace WDClasses
         public decimal eth { get; set; }
         public decimal ltc { get; set; }
         public decimal doge { get; set; }
+        public decimal bch { get; set; }
+        public decimal xrp { get; set; }
     }
     public class WDPlaceBet
     {

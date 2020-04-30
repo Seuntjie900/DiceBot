@@ -20,7 +20,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "btc", "eth", "ltc", "trx", "bch","doge" };
+        public static string[] cCurrencies = new string[] { "btc", "eth", "ltc", "trx", "bch","doge","xrp" };
         string URL = "https://wolf.bet";
         public WolfBet(cDiceBot Parent)
         {
@@ -37,7 +37,7 @@ namespace DiceBot
             Name = "WolfBet";
             Tip = false;
             TipUsingName = true;
-            SiteURL = "https://wolf.bet/";
+            SiteURL = "https://wolf.bet?c=Seuntjie";
             NonceBased = true;
             if (File.Exists("wolf.txt"))
             {
@@ -291,6 +291,7 @@ namespace DiceBot
                             Profit = decimal.Parse(result.bet.profit, System.Globalization.NumberFormatInfo.InvariantInfo),
                             serverhash = result.bet.server_seed_hashed
                         };
+                        bets++;
                         bool Win = (((bool)High ? tmpRsult.Roll > (decimal)maxRoll - (decimal)(tmpRsult.Chance) : (decimal)tmpRsult.Roll < (decimal)(tmpRsult.Chance)));
                         if (Win)
                             wins++;
