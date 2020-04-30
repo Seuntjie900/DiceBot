@@ -14,7 +14,7 @@ namespace DiceBot
 {
     class WinDice: DiceSite
     {
-        string[] SiteA = new string[] { "https://windice.io", "https://windice1.io" };
+        string[] SiteA = new string[] { "https://windice.io", "https://windice1.io", "https://windice.link" };
         int site = 0;
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
