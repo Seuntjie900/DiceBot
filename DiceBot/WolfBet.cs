@@ -136,10 +136,10 @@ namespace DiceBot
                         ForceUpdateStats = false;
                         string  sEmitResponse = Client.GetStringAsync("user/balances").Result;
                         WolfBetProfile tmpProfile = json.JsonDeserialize<WolfBetProfile>(sEmitResponse);
-                        if (tmpProfile.user != null)
+                        if (tmpProfile.balances != null)
                         {
                             //set balance here
-                            foreach (Balance x in tmpProfile.user.balances)
+                            foreach (Balance x in tmpProfile.balances)
                             {
                                 if (x.currency.ToLower() == Currency.ToLower())
                                 {
@@ -300,6 +300,10 @@ namespace DiceBot
                         profit += tmpRsult.Profit;
                         this.balance = result.userBalance.amount;
                         FinishedBet(tmpRsult);
+                    }
+                    else
+                    {
+                        Parent.DumpLog(sEmitResponse, -1);
                     }
                 }
                 catch (Exception e)
