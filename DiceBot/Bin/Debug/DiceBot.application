@@ -7,14 +7,14 @@
     <framework targetVersion="4.5.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="DiceBot.exe.manifest" size="14700">
+    <dependentAssembly dependencyType="install" codebase="DiceBot.exe.manifest" size="15389">
       <assemblyIdentity name="DiceBot.exe" version="1.0.0.3" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>/FOt1D4wCJGnlZdTjKdn3ccx1OLm+a3FJ/LyGWvaSGc=</dsig:DigestValue>
+        <dsig:DigestValue>nNKLh6gev4gXvZm5d3umY/JfWH9NoTFZq8dmlHv8xX4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -4,7 +4,7 @@
   <description asmv2:iconFile="logo.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="DiceBot" version="3.3.23.0" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="DiceBot" version="3.4.9.0" language="neutral" processorArchitecture="msil" />
     <commandLine file="DiceBot.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -43,14 +43,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="1134080">
-      <assemblyIdentity name="DiceBot" version="3.3.23.0" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiceBot.exe" size="1055232">
+      <assemblyIdentity name="DiceBot" version="3.4.9.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>4PcJ0J7v8gN31e5uVRfhOmedZ5vC/AZcb8n6C9D+ads=</dsig:DigestValue>
+        <dsig:DigestValue>Jf0/qO+MoFLlWF/eSiotp5SffD9VgKwZn8RN8WTjkMI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FastColoredTextBox.dll" size="330752">
+      <assemblyIdentity name="FastColoredTextBox" version="2.16.24.0" publicKeyToken="FB8AA12B994EF61B" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>rJJsksz8N4mlrlccxEFesYl9UAp5YE2ElSQcGazfAbk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
