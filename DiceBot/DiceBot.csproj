@@ -197,214 +197,216 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="About.cs">
+    <Compile Include="Common\Bet.cs" />
+    <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="About.Designer.cs">
+    <Compile Include="Forms\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="BetHistory.cs">
+    <Compile Include="Forms\BetHistory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BetHistory.Designer.cs">
+    <Compile Include="Forms\BetHistory.Designer.cs">
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
-    <Compile Include="BetKing.cs" />
-    <Compile Include="BitdiceConfirm.cs">
+    <Compile Include="Sites\BetKing.cs" />
+    <Compile Include="Forms\BitdiceConfirm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BitdiceConfirm.Designer.cs">
+    <Compile Include="Forms\BitdiceConfirm.Designer.cs">
       <DependentUpon>BitdiceConfirm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BitExo.cs" />
-    <Compile Include="Bitvest.cs" />
-    <Compile Include="DuckDice.cs" />
-    <Compile Include="EtherCrash.cs" />
-    <Compile Include="Freebitcoin.cs" />
-    <Compile Include="Kingdice.cs" />
-    <Compile Include="LoginFailedForm.cs">
+    <Compile Include="Sites\BitExo.cs" />
+    <Compile Include="Sites\BitExoReqType.cs" />
+    <Compile Include="Sites\Bitvest.cs" />
+    <Compile Include="Sites\DuckDice.cs" />
+    <Compile Include="Sites\EtherCrash.cs" />
+    <Compile Include="Sites\FreeBitcoin.cs" />
+    <Compile Include="Sites\KingDice.cs" />
+    <Compile Include="Forms\LoginFailedForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoginFailedForm.Designer.cs">
+    <Compile Include="Forms\LoginFailedForm.Designer.cs">
       <DependentUpon>LoginFailedForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NitroDice.cs" />
-    <Compile Include="NitrogenSports.cs" />
-    <Compile Include="SatoshiDice.cs" />
-    <Compile Include="SeedInput.cs">
+    <Compile Include="Sites\NitroDice.cs" />
+    <Compile Include="Sites\NitrogenSports.cs" />
+    <Compile Include="Sites\SatoshiDice.cs" />
+    <Compile Include="Forms\SeedInput.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SeedInput.Designer.cs">
+    <Compile Include="Forms\SeedInput.Designer.cs">
       <DependentUpon>SeedInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stake.cs" />
-    <Compile Include="StatsForm.cs">
+    <Compile Include="Sites\Stake.cs" />
+    <Compile Include="Forms\StatsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StatsForm.Designer.cs">
+    <Compile Include="Forms\StatsForm.Designer.cs">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="bitdice.cs" />
-    <Compile Include="Bitlser.cs" />
-    <Compile Include="cDiceBot.cs">
+    <Compile Include="Sites\BitDice.cs" />
+    <Compile Include="Sites\Bitlser.cs" />
+    <Compile Include="Forms\cDiceBot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="cDiceBot.Designer.cs">
+    <Compile Include="Forms\cDiceBot.Designer.cs">
       <DependentUpon>cDiceBot.cs</DependentUpon>
     </Compile>
-    <Compile Include="cBet.cs" />
-    <Compile Include="Cloudflare.cs" />
-    <Compile Include="cryptogames.cs" />
-    <Compile Include="Custom Chart.cs">
+    <Compile Include="Common\cBet.cs" />
+    <Compile Include="Common\Cloudflare.cs" />
+    <Compile Include="Sites\CryptoGames.cs" />
+    <Compile Include="Forms\Custom Chart.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Custom Chart.Designer.cs">
+    <Compile Include="Forms\Custom Chart.Designer.cs">
       <DependentUpon>Custom Chart.cs</DependentUpon>
     </Compile>
-    <Compile Include="Donate.cs">
+    <Compile Include="Forms\Donate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Donate.Designer.cs">
+    <Compile Include="Forms\Donate.Designer.cs">
       <DependentUpon>Donate.cs</DependentUpon>
     </Compile>
-    <Compile Include="DonateBox.cs">
+    <Compile Include="Forms\DonateBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DonateBox.Designer.cs">
+    <Compile Include="Forms\DonateBox.Designer.cs">
       <DependentUpon>DonateBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="fChat.cs">
+    <Compile Include="Forms\fChat.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="fChat.Designer.cs">
+    <Compile Include="Forms\fChat.Designer.cs">
       <DependentUpon>fChat.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfirmPassword.cs">
+    <Compile Include="Forms\ConfirmPassword.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConfirmPassword.Designer.cs">
+    <Compile Include="Forms\ConfirmPassword.Designer.cs">
       <DependentUpon>ConfirmPassword.cs</DependentUpon>
     </Compile>
-    <Compile Include="dice999.cs" />
-    <Compile Include="DiceSite.cs" />
-    <Compile Include="Email.cs" />
-    <Compile Include="FortuneJack.cs" />
-    <Compile Include="Graph.cs">
+    <Compile Include="Sites\Dice999.cs" />
+    <Compile Include="Sites\DiceSite.cs" />
+    <Compile Include="Common\Email.cs" />
+    <Compile Include="Sites\FortuneJack.cs" />
+    <Compile Include="Forms\Graph.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Graph.Designer.cs">
+    <Compile Include="Forms\Graph.Designer.cs">
       <DependentUpon>Graph.cs</DependentUpon>
     </Compile>
-    <Compile Include="imgur.cs" />
-    <Compile Include="JD.cs" />
-    <Compile Include="json.cs" />
-    <Compile Include="Mersenne.cs" />
-    <Compile Include="Messagehelpr.cs" />
-    <Compile Include="MiniBrowser.cs">
+    <Compile Include="Common\Imgur.cs" />
+    <Compile Include="Sites\JD.cs" />
+    <Compile Include="Common\JsonUtils.cs" />
+    <Compile Include="Common\Mersenne.cs" />
+    <Compile Include="Common\Messagehelpr.cs" />
+    <Compile Include="Forms\MiniBrowser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MiniBrowser.Designer.cs">
+    <Compile Include="Forms\MiniBrowser.Designer.cs">
       <DependentUpon>MiniBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="PD.cs" />
+    <Compile Include="Sites\PD.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Proxy.cs">
+    <Compile Include="Forms\Proxy.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Proxy.Designer.cs">
+    <Compile Include="Forms\Proxy.Designer.cs">
       <DependentUpon>Proxy.cs</DependentUpon>
     </Compile>
-    <Compile Include="SafeDice.cs" />
-    <Compile Include="SavedItem.cs" />
-    <Compile Include="Settings.cs">
+    <Compile Include="Sites\SafeDice.cs" />
+    <Compile Include="Common\SavedItem.cs" />
+    <Compile Include="Forms\Settings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Settings.Designer.cs">
+    <Compile Include="Forms\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="SimpleSwap.cs">
+    <Compile Include="Forms\SimpleSwap.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SimpleSwap.Designer.cs">
+    <Compile Include="Forms\SimpleSwap.Designer.cs">
       <DependentUpon>SimpleSwap.cs</DependentUpon>
     </Compile>
-    <Compile Include="Simulate.cs">
+    <Compile Include="Forms\Simulate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Simulate.Designer.cs">
+    <Compile Include="Forms\Simulate.Designer.cs">
       <DependentUpon>Simulate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Simulation.cs" />
-    <Compile Include="sqlite_helper.cs" />
-    <Compile Include="Startup.cs">
+    <Compile Include="Common\Simulation.cs" />
+    <Compile Include="Common\SQLiteHelper.cs" />
+    <Compile Include="Forms\Startup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Startup.Designer.cs">
+    <Compile Include="Forms\Startup.Designer.cs">
       <DependentUpon>Startup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stats.cs">
+    <Compile Include="Controls\Stats.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stats.Designer.cs">
+    <Compile Include="Controls\Stats.Designer.cs">
       <DependentUpon>Stats.cs</DependentUpon>
     </Compile>
-    <Compile Include="StreakTable.cs">
+    <Compile Include="Forms\StreakTable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StreakTable.Designer.cs">
+    <Compile Include="Forms\StreakTable.Designer.cs">
       <DependentUpon>StreakTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="textValues_en.cs" />
-    <Compile Include="UserInput.cs">
+    <Compile Include="Common\TextValues.cs" />
+    <Compile Include="Forms\UserInput.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInput.Designer.cs">
+    <Compile Include="Forms\UserInput.Designer.cs">
       <DependentUpon>UserInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Verify.cs">
+    <Compile Include="Forms\Verify.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Verify.Designer.cs">
+    <Compile Include="Forms\Verify.Designer.cs">
       <DependentUpon>Verify.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinDice.cs" />
-    <Compile Include="WolfBet.cs" />
-    <Compile Include="YoloDice.cs" />
-    <EmbeddedResource Include="About.resx">
+    <Compile Include="Sites\WinDice.cs" />
+    <Compile Include="Sites\WolfBet.cs" />
+    <Compile Include="Sites\YoloDice.cs" />
+    <EmbeddedResource Include="Forms\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BetHistory.resx">
+    <EmbeddedResource Include="Forms\BetHistory.resx">
       <DependentUpon>BetHistory.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BitdiceConfirm.resx">
+    <EmbeddedResource Include="Forms\BitdiceConfirm.resx">
       <DependentUpon>BitdiceConfirm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="cDiceBot.resx">
+    <EmbeddedResource Include="Forms\cDiceBot.resx">
       <DependentUpon>cDiceBot.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Custom Chart.resx">
+    <EmbeddedResource Include="Forms\Custom Chart.resx">
       <DependentUpon>Custom Chart.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Donate.resx">
+    <EmbeddedResource Include="Forms\Donate.resx">
       <DependentUpon>Donate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DonateBox.resx">
+    <EmbeddedResource Include="Forms\DonateBox.resx">
       <DependentUpon>DonateBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="fChat.resx">
+    <EmbeddedResource Include="Forms\fChat.resx">
       <DependentUpon>fChat.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfirmPassword.resx">
+    <EmbeddedResource Include="Forms\ConfirmPassword.resx">
       <DependentUpon>ConfirmPassword.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Graph.resx">
+    <EmbeddedResource Include="Forms\Graph.resx">
       <DependentUpon>Graph.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoginFailedForm.resx">
+    <EmbeddedResource Include="Forms\LoginFailedForm.resx">
       <DependentUpon>LoginFailedForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MiniBrowser.resx">
+    <EmbeddedResource Include="Forms\MiniBrowser.resx">
       <DependentUpon>MiniBrowser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -417,42 +419,40 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Proxy.resx">
+    <EmbeddedResource Include="Forms\Proxy.resx">
       <DependentUpon>Proxy.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SeedInput.resx">
+    <EmbeddedResource Include="Forms\SeedInput.resx">
       <DependentUpon>SeedInput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Settings.resx">
+    <EmbeddedResource Include="Forms\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SimpleSwap.resx">
+    <EmbeddedResource Include="Forms\SimpleSwap.resx">
       <DependentUpon>SimpleSwap.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Simulate.resx">
+    <EmbeddedResource Include="Forms\Simulate.resx">
       <DependentUpon>Simulate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Startup.resx">
+    <EmbeddedResource Include="Forms\Startup.resx">
       <DependentUpon>Startup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stats.resx">
+    <EmbeddedResource Include="Controls\Stats.resx">
       <DependentUpon>Stats.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StatsForm.resx">
+    <EmbeddedResource Include="Forms\StatsForm.resx">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StreakTable.resx">
+    <EmbeddedResource Include="Forms\StreakTable.resx">
       <DependentUpon>StreakTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInput.resx">
+    <EmbeddedResource Include="Forms\UserInput.resx">
       <DependentUpon>UserInput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Verify.resx">
+    <EmbeddedResource Include="Forms\Verify.resx">
       <DependentUpon>Verify.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="DiceBot_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\Bet.datasource" />
