@@ -24,7 +24,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "btc","eth","ltc","doge","bch","xrp" };
+        public static string[] cCurrencies = new string[] { "btc","eth","ltc","doge","bch","xrp","win" };
         Random R = new Random();
         public WinDice(cDiceBot Parent)
         {
@@ -364,6 +364,7 @@ namespace WDClasses
         public decimal doge { get; set; }
         public decimal bch { get; set; }
         public decimal xrp { get; set; }
+        public decimal win { get; set; }
     }
     public class WDPlaceBet
     {
