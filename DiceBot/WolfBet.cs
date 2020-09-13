@@ -252,13 +252,14 @@ namespace DiceBot
             try
             {
                 PlaceBetObj tmp5 = obj as PlaceBetObj;
+                decimal tmpchance = Math.Round(tmp5.Chance, 2);
                 WolfPlaceBet tmp = new WolfPlaceBet
                 {
                     amount = tmp5.Amount.ToString("0.00000000",System.Globalization.NumberFormatInfo.InvariantInfo),
                     currency = Currency,
                     rule = tmp5.High ? "over" : "under",
-                    multiplier = ((100m - edge) / tmp5.Chance).ToString("0.####",System.Globalization.NumberFormatInfo.InvariantInfo),
-                    bet_value = (High ? maxRoll - tmp5.Chance : tmp5.Chance).ToString("0.##",System.Globalization.NumberFormatInfo.InvariantInfo),
+                    multiplier = ((100m - edge) / tmpchance).ToString("0.####",System.Globalization.NumberFormatInfo.InvariantInfo),
+                    bet_value = (High ? maxRoll - tmpchance : tmpchance).ToString("0.##",System.Globalization.NumberFormatInfo.InvariantInfo),
                     game = "dice"
                 };
                 string LoginString = json.JsonSerializer<WolfPlaceBet>(tmp);

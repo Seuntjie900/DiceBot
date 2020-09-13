@@ -137,7 +137,7 @@ namespace DiceBot
                 var curBet = BetObject as PlaceBetObj;
                 string ClientSeed = R.Next(0, int.MaxValue).ToString();
                 string Highlow = curBet.High ? "high" : "low";
-                string request = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo ,"dice?api_key={0}&currency={1}&amount={2}&chance={3}&type={4}&client={5}",
+                string request = string.Format( System.Globalization.NumberFormatInfo.InvariantInfo ,"dice?api_key={0}&currency={1}&amount={2}&chance={3}&type={4}",
                     APIKey,
                     Currency,
                     curBet.Amount,

@@ -958,7 +958,7 @@ end";
         void luaWithdraw(decimal amount, string address)
         {
             WriteConsole("Withdrawing " +amount + " to " + address);
-            Withdraw(Amount, address);
+            Withdraw(amount, address);
 
             /*if (CurrentSite.AutoWithdraw)
                 CurrentSite.Withdraw(amount, address);*/
@@ -1785,10 +1785,12 @@ end";
                         if (Lastbet <0)
                         {
                             WriteConsole("Please set starting bet using nextbet = x.xxxxxxxx");
+                            return;
                         }
                         if (Chance==0)
                         {
                             WriteConsole("Please set starting chance using chance = yy.yyyy");
+                            return;
                         }
                     }                    
                     if (nudMutawaMultiplier.Value != 0)
@@ -5194,6 +5196,10 @@ end";
                     case "WolfBet": currentsite = new WolfBet(this); break;
 
                 }
+                if (CurrentSite is DuckDice dd)
+                {
+                    dd.Mode = cmbDuckMode.SelectedIndex + 1;
+                }
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
                 CurrentSite.Currency = curcur;
@@ -5795,6 +5801,16 @@ end";
                 lblXtraControl.Text = CurrentSite.XtraText;
                 lblXtraControl.Visible = CurrentSite.ShowXtra;
                 txtExtraBox.Visible = CurrentSite.ShowXtra;
+                if (CurrentSite is DuckDice dd)
+                {
+                    cmbDuckMode.SelectedIndex = 0;
+                    dd.Mode = cmbDuckMode.SelectedIndex + 1;                        
+                    lblDuckMode.Visible = cmbDuckMode.Visible = true;
+                }
+                else
+                {
+                    lblDuckMode.Visible = cmbDuckMode.Visible = false;
+                }
                 /*if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
                 {
                     lblPass.Text = "API key:";
@@ -7014,6 +7030,14 @@ end";
         private void btnResume_Click(object sender, EventArgs e)
         {
             Start(true);
+        }
+
+        private void cmbDuckMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (CurrentSite is DuckDice dd)
+            {
+                dd.Mode = cmbDuckMode.SelectedIndex + 1;
+            }
         }
 
         private void seedsToolStripMenuItem_Click(object sender, EventArgs e)

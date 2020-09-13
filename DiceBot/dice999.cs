@@ -304,7 +304,7 @@ namespace DiceBot
                 if (err != "")
                     Parent.updateStatus(err);
                 else
-                    Parent.updateStatus("Something went wrong! stopped betting");
+                    Parent.updateStatus("Something went wrong! ");
             }
         }
 

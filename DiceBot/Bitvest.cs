@@ -535,9 +535,29 @@ namespace DiceBot
        
         public override void ResetSeed()
         {
-            string request = $"token={accesstoken}&secret=0&act=new_server_seed";
+            //string request = $"token={accesstoken}&secret=0&act=new_server_seed";
             //{"success":true,"server_seed":"b10982af50874add19b6dc54c8e76ccb2e1f5b86b6047730ddfb4cdee2fd8fbf","server_hash":"d6de3617918df1d6c5d34f36833a02733e595c6a58a7088fa7a7e9aebc2fbe1e"}
             seed = RandomSeed();
+            List<KeyValuePair<string,string>> pairs = new List<KeyValuePair<string, string>>();
+            
+            pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
+            pairs.Add(new KeyValuePair<string, string>("secret", "0"));
+            pairs.Add(new KeyValuePair<string, string>("act", "new_server_seed"));
+
+            FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
+            string sEmitResponse = Client.PostAsync("action.php", Content).Result.Content.ReadAsStringAsync().Result;
+
+            pairs = new List<KeyValuePair<string, string>>();
+
+            pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
+            pairs.Add(new KeyValuePair<string, string>("secret", "0"));
+            pairs.Add(new KeyValuePair<string, string>("act", "change_seed"));
+            pairs.Add(new KeyValuePair<string, string>("new_seed", seed));
+
+            Content = new FormUrlEncodedContent(pairs);
+            sEmitResponse = Client.PostAsync("action.php", Content).Result.Content.ReadAsStringAsync().Result;
+
+
         }
 
         public override void SetClientSeed(string Seed)

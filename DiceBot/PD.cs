@@ -21,7 +21,7 @@ namespace DiceBot
         protected string RolName = "primediceRoll";
         protected string GameName = "CasinoGamePrimedice";
         protected string StatGameName = "primedice";
-        public static string[] sCurrencies = new string[] { "Btc", "Ltc","Eth","Doge","Bch", "XRP","TRX" };
+        public static string[] sCurrencies = new string[] { "Btc", "Ltc","Eth","Doge","Bch", "XRP","TRX","EOS" };
         GraphQL.Client.GraphQLClient GQLClient;
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();

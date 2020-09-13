@@ -518,6 +518,8 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.cmbDuckMode = new System.Windows.Forms.ComboBox();
+            this.lblDuckMode = new System.Windows.Forms.Label();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -4908,6 +4910,8 @@
             // 
             // gbLogin
             // 
+            this.gbLogin.Controls.Add(this.lblDuckMode);
+            this.gbLogin.Controls.Add(this.cmbDuckMode);
             this.gbLogin.Controls.Add(this.txtExtraBox);
             this.gbLogin.Controls.Add(this.lblXtraControl);
             this.gbLogin.Controls.Add(this.lblMFAText);
@@ -6044,7 +6048,7 @@
             this.chartToolStripMenuItem.CheckOnClick = true;
             this.chartToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chartToolStripMenuItem.Name = "chartToolStripMenuItem";
-            this.chartToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.chartToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.chartToolStripMenuItem.Text = "Live Chart";
             this.chartToolStripMenuItem.CheckedChanged += new System.EventHandler(this.chartToolStripMenuItem_CheckedChanged);
             // 
@@ -6054,7 +6058,7 @@
             this.loginPanelToolStripMenuItem.CheckOnClick = true;
             this.loginPanelToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.loginPanelToolStripMenuItem.Name = "loginPanelToolStripMenuItem";
-            this.loginPanelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loginPanelToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.loginPanelToolStripMenuItem.Text = "Login Panel";
             this.loginPanelToolStripMenuItem.CheckedChanged += new System.EventHandler(this.loginPanelToolStripMenuItem_CheckedChanged);
             // 
@@ -6064,7 +6068,7 @@
             this.manualBettingToolStripMenuItem.CheckOnClick = true;
             this.manualBettingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.manualBettingToolStripMenuItem.Name = "manualBettingToolStripMenuItem";
-            this.manualBettingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.manualBettingToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.manualBettingToolStripMenuItem.Text = "Manual Betting";
             this.manualBettingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.manualBettingToolStripMenuItem_CheckedChanged);
             this.manualBettingToolStripMenuItem.Click += new System.EventHandler(this.manualBettingToolStripMenuItem_Click);
@@ -6075,7 +6079,7 @@
             this.embeddedToolStripMenuItem,
             this.popupToolStripMenuItem});
             this.statsToolStripMenuItem.Name = "statsToolStripMenuItem";
-            this.statsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.statsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.statsToolStripMenuItem.Text = "Stats";
             // 
             // embeddedToolStripMenuItem
@@ -6097,7 +6101,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
             // 
             // chartsToolStripMenuItem
             // 
@@ -6108,41 +6112,41 @@
             this.allTimeStaticToolStripMenuItem,
             this.customToolStripMenuItem});
             this.chartsToolStripMenuItem.Name = "chartsToolStripMenuItem";
-            this.chartsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.chartsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.chartsToolStripMenuItem.Text = "Charts";
             // 
             // sessionLiveToolStripMenuItem
             // 
             this.sessionLiveToolStripMenuItem.Name = "sessionLiveToolStripMenuItem";
-            this.sessionLiveToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.sessionLiveToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.sessionLiveToolStripMenuItem.Text = "Session Live";
             this.sessionLiveToolStripMenuItem.Click += new System.EventHandler(this.btnGraphProfitBets_Click);
             // 
             // sessionStaticToolStripMenuItem
             // 
             this.sessionStaticToolStripMenuItem.Name = "sessionStaticToolStripMenuItem";
-            this.sessionStaticToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.sessionStaticToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.sessionStaticToolStripMenuItem.Text = "Session Static";
             this.sessionStaticToolStripMenuItem.Click += new System.EventHandler(this.btnGraphProfitTime_Click);
             // 
             // allTimeLiveToolStripMenuItem
             // 
             this.allTimeLiveToolStripMenuItem.Name = "allTimeLiveToolStripMenuItem";
-            this.allTimeLiveToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.allTimeLiveToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.allTimeLiveToolStripMenuItem.Text = "All Time Live";
             this.allTimeLiveToolStripMenuItem.Click += new System.EventHandler(this.btnChartAllTimeProfitBets_Click);
             // 
             // allTimeStaticToolStripMenuItem
             // 
             this.allTimeStaticToolStripMenuItem.Name = "allTimeStaticToolStripMenuItem";
-            this.allTimeStaticToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.allTimeStaticToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.allTimeStaticToolStripMenuItem.Text = "All Time Static";
             this.allTimeStaticToolStripMenuItem.Click += new System.EventHandler(this.btnChartAllTimeProfitTime_Click);
             // 
             // customToolStripMenuItem
             // 
             this.customToolStripMenuItem.Name = "customToolStripMenuItem";
-            this.customToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.customToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.customToolStripMenuItem.Text = "Custom";
             this.customToolStripMenuItem.Click += new System.EventHandler(this.btnChartBetID_Click);
             // 
@@ -6150,7 +6154,7 @@
             // 
             this.chatToolStripMenuItem.Enabled = false;
             this.chatToolStripMenuItem.Name = "chatToolStripMenuItem";
-            this.chatToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.chatToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.chatToolStripMenuItem.Text = "Chat";
             this.chatToolStripMenuItem.Visible = false;
             this.chatToolStripMenuItem.Click += new System.EventHandler(this.button4_Click_1);
@@ -6158,56 +6162,56 @@
             // simulationToolStripMenuItem
             // 
             this.simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
-            this.simulationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.simulationToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.simulationToolStripMenuItem.Text = "Simulate";
             this.simulationToolStripMenuItem.Click += new System.EventHandler(this.simulationToolStripMenuItem_Click);
             // 
             // betHistoryToolStripMenuItem
             // 
             this.betHistoryToolStripMenuItem.Name = "betHistoryToolStripMenuItem";
-            this.betHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.betHistoryToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.betHistoryToolStripMenuItem.Text = "Bet History";
             this.betHistoryToolStripMenuItem.Click += new System.EventHandler(this.btnBetHistory_Click);
             // 
             // badStreakTableToolStripMenuItem
             // 
             this.badStreakTableToolStripMenuItem.Name = "badStreakTableToolStripMenuItem";
-            this.badStreakTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.badStreakTableToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.badStreakTableToolStripMenuItem.Text = "Bad Streak Table";
             this.badStreakTableToolStripMenuItem.Click += new System.EventHandler(this.btnStreakTable_Click);
             // 
             // luckyNumberVerifierToolStripMenuItem
             // 
             this.luckyNumberVerifierToolStripMenuItem.Name = "luckyNumberVerifierToolStripMenuItem";
-            this.luckyNumberVerifierToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.luckyNumberVerifierToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.luckyNumberVerifierToolStripMenuItem.Text = "Roll Verifier";
             this.luckyNumberVerifierToolStripMenuItem.Click += new System.EventHandler(this.luckyNumberVerifierToolStripMenuItem_Click);
             // 
             // seedsToolStripMenuItem
             // 
             this.seedsToolStripMenuItem.Name = "seedsToolStripMenuItem";
-            this.seedsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.seedsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.seedsToolStripMenuItem.Text = "Enter Seed/Hash";
             this.seedsToolStripMenuItem.Click += new System.EventHandler(this.seedsToolStripMenuItem_Click);
             // 
             // proxySettingsToolStripMenuItem
             // 
             this.proxySettingsToolStripMenuItem.Name = "proxySettingsToolStripMenuItem";
-            this.proxySettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.proxySettingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.proxySettingsToolStripMenuItem.Text = "Proxy settings";
             this.proxySettingsToolStripMenuItem.Click += new System.EventHandler(this.proxySettingsToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
             // bitdiceActivatorToolStripMenuItem
             // 
             this.bitdiceActivatorToolStripMenuItem.Name = "bitdiceActivatorToolStripMenuItem";
-            this.bitdiceActivatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitdiceActivatorToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.bitdiceActivatorToolStripMenuItem.Text = "Device Verifier";
             this.bitdiceActivatorToolStripMenuItem.Click += new System.EventHandler(this.bitdiceActivatorToolStripMenuItem_Click);
             // 
@@ -6242,7 +6246,7 @@
             // justDiceToolStripMenuItem
             // 
             this.justDiceToolStripMenuItem.Name = "justDiceToolStripMenuItem";
-            this.justDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.justDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.justDiceToolStripMenuItem.Text = "Just-Dice";
             this.justDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.justDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6251,7 +6255,7 @@
             // 
             this.primeDiceToolStripMenuItem.CheckOnClick = true;
             this.primeDiceToolStripMenuItem.Name = "primeDiceToolStripMenuItem";
-            this.primeDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.primeDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.primeDiceToolStripMenuItem.Text = "Prime Dice";
             this.primeDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.primeDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6260,7 +6264,7 @@
             // 
             this.diceToolStripMenuItem.CheckOnClick = true;
             this.diceToolStripMenuItem.Name = "diceToolStripMenuItem";
-            this.diceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.diceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.diceToolStripMenuItem.Text = "999Dice";
             this.diceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.diceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6268,7 +6272,7 @@
             // safediceToolStripMenuItem
             // 
             this.safediceToolStripMenuItem.Name = "safediceToolStripMenuItem";
-            this.safediceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.safediceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.safediceToolStripMenuItem.Text = "SafeDice";
             this.safediceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.safediceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6276,7 +6280,7 @@
             // bitDiceToolStripMenuItem
             // 
             this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
-            this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.bitDiceToolStripMenuItem.Text = "BitDice";
             this.bitDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6285,7 +6289,7 @@
             // 
             this.fortuneJackToolStripMenuItem.Enabled = false;
             this.fortuneJackToolStripMenuItem.Name = "fortuneJackToolStripMenuItem";
-            this.fortuneJackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fortuneJackToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.fortuneJackToolStripMenuItem.Text = "FortuneJack";
             this.fortuneJackToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.fortuneJackToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6293,7 +6297,7 @@
             // cryptoGamesToolStripMenuItem
             // 
             this.cryptoGamesToolStripMenuItem.Name = "cryptoGamesToolStripMenuItem";
-            this.cryptoGamesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cryptoGamesToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.cryptoGamesToolStripMenuItem.Text = "Crypto-Games";
             this.cryptoGamesToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.cryptoGamesToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6301,7 +6305,7 @@
             // bitslerToolStripMenuItem
             // 
             this.bitslerToolStripMenuItem.Name = "bitslerToolStripMenuItem";
-            this.bitslerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitslerToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.bitslerToolStripMenuItem.Text = "Bitsler";
             this.bitslerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitslerToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6309,7 +6313,7 @@
             // satoshiDiceToolStripMenuItem
             // 
             this.satoshiDiceToolStripMenuItem.Name = "satoshiDiceToolStripMenuItem";
-            this.satoshiDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.satoshiDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.satoshiDiceToolStripMenuItem.Text = "Mega Dice";
             this.satoshiDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.satoshiDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6317,7 +6321,7 @@
             // bitvestToolStripMenuItem
             // 
             this.bitvestToolStripMenuItem.Name = "bitvestToolStripMenuItem";
-            this.bitvestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitvestToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.bitvestToolStripMenuItem.Text = "Bitvest";
             this.bitvestToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitvestToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6325,7 +6329,7 @@
             // kingDiceToolStripMenuItem
             // 
             this.kingDiceToolStripMenuItem.Name = "kingDiceToolStripMenuItem";
-            this.kingDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.kingDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.kingDiceToolStripMenuItem.Text = "KingDice";
             this.kingDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.kingDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6333,7 +6337,7 @@
             // nitorgenSportsToolStripMenuItem
             // 
             this.nitorgenSportsToolStripMenuItem.Name = "nitorgenSportsToolStripMenuItem";
-            this.nitorgenSportsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nitorgenSportsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.nitorgenSportsToolStripMenuItem.Text = "Nitorgen Sports";
             this.nitorgenSportsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.nitorgenSportsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6341,7 +6345,7 @@
             // yoloDiceToolStripMenuItem
             // 
             this.yoloDiceToolStripMenuItem.Name = "yoloDiceToolStripMenuItem";
-            this.yoloDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.yoloDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.yoloDiceToolStripMenuItem.Text = "YoloDice";
             this.yoloDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.yoloDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6349,7 +6353,7 @@
             // bitExoToolStripMenuItem
             // 
             this.bitExoToolStripMenuItem.Name = "bitExoToolStripMenuItem";
-            this.bitExoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitExoToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.bitExoToolStripMenuItem.Text = "Bit-Exo";
             this.bitExoToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitExoToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6357,7 +6361,7 @@
             // duckDiceToolStripMenuItem
             // 
             this.duckDiceToolStripMenuItem.Name = "duckDiceToolStripMenuItem";
-            this.duckDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.duckDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.duckDiceToolStripMenuItem.Text = "DuckDice";
             this.duckDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.duckDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6365,7 +6369,7 @@
             // freebitcoinToolStripMenuItem
             // 
             this.freebitcoinToolStripMenuItem.Name = "freebitcoinToolStripMenuItem";
-            this.freebitcoinToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.freebitcoinToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.freebitcoinToolStripMenuItem.Text = "Freebitco.in";
             this.freebitcoinToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.freebitcoinToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6373,7 +6377,7 @@
             // stakeToolStripMenuItem
             // 
             this.stakeToolStripMenuItem.Name = "stakeToolStripMenuItem";
-            this.stakeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stakeToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.stakeToolStripMenuItem.Text = "Stake";
             this.stakeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.stakeToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6381,7 +6385,7 @@
             // nitrodiceToolStripMenuItem
             // 
             this.nitrodiceToolStripMenuItem.Name = "nitrodiceToolStripMenuItem";
-            this.nitrodiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nitrodiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.nitrodiceToolStripMenuItem.Text = "Nitrodice";
             this.nitrodiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.nitrodiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6389,7 +6393,7 @@
             // etherCrashToolStripMenuItem
             // 
             this.etherCrashToolStripMenuItem.Name = "etherCrashToolStripMenuItem";
-            this.etherCrashToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.etherCrashToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.etherCrashToolStripMenuItem.Text = "EtherCrash";
             this.etherCrashToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.etherCrashToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6397,7 +6401,7 @@
             // winDiceToolStripMenuItem
             // 
             this.winDiceToolStripMenuItem.Name = "winDiceToolStripMenuItem";
-            this.winDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.winDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.winDiceToolStripMenuItem.Text = "WinDice";
             this.winDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.winDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6405,7 +6409,7 @@
             // wolfBetToolStripMenuItem
             // 
             this.wolfBetToolStripMenuItem.Name = "wolfBetToolStripMenuItem";
-            this.wolfBetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.wolfBetToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.wolfBetToolStripMenuItem.Text = "Wolf.Bet";
             this.wolfBetToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.wolfBetToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6547,6 +6551,29 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
+            // 
+            // cmbDuckMode
+            // 
+            this.cmbDuckMode.FormattingEnabled = true;
+            this.cmbDuckMode.Items.AddRange(new object[] {
+            "Main",
+            "Faucet"});
+            this.cmbDuckMode.Location = new System.Drawing.Point(77, 184);
+            this.cmbDuckMode.Name = "cmbDuckMode";
+            this.cmbDuckMode.Size = new System.Drawing.Size(174, 21);
+            this.cmbDuckMode.TabIndex = 12;
+            this.cmbDuckMode.Visible = false;
+            this.cmbDuckMode.SelectedIndexChanged += new System.EventHandler(this.cmbDuckMode_SelectedIndexChanged);
+            // 
+            // lblDuckMode
+            // 
+            this.lblDuckMode.AutoSize = true;
+            this.lblDuckMode.Location = new System.Drawing.Point(31, 187);
+            this.lblDuckMode.Name = "lblDuckMode";
+            this.lblDuckMode.Size = new System.Drawing.Size(40, 13);
+            this.lblDuckMode.TabIndex = 13;
+            this.lblDuckMode.Text = "Mode: ";
+            this.lblDuckMode.Visible = false;
             // 
             // cDiceBot
             // 
@@ -7245,6 +7272,8 @@
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Button btnResume;
         private System.Windows.Forms.ToolStripMenuItem wolfBetToolStripMenuItem;
+        private System.Windows.Forms.Label lblDuckMode;
+        private System.Windows.Forms.ComboBox cmbDuckMode;
     }
 }
 

@@ -21,7 +21,11 @@ namespace DiceBot
         long uid = 0;
         DateTime lastupdate = new DateTime();
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        public static string[] sCurrencies = new string[] { "BTC","ETH","LTC","BCH","XRP","DOGE","DASH", "BSV", "ZEC","ETC","NEO","KMD","BTG","LSK","DGB","QTUM","STRAT","WAVES","BURST","BTSLR","BSV","XLM","USDT" };
+        public static string[] sCurrencies = new string[] {
+            "BTC","ETH","LTC","BCH","XRP","DOGE","DASH",
+            "BSV", "ZEC","ETC","NEO","KMD","BTG","LSK",
+            "DGB","QTUM","STRAT","WAVES","BTSLR","EOS",
+            "XLM","USDT","TRX" };
         HttpClientHandler ClientHandlr;
         
         public Bitsler(cDiceBot Parent)
