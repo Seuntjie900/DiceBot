@@ -23,7 +23,7 @@ namespace DiceBot
         public static string[] cCurrencies = new string[] { "BTC","ETH", "LTC", "DOGE","DASH","BCH","XMR","XRP","ETC","BTG","XLM","ZEC","USDT","DTP" };
         string[] mirrors = new string[] {"https://duckdice.io/", "https://duckdice.me", "https://duckdice.net" };
         private int mod;
-
+        string apiversion = "1.1.1.";
         public int Mode
         {
             get { return mod; }
@@ -55,11 +55,12 @@ namespace DiceBot
 
         protected override void CurrencyChanged()
         {
-            try
+            ForceUpdateStats = true;
+            /*try
             {
                 if (ispd)
                 {
-                    string sEmitResponse = Client.GetStringAsync("load/" + Currency + "?api_key=" + accesstoken).Result;
+                    string sEmitResponse = Client.GetStringAsync("load/" + Currency + "?api_key=" + accesstoken + "&api_version=" + apiversion).Result;
                     Quackbalance balance = json.JsonDeserialize<Quackbalance>(sEmitResponse);
                     this.balance = decimal.Parse(this.Mode==1? balance.user.balances.main: balance.user.balances.faucet, System.Globalization.NumberFormatInfo.InvariantInfo);
                     Parent.updateBalance(this.balance);
@@ -77,7 +78,7 @@ namespace DiceBot
                     Parent.updateWins(wins);
                 }
             }
-            catch { }
+            catch { }*/
         }
 
         void GetBalanceThread()
@@ -89,8 +90,9 @@ namespace DiceBot
                 {
                     try
                     {
+                        ForceUpdateStats = false;
                         lastupdate = DateTime.Now;
-                        string sEmitResponse = Client.GetStringAsync("load/" + Currency + "?api_key=" + accesstoken).Result;
+                        string sEmitResponse = Client.GetStringAsync("load/" + Currency + "?api_key=" + accesstoken+ "&api_version=" + apiversion).Result;
                         Quackbalance balance = json.JsonDeserialize<Quackbalance>(sEmitResponse);
                         this.balance = decimal.Parse(this.Mode == 1 ? balance.user.balances.main : balance.user.balances.faucet, System.Globalization.NumberFormatInfo.InvariantInfo);
                         Parent.updateBalance(this.balance);
@@ -127,7 +129,7 @@ namespace DiceBot
             StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":\"{0:0.00000000}\",\"symbol\":\"{1}\",\"chance\":{2:0.00},\"isHigh\":{3},\"faucet\":{4}}}", amount, Currency, chance, High ? "true" : "false",this.Mode==2?"true":"false"), Encoding.UTF8, "application/json");
             try
             {
-                string sEmitResponse = Client.PostAsync("play" + "?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                string sEmitResponse = Client.PostAsync("play" + "?api_key=" + accesstoken + "&api_version=" + apiversion, Content).Result.Content.ReadAsStringAsync().Result;
                 QuackBet newbet = json.JsonDeserialize<QuackBet>(sEmitResponse);
                 if (newbet.error!=null)
                 {
@@ -183,7 +185,7 @@ namespace DiceBot
                     Clientseed += alf[R.Next(0, alf.Length)];
                 }
                 StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"clientSeed\":\"{0}\"}}", Clientseed), Encoding.UTF8, "application/json");
-                string sEmitResponse = Client.PostAsync("randomize/" + "?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                string sEmitResponse = Client.PostAsync("randomize/" + "?api_key=" + accesstoken + "&api_version=" + apiversion, Content).Result.Content.ReadAsStringAsync().Result;
                 currentseed = json.JsonDeserialize<QuackSeed>(sEmitResponse).current;
             }
             catch (Exception e)
@@ -209,7 +211,7 @@ namespace DiceBot
             {
                 string cont = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"username\":\"{1}\",\"symbol\":\"{0}\",\"amount\":{2:0.00000000}}}", Currency, User, amount);
                 StringContent Content = new StringContent(cont, Encoding.UTF8, "application/json");
-                string sEmitResponse = Client.PostAsync("tip-username" + "?api_key=" + accesstoken, Content).Result.Content.ReadAsStringAsync().Result;
+                string sEmitResponse = Client.PostAsync("tip-username" + "?api_key=" + accesstoken + "&api_version=" + apiversion, Content).Result.Content.ReadAsStringAsync().Result;
                 //Parent.DumpLog(sEmitResponse, -1);
                 QuackWithdraw tmp = json.JsonDeserialize<QuackWithdraw>(sEmitResponse);
                 if (tmp.error == null)
@@ -238,6 +240,7 @@ namespace DiceBot
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             Client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             Client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
+
             //Client.DefaultRequestHeaders.Add("origin", "https://duckdice.io");
             try
             {
@@ -250,7 +253,7 @@ namespace DiceBot
                 string sEmitResponse="";
                 try
                 {
-                    using (var response = Client.GetAsync("load/" + Currency + "?api_key=" + accesstoken).Result)
+                    using (var response = Client.GetAsync("load/" + Currency + "?api_key=" + accesstoken+ "&api_version="+apiversion).Result)
                     {
                         if (response.IsSuccessStatusCode)
                         {  
@@ -268,6 +271,7 @@ namespace DiceBot
                         }
                     };
                 }
+
                 catch (AggregateException e)
                 {
                     Parent.DumpLog(e.ToString(), -1);
@@ -280,9 +284,9 @@ namespace DiceBot
                 }
 
                 Quackbalance balance = json.JsonDeserialize<Quackbalance>(sEmitResponse);
-                sEmitResponse = Client.GetStringAsync("stat/" + Currency + "?api_key=" + accesstoken).Result;
+                sEmitResponse = Client.GetStringAsync("stat/" + Currency + "?api_key=" + accesstoken + "&api_version=" + apiversion).Result;
                 QuackStatsDetails Stats = json.JsonDeserialize<QuackStatsDetails>(sEmitResponse);
-                sEmitResponse = Client.GetStringAsync("randomize" + "?api_key=" + accesstoken).Result;
+                sEmitResponse = Client.GetStringAsync("randomize" + "?api_key=" + accesstoken + "&api_version=" + apiversion).Result;
                 currentseed = json.JsonDeserialize<QuackSeed>(sEmitResponse).current;
                 if (balance!=null && Stats!=null)
                 {

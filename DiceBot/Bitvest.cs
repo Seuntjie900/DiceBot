@@ -120,17 +120,31 @@ namespace DiceBot
                                 switch (Currency.ToLower())
                                 {
                                     case "bitcoins":
-                                        balance = tmpbase.data.balance; break;
+                                        balance = tmpbase.data.balance;
+                                        wagered = tmpbase.data.total_bet;
+                                        profit = tmpbase.data.total_profit;
+
+                                        break;
                                     case "ethers":
-                                        balance = tmpbase.data.ether_balance; break;
+                                        balance = tmpbase.data.ether_balance;
+                                        wagered = tmpbase.data.total_bet;
+                                        profit = tmpbase.data.total_profit; break;
                                     case "litecoins":
-                                        balance = tmpbase.data.litecoin_balance; break;
+                                        balance = tmpbase.data.litecoin_balance;
+                                        wagered = tmpbase.data.litecoin_total_bet;
+                                        profit = tmpbase.data.litecoin_total_profit; break;
                                     case "dogecoins":
-                                        balance = tmpbase.data.balance_dogecoin;break;
+                                        balance = tmpbase.data.balance_dogecoin;
+                                        wagered = tmpbase.data.dogecoin_total_bet;
+                                        profit = tmpbase.data.dogecoin_total_profit; break;
                                     case "bcash":
-                                        balance = tmpbase.data.balance_bcash; break;
+                                        balance = tmpbase.data.balance_bcash;
+                                        wagered = tmpbase.data.bcash_total_bet;
+                                        profit = tmpbase.data.bcash_total_profit; break;
                                     default:
-                                        balance = tmpbase.data.token_balance; break;
+                                        balance = tmpbase.data.token_balance;
+                                        wagered = tmpbase.data.token_total_bet;
+                                        profit = tmpbase.data.token_total_profit; break;
                                 }
                                 /*if (Currency.ToLower() == "bitcoins")
                                 {
@@ -156,6 +170,8 @@ namespace DiceBot
                         balance = decimal.Parse(tmplogin.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
                     }*/
                                 Parent.updateBalance(balance);
+                                Parent.updateWagered(wagered);
+                                Parent.updateProfit(profit);
                             }
                         }
 
@@ -345,31 +361,45 @@ namespace DiceBot
                     if (Currency.ToLower() == "bitcoins")
                     {
                         balance = decimal.Parse(tmplogin.balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        profit = (-decimal.Parse(tmplogin.self_total_bet_dice, System.Globalization.NumberFormatInfo.InvariantInfo) + decimal.Parse(tmplogin.self_total_won_dice, System.Globalization.NumberFormatInfo.InvariantInfo));
+                        wagered = decimal.Parse(tmplogin.self_total_bet_dice, System.Globalization.NumberFormatInfo.InvariantInfo);
+
+
                     }
                     else if (Currency.ToLower() == "ethers")
                     {
                         balance = decimal.Parse(tmplogin.balance_ether, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        profit = (-decimal.Parse(tmplogin.self_total_bet_dice_ether, System.Globalization.NumberFormatInfo.InvariantInfo) + decimal.Parse(tmplogin.self_total_won_dice_ether, System.Globalization.NumberFormatInfo.InvariantInfo));
+                        wagered = decimal.Parse(tmplogin.self_total_bet_dice_ether, System.Globalization.NumberFormatInfo.InvariantInfo);
                     }
                     else if (Currency.ToLower() == "litecoins")
                     {
                         balance = decimal.Parse(tmplogin.balance_litecoin, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        profit = (-decimal.Parse(tmplogin.self_total_bet_dice_litecoin, System.Globalization.NumberFormatInfo.InvariantInfo) + decimal.Parse(tmplogin.self_total_won_dice_litecoin, System.Globalization.NumberFormatInfo.InvariantInfo));
+                        wagered = decimal.Parse(tmplogin.self_total_bet_dice_litecoin, System.Globalization.NumberFormatInfo.InvariantInfo);
                     }
                     else if (Currency.ToLower() == "dogecoins")
                     {
                         balance = decimal.Parse(tmplogin.balance_dogecoin, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        profit = (-decimal.Parse(tmplogin.self_total_bet_dice_dogecoin, System.Globalization.NumberFormatInfo.InvariantInfo) + decimal.Parse(tmplogin.self_total_won_dice_dogecoin, System.Globalization.NumberFormatInfo.InvariantInfo));
+                        wagered = decimal.Parse(tmplogin.self_total_bet_dice_dogecoin, System.Globalization.NumberFormatInfo.InvariantInfo);
                     }
                     else if (Currency.ToLower()=="bcash")
                     {
                         balance = decimal.Parse(tmplogin.balance_bcash, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        profit = (-decimal.Parse(tmplogin.self_total_bet_dice_bcash, System.Globalization.NumberFormatInfo.InvariantInfo) + decimal.Parse(tmplogin.self_total_won_dice_bcash, System.Globalization.NumberFormatInfo.InvariantInfo));
+                        wagered = decimal.Parse(tmplogin.self_total_bet_dice_bcash, System.Globalization.NumberFormatInfo.InvariantInfo);
                     }
                     else
                     {
                         balance = decimal.Parse(tmplogin.token_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        profit = 0;
+                        wagered = 0;
                     }
                     accesstoken = tmplogin.session_token;
                     secret = tmpblogin.account.secret;
-                    wagered = decimal.Parse(tmplogin.self_total_bet_dice, System.Globalization.NumberFormatInfo.InvariantInfo);
-                    profit = decimal.Parse(tmplogin.self_total_won_dice, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    //wagered = decimal.Parse(tmplogin.self_total_bet_dice, System.Globalization.NumberFormatInfo.InvariantInfo);
+                    //profit = decimal.Parse(tmplogin.self_total_won_dice, System.Globalization.NumberFormatInfo.InvariantInfo);
                     bets = int.Parse(tmplogin.self_total_bets_dice.Replace(",",""), System.Globalization.NumberFormatInfo.InvariantInfo);
                     wins = 0;
                     losses = 0;
@@ -385,6 +415,7 @@ namespace DiceBot
                     ispd = true;
                     pw = Password;
                     new Thread(new ThreadStart(GetBalanceThread)).Start();
+                    ForceUpdateStats = true;
                     lasthash = tmpblogin.server_hash;
                     this.Tip = tmpblogin.tip.enabled;
                     finishedlogin(true);
@@ -615,7 +646,19 @@ namespace DiceBot
                 pairs.Add(new KeyValuePair<string, string>("secret", secret));
                 pairs.Add(new KeyValuePair<string, string>("tfa", ""));
                 pairs.Add(new KeyValuePair<string, string>("token", accesstoken));
+                pairs.Add(new KeyValuePair<string, string>("btc_fee", "0.00012000"));
+                string curreny = "";
+                switch (Currency.ToLower())
+                {
+                    case "bitcoins": curreny = "btc";break;
+                    case "tokens":     curreny = "tok";break;
+                    case "litecoins":  curreny = "ltc";break;
+                    case "ethers":     curreny = "eth";break;
+                    case "dogecoins":  curreny = "doge";break;
+                    case "bcash": curreny = "bch"; break;
 
+                }
+                pairs.Add(new KeyValuePair<string, string>("currency", curreny));
                 FormUrlEncodedContent Content = new FormUrlEncodedContent(pairs);
                 string sEmitResponse = Client.PostAsync("action.php", Content).Result.Content.ReadAsStringAsync().Result;
 
@@ -861,7 +904,21 @@ namespace DiceBot
         public int bets { get; set; }
         public string server_hash { get; set; }
 
+        public string self_total_bet_dice_ether { get; set; }
+        public string self_total_won_dice_ether{ get; set; }
+        public string self_total_bets_dice_ether { get; set; }
 
+        public string self_total_bet_dice_litecoin { get; set; }
+        public string self_total_won_dice_litecoin { get; set; }
+        public string self_total_bets_dice_litecoin { get; set; }
+
+        public string self_total_bet_dice_bcash { get; set; }
+        public string self_total_won_dice_bcash { get; set; }
+        public string self_total_bets_dice_bcash { get; set; }
+
+        public string self_total_bet_dice_dogecoin { get; set; }
+        public string self_total_won_dice_dogecoin { get; set; }
+        public string self_total_bets_dice_dogecoin { get; set; }
 
 
     }

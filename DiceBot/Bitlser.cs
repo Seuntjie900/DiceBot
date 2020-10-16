@@ -193,9 +193,17 @@ namespace DiceBot
                                                 profit = bsstatsbase.xlm_profit;
                                                 wagered = bsstatsbase.xlm_wagered; break;
                                             case "usdt":
-                                                balance = bsstatsbase.xlm_balance;
-                                                profit = bsstatsbase.xlm_profit;
-                                                wagered = bsstatsbase.xlm_wagered; break;
+                                                balance = bsstatsbase.usdt_balance;
+                                                profit = bsstatsbase.usdt_profit;
+                                                wagered = bsstatsbase.usdt_wagered; break;
+                                            case "trx":
+                                                balance = bsstatsbase.trx_balance;
+                                                profit = bsstatsbase.trx_profit;
+                                                wagered = bsstatsbase.trx_wagered; break;
+                                            case "eos":
+                                                balance = bsstatsbase.eos_balance;
+                                                profit = bsstatsbase.eos_profit;
+                                                wagered = bsstatsbase.eos_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                         wins = int.Parse(bsstatsbase.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -329,9 +337,17 @@ namespace DiceBot
                                         profit = bsstatsbase.xlm_profit;
                                         wagered = bsstatsbase.xlm_wagered; break;
                                     case "usdt":
-                                        balance = bsstatsbase.xlm_balance;
-                                        profit = bsstatsbase.xlm_profit;
-                                        wagered = bsstatsbase.xlm_wagered; break;
+                                        balance = bsstatsbase.usdt_balance;
+                                        profit = bsstatsbase.usdt_profit;
+                                        wagered = bsstatsbase.usdt_wagered; break;
+                                    case "trx":
+                                        balance = bsstatsbase.trx_balance;
+                                        profit = bsstatsbase.trx_profit;
+                                        wagered = bsstatsbase.trx_wagered; break;
+                                    case "eos":
+                                        balance = bsstatsbase.eos_balance;
+                                        profit = bsstatsbase.eos_profit;
+                                        wagered = bsstatsbase.eos_wagered; break;
                                 }
                                 bets = int.Parse(bsstatsbase.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                 wins = int.Parse(bsstatsbase.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -650,9 +666,17 @@ currency:btc*/
                                                 profit = bsstatsbase.xlm_profit;
                                                 wagered = bsstatsbase.xlm_wagered; break;
                                             case "usdt":
-                                                balance = bsstatsbase.xlm_balance;
-                                                profit = bsstatsbase.xlm_profit;
-                                                wagered = bsstatsbase.xlm_wagered; break;
+                                                balance = bsstatsbase.usdt_balance;
+                                                profit = bsstatsbase.usdt_profit;
+                                                wagered = bsstatsbase.usdt_wagered; break;
+                                            case "trx":
+                                                balance = bsstatsbase.trx_balance;
+                                                profit = bsstatsbase.trx_profit;
+                                                wagered = bsstatsbase.trx_wagered; break;
+                                            case "eos":
+                                                balance = bsstatsbase.eos_balance;
+                                                profit = bsstatsbase.eos_profit;
+                                                wagered = bsstatsbase.eos_wagered; break;
                                         }
                                         bets = int.Parse(bsstatsbase.bets==null?"0": bsstatsbase.bets, System.Globalization.NumberFormatInfo.InvariantInfo);
                                         wins = int.Parse(bsstatsbase.wins == null ? "0" : bsstatsbase.wins, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -985,6 +1009,12 @@ currency:btc*/
 
         public string wins { get; set; }
         public string losses { get; set; }
+        public decimal trx_balance { get; internal set; }
+        public decimal trx_profit { get; internal set; }
+        public decimal trx_wagered { get; internal set; }
+        public decimal eos_balance { get; internal set; }
+        public decimal eos_profit { get; internal set; }
+        public decimal eos_wagered { get; internal set; }
     }
     public class bsStatsBase
     {

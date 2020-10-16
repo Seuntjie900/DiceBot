@@ -38,6 +38,7 @@ namespace DiceBot
             
             GameName = "CasinoGameDice";
             StatGameName = "dice";
+            EnumName = "CasinoGameDiceConditionEnum";
         }
         public override decimal GetLucky(string server, string client, int nonce)
         {

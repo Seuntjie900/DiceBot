@@ -34,7 +34,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        public const string vers = "3.4.11";
+        public const string vers = "3.4.12";
         public string UserAgent
         {
             get {
@@ -263,7 +263,7 @@ namespace DiceBot
             //FileInfo tmp = new FileInfo("");
             
         }
-        long chartbets = 1;
+        long chartbets = 0;
         List<System.Windows.Forms.DataVisualization.Charting.DataPoint> chartpoints = new List<System.Windows.Forms.DataVisualization.Charting.DataPoint>();
         delegate void dAddChartPoint(object win);
         int LiveBets = 1000;
@@ -289,11 +289,23 @@ namespace DiceBot
                         {
                             var axisX = chrtEmbeddedLiveChart.ChartAreas[0].AxisX;
                             var axisY = chrtEmbeddedLiveChart.ChartAreas[0].AxisY;
-                            axisX.Maximum = chartbets < LiveBets ? chartbets : LiveBets;
+                            axisX.Maximum = chartbets < LiveBets ? chartbets +1: LiveBets;
                             axisX.Minimum = 1;// chartbets > 100 ? chartbets - 100 : 0;
                                               //--chrtEmbeddedLiveChart.Series[0].Points.Add()
-
-                            System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint(chartbets - 1, (double)Chartprofit);
+                            if (chartbets==1)
+                            {
+                                System.Windows.Forms.DataVisualization.Charting.DataPoint tmp2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 0);
+                                tmp2.Color = Color.Green ;
+                                tmp2.BorderColor = Color.Green ;
+                                tmp2.MarkerColor = Color.Green ;
+                                   
+                                tmp2.MarkerSize = 3 ;
+                                tmp2.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+                                tmp2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+                                tmp2.BorderWidth = 1;
+                                chrtEmbeddedLiveChart.Series[0].Points.Add(tmp2);
+                            }
+                            System.Windows.Forms.DataVisualization.Charting.DataPoint tmp = new System.Windows.Forms.DataVisualization.Charting.DataPoint(chartbets , (double)Chartprofit);
                             tmp.Color = win ? Color.Green : Color.Red;
                             tmp.BorderColor = win ? Color.Green : Color.Red;
                             tmp.MarkerColor = win ? Color.Green : Color.Red;
@@ -1704,15 +1716,51 @@ end";
             {
                 if (CurrentSite.ChangeSeed)
                 {
-
-                    CurrentSite.ResetSeed();
-
+                    if (RunningSimulation)
+                    {
+                        NewSimSeed();
+                    }
+                    else
+                    {
+                        CurrentSite.ResetSeed();
+                    }
                 }
             }
             catch (Exception e  )
             {
                 DumpLog(e.ToString(), -1);
                 updateStatus("Error resetting seed");
+            }
+        }
+        string sserver = "";
+        private void NewSimSeed()
+        {
+            string chars = "0123456789abcdef";
+            if (!(CurrentSite is dice999 || CurrentSite is YoloDice))
+            {
+                chars += "ghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
+            }
+            server = "";
+
+            for (int i = 0; i < 64; i++)
+            {
+                server += (chars[rand.Next(0, chars.Length)]);
+            }
+            client = "";
+            if (CurrentSite is dice999)
+            {
+                client = rand.Next(0, int.MaxValue).ToString();
+            }
+            else
+                for (int i = 0; i < 24; i++)
+                {
+                    client += rand.Next(0, 10).ToString();
+                }
+
+            sserver = "";
+            foreach (byte b in server)
+            {
+                sserver += Convert.ToChar(b);
             }
         }
 
@@ -4317,36 +4365,10 @@ end";
             StartBalance = dPreviousBalance = (decimal)SimWindow.nudSimBalance.Value;
             Wins = Losses = 0;
             profit = 0;
-            
-            
-            
-            string chars = "0123456789abcdef";
-            if (! (CurrentSite is dice999 || CurrentSite is YoloDice))
-            {
-                chars += "ghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
-            }
-            server = "";
 
-            for (int i = 0; i < 64; i++)
-            {
-                server += (chars[rand.Next(0, chars.Length)]);
-            }
-            client = "";
-            if (CurrentSite is dice999)
-            {
-                client = rand.Next(0, int.MaxValue).ToString();
-            }
-            else
-            for (int i = 0; i < 24; i++)
-            {
-                client += rand.Next(0, 10).ToString();
-            }
 
-            string sserver = "";
-            foreach (byte b in server)
-            {
-                sserver += Convert.ToChar(b);
-            }
+
+            NewSimSeed();
             
             tempsim = new Simulation(dPreviousBalance.ToString("0.00000000"), (Wins+Losses).ToString(), sserver, client);
             RunningSimulation = true;
@@ -4371,34 +4393,7 @@ end";
                 string betstring = (RunSimBets).ToString() + ",";
                 if (!CurrentSite.NonceBased)
                 {
-                    string chars = "0123456789abcdef";
-                    if (!(CurrentSite is dice999))
-                    {
-                        chars += "ghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
-                    }
-                    server = "";
-
-                    for (int i = 0; i < 64; i++)
-                    {
-                        server += (chars[rand.Next(0, chars.Length)]);
-                    }
-                    client = "";
-                    if (CurrentSite is dice999)
-                    {
-                        client = rand.Next(0, int.MaxValue).ToString();
-                    }
-                    else
-                        for (int i = 0; i < 12; i++)
-                        {
-                            client += rand.Next(0, 10).ToString();
-                        }
-
-                    string sserver = "";
-                    foreach (byte b in server)
-                    {
-                        sserver += Convert.ToChar(b);
-                    }
-                    this.server = sserver;
+                    NewSimSeed();
                 }
                 decimal number = CurrentSite.GetLucky(server, client, RunSimBets);
                 tmp.Roll = (decimal)number;

@@ -20,6 +20,7 @@ namespace DiceBot
         protected string URL = "https://api.primedice.com/graphql";
         protected string RolName = "primediceRoll";
         protected string GameName = "CasinoGamePrimedice";
+        protected string EnumName = "CasinoGamePrimediceConditionEnum";
         protected string StatGameName = "primedice";
         public static string[] sCurrencies = new string[] { "Btc", "Ltc","Eth","Doge","Bch", "XRP","TRX","EOS" };
         GraphQL.Client.GraphQLClient GQLClient;
@@ -74,7 +75,7 @@ namespace DiceBot
                         lastupdate = DateTime.Now;
                         GraphQLRequest LoginReq = new GraphQLRequest
                         {
-                            Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
+                            Query = "query DiceBotGetBalance{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
                         };
                         GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                         pdUser user = Resp.GetDataFieldAs<pdUser>("user");
@@ -200,7 +201,7 @@ namespace DiceBot
 
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "query{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
+                    Query = "query DiceBotLogin{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
                 };
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 pdUser user = Resp.GetDataFieldAs<pdUser>("user");
@@ -259,17 +260,31 @@ namespace DiceBot
         DateTime Lastbet = DateTime.Now;
         void placebetthread(object bet)
         {
-            
+
             try
             {
                 PlaceBetObj tmp5 = bet as PlaceBetObj;
                 decimal amount = tmp5.Amount;
                 decimal chance = tmp5.Chance;
                 bool High = tmp5.High;
-                
-                decimal tmpchance = High ? maxRoll - chance : chance;
 
-                GraphQLResponse betresult = GQLClient.PostAsync(new GraphQLRequest { Query = "mutation{"+RolName+"(amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + ", target:" + tmpchance.ToString("0.00", System.Globalization.NumberFormatInfo.InvariantInfo) + ",condition:" + (High ? "above" : "below") + ",currency:"+Currency.ToLower()+ ") { id nonce currency amount payout state { ... on "+GameName+ " { result target condition } } createdAt serverSeed{seedHash seed nonce} clientSeed{seed} user{balances{available{amount currency}} statistic{game bets wins losses betAmount profit currency}}}}" }).Result;
+                decimal tmpchance = High ? maxRoll - chance : chance;
+                var Request = new GraphQLRequest { Query = @"mutation DiceBotDiceBet($amount: Float! 
+  $target: Float!
+  $condition: "+EnumName+@"!
+  $currency: CurrencyEnum!
+  $identifier: String!){ " + RolName + "(amount: $amount, target: $target,condition: $condition,currency: $currency, identifier: $identifier)" +
+  " { id nonce currency amount payout state { ... on " + GameName + " { result target condition } } createdAt serverSeed{seedHash seed nonce} clientSeed{seed} user{balances{available{amount currency}} statistic{game bets wins losses betAmount profit currency}}}}" };
+                Request.Variables = new
+                {
+                    amount = amount,//.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo),
+                target = tmpchance,//.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo),
+                    condition = (High ? "above" : "below"),
+                    currency = Currency.ToLower(),
+                    identifier = "0123456789abcdef",
+            };
+                GraphQLResponse betresult = GQLClient.PostAsync(Request).Result;
+                
                 if (betresult.Errors!=null)
                 {
                     if (betresult.Errors.Length > 0)
@@ -309,7 +324,10 @@ namespace DiceBot
                         
                         if (getid)
                         {
-                            GraphQLResponse betresult2 = GQLClient.PostAsync(new GraphQLRequest { Query = " query{bet(betId:\"" + tmpbet.Id + "\"){iid}}" }).Result;
+                            var IdRequest = new GraphQLRequest { Query = " query DiceBotGetBetId($betId: String!){bet(betId: $betId){iid}}" };
+                            string betid = tmpbet.Id;
+                            IdRequest.Variables = new { betId= betid /*tmpbet.Id*/ };
+                            GraphQLResponse betresult2 = GQLClient.PostAsync(IdRequest).Result;
 
                             if (betresult2.Data != null)
                             {
@@ -367,10 +385,12 @@ namespace DiceBot
         {
             try
             {
+                
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "mutation{rotateServerSeed{ seed seedHash nonce } changeClientSeed(seed:\"" + R.Next(0, int.MaxValue).ToString() + "\"){seed}}"
+                    Query = "mutation DiceBotRotateSeed ($seed: String!){rotateServerSeed{ seed seedHash nonce } changeClientSeed(seed: $seed){seed}}"
                 };
+                LoginReq.Variables = new { seed = R.Next(0, int.MaxValue).ToString() };
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 if (Resp.Data != null)
                 {
@@ -414,7 +434,7 @@ namespace DiceBot
                 
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "mutation{createWithdrawal(currency:"+Currency.ToLower()+", address:\""+Address+"\",amount:"+amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)+"){id name address hash amount walletFee createdAt status currency}}"
+                    Query = "mutation DiceBotWithdrawal{createWithdrawal(currency:"+Currency.ToLower()+", address:\""+Address+"\",amount:"+amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)+"){id name address hash amount walletFee createdAt status currency}}"
                 };
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 return Resp.Data.createWithdrawal.id.Value != null;
@@ -503,7 +523,7 @@ namespace DiceBot
                 string userid = GetUid(User);
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "mutation{sendTip(userId:\""+userid+"\", amount:"+amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)+", currency:"+Currency.ToLower()+ ",isPublic:true,chatId:\"14939265-52a4-404e-8a0c-6e3e10d915b4\"){id currency amount}}"
+                    Query = "mutation DiceBotSendTip{sendTip(userId:\""+userid+"\", amount:"+amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)+", currency:"+Currency.ToLower()+ ",isPublic:true,chatId:\"14939265-52a4-404e-8a0c-6e3e10d915b4\"){id currency amount}}"
                 };
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 return Resp.Data.sendTip.id.Value != null;
@@ -529,7 +549,7 @@ namespace DiceBot
                 
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "query { user(name:\""+ username + "\"){id}}"
+                    Query = "query DiceBotGetUid{ user(name:\""+ username + "\"){id}}"
                 };
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 return Resp.Data.user.id.Value;
