@@ -174,6 +174,7 @@ namespace DiceBot
                 //RequireCaptchaEventArgs Captchaval = new RequireCaptchaEventArgs { PublicKey = CaptchaKey, Domain=this.URL };
                 //RequireCaptcha(Captchaval);
                 GQLClient = new GraphQL.Client.GraphQLClient(URL);
+                
                 /*GraphQLRequest LoginReq = new GraphQLRequest
                 {
                     Query = "mutation{loginUser(captcha:\""+Captchaval.ResponseValue+ "\" name:\"" + Username + "\", password:\"" + Password + "\"" + (string.IsNullOrWhiteSpace(otp) ? "" : ",tfaToken:\"" + otp + "\"") + ") {activeServerSeed { seedHash seed nonce} activeClientSeed {seed} id statistic {bets wins losses amount profit currency} balances{available{currency amount}} }}"

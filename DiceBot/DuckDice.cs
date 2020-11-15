@@ -23,7 +23,7 @@ namespace DiceBot
         public static string[] cCurrencies = new string[] { "BTC","ETH", "LTC", "DOGE","DASH","BCH","XMR","XRP","ETC","BTG","XLM","ZEC","USDT","DTP" };
         string[] mirrors = new string[] {"https://duckdice.io/", "https://duckdice.me", "https://duckdice.net" };
         private int mod;
-        string apiversion = "1.1.1.";
+        string apiversion = "1.1.1";
         public int Mode
         {
             get { return mod; }

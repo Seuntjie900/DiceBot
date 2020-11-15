@@ -34,7 +34,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        public const string vers = "3.4.12";
+        public const string vers = "3.4.13";
         public string UserAgent
         {
             get {
@@ -394,6 +394,8 @@ namespace DiceBot
             
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture =  new CultureInfo("en-US");
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+      | SecurityProtocolType.Tls11;
             sqlite_helper.CheckDBS();
             InitializeComponent();
             richTextBox3 = new FastColoredTextBox();

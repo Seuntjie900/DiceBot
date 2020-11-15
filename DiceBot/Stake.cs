@@ -33,7 +33,7 @@ namespace DiceBot
             Tip = true;
             TipUsingName = true;
             SiteURL = "https://stake.com/?code=seuntjie";
-            URL = "https://api.stake.com/graphql/";
+            URL = "https://api.stake.com/graphql";
             RolName = "diceRoll";
             
             GameName = "CasinoGameDice";
