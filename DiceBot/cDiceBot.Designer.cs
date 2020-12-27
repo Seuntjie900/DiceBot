@@ -363,6 +363,8 @@
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbLogin = new System.Windows.Forms.GroupBox();
+            this.lblDuckMode = new System.Windows.Forms.Label();
+            this.cmbDuckMode = new System.Windows.Forms.ComboBox();
             this.txtExtraBox = new System.Windows.Forms.TextBox();
             this.lblXtraControl = new System.Windows.Forms.Label();
             this.lblMFAText = new System.Windows.Forms.Label();
@@ -518,8 +520,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.cmbDuckMode = new System.Windows.Forms.ComboBox();
-            this.lblDuckMode = new System.Windows.Forms.Label();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -4932,6 +4932,30 @@
             this.gbLogin.TabStop = false;
             this.gbLogin.Text = "Login/Register";
             // 
+            // lblDuckMode
+            // 
+            this.lblDuckMode.AutoSize = true;
+            this.lblDuckMode.Location = new System.Drawing.Point(31, 187);
+            this.lblDuckMode.Name = "lblDuckMode";
+            this.lblDuckMode.Size = new System.Drawing.Size(40, 13);
+            this.lblDuckMode.TabIndex = 13;
+            this.lblDuckMode.Text = "Mode: ";
+            this.lblDuckMode.Visible = false;
+            // 
+            // cmbDuckMode
+            // 
+            this.cmbDuckMode.FormattingEnabled = true;
+            this.cmbDuckMode.Items.AddRange(new object[] {
+            "Main",
+            "Faucet",
+            "TLE"});
+            this.cmbDuckMode.Location = new System.Drawing.Point(77, 184);
+            this.cmbDuckMode.Name = "cmbDuckMode";
+            this.cmbDuckMode.Size = new System.Drawing.Size(174, 21);
+            this.cmbDuckMode.TabIndex = 12;
+            this.cmbDuckMode.Visible = false;
+            this.cmbDuckMode.SelectedIndexChanged += new System.EventHandler(this.cmbDuckMode_SelectedIndexChanged);
+            // 
             // txtExtraBox
             // 
             this.txtExtraBox.Location = new System.Drawing.Point(77, 117);
@@ -6551,29 +6575,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
-            // 
-            // cmbDuckMode
-            // 
-            this.cmbDuckMode.FormattingEnabled = true;
-            this.cmbDuckMode.Items.AddRange(new object[] {
-            "Main",
-            "Faucet"});
-            this.cmbDuckMode.Location = new System.Drawing.Point(77, 184);
-            this.cmbDuckMode.Name = "cmbDuckMode";
-            this.cmbDuckMode.Size = new System.Drawing.Size(174, 21);
-            this.cmbDuckMode.TabIndex = 12;
-            this.cmbDuckMode.Visible = false;
-            this.cmbDuckMode.SelectedIndexChanged += new System.EventHandler(this.cmbDuckMode_SelectedIndexChanged);
-            // 
-            // lblDuckMode
-            // 
-            this.lblDuckMode.AutoSize = true;
-            this.lblDuckMode.Location = new System.Drawing.Point(31, 187);
-            this.lblDuckMode.Name = "lblDuckMode";
-            this.lblDuckMode.Size = new System.Drawing.Size(40, 13);
-            this.lblDuckMode.TabIndex = 13;
-            this.lblDuckMode.Text = "Mode: ";
-            this.lblDuckMode.Visible = false;
             // 
             // cDiceBot
             // 

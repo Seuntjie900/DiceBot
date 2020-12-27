@@ -30,7 +30,7 @@ namespace DiceBot
             this.Parent = Parent;
             Name = "Stake";
             edge = 1;
-            Tip = true;
+            Tip = false;
             TipUsingName = true;
             SiteURL = "https://stake.com/?code=seuntjie";
             URL = "https://api.stake.com/graphql";

@@ -18,16 +18,17 @@ namespace DiceBot
         string username = "";
         long uid = 0;
         DateTime lastupdate = new DateTime();
-        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
+        HttpClient Client;
         HttpClientHandler ClientHandlr;
         public static string[] cCurrencies = new string[] { "BTC","ETH", "LTC", "DOGE","DASH","BCH","XMR","XRP","ETC","BTG","XLM","ZEC","USDT","DTP" };
         string[] mirrors = new string[] {"https://duckdice.io/", "https://duckdice.me", "https://duckdice.net" };
         private int mod;
         string apiversion = "1.1.1";
+        string TLEhash = null;
         public int Mode
         {
             get { return mod; }
-            set { mod = value; ForceUpdateStats = true; }
+            set { mod = value; ForceUpdateStats = true; if (Mode == 3) this.edge = 2m; else this.edge = 1m; }
         }
 
 
@@ -94,7 +95,15 @@ namespace DiceBot
                         lastupdate = DateTime.Now;
                         string sEmitResponse = Client.GetStringAsync("load/" + Currency + "?api_key=" + accesstoken+ "&api_version=" + apiversion).Result;
                         Quackbalance balance = json.JsonDeserialize<Quackbalance>(sEmitResponse);
-                        this.balance = decimal.Parse(this.Mode == 1 ? balance.user.balances.main : balance.user.balances.faucet, System.Globalization.NumberFormatInfo.InvariantInfo);
+                        //switch (this.Mode)
+                        //{
+                        //    case 1: this.balance = decimal.Parse(balance.user.balances.faucet, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                        //    case 2:
+                        //        this.balance = decimal.Parse(balance.user.balances.main, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                        //    case 3: this.balance = decimal.Parse(balance.user.balances.tle, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                        //    default: this.balance = decimal.Parse(balance.user.balances.main, System.Globalization.NumberFormatInfo.InvariantInfo); break;
+                        //}
+                        this.balance = decimal.Parse(this.Mode == 2 ? balance.user.balances.faucet: balance.user.balances.main, System.Globalization.NumberFormatInfo.InvariantInfo);
                         Parent.updateBalance(this.balance);
                         sEmitResponse = Client.GetStringAsync("stat/" + Currency + "?api_key=" + accesstoken).Result;
                         QuackStatsDetails Stats = json.JsonDeserialize<QuackStatsDetails>(sEmitResponse);
@@ -122,11 +131,17 @@ namespace DiceBot
         QuackSeed currentseed = null;
         void PlaceBetThreead(object bet)
         {
+            if (Mode==3 && TLEhash == null)
+            {
+                string TLE = Client.GetAsync("tle").Result.Content.ReadAsStringAsync().Result;
+                var tleobj = json.JsonDeserialize<DDTLE>(TLE);
+                TLEhash = tleobj.data.FirstOrDefault()?.hash;
+            }
             PlaceBetObj tmp5 = bet as PlaceBetObj;
             decimal amount = tmp5.Amount;
             decimal chance = tmp5.Chance;
             bool High = tmp5.High;
-            StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":\"{0:0.00000000}\",\"symbol\":\"{1}\",\"chance\":{2:0.00},\"isHigh\":{3},\"faucet\":{4}}}", amount, Currency, chance, High ? "true" : "false",this.Mode==2?"true":"false"), Encoding.UTF8, "application/json");
+            StringContent Content = new StringContent(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "{{\"amount\":\"{0:0.00000000}\",\"symbol\":\"{1}\",\"chance\":{2:0.00},\"isHigh\":{3},\"faucet\":{4},\"tleHash\":\"{5}\"}}", amount, Currency, chance, High ? "true" : "false",this.Mode==2?"true":"false", Mode==3? TLEhash:null), Encoding.UTF8, "application/json");
             try
             {
                 string sEmitResponse = Client.PostAsync("play" + "?api_key=" + accesstoken + "&api_version=" + apiversion, Content).Result.Content.ReadAsStringAsync().Result;
@@ -407,6 +422,7 @@ namespace DiceBot
     {
         public string main { get; set; }
         public string faucet { get; set; }
+        public string tle { get; set; }
     }
     public class QuackStats
     {
@@ -461,4 +477,34 @@ namespace DiceBot
         public string error { get; set; }
         
     }
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class DDRewardConfig
+    {
+        public int xp { get; set; }
+        public int level { get; set; }
+        public string amount { get; set; }
+    }
+
+    public class DDTLEData
+    {
+        public string hash { get; set; }
+        public string slug { get; set; }
+        public string name { get; set; }
+        public string gameMode { get; set; }
+        public List<DDRewardConfig> rewardConfig { get; set; }
+        public string minBetAmount { get; set; }
+        public string symbol { get; set; }
+        public string paySymbol { get; set; }
+        public int defaultXpPerLevel { get; set; }
+        public string defaultAmountPerLevel { get; set; }
+        public string houseEdge { get; set; }
+        public int endDate { get; set; }
+    }
+
+    public class DDTLE
+    {
+        public List<DDTLEData> data { get; set; }
+    }
+
+
 }

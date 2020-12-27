@@ -522,11 +522,21 @@ namespace DiceBot
             {
                 //mutation{sendTip(userId:"", amount:0, currency:btc,isPublic:true,chatId:""){id currency amount}}
                 string userid = GetUid(User);
-                GraphQLRequest LoginReq = new GraphQLRequest
+                string chatid = "";
+                string Tippayload = "mutation SendTip($userId: String!, $amount: Float!, $currency: CurrencyEnum!, $isPublic: Boolean, $chatId: String!, $tfaToken: String) {sendTip(userId: $userId, amount: $amount, currency: $currency, isPublic: $isPublic, chatId: $chatId, tfaToken: $tfaToken) { id amount currency user { id name __typename } sendBy { id name balances { available { amount currency __typename } vault { amount currency __typename } __typename } __typename } __typename } }";
+                GraphQLRequest req = new GraphQLRequest();
+                req.Query = Tippayload;
+                req.Variables = new
                 {
-                    Query = "mutation DiceBotSendTip{sendTip(userId:\""+userid+"\", amount:"+amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo)+", currency:"+Currency.ToLower()+ ",isPublic:true,chatId:\"14939265-52a4-404e-8a0c-6e3e10d915b4\"){id currency amount}}"
+                    name = User,
+                    amount = amount,
+                    isPublic = true,
+                    userId = userid,
+                    chatId = chatid,
+                    currency = Currency,
+                    tfaToken = (string)null
                 };
-                GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
+                GraphQLResponse Resp = GQLClient.PostAsync(req).Result;
                 return Resp.Data.sendTip.id.Value != null;
             }
             catch (Exception e)
@@ -550,8 +560,9 @@ namespace DiceBot
                 
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {
-                    Query = "query DiceBotGetUid{ user(name:\""+ username + "\"){id}}"
+                    Query = "query DiceBotGetUid($username: String!){ user(name: $username){id}}"
                 };
+                LoginReq.Variables = new { username = username };
                 GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
                 return Resp.Data.user.id.Value;
                 

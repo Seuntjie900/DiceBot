@@ -138,7 +138,7 @@ namespace DiceBot
                 PlaceBetObj tmp9 = _High as PlaceBetObj;
 
                 bool High = tmp9.High;
-                decimal amount = tmp9.Amount;
+                decimal amount = Math.Round(tmp9.Amount,8);
                 //decimal chance = tmp9.Chance;
 
                 Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, tmp9.Chance, High ? "High" : "Low"));
@@ -260,7 +260,7 @@ namespace DiceBot
                 else
                 {
                     balance = (decimal)tmpBet.StartingBalance / 100000000.0m - (amount) + ((decimal)tmpBet.PayOut / 100000000.0m);
-
+                    
                     profit += -(amount) + (decimal)(tmpBet.PayOut / 100000000m);
                     Bet tmp = new Bet();
                     tmp.Guid = tmp9.Guid;
@@ -428,10 +428,15 @@ namespace DiceBot
         int site = 0;
         bool thing = false;
         string[] SiteA = new string[] {"https://www.999dice.com/api/web.aspx" ,
-            "https://www.999proxy.com/api/web.aspx",
-            "https://www.999doge.com/api/web.aspx",
-            "https://www.999-dice.com/api/web.aspx",
-            "http://999again.ddns.net:999/api/web.aspx" };
+            "https://www.999proxy.com/api/web.aspx" ,
+            "http://super999.ddns.net:999/api/web.aspx" ,
+            "https://ru.999dice.com/api/web.aspx" ,
+            "https://www.999-dice.com/api/web.aspx" ,
+            "https://www.999doge.com/api/web.aspx" ,
+            "https://www.notdicelol.com/api/web.aspx" ,
+            "https://www.proxy999.com/api/web.aspx" ,
+            "https://www.notdicelol.com:9999/api/web.aspx" ,
+            };
 
         public override void Login(string Username, string Password, string twofa)
         {
