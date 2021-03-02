@@ -414,6 +414,8 @@ currency:btc*/
                             balance = decimal.Parse(bsbase.new_balance, System.Globalization.NumberFormatInfo.InvariantInfo);
                             lastupdate = DateTime.Now;
                             Bet tmp = bsbase.ToBet();
+                            tmp.high = tmpob.High;
+                            tmp.Chance = tmpob.Chance;
                             tmp.Guid = tmpob.Guid;
                             profit += (decimal)tmp.Profit;
                             wagered += (decimal)tmp.Amount;

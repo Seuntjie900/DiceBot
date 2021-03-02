@@ -34,7 +34,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        public const string vers = "3.4.14";
+        public const string vers = "3.4.15";
         public string UserAgent
         {
             get {
@@ -2097,6 +2097,10 @@ end";
                 }
                 if (Winstreak% (int)nudStretchWin.Value == 0)
                     Lastbet *= WinMultiplier;
+                else
+                {
+
+                }
                 if (Winstreak == 1)
                 {
                     if(chkFirstResetWin.Checked && !chkMK.Checked)
@@ -4188,7 +4192,7 @@ end";
                 valid = false;
                 sMessage += "Please enter a valid number in the Times Multiplier By Field\n";
             }
-            WinMultiplier = (int)(nudWinMultiplier.Value);
+            WinMultiplier = (nudWinMultiplier.Value);
             if (WinMultiplier == -1)
             {
                 valid = false;

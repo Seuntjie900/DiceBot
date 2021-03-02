@@ -20,7 +20,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "btc", "eth", "ltc", "trx", "bch","doge","xrp" };
+        public static string[] cCurrencies = new string[] { "btc", "eth", "ltc", "trx", "bch","doge","xrp","usdt","etc","sushi","uni","xlm" };
         string URL = "https://wolf.bet";
         public WolfBet(cDiceBot Parent)
         {
@@ -446,6 +446,12 @@ namespace DiceBot.WolfBetClasses
         public string doge { get; set; }
         public string trx { get; set; }
         public string bch { get; set; }
+        public string xrp { get; set; }
+        public string usdt { get; set; }
+        public string etc { get; set; }
+        public string sushi { get; set; }
+        public string uni { get; set; }
+        public string xlm { get; set; }
     }
 
     public class Next
@@ -484,6 +490,12 @@ namespace DiceBot.WolfBetClasses
         public WBStat ltc { get; set; }
         public WBStat trx { get; set; }
         public WBStat bch { get; set; }
+        public WBStat xrp { get; set; }
+        public WBStat usdt { get; set; }
+        public WBStat etc { get; set; }
+        public WBStat sushi { get; set; }
+        public WBStat uni { get; set; }
+        public WBStat xlm { get; set; }
     }
 
     public class WolfBetStats

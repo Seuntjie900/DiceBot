@@ -18,10 +18,10 @@ namespace DiceBot
         string username = "";
         long uid = 0;
         DateTime lastupdate = new DateTime();
-        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
+        HttpClient Client;
         HttpClientHandler ClientHandlr;
         
-        public static string[] sCurrencies = new string[] { "BTC", "Doge", "ETH", "DASH","GAS", "Bch", "STRAT", "PLAY", "LTC","XMR","ETC" };
+        public static string[] sCurrencies = new string[] { "BTC", "DOGE", "ETH", "DASH","GAS", "BCH", "STRAT", "PLAY", "LTC","XMR","ETC" };
         public cryptogames(cDiceBot Parent)
         {
             _PasswordText = "API Key: ";
@@ -31,7 +31,7 @@ namespace DiceBot
             AutoLogin = true;
             AutoWithdraw = false;
             ChangeSeed = false;
-            edge = 0.8m;
+            edge = 1m;
             maxRoll = 99.999m;
             this.Currencies = sCurrencies;
             this.Currency = "btc";
@@ -66,6 +66,7 @@ namespace DiceBot
                             this.wagered = tmpBal.Wagered;
                             this.profit = tmpBal.Profit;
                             this.bets = tmpBal.TotalBets;
+                            edge = tmpBal.DiceEdge;
                             Parent.updateBalance((decimal)(balance));
                             Parent.updateBets(bets);
                             Parent.updateLosses(losses);
@@ -187,6 +188,7 @@ namespace DiceBot
                 this.bets = tmpBal.TotalBets;
                 //Get stats
                 //assign vals to stats
+                edge = tmpBal.DiceEdge;
                 Parent.updateBalance((decimal)(balance));
                 Parent.updateBets(bets);
                 Parent.updateLosses(losses);
@@ -312,6 +314,7 @@ namespace DiceBot
         public int TotalBets { get; set; }
         public decimal Profit { get; set; }
         public decimal Wagered { get; set; }
+        public decimal DiceEdge { get; set; }
     }
     public class cgNextSeed
     {
