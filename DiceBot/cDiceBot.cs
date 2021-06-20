@@ -4394,7 +4394,7 @@ end";
             EnableTimer(tmBet, false);
             Bet tmp = new Bet();
             tmp.Guid = this.LastBetPlaced;
-            if (RunSimBets < numSimBets)
+            if (RunSimBets <= numSimBets)
             {
                 string betstring = (RunSimBets).ToString() + ",";
                 if (!CurrentSite.NonceBased)

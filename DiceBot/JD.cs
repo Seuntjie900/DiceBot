@@ -204,8 +204,14 @@ namespace DiceBot
 
         public override void Disconnect()
         {
-            if (Instance.Connected)
-            Instance.Disconnect();
+            try
+            {
+                Instance.Disconnect();
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public override void Donate(decimal Amount)

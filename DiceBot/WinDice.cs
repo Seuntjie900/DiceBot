@@ -87,6 +87,16 @@ namespace DiceBot
                     finishedlogin(true);
                     return;
                 }
+                else
+                {
+
+                    if (++site < SiteA.Length)
+                        Login(username, Password, twofa);
+                    else
+                    {   
+                        this.finishedlogin(false);
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -102,46 +112,62 @@ namespace DiceBot
         WDGetSeed currentseed;
         bool getbalance()
         {
-            string response = Client.GetStringAsync("user").Result;
-            WDUserResponse tmpBalance = json.JsonDeserialize<WDUserResponse>(response);
-            if (tmpBalance.data != null)
+            try
             {
-                PropertyInfo tmp = typeof(WDBalance).GetProperty(Currency.ToLower());
-                if (tmp != null)
+                string response = Client.GetStringAsync("user").Result;
+                WDUserResponse tmpBalance = json.JsonDeserialize<WDUserResponse>(response);
+                if (tmpBalance.data != null)
                 {
-                    decimal balance = (decimal)tmp.GetValue(tmpBalance.data.balance);
-                    this.balance = balance;
-                    Parent.updateBalance(balance);
+                    PropertyInfo tmp = typeof(WDBalance).GetProperty(Currency.ToLower());
+                    if (tmp != null)
+                    {
+                        decimal balance = (decimal)tmp.GetValue(tmpBalance.data.balance);
+                        this.balance = balance;
+                        Parent.updateBalance(balance);
+                    }
                 }
+                return tmpBalance.status == "success";
             }
-            return tmpBalance.status=="success";
+            catch (Exception e)
+            {
+                Parent.DumpLog(e.ToString(), -1);
+            }
+            return false;
         }
         bool getstats()
         {
-            string response = Client.GetStringAsync("stats").Result;
-            WDStatsResponse tmpBalance = json.JsonDeserialize<WDStatsResponse>(response);
-            if (tmpBalance.data != null)
+            try
             {
-                foreach (WDStatistic x in tmpBalance.data.statistics)
+                string response = Client.GetStringAsync("stats").Result;
+                WDStatsResponse tmpBalance = json.JsonDeserialize<WDStatsResponse>(response);
+                if (tmpBalance.data != null)
                 {
-                    if (x.curr==Currency)
+                    foreach (WDStatistic x in tmpBalance.data.statistics)
                     {
-                        this.wagered = x.bet;
-                        this.profit = x.profit;
-                        Parent.updateWagered(wagered);
-                        Parent.updateProfit(profit);
-                        
-                        break;
+                        if (x.curr == Currency)
+                        {
+                            this.wagered = x.bet;
+                            this.profit = x.profit;
+                            Parent.updateWagered(wagered);
+                            Parent.updateProfit(profit);
+
+                            break;
+                        }
                     }
+                    this.bets = tmpBalance.data.stats.bets;
+                    this.wins = tmpBalance.data.stats.wins;
+                    this.losses = tmpBalance.data.stats.loses;
+                    Parent.updateBets(bets);
+                    Parent.updateWins(wins);
+                    Parent.updateLosses(losses);
                 }
-                this.bets = tmpBalance.data.stats.bets;
-                this.wins = tmpBalance.data.stats.wins;
-                this.losses = tmpBalance.data.stats.loses;
-                Parent.updateBets(bets);
-                Parent.updateWins(wins);
-                Parent.updateLosses(losses);
+                return tmpBalance.status == "success";
             }
-            return tmpBalance.status == "success";
+            catch (Exception e)
+            {
+                Parent.DumpLog(e.ToString(), -1);
+            }
+            return false;
         }
         bool getseed()
         {
