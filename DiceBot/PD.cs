@@ -47,6 +47,7 @@ namespace DiceBot
             this.Parent = Parent;
             Name = "PrimeDice";
             this.Tip = false;
+            this.Vault = true;
             TipUsingName = true;
             //Thread tChat = new Thread(GetMessagesThread);
             //tChat.Start();
@@ -444,6 +445,28 @@ namespace DiceBot
             {
                 return false;
             }
+        }
+
+        public override bool InternalSendToVault(decimal amount)
+        {
+            try
+            {
+
+                GraphQLRequest req = new GraphQLRequest
+                {
+                    Query = "mutation {createVaultDeposit(currency:" + Currency.ToLower() + ", amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + "){id}}"
+                };
+
+                GraphQLResponse Resp = GQLClient.PostAsync(req).Result;
+
+                return Resp.Data.createVaultDeposit.id.Value != null;
+
+            }
+            catch (Exception e)
+            {
+
+            }
+            return false;
         }
 
         public override decimal GetLucky(string server, string client, int nonce)
