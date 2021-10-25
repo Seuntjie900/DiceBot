@@ -32,7 +32,7 @@ namespace DiceBot
         protected string _UsernameText = "Username: ";
         public string UsernameText
         {
-            get { return _UsernameText; }            
+            get { return _UsernameText; }
         }
 
         protected string _PasswordText = "Password: ";
@@ -40,23 +40,23 @@ namespace DiceBot
         public string PasswordText
         {
             get { return _PasswordText; }
-            
+
         }
         protected string _MFAText = "2FA Code:";
 
         public string MFAText
         {
             get { return _MFAText; }
-            
+
         }
-        private string xtraText="2FA Code:";
+        private string xtraText = "2FA Code:";
 
         public string XtraText
         {
             get { return xtraText; }
             set { xtraText = value; }
         }
-        private bool showXtra=false;
+        private bool showXtra = false;
 
         public bool ShowXtra
         {
@@ -65,25 +65,26 @@ namespace DiceBot
         }
 
 
-        private bool _NonceBased=true;
+        private bool _NonceBased = true;
         public bool NonceBased
         {
             get { return _NonceBased; }
             set { _NonceBased = value; }
         }
-        
+
         public string Currency
         {
             get { return currency; }
-            set { currency= value; CurrencyChanged();}}
-            
-        
-        protected virtual void CurrencyChanged(){}
+            set { currency = value; CurrencyChanged(); }
+        }
+
+
+        protected virtual void CurrencyChanged() { }
 
         protected cDiceBot Parent;
         public bool AutoWithdraw { get; set; }
         public bool AutoInvest { get; set; }
-        public bool ChangeSeed {get;set;}
+        public bool ChangeSeed { get; set; }
         public bool AutoLogin { get; set; }
         public decimal edge = 1;
         public string Name { get; protected set; }
@@ -99,6 +100,9 @@ namespace DiceBot
         protected bool High = false;
         public string BetURL = "";
         public bool Tip { get; set; }
+
+        public bool Vault { get; set; }
+
         public bool TipUsingName { get; set; }
         public bool GettingSeed { get; set; }
         public bool ForceUpdateStats = false;
@@ -124,11 +128,11 @@ namespace DiceBot
         {
             return bets;
         }
-        
+
         public void PlaceBet(bool High, decimal amount, decimal chance, string BetGuid)
         {
-            Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
-            internalPlaceBet(High,amount, chance, BetGuid);
+            Parent.updateStatus(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "Betting: {0:0.00000000} at {1:0.00000000} {2}", amount, chance, High ? "High" : "Low"));
+            internalPlaceBet(High, amount, chance, BetGuid);
         }
         protected void FinishedBet(Bet newBet)
         {
@@ -140,9 +144,9 @@ namespace DiceBot
             Parent.updateWins(wins);
             Parent.AddBet(newBet);
             Parent.GetBetResult(balance, newBet);
-                
+
         }
-        protected abstract void internalPlaceBet(bool High,decimal amount, decimal chancem, string BetGuid);
+        protected abstract void internalPlaceBet(bool High, decimal amount, decimal chancem, string BetGuid);
         public abstract void ResetSeed();
         public abstract void SetClientSeed(string Seed);
         public virtual bool Invest(decimal Amount)
@@ -152,11 +156,11 @@ namespace DiceBot
         }
         public virtual void Donate(decimal Amount)
         {
-            
+
         }
         public bool Withdraw(decimal Amount, string Address)
         {
-            Parent.updateStatus(string.Format( System.Globalization.NumberFormatInfo.InvariantInfo,"Withdrawing {0} {1} to {2}", Amount, currency, Address));
+            Parent.updateStatus(string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "Withdrawing {0} {1} to {2}", Amount, currency, Address));
             bool res = internalWithdraw(Amount, Address);
 
             if (res)
@@ -169,17 +173,17 @@ namespace DiceBot
             return res;
         }
         protected abstract bool internalWithdraw(decimal Amount, string Address);
-        
+
         public abstract void Login(string Username, string Password, string twofa);
-        
+
         public abstract bool Register(string username, string password);
-        
+
         public abstract bool ReadyToBet();
-        
+
         public virtual decimal GetLucky(string server, string client, int nonce)
         {
             HMACSHA512 betgenerator = new HMACSHA512();
-            
+
             int charstouse = 5;
             List<byte> serverb = new List<byte>();
 
@@ -196,7 +200,7 @@ namespace DiceBot
             {
                 buffer.Add(Convert.ToByte(c));
             }
-            
+
             byte[] hash = betgenerator.ComputeHash(buffer.ToArray());
 
             StringBuilder hex = new StringBuilder(hash.Length * 2);
@@ -204,11 +208,11 @@ namespace DiceBot
                 hex.AppendFormat("{0:x2}", b);
 
 
-            for (int i = 0; i < hex.Length; i+=charstouse)
+            for (int i = 0; i < hex.Length; i += charstouse)
             {
 
                 string s = hex.ToString().Substring(i, charstouse);
-                
+
                 decimal lucky = int.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 if (lucky < 1000000)
                     return lucky / 10000;
@@ -256,7 +260,7 @@ namespace DiceBot
         }
 
         public abstract void Disconnect();
-        
+
         public abstract void GetSeed(long BetID);
         public abstract void SendChatMessage(string Message);
         protected void ReceivedChatMessage(string Message)
@@ -265,7 +269,7 @@ namespace DiceBot
         }
         public bool SendTip(string User, decimal Amount)
         {
-            Parent.updateStatus("Tipping "+Amount+" to "+User);
+            Parent.updateStatus("Tipping " + Amount + " to " + User);
             bool res = InternalSendTip(User, Amount);
             if (res)
             {
@@ -276,11 +280,37 @@ namespace DiceBot
             }
             return res;
         }
+
+        public bool SendToVault(decimal Amount)
+        {
+            Parent.updateStatus("Vaulting " + Amount + ".");
+            bool res = InternalSendToVault(Amount);
+            if (res)
+            {
+                if (AutoUpdate)
+                {
+                    ForceUpdateStats = true;
+                }
+                else
+                {
+                    balance -= amount;
+                }
+            }
+            return res;
+        }
+
         public virtual bool InternalSendTip(string User, decimal amount)
         {
             Parent.updateStatus("Tipping is not enabled for the current site.");
             return false;
         }
+
+        public virtual bool InternalSendToVault(decimal amount)
+        {
+            Parent.updateStatus("Vaulting is not enabled for the current site.");
+            return false;
+        }
+
         protected void finishedlogin(bool Success)
         {
             Parent.updateBalance(balance);
@@ -289,13 +319,13 @@ namespace DiceBot
             Parent.updateBets(bets);
             Parent.updateWins(wins);
             Parent.updateLosses(losses);
-            if (FinishedLogin!=null)
+            if (FinishedLogin != null)
                 FinishedLogin(Success);
         }
 
         public delegate void dFinishedLogin(bool LoggedIn);
         public event dFinishedLogin FinishedLogin;
-        
+
         public virtual void SetProxy(string host, int port)
         {
             prox_host = host;
@@ -310,7 +340,7 @@ namespace DiceBot
             Prox = new WebProxy(prox_host, prox_port);
             Prox.Credentials = new NetworkCredential(prox_username, prox_pass);
         }
-        
+
     }
     public class PlaceBetObj
     {
@@ -326,7 +356,7 @@ namespace DiceBot
         public decimal Chance { get; set; }
         public string Guid { get; set; }
     }
-    public class RequireCaptchaEventArgs:EventArgs
+    public class RequireCaptchaEventArgs : EventArgs
     {
         public string PublicKey { get; set; }
         public string RequestValue { get; set; }
@@ -336,7 +366,7 @@ namespace DiceBot
 
     public class Random
     {
-        
+
         RandomNumberGenerator r = RandomNumberGenerator.Create();
         const string chars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
         public virtual uint Next(uint max)
@@ -348,8 +378,8 @@ namespace DiceBot
         }
         public virtual uint Next(uint min, uint max)
         {
-            uint result = Next(max-min);
-            return (min+result);
+            uint result = Next(max - min);
+            return (min + result);
         }
         public virtual int Next(int min, int max)
         {
@@ -370,7 +400,7 @@ namespace DiceBot
         public string RandomString(int length)
         {
             string x = "";
-            while(x.Length>0)
+            while (x.Length > 0)
             {
                 x += chars[Next(0, chars.Length)];
             }
