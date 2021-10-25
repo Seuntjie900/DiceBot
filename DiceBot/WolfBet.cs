@@ -20,7 +20,7 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "btc", "eth", "ltc", "trx", "bch","doge","xrp","usdt","etc","sushi","uni","xlm" };
+        public static string[] cCurrencies = new string[] { "btc", "eth", "ltc", "trx", "bch","doge","xrp","usdt","etc","sushi","uni","xlm","shiv" };
         string URL = "https://wolf.bet";
         public WolfBet(cDiceBot Parent)
         {
