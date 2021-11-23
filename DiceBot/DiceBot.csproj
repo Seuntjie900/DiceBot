@@ -468,6 +468,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".gitignore" />
     <Content Include="logo.ico" />
   </ItemGroup>
   <ItemGroup>

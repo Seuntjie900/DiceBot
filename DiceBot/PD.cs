@@ -454,7 +454,7 @@ namespace DiceBot
 
                 GraphQLRequest req = new GraphQLRequest
                 {
-                    Query = "mutation {createVaultDeposit(currency:" + Currency.ToLower() + ", amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + "){id}}"
+                    Query = "mutation DiceBotVault{createVaultDeposit(currency:" + Currency.ToLower() + ", amount:" + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + "){id}}"
                 };
 
                 GraphQLResponse Resp = GQLClient.PostAsync(req).Result;

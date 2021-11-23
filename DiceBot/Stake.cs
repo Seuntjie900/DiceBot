@@ -32,10 +32,11 @@ namespace DiceBot
             edge = 1;
             Tip = false;
             TipUsingName = true;
+
             SiteURL = "https://stake.com/?code=seuntjie";
             URL = "https://api.stake.com/graphql";
             RolName = "diceRoll";
-            
+            Vault = true;
             GameName = "CasinoGameDice";
             StatGameName = "dice";
             EnumName = "CasinoGameDiceConditionEnum";
