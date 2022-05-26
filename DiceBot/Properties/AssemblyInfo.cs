@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DiceBot")]
 [assembly: AssemblyDescription("Automatic and flexible Betting bot for all the big dice sites")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Botma Software (Pty) Ltd")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("DiceBot")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.4.17.0")]
-[assembly: AssemblyFileVersion("3.4.17.0")]
+[assembly: AssemblyVersion("4.1.02.0")]
+[assembly: AssemblyFileVersion("4.1.20.0")]
