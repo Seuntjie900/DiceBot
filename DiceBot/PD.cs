@@ -87,7 +87,7 @@ namespace DiceBot
                                 this.bets = (int)x.bets;
                                 this.wins = (int)x.wins;
                                 this.losses = (int)x.losses;
-                                this.profit = (decimal)x.profit;
+                                this.profit = x.profit.HasValue ? (decimal)x.profit.Value : 0;
                                 this.wagered = (decimal)x.betAmount;
                                 break;
                             }
@@ -309,7 +309,7 @@ namespace DiceBot
                                 this.bets = (int)x.bets;
                                 this.wins = (int)x.wins;
                                 this.losses = (int)x.losses;
-                                this.profit = (decimal)x.profit;
+                                this.profit = x.profit.HasValue ? (decimal)x.profit.Value : 0;
                                 this.wagered = (decimal)x.betAmount;
                                 break;
                             }
