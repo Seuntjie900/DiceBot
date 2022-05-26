@@ -1061,6 +1061,7 @@ end";
         {
             try
             {
+                /*
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("https://bot.seuntjie.com/Dicebot/vs.html?vers=" + vers);
                 request.UserAgent = "dicebot" + vers;
 
@@ -1095,6 +1096,7 @@ end";
                         }
                     }
                 }
+                */
             }
             catch (Exception e)
             {
