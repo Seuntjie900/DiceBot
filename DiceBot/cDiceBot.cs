@@ -34,7 +34,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        public const string vers = "4.1.02";//"3.4.15";
+        public const string vers = "4.1.03";//"3.4.15";
         public string UserAgent
         {
             get
@@ -6180,8 +6180,8 @@ end";
 
         private void donateToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            Donate tmp = new Donate(CurrentSite.Name);
-            tmp.Show();
+           // Donate tmp = new Donate(CurrentSite.Name);
+            //tmp.Show();
         }
 
         string proxUser = "", proxPass = "", proxHost = "";
