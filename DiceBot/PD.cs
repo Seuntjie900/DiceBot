@@ -761,7 +761,7 @@ namespace DiceBot
             public decimal wins { get; set; }
             public decimal losses { get; set; }
             public double betAmount { get; set; }
-            public double profit { get; set; }
+            public double? profit { get; set; }
             public string currency { get; set; }
             public string __typename { get; set; }
         }

@@ -34,7 +34,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        public const string vers = "3.4.15";
+        public const string vers = "4.1.01";//"3.4.15";
         public string UserAgent
         {
             get
