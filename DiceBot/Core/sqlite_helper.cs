@@ -173,7 +173,7 @@ namespace DiceBot.Core
                     case "MegaDice": tmp.Verified = tmp.Roll == (decimal)SatoshiDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "Bitvest": tmp.Verified = tmp.Roll == (decimal)Bitvest.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "KingDice": tmp.Verified = tmp.Roll == (decimal)Kingdice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
-                    case "YoloDice": tmp.Verified = tmp.Roll == (decimal)YoloDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
+                    //case "YoloDice": tmp.Verified = tmp.Roll == (decimal)YoloDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "DuckDice": tmp.Verified = tmp.Roll == (decimal)DuckDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce);break;
                     case "NitroDice": tmp.Verified = tmp.Roll == (decimal)NitroDice.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce); break;
                     case "WolfBet": tmp.Verified = tmp.Roll == (decimal)WolfBet.sGetLucky(tmp.serverseed, tmp.clientseed, tmp.nonce);break;
