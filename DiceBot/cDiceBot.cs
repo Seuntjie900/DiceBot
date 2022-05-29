@@ -22,6 +22,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms.DataVisualization.Charting;
 using FastColoredTextBoxNS;
+using DiceBot.Core;
 
 namespace DiceBot
 {
@@ -34,7 +35,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        public const string vers = "4.1.03";//"3.4.15";
+        public const string vers = AppHelpers.vers;//"3.4.15";
         public string UserAgent
         {
             get
@@ -42,7 +43,7 @@ namespace DiceBot
                 string windows = Environment.OSVersion.VersionString;
                 bool is64 = Environment.Is64BitOperatingSystem;
 
-                string agent = $"DiceBot/{ cDiceBot.vers} (+http://bot.seuntjie.com)";
+                string agent = $"DiceBot/{ AppHelpers.vers} (+http://bot.seuntjie.com)";
                 return agent;
             }
         }
@@ -505,7 +506,7 @@ end";
             primeDiceToolStripMenuItem.Checked = true;
 
             bool frst = true;
-            foreach (string s in PD.sCurrencies)
+            foreach (string s in PrimeDice.sCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
 
@@ -5205,14 +5206,14 @@ end";
                 string curcur = CurrentSite.Currency;
                 switch (CurrentSite.GetType().Name)
                 {
-                    case "JD": CurrentSite = new JD(this); break;
+                    //case "JD": CurrentSite = new JD(this); break;
                     case "PRC": CurrentSite = new BetKing(this); break;
                     case "bitdice": CurrentSite = new bitdice(this); break;
                     case "cryptogames": CurrentSite = new cryptogames(this); break;
                     case "dice999": CurrentSite = new dice999(this, (CurrentSite as dice999).doge999); break;
                     case "doge999": CurrentSite = new dice999(this, true); break;
                     case "FortuneJack": CurrentSite = new FortuneJack(this); break;
-                    case "PD": CurrentSite = new PD(this); break;
+                    case "PD": CurrentSite = new PrimeDice(this); break;
                     case "SafeDice": CurrentSite = new SafeDice(this); break;
                     case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
                     case "Bitvest": CurrentSite = new Bitvest(this); break;
@@ -5233,15 +5234,24 @@ end";
                 {
                     dd.Mode = cmbDuckMode.SelectedIndex + 1;
                 }
+
                 if (UseProxy)
+                {
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
+                }
+
                 CurrentSite.Currency = curcur;
                 CurrentSite.FinishedLogin -= CurrentSite_FinishedLogin;
                 CurrentSite.FinishedLogin += CurrentSite_FinishedLogin;
+
                 if (txtExtraBox.Text != "")
+                {
                     CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text + "&" + txtExtraBox.Text);
+                }
                 else
+                {
                     CurrentSite.Login(txtApiUsername.Text, txtApiPassword.Text, txtApi2fa.Text);
+                }
 
             }
             else
@@ -5253,14 +5263,14 @@ end";
                     string curcur = CurrentSite.Currency;
                     switch (CurrentSite.GetType().Name)
                     {
-                        case "JD": CurrentSite = new JD(this); break;
+                        //case "JD": CurrentSite = new JD(this); break;
                         case "PRC": CurrentSite = new BetKing(this); break;
                         case "bitdice": CurrentSite = new bitdice(this); break;
                         case "cryptogames": CurrentSite = new cryptogames(this); break;
                         case "dice999": CurrentSite = new dice999(this, false); break;
                         case "doge999": CurrentSite = new dice999(this, true); break;
                         case "FortuneJack": CurrentSite = new FortuneJack(this); break;
-                        case "PD": CurrentSite = new PD(this); break;
+                        case "PD": CurrentSite = new PrimeDice(this); break;
                         case "SafeDice": CurrentSite = new SafeDice(this); break;
                         case "SatoshiDice": CurrentSite = new SatoshiDice(this); break;
                         case "Bitvest": CurrentSite = new Bitvest(this); break;
@@ -5276,8 +5286,12 @@ end";
                         case "WinDice": currentsite = new WinDice(this); break;
                         case "WolfBet": currentsite = new WolfBet(this); break;
                     }
+
                     if (UseProxy)
+                    {
                         CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
+                    }
+
                     CurrentSite.Currency = curcur;
                     EnableNotLoggedInControls(false);
                 }
@@ -5785,9 +5799,9 @@ end";
             {
                 CurrentSite.Disconnect();
             }
-            if (CurrentSite is PD)
+            if (CurrentSite is PrimeDice)
             {
-                (CurrentSite as PD).ispd = false;
+                (CurrentSite as PrimeDice).ispd = false;
             }
             if ((sender as ToolStripMenuItem).Checked)
             {
@@ -5804,11 +5818,11 @@ end";
                 }
                 switch ((sender as ToolStripMenuItem).Name)
                 {
-                    case "justDiceToolStripMenuItem": CurrentSite = new JD(this); siteToolStripMenuItem.Text = "Site " + "(JD)"; break;
+                    //case "justDiceToolStripMenuItem": CurrentSite = new JD(this); siteToolStripMenuItem.Text = "Site " + "(JD)"; break;
                     case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new BetKing(this); siteToolStripMenuItem.Text = "Site " + "(BK)"; break;
                     case "diceToolStripMenuItem": CurrentSite = new dice999(this, false); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     case "dogeToolStripMenuItem": CurrentSite = new dice999(this, true); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
-                    case "primeDiceToolStripMenuItem": CurrentSite = new PD(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
+                    case "primeDiceToolStripMenuItem": CurrentSite = new PrimeDice(this); siteToolStripMenuItem.Text = "Site " + "(PD)"; break;
                     case "safediceToolStripMenuItem": CurrentSite = new SafeDice(this); siteToolStripMenuItem.Text = "Site (SD)"; break;
                     case "bitDiceToolStripMenuItem": CurrentSite = new bitdice(this); siteToolStripMenuItem.Text = "Site (BD)"; break;
                     case "fortuneJackToolStripMenuItem": CurrentSite = new FortuneJack(this); siteToolStripMenuItem.Text = "Site (FJ)"; break;
@@ -6180,7 +6194,7 @@ end";
 
         private void donateToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-           // Donate tmp = new Donate(CurrentSite.Name);
+            // Donate tmp = new Donate(CurrentSite.Name);
             //tmp.Show();
         }
 
