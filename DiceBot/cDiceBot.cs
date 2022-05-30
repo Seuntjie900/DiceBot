@@ -132,7 +132,7 @@ namespace DiceBot
         string ching = "";
         string salarm = "";
         bool startupMessage = true;
-        int donateMode = 2;
+        int donateMode = 1;
         decimal donatePercentage = 1;
         #endregion
 
