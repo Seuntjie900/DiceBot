@@ -28,10 +28,15 @@
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <MapFileExtensions>false</MapFileExtensions>
+    <ProductName>Dicebot</ProductName>
+    <SuiteName>Ficebot</SuiteName>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>7</ApplicationRevision>
+    <ApplicationVersion>4.1.03.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <ExcludeDeploymentUrl>true</ExcludeDeploymentUrl>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -64,10 +69,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>E10D9A30C7D396048C0CA499F0773A605A131811</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>F8177F09ABD70BE3E9901B90A91B09A9D84A834A</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>DiceBot_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>dicebot_2022.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -121,7 +126,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>dicebot_2022.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FastColoredTextBox, Version=2.16.24.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
@@ -133,17 +141,10 @@
     <Reference Include="GraphQL.Common, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GraphQL.Common.1.0.3\lib\netstandard1.0\GraphQL.Common.dll</HintPath>
     </Reference>
-    <Reference Include="JDCAPI">
-      <HintPath>..\PrivateReferences\JDCAPI.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Client.2.3.0\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="NBitcoin, Version=4.1.1.66, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NBitcoin.4.1.1.66\lib\net452\NBitcoin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -209,52 +210,56 @@
     <Compile Include="BetHistory.Designer.cs">
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
-    <Compile Include="BetKing.cs" />
+    <Compile Include="Core\AppHelpers.cs" />
+    <Compile Include="Core\cBet.cs" />
+    <Compile Include="Core\DiceSite.cs" />
+    <Compile Include="Core\Random.cs" />
+    <Compile Include="Sites\BetKing.cs" />
     <Compile Include="BitdiceConfirm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="BitdiceConfirm.Designer.cs">
       <DependentUpon>BitdiceConfirm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BitExo.cs" />
-    <Compile Include="Bitvest.cs" />
-    <Compile Include="DuckDice.cs" />
-    <Compile Include="EtherCrash.cs" />
-    <Compile Include="Freebitcoin.cs" />
-    <Compile Include="Kingdice.cs" />
+    <Compile Include="Sites\bitdice.cs" />
+    <Compile Include="Sites\BitExo.cs" />
+    <Compile Include="Sites\Bitvest.cs" />
+    <Compile Include="Sites\DuckDice.cs" />
+    <Compile Include="Sites\EtherCrash.cs" />
+    <Compile Include="Sites\Freebitcoin.cs" />
+    <Compile Include="Sites\Kingdice.cs" />
     <Compile Include="LoginFailedForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LoginFailedForm.Designer.cs">
       <DependentUpon>LoginFailedForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NitroDice.cs" />
-    <Compile Include="NitrogenSports.cs" />
-    <Compile Include="SatoshiDice.cs" />
+    <Compile Include="Sites\NitroDice.cs" />
+    <Compile Include="Sites\NitrogenSports.cs" />
+    <Compile Include="Sites\PrimeDice.cs" />
+    <Compile Include="Sites\SatoshiDice.cs" />
     <Compile Include="SeedInput.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SeedInput.Designer.cs">
       <DependentUpon>SeedInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stake.cs" />
+    <Compile Include="Sites\Stake.cs" />
     <Compile Include="StatsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="StatsForm.Designer.cs">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="bitdice.cs" />
-    <Compile Include="Bitlser.cs" />
+    <Compile Include="Sites\Bitlser.cs" />
     <Compile Include="cDiceBot.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="cDiceBot.Designer.cs">
       <DependentUpon>cDiceBot.cs</DependentUpon>
     </Compile>
-    <Compile Include="cBet.cs" />
-    <Compile Include="Cloudflare.cs" />
-    <Compile Include="cryptogames.cs" />
+    <Compile Include="Core\Cloudflare.cs" />
+    <Compile Include="Sites\cryptogames.cs" />
     <Compile Include="Custom Chart.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -285,28 +290,26 @@
     <Compile Include="ConfirmPassword.Designer.cs">
       <DependentUpon>ConfirmPassword.cs</DependentUpon>
     </Compile>
-    <Compile Include="dice999.cs" />
-    <Compile Include="DiceSite.cs" />
-    <Compile Include="Email.cs" />
-    <Compile Include="FortuneJack.cs" />
+    <Compile Include="Sites\dice999.cs" />
+    <Compile Include="Core\Email.cs" />
+    <Compile Include="Sites\FortuneJack.cs" />
     <Compile Include="Graph.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Graph.Designer.cs">
       <DependentUpon>Graph.cs</DependentUpon>
     </Compile>
-    <Compile Include="imgur.cs" />
-    <Compile Include="JD.cs" />
-    <Compile Include="json.cs" />
+    <Compile Include="Core\imgur.cs" />
+    <Compile Include="Sites\JD.cs" />
+    <Compile Include="Core\json.cs" />
     <Compile Include="Mersenne.cs" />
-    <Compile Include="Messagehelpr.cs" />
+    <Compile Include="Core\Messagehelpr.cs" />
     <Compile Include="MiniBrowser.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MiniBrowser.Designer.cs">
       <DependentUpon>MiniBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="PD.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxy.cs">
@@ -315,8 +318,8 @@
     <Compile Include="Proxy.Designer.cs">
       <DependentUpon>Proxy.cs</DependentUpon>
     </Compile>
-    <Compile Include="SafeDice.cs" />
-    <Compile Include="SavedItem.cs" />
+    <Compile Include="Sites\SafeDice.cs" />
+    <Compile Include="Core\SavedItem.cs" />
     <Compile Include="Settings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -335,8 +338,8 @@
     <Compile Include="Simulate.Designer.cs">
       <DependentUpon>Simulate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Simulation.cs" />
-    <Compile Include="sqlite_helper.cs" />
+    <Compile Include="Core\Simulation.cs" />
+    <Compile Include="Core\sqlite_helper.cs" />
     <Compile Include="Startup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -355,7 +358,7 @@
     <Compile Include="StreakTable.Designer.cs">
       <DependentUpon>StreakTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="textValues_en.cs" />
+    <Compile Include="Core\textValues_en.cs" />
     <Compile Include="UserInput.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -368,9 +371,9 @@
     <Compile Include="Verify.Designer.cs">
       <DependentUpon>Verify.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinDice.cs" />
-    <Compile Include="WolfBet.cs" />
-    <Compile Include="YoloDice.cs" />
+    <Compile Include="Sites\WinDice.cs" />
+    <Compile Include="Sites\WolfBet.cs" />
+    <Compile Include="Sites\YoloDice.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
@@ -451,8 +454,7 @@
       <DependentUpon>Verify.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="DiceBot_1_TemporaryKey.pfx" />
+    <None Include="dicebot_2022.pfx" />
     <None Include="DiceBot_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />

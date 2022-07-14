@@ -680,7 +680,7 @@
             this.pnlAdvanced.Controls.Add(this.tcSettings);
             this.pnlAdvanced.Controls.Add(this.panel4);
             this.pnlAdvanced.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlAdvanced.Location = new System.Drawing.Point(367, 0);
+            this.pnlAdvanced.Location = new System.Drawing.Point(244, 0);
             this.pnlAdvanced.Name = "pnlAdvanced";
             this.pnlAdvanced.Size = new System.Drawing.Size(475, 525);
             this.pnlAdvanced.TabIndex = 2;
@@ -4736,7 +4736,7 @@
             this.pnlApiInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlApiInfo.Location = new System.Drawing.Point(0, 219);
             this.pnlApiInfo.Name = "pnlApiInfo";
-            this.pnlApiInfo.Size = new System.Drawing.Size(1196, 306);
+            this.pnlApiInfo.Size = new System.Drawing.Size(1048, 306);
             this.pnlApiInfo.TabIndex = 7;
             // 
             // groupBox6
@@ -4745,7 +4745,7 @@
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(0, 0);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(1196, 306);
+            this.groupBox6.Size = new System.Drawing.Size(1048, 306);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Bets:";
@@ -4767,14 +4767,14 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer1.Size = new System.Drawing.Size(1190, 287);
+            this.splitContainer1.Size = new System.Drawing.Size(1042, 287);
             this.splitContainer1.SplitterDistance = 168;
             this.splitContainer1.TabIndex = 0;
             // 
             // btnChartReset
             // 
             this.btnChartReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChartReset.Location = new System.Drawing.Point(1112, 84);
+            this.btnChartReset.Location = new System.Drawing.Point(964, 84);
             this.btnChartReset.Name = "btnChartReset";
             this.btnChartReset.Size = new System.Drawing.Size(75, 23);
             this.btnChartReset.TabIndex = 3;
@@ -4785,7 +4785,7 @@
             // btnDisable
             // 
             this.btnDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDisable.Location = new System.Drawing.Point(1112, 113);
+            this.btnDisable.Location = new System.Drawing.Point(964, 113);
             this.btnDisable.Name = "btnDisable";
             this.btnDisable.Size = new System.Drawing.Size(75, 23);
             this.btnDisable.TabIndex = 2;
@@ -4796,7 +4796,7 @@
             // btnHideLive
             // 
             this.btnHideLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHideLive.Location = new System.Drawing.Point(1112, 142);
+            this.btnHideLive.Location = new System.Drawing.Point(964, 142);
             this.btnHideLive.Name = "btnHideLive";
             this.btnHideLive.Size = new System.Drawing.Size(75, 23);
             this.btnHideLive.TabIndex = 1;
@@ -4821,7 +4821,7 @@
             series1.Name = "Profit";
             series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
             this.chrtEmbeddedLiveChart.Series.Add(series1);
-            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(1190, 168);
+            this.chrtEmbeddedLiveChart.Size = new System.Drawing.Size(1042, 168);
             this.chrtEmbeddedLiveChart.TabIndex = 0;
             this.chrtEmbeddedLiveChart.Text = "chart1";
             // 
@@ -4843,7 +4843,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(1190, 115);
+            this.dataGridView1.Size = new System.Drawing.Size(1042, 115);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
@@ -4905,7 +4905,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1196, 219);
+            this.panel5.Size = new System.Drawing.Size(1048, 219);
             this.panel5.TabIndex = 4;
             // 
             // gbLogin
@@ -5457,7 +5457,7 @@
             this.pnlBasic.Controls.Add(this.btnStartLow2);
             this.pnlBasic.Controls.Add(this.btnStartHigh2);
             this.pnlBasic.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlBasic.Location = new System.Drawing.Point(842, 0);
+            this.pnlBasic.Location = new System.Drawing.Point(719, 0);
             this.pnlBasic.Name = "pnlBasic";
             this.pnlBasic.Size = new System.Drawing.Size(149, 525);
             this.pnlBasic.TabIndex = 8;
@@ -5750,8 +5750,8 @@
             this.scMain.Panel2.Controls.Add(this.pnlBasic);
             this.scMain.Panel2.Controls.Add(this.pnlProgrammer);
             this.scMain.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint);
-            this.scMain.Size = new System.Drawing.Size(2195, 527);
-            this.scMain.SplitterDistance = 1198;
+            this.scMain.Size = new System.Drawing.Size(1924, 527);
+            this.scMain.SplitterDistance = 1050;
             this.scMain.TabIndex = 9;
             // 
             // pnlProgrammer
@@ -5763,7 +5763,7 @@
             this.pnlProgrammer.Location = new System.Drawing.Point(0, 0);
             this.pnlProgrammer.MinimumSize = new System.Drawing.Size(550, 100);
             this.pnlProgrammer.Name = "pnlProgrammer";
-            this.pnlProgrammer.Size = new System.Drawing.Size(991, 525);
+            this.pnlProgrammer.Size = new System.Drawing.Size(868, 525);
             this.pnlProgrammer.TabIndex = 9;
             // 
             // tabControl2
@@ -5776,7 +5776,7 @@
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(991, 490);
+            this.tabControl2.Size = new System.Drawing.Size(868, 490);
             this.tabControl2.TabIndex = 0;
             // 
             // tabPage10
@@ -5786,7 +5786,7 @@
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(983, 464);
+            this.tabPage10.Size = new System.Drawing.Size(860, 464);
             this.tabPage10.TabIndex = 0;
             this.tabPage10.Text = "Code";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -5799,7 +5799,7 @@
             this.pnlLoadProgrammer.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlLoadProgrammer.Location = new System.Drawing.Point(3, 3);
             this.pnlLoadProgrammer.Name = "pnlLoadProgrammer";
-            this.pnlLoadProgrammer.Size = new System.Drawing.Size(977, 34);
+            this.pnlLoadProgrammer.Size = new System.Drawing.Size(854, 34);
             this.pnlLoadProgrammer.TabIndex = 10;
             // 
             // btnOpenCode
@@ -5815,7 +5815,7 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(892, 5);
+            this.button3.Location = new System.Drawing.Point(769, 5);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 8;
@@ -5966,7 +5966,7 @@
             this.pnlControlProgrammer.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlControlProgrammer.Location = new System.Drawing.Point(0, 490);
             this.pnlControlProgrammer.Name = "pnlControlProgrammer";
-            this.pnlControlProgrammer.Size = new System.Drawing.Size(991, 35);
+            this.pnlControlProgrammer.Size = new System.Drawing.Size(868, 35);
             this.pnlControlProgrammer.TabIndex = 1;
             // 
             // btnStopProgrammer
@@ -6001,7 +6001,7 @@
             this.donateToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(2195, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1924, 24);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -6269,7 +6269,7 @@
             // justDiceToolStripMenuItem
             // 
             this.justDiceToolStripMenuItem.Name = "justDiceToolStripMenuItem";
-            this.justDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.justDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.justDiceToolStripMenuItem.Text = "Just-Dice";
             this.justDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.justDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6278,7 +6278,7 @@
             // 
             this.primeDiceToolStripMenuItem.CheckOnClick = true;
             this.primeDiceToolStripMenuItem.Name = "primeDiceToolStripMenuItem";
-            this.primeDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.primeDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.primeDiceToolStripMenuItem.Text = "Prime Dice";
             this.primeDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.primeDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6287,7 +6287,7 @@
             // 
             this.diceToolStripMenuItem.CheckOnClick = true;
             this.diceToolStripMenuItem.Name = "diceToolStripMenuItem";
-            this.diceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.diceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.diceToolStripMenuItem.Text = "999Dice";
             this.diceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.diceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6295,7 +6295,7 @@
             // safediceToolStripMenuItem
             // 
             this.safediceToolStripMenuItem.Name = "safediceToolStripMenuItem";
-            this.safediceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.safediceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.safediceToolStripMenuItem.Text = "SafeDice";
             this.safediceToolStripMenuItem.Visible = false;
             this.safediceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
@@ -6304,7 +6304,7 @@
             // bitDiceToolStripMenuItem
             // 
             this.bitDiceToolStripMenuItem.Name = "bitDiceToolStripMenuItem";
-            this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.bitDiceToolStripMenuItem.Text = "BitDice";
             this.bitDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6313,7 +6313,7 @@
             // 
             this.fortuneJackToolStripMenuItem.Enabled = false;
             this.fortuneJackToolStripMenuItem.Name = "fortuneJackToolStripMenuItem";
-            this.fortuneJackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fortuneJackToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.fortuneJackToolStripMenuItem.Text = "FortuneJack";
             this.fortuneJackToolStripMenuItem.Visible = false;
             this.fortuneJackToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
@@ -6322,7 +6322,7 @@
             // cryptoGamesToolStripMenuItem
             // 
             this.cryptoGamesToolStripMenuItem.Name = "cryptoGamesToolStripMenuItem";
-            this.cryptoGamesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cryptoGamesToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.cryptoGamesToolStripMenuItem.Text = "Crypto-Games";
             this.cryptoGamesToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.cryptoGamesToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6330,7 +6330,7 @@
             // bitslerToolStripMenuItem
             // 
             this.bitslerToolStripMenuItem.Name = "bitslerToolStripMenuItem";
-            this.bitslerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitslerToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.bitslerToolStripMenuItem.Text = "Bitsler";
             this.bitslerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitslerToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6338,7 +6338,7 @@
             // satoshiDiceToolStripMenuItem
             // 
             this.satoshiDiceToolStripMenuItem.Name = "satoshiDiceToolStripMenuItem";
-            this.satoshiDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.satoshiDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.satoshiDiceToolStripMenuItem.Text = "Mega Dice";
             this.satoshiDiceToolStripMenuItem.Visible = false;
             this.satoshiDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
@@ -6347,7 +6347,7 @@
             // bitvestToolStripMenuItem
             // 
             this.bitvestToolStripMenuItem.Name = "bitvestToolStripMenuItem";
-            this.bitvestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitvestToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.bitvestToolStripMenuItem.Text = "Bitvest";
             this.bitvestToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitvestToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6355,7 +6355,7 @@
             // kingDiceToolStripMenuItem
             // 
             this.kingDiceToolStripMenuItem.Name = "kingDiceToolStripMenuItem";
-            this.kingDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.kingDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.kingDiceToolStripMenuItem.Text = "KingDice";
             this.kingDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.kingDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6363,7 +6363,7 @@
             // nitorgenSportsToolStripMenuItem
             // 
             this.nitorgenSportsToolStripMenuItem.Name = "nitorgenSportsToolStripMenuItem";
-            this.nitorgenSportsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nitorgenSportsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.nitorgenSportsToolStripMenuItem.Text = "Nitorgen Sports";
             this.nitorgenSportsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.nitorgenSportsToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6371,7 +6371,7 @@
             // yoloDiceToolStripMenuItem
             // 
             this.yoloDiceToolStripMenuItem.Name = "yoloDiceToolStripMenuItem";
-            this.yoloDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.yoloDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.yoloDiceToolStripMenuItem.Text = "YoloDice";
             this.yoloDiceToolStripMenuItem.Visible = false;
             this.yoloDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
@@ -6380,7 +6380,7 @@
             // bitExoToolStripMenuItem
             // 
             this.bitExoToolStripMenuItem.Name = "bitExoToolStripMenuItem";
-            this.bitExoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitExoToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.bitExoToolStripMenuItem.Text = "Bit-Exo";
             this.bitExoToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.bitExoToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6388,7 +6388,7 @@
             // duckDiceToolStripMenuItem
             // 
             this.duckDiceToolStripMenuItem.Name = "duckDiceToolStripMenuItem";
-            this.duckDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.duckDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.duckDiceToolStripMenuItem.Text = "DuckDice";
             this.duckDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.duckDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6396,7 +6396,7 @@
             // freebitcoinToolStripMenuItem
             // 
             this.freebitcoinToolStripMenuItem.Name = "freebitcoinToolStripMenuItem";
-            this.freebitcoinToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.freebitcoinToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.freebitcoinToolStripMenuItem.Text = "Freebitco.in";
             this.freebitcoinToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.freebitcoinToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6404,7 +6404,7 @@
             // stakeToolStripMenuItem
             // 
             this.stakeToolStripMenuItem.Name = "stakeToolStripMenuItem";
-            this.stakeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stakeToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.stakeToolStripMenuItem.Text = "Stake";
             this.stakeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.stakeToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6412,7 +6412,7 @@
             // nitrodiceToolStripMenuItem
             // 
             this.nitrodiceToolStripMenuItem.Name = "nitrodiceToolStripMenuItem";
-            this.nitrodiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nitrodiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.nitrodiceToolStripMenuItem.Text = "Nitrodice";
             this.nitrodiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.nitrodiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6420,7 +6420,7 @@
             // etherCrashToolStripMenuItem
             // 
             this.etherCrashToolStripMenuItem.Name = "etherCrashToolStripMenuItem";
-            this.etherCrashToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.etherCrashToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.etherCrashToolStripMenuItem.Text = "EtherCrash";
             this.etherCrashToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.etherCrashToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6428,7 +6428,7 @@
             // winDiceToolStripMenuItem
             // 
             this.winDiceToolStripMenuItem.Name = "winDiceToolStripMenuItem";
-            this.winDiceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.winDiceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.winDiceToolStripMenuItem.Text = "WinDice";
             this.winDiceToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.winDiceToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6436,7 +6436,7 @@
             // wolfBetToolStripMenuItem
             // 
             this.wolfBetToolStripMenuItem.Name = "wolfBetToolStripMenuItem";
-            this.wolfBetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.wolfBetToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.wolfBetToolStripMenuItem.Text = "Wolf.Bet";
             this.wolfBetToolStripMenuItem.CheckedChanged += new System.EventHandler(this.justDiceToolStripMenuItem_CheckedChanged);
             this.wolfBetToolStripMenuItem.Click += new System.EventHandler(this.justDiceToolStripMenuItem_Click);
@@ -6558,7 +6558,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 551);
             this.statusStrip1.MaximumSize = new System.Drawing.Size(0, 100);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(2195, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1924, 22);
             this.statusStrip1.TabIndex = 11;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -6583,7 +6583,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2195, 573);
+            this.ClientSize = new System.Drawing.Size(1924, 573);
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.statusStrip1);
