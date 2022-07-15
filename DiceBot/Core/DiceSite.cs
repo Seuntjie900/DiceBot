@@ -109,6 +109,12 @@ namespace DiceBot.Core
         public bool ForceUpdateStats = false;
         public bool AutoUpdate = true;
 
+
+        public bool HaveMirrors { get; set; } = false;
+        public List<string>  MirrorList { get; set; }
+
+        public string CurrentMirror { get;  set; }
+
         public int GetWins()
         {
             return wins;
@@ -128,6 +134,11 @@ namespace DiceBot.Core
         public int GetBets()
         {
             return bets;
+        }
+
+        public virtual void UpdateMirror(string url)
+        {
+            //URL = url;
         }
 
         public void PlaceBet(bool High, decimal amount, decimal chance, string BetGuid)

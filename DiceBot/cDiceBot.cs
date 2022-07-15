@@ -35,7 +35,7 @@ namespace DiceBot
         #endregion
 
         //Version number to test against site
-        public const string vers = AppHelpers.vers;//"3.4.15";
+        public const string vers = AppHelpers.AppVersion;
         public string UserAgent
         {
             get
@@ -43,7 +43,7 @@ namespace DiceBot
                 string windows = Environment.OSVersion.VersionString;
                 bool is64 = Environment.Is64BitOperatingSystem;
 
-                string agent = $"DiceBot/{ AppHelpers.vers} (+http://bot.seuntjie.com)";
+                string agent = $"DiceBot/{ AppHelpers.AppVersion} (+http://bot.seuntjie.com)";
                 return agent;
             }
         }
@@ -149,8 +149,8 @@ namespace DiceBot
         List<decimal> LabList = new List<decimal>();
         #endregion
 
-        DiceSite currentsite;
-        DiceSite CurrentSite
+        private DiceSite currentsite;
+        public DiceSite CurrentSite
         {
             get
             {
@@ -248,19 +248,22 @@ namespace DiceBot
             {
 
             }
+
             bool Win = (((bool)bet.high ? (decimal)bet.Roll > (decimal)CurrentSite.maxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)));
+
             if (!RunningSimulation)
             {
-
                 new Thread(new ParameterizedThreadStart(AddChartPoint)).Start(Win);
             }
+
             if (InvokeRequired)
             {
                 Invoke(new dDobet(DoBet), bet);
             }
             else
+            {
                 DoBet(bet);
-
+            }
 
             //FileInfo tmp = new FileInfo("");
 
@@ -396,10 +399,13 @@ namespace DiceBot
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-      | SecurityProtocolType.Tls11;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
             sqlite_helper.CheckDBS();
             InitializeComponent();
+
+
+            Text = AppHelpers.AppFullName;
+
             richTextBox3 = new FastColoredTextBox();
             richTextBox3.Dock = DockStyle.Fill;
             richTextBox3.Language = Language.Lua;
@@ -419,6 +425,7 @@ function dobet()
 
 end";
             tsmiVersion.Text = "Version " + vers;
+
             foreach (string s in args)
             {
                 if (s.StartsWith("log="))
@@ -427,6 +434,7 @@ end";
                     int.TryParse(loglev, out LogLevel);
                 }
             }
+
             DumpLog("starting bot " + vers, 6);
             PopulateSaveNames();
             WriteConsole("Starting Dicebot " + vers);
@@ -439,6 +447,7 @@ end";
             basicToolStripMenuItem.Checked = true;
             //chrtEmbeddedLiveChart.Series[0].Points.AddXY(0, 0);
             //chrtEmbeddedLiveChart.ChartAreas[0].AxisX.Minimum = 0;
+
             #region tooltip Texts
             ToolTip tt = new ToolTip();
             tt.SetToolTip(gbZigZag, "After every n bets/wins/losses \n(as specified to the right), \nthe bot will switch from \nbetting high to low or vica verca");
@@ -503,9 +512,11 @@ end";
 
 
             #endregion
+
             primeDiceToolStripMenuItem.Checked = true;
 
             bool frst = true;
+
             foreach (string s in PrimeDice.sCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
@@ -667,21 +678,6 @@ end";
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
 
             }
-
-
-            //foreach (string s in YoloDice.cCurrencies)
-            //{
-            //    ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
-            //    if (frst)
-            //    {
-            //        tmpItem.Checked = true;
-            //        frst = false;
-            //    }
-            //    yoloDiceToolStripMenuItem.DropDown.Items.Add(tmpItem);
-            //    tmpItem.Click += btcToolStripMenuItem_Click;
-            //    tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
-            //}
-
             foreach (string s in NitroDice.sCurrencies)
             {
                 ToolStripMenuItem tmpItem = new ToolStripMenuItem { Text = s };
@@ -744,6 +740,7 @@ end";
                 tmpItem.Click += btcToolStripMenuItem_Click;
                 tmpItem.CheckedChanged += btcToolStripMenuItem_CheckedChanged;
             }
+
             if (!File.Exists(Environment.GetEnvironmentVariable("APPDATA") + "\\DiceBot2\\settings"))
             {
                 if (MessageBox.Show("Dice Bot has detected that there are no default settings saved on this computer." +
@@ -766,17 +763,22 @@ end";
             else
             {
                 if (Emails == null)
+                {
                     Emails = new Email("", "");
+                }
                 load();
                 loadsettings();
                 if (txtQuickSwitch.Text != "")
+                {
                     btnStratRefresh_Click(btnStratRefresh, new EventArgs());
+                }
             }
 
             tmStop.Enabled = true;
 
-            Thread tGetVers = new Thread(new ThreadStart(getversion));
-            tGetVers.Start();
+            //Thread tGetVers = new Thread(new ThreadStart(getversion));
+            //tGetVers.Start();
+
             populateFiboNacci();
 
             if (autologin)
@@ -784,8 +786,8 @@ end";
                 CurrentSite.FinishedLogin -= CurrentSite_FinishedLogin;
                 CurrentSite.FinishedLogin += CurrentSite_FinishedLogin;
                 CurrentSite.Login(username, password, txtApi2fa.Text);
-
             }
+
             Lua.RegisterFunction("withdraw", this, new dWithdraw(luaWithdraw).Method);
             Lua.RegisterFunction("vault", this, new dVault(luaVault).Method);
             Lua.RegisterFunction("invest", this, new dInvest(luainvest).Method);
@@ -4284,7 +4286,7 @@ end";
 
                     TrayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
                     TrayIcon.BalloonTipText = "DiceBot is still running";
-                    TrayIcon.BalloonTipTitle = "DiceBot";
+                    TrayIcon.BalloonTipTitle = AppHelpers.AppVersion;// "DiceBot";
                     TrayIcon.BalloonTipIcon = ToolTipIcon.None;
                     TrayIcon.ShowBalloonTip(500);
                     this.Hide();
@@ -4411,9 +4413,13 @@ end";
             RunningSimulation = true;
             stop = false;
             if (programmerToolStripMenuItem.Checked)
+            {
                 Lastbet = Lastbet;
+            }
             else
+            {
                 Lastbet = MinBet;
+            }
             Start(false);
 
         }
@@ -5238,6 +5244,10 @@ end";
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
                 }
 
+                if (CurrentSite.HaveMirrors)
+                {
+                    CurrentSite.UpdateMirror(comboBoxMirrorSelector.SelectedItem.ToString());
+                }
                 CurrentSite.Currency = curcur;
                 CurrentSite.FinishedLogin -= CurrentSite_FinishedLogin;
                 CurrentSite.FinishedLogin += CurrentSite_FinishedLogin;
@@ -5274,7 +5284,7 @@ end";
                         case "Bitvest": CurrentSite = new Bitvest(this); break;
                         case "KingDice": CurrentSite = new Kingdice(this); break;
                         case "NitrogenSports": CurrentSite = new NitrogenSports(this); break;
-                       // case "YoloDice": CurrentSite = new YoloDice(this); break;
+                        // case "YoloDice": CurrentSite = new YoloDice(this); break;
                         case "Bit-Exo": CurrentSite = new BitExo(this); break;
                         case "DuckDice": CurrentSite = new DuckDice(this); break;
                         case "FreeBitcoin": CurrentSite = new Freebitcoin(this); break;
@@ -5790,17 +5800,21 @@ end";
             Process.Start("https://bot.seuntjie.com/gettingstarted.aspxex");
         }
 
-        private void justDiceToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void onSiteMenuItem_CheckedChanged(object sender, EventArgs e)
         {
+
             EnableNotLoggedInControls(false);
+
             if (CurrentSite != null)
             {
                 CurrentSite.Disconnect();
             }
+
             if (CurrentSite is PrimeDice)
             {
                 (CurrentSite as PrimeDice).ispd = false;
             }
+
             if ((sender as ToolStripMenuItem).Checked)
             {
                 foreach (ToolStripMenuItem t in siteToolStripMenuItem.DropDownItems)
@@ -5814,9 +5828,9 @@ end";
                         t.Checked = false;
                     }
                 }
+
                 switch ((sender as ToolStripMenuItem).Name)
                 {
-                    //case "justDiceToolStripMenuItem": CurrentSite = new JD(this); siteToolStripMenuItem.Text = "Site " + "(JD)"; break;
                     case "pocketRocketsCasinoToolStripMenuItem": CurrentSite = new BetKing(this); siteToolStripMenuItem.Text = "Site " + "(BK)"; break;
                     case "diceToolStripMenuItem": CurrentSite = new dice999(this, false); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
                     case "dogeToolStripMenuItem": CurrentSite = new dice999(this, true); siteToolStripMenuItem.Text = "Site " + "(999D)"; break;
@@ -5830,7 +5844,6 @@ end";
                     case "bitvestToolStripMenuItem": CurrentSite = new Bitvest(this); siteToolStripMenuItem.Text = "Site (BV)"; break;
                     case "kingDiceToolStripMenuItem": CurrentSite = new Kingdice(this); siteToolStripMenuItem.Text = "Site (KD)"; break;
                     case "nitorgenSportsToolStripMenuItem": CurrentSite = new NitrogenSports(this); siteToolStripMenuItem.Text = "Site (NS)"; break;
-                    //case "yoloDiceToolStripMenuItem": CurrentSite = new YoloDice(this); siteToolStripMenuItem.Text = "Site (YD)"; break;
                     case "bitExoToolStripMenuItem": CurrentSite = new BitExo(this); siteToolStripMenuItem.Text = "Site (BE)"; break;
                     case "duckDiceToolStripMenuItem": CurrentSite = new DuckDice(this); siteToolStripMenuItem.Text = "Site (Quack)"; break;
                     case "freebitcoinToolStripMenuItem": CurrentSite = new Freebitcoin(this); siteToolStripMenuItem.Text = "Site (FBtc)"; break;
@@ -5840,12 +5853,14 @@ end";
                     case "winDiceToolStripMenuItem": CurrentSite = new WinDice(this); siteToolStripMenuItem.Text = "Site (WD)"; break;
                     case "wolfBetToolStripMenuItem": CurrentSite = new WolfBet(this); siteToolStripMenuItem.Text = "Site (Awoo!)"; break;
                 }
+
                 lblUsername.Text = CurrentSite.UsernameText;
                 lblPass.Text = CurrentSite.PasswordText;
                 lblMFAText.Text = CurrentSite.MFAText;
                 lblXtraControl.Text = CurrentSite.XtraText;
                 lblXtraControl.Visible = CurrentSite.ShowXtra;
                 txtExtraBox.Visible = CurrentSite.ShowXtra;
+
                 if (CurrentSite is DuckDice dd)
                 {
                     cmbDuckMode.SelectedIndex = 0;
@@ -5856,48 +5871,42 @@ end";
                 {
                     lblDuckMode.Visible = cmbDuckMode.Visible = false;
                 }
-                /*if (CurrentSite is WD|| CurrentSite is PD || CurrentSite is dadice || CurrentSite is CoinMillions || CurrentSite is Coinichiwa || CurrentSite is cryptogames)
-                {
-                    lblPass.Text = "API key:";
-                    lblUsername.Text = "Username:";
-                }
-                else if (CurrentSite is BB || CurrentSite is moneypot) 
-                {
-                    lblPass.Text = "API Token:";
 
-                    lblUsername.Text = "Username:";
-                }
-                else if (CurrentSite is MoneroDice)
+
+                if (CurrentSite.HaveMirrors)
                 {
-                    lblPass.Text = "Private Key:";
-                    lblUsername.Text = "Public Key:";
-                }
-                else if (CurrentSite is SatoshiDice)
-                {
-                    lblUsername.Text = "Email";
-                    lblPass.Text = "Password:";
-                }
-                else if (CurrentSite is rollin)
-                {
-                    lblPass.Text = "API Key:";
-                    lblUsername.Text = "Username:";
-                    
+
+                    mirrorSelectorLabel.Visible = true;
+                    comboBoxMirrorSelector.Items.Clear();
+                    comboBoxMirrorSelector.Visible = true;
+                    comboBoxMirrorSelector.AutoCompleteMode = AutoCompleteMode.None;
+
+                    foreach (var item in CurrentSite.MirrorList)
+                    {
+                        comboBoxMirrorSelector.Items.Add(item);
+                    }
+
                 }
                 else
                 {
-                    lblPass.Text = "Password:";
-                    lblUsername.Text = "Username:";
-                }*/
+                    mirrorSelectorLabel.Visible = false;
+                    comboBoxMirrorSelector.Visible = false;
+                }
 
                 rdbInvest.Enabled = CurrentSite.AutoInvest;
+
                 if (!rdbInvest.Enabled)
                     rdbInvest.Checked = false;
+
                 rdbWithdraw.Enabled = CurrentSite.AutoWithdraw;
                 rdbLimitTip.Enabled = CurrentSite.Tip;
+
                 if (!rdbWithdraw.Enabled)
                     rdbWithdraw.Checked = false;
+
                 if (!rdbLimitTip.Enabled)
                     rdbLimitTip.Checked = false;
+
                 if (UseProxy)
                     CurrentSite.SetProxy(proxHost, proxport, proxUser, proxPass);
             }
@@ -5994,6 +6003,7 @@ end";
                 Balance = Site.balance;
             }
         }
+
         SiteDetails CurrentSiteDetails = null;
         void SetLuaVars()
         {
@@ -7083,6 +7093,24 @@ end";
             {
                 dd.Mode = cmbDuckMode.SelectedIndex + 1;
             }
+        }
+
+        private void comboBoxMirrorSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxMirrorSelector_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (CurrentSite is Stake s)
+            {
+                s.UpdateMirror(comboBoxMirrorSelector.SelectedItem.ToString());
+            }
+        }
+
+        private void label37_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void seedsToolStripMenuItem_Click(object sender, EventArgs e)
