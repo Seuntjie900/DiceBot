@@ -13,9 +13,11 @@ namespace DiceBot
     class Stake : PrimeDice
     {
 
-        public static new string[] sCurrencies = new string[] { "Btc", "Eth", "Ltc", "Doge", "Bch", "Xrp", "Trx", "Eos" };
+        public static new string[] sCurrencies = new string[] { "BTC", "ETH", "LTC", "DOGE", "BCH", "XRP", "TRX", "EOS", "BNB", "USDT" };
 
-        public Stake(cDiceBot Parent) : base(Parent)/*:base(Parent)*/
+
+
+        public Stake(cDiceBot Parent) : base(Parent)
         {
             this.Currencies = sCurrencies;
             this.Currency = "Btc";
@@ -25,7 +27,7 @@ namespace DiceBot
             AutoWithdraw = true;
             ChangeSeed = true;
             AutoLogin = true;
-            BetURL = "https://api.stake.com/bets/";
+            BetURL = "https://api.stake.bet/bets/";
             register = false;
             this.Parent = Parent;
             Name = "Stake";
@@ -33,13 +35,27 @@ namespace DiceBot
             Tip = false;
             TipUsingName = true;
 
-            SiteURL = "https://stake.com/?code=seuntjie";
-            URL = "https://api.stake.com/graphql";
+            SiteURL = "https://stake.com/";
+            URL = "https://api.stake.bet/graphql";
             RolName = "diceRoll";
             Vault = true;
             GameName = "CasinoGameDice";
             StatGameName = "dice";
             EnumName = "CasinoGameDiceConditionEnum";
+            HaveMirrors = true;
+            MirrorList = new List<string> { "stake.com",
+                                            "stake.bet",
+                                            "stake.games",
+                                            "staketr.com",
+                                            "staketr2.com",
+                                            "staketr3.com",
+                                            "staketr4.com",
+                                            "staketr5.com",
+                                            "stake.bz",
+                                            "stake.jp",
+                                            "stake.ac",
+                                            "stake.icu" };
+            CurrentMirror = "";
         }
         public override decimal GetLucky(string server, string client, int nonce)
         {
@@ -91,6 +107,21 @@ namespace DiceBot
             total = Math.Floor(total * 10001) / 100m;
             return total;
             return 0;
+        }
+
+
+
+        public override void UpdateMirror(string url)
+        {
+            //CurrentMirror = Parent.
+            if (url != "" && MirrorList.Contains(url))
+            {
+                BetURL = $"https://api.{url}/bets/";
+                SiteURL = $"https://{url}/";
+                URL = $"https://api.{url}/graphql";
+                //base.UpdateMirror(URL);
+            }
+            
         }
     }
 }

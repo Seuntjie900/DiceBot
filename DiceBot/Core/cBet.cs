@@ -24,7 +24,7 @@ namespace DiceBot
         public string Currency { get; set; }
         public string Id { get; set; }
         private decimal chance = 0;
-        public decimal Chance { get { return chance; } set { if (value > 100)chance = value / 10000; else chance = value; } }
+        public decimal Chance { get { return chance; } set { if (value > 100) chance = value / 10000; else chance = value; } }
         private string betdate = "";
         public string BetDate
         {
@@ -94,6 +94,6 @@ namespace DiceBot
             return false;
         }
     }
-   
+
 }
 
