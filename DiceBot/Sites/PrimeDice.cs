@@ -193,7 +193,33 @@ namespace DiceBot
         protected string GameName = "CasinoGamePrimedice";
         protected string EnumName = "CasinoGamePrimediceConditionEnum";
         protected string StatGameName = "primedice";
-        public static string[] sCurrencies = new string[] { "BTC", "ETH", "LTC", "DOGE", "BCH", "XRP", "TRX", "EOS", "BNB", "USDT" };
+
+        private static string[] _sCurrencies = new string[]
+        {
+            "BTC",
+            "ETH",
+            "LTC",
+            "DOGE",
+            "BCH",
+            "XRP",
+            "TRX",
+            "EOS",
+            "BNB",
+            "USDT",
+            "ape",
+            "busd",
+            "cro",
+            "dai",
+            "link",
+            "sand",
+            "shib",
+            "uni",
+            "usdc"
+        };
+
+
+        public static string[] sCurrencies => _sCurrencies.OrderBy(x => x).ToArray();
+
         GraphQL.Client.GraphQLClient GQLClient;
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
@@ -658,7 +684,8 @@ namespace DiceBot
         public override void Disconnect()
         {
             ispd = false;
-            if (accesstoken != "") { 
+            if (accesstoken != "")
+            {
                 try
                 {
                     string sEmitResponse = Client.GetStringAsync("logout?api_key=" + accesstoken).Result;
@@ -775,5 +802,5 @@ namespace DiceBot
             throw new NotImplementedException();
         }
 
-    }    
+    }
 }
