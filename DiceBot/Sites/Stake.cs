@@ -37,7 +37,7 @@ namespace DiceBot
 };
 
 
-        public static new string[] sCurrencies => _sCurrencies.Select(x => x.ToLowerInvariant()).OrderBy(x => x).ToArray();
+        public static new string[] sCurrencies => _sCurrencies.Select(x => x.ToUpperInvariant()).OrderBy(x => x).ToArray();
 
 
         public Stake(cDiceBot Parent) : base(Parent)
