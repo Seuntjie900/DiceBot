@@ -524,6 +524,42 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.109.2\build\net451\System.Data.SQLite.Core.targets'))" />
   </Target>
+<!--
+  <Target Name="CreateDeployZip">
+    <PropertyGroup>
+      <StringDate>$([System.DateTime]::Now.ToString('yyyyMMdd'))</StringDate>
+    </PropertyGroup>
+    <ItemGroup>
+        <DebugApplicationFiles Include="$(DebugPath)\**\*.*" Exclude="$(DebugPath)\*vshost.exe*" />
+    </ItemGroup>
+    <MakeDir Directories="$(NightlyBuildPath)"/>
+    <Zip Files="@(DebugApplicationFiles)"
+      WorkingDirectory="$(DebugPath)"
+      ZipFileName="$(NightlyBuildPath)\$(StringDate)_$(NightlyZipName).zip"
+      ZipLevel="9" />
+</Target>
+-->
+<!--
+
+  <FileUpdate File="$(RootDir)/GlobalAssemblyInfo.cs"
+            Regex='AssemblyFileVersion[(]"[^"]+"[)]'
+            ReplacementText='AssemblyFileVersion("$(VersionNumber)")' />
+
+
+ <Target Name="ZipOutputPath" AfterTargets="Build">
+        <ZipDirectory
+            SourceDirectory="$(OutputPath)"
+            DestinationFile="$(OutputPath)\..\$(AssemblyName).zip"
+            Overwrite=="true" />
+    </Target>
+    -->
+<Target Name="ZipOutputPath" AfterTargets="Build">
+        <ZipDirectory
+            SourceDirectory="$(OutputPath)"
+            DestinationFile="$(OutputPath)\..\$(AssemblyName)$(AssemblyVersion).zip"
+            Overwrite="true" />
+    </Target>
+
   <PropertyGroup>
     <PostBuildEvent>
     if not exist "$(TargetDir)x86" md "$(TargetDir)x86"

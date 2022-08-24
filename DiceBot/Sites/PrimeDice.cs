@@ -218,7 +218,7 @@ namespace DiceBot
         };
 
 
-        public static string[] sCurrencies => _sCurrencies.OrderBy(x => x).ToArray();
+        public static string[] sCurrencies => _sCurrencies.Select(x=>x.ToLowerInvariant()).OrderBy(x => x).ToArray();
 
         GraphQL.Client.GraphQLClient GQLClient;
         string accesstoken = "";

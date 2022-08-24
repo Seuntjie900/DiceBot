@@ -13,8 +13,31 @@ namespace DiceBot
     class Stake : PrimeDice
     {
 
-        public static new string[] sCurrencies = new string[] { "BTC", "ETH", "LTC", "DOGE", "BCH", "XRP", "TRX", "EOS", "BNB", "USDT" };
+        private static string[] _sCurrencies = new string[]
+{
+            "BTC",
+            "ETH",
+            "LTC",
+            "DOGE",
+            "BCH",
+            "XRP",
+            "TRX",
+            "EOS",
+            "BNB",
+            "USDT",
+            "ape",
+            "busd",
+            "cro",
+            "dai",
+            "link",
+            "sand",
+            "shib",
+            "uni",
+            "usdc"
+};
 
+
+        public static new string[] sCurrencies => _sCurrencies.Select(x => x.ToLowerInvariant()).OrderBy(x => x).ToArray();
 
 
         public Stake(cDiceBot Parent) : base(Parent)
