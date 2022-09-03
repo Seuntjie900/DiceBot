@@ -206,15 +206,15 @@ namespace DiceBot
             "EOS",
             "BNB",
             "USDT",
-            "ape",
-            "busd",
-            "cro",
-            "dai",
-            "link",
-            "sand",
-            "shib",
-            "uni",
-            "usdc"
+            "APE",
+            "BUSD",
+            "CRO",
+            "DAI",
+            "LINK",
+            "SAND",
+            "SHIB",
+            "UNI",
+            "USDC"
         };
 
 
