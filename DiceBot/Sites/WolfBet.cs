@@ -11,7 +11,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using DiceBot.Core;
 using DiceBot.WolfBetClasses;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class WolfBet : DiceSite

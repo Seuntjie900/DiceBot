@@ -8,7 +8,49 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DiceBot.Core;
+using DiceBot.Schema.cryptogames;
 
+namespace DiceBot.Schema.cryptogames
+{
+
+
+    public class cgBalance
+    {
+        public decimal Balance { get; set; }
+    }
+    public class cgPlaceBet
+    {
+        public decimal Bet { get; set; }
+        public decimal Payout { get; set; }
+        public bool UnderOver { get; set; }
+        public string ClientSeed { get; set; }
+    }
+    public class cgGetBet
+    {
+        public long BetId { get; set; }
+        public decimal Roll { get; set; }
+        public string ClientSeed { get; set; }
+        public string Target { get; set; }
+        public decimal Profit { get; set; }
+        public string NextServerSeedHash { get; set; }
+        public string ServerSeed { get; set; }
+        public string Message { get; set; }
+    }
+    public class cgUser
+    {
+        public string Nickname { get; set; }
+        public decimal Balance { get; set; }
+        public string Coin { get; set; }
+        public int TotalBets { get; set; }
+        public decimal Profit { get; set; }
+        public decimal Wagered { get; set; }
+        public decimal DiceEdge { get; set; }
+    }
+    public class cgNextSeed
+    {
+        public string NextServerSeedHash { get; set; }
+    }
+}
 namespace DiceBot
 {
     class cryptogames : DiceSite
@@ -286,40 +328,4 @@ namespace DiceBot
 
     }
 
-    public class cgBalance
-    {
-        public decimal Balance { get; set; }
-    }
-    public class cgPlaceBet
-    {
-        public decimal Bet { get; set; }
-        public decimal Payout { get; set; }
-        public bool UnderOver { get; set; }
-        public string ClientSeed { get; set; }
-    }
-    public class cgGetBet
-    {
-        public long BetId { get; set; }
-        public decimal Roll { get; set; }
-        public string ClientSeed { get; set; }
-        public string Target { get; set; }
-        public decimal Profit { get; set; }
-        public string NextServerSeedHash { get; set; }
-        public string ServerSeed { get; set; }
-        public string Message { get; set; }
-    }
-    public class cgUser
-    {
-        public string Nickname { get; set; }
-        public decimal Balance { get; set; }
-        public string Coin { get; set; }
-        public int TotalBets { get; set; }
-        public decimal Profit { get; set; }
-        public decimal Wagered { get; set; }
-        public decimal DiceEdge { get; set; }
-    }
-    public class cgNextSeed
-    {
-        public string NextServerSeedHash { get; set; }
-    }
 }

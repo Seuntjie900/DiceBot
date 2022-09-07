@@ -9,7 +9,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using DiceBot.Core;
 using WebSocket4Net;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class NitrogenSports : DiceSite

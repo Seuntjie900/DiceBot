@@ -11,7 +11,11 @@ using System.Collections;
 using System.Reflection;
 using System.Security.Cryptography;
 using DiceBot.Core;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class FortuneJack : DiceSite

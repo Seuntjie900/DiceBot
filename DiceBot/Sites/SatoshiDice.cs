@@ -6,7 +6,11 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using DiceBot.Core;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class SatoshiDice : DiceSite

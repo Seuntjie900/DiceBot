@@ -10,7 +10,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using DiceBot.Core;
 using WDClasses;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class WinDice: DiceSite
