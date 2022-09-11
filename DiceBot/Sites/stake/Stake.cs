@@ -157,8 +157,6 @@ namespace DiceBot
                 Site = SiteURL
             };
 
-            // ApiClient = new StakeApiClient(settings);
-
         }
 
         string userid = "";
@@ -166,13 +164,10 @@ namespace DiceBot
         DateTime Lastbet = DateTime.Now;
         DBRandom R = new DBRandom();
 
-
-
         protected override void CurrencyChanged()
         {
             ForceUpdateStats = true;
         }
-
 
         void GetBalanceThread()
         {
