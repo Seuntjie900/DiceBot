@@ -128,7 +128,7 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>dicebot_2022.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Dicebot_temp.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>DiceBot.Program</StartupObject>
@@ -216,7 +216,8 @@
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\AppHelpers.cs" />
-    <Compile Include="Core\cBet.cs" />
+    <Compile Include="Core\Shema\Bet.cs" />
+    <Compile Include="Core\Shema\cBet.cs" />
     <Compile Include="Core\DiceSite.cs" />
     <Compile Include="Core\Random.cs" />
     <Compile Include="Sites\BetKing.cs" />
@@ -226,10 +227,11 @@
     <Compile Include="BitdiceConfirm.Designer.cs">
       <DependentUpon>BitdiceConfirm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sites\bitdice.cs" />
+    <Compile Include="Sites\bitdice\bitdice.cs" />
     <Compile Include="Sites\BitExo.cs" />
     <Compile Include="Sites\Bitvest.cs" />
-    <Compile Include="Sites\DuckDice.cs" />
+    <Compile Include="Sites\DuckDice\Schema.cs" />
+    <Compile Include="Sites\DuckDice\DuckDice.cs" />
     <Compile Include="Sites\EtherCrash.cs" />
     <Compile Include="Sites\Freebitcoin.cs" />
     <Compile Include="Sites\Kingdice.cs" />
@@ -241,8 +243,8 @@
     </Compile>
     <Compile Include="Sites\NitroDice.cs" />
     <Compile Include="Sites\NitrogenSports.cs" />
-    <Compile Include="Sites\Stake.cs" />
-    <Compile Include="Sites\PrimeDice.cs" />
+    <Compile Include="Sites\stake\Stake.cs" />
+    <Compile Include="Sites\primedice\PrimeDice.cs" />
     <Compile Include="Sites\SatoshiDice.cs" />
     <Compile Include="SeedInput.cs">
       <SubType>Form</SubType>
@@ -250,14 +252,14 @@
     <Compile Include="SeedInput.Designer.cs">
       <DependentUpon>SeedInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sites\StakeOld.cs" />
+    <Compile Include="Sites\stake\StakeOld.cs" />
     <Compile Include="StatsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="StatsForm.Designer.cs">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sites\Bitlser.cs" />
+    <Compile Include="Sites\bitsler\Bitlser.cs" />
     <Compile Include="cDiceBot.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -461,6 +463,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="dicebot_2022.pfx" />
+    <None Include="Dicebot_temp.pfx" />
     <None Include="DiceBot_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Bet.datasource" />
@@ -532,7 +535,6 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.109.2\build\net451\System.Data.SQLite.Core.targets'))" />
   </Target>
- 
   <!--
 
   <FileUpdate File="$(RootDir)/GlobalAssemblyInfo.cs"
@@ -557,35 +559,27 @@
     <Message Text="Assmebly Version: %(MyAssemblyIdentities.Version)"/>
   </Target>
 -->
-
-<UsingTask TaskName="GetFileVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+  <UsingTask TaskName="GetFileVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <AssemblyPath ParameterType="System.String" Required="true" />
       <Version ParameterType="System.String" Output="true" />
     </ParameterGroup>
     <Task>
       <Using Namespace="System.Diagnostics" />
-      <Code Type="Fragment" Language="cs">
-        <![CDATA[
+      <Code Type="Fragment" Language="cs"><![CDATA[
           Log.LogMessage("Getting version details of assembly at: " + this.AssemblyPath, MessageImportance.High);
           this.Version = FileVersionInfo.GetVersionInfo(this.AssemblyPath).FileVersion;  
-        ]]>
-      </Code>
+        ]]></Code>
     </Task>
   </UsingTask>
-
   <Target Name="PrepareDeployPackage" AfterTargets="Build">
-    
     <GetFileVersion AssemblyPath="$(TargetPath)">
       <Output TaskParameter="Version" PropertyName="MyAssemblyFileVersion" />
     </GetFileVersion>
-
     <Message Text="Versioning assemblies" />
-    <MakeDir Directories="$(SolutionDir)\Deploy"/>
+    <MakeDir Directories="$(SolutionDir)\Deploy" />
     <ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(SolutionDir)\Deploy\$(AssemblyName).$(MyAssemblyFileVersion).zip" Overwrite="true" />
-
   </Target>
-
   <PropertyGroup>
     <PostBuildEvent>
     if not exist "$(TargetDir)x86" md "$(TargetDir)x86"

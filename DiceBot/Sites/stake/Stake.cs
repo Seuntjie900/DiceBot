@@ -17,11 +17,13 @@ using GamblingTools.sdk.Connectors.Stake;
 using GamblingTools.sdk;
 using Newtonsoft.Json;
 using RestSharp.Serialization.Json;
-namespace DiceBot.Schema.BetKing
+
+namespace DiceBot.Schema.Stake
 {
 
 
 }
+
 namespace DiceBot
 {
 
@@ -74,6 +76,8 @@ namespace DiceBot
         HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
         HttpClientHandler ClientHandlr;
         GraphQL.Client.GraphQLClient GQLClient;
+
+        StakeApiClient ApiClient;
 
 
 
@@ -153,6 +157,8 @@ namespace DiceBot
                 Site = SiteURL
             };
 
+            // ApiClient = new StakeApiClient(settings);
+
         }
 
         string userid = "";
@@ -180,28 +186,15 @@ namespace DiceBot
                         ForceUpdateStats = false;
                         lastupdate = DateTime.Now;
 
-                        /*
-                        GraphQLRequest LoginReq = new GraphQLRequest
-                        {
-                            Query = "query DiceBotGetBalance{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
-                        };
-
-                        GraphQLResponse Resp = GQLClient.PostAsync(LoginReq).Result;
-                        pdUser user = Resp.GetDataFieldAs<pdUser>("user");
-                        */
-
-                        var gqlrequest = new StakeCustomGQLRequest(settings);
                         var req = new RequestData()
                         {
                             operationName = "DiceBotGetBalance",
                             query = "query DiceBotGetBalance{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
                         };
 
-                        gqlrequest.AddRequest(req);
+                        var response = ApiClient.Execute(req);
 
-                        var rs = gqlrequest.ExecuteSingle();
-
-                        var user = rs.Get<pdUser>("user");
+                        var user = response.Get<pdUser>("user");
 
                         foreach (Statistic x in user.statistic)
                         {
@@ -233,7 +226,7 @@ namespace DiceBot
                         Parent.updateLosses(losses);
 
                     }
-                    Thread.Sleep(1000);
+                    //Thread.Sleep(1000);
                 }
             }
             catch (Exception e)
@@ -252,11 +245,14 @@ namespace DiceBot
             try
             {
 
+
+
                 settings.Update("", Password);
 
-                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                ApiClient = null;
+                ApiClient = new StakeApiClient(settings);
 
-                var gqlrequest = new StakeCustomGQLRequest(settings);
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
                 var req = new RequestData()
                 {
@@ -264,11 +260,9 @@ namespace DiceBot
                     query = "query DiceBotLogin{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
                 };
 
-                gqlrequest.AddRequest(req);
+                var response = ApiClient.Execute(req);
 
-                var rs = gqlrequest.ExecuteSingle();
-
-                var user = rs.Get<pdUser>("user");
+                var user = response.Get<pdUser>("user");
 
                 userid = user.id;
 
@@ -334,121 +328,11 @@ namespace DiceBot
 
                 settings.Update(url);
 
+                ApiClient = null;
+                ApiClient = new StakeApiClient(settings);
+
             }
         }
-
-        #region ORIGINAL
-        //      void placebetthread(object bet)
-        //      {
-
-        //          try
-        //          {
-        //              PlaceBetObj tmp5 = bet as PlaceBetObj;
-        //              decimal amount = tmp5.Amount;
-        //              decimal chance = tmp5.Chance;
-        //              bool High = tmp5.High;
-        //              decimal tmpchance = High ? maxRoll - chance : chance;
-        //              var Request = new GraphQLRequest
-        //              {
-        //                  Query = @"mutation DiceBotDiceBet($amount: Float! 
-        //$target: Float!
-        //$condition: " + EnumName + @"!
-        //$currency: CurrencyEnum!
-        //$identifier: String!){ " + RolName + "(amount: $amount, target: $target,condition: $condition,currency: $currency, identifier: $identifier)" +
-        //      " { id nonce currency amount payout state { ... on " + GameName + " { result target condition } } createdAt serverSeed{seedHash seed nonce} clientSeed{seed} user{balances{available{amount currency}} statistic{game bets wins losses betAmount profit currency}}}}"
-        //              };
-        //              Request.Variables = new
-        //              {
-        //                  amount = amount,//.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo),
-        //                  target = tmpchance,//.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo),
-        //                  condition = (High ? "above" : "below"),
-        //                  currency = Currency.ToLower(),
-        //                  identifier = "0123456789abcdef",
-        //              };
-        //              GraphQLResponse betresult = GQLClient.PostAsync(Request).Result;
-        //              if (betresult.Errors != null)
-        //              {
-        //                  if (betresult.Errors.Length > 0)
-        //                      Parent.updateStatus(betresult.Errors[0].Message);
-        //              }
-        //              if (betresult.Data != null)
-        //              {
-        //                  RollDice tmp = betresult.GetDataFieldAs<RollDice>(RolName);
-        //                  Lastbet = DateTime.Now;
-        //                  try
-        //                  {
-        //                      lastupdate = DateTime.Now;
-        //                      foreach (Statistic x in tmp.user.statistic)
-        //                      {
-        //                          if (x.currency.ToLower() == Currency.ToLower() && x.game == StatGameName)
-        //                          {
-        //                              this.bets = (int)x.bets;
-        //                              this.wins = (int)x.wins;
-        //                              this.losses = (int)x.losses;
-        //                              this.profit = x.profit.HasValue ? (decimal)x.profit.Value : 0;
-        //                              this.wagered = (decimal)x.betAmount;
-        //                              break;
-        //                          }
-        //                      }
-        //                      foreach (Balance x in tmp.user.balances)
-        //                      {
-        //                          if (x.available.currency.ToLower() == Currency.ToLower())
-        //                          {
-        //                              balance = (decimal)x.available.amount;
-        //                              break;
-        //                          }
-        //                      }
-        //                      Bet tmpbet = tmp.ToBet(maxRoll);
-        //                      if (getid)
-        //                      {
-        //                          var IdRequest = new GraphQLRequest { Query = " query DiceBotGetBetId($betId: String!){bet(betId: $betId){iid}}" };
-        //                          string betid = tmpbet.Id;
-        //                          IdRequest.Variables = new { betId = betid /*tmpbet.Id*/ };
-        //                          GraphQLResponse betresult2 = GQLClient.PostAsync(IdRequest).Result;
-        //                          if (betresult2.Data != null)
-        //                          {
-        //                              //RollDice tmp2 = betresult2.GetDataFieldAs<RollDice>(RolName);
-        //                              //tmpbet.Id = tmp2.iid;
-        //                              tmpbet.Id = betresult2.Data.bet.iid;
-        //                              if (tmpbet.Id.Contains("house:"))
-        //                                  tmpbet.Id = tmpbet.Id.Substring("house:".Length);
-        //                          }
-        //                      }
-        //                      tmpbet.Guid = tmp5.Guid;
-        //                      FinishedBet(tmpbet);
-        //                      retrycount = 0;
-        //                  }
-        //                  catch (Exception e)
-        //                  {
-        //                      Parent.DumpLog(e.ToString(), -1);
-        //                      Parent.updateStatus("Some kind of error happened. I don't really know graphql, so your guess as to what went wrong is as good as mine.");
-        //                  }
-        //              }
-        //          }
-        //          catch (AggregateException e)
-        //          {
-        //              if (retrycount++ < 3)
-        //              {
-        //                  Thread.Sleep(500);
-        //                  placebetthread(new PlaceBetObj(High, amount, chance, (bet as PlaceBetObj).Guid));
-        //                  return;
-        //              }
-        //              if (e.InnerException.Message.Contains("429") || e.InnerException.Message.Contains("502"))
-        //              {
-        //                  Thread.Sleep(500);
-        //                  placebetthread(new PlaceBetObj(High, amount, chance, (bet as PlaceBetObj).Guid));
-        //              }
-        //          }
-        //          catch (Exception e2)
-        //          {
-        //              Parent.updateStatus("Error occured while trying to bet, retrying in 30 seconds. Probably.");
-        //              Parent.DumpLog(e2.ToString(), -1);
-        //          }
-        //      } 
-        #endregion
-
-
-
 
         void placebetthread(object bet)
         {
@@ -461,9 +345,6 @@ namespace DiceBot
                 bool High = tmp5.High;
 
                 decimal tmpchance = High ? maxRoll - chance : chance;
-
-
-                var gqlrequest = new StakeCustomGQLRequest(settings);
 
                 var req = new RequestData()
                 {
@@ -484,22 +365,20 @@ namespace DiceBot
                     }
                 };
 
-                gqlrequest.AddRequest(req);
+                var response = ApiClient.Execute(req);
 
-                var betresult = gqlrequest.ExecuteSingle();
-
-                if (betresult.Errors != null)
+                if (response.Errors != null)
                 {
-                    if (betresult.Errors.Count > 0)
+                    if (response.Errors.Count > 0)
                     {
-                        Parent.updateStatus(betresult.Errors[0].message);
+                        Parent.updateStatus(response.Errors[0].message);
                     }
                 }
 
-                if (betresult.Data != null)
+                if (response.Data != null)
                 {
 
-                    RollDice tmp = betresult.Get<RollDice>("diceRoll");
+                    RollDice tmp = response.Get<RollDice>("diceRoll");
 
                     Lastbet = DateTime.Now;
 
@@ -529,6 +408,7 @@ namespace DiceBot
                                 break;
                             }
                         }
+
                         Bet tmpbet = tmp.ToBet(maxRoll);
 
                         if (getid)
@@ -576,12 +456,10 @@ namespace DiceBot
             new Thread(new ParameterizedThreadStart(placebetthread)).Start(new PlaceBetObj(High, amount, chance, Guid));
         }
 
-
-
         internal string GetBetIId(string betId)
         {
 
-            using (var DiceBotGetBetId = new StakeCustomGQLRequest(settings))
+            using (var connector = new StakeSharedConnector(settings))
             {
                 var req = new RequestData()
                 {
@@ -593,9 +471,9 @@ namespace DiceBot
                     }
                 };
 
-                DiceBotGetBetId.AddRequest(req);
+                connector.AddRequest(req);
 
-                var response = DiceBotGetBetId.ExecuteSingle();
+                var response = connector.ExecuteRequest();
 
                 if (response.Data != null)
                 {
@@ -616,8 +494,6 @@ namespace DiceBot
 
         }
 
-
-
         public override void ResetSeed()
         {
             try
@@ -628,12 +504,15 @@ namespace DiceBot
                     {
                         operationName = "DiceBotRotateSeed",
                         query = "mutation DiceBotRotateSeed ($seed: String!){rotateServerSeed{ seed seedHash nonce } changeClientSeed(seed: $seed){seed}}",
-                        variables = new { seed = R.Next(0, int.MaxValue).ToString() }
+                        variables = new
+                        {
+                            seed = R.Next(0, int.MaxValue).ToString()
+                        }
                     };
 
                     gqlrequest.AddRequest(req);
 
-                    var response = gqlrequest.ExecuteSingle();
+                    var response = gqlrequest.ExecuteRequest();
 
                     if (response.Data != null)
                     {
@@ -687,7 +566,7 @@ namespace DiceBot
 
                     gqlrequest.AddRequest(req);
 
-                    var response = gqlrequest.ExecuteSingle();
+                    var response = gqlrequest.ExecuteRequest();
 
                     return response.Data != null;
                 }
@@ -714,7 +593,7 @@ namespace DiceBot
 
                     gqlrequest.AddRequest(req);
 
-                    var response = gqlrequest.ExecuteSingle();
+                    var response = gqlrequest.ExecuteRequest();
 
                     return response.Data != null;
                 }
@@ -780,8 +659,6 @@ namespace DiceBot
             return 0;
         }
 
-
-
         public override void Disconnect()
         {
             ispd = false;
@@ -827,10 +704,9 @@ namespace DiceBot
                     }
                 };
 
-
                 gqlrequest.AddRequest(payload);
 
-                var response = gqlrequest.ExecuteSingle();
+                var response = gqlrequest.ExecuteRequest();
 
                 return response.Data != null;
 
@@ -847,6 +723,7 @@ namespace DiceBot
             }
             return false;
         }
+
         public string GetUid(string username)
         {
             try
@@ -864,7 +741,7 @@ namespace DiceBot
 
                     gqlrequest.AddRequest(payload);
 
-                    var response = gqlrequest.ExecuteSingle();
+                    var response = gqlrequest.ExecuteRequest();
 
                     var user = response.Get<pdUser>("user");
 
@@ -881,9 +758,6 @@ namespace DiceBot
                 return null;
             }
         }
-
-
-
 
         public override void SendChatMessage(string Message)
         {
