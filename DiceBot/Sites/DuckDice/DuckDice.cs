@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DiceBot.Core;
+using DiceBot.Schema.DuckDice;
 
 namespace DiceBot
 {
     class DuckDice : DiceSite
     {
+
+
         string accesstoken = "";
         DateTime LastSeedReset = new DateTime();
         public bool ispd = false;
@@ -21,18 +24,65 @@ namespace DiceBot
         DateTime lastupdate = new DateTime();
         HttpClient Client;
         HttpClientHandler ClientHandlr;
-        public static string[] cCurrencies = new string[] { "BTC", "ETH", "LTC", "DOGE", "DASH", "BCH", "XMR", "XRP", "ETC", "BTG", "XLM", "ZEC", "USDT", "DTP" };
+        //public static string[] cCurrencies = new string[] { "BTC", "ETH", "LTC", "DOGE", "DASH", "BCH", "XMR", "XRP", "ETC", "BTG", "XLM", "ZEC", "USDT", "DTP" };
+
+
+        // document.querySelectorAll('.checkbox-block .checkbox-label__text div').forEach(p => console.log("\"" + p.textContent +"\","))
+        private static string[] _cCurrencies = new string[]
+        {
+            "BTTC",
+            "BTC",
+            "LTC",
+            "DOGE",
+            "XRP",
+            "USDT",
+            "ETH",
+            "TRX",
+            "XLM",
+            "BCH",
+            "SHIB",
+            "DASH",
+            "BNB",
+            "ETC",
+            "ADA",
+            "XMR",
+            "BTG",
+            "ZEC",
+            "EOS",
+            "DOT",
+            "BUSD",
+            "MATIC",
+            "USDC",
+            "DAI",
+            "SOL",
+            "NEAR",
+            "RVN",
+            "AVAX",
+            "ZEN",
+            "FTM"
+        };
+
+
+        public static string[] cCurrencies => _cCurrencies.Select(x => x.ToUpperInvariant()).OrderBy(x => x).ToArray();
+
+
         string[] mirrors = new string[] { "https://duckdice.io/", "https://duckdice.me", "https://duckdice.net" };
+
         private int mod;
+
         string apiversion = "1.1.1";
+
         string TLEhash = null;
+
         public int Mode
         {
             get { return mod; }
-            set { mod = value; ForceUpdateStats = true; if (Mode == 3) this.edge = 2m; else this.edge = 1m; }
+            set
+            {
+                mod = value;
+                ForceUpdateStats = true; if (Mode == 3) this.edge = 2m; else this.edge = 1m;
+            }
         }
-
-
 
         public DuckDice(cDiceBot Parent)
         {
@@ -242,11 +292,14 @@ namespace DiceBot
             }
             return false;
         }
+
         public override void Donate(decimal Amount)
         {
-            SendTip("seuntjie", Amount);
+            SendTip("WinMachine", Amount);
         }
+
         int site = 0;
+
         public override void Login(string Username, string Password, string twofa)
         {
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
@@ -406,105 +459,6 @@ namespace DiceBot
             return 0;
         }
 
-    }
-    public class QuackLogin
-    {
-        public string token { get; set; }
-    }
-    public class Quackbalance
-    {
-        public QuackStats user { get; set; }
-        public string hash { get; set; }
-        public string username { get; set; }
-        public QuackBalValues balances { get; set; }
-        public QuackStats session { get; set; }
-    }
-    public class QuackBalValues
-    {
-        public string main { get; set; }
-        public string faucet { get; set; }
-        public string tle { get; set; }
-    }
-    public class QuackStats
-    {
-
-        public QuackStats user { get; set; }
-        public string hash { get; set; }
-        public string username { get; set; }
-        public string balance { get; set; }
-        public QuackBalValues balances { get; set; }
-        public QuackStats session { get; set; }
-        public int bets { get; set; }
-        public int wins { get; set; }
-        public string volume { get; set; }
-        public string profit { get; set; }
-
-    }
-    public class QuackStatsDetails
-    {
-        public int bets { get; set; }
-        public int wins { get; set; }
-        public string profit { get; set; }
-        public string volume { get; set; }
-    }
-    public class QuackBet
-    {
-        public string error { get; set; }
-        public QuackBet bet { get; set; }
-        public QuackStats user { get; set; }
-        public string hash { get; set; }
-        public string symbol { get; set; }
-        public bool result { get; set; }
-        public bool isHigh { get; set; }
-        public decimal number { get; set; }
-        public decimal threshold { get; set; }
-        public decimal chance { get; set; }
-        public decimal payout { get; set; }
-        public string betAmount { get; set; }
-        public string winAmount { get; set; }
-        public string profit { get; set; }
-        public long nonce { get; set; }
-
-    }
-    public class QuackSeed
-    {
-        public QuackSeed current { get; set; }
-        public string clientSeed { get; set; }
-        public long nonce { get; set; }
-        public string serverSeedHash { get; set; }
-    }
-    public class QuackWithdraw
-    {
-        public string error { get; set; }
-
-    }
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class DDRewardConfig
-    {
-        public int xp { get; set; }
-        public int level { get; set; }
-        public string amount { get; set; }
-    }
-
-    public class DDTLEData
-    {
-        public string hash { get; set; }
-        public string slug { get; set; }
-        public string name { get; set; }
-        public string gameMode { get; set; }
-        public List<DDRewardConfig> rewardConfig { get; set; }
-        public string minBetAmount { get; set; }
-        public string symbol { get; set; }
-        public string paySymbol { get; set; }
-        public int defaultXpPerLevel { get; set; }
-        public string defaultAmountPerLevel { get; set; }
-        public string houseEdge { get; set; }
-        public int endDate { get; set; }
-    }
-
-    public class DDTLE
-    {
-        public List<DDTLEData> data { get; set; }
     }
 
 

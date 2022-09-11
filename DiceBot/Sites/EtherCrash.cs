@@ -8,7 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using DiceBot.Core;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class EtherCrash : DiceSite

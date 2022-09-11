@@ -8,9 +8,89 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DiceBot.Core;
+using DiceBot.Schema.BitExo;
 using SuperSocket.ClientEngine;
 using WebSocket4Net;
+namespace DiceBot.Schema.BitExo
+{
 
+    public class BEPayout
+    {
+        public long from { get; set; }
+        public long to { get; set; }
+        public decimal value { get; set; }
+    }
+
+    public class BEBetResult
+    {
+        public string created_at { get; set; }
+        public long raw_outcome { get; set; }
+        public string uname { get; set; }
+        public long secret { get; set; }
+        public string salt { get; set; }
+        public string hash { get; set; }
+        public long client_seed { get; set; }
+        public List<BEPayout> payouts { get; set; }
+        public long wager { get; set; }
+        public decimal profit { get; set; }
+        public string kind { get; set; }
+        public decimal edge { get; set; }
+        public object @ref { get; set; }
+        public string currency { get; set; }
+        public long _id { get; set; }
+        public long id { get; set; }
+        public string next_hash { get; set; }
+        public decimal outcome { get; set; }
+    }
+    public class BEBalances
+    {
+        public decimal doge { get; set; }
+        public decimal bxo { get; set; }
+        public decimal clam { get; set; }
+        public decimal btc { get; set; }
+        public decimal eth { get; set; }
+        public decimal ltc { get; set; }
+        public decimal flash { get; set; }
+    }
+    public class BECoininf
+    {
+        public decimal bets { get; set; }
+        public decimal wager { get; set; }
+        public decimal profit { get; set; }
+        public decimal wager24hour { get; set; }
+    }
+
+    public class BEStats
+    {
+        public BECoininf btc { get; set; }
+        public BECoininf bxo { get; set; }
+        public BECoininf clam { get; set; }
+        public BECoininf doge { get; set; }
+        public BECoininf eth { get; set; }
+        public BECoininf flash { get; set; }
+        public BECoininf ltc { get; set; }
+    }
+    public class BEUser
+    {
+        public string uname { get; set; }
+        public string email { get; set; }
+        public BEBalances balances { get; set; }
+        public BEStats stats { get; set; }
+
+        public string last_claim_time { get; set; }
+        public double last_claim_betted_wager { get; set; }
+        public double total_claims { get; set; }
+        public string token { get; set; }
+        public double level { get; set; }
+        public double levelwager { get; set; }
+    }
+
+    public class BEBalanceBase
+    {
+        public BEUser user { get; set; }
+    }
+
+}
 namespace DiceBot
 {
     class BitExo : DiceSite
@@ -528,79 +608,4 @@ namespace DiceBot
     }
 
 
-    public class BEPayout
-    {
-        public long from { get; set; }
-        public long to { get; set; }
-        public decimal value { get; set; }
-    }
-
-    public class BEBetResult
-    {
-        public string created_at { get; set; }
-        public long raw_outcome { get; set; }
-        public string uname { get; set; }
-        public long secret { get; set; }
-        public string salt { get; set; }
-        public string hash { get; set; }
-        public long client_seed { get; set; }
-        public List<BEPayout> payouts { get; set; }
-        public long wager { get; set; }
-        public decimal profit { get; set; }
-        public string kind { get; set; }
-        public decimal edge { get; set; }
-        public object @ref { get; set; }
-        public string currency { get; set; }
-        public long _id { get; set; }
-        public long id { get; set; }
-        public string next_hash { get; set; }
-        public decimal outcome { get; set; }
-    }
-    public class BEBalances
-    {
-        public decimal doge { get; set; }
-        public decimal bxo { get; set; }
-        public decimal clam { get; set; }
-        public decimal btc { get; set; }
-        public decimal eth { get; set; }
-        public decimal ltc { get; set; }
-        public decimal flash { get; set; }
-    }
-    public class BECoininf
-    {
-        public decimal bets { get; set; }
-        public decimal wager { get; set; }
-        public decimal profit { get; set; }
-        public decimal wager24hour { get; set; }
-    }
-
-    public class BEStats
-    {
-        public BECoininf btc { get; set; }
-        public BECoininf bxo { get; set; }
-        public BECoininf clam { get; set; }
-        public BECoininf doge { get; set; }
-        public BECoininf eth { get; set; }
-        public BECoininf flash { get; set; }
-        public BECoininf ltc { get; set; }
-    }
-    public class BEUser
-    {
-        public string uname { get; set; }
-        public string email { get; set; }
-        public BEBalances balances { get; set; }
-        public BEStats stats { get; set; }
-
-        public string last_claim_time { get; set; }
-        public double last_claim_betted_wager { get; set; }
-        public double total_claims { get; set; }
-        public string token { get; set; }
-        public double level { get; set; }
-        public double levelwager { get; set; }
-    }
-
-    public class BEBalanceBase
-    {
-        public BEUser user { get; set; }
-    }
 }

@@ -30,11 +30,11 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>false</MapFileExtensions>
     <ProductName>Dicebot</ProductName>
-    <SuiteName>Ficebot</SuiteName>
+    <SuiteName>Dicebot</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>7</ApplicationRevision>
-    <ApplicationVersion>4.1.03.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>4.1.15.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <ExcludeDeploymentUrl>true</ExcludeDeploymentUrl>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -69,10 +69,11 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>F8177F09ABD70BE3E9901B90A91B09A9D84A834A</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E10D9A30C7D396048C0CA499F0773A605A131811</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>dicebot_2022.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -82,9 +83,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
-  <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
@@ -129,7 +128,10 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>dicebot_2022.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Dicebot_temp.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>DiceBot.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FastColoredTextBox, Version=2.16.24.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
@@ -214,7 +216,8 @@
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\AppHelpers.cs" />
-    <Compile Include="Core\cBet.cs" />
+    <Compile Include="Core\Shema\Bet.cs" />
+    <Compile Include="Core\Shema\cBet.cs" />
     <Compile Include="Core\DiceSite.cs" />
     <Compile Include="Core\Random.cs" />
     <Compile Include="Sites\BetKing.cs" />
@@ -224,10 +227,11 @@
     <Compile Include="BitdiceConfirm.Designer.cs">
       <DependentUpon>BitdiceConfirm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sites\bitdice.cs" />
+    <Compile Include="Sites\bitdice\bitdice.cs" />
     <Compile Include="Sites\BitExo.cs" />
     <Compile Include="Sites\Bitvest.cs" />
-    <Compile Include="Sites\DuckDice.cs" />
+    <Compile Include="Sites\DuckDice\Schema.cs" />
+    <Compile Include="Sites\DuckDice\DuckDice.cs" />
     <Compile Include="Sites\EtherCrash.cs" />
     <Compile Include="Sites\Freebitcoin.cs" />
     <Compile Include="Sites\Kingdice.cs" />
@@ -239,7 +243,8 @@
     </Compile>
     <Compile Include="Sites\NitroDice.cs" />
     <Compile Include="Sites\NitrogenSports.cs" />
-    <Compile Include="Sites\PrimeDice.cs" />
+    <Compile Include="Sites\stake\Stake.cs" />
+    <Compile Include="Sites\primedice\PrimeDice.cs" />
     <Compile Include="Sites\SatoshiDice.cs" />
     <Compile Include="SeedInput.cs">
       <SubType>Form</SubType>
@@ -247,14 +252,14 @@
     <Compile Include="SeedInput.Designer.cs">
       <DependentUpon>SeedInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sites\Stake.cs" />
+    <Compile Include="Sites\stake\StakeOld.cs" />
     <Compile Include="StatsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="StatsForm.Designer.cs">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sites\Bitlser.cs" />
+    <Compile Include="Sites\bitsler\Bitlser.cs" />
     <Compile Include="cDiceBot.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -458,9 +463,9 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="dicebot_2022.pfx" />
+    <None Include="Dicebot_temp.pfx" />
     <None Include="DiceBot_TemporaryKey.pfx" />
     <None Include="packages.config" />
-    <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\Bet.datasource" />
     <None Include="Properties\DataSources\cBet.datasource" />
     <None Include="Properties\Settings.settings">
@@ -516,6 +521,12 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GamblingTools\GamblingTools.sdk\GamblingTools.Sdk.csproj">
+      <Project>{02204352-cc6a-4be0-8aba-d594f33c5b1f}</Project>
+      <Name>GamblingTools.Sdk</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -523,6 +534,51 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.109.2\build\net451\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <!--
+
+  <FileUpdate File="$(RootDir)/GlobalAssemblyInfo.cs"
+            Regex='AssemblyFileVersion[(]"[^"]+"[)]'
+            ReplacementText='AssemblyFileVersion("$(VersionNumber)")' />
+
+
+ <Target Name="ZipOutputPath" AfterTargets="Build">
+        <ZipDirectory
+            SourceDirectory="$(OutputPath)"
+            DestinationFile="$(OutputPath)\..\$(AssemblyName).zip"
+            Overwrite=="true" />
+    </Target>
+    -->
+  <!--<Target Name="PrepareDeployPackage" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">-->
+  <!-- <Target Name="BeforeCompile" DependsOnTargets="CommonBuildDefineModifiedAssemblyVersion">
+  </Target> 
+   <Target Name="GetAssmeblyVersion" AfterTargets="Build">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="MyAssemblyIdentities"/>
+    </GetAssemblyIdentity>
+    <Message Text="Assmebly Version: %(MyAssemblyIdentities.Version)"/>
+  </Target>
+-->
+  <UsingTask TaskName="GetFileVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <AssemblyPath ParameterType="System.String" Required="true" />
+      <Version ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.Diagnostics" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+          Log.LogMessage("Getting version details of assembly at: " + this.AssemblyPath, MessageImportance.High);
+          this.Version = FileVersionInfo.GetVersionInfo(this.AssemblyPath).FileVersion;  
+        ]]></Code>
+    </Task>
+  </UsingTask>
+  <Target Name="PrepareDeployPackage" AfterTargets="Build">
+    <GetFileVersion AssemblyPath="$(TargetPath)">
+      <Output TaskParameter="Version" PropertyName="MyAssemblyFileVersion" />
+    </GetFileVersion>
+    <Message Text="Versioning assemblies" />
+    <MakeDir Directories="$(SolutionDir)\Deploy" />
+    <ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(SolutionDir)\Deploy\$(AssemblyName).$(MyAssemblyFileVersion).zip" Overwrite="true" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>

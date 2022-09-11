@@ -8,7 +8,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DiceBot.Core;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class Freebitcoin : DiceSite

@@ -8,7 +8,11 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Net.Http;
 using DiceBot.Core;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class SafeDice : DiceSite

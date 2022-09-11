@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiceBot", "DiceBot\DiceBot.csproj", "{7E0D59CC-D9A0-4EB4-96BF-11C0DDD8A8B5}"
 EndProject
@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5AA739
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamblingTools.Sdk", "..\GamblingTools\GamblingTools.sdk\GamblingTools.Sdk.csproj", "{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,8 +37,23 @@ Global
 		{7E0D59CC-D9A0-4EB4-96BF-11C0DDD8A8B5}.Release|x64.Build.0 = Release|x64
 		{7E0D59CC-D9A0-4EB4-96BF-11C0DDD8A8B5}.Release|x86.ActiveCfg = Release|x86
 		{7E0D59CC-D9A0-4EB4-96BF-11C0DDD8A8B5}.Release|x86.Build.0 = Release|x86
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Debug|x64.ActiveCfg = Debug|x64
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Debug|x64.Build.0 = Debug|x64
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Debug|x86.ActiveCfg = Debug|x86
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Debug|x86.Build.0 = Debug|x86
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Release|x64.ActiveCfg = Release|x64
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Release|x64.Build.0 = Release|x64
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Release|x86.ActiveCfg = Release|x86
+		{02204352-CC6A-4BE0-8ABA-D594F33C5B1F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CF806B2-6773-4515-9A3A-005479F4D946}
 	EndGlobalSection
 EndGlobal

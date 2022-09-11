@@ -9,7 +9,11 @@ using System.Security.Cryptography;
 using System.Globalization;
 using System.Net.Http;
 using DiceBot.Core;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class dice999 : DiceSite

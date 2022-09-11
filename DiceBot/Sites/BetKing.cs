@@ -9,7 +9,93 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DiceBot.Core;
+using DiceBot.Schema.BetKing;
 using WebSocket4Net;
+
+namespace DiceBot.Schema.BetKing
+{
+
+    public class BKAccount
+    {
+
+        public string id { get; set; }
+        public string username { get; set; }
+        public string email { get; set; }
+
+    }
+    public class BKStat
+    {
+        public string num_bets { get; set; }
+        public string wagered { get; set; }
+        public string profit { get; set; }
+        public int currency { get; set; }
+    }
+    public class bkGameDetails
+    {
+        public double roll { get; set; }
+        public double chance { get; set; }
+        public int target { get; set; }
+    }
+
+    public class bkPlaceBet
+    {
+        public string id { get; set; }
+        public string date { get; set; }
+        public string bet_amount { get; set; }
+        public int currency { get; set; }
+        public string profit { get; set; }
+        public bkGameDetails game_details { get; set; }
+        public string game_type { get; set; }
+        public string balance { get; set; }
+        public int nextNonce { get; set; }
+        public string error { get; set; }
+    }
+    public class BKCurrency
+    {
+        public int id { get; set; }
+        public string symbol { get; set; }
+        public string name { get; set; }
+        public int scale { get; set; }
+        public string max_withdraw_limit { get; set; }
+        public string min_withdraw_limit { get; set; }
+        public string withdrawal_fee { get; set; }
+        public string no_throttle_amount { get; set; }
+        public string min_tip { get; set; }
+        public string address_type { get; set; }
+
+        public decimal EffectiveScale
+        {
+            get
+            {
+                return (decimal)Math.Pow(10.0, (double)scale);
+            }
+        }
+    }
+
+    public class bkGetCurrencies
+    {
+        public List<BKCurrency> currencies { get; set; }
+    }
+    public class bkBalance
+    {
+        public string balance { get; set; }
+        public int currency { get; set; }
+    }
+
+    public class bkGetBalances
+    {
+        public List<bkBalance> balances { get; set; }
+    }
+    public class bkLoadSTate
+    {
+        public string clientSeed { get; set; }
+        public string serverSeedHash { get; set; }
+        public int nonce { get; set; }
+        public string maxWin { get; set; }
+        public string minBetAmount { get; set; }
+        public bool isBettingDisabled { get; set; }
+    }
+}
 
 namespace DiceBot
 {
@@ -519,84 +605,5 @@ namespace DiceBot
 
 
     }
-    public class BKAccount
-    {
 
-        public string id { get; set; }
-        public string username { get; set; }
-        public string email { get; set; }
-
-    }
-    public class BKStat
-    {
-        public string num_bets { get; set; }
-        public string wagered { get; set; }
-        public string profit { get; set; }
-        public int currency { get; set; }
-    }
-    public class bkGameDetails
-    {
-        public double roll { get; set; }
-        public double chance { get; set; }
-        public int target { get; set; }
-    }
-
-    public class bkPlaceBet
-    {
-        public string id { get; set; }
-        public string date { get; set; }
-        public string bet_amount { get; set; }
-        public int currency { get; set; }
-        public string profit { get; set; }
-        public bkGameDetails game_details { get; set; }
-        public string game_type { get; set; }
-        public string balance { get; set; }
-        public int nextNonce { get; set; }
-        public string error { get; set; }
-    }
-    public class BKCurrency
-    {
-        public int id { get; set; }
-        public string symbol { get; set; }
-        public string name { get; set; }
-        public int scale { get; set; }
-        public string max_withdraw_limit { get; set; }
-        public string min_withdraw_limit { get; set; }
-        public string withdrawal_fee { get; set; }
-        public string no_throttle_amount { get; set; }
-        public string min_tip { get; set; }
-        public string address_type { get; set; }
-
-        public decimal EffectiveScale
-        {
-            get
-            {
-                return (decimal)Math.Pow(10.0, (double)scale);
-            }
-        }
-    }
-
-    public class bkGetCurrencies
-    {
-        public List<BKCurrency> currencies { get; set; }
-    }
-    public class bkBalance
-    {
-        public string balance { get; set; }
-        public int currency { get; set; }
-    }
-
-    public class bkGetBalances
-    {
-        public List<bkBalance> balances { get; set; }
-    }
-    public class bkLoadSTate
-    {
-        public string clientSeed { get; set; }
-        public string serverSeedHash { get; set; }
-        public int nonce { get; set; }
-        public string maxWin { get; set; }
-        public string minBetAmount { get; set; }
-        public bool isBettingDisabled { get; set; }
-    }
 }

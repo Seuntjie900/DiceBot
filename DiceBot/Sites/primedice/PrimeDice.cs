@@ -14,7 +14,11 @@ using GraphQL.Common.Response;
 using System.Globalization;
 using DiceBot.Core;
 using static DiceBot.PrimediceSchema;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     public class SiteSchemaBase
@@ -206,19 +210,19 @@ namespace DiceBot
             "EOS",
             "BNB",
             "USDT",
-            "ape",
-            "busd",
-            "cro",
-            "dai",
-            "link",
-            "sand",
-            "shib",
-            "uni",
-            "usdc"
+            "APE",
+            "BUSD",
+            "CRO",
+            "DAI",
+            "LINK",
+            "SAND",
+            "SHIB",
+            "UNI",
+            "USDC"
         };
 
 
-        public static string[] sCurrencies => _sCurrencies.OrderBy(x => x).ToArray();
+        public static string[] sCurrencies => _sCurrencies.Select(x=>x.ToUpperInvariant()).OrderBy(x => x).ToArray();
 
         GraphQL.Client.GraphQLClient GQLClient;
         string accesstoken = "";
@@ -336,10 +340,15 @@ namespace DiceBot
 
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 GQLClient = new GraphQL.Client.GraphQLClient(URL);
 
+                GQLClient.DefaultRequestHeaders.Add("authorization", string.Format("Bearer {0}", (object)Password));
                 GQLClient.DefaultRequestHeaders.Add("x-access-token", Password);
+
+               // GQLClient.UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36";
+
 
                 GraphQLRequest LoginReq = new GraphQLRequest
                 {

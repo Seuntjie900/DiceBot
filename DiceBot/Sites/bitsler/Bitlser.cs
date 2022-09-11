@@ -9,7 +9,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DiceBot.Core;
+namespace DiceBot.Schema.BetKing
+{
 
+
+}
 namespace DiceBot
 {
     class Bitsler : DiceSite
@@ -56,6 +60,13 @@ namespace DiceBot
             SiteURL = "https://www.bitsler.com/?ref=seuntjie";
             register = false;
             AutoUpdate = true;
+
+
+
+            ///        }
+
+            DateTime LastBet = DateTime.Now;
+            double LastBetAmount = 0;//
         }
         void GetBalanceThread()
         {
@@ -739,8 +750,10 @@ currency:btc*/
         {
             throw new NotImplementedException();
         }
+
         DateTime LastBet = DateTime.Now;
         double LastBetAmount = 0;
+
         public override bool ReadyToBet()
         {
             //return true;

@@ -12,6 +12,85 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using DiceBot.Core;
+using DiceBot.Schema.BitDice;
+
+namespace DiceBot.Schema.BitDice
+{
+    public class BDSTats
+    {
+        public decimal balance { get; set; }
+        public string currency { get; set; }
+        public decimal profit { get; set; }
+        public decimal wagered { get; set; }
+    }
+    public class BDSeed
+    {
+        public string hash { get; set; }
+        public long id { get; set; }
+    }
+    public class BDUser
+    {
+        public int level { get; set; }
+        public string username { get; set; }
+    }
+
+    public class BDBetData
+    {
+        public decimal chance { get; set; }
+        public bool high { get; set; }
+        public decimal lucky { get; set; }
+        public decimal multiplier { get; set; }
+        public bool result { get; set; }
+        public long secret { get; set; }
+        public decimal target { get; set; }
+        public BDUser user { get; set; }
+        public long nonce { get; set; }
+    }
+
+    public class BDBet
+    {
+        public decimal amount { get; set; }
+        public string currency { get; set; }
+        public BDBetData data { get; set; }
+        public long date { get; set; }
+        public long game { get; set; }
+        public long id { get; set; }
+        public decimal profit { get; set; }
+        public decimal wagered { get; set; }
+
+    }
+
+    public class BDJackpot
+    {
+        public bool status { get; set; }
+    }
+
+    public class BDOld
+    {
+        public string client { get; set; }
+        public string hash { get; set; }
+        public string secret { get; set; }
+    }
+
+    public class BDSecret
+    {
+        public decimal game { get; set; }
+        public string hash { get; set; }
+        public long id { get; set; }
+    }
+
+    public class BDBetResponse
+    {
+        public string error { get; set; }
+        public decimal balance { get; set; }
+        public BDBet bet { get; set; }
+        public BDJackpot jackpot { get; set; }
+        public BDOld old { get; set; }
+        public BDSecret secret { get; set; }
+    }
+
+
+}
 
 namespace DiceBot
 {
@@ -285,76 +364,5 @@ namespace DiceBot
         }
 
     }
-    public class BDSTats
-    {
-        public decimal balance { get; set; }
-        public string currency { get; set; }
-        public decimal profit { get; set; }
-        public decimal wagered { get; set; }
-    }
-    public class BDSeed
-    {
-        public string hash { get; set; }
-        public long id { get; set; }
-    }
-    public class BDUser
-    {
-        public int level { get; set; }
-        public string username { get; set; }
-    }
 
-    public class BDBetData
-    {
-        public decimal chance { get; set; }
-        public bool high { get; set; }
-        public decimal lucky { get; set; }
-        public decimal multiplier { get; set; }
-        public bool result { get; set; }
-        public long secret { get; set; }
-        public decimal target { get; set; }
-        public BDUser user { get; set; }
-        public long nonce { get; set; }
-    }
-
-    public class BDBet
-    {
-        public decimal amount { get; set; }
-        public string currency { get; set; }
-        public BDBetData data { get; set; }
-        public long date { get; set; }
-        public long game { get; set; }
-        public long id { get; set; }
-        public decimal profit { get; set; }
-        public decimal wagered { get; set; }
-
-    }
-
-    public class BDJackpot
-    {
-        public bool status { get; set; }
-    }
-
-    public class BDOld
-    {
-        public string client { get; set; }
-        public string hash { get; set; }
-        public string secret { get; set; }
-    }
-
-    public class BDSecret
-    {
-        public decimal game { get; set; }
-        public string hash { get; set; }
-        public long id { get; set; }
-    }
-
-    public class BDBetResponse
-    {
-        public string error { get; set; }
-        public decimal balance { get; set; }
-        public BDBet bet { get; set; }
-        public BDJackpot jackpot { get; set; }
-        public BDOld old { get; set; }
-        public BDSecret secret { get; set; }
-    }
 }
