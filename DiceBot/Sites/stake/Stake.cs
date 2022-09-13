@@ -27,7 +27,7 @@ namespace DiceBot.Schema.Stake
 namespace DiceBot
 {
 
-    public class Stake : DiceSite
+    public class Stake : DiceSite, IDiceSite
     {
 
         protected ClientSettings settings;
@@ -240,14 +240,12 @@ namespace DiceBot
             try
             {
 
-
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
                 settings.Update("", Password);
 
                 ApiClient = null;
                 ApiClient = new StakeApiClient(settings);
-
-                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
                 var req = new RequestData()
                 {
