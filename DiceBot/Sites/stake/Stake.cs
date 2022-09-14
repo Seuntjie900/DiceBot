@@ -17,6 +17,7 @@ using GamblingTools.sdk.Connectors.Stake;
 using GamblingTools.sdk;
 using Newtonsoft.Json;
 using RestSharp.Serialization.Json;
+using GamblingTools.sdk.gql;
 
 namespace DiceBot.Schema.Stake
 {
@@ -26,6 +27,9 @@ namespace DiceBot.Schema.Stake
 
 namespace DiceBot
 {
+
+
+    // https://stackoverflow.com/questions/35767845/how-to-handle-recaptcha-on-third-party-site-in-my-client-application
 
     public class Stake : DiceSite, IDiceSite
     {
@@ -73,42 +77,19 @@ namespace DiceBot
 
 
 
-        HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
-        HttpClientHandler ClientHandlr;
-        GraphQL.Client.GraphQLClient GQLClient;
+        // HttpClient Client;// = new HttpClient { BaseAddress = new Uri("https://api.primedice.com/api/") };
+        // HttpClientHandler ClientHandlr;
+        // GraphQL.Client.GraphQLClient GQLClient;
 
         StakeApiClient ApiClient;
 
+        Cnx connection;
 
 
         bool getid = false;
 
         public Stake(cDiceBot Parent)
         {
-            /*
-            _PasswordText = "API Key: ";
-            maxRoll = 99.99m;
-            AutoInvest = false;
-            AutoWithdraw = true;
-            ChangeSeed = true;
-            AutoLogin = true;
-            BetURL = "https://api.primedice.com/bets/";
-            this.Currencies = sCurrencies;
-            this.Currency = "Btc";
-            this.Parent = Parent;
-            Name = "PrimeDice";
-            this.Tip = false;
-            this.Vault = true;
-            TipUsingName = true;
-            //Thread tChat = new Thread(GetMessagesThread);
-            //tChat.Start();
-            SiteURL = "https://primedice.com";
-
-            if (File.Exists("slow") || File.Exists("slow.txt"))
-            {
-                getid = true;
-            }
-            */
 
             this.Currencies = sCurrencies;
             this.Currency = "Btc";
@@ -134,20 +115,20 @@ namespace DiceBot
             StatGameName = "dice";
             EnumName = "CasinoGameDiceConditionEnum";
             HaveMirrors = true;
-            MirrorList = new List<string> { "stake.com",
-                                            "stake.bet",
-                                            "stake.games",
-                                            "staketr.com",
-                                            "staketr2.com",
-                                            "staketr3.com",
-                                            "staketr4.com",
-                                            "staketr5.com",
-                                            "stake.bz",
-                                            "stake.jp",
-                                            "stake.ac",
-                                            "stake.icu" ,
-            "stake.us"
-            };
+            MirrorList = new List<string>();
+            MirrorList.Add("stake.com");
+            MirrorList.Add("stake.bet");
+            MirrorList.Add("stake.games");
+            MirrorList.Add("staketr.com");
+            MirrorList.Add("staketr2.com");
+            MirrorList.Add("staketr3.com");
+            MirrorList.Add("staketr4.com");
+            MirrorList.Add("staketr5.com");
+            MirrorList.Add("stake.bz");
+            MirrorList.Add("stake.jp");
+            MirrorList.Add("stake.ac");
+            MirrorList.Add("stake.icu");
+            MirrorList.Add("stake.us");
 
             CurrentMirror = "";
 
@@ -234,6 +215,27 @@ namespace DiceBot
         {
             return false;
         }
+
+
+        //public override void Login(string Username, string Password, string otp)
+        //{
+        //    try
+        //    {
+        //        Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+        //        settings.Update("", Password);
+        //        connection = new Cnx(settings.Site, settings.GraphQLEndPoint, settings.ApiKey);
+        //        var payload = new RequestData()
+        //        {
+        //            operationName = "DiceBotLogin",
+        //            query = "query DiceBotLogin{user {activeServerSeed { seedHash seed nonce} activeClientSeed{seed} id balances{available{currency amount}} statistic {game bets wins losses betAmount profit currency}}}"
+        //        };
+        //        var result = connection.Query(payload);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
         public override void Login(string Username, string Password, string otp)
         {
@@ -659,7 +661,9 @@ namespace DiceBot
             {
                 try
                 {
-                    string sEmitResponse = Client.GetStringAsync("logout?api_key=" + accesstoken).Result;
+                    //string sEmitResponse = Client.GetStringAsync("logout?api_key=" + accesstoken).Result;
+
+                    ApiClient.Disconnect();
                     accesstoken = "";
                 }
                 catch
