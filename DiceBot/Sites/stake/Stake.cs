@@ -580,10 +580,15 @@ namespace DiceBot
 
                 using (var gqlrequest = new StakeCustomGQLRequest(settings))
                 {
+
                     var req = new RequestData()
                     {
-                        operationName = "createVaultDeposit",
-                        query = "mutation DiceBotVault{ createVaultDeposit(currency: " + Currency.ToLower() + ", amount: " + amount.ToString("0.00000000", System.Globalization.NumberFormatInfo.InvariantInfo) + "){ id }}"
+                        variables = new
+                        {
+                            currency = Currency.ToLower(),
+                            amount = amount
+                        },
+                        query = "mutation CreateVaultDeposit($currency: CurrencyEnum!, $amount: Float!) {\n  createVaultDeposit(currency: $currency, amount: $amount) {\n    id\n    amount\n    currency\n    user {\n      id\n      balances {\n        available {\n          amount\n          currency\n          __typename\n        }\n        vault {\n          amount\n          currency\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
                     };
 
                     gqlrequest.AddRequest(req);
