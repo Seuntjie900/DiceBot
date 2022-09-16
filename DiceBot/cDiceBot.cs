@@ -27,8 +27,55 @@ using DiceBot.Core;
 namespace DiceBot
 {
 
+   
+
+
     public partial class cDiceBot : Form
     {
+
+        public class SiteDetails
+        {
+            public string name { get; set; }
+            public decimal edge { get; set; }
+            public decimal maxroll { get; set; }
+            public bool cantip { get; set; }
+            public bool tipusingname { get; set; }
+            public bool canwithdraw { get; set; }
+            public bool canresetseed { get; set; }
+            public bool caninvest { get; set; }
+            public string siteurl { get; set; }
+            public long Wins { get; set; }
+            public long Losses { get; set; }
+            public decimal Profit { get; set; }
+            public decimal Wagered { get; set; }
+            public decimal Balance { get; set; }
+            public long Bets { get; set; }
+
+            public void SetDetails(DiceSite Site)
+            {
+                name = Site.Name;
+                edge = Site.edge;
+                maxroll = Site.maxRoll;
+                cantip = Site.Tip;
+                tipusingname = Site.TipUsingName;
+                canwithdraw = Site.AutoWithdraw;
+                canresetseed = Site.ChangeSeed;
+                caninvest = Site.AutoInvest;
+                siteurl = Site.SiteURL;
+            }
+            public void UpdateUserDetails(DiceSite Site)
+            {
+                Wins = Site.GetWins();
+                Losses = Site.GetLosses();
+                Bets = Site.GetBets();
+                Profit = Site.GetProfit();
+                Wagered = Site.GetWagered();
+                Balance = Site.balance;
+            }
+        }
+
+        SiteDetails CurrentSiteDetails = null;
+
         #region saving and loading strat vars
         Dictionary<string, Control> SaveNames = new Dictionary<string, Control>();
         Dictionary<string, Control> PSaveNames = new Dictionary<string, Control>();
@@ -211,6 +258,7 @@ namespace DiceBot
         delegate void dDobet(Bet bet);
 
         Queue<string> Last10Guids = new Queue<string>();
+       
         public void GetBetResult(decimal Balance, Bet bet)
         {
             try
@@ -270,10 +318,15 @@ namespace DiceBot
             //FileInfo tmp = new FileInfo("");
 
         }
+       
         long chartbets = 0;
+
         List<System.Windows.Forms.DataVisualization.Charting.DataPoint> chartpoints = new List<System.Windows.Forms.DataVisualization.Charting.DataPoint>();
+       
         delegate void dAddChartPoint(object win);
+
         int LiveBets = 1000;
+
         void AddChartPoint(object Win)
         {
             try
@@ -777,8 +830,10 @@ end";
                 {
                     Emails = new Email("", "");
                 }
+
                 load();
                 loadsettings();
+
                 if (txtQuickSwitch.Text != "")
                 {
                     btnStratRefresh_Click(btnStratRefresh, new EventArgs());
@@ -817,6 +872,7 @@ end";
             Lua.RegisterFunction("presetlist", this, new dStrat(LuaPreset).Method);
             Lua.RegisterFunction("resetstats", this, new dResetStats(resetstats).Method);
             Lua.RegisterFunction("resetprofit", this, new dResetProfit(resetprofit).Method);
+            Lua.RegisterFunction("resetpartialprofit", this, new dResetPartialProfit(resetpartialprofit).Method);
             Lua.RegisterFunction("setvalueint", this, new dSetValue(LuaSetValue).Method);
             Lua.RegisterFunction("setvaluestring", this, new dSetValue1(LuaSetValue).Method);
             Lua.RegisterFunction("setvaluedecimal", this, new dSetValue2(LuaSetValue).Method);
@@ -958,7 +1014,7 @@ end";
 
 
         delegate void dResetProfit();
-
+        delegate void dResetPartialProfit();
 
 
         delegate void dRunsim(decimal startingabalance, int bets);
@@ -4770,7 +4826,6 @@ end";
             }
         }
 
-
         private void nudBotSpeed_ValueChanged(object sender, EventArgs e)
         {
             if (nudBotSpeed.Value != (decimal)0.0)
@@ -4779,15 +4834,8 @@ end";
             }
         }
 
-
-
-
-
-
-
-
-
         #region charts
+
         //button for generating random charts - for testing purposes
         private void button1_Click(object sender, EventArgs e)
         {
@@ -4802,20 +4850,21 @@ end";
                     previous -= tmp;
                 }
                 else
+                {
                     previous += tmp;
-                tmpBets.Add(new Bet { Id = i.ToString(), Profit = (decimal)previous });
+                }
+                tmpBets.Add(new Bet
+                {
+                    Id = i.ToString(),
+                    Profit = (decimal)previous
+                });
             }
 
             Graph g = new Graph(tmpBets.ToArray());
             g.Show();
         }
 
-
-
         #region generate charts
-
-
-
 
         private void btnChartBetID_Click(object sender, EventArgs e)
         {
@@ -4856,7 +4905,9 @@ end";
                 created = true;
             }
             if (!created)
+            {
                 MessageBox.Show("Live chart is already open. Please close the current live chart window before opening a new one.");
+            }
             //currentprofitbet();
         }
 
@@ -4895,10 +4946,10 @@ end";
             g.Show();
         }
 
-
-        #endregion
         #endregion
 
+
+        #endregion
 
         private void btnStopOnWin_Click(object sender, EventArgs e)
         {
@@ -4979,7 +5030,9 @@ end";
                         {
                             dparse(sss, ref convert);
                             if (!convert)
+                            {
                                 break;
+                            }
                         }
                         if (convert)
                         {
@@ -5456,7 +5509,6 @@ end";
         {
             if (e.ColumnIndex == 0 && e.RowIndex >= 0)
             {
-
                 string url = CurrentSite.BetURL + dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                 Process.Start(url);
             }
@@ -5493,21 +5545,24 @@ end";
         {
             if ((sender as NumericUpDown).Name == "nudApiBet")
             {
-
                 lblApiBetProfit.Text = ((nudApiBet.Value * nudApiPayout.Value) - nudApiBet.Value).ToString("0.00000000");
             }
             else if ((sender as NumericUpDown).Name == "nudApiChance")
             {
                 decimal payout = (100m - CurrentSite.edge) / (nudApiChance.Value);
                 if (nudApiPayout.Value != payout)
+                {
                     nudApiPayout.Value = payout;
+                }
                 lblApiBetProfit.Text = ((nudApiBet.Value * payout) - nudApiBet.Value).ToString("0.00000000");
             }
             else if ((sender as NumericUpDown).Name == "nudApiPayout")
             {
                 decimal chance = (100m - CurrentSite.edge) / (nudApiPayout.Value);
                 if (nudApiChance.Value != chance)
+                {
                     nudApiChance.Value = chance;
+                }
                 lblApiBetProfit.Text = ((nudApiBet.Value * nudApiPayout.Value) - nudApiBet.Value).ToString("0.00000000");
             }
         }
@@ -5619,7 +5674,6 @@ end";
                 if (decimal.TryParse(Amount, out tmpAmount))
                 {
                     CurrentSite.SendTip(User, tmpAmount);
-
                 }
                 else
                 {
@@ -5829,7 +5883,6 @@ end";
             if (Message != "")
             {
                 CurrentSite.SendChatMessage(Message);
-
             }
         }
 
@@ -6069,47 +6122,6 @@ end";
 
         }
 
-        public class SiteDetails
-        {
-            public string name { get; set; }
-            public decimal edge { get; set; }
-            public decimal maxroll { get; set; }
-            public bool cantip { get; set; }
-            public bool tipusingname { get; set; }
-            public bool canwithdraw { get; set; }
-            public bool canresetseed { get; set; }
-            public bool caninvest { get; set; }
-            public string siteurl { get; set; }
-            public long Wins { get; set; }
-            public long Losses { get; set; }
-            public decimal Profit { get; set; }
-            public decimal Wagered { get; set; }
-            public decimal Balance { get; set; }
-            public long Bets { get; set; }
-            public void SetDetails(DiceSite Site)
-            {
-                name = Site.Name;
-                edge = Site.edge;
-                maxroll = Site.maxRoll;
-                cantip = Site.Tip;
-                tipusingname = Site.TipUsingName;
-                canwithdraw = Site.AutoWithdraw;
-                canresetseed = Site.ChangeSeed;
-                caninvest = Site.AutoInvest;
-                siteurl = Site.SiteURL;
-            }
-            public void UpdateUserDetails(DiceSite Site)
-            {
-                Wins = Site.GetWins();
-                Losses = Site.GetLosses();
-                Bets = Site.GetBets();
-                Profit = Site.GetProfit();
-                Wagered = Site.GetWagered();
-                Balance = Site.balance;
-            }
-        }
-
-        SiteDetails CurrentSiteDetails = null;
         void SetLuaVars()
         {
             try

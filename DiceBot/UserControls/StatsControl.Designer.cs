@@ -55,6 +55,8 @@
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.valuePartialProfit = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.lblWagered = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnHideStats = new System.Windows.Forms.Button();
@@ -88,8 +90,6 @@
             this.lblBets = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.tcStats = new System.Windows.Forms.TabControl();
-            this.label3 = new System.Windows.Forms.Label();
-            this.valuePartialProfit = new System.Windows.Forms.Label();
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakLose)).BeginInit();
@@ -408,6 +408,26 @@
             this.tabPage7.UseVisualStyleBackColor = true;
             this.tabPage7.Click += new System.EventHandler(this.tabPage7_Click);
             // 
+            // valuePartialProfit
+            // 
+            this.valuePartialProfit.AutoSize = true;
+            this.valuePartialProfit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valuePartialProfit.Location = new System.Drawing.Point(116, 78);
+            this.valuePartialProfit.Name = "valuePartialProfit";
+            this.valuePartialProfit.Size = new System.Drawing.Size(14, 16);
+            this.valuePartialProfit.TabIndex = 35;
+            this.valuePartialProfit.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(24, 78);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(81, 13);
+            this.label3.TabIndex = 34;
+            this.label3.Text = "Partial Profit:";
+            // 
             // lblWagered
             // 
             this.lblWagered.AutoSize = true;
@@ -720,28 +740,6 @@
             this.tcStats.SelectedIndex = 0;
             this.tcStats.Size = new System.Drawing.Size(486, 270);
             this.tcStats.TabIndex = 15;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(24, 78);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(81, 13);
-            this.label3.TabIndex = 34;
-            this.label3.Text = "Partial Profit:";
-            this.label3.Visible = false;
-            // 
-            // valuePartialProfit
-            // 
-            this.valuePartialProfit.AutoSize = true;
-            this.valuePartialProfit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.valuePartialProfit.Location = new System.Drawing.Point(116, 78);
-            this.valuePartialProfit.Name = "valuePartialProfit";
-            this.valuePartialProfit.Size = new System.Drawing.Size(14, 16);
-            this.valuePartialProfit.TabIndex = 35;
-            this.valuePartialProfit.Text = "0";
-            this.valuePartialProfit.Visible = false;
             // 
             // StatsControl
             // 

@@ -218,8 +218,8 @@
     <Compile Include="Core\AppHelpers.cs" />
     <Compile Include="Core\GameEngine.cs" />
     <Compile Include="Core\IDiceSite.cs" />
-    <Compile Include="Core\Shema\Bet.cs" />
-    <Compile Include="Core\Shema\cBet.cs" />
+    <Compile Include="Core\Schema\Bet.cs" />
+    <Compile Include="Core\Schema\cBet.cs" />
     <Compile Include="Core\DiceSite.cs" />
     <Compile Include="Core\Random.cs" />
     <Compile Include="Sites\BetKing.cs" />
