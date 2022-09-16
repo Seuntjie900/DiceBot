@@ -62,15 +62,15 @@
             this.label69 = new System.Windows.Forms.Label();
             this.btnResetStats = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
-            this.lblTime = new System.Windows.Forms.Label();
+            this.valueTime = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.lblProfit = new System.Windows.Forms.Label();
-            this.lblProfpb = new System.Windows.Forms.Label();
-            this.lblWinStreak = new System.Windows.Forms.Label();
+            this.valueProfit = new System.Windows.Forms.Label();
+            this.valueProfpb = new System.Windows.Forms.Label();
+            this.valueWinStreak = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lblLoseStreak = new System.Windows.Forms.Label();
             this.lblMaxBets = new System.Windows.Forms.Label();
@@ -88,6 +88,8 @@
             this.lblBets = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.tcStats = new System.Windows.Forms.TabControl();
+            this.label3 = new System.Windows.Forms.Label();
+            this.valuePartialProfit = new System.Windows.Forms.Label();
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakWin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLastStreakLose)).BeginInit();
@@ -363,6 +365,8 @@
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.valuePartialProfit);
+            this.tabPage7.Controls.Add(this.label3);
             this.tabPage7.Controls.Add(this.lblWagered);
             this.tabPage7.Controls.Add(this.label2);
             this.tabPage7.Controls.Add(this.btnHideStats);
@@ -370,15 +374,15 @@
             this.tabPage7.Controls.Add(this.label69);
             this.tabPage7.Controls.Add(this.btnResetStats);
             this.tabPage7.Controls.Add(this.label7);
-            this.tabPage7.Controls.Add(this.lblTime);
+            this.tabPage7.Controls.Add(this.valueTime);
             this.tabPage7.Controls.Add(this.label8);
             this.tabPage7.Controls.Add(this.label9);
             this.tabPage7.Controls.Add(this.label10);
             this.tabPage7.Controls.Add(this.label11);
             this.tabPage7.Controls.Add(this.label12);
-            this.tabPage7.Controls.Add(this.lblProfit);
-            this.tabPage7.Controls.Add(this.lblProfpb);
-            this.tabPage7.Controls.Add(this.lblWinStreak);
+            this.tabPage7.Controls.Add(this.valueProfit);
+            this.tabPage7.Controls.Add(this.valueProfpb);
+            this.tabPage7.Controls.Add(this.valueWinStreak);
             this.tabPage7.Controls.Add(this.label1);
             this.tabPage7.Controls.Add(this.lblLoseStreak);
             this.tabPage7.Controls.Add(this.lblMaxBets);
@@ -467,28 +471,30 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Time Running:";
             // 
-            // lblTime
+            // valueTime
             // 
-            this.lblTime.AutoSize = true;
-            this.lblTime.Location = new System.Drawing.Point(116, 12);
-            this.lblTime.Name = "lblTime";
-            this.lblTime.Size = new System.Drawing.Size(0, 13);
-            this.lblTime.TabIndex = 1;
+            this.valueTime.AutoSize = true;
+            this.valueTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valueTime.Location = new System.Drawing.Point(116, 14);
+            this.valueTime.Name = "valueTime";
+            this.valueTime.Size = new System.Drawing.Size(16, 17);
+            this.valueTime.TabIndex = 1;
+            this.valueTime.Text = "0";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(64, 56);
+            this.label8.Location = new System.Drawing.Point(13, 56);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(41, 13);
+            this.label8.Size = new System.Drawing.Size(92, 13);
             this.label8.TabIndex = 2;
-            this.label8.Text = "Profit:";
+            this.label8.Text = "Running Profit:";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(18, 122);
+            this.label9.Location = new System.Drawing.Point(18, 144);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(87, 13);
             this.label9.TabIndex = 3;
@@ -506,7 +512,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(29, 144);
+            this.label11.Location = new System.Drawing.Point(29, 166);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(76, 13);
             this.label11.TabIndex = 5;
@@ -515,36 +521,41 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(9, 166);
+            this.label12.Location = new System.Drawing.Point(9, 188);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(96, 13);
             this.label12.TabIndex = 6;
             this.label12.Text = "Profit per 24 hours:";
             // 
-            // lblProfit
+            // valueProfit
             // 
-            this.lblProfit.AutoSize = true;
-            this.lblProfit.Location = new System.Drawing.Point(116, 56);
-            this.lblProfit.Name = "lblProfit";
-            this.lblProfit.Size = new System.Drawing.Size(0, 13);
-            this.lblProfit.TabIndex = 7;
+            this.valueProfit.AutoSize = true;
+            this.valueProfit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valueProfit.Location = new System.Drawing.Point(116, 56);
+            this.valueProfit.Name = "valueProfit";
+            this.valueProfit.Size = new System.Drawing.Size(14, 16);
+            this.valueProfit.TabIndex = 7;
+            this.valueProfit.Text = "0";
             // 
-            // lblProfpb
+            // valueProfpb
             // 
-            this.lblProfpb.AutoSize = true;
-            this.lblProfpb.Location = new System.Drawing.Point(369, 165);
-            this.lblProfpb.Name = "lblProfpb";
-            this.lblProfpb.Size = new System.Drawing.Size(0, 13);
-            this.lblProfpb.TabIndex = 25;
+            this.valueProfpb.AutoSize = true;
+            this.valueProfpb.Location = new System.Drawing.Point(369, 165);
+            this.valueProfpb.Name = "valueProfpb";
+            this.valueProfpb.Size = new System.Drawing.Size(13, 13);
+            this.valueProfpb.TabIndex = 25;
+            this.valueProfpb.Text = "0";
             // 
-            // lblWinStreak
+            // valueWinStreak
             // 
-            this.lblWinStreak.AutoSize = true;
-            this.lblWinStreak.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.lblWinStreak.Location = new System.Drawing.Point(116, 122);
-            this.lblWinStreak.Name = "lblWinStreak";
-            this.lblWinStreak.Size = new System.Drawing.Size(0, 13);
-            this.lblWinStreak.TabIndex = 8;
+            this.valueWinStreak.AutoSize = true;
+            this.valueWinStreak.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valueWinStreak.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.valueWinStreak.Location = new System.Drawing.Point(116, 146);
+            this.valueWinStreak.Name = "valueWinStreak";
+            this.valueWinStreak.Size = new System.Drawing.Size(14, 16);
+            this.valueWinStreak.TabIndex = 8;
+            this.valueWinStreak.Text = "0";
             // 
             // label1
             // 
@@ -567,24 +578,28 @@
             // lblMaxBets
             // 
             this.lblMaxBets.AutoSize = true;
-            this.lblMaxBets.Location = new System.Drawing.Point(116, 188);
+            this.lblMaxBets.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxBets.Location = new System.Drawing.Point(116, 211);
             this.lblMaxBets.Name = "lblMaxBets";
-            this.lblMaxBets.Size = new System.Drawing.Size(0, 13);
+            this.lblMaxBets.Size = new System.Drawing.Size(14, 16);
             this.lblMaxBets.TabIndex = 23;
+            this.lblMaxBets.Text = "0";
             this.lblMaxBets.Visible = false;
             // 
             // lblProfitph
             // 
             this.lblProfitph.AutoSize = true;
-            this.lblProfitph.Location = new System.Drawing.Point(116, 144);
+            this.lblProfitph.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProfitph.Location = new System.Drawing.Point(116, 168);
             this.lblProfitph.Name = "lblProfitph";
-            this.lblProfitph.Size = new System.Drawing.Size(0, 13);
+            this.lblProfitph.Size = new System.Drawing.Size(14, 16);
             this.lblProfitph.TabIndex = 10;
+            this.lblProfitph.Text = "0";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(28, 188);
+            this.label20.Location = new System.Drawing.Point(28, 210);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(77, 13);
             this.label20.TabIndex = 22;
@@ -594,10 +609,12 @@
             // lblProfit24
             // 
             this.lblProfit24.AutoSize = true;
-            this.lblProfit24.Location = new System.Drawing.Point(116, 165);
+            this.lblProfit24.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProfit24.Location = new System.Drawing.Point(116, 189);
             this.lblProfit24.Name = "lblProfit24";
-            this.lblProfit24.Size = new System.Drawing.Size(0, 13);
+            this.lblProfit24.Size = new System.Drawing.Size(14, 16);
             this.lblProfit24.TabIndex = 11;
+            this.lblProfit24.Text = "0";
             // 
             // lblCustreak
             // 
@@ -610,7 +627,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(71, 100);
+            this.label14.Location = new System.Drawing.Point(71, 122);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(34, 13);
             this.label14.TabIndex = 12;
@@ -628,19 +645,23 @@
             // lblWins
             // 
             this.lblWins.AutoSize = true;
+            this.lblWins.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWins.ForeColor = System.Drawing.Color.Green;
-            this.lblWins.Location = new System.Drawing.Point(116, 100);
+            this.lblWins.Location = new System.Drawing.Point(116, 124);
             this.lblWins.Name = "lblWins";
-            this.lblWins.Size = new System.Drawing.Size(0, 13);
+            this.lblWins.Size = new System.Drawing.Size(14, 16);
             this.lblWins.TabIndex = 13;
+            this.lblWins.Text = "0";
             // 
             // lblBalance
             // 
             this.lblBalance.AutoSize = true;
+            this.lblBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBalance.Location = new System.Drawing.Point(116, 34);
             this.lblBalance.Name = "lblBalance";
-            this.lblBalance.Size = new System.Drawing.Size(0, 13);
+            this.lblBalance.Size = new System.Drawing.Size(14, 16);
             this.lblBalance.TabIndex = 19;
+            this.lblBalance.Text = "0";
             // 
             // label15
             // 
@@ -672,16 +693,18 @@
             // lblBets
             // 
             this.lblBets.AutoSize = true;
+            this.lblBets.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBets.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblBets.Location = new System.Drawing.Point(116, 78);
+            this.lblBets.Location = new System.Drawing.Point(116, 102);
             this.lblBets.Name = "lblBets";
-            this.lblBets.Size = new System.Drawing.Size(0, 13);
+            this.lblBets.Size = new System.Drawing.Size(14, 16);
             this.lblBets.TabIndex = 17;
+            this.lblBets.Text = "0";
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(74, 78);
+            this.label17.Location = new System.Drawing.Point(74, 100);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(31, 13);
             this.label17.TabIndex = 16;
@@ -697,6 +720,28 @@
             this.tcStats.SelectedIndex = 0;
             this.tcStats.Size = new System.Drawing.Size(486, 270);
             this.tcStats.TabIndex = 15;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(24, 78);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(81, 13);
+            this.label3.TabIndex = 34;
+            this.label3.Text = "Partial Profit:";
+            this.label3.Visible = false;
+            // 
+            // valuePartialProfit
+            // 
+            this.valuePartialProfit.AutoSize = true;
+            this.valuePartialProfit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valuePartialProfit.Location = new System.Drawing.Point(116, 78);
+            this.valuePartialProfit.Name = "valuePartialProfit";
+            this.valuePartialProfit.Size = new System.Drawing.Size(14, 16);
+            this.valuePartialProfit.TabIndex = 35;
+            this.valuePartialProfit.Text = "0";
+            this.valuePartialProfit.Visible = false;
             // 
             // StatsControl
             // 
@@ -750,15 +795,15 @@
         public System.Windows.Forms.Label label69;
         public System.Windows.Forms.Button btnResetStats;
         public System.Windows.Forms.Label label7;
-        public System.Windows.Forms.Label lblTime;
+        public System.Windows.Forms.Label valueTime;
         public System.Windows.Forms.Label label8;
         public System.Windows.Forms.Label label9;
         public System.Windows.Forms.Label label10;
         public System.Windows.Forms.Label label11;
         public System.Windows.Forms.Label label12;
-        public System.Windows.Forms.Label lblProfit;
-        public System.Windows.Forms.Label lblProfpb;
-        public System.Windows.Forms.Label lblWinStreak;
+        public System.Windows.Forms.Label valueProfit;
+        public System.Windows.Forms.Label valueProfpb;
+        public System.Windows.Forms.Label valueWinStreak;
         public System.Windows.Forms.Label label1;
         public System.Windows.Forms.Label lblLoseStreak;
         public System.Windows.Forms.Label lblMaxBets;
@@ -778,6 +823,7 @@
         public System.Windows.Forms.TabControl tcStats;
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.Label lblWagered;
-
+        public System.Windows.Forms.Label valuePartialProfit;
+        public System.Windows.Forms.Label label3;
     }
 }

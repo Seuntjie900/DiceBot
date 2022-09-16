@@ -81,6 +81,7 @@ namespace DiceBot
         decimal avgstreak = 0;
         decimal currentprofit = 0;
         decimal profit = 0;
+        decimal partialprofit = 0;
         decimal luck = 0;
         decimal wagered = 0;
         int numwinstreasks = 0;
@@ -240,6 +241,7 @@ namespace DiceBot
             {
                 PreviousBalance = (decimal)Balance;
                 profit += (decimal)bet.Profit;
+                partialprofit += (decimal)bet.Profit;
                 Chartprofit += (decimal)bet.Profit;
                 wagered += (decimal)bet.Amount;
 
@@ -814,6 +816,7 @@ end";
             Lua.RegisterFunction("dalembert", this, new dStrat(LuaDAlember).Method);
             Lua.RegisterFunction("presetlist", this, new dStrat(LuaPreset).Method);
             Lua.RegisterFunction("resetstats", this, new dResetStats(resetstats).Method);
+            Lua.RegisterFunction("resetprofit", this, new dResetProfit(resetprofit).Method);
             Lua.RegisterFunction("setvalueint", this, new dSetValue(LuaSetValue).Method);
             Lua.RegisterFunction("setvaluestring", this, new dSetValue1(LuaSetValue).Method);
             Lua.RegisterFunction("setvaluedecimal", this, new dSetValue2(LuaSetValue).Method);
@@ -952,6 +955,10 @@ end";
         }
 
         delegate void dResetStats();
+
+
+        delegate void dResetProfit();
+
 
 
         delegate void dRunsim(decimal startingabalance, int bets);
@@ -1186,9 +1193,11 @@ end";
             }
             else
             {
+
                 lblLosses2.Text = Losses.ToString();
-                lblLosses2.Text = Losses.ToString();
+                //lblLosses2.Text = Losses.ToString();
                 lblProfit2.Text = profit.ToString("0.00000000");
+
                 if (Winstreak == 0)
                 {
                     lblCustreak2.Text = Losestreak.ToString();
@@ -1209,23 +1218,33 @@ end";
                         StatsWindows.lblLoseStreak.Text = WorstStreak.ToString();
                         lblLosses2.Text = StatsWindows.lblLosses.Text = Losses.ToString();
 
-                        lblProfit2.Text = StatsWindows.lblProfit.Text = profit.ToString("0.00000000");
+                        lblProfit2.Text = StatsWindows.valueProfit.Text = profit.ToString("0.00000000");
                         StatsWindows.lblWagered.Text = wagered.ToString("0.00000000");
                         StatsWindows.lblBalance.Text = PreviousBalance.ToString("0.00000000");
 
                         if (profit < 0)
                         {
-                            StatsWindows.lblProfit.ForeColor = Color.Red;
+                            StatsWindows.valueProfit.ForeColor = Color.Red;
                         }
                         else
                         {
-                            StatsWindows.lblProfit.ForeColor = Color.Green;
+                            StatsWindows.valueProfit.ForeColor = Color.Green;
                         }
 
                         if (profit > 0.001m)
                         {
                             donateToolStripMenuItem.ForeColor = Color.Green;
                             donateToolStripMenuItem.BackColor = Color.LightBlue;
+                        }
+
+                        StatsWindows.valuePartialProfit.Text = partialprofit.ToString("0.00000000");
+                        if (partialprofit < 0)
+                        {
+                            StatsWindows.valuePartialProfit.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            StatsWindows.valuePartialProfit.ForeColor = Color.Green;
                         }
 
                         if (Winstreak == 0)
@@ -1240,7 +1259,7 @@ end";
                         }
 
                         lblWins2.Text = StatsWindows.lblWins.Text = Wins.ToString();
-                        StatsWindows.lblWinStreak.Text = BestStreak.ToString();
+                        StatsWindows.valueWinStreak.Text = BestStreak.ToString();
 
                         TimeSpan curtime = TotalTime + (DateTime.Now - dtStarted);
                         lblBets2.Text = StatsWindows.lblBets.Text = (Wins + Losses).ToString();
@@ -1265,7 +1284,7 @@ end";
                             profph = (profpB * betsps) * 60.0m * 60.0m;
                         }
 
-                        StatsWindows.lblProfpb.Text = profpB.ToString("0.00000000");
+                        StatsWindows.valueProfpb.Text = profpB.ToString("0.00000000");
                         StatsWindows.lblProfitph.Text = (profph.ToString("0.00000000"));
                         StatsWindows.lblProfit24.Text = (profph * 24.0m).ToString("0.00000000");
 
@@ -2749,26 +2768,28 @@ end";
 
                         //update last losing streak if it is above the specified value to show in the stats
                         if (StatsWindows != null)
+                        {
                             if (!StatsWindows.IsDisposed)
+                            {
                                 if (Losestreak >= StatsWindows.nudLastStreakLose.Value)
+                                {
                                     laststreaklose = Losestreak;
+                                }
+                            }
+                        }
 
                         //switch high low if applied in the zig zag tab
                         if ((!programmerToolStripMenuItem.Checked) || EnableProgZigZag)
                         {
                             if (chkZigZagLoss.Checked && Losses % (int)nudZigZagLoss.Value == 0 && Losses != 0)
                             {
-
                                 high = !high;
-
                             }
                             if (chkZigZagLossStreak.Checked && Losestreak % (int)nudZigZagLossStreak.Value == 0 && Losestreak != 0)
                             {
                                 high = !high;
                             }
                         }
-
-
 
                         if (!programmerToolStripMenuItem.Checked || EnableReset)
                         {
@@ -3215,7 +3236,7 @@ end";
                 {
                     if (!StatsWindows.IsDisposed)
                     {
-                        StatsWindows.lblTime.Text = (TotalTime + (DateTime.Now - dtStarted)).ToString(AppHelpers.DateTimeCounterFormat);
+                        StatsWindows.valueTime.Text = (TotalTime + (DateTime.Now - dtStarted)).ToString(AppHelpers.DateTimeCounterFormat);
                     }
                 }
 
@@ -3234,6 +3255,7 @@ end";
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            /*
             if ((CurrentSite.AutoWithdraw || CurrentSite.Tip) && profit > 0)
             {
                 if (donateMode == 1)
@@ -3260,6 +3282,8 @@ end";
                         CurrentSite.Donate((donatePercentage / 100.0m) * profit);
                 }
             }
+            */
+
             Stop("");
             if (CurrentSite != null)
             {
@@ -4690,6 +4714,25 @@ end";
         }
         #endregion
 
+
+        void resetprofit()
+        {
+            profit = 0;
+            partialprofit = 0;
+
+            ProfitSinceLastReset = 0;
+            StreakProfitSinceLastReset = 0;
+            StreakLossSinceLastReset = 0;
+
+            UpdateStatsControl();
+        }
+
+        void resetpartialprofit()
+        {
+            partialprofit = 0;
+            UpdateStatsControl();
+        }
+
         void resetstats()
         {
             Wins = 0;
@@ -6084,6 +6127,7 @@ end";
                 //Lua.clear();
                 Lua["balance"] = PreviousBalance;
                 Lua["profit"] = this.profit;
+                Lua["partialprofit"] = this.partialprofit;
                 Lua["currentstreak"] = (Winstreak > 0) ? Winstreak : -Losestreak;
                 Lua["previousbet"] = Lastbet;
                 Lua["nextbet"] = Lastbet;
