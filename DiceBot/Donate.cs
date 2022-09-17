@@ -15,14 +15,14 @@ namespace DiceBot
         {
             InitializeComponent();
             string tipmsg = "You can tip to the account {0} on {1}";
-            switch (SiteName.ToLower())
+           /* switch (SiteName.ToLower())
             {
                 case "primedice": tipmsg = string.Format(tipmsg, "seuntjie", SiteName); break;
                 case "999dice": tipmsg = string.Format(tipmsg, "seuntjie", SiteName); break;
                 case "justdice": tipmsg = string.Format(tipmsg, "seuntjie (91380)", SiteName); break;
                 case "prcdice": tipmsg = string.Format(tipmsg, "seuntjie (357)", SiteName); break;
                 case "safedice": tipmsg = string.Format(tipmsg, "seuntjie (1050)", SiteName); break;
-            }
+            }*/
             lblTip.Text = tipmsg;
         }
 

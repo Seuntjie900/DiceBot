@@ -23,7 +23,7 @@ namespace DiceBot
             e.Cancel = true;
             base.OnClosing(e);*/
         }
-        public void AddStatsWindow(Stats stats)
+        public void AddStatsWindow(StatsControl stats)
         {
             this.Controls.Add(stats);
             stats.ShowHideButtons = true;
