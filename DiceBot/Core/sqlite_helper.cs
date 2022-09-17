@@ -27,7 +27,7 @@ namespace DiceBot.Core
             return Conn;
         }
         
-        public static void CheckDBS()
+        public static void CheckDatabase()
         {
             SQLiteConnection sqcon = GetConnection();
             if (File.Exists("DiceBot.db"))

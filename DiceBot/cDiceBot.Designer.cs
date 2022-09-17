@@ -363,6 +363,7 @@
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbLogin = new System.Windows.Forms.GroupBox();
+            this.mirrorSelectorLabel = new System.Windows.Forms.Label();
             this.comboBoxMirrorSelector = new System.Windows.Forms.ComboBox();
             this.lblDuckMode = new System.Windows.Forms.Label();
             this.cmbDuckMode = new System.Windows.Forms.ComboBox();
@@ -521,7 +522,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.betBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.mirrorSelectorLabel = new System.Windows.Forms.Label();
             this.pnlAdvanced.SuspendLayout();
             this.tcSettings.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -4936,6 +4936,17 @@
             this.gbLogin.TabStop = false;
             this.gbLogin.Text = "Login/Register";
             // 
+            // mirrorSelectorLabel
+            // 
+            this.mirrorSelectorLabel.AutoSize = true;
+            this.mirrorSelectorLabel.Location = new System.Drawing.Point(13, 132);
+            this.mirrorSelectorLabel.Name = "mirrorSelectorLabel";
+            this.mirrorSelectorLabel.Size = new System.Drawing.Size(58, 13);
+            this.mirrorSelectorLabel.TabIndex = 15;
+            this.mirrorSelectorLabel.Text = "Mirror site: ";
+            this.mirrorSelectorLabel.Visible = false;
+            this.mirrorSelectorLabel.Click += new System.EventHandler(this.label37_Click);
+            // 
             // comboBoxMirrorSelector
             // 
             this.comboBoxMirrorSelector.FormattingEnabled = true;
@@ -6087,7 +6098,7 @@
             this.chartToolStripMenuItem.CheckOnClick = true;
             this.chartToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chartToolStripMenuItem.Name = "chartToolStripMenuItem";
-            this.chartToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.chartToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.chartToolStripMenuItem.Text = "Live Chart";
             this.chartToolStripMenuItem.CheckedChanged += new System.EventHandler(this.chartToolStripMenuItem_CheckedChanged);
             // 
@@ -6097,17 +6108,15 @@
             this.loginPanelToolStripMenuItem.CheckOnClick = true;
             this.loginPanelToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.loginPanelToolStripMenuItem.Name = "loginPanelToolStripMenuItem";
-            this.loginPanelToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.loginPanelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loginPanelToolStripMenuItem.Text = "Login Panel";
             this.loginPanelToolStripMenuItem.CheckedChanged += new System.EventHandler(this.loginPanelToolStripMenuItem_CheckedChanged);
             // 
             // manualBettingToolStripMenuItem
             // 
-            this.manualBettingToolStripMenuItem.Checked = true;
             this.manualBettingToolStripMenuItem.CheckOnClick = true;
-            this.manualBettingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.manualBettingToolStripMenuItem.Name = "manualBettingToolStripMenuItem";
-            this.manualBettingToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.manualBettingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.manualBettingToolStripMenuItem.Text = "Manual Betting";
             this.manualBettingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.manualBettingToolStripMenuItem_CheckedChanged);
             this.manualBettingToolStripMenuItem.Click += new System.EventHandler(this.manualBettingToolStripMenuItem_Click);
@@ -6118,14 +6127,14 @@
             this.embeddedToolStripMenuItem,
             this.popupToolStripMenuItem});
             this.statsToolStripMenuItem.Name = "statsToolStripMenuItem";
-            this.statsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.statsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.statsToolStripMenuItem.Text = "Stats";
             // 
             // embeddedToolStripMenuItem
             // 
             this.embeddedToolStripMenuItem.CheckOnClick = true;
             this.embeddedToolStripMenuItem.Name = "embeddedToolStripMenuItem";
-            this.embeddedToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.embeddedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.embeddedToolStripMenuItem.Text = "Embedded";
             this.embeddedToolStripMenuItem.CheckedChanged += new System.EventHandler(this.embeddedToolStripMenuItem_CheckedChanged);
             this.embeddedToolStripMenuItem.Click += new System.EventHandler(this.embeddedToolStripMenuItem_Click);
@@ -6133,14 +6142,14 @@
             // popupToolStripMenuItem
             // 
             this.popupToolStripMenuItem.Name = "popupToolStripMenuItem";
-            this.popupToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.popupToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.popupToolStripMenuItem.Text = "Popup";
             this.popupToolStripMenuItem.Click += new System.EventHandler(this.popupToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // chartsToolStripMenuItem
             // 
@@ -6151,7 +6160,7 @@
             this.allTimeStaticToolStripMenuItem,
             this.customToolStripMenuItem});
             this.chartsToolStripMenuItem.Name = "chartsToolStripMenuItem";
-            this.chartsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.chartsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.chartsToolStripMenuItem.Text = "Charts";
             // 
             // sessionLiveToolStripMenuItem
@@ -6193,7 +6202,7 @@
             // 
             this.chatToolStripMenuItem.Enabled = false;
             this.chatToolStripMenuItem.Name = "chatToolStripMenuItem";
-            this.chatToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.chatToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.chatToolStripMenuItem.Text = "Chat";
             this.chatToolStripMenuItem.Visible = false;
             this.chatToolStripMenuItem.Click += new System.EventHandler(this.button4_Click_1);
@@ -6201,56 +6210,56 @@
             // simulationToolStripMenuItem
             // 
             this.simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
-            this.simulationToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.simulationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.simulationToolStripMenuItem.Text = "Simulate";
             this.simulationToolStripMenuItem.Click += new System.EventHandler(this.simulationToolStripMenuItem_Click);
             // 
             // betHistoryToolStripMenuItem
             // 
             this.betHistoryToolStripMenuItem.Name = "betHistoryToolStripMenuItem";
-            this.betHistoryToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.betHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.betHistoryToolStripMenuItem.Text = "Bet History";
             this.betHistoryToolStripMenuItem.Click += new System.EventHandler(this.btnBetHistory_Click);
             // 
             // badStreakTableToolStripMenuItem
             // 
             this.badStreakTableToolStripMenuItem.Name = "badStreakTableToolStripMenuItem";
-            this.badStreakTableToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.badStreakTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.badStreakTableToolStripMenuItem.Text = "Bad Streak Table";
             this.badStreakTableToolStripMenuItem.Click += new System.EventHandler(this.btnStreakTable_Click);
             // 
             // luckyNumberVerifierToolStripMenuItem
             // 
             this.luckyNumberVerifierToolStripMenuItem.Name = "luckyNumberVerifierToolStripMenuItem";
-            this.luckyNumberVerifierToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.luckyNumberVerifierToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.luckyNumberVerifierToolStripMenuItem.Text = "Roll Verifier";
             this.luckyNumberVerifierToolStripMenuItem.Click += new System.EventHandler(this.luckyNumberVerifierToolStripMenuItem_Click);
             // 
             // seedsToolStripMenuItem
             // 
             this.seedsToolStripMenuItem.Name = "seedsToolStripMenuItem";
-            this.seedsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.seedsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.seedsToolStripMenuItem.Text = "Enter Seed/Hash";
             this.seedsToolStripMenuItem.Click += new System.EventHandler(this.seedsToolStripMenuItem_Click);
             // 
             // proxySettingsToolStripMenuItem
             // 
             this.proxySettingsToolStripMenuItem.Name = "proxySettingsToolStripMenuItem";
-            this.proxySettingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.proxySettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.proxySettingsToolStripMenuItem.Text = "Proxy settings";
             this.proxySettingsToolStripMenuItem.Click += new System.EventHandler(this.proxySettingsToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.btnSaveUser_Click);
             // 
             // bitdiceActivatorToolStripMenuItem
             // 
             this.bitdiceActivatorToolStripMenuItem.Name = "bitdiceActivatorToolStripMenuItem";
-            this.bitdiceActivatorToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.bitdiceActivatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.bitdiceActivatorToolStripMenuItem.Text = "Device Verifier";
             this.bitdiceActivatorToolStripMenuItem.Click += new System.EventHandler(this.bitdiceActivatorToolStripMenuItem_Click);
             // 
@@ -6594,17 +6603,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(79, 17);
             this.lblStatus.Text = "Disconnected";
-            // 
-            // mirrorSelectorLabel
-            // 
-            this.mirrorSelectorLabel.AutoSize = true;
-            this.mirrorSelectorLabel.Location = new System.Drawing.Point(13, 132);
-            this.mirrorSelectorLabel.Name = "mirrorSelectorLabel";
-            this.mirrorSelectorLabel.Size = new System.Drawing.Size(58, 13);
-            this.mirrorSelectorLabel.TabIndex = 15;
-            this.mirrorSelectorLabel.Text = "Mirror site: ";
-            this.mirrorSelectorLabel.Visible = false;
-            this.mirrorSelectorLabel.Click += new System.EventHandler(this.label37_Click);
             // 
             // cDiceBot
             // 

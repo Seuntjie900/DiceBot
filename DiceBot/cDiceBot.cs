@@ -27,8 +27,55 @@ using DiceBot.Core;
 namespace DiceBot
 {
 
+   
+
+
     public partial class cDiceBot : Form
     {
+
+        public class SiteDetails
+        {
+            public string name { get; set; }
+            public decimal edge { get; set; }
+            public decimal maxroll { get; set; }
+            public bool cantip { get; set; }
+            public bool tipusingname { get; set; }
+            public bool canwithdraw { get; set; }
+            public bool canresetseed { get; set; }
+            public bool caninvest { get; set; }
+            public string siteurl { get; set; }
+            public long Wins { get; set; }
+            public long Losses { get; set; }
+            public decimal Profit { get; set; }
+            public decimal Wagered { get; set; }
+            public decimal Balance { get; set; }
+            public long Bets { get; set; }
+
+            public void SetDetails(DiceSite Site)
+            {
+                name = Site.Name;
+                edge = Site.edge;
+                maxroll = Site.maxRoll;
+                cantip = Site.Tip;
+                tipusingname = Site.TipUsingName;
+                canwithdraw = Site.AutoWithdraw;
+                canresetseed = Site.ChangeSeed;
+                caninvest = Site.AutoInvest;
+                siteurl = Site.SiteURL;
+            }
+            public void UpdateUserDetails(DiceSite Site)
+            {
+                Wins = Site.GetWins();
+                Losses = Site.GetLosses();
+                Bets = Site.GetBets();
+                Profit = Site.GetProfit();
+                Wagered = Site.GetWagered();
+                Balance = Site.balance;
+            }
+        }
+
+        SiteDetails CurrentSiteDetails = null;
+
         #region saving and loading strat vars
         Dictionary<string, Control> SaveNames = new Dictionary<string, Control>();
         Dictionary<string, Control> PSaveNames = new Dictionary<string, Control>();
@@ -53,7 +100,7 @@ namespace DiceBot
         DateTime OpenTime = DateTime.Now;
         Random r = new Random();
         Graph LiveGraph;
-        Stats StatsWindows = new Stats();
+        StatsControl StatsWindows = new StatsControl();
         StatsForm StatsForm = new StatsForm();
         Simulate SimWindow;
 
@@ -81,6 +128,7 @@ namespace DiceBot
         decimal avgstreak = 0;
         decimal currentprofit = 0;
         decimal profit = 0;
+        decimal partialprofit = 0;
         decimal luck = 0;
         decimal wagered = 0;
         int numwinstreasks = 0;
@@ -210,6 +258,7 @@ namespace DiceBot
         delegate void dDobet(Bet bet);
 
         Queue<string> Last10Guids = new Queue<string>();
+       
         public void GetBetResult(decimal Balance, Bet bet)
         {
             try
@@ -240,6 +289,7 @@ namespace DiceBot
             {
                 PreviousBalance = (decimal)Balance;
                 profit += (decimal)bet.Profit;
+                partialprofit += (decimal)bet.Profit;
                 Chartprofit += (decimal)bet.Profit;
                 wagered += (decimal)bet.Amount;
 
@@ -268,10 +318,15 @@ namespace DiceBot
             //FileInfo tmp = new FileInfo("");
 
         }
+       
         long chartbets = 0;
+
         List<System.Windows.Forms.DataVisualization.Charting.DataPoint> chartpoints = new List<System.Windows.Forms.DataVisualization.Charting.DataPoint>();
+       
         delegate void dAddChartPoint(object win);
+
         int LiveBets = 1000;
+
         void AddChartPoint(object Win)
         {
             try
@@ -394,13 +449,21 @@ namespace DiceBot
             }
         }
         FastColoredTextBox richTextBox3;
+
+        DiceEngine EngineX;
+
         public cDiceBot(string[] args)
         {
 
+            EngineX = new DiceEngine();
+
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
-            sqlite_helper.CheckDBS();
+
+            sqlite_helper.CheckDatabase();
+
             InitializeComponent();
 
 
@@ -440,6 +503,7 @@ end";
             WriteConsole("Starting Dicebot " + vers);
             PopoutChat.SendMessage += PopoutChat_SendMessage;
             SimWindow = new Simulate(this);
+
             StatsWindows.btnResetStats.Click += btnResetStats_Click;
 
             ControlsToDisable = new Control[] { btnApiBetHigh, btnApiBetLow, btnWithdraw, btnInvest, btnTip, btnStartHigh, btnStartLow, btnStartHigh2, btnStartLow2, btnMPWithdraw, btnMPDeposit };
@@ -766,8 +830,10 @@ end";
                 {
                     Emails = new Email("", "");
                 }
+
                 load();
                 loadsettings();
+
                 if (txtQuickSwitch.Text != "")
                 {
                     btnStratRefresh_Click(btnStratRefresh, new EventArgs());
@@ -805,6 +871,8 @@ end";
             Lua.RegisterFunction("dalembert", this, new dStrat(LuaDAlember).Method);
             Lua.RegisterFunction("presetlist", this, new dStrat(LuaPreset).Method);
             Lua.RegisterFunction("resetstats", this, new dResetStats(resetstats).Method);
+            Lua.RegisterFunction("resetprofit", this, new dResetProfit(resetprofit).Method);
+            Lua.RegisterFunction("resetpartialprofit", this, new dResetPartialProfit(resetpartialprofit).Method);
             Lua.RegisterFunction("setvalueint", this, new dSetValue(LuaSetValue).Method);
             Lua.RegisterFunction("setvaluestring", this, new dSetValue1(LuaSetValue).Method);
             Lua.RegisterFunction("setvaluedecimal", this, new dSetValue2(LuaSetValue).Method);
@@ -943,6 +1011,10 @@ end";
         }
 
         delegate void dResetStats();
+
+
+        delegate void dResetProfit();
+        delegate void dResetPartialProfit();
 
 
         delegate void dRunsim(decimal startingabalance, int bets);
@@ -1163,20 +1235,25 @@ end";
         //maxbets();//recursive
         //btnStreakTable_Click()
         #region Statistics
+
         delegate void dUpdateStats();
-        private void UpdateStats()
+
+
+        private void UpdateStatsControl()
         {
 
             if (InvokeRequired)
             {
-                Invoke(new dUpdateStats(UpdateStats));
+                Invoke(new dUpdateStats(UpdateStatsControl));
                 return;
             }
             else
             {
+
                 lblLosses2.Text = Losses.ToString();
-                lblLosses2.Text = Losses.ToString();
+                //lblLosses2.Text = Losses.ToString();
                 lblProfit2.Text = profit.ToString("0.00000000");
+
                 if (Winstreak == 0)
                 {
                     lblCustreak2.Text = Losestreak.ToString();
@@ -1186,9 +1263,10 @@ end";
                 {
                     lblCustreak2.Text = Winstreak.ToString();
                     lblCustreak2.ForeColor = Color.Green;
-
                 }
+
                 lblWins2.Text = Wins.ToString();
+
                 if (StatsWindows != null)
                 {
                     if (!StatsWindows.IsDisposed)
@@ -1196,25 +1274,35 @@ end";
                         StatsWindows.lblLoseStreak.Text = WorstStreak.ToString();
                         lblLosses2.Text = StatsWindows.lblLosses.Text = Losses.ToString();
 
-
-                        lblProfit2.Text = StatsWindows.lblProfit.Text = profit.ToString("0.00000000");
+                        lblProfit2.Text = StatsWindows.valueProfit.Text = profit.ToString("0.00000000");
                         StatsWindows.lblWagered.Text = wagered.ToString("0.00000000");
                         StatsWindows.lblBalance.Text = PreviousBalance.ToString("0.00000000");
+
                         if (profit < 0)
                         {
-                            StatsWindows.lblProfit.ForeColor = Color.Red;
-
+                            StatsWindows.valueProfit.ForeColor = Color.Red;
                         }
                         else
                         {
-                            StatsWindows.lblProfit.ForeColor = Color.Green;
-
+                            StatsWindows.valueProfit.ForeColor = Color.Green;
                         }
+
                         if (profit > 0.001m)
                         {
                             donateToolStripMenuItem.ForeColor = Color.Green;
                             donateToolStripMenuItem.BackColor = Color.LightBlue;
                         }
+
+                        StatsWindows.valuePartialProfit.Text = partialprofit.ToString("0.00000000");
+                        if (partialprofit < 0)
+                        {
+                            StatsWindows.valuePartialProfit.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            StatsWindows.valuePartialProfit.ForeColor = Color.Green;
+                        }
+
                         if (Winstreak == 0)
                         {
                             lblCustreak2.Text = StatsWindows.lblCustreak.Text = Losestreak.ToString();
@@ -1224,34 +1312,49 @@ end";
                         {
                             lblCustreak2.Text = StatsWindows.lblCustreak.Text = Winstreak.ToString();
                             lblCustreak2.ForeColor = StatsWindows.lblCustreak.ForeColor = Color.Green;
-
                         }
 
                         lblWins2.Text = StatsWindows.lblWins.Text = Wins.ToString();
-                        StatsWindows.lblWinStreak.Text = BestStreak.ToString();
-
+                        StatsWindows.valueWinStreak.Text = BestStreak.ToString();
 
                         TimeSpan curtime = TotalTime + (DateTime.Now - dtStarted);
                         lblBets2.Text = StatsWindows.lblBets.Text = (Wins + Losses).ToString();
                         decimal profpB = 0;
+
                         if (Wins + Losses > 0)
+                        {
                             profpB = (decimal)profit / (decimal)(Wins + Losses);
+                        }
+
                         decimal betsps = 0;
 
                         if (curtime.TotalSeconds > 0.0)
+                        {
                             betsps = (decimal)(Wins + Losses) / (decimal)(curtime.TotalSeconds);
+                        }
+
                         decimal profph = 0;
+
                         if (profpB > 0 && betsps > 0)
+                        {
                             profph = (profpB * betsps) * 60.0m * 60.0m;
-                        StatsWindows.lblProfpb.Text = profpB.ToString("0.00000000");
+                        }
+
+                        StatsWindows.valueProfpb.Text = profpB.ToString("0.00000000");
                         StatsWindows.lblProfitph.Text = (profph.ToString("0.00000000"));
                         StatsWindows.lblProfit24.Text = (profph * 24.0m).ToString("0.00000000");
 
                         int imaxbets = maxbets();
+
                         if (imaxbets == -500)
+                        {
                             StatsWindows.lblMaxBets.Text = "500+";
+                        }
                         else
+                        {
                             StatsWindows.lblMaxBets.Text = imaxbets.ToString();
+                        }
+
                         if (imaxbets > 20)
                         {
                             StatsWindows.lblMaxBets.ForeColor = Color.Blue;
@@ -1268,12 +1371,20 @@ end";
                         {
                             StatsWindows.lblMaxBets.ForeColor = Color.Red;
                         }
+
                         StatsWindows.lblAvgWinStreak.Text = avgwin.ToString("0.000000");
                         StatsWindows.lblAvgLoseStreak.Text = avgloss.ToString("0.000000");
                         StatsWindows.lblAvgStreak.Text = avgstreak.ToString("0.000000");
+
                         if (avgstreak > 0)
+                        {
                             StatsWindows.lblAvgStreak.ForeColor = Color.Green;
-                        else StatsWindows.lblAvgStreak.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            StatsWindows.lblAvgStreak.ForeColor = Color.Red;
+                        }
+
                         StatsWindows.lbl3Best.Text = BestStreak.ToString() + "\n" + BestStreak2.ToString() + "\n" + BestStreak3.ToString();
                         StatsWindows.lbl3Worst.Text = WorstStreak.ToString() + "\n" + WorstStreak2.ToString() + "\n" + WorstStreak3.ToString();
                         StatsWindows.lblLastStreakLose.Text = laststreaklose.ToString();
@@ -1281,10 +1392,12 @@ end";
                         StatsWindows.lblLargestBet.Text = LargestBet.ToString("0.00000000");
                         StatsWindows.lblLargestLoss.Text = LargestLoss.ToString("0.00000000");
                         StatsWindows.lblLargestWin.Text = LargestWin.ToString("0.00000000");
+
                         if (Losses != 0)
                         {
                             StatsWindows.lblLuck.Text = luck.ToString("00.00") + "%";
                         }
+
                     }
                 }
 
@@ -1435,11 +1548,18 @@ end";
         private void CalculateLuck(bool win)
         {
             decimal lucktotal = (decimal)luck * (decimal)((Wins + Losses) - 1);
+
             if (win)
+            {
                 lucktotal += (decimal)((decimal)100 / (decimal)Chance) * (decimal)100;
+            }
+
             decimal tmp = (decimal)(lucktotal / (decimal)(Wins + Losses));
+
             luck = tmp;
         }
+
+
         #endregion
 
         //Core Program
@@ -2563,9 +2683,11 @@ end";
                             currentprofit += profit;
                             ProfitSinceLastReset += profit;
                             StreakProfitSinceLastReset += profit;
+
                             DumpLog("currentprofit: " + currentprofit.ToString(), 7);
                             DumpLog("##ProfitSinceLastReset: " + ProfitSinceLastReset.ToString(), 7);
                             DumpLog("StreakProfitSinceLastReset: " + StreakProfitSinceLastReset.ToString(), 7);
+
                             Wins++;
                             Winstreak++;
                             trazelwin++;
@@ -2702,26 +2824,28 @@ end";
 
                         //update last losing streak if it is above the specified value to show in the stats
                         if (StatsWindows != null)
+                        {
                             if (!StatsWindows.IsDisposed)
+                            {
                                 if (Losestreak >= StatsWindows.nudLastStreakLose.Value)
+                                {
                                     laststreaklose = Losestreak;
+                                }
+                            }
+                        }
 
                         //switch high low if applied in the zig zag tab
                         if ((!programmerToolStripMenuItem.Checked) || EnableProgZigZag)
                         {
                             if (chkZigZagLoss.Checked && Losses % (int)nudZigZagLoss.Value == 0 && Losses != 0)
                             {
-
                                 high = !high;
-
                             }
                             if (chkZigZagLossStreak.Checked && Losestreak % (int)nudZigZagLossStreak.Value == 0 && Losestreak != 0)
                             {
                                 high = !high;
                             }
                         }
-
-
 
                         if (!programmerToolStripMenuItem.Checked || EnableReset)
                         {
@@ -2882,7 +3006,7 @@ end";
                     try
                     {
                         if (!RunningSimulation)
-                            UpdateStats();
+                            UpdateStatsControl();
                     }
                     catch (Exception e)
                     {
@@ -3168,7 +3292,7 @@ end";
                 {
                     if (!StatsWindows.IsDisposed)
                     {
-                        StatsWindows.lblTime.Text = (TotalTime + (DateTime.Now - dtStarted)).ToString(@"hh\:mm\:ss");
+                        StatsWindows.valueTime.Text = (TotalTime + (DateTime.Now - dtStarted)).ToString(AppHelpers.DateTimeCounterFormat);
                     }
                 }
 
@@ -3187,6 +3311,7 @@ end";
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            /*
             if ((CurrentSite.AutoWithdraw || CurrentSite.Tip) && profit > 0)
             {
                 if (donateMode == 1)
@@ -3213,6 +3338,8 @@ end";
                         CurrentSite.Donate((donatePercentage / 100.0m) * profit);
                 }
             }
+            */
+
             Stop("");
             if (CurrentSite != null)
             {
@@ -4358,7 +4485,7 @@ end";
             else if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 TrayIcon.BalloonTipTitle = "DiceBot";
-                TrayIcon.BalloonTipText = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "Balance: {0:0.00000000}\n Profit: {1:0.00000000}\nCurrent Streak: {2}\nWorst Streak: {3}\nTime running: ", PreviousBalance, PreviousBalance - StartBalance, curstreak, WorstStreak) + (TotalTime + (DateTime.Now - dtStarted)).ToString(@"hh\:mm\:ss");
+                TrayIcon.BalloonTipText = string.Format(System.Globalization.NumberFormatInfo.InvariantInfo, "Balance: {0:0.00000000}\n Profit: {1:0.00000000}\nCurrent Streak: {2}\nWorst Streak: {3}\nTime running: ", PreviousBalance, (PreviousBalance - StartBalance), curstreak, WorstStreak) + (TotalTime + (DateTime.Now - dtStarted)).ToString(AppHelpers.DateTimeCounterFormat);
                 TrayIcon.BalloonTipIcon = ToolTipIcon.None;
                 TrayIcon.ShowBalloonTip(800);
             }
@@ -4643,6 +4770,25 @@ end";
         }
         #endregion
 
+
+        void resetprofit()
+        {
+            profit = 0;
+            partialprofit = 0;
+
+            ProfitSinceLastReset = 0;
+            StreakProfitSinceLastReset = 0;
+            StreakLossSinceLastReset = 0;
+
+            UpdateStatsControl();
+        }
+
+        void resetpartialprofit()
+        {
+            partialprofit = 0;
+            UpdateStatsControl();
+        }
+
         void resetstats()
         {
             Wins = 0;
@@ -4650,14 +4796,18 @@ end";
             bool success = false;
             profit = 0;
             decimal tmp = CurrentSite.balance;
+
             if (success)
+            {
                 StartBalance = tmp;
+            }
+
             Winstreak = Losestreak = BestStreak = WorstStreak = laststreaklose = laststreakwin = BestStreak2 = WorstStreak2 = BestStreak3 = WorstStreak3 = numstreaks = numwinstreasks = numlosesreaks = 0;
             avgloss = avgstreak = LargestBet = LargestLoss = LargestWin = avgwin = 0.0m;
             TotalTime = new TimeSpan();
             dtStarted = DateTime.Now;
             ProfitSinceLastReset = StreakProfitSinceLastReset = StreakLossSinceLastReset = 0;
-            UpdateStats();
+            UpdateStatsControl();
             wagered = 0;
         }
 
@@ -4676,7 +4826,6 @@ end";
             }
         }
 
-
         private void nudBotSpeed_ValueChanged(object sender, EventArgs e)
         {
             if (nudBotSpeed.Value != (decimal)0.0)
@@ -4685,15 +4834,8 @@ end";
             }
         }
 
-
-
-
-
-
-
-
-
         #region charts
+
         //button for generating random charts - for testing purposes
         private void button1_Click(object sender, EventArgs e)
         {
@@ -4708,20 +4850,21 @@ end";
                     previous -= tmp;
                 }
                 else
+                {
                     previous += tmp;
-                tmpBets.Add(new Bet { Id = i.ToString(), Profit = (decimal)previous });
+                }
+                tmpBets.Add(new Bet
+                {
+                    Id = i.ToString(),
+                    Profit = (decimal)previous
+                });
             }
 
             Graph g = new Graph(tmpBets.ToArray());
             g.Show();
         }
 
-
-
         #region generate charts
-
-
-
 
         private void btnChartBetID_Click(object sender, EventArgs e)
         {
@@ -4762,7 +4905,9 @@ end";
                 created = true;
             }
             if (!created)
+            {
                 MessageBox.Show("Live chart is already open. Please close the current live chart window before opening a new one.");
+            }
             //currentprofitbet();
         }
 
@@ -4801,10 +4946,10 @@ end";
             g.Show();
         }
 
-
-        #endregion
         #endregion
 
+
+        #endregion
 
         private void btnStopOnWin_Click(object sender, EventArgs e)
         {
@@ -4885,7 +5030,9 @@ end";
                         {
                             dparse(sss, ref convert);
                             if (!convert)
+                            {
                                 break;
+                            }
                         }
                         if (convert)
                         {
@@ -5133,18 +5280,29 @@ end";
             }
             else
             {
+
                 if (LiveGraph != null)
+                {
                     if (!LiveGraph.IsDisposed)
+                    {
                         LiveGraph.AddBet(Bet as Bet);
+                    }
+                }
+
                 sqlite_helper.AddBet(Bet as Bet, CurrentSite.Name);
                 dataGridView1.DataBindings.Clear();
                 Bet _Bet = (Bet as Bet);
+
                 if (logging > 2)
+                {
                     using (StreamWriter sw = File.AppendText("log.txt"))
                     {
                         sw.WriteLine(json.JsonSerializer<Bet>(_Bet));
                     }
+                }
+
                 dataGridView1.Rows.Insert(0, _Bet.Id, _Bet.date, _Bet.Amount.ToString("0.00000000#######"), _Bet.high, _Bet.Chance, _Bet.Roll, _Bet.Profit.ToString("0.00000000#######"), _Bet.nonce);
+
                 if (dataGridView1.Rows.Count > 0)
                 {
 
@@ -5351,7 +5509,6 @@ end";
         {
             if (e.ColumnIndex == 0 && e.RowIndex >= 0)
             {
-
                 string url = CurrentSite.BetURL + dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                 Process.Start(url);
             }
@@ -5388,21 +5545,24 @@ end";
         {
             if ((sender as NumericUpDown).Name == "nudApiBet")
             {
-
                 lblApiBetProfit.Text = ((nudApiBet.Value * nudApiPayout.Value) - nudApiBet.Value).ToString("0.00000000");
             }
             else if ((sender as NumericUpDown).Name == "nudApiChance")
             {
                 decimal payout = (100m - CurrentSite.edge) / (nudApiChance.Value);
                 if (nudApiPayout.Value != payout)
+                {
                     nudApiPayout.Value = payout;
+                }
                 lblApiBetProfit.Text = ((nudApiBet.Value * payout) - nudApiBet.Value).ToString("0.00000000");
             }
             else if ((sender as NumericUpDown).Name == "nudApiPayout")
             {
                 decimal chance = (100m - CurrentSite.edge) / (nudApiPayout.Value);
                 if (nudApiChance.Value != chance)
+                {
                     nudApiChance.Value = chance;
+                }
                 lblApiBetProfit.Text = ((nudApiBet.Value * nudApiPayout.Value) - nudApiBet.Value).ToString("0.00000000");
             }
         }
@@ -5514,7 +5674,6 @@ end";
                 if (decimal.TryParse(Amount, out tmpAmount))
                 {
                     CurrentSite.SendTip(User, tmpAmount);
-
                 }
                 else
                 {
@@ -5724,7 +5883,6 @@ end";
             if (Message != "")
             {
                 CurrentSite.SendChatMessage(Message);
-
             }
         }
 
@@ -5964,47 +6122,6 @@ end";
 
         }
 
-        public class SiteDetails
-        {
-            public string name { get; set; }
-            public decimal edge { get; set; }
-            public decimal maxroll { get; set; }
-            public bool cantip { get; set; }
-            public bool tipusingname { get; set; }
-            public bool canwithdraw { get; set; }
-            public bool canresetseed { get; set; }
-            public bool caninvest { get; set; }
-            public string siteurl { get; set; }
-            public long Wins { get; set; }
-            public long Losses { get; set; }
-            public decimal Profit { get; set; }
-            public decimal Wagered { get; set; }
-            public decimal Balance { get; set; }
-            public long Bets { get; set; }
-            public void SetDetails(DiceSite Site)
-            {
-                name = Site.Name;
-                edge = Site.edge;
-                maxroll = Site.maxRoll;
-                cantip = Site.Tip;
-                tipusingname = Site.TipUsingName;
-                canwithdraw = Site.AutoWithdraw;
-                canresetseed = Site.ChangeSeed;
-                caninvest = Site.AutoInvest;
-                siteurl = Site.SiteURL;
-            }
-            public void UpdateUserDetails(DiceSite Site)
-            {
-                Wins = Site.GetWins();
-                Losses = Site.GetLosses();
-                Bets = Site.GetBets();
-                Profit = Site.GetProfit();
-                Wagered = Site.GetWagered();
-                Balance = Site.balance;
-            }
-        }
-
-        SiteDetails CurrentSiteDetails = null;
         void SetLuaVars()
         {
             try
@@ -6022,6 +6139,7 @@ end";
                 //Lua.clear();
                 Lua["balance"] = PreviousBalance;
                 Lua["profit"] = this.profit;
+                Lua["partialprofit"] = this.partialprofit;
                 Lua["currentstreak"] = (Winstreak > 0) ? Winstreak : -Losestreak;
                 Lua["previousbet"] = Lastbet;
                 Lua["nextbet"] = Lastbet;
@@ -7032,7 +7150,9 @@ end";
             else
             {
                 if (panel5.Controls.Contains(StatsWindows))
+                {
                     panel5.Controls.Remove(StatsWindows);
+                }
                 panel5.Height = 189;
             }
 

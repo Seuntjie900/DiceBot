@@ -11,7 +11,7 @@ using System.IO;
 
 namespace DiceBot.Core
 {
-    public abstract class DiceSite
+    public abstract class DiceSite 
     {
         public event EventHandler<RequireCaptchaEventArgs> OnRequireCaptcha;
         protected void RequireCaptcha(RequireCaptchaEventArgs e)
@@ -111,9 +111,9 @@ namespace DiceBot.Core
 
 
         public bool HaveMirrors { get; set; } = false;
-        public List<string>  MirrorList { get; set; }
+        public List<string> MirrorList { get; set; }
 
-        public string CurrentMirror { get;  set; }
+        public string CurrentMirror { get; set; }
 
         public int GetWins()
         {

@@ -216,8 +216,10 @@
       <DependentUpon>BetHistory.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\AppHelpers.cs" />
-    <Compile Include="Core\Shema\Bet.cs" />
-    <Compile Include="Core\Shema\cBet.cs" />
+    <Compile Include="Core\GameEngine.cs" />
+    <Compile Include="Core\IDiceSite.cs" />
+    <Compile Include="Core\Schema\Bet.cs" />
+    <Compile Include="Core\Schema\cBet.cs" />
     <Compile Include="Core\DiceSite.cs" />
     <Compile Include="Core\Random.cs" />
     <Compile Include="Sites\BetKing.cs" />
@@ -354,11 +356,11 @@
     <Compile Include="Startup.Designer.cs">
       <DependentUpon>Startup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stats.cs">
+    <Compile Include="UserControls\StatsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stats.Designer.cs">
-      <DependentUpon>Stats.cs</DependentUpon>
+    <Compile Include="UserControls\StatsControl.Designer.cs">
+      <DependentUpon>StatsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="StreakTable.cs">
       <SubType>Form</SubType>
@@ -446,8 +448,8 @@
     <EmbeddedResource Include="Startup.resx">
       <DependentUpon>Startup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stats.resx">
-      <DependentUpon>Stats.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\StatsControl.resx">
+      <DependentUpon>StatsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatsForm.resx">
       <DependentUpon>StatsForm.cs</DependentUpon>
